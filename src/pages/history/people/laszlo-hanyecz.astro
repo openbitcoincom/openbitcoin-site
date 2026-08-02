@@ -1,0 +1,166 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="Laszlo Hanyecz: The 10,000 BTC Pizza Day Story - OpenBitcoin" description="Laszlo Hanyecz paid 10,000 BTC for two pizzas on May 22, 2010, bitcoin's first real purchase. The forum thread, the $41 value, and why he has no regrets.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History / People</div>
+    <h1>Laszlo Hanyecz</h1>
+    <p class="doc-lede">Everyone knows the man who paid 10,000 bitcoin for two pizzas. Fewer remember he shipped Bitcoin's first Mac build, wrote the first GPU miner, and heard from Satoshi about it. He regrets none of it.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pl-hero">
+      <div class="pl-big">10,000 BTC</div>
+      <div class="pl-sub">paid for two large pizzas, May 22, 2010</div>
+      <div class="pl-line">The arithmetic gets exactly one line on this page: those coins are worth <b id="pl-now" class="pl-up">&#8230;</b> at today's price. Everything else here is about the person.</div>
+      <div class="pl-stats">
+        <div class="pl-stat"><b>May 18, 2010</b><i>the offer posted to the forum</i></div>
+        <div class="pl-stat"><b>&#8776;$41</b><i>market value of the coins then</i></div>
+        <div class="pl-stat"><b>&#8776;$25</b><i>what the two pizzas cost</i></div>
+        <div class="pl-stat"><b>May 22, 2010</b><i>delivered, paid, documented</i></div>
+      </div>
+    </div>
+    <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+
+    <div class="doc-card pl-mt">
+      <div class="doc-sec">
+        <h2>Four days to sell a pizza</h2>
+        <div class="doc-prose">
+          <p>On May 18, 2010, a software engineer in Jacksonville, Florida named Laszlo Hanyecz posted a new thread to the bitcoin forum. The title was a question, "Pizza for bitcoins?", and the offer inside was written the way a person actually talks:</p>
+          <blockquote>"I'll pay 10,000 bitcoins for a couple of pizzas.. like maybe 2 large ones so I have some left over for the next day. I like having left over pizza to nibble on later. You can make the pizza yourself and bring it to my house or order it for me from a delivery place, but what I'm aiming for is getting food delivered in exchange for bitcoins where I don't have to order or prepare it myself, kind of like ordering a 'breakfast platter' at a hotel or something, they just bring you something to eat and you're happy!"</blockquote>
+          <div class="pl-att">laszlo, bitcointalk, May 18, 2010</div>
+          <p>Bitcoin had existed for sixteen months and had never once bought a physical thing. There was one tiny exchange, a market rate of about four tenths of a cent, and therefore an offer worth roughly $41. Even so, for three days nobody took it. On May 21 he bumped his own thread: "So nobody wants to buy me pizza? Is the bitcoin amount I'm offering too low?"</p>
+          <p>The next day it happened. Jeremy Sturdivant, a 19 year old who posted as jercos, took the deal, ordered two large pizzas from a Papa John's, and had them delivered to Hanyecz's door, spending about $25 of his own money. Hanyecz sent the 10,000 coins and posted the update the internet still celebrates every May 22:</p>
+          <blockquote>"I just want to report that I successfully traded 10,000 bitcoins for pizza."</blockquote>
+          <div class="pl-att">laszlo, bitcointalk, May 22, 2010, followed by a link to photos and "Thanks jercos!"</div>
+          <p>The photos showed the pizzas on the kitchen counter, and he noted in the thread that his one year old daughter enjoyed them too. It was the first documented purchase of a physical good with bitcoin. Both sides walked away satisfied: Sturdivant had turned $25 into $41 worth of an experiment he believed in, and Hanyecz had proven the experiment could buy dinner.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The developer the meme swallowed</h2>
+        <div class="doc-prose">
+          <p>The pizza story travels without its context, and the context is the better story. Hanyecz was not a random forum user with heavy pockets. He found bitcoin in late 2009, when the network was months old and the people running it might not have filled a bus, and he did what the early ones did: he read the code and started contributing.</p>
+          <p>In April 2010 he built and shipped the first Mac OS X release of the bitcoin client, which until then ran only on Windows and Linux. He answered technical questions on the forum, patched what broke, and pushed for the thing he cared about most, which was that bitcoin should be used as money rather than only mined and admired. The pizza offer was not a stunt bolted onto that conviction. It was the conviction, with toppings.</p>
+          <div class="pl-tl">
+            <div class="pl-tli"><span class="pl-tly">Late 2009</span><span class="pl-tlt">Finds bitcoin, starts contributing code and forum support</span></div>
+            <div class="pl-tli"><span class="pl-tly">Apr 2010</span><span class="pl-tlt">Ships the first Mac OS X build of the bitcoin client</span></div>
+            <div class="pl-tli"><span class="pl-tly">May 10, 2010</span><span class="pl-tlt">Posts the first GPU miner; his hashpower jumps roughly tenfold</span></div>
+            <div class="pl-tli"><span class="pl-tly">May 18, 2010</span><span class="pl-tlt">Offers 10,000 BTC for a couple of pizzas</span></div>
+            <div class="pl-tli"><span class="pl-tly">May 22, 2010</span><span class="pl-tlt">Pizzas delivered: the first documented physical purchase</span></div>
+            <div class="pl-tli"><span class="pl-tly">2010</span><span class="pl-tlt">Keeps paying for pizza in bitcoin, near 100,000 BTC by his own count</span></div>
+            <div class="pl-tli"><span class="pl-tly">2018</span><span class="pl-tlt">"You know, I don't regret it"</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The GPU letters</h2>
+        <div class="doc-prose">
+          <p>His bigger technical first came the same month as the pizzas. On May 10, 2010, he posted an updated Mac build with a new trick: it could mine on the graphics card. Nobody had done that. A GPU ran the hashing work roughly ten times faster than the CPUs everyone else used, and for a stretch Hanyecz was winning an outsized share of all new blocks, which is where the coins for all that pizza came from.</p>
+          <p>Satoshi Nakamoto noticed, and was not entirely pleased. In emails to Hanyecz published years later, the network's author asked him, politely, to slow down:</p>
+          <blockquote>"A big attraction to new users is that anyone with a computer can generate some free coins. GPUs would prematurely limit the incentive to only those with high-end GPU hardware. It's inevitable that GPU compute clusters will eventually hog all the generated coins, but I don't want to hasten that day."</blockquote>
+          <div class="pl-att">Satoshi Nakamoto, email to Hanyecz, 2010, published later</div>
+          <p>Hanyecz stopped promoting the GPU miner. Recalling it years later, he put his reaction in one line: "Man, I feel like I crapped up your project. Sorry, dude." The day Satoshi did not want to hasten arrived anyway. GPU farms came, then ASICs, and mining on an ordinary computer was over within a few years. Hanyecz had simply run the experiment first, told everyone the result, and then, when the author asked, put it away.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>It was never one order</h2>
+        <div class="doc-prose">
+          <p>The famous 10,000 BTC was not a lapse. It was a policy. Hanyecz kept ordering pizza for bitcoin through that summer as the price climbed, and by his own later estimate spent something near 100,000 BTC on pizza in 2010. He could afford to because his GPU kept mining more, and he wanted to because a currency nobody spends is not a currency. That year he was close to the only person on earth treating bitcoin as money, which is exactly what bitcoin needed someone to do.</p>
+          <p>He never framed the trades as losses, because at the time they were not:</p>
+          <blockquote>"A trade happens because both parties think they're getting a good deal. I felt like I was beating the internet, getting free food."</blockquote>
+          <div class="pl-att">laszlo, forum post, 2014</div>
+          <p>Sturdivant, for his part, spent his 10,000 coins on travel while bitcoin was still worth well under a dollar. Neither man is a cautionary tale. They are the two people who made the first real trade, at prices that made it rational, in an economy that did not exist until they invented it over a pizza order.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>No regrets, on the record</h2>
+        <div class="doc-prose">
+          <p>The question follows him everywhere, and he has answered it the same way for years. Asked directly in a 2018 interview:</p>
+          <blockquote>"You know, I don't regret it. I think that it's great that I got to be part of the early history of Bitcoin in that way, and people know about the pizza and it's an interesting story because everybody can kind of relate to that."</blockquote>
+          <div class="pl-att">Laszlo Hanyecz, Cointelegraph interview, 2018</div>
+          <p>It is worth taking him at his word. The dollar figure at the top of this page is real, but it describes a world that exists partly because trades like his happened in the old one. Every merchant checkout and every <a href="/spend">way to spend bitcoin</a> today extends a line that starts at two pizzas in Jacksonville.</p>
+          <p>If the pizza numbers make you want arithmetic of your own, point it forward instead of back: the <a href="/dca">averaging calculator</a> shows what steady buying since then looks like, and the <a href="/whatif">what-if machine</a> will run the counterfactual for any date and amount you pick, including May 22, 2010.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pl-about doc-prose">
+      <p>Laszlo Hanyecz wrote early bitcoin code, shipped the first Mac build, invented GPU mining, and paid 10,000 BTC for two pizzas, in roughly that order of importance. Dates and quotes above come from the original forum thread, the published Satoshi correspondence, and his later interviews, documented at <a href="/sources">/sources</a>. More people from the record are on the <a href="/history/people">people index</a>, and the era's other giveaway economics live at <a href="/history/faucets">the faucet story</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The trade</div>
+      <div class="pl-rs"><b>10,000 BTC</b><i>what hanyecz sent</i></div>
+      <div class="pl-rs"><b>2 large</b><i>pizzas delivered</i></div>
+      <div class="pl-rs"><b>&#8776;$41</b><i>market value then</i></div>
+      <div class="pl-rs"><b>&#8776;$25</b><i>the buyer's outlay</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history/people">People of bitcoin history</a>
+        <a href="/history/people/hal-finney">Hal Finney</a>
+        <a href="/history/people/gavin-andresen">Gavin Andresen</a>
+        <a href="/history/faucets">The faucet era</a>
+        <a href="/dca">Dollar cost averaging</a>
+        <a href="/whatif">The what-if machine</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pl-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .pl-big{font:800 56px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-2px}
+  .pl-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .pl-line{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:12px}
+  .pl-line b{font:700 13.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pl-line b.pl-up{color:var(--up)}
+  .pl-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px;text-align:left}
+  .pl-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .pl-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pl-stat i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pl-mt{margin-top:14px}
+  .pl-att{font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-top:7px;padding-left:20px}
+  .pl-tl{margin-top:14px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel-2);padding:4px 16px}
+  .pl-tli{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .pl-tli:last-child{border-bottom:0}
+  .pl-tly{flex:none;width:86px;font:700 10.5px var(--mono);letter-spacing:.04em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .pl-tlt{font:500 13px/1.55 var(--sans);color:var(--ink-2);min-width:0}
+  .pl-about{margin-top:14px}
+  .pl-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pl-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pl-rs:last-child{border-bottom:0}
+  .pl-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pl-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .pl-big{font-size:42px}
+    .pl-hero{padding:22px 16px 18px}
+    .pl-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .pl-stat b{white-space:normal}
+    .pl-tl{padding:2px 13px}
+    .pl-tli{gap:11px}
+    .pl-tly{width:74px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  var el=document.getElementById("pl-now");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipsis in place */
+    if(el)el.textContent="$"+(10000*P.price/1e6).toFixed(1)+"M";
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipsis holds until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

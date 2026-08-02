@@ -1,0 +1,157 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Why Exchanges Freeze Bitcoin Deposits and What to Do - OpenBitcoin" description="Your bitcoin deposit confirmed on-chain but the exchange has not credited it. Why compliance software freezes deposits, what to send support, what to avoid.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Why exchanges freeze deposits</h1>
+    <p class="doc-lede">The transaction confirmed on-chain, the exchange credited nothing, and support says "under review." This page explains what is happening, what to send, and the one thing you must never pay.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="fd-card">
+      <div class="fd-chead"><span class="fd-num">01</span><h2>What happened</h2></div>
+      <p class="fd-p">You sent bitcoin to your exchange deposit address and the transaction confirmed. The <a href="/">transaction lookup</a> shows it sitting in a block with confirmations stacking on top, and every node on the network agrees the coins moved. Yet your exchange balance shows nothing, and support answers with a phrase like "under review" or "pending additional checks."</p>
+      <div class="fd-flow" aria-label="Deposit status: broadcast done, confirmed done, credit held">
+        <div class="fd-step fd-ok"><span class="fd-mark">&#10003;</span><b>Broadcast</b><i>your wallet sent it</i></div>
+        <div class="fd-arrow" aria-hidden="true">&#8594;</div>
+        <div class="fd-step fd-ok"><span class="fd-mark">&#10003;</span><b>Confirmed on-chain</b><i>the network recorded it</i></div>
+        <div class="fd-arrow" aria-hidden="true">&#8594;</div>
+        <div class="fd-step fd-hold"><span class="fd-mark">&#8943;</span><b>Credited</b><i>held, "under review"</i></div>
+      </div>
+      <p class="fd-p fd-pm">Split the event in two. The Bitcoin side is finished: a confirmed transaction is final and cannot be lost or reversed. The exchange side has not started: crediting your account is a private database entry that the company makes at its own discretion, and its compliance system has put that entry on hold. Your coins are not missing. They sit on an address the exchange controls, and the delay is a decision, not an accident.</p>
+      <p class="fd-note">If the transaction has not confirmed at all, this page is not your situation. A low fee is the usual cause, and the <a href="/tx/stuck">stuck transaction guide</a> covers it.</p>
+    </div>
+
+    <div class="fd-card fd-mt">
+      <div class="fd-chead"><span class="fd-num">02</span><h2>Why exchanges do this</h2></div>
+      <p class="fd-p">Exchanges that operate under anti-money-laundering rules screen every incoming deposit with chain-analysis software. The software walks backward through the history of the coins you sent: which addresses they came from, which addresses those came from, and so on for many hops. Each deposit gets a risk score. If that history touches addresses the vendor has flagged, wallets tied to exchange hacks, ransomware payouts, darknet markets, sanctioned entities, or mixing services, the score rises, and above the exchange's threshold the deposit is routed to a human compliance queue instead of being credited.</p>
+      <div class="fd-key"><b>The score is about the coins' past, not about you</b><span>Coins circulate. A flagged hop can sit several transactions back in the coins' history, made by strangers before you ever received them, and nothing in your own conduct is what triggered the hold. A hold is a property of the deposit's history, not an accusation against the depositor.</span></div>
+    </div>
+
+    <div class="fd-card fd-mt">
+      <div class="fd-chead"><span class="fd-num">03</span><h2>What the scores really are</h2></div>
+      <p class="fd-p">Nothing on the Bitcoin network marks a coin as clean or dirty. The protocol treats every coin identically; "taint" is a label applied off-chain by private analytics companies, and it is worth being precise about what that means.</p>
+      <ul class="fd-facts">
+        <li><b>Third-party.</b> The exchange is usually acting on a vendor's database, not on its own investigation of you.</li>
+        <li><b>Opaque.</b> You cannot see your score, the threshold, or which hop tripped it. The vendor's methods and blacklists are proprietary, and different vendors disagree about the same coins.</li>
+        <li><b>Fallible.</b> These scores have been wrong before. Flags have been applied in error and later reversed, which is exactly what you would expect from opaque heuristics run at scale.</li>
+      </ul>
+      <p class="fd-p fd-pm">So treat the hold as a bureaucratic process with an error rate, not a verdict on you or your coins.</p>
+    </div>
+
+    <div class="fd-card fd-mt">
+      <div class="fd-chead"><span class="fd-num">04</span><h2>What to do</h2></div>
+      <ol class="fd-steps">
+        <li><b>Verify the on-chain facts first.</b> Pull the transaction ID and the confirming block from the <a href="/">transaction lookup</a>. That record is your proof the coins arrived at the exchange's address; no one can dispute it.</li>
+        <li><b>Reply to support with the origin story of the funds.</b> Where the coins came from, with documents: a withdrawal confirmation from another exchange, an invoice if they were payment for goods or work, the record of a private purchase. Dates, amounts, transaction IDs. Compliance reviewers close cases on paperwork, and a deposit with a documented origin is an easy case.</li>
+        <li><b>Be patient and factual.</b> The review is queue work done by people. Anger does not move a queue; a tidy, consistent account of where the coins came from does. Answer what is asked, add nothing invented, and keep your story identical in every message, because inconsistencies are what reviewers are trained to notice.</li>
+        <li><b>Escalate in writing.</b> If weeks pass without movement, ask for a case reference, ask what specific document is missing, and move to the exchange's formal complaint channel. Keep every message. Whatever escalation comes later, it will run on the written record you kept.</li>
+      </ol>
+    </div>
+
+    <div class="fd-card fd-mt fd-warn">
+      <div class="fd-chead"><span class="fd-num">05</span><h2>What not to do</h2></div>
+      <ul class="fd-donts">
+        <li><b>Do not send more coins to "unlock" the deposit.</b> No legitimate exchange charges a separately paid fee or deposit to release funds under review; a real fee comes out of the balance it already holds. A demand to send more first is the signature move of the fake platforms in the <a href="/learn/scams">scams guide</a>. If you hear it, stop and reconsider whether the "exchange" is an exchange at all.</li>
+        <li><b>Do not keep depositing while the hold is open.</b> New deposits land in the same screening and add to what is held.</li>
+        <li><b>Do not improvise the origin story.</b> A guess that a document later contradicts reads as evasion. If you do not know a detail, say so plainly.</li>
+        <li><b>Do not hire the stranger who offers to fix it.</b> "Compliance consultants" and "recovery agents" who appear after you complain publicly are the second-strike pattern from the <a href="/learn/scams">scams guide</a>. They cannot move the exchange's queue, and their fee is the point.</li>
+      </ul>
+    </div>
+
+    <div class="fd-card fd-mt">
+      <div class="fd-chead"><span class="fd-num">06</span><h2>Prevention</h2></div>
+      <ul class="fd-steps fd-prev">
+        <li><b>Know your counterparty before the deposit.</b> Read the exchange's terms on deposit reviews and holds, and find out what proof of origin it accepts, before coins are in the pipe rather than after.</li>
+        <li><b>Keep records as you go.</b> A boring folder of withdrawal confirmations, invoices, and trade receipts turns a frozen deposit from a crisis into an email attachment.</li>
+        <li><b>Route the minimum through custodians.</b> The structural fix: coins in self-custody cannot be frozen by anyone. There is no compliance desk between you and coins whose keys you hold, nothing to credit and nobody to withhold the credit. An exchange can only hold what passes through its accounts, so keep balances there brief and small. The <a href="/learn/self-custody">self-custody guide</a> covers how.</li>
+      </ul>
+    </div>
+
+    <div class="fd-about doc-prose">
+      <p>A frozen deposit sits at the seam between two systems: the Bitcoin network, where a confirmed transaction is final, and a company's ledger, where a credit is discretionary. The chain is the half you can check yourself, with the <a href="/">transaction</a> and <a href="/">address</a> lookups, and the durable fix is structural: keys of your own, covered in the <a href="/learn/self-custody">self-custody guide</a>, plus the reflexes in the <a href="/learn/scams">scams guide</a> for the demands no real exchange makes. How custodial accounts differ from coins you hold runs through the <a href="/learn/no-kyc">no-KYC guide</a> as well. Everything here is informational, not legal or financial advice, under the site's <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="fd-railp">If the transaction confirmed, the coins arrived and cannot be lost; what is frozen is a company's ledger entry, and it is opened with documentation and patience, never with another payment.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">First moves</div>
+      <ol class="fd-rl">
+        <li>Verify the confirmation with the <a href="/">lookup</a></li>
+        <li>Send support the origin records</li>
+        <li>Keep everything in writing</li>
+        <li>Pay nothing to "unlock"</li>
+      </ol>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tx/stuck">Transaction not confirming</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn/scams">Bitcoin scams and how they work</a>
+        <a href="/learn/no-kyc">Buying without KYC</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .fd-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .fd-mt{margin-top:14px}
+  .fd-chead{display:flex;align-items:baseline;gap:10px}
+  .fd-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .fd-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .fd-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .fd-pm{margin-top:12px}
+  .fd-p a,.fd-note a,.fd-steps a,.fd-donts a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .fd-p a:hover,.fd-note a:hover,.fd-steps a:hover,.fd-donts a:hover{border-bottom-style:solid}
+  .fd-flow{display:flex;align-items:stretch;gap:8px;margin-top:14px}
+  .fd-step{flex:1;background:var(--field);border-radius:10px;padding:11px 13px;min-width:0}
+  .fd-step b{display:block;font:700 12px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);margin-top:6px}
+  .fd-step i{display:block;font:600 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .fd-mark{display:inline-block;font:700 13px/1 var(--mono)}
+  .fd-ok{border:1px solid var(--line-2)}
+  .fd-ok .fd-mark{color:var(--up)}
+  .fd-hold{border:1px dashed rgba(255,166,60,.5);background:rgba(255,166,60,.07)}
+  .fd-hold .fd-mark{color:var(--acc)}
+  .fd-hold b{color:var(--acc)}
+  .fd-arrow{align-self:center;font:700 14px var(--mono);color:var(--ink-3);flex:0 0 auto}
+  .fd-note{font:600 11px/1.6 var(--mono);letter-spacing:.03em;color:var(--ink-3);margin:12px 0 0;padding-top:10px;border-top:1px dotted var(--line-2)}
+  .fd-key{margin-top:14px;border-radius:12px;padding:16px 18px;border:1px solid rgba(255,166,60,.4);background:rgba(255,166,60,.06)}
+  .fd-key b{display:block;font:700 12px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--acc)}
+  .fd-key span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .fd-facts{margin:12px 0 0;padding-left:22px}
+  .fd-facts li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .fd-facts li::marker{color:var(--acc)}
+  .fd-facts b{color:var(--ink);font-weight:600}
+  .fd-steps{margin:12px 0 0;padding-left:22px}
+  .fd-steps li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .fd-steps li::marker{color:var(--acc);font-weight:700}
+  .fd-steps b{color:var(--ink);font-weight:600}
+  .fd-warn{border-color:rgba(246,70,93,.4)}
+  .fd-donts{margin:12px 0 0;padding-left:0;list-style:none}
+  .fd-donts li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px;padding-left:22px;position:relative}
+  .fd-donts li::before{content:"\00d7";position:absolute;left:0;top:0;font:700 15px/1.55 var(--mono);color:var(--down)}
+  .fd-donts b{color:var(--ink);font-weight:600}
+  .fd-about{margin-top:14px}
+  .fd-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .fd-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .fd-rl{margin:0;padding-left:18px}
+  .fd-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .fd-rl li:first-child{margin-top:0}
+  .fd-rl li::marker{color:var(--acc);font-weight:700}
+  .fd-rl a{color:var(--acc);text-decoration:none}
+  .fd-rl a:hover{border-bottom:1px solid var(--acc)}
+  @media(max-width:700px){
+    .fd-flow{flex-direction:column}
+    .fd-arrow{align-self:flex-start;transform:rotate(90deg);margin-left:6px}
+  }
+</style>
+</Base>

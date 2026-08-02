@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin All-Time High: Price, Drawdown and Recovery Math - OpenBitcoin" description="Bitcoin's all-time high is $126,272, set October 6, 2025. Live drawdown from the peak, the gain required to reclaim it, and prior cycle highs for context.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">All-time high</div>
+    <h1>Bitcoin all-time high</h1>
+    <p class="doc-lede">The highest recorded bitcoin price is $126,272, set on October 6, 2025. Below: where the current price stands against that peak, and the peaks of prior cycles. All figures in US dollars.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="at-card at-hero">
+      <div class="at-hlab">All-time high</div>
+      <div class="at-hnum">$126,272</div>
+      <div class="at-hdate">Set October 6, 2025</div>
+    </div>
+    <div class="at-live">
+      <div class="at-stat">
+        <div class="at-k">Price now</div>
+        <div class="at-v" id="at-now">&hellip;</div>
+        <div class="at-s">USD, median of three exchanges</div>
+      </div>
+      <div class="at-stat">
+        <div class="at-k">Drawdown from ATH</div>
+        <div class="at-v" id="at-dd">&hellip;</div>
+        <div class="at-s">below $126,272</div>
+      </div>
+      <div class="at-stat">
+        <div class="at-k">To reclaim ATH</div>
+        <div class="at-v" id="at-gain">&hellip;</div>
+        <div class="at-s">gain required from here</div>
+      </div>
+    </div>
+    <div class="at-card">
+      <div class="at-tlab">Prior cycle peaks</div>
+      <table class="at-table" aria-label="Prior cycle all-time highs">
+        <thead><tr><th>Peak</th><th>Price</th><th>Price now &divide; peak</th></tr></thead>
+        <tbody>
+          <tr><td>November 2021</td><td>$69,000</td><td><b data-peak="69000">&hellip;</b></td></tr>
+          <tr><td>December 2017</td><td>$19,783</td><td><b data-peak="19783">&hellip;</b></td></tr>
+          <tr><td>November 2013</td><td>$1,163</td><td><b data-peak="1163">&hellip;</b></td></tr>
+        </tbody>
+      </table>
+      <div class="at-note">The multiple is the current price divided by that cycle's peak, recomputed as the price ticks. Peak figures are the recorded USD highs of each cycle.</div>
+    </div>
+    <div class="at-about doc-prose">
+      <p>Bitcoin's all-time high of $126,272 was recorded on October 6, 2025. Earlier cycles peaked near $69,000 in November 2021, $19,783 in December 2017, and $1,163 in November 2013. The live price on this page is a median of three exchanges, documented at <a href="/sources">/sources</a>; the drawdown and recovery figures are arithmetic against that price, not forecasts.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="at-rstat"><b id="at-rnow">&hellip;</b><i>price, USD</i></div>
+      <div class="at-rstat"><b id="at-rdays">&hellip;</b><i>since the ATH</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/chart">Full price chart</a>
+        <a href="/convert">Bitcoin converter</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .at-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .at-card:first-child{margin-top:0}
+  .at-hero{text-align:left}
+  .at-hlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .at-hnum{font:800 clamp(38px,5.4vw,56px)/1.05 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.015em;
+    color:var(--price-ink);margin-top:8px}
+  .at-hdate{font:600 12px var(--mono);letter-spacing:.06em;color:var(--ink-3);margin-top:8px}
+  .at-live{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  .at-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:14px 16px}
+  .at-k{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .at-v{font:700 24px var(--mono);font-variant-numeric:tabular-nums;color:var(--price-ink);margin-top:7px;letter-spacing:-.3px}
+  .at-v.at-dn{color:var(--down)}
+  .at-s{font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:5px}
+  .at-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .at-table{width:100%;border-collapse:collapse}
+  .at-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .at-table td{font:600 14.5px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .at-table tr:last-child td{border-bottom:0}
+  .at-table td:first-child{color:var(--ink);font-weight:700}
+  .at-table td b{color:var(--price-ink);font-weight:700}
+  .at-note{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin-top:10px}
+  .at-about{margin-top:14px}
+  .at-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .at-rstat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .at-rstat:last-child{border-bottom:0}
+  .at-rstat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .at-rstat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .at-live{grid-template-columns:1fr}
+    .at-card{padding:18px 18px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* the ATH and its date are history; price starts null and every figure
+     derived from it holds at the ellipsis it was served with */
+  var ATH=126272,ATHTS=Date.UTC(2025,9,6),price=null;
+  var elNow=document.getElementById("at-now"),elDd=document.getElementById("at-dd"),
+      elGain=document.getElementById("at-gain"),elRnow=document.getElementById("at-rnow"),
+      elDays=document.getElementById("at-rdays"),
+      mults=document.querySelectorAll("[data-peak]");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function paint(){
+    /* days since the record needs no feed: it is the calendar against the ATH
+       date, the same arithmetic /price uses for its pf-since figure */
+    elDays.textContent=fmt(Math.floor((Date.now()-ATHTS)/86400000),0)+" days";
+    if(price===null)return;
+    var dd=(price/ATH-1)*100,gain=(ATH/price-1)*100;
+    elNow.textContent="$"+fmt(price,0);
+    elRnow.textContent="$"+fmt(price,0);
+    elDd.textContent=(dd<0?"-":"+")+fmt(Math.abs(dd),1)+"%";
+    elDd.className="at-v"+(dd<0?" at-dn":"");
+    elGain.textContent=(gain<0?"-":"+")+fmt(Math.abs(gain),1)+"%";
+    mults.forEach(function(el){
+      var m=price/parseFloat(el.dataset.peak);
+      el.textContent=fmt(m,m>=10?1:2)+"×";
+    });
+  }
+  function setPrice(p){if(typeof p==="number"&&p>0){price=p;return true;}return false;}
+  window.obPaintFiat=function(S){if(S&&setPrice(S.price))paint();};
+  paint();
+  /* chrome.js parses after this script, so a summary it already holds is read
+     on DOMContentLoaded rather than here */
+  function boot(){
+    try{
+      var L=window.OB_LIVE;
+      if(L&&L.price&&setPrice(L.price.usd))paint();
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

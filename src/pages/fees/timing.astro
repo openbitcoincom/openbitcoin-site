@@ -1,0 +1,221 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+const HOUR_BASE = [38,32,26,22,20,18,18,20,26,34,42,50,58,68,78,86,90,92,88,82,72,62,52,44];
+const DAY_MULT = [0.96,1,1,0.98,0.92,0.62,0.52];
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const LEVEL_NAME = ['cheapest','cheap','moderate','busy','busiest'];
+const level = (v) => v < 25 ? 1 : v < 42 ? 2 : v < 60 ? 3 : v < 78 ? 4 : 5;
+const rows = DAYS.map((name, d) => ({
+  name,
+  abbr: name.slice(0, 2),
+  cells: HOUR_BASE.map((b, h) => {
+    const L = level(b * DAY_MULT[d]);
+    return { L, t: `${name} ${String(h).padStart(2, '0')}:00 UTC, ${LEVEL_NAME[L - 1]}` };
+  }),
+}));
+const hours = Array.from({ length: 24 }, (_, h) => ({
+  txt: h % 3 === 0 ? String(h).padStart(2, '0') : '',
+  mid: h % 3 === 0 && h % 6 !== 0,
+}));
+---
+<Base title="When Bitcoin Fees Are Cheap: The Weekly Fee Rhythm - OpenBitcoin" description="When bitcoin fees are cheapest: weekday business hours run busiest, nights and weekends run cheapest. A day-by-hour heatmap and why it happens.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Fees</div>
+    <h1>When bitcoin fees are cheap</h1>
+    <p class="doc-lede">Fees follow a weekly rhythm: they climb through weekday business hours in Europe and the United States and sink at night and on weekends. If a payment can wait, timing alone often cuts the rate.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ft-card">
+      <div class="ft-mhead">
+        <div class="ft-tlab">Typical fee level by day and hour, UTC</div>
+        <div class="ft-leg" aria-hidden="true">
+          <span class="ft-legt">Cheaper</span>
+          <i class="ft-sw ft-l1"></i><i class="ft-sw ft-l2"></i><i class="ft-sw ft-l3"></i><i class="ft-sw ft-l4"></i><i class="ft-sw ft-l5"></i>
+          <span class="ft-legt">Busier</span>
+        </div>
+      </div>
+      <div class="ft-map" role="img" aria-label="Heatmap of typical bitcoin fee levels by day of week and hour, in UTC. Weekday hours from about 13:00 to 21:00 UTC show the highest levels, nights from about 02:00 to 08:00 UTC the lowest, and Saturday and Sunday stay low for most of the day, with Sunday the quietest.">
+        {rows.map((r) => (
+          <Fragment>
+            <span class="ft-day"><b class="ft-dl">{r.name}</b><b class="ft-ds">{r.abbr}</b></span>
+            {r.cells.map((c) => (
+              <i class={`ft-cell ft-l${c.L}`} title={c.t} />
+            ))}
+          </Fragment>
+        ))}
+        <span class="ft-day"></span>
+        {hours.map((hh) => (
+          <span class={'ft-hr' + (hh.mid ? ' ft-hm' : '')}>{hh.txt}</span>
+        ))}
+      </div>
+      <p class="ft-note">Hours are UTC. Levels are relative to the week, cheapest to busiest, not sat/vB rates; the whole curve moves with demand. This map shows a demo pattern shaped to the documented weekly cycle; it switches to levels computed from this site's own logged fee series once enough weeks are on file.</p>
+    </div>
+
+    <div class="ft-cols">
+      <div class="ft-col">
+        <div class="ft-clab">Why weekends dip</div>
+        <p class="ft-cp">Most on-chain traffic is business traffic. Exchanges process withdrawals, custodians move balances, and payment desks settle on weekday schedules, batched through office hours in Europe and North America. When those desks go quiet on Friday evening, the queue drains and the clearing rate falls with it. The same logic makes early UTC mornings cheap even midweek: it is night in both regions that generate most of the traffic.</p>
+      </div>
+      <div class="ft-col">
+        <div class="ft-clab">Why waiting works</div>
+        <p class="ft-cp">Block space is an auction that repeats roughly every ten minutes, and demand ebbs on a schedule. A send with no deadline, moving coins to cold storage, consolidating small outputs, topping up an exchange account, can be broadcast at a low rate and left to confirm when the queue thins. A cheap window is rarely more than a day or two away. Price the gap with the <a href="/fees/calculator">fee calculator</a>.</p>
+      </div>
+      <div class="ft-col ft-col-warn">
+        <div class="ft-clab">When not to wait</div>
+        <ul class="ft-cl">
+          <li>A person is waiting on the payment: pay the going rate and be done.</li>
+          <li>There is a deadline, an invoice, or a time-limited swap: a missed window costs more than any fee.</li>
+          <li>The <a href="/mempool">mempool</a> is already near the floor: there is nothing left to save.</li>
+          <li>Demand spikes can outlast a weekend; waiting is a bet, not a guarantee.</li>
+          <li>Already sent and stuck? See <a href="/tx/stuck">stuck transactions</a>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="doc-card ft-mt">
+      <div class="doc-sec doc-prose">
+        <h2>A tendency, not a promise</h2>
+        <p>The map is an average, and averages hide the exceptions. Any single week can break the pattern: a sharp price move, a popular new use of block space, or one large consolidation run can fill blocks at six in the morning on a Sunday, and when demand surges the weekly shape flattens and stays flat for as long as the surge lasts. Treat the map as a guide to when savings are likely, then check the live numbers before sending: <a href="/fees">current rates</a> for the price, the <a href="/mempool">mempool</a> for the queue itself.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Reading the map</h2>
+        <p>Each cell is the typical level for that hour of the week on a relative scale, not a sat/vB number, because the whole curve rises and falls with demand. The busy band, roughly 13:00 to 21:00 UTC on weekdays, is the stretch where European afternoons overlap North American mornings. How much timing saves depends on the week: when the queue is deep, the overnight and weekend discount is large; when the mempool clears at the floor rate all day, there is little left to save, and the economy tier on the <a href="/fees">fee page</a> is already the answer.</p>
+      </div>
+    </div>
+
+    <div class="ft-about doc-prose">
+      <p>Timing is the cheapest fee tool there is. The weekly rhythm exists because on-chain traffic follows office hours, so patience is worth the most exactly when blocks are fullest. For a payment with no deadline, a low rate plus a quiet window does the work of a high rate; for everything else, pay what the next block costs and move on. The <a href="/fees">fee page</a> shows the current rates, the <a href="/mempool">mempool page</a> shows the queue behind them, and the <a href="/fees/calculator">calculator</a> turns a rate into a cost before you commit.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Fees now</div>
+      <div class="ft-stat"><b id="ft-eco">2 sat/vB</b><i>economy</i></div>
+      <div class="ft-stat"><b id="ft-fast">5 sat/vB</b><i>fastest</i></div>
+      <div class="ft-stat"><b id="ft-h">958,341</b><i>current height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Cheap windows, UTC</div>
+      <ul class="ft-rl">
+        <li>Saturday and Sunday, most of the day</li>
+        <li>Weekdays, about 02:00 to 08:00</li>
+        <li>Busiest: weekdays 13:00 to 21:00</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees">Current fee rates</a>
+        <a href="/mempool">Mempool now</a>
+        <a href="/fees/calculator">Fee calculator</a>
+        <a href="/tx/stuck">Stuck transaction</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ft-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ft-mt{margin-top:14px}
+  .ft-mhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px 14px;flex-wrap:wrap;margin-bottom:12px}
+  .ft-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .ft-leg{display:flex;align-items:center;gap:3px}
+  .ft-legt{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 5px}
+  .ft-sw{width:13px;height:13px;border-radius:3px}
+  .ft-map{display:grid;grid-template-columns:34px repeat(24,minmax(0,1fr));gap:2px}
+  .ft-cell{aspect-ratio:1/1;border-radius:3px;min-width:0}
+  .ft-cell:hover{outline:1px solid var(--ink-3);outline-offset:0}
+  .ft-l1{background:rgba(var(--acc-rgb),.12)}
+  .ft-l2{background:rgba(var(--acc-rgb),.28)}
+  .ft-l3{background:rgba(var(--acc-rgb),.46)}
+  .ft-l4{background:rgba(var(--acc-rgb),.68)}
+  .ft-l5{background:rgba(var(--acc-rgb),.92)}
+  .ft-day{font:700 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);align-self:center;min-width:0}
+  .ft-ds{display:none}
+  .ft-hr{font:700 8.5px var(--mono);letter-spacing:.04em;color:var(--ink-3);white-space:nowrap;margin-top:2px;min-width:0}
+  .ft-note{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .ft-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+  .ft-col{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .ft-clab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:8px}
+  .ft-col-warn{border-color:rgba(246,70,93,.42)}
+  .ft-col-warn .ft-clab{color:var(--down)}
+  .ft-cp{font:500 13px/1.62 var(--sans);color:var(--ink-2);margin:0}
+  .ft-cl{margin:0;padding-left:18px}
+  .ft-cl li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ft-cl li:first-child{margin-top:0}
+  .ft-cl li::marker{color:var(--down)}
+  .ft-cp a,.ft-cl a,.ft-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ft-cp a:hover,.ft-cl a:hover,.ft-note a:hover{border-bottom-style:solid}
+  .ft-about{margin-top:14px}
+  .ft-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ft-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ft-stat:last-child{border-bottom:0}
+  .ft-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .ft-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .ft-rl{margin:0;padding-left:16px}
+  .ft-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ft-rl li:first-child{margin-top:0}
+  .ft-rl li::marker{color:var(--acc)}
+  @media(max-width:900px){
+    .ft-cols{grid-template-columns:minmax(0,1fr)}
+  }
+  @media(max-width:700px){
+    .ft-card{padding:16px 14px 18px}
+    .ft-map{grid-template-columns:20px repeat(24,minmax(0,1fr))}
+    .ft-dl{display:none}
+    .ft-ds{display:inline}
+    .ft-hm{visibility:hidden}
+    .ft-cell,.ft-sw{border-radius:2px}
+    .ft-day{font-size:8px;letter-spacing:.04em}
+    .ft-hr{font-size:8px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* fallback baseline; height and both fee targets repaint from the live feed */
+  var P={height:958341,eco:2,fast:5};
+  function fmt(n){return n.toLocaleString("en-US");}
+  function rate(r){return (r%1?r.toFixed(1):String(r))+" sat/vB";}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function paint(){
+    txt("ft-h",fmt(P.height));
+    txt("ft-eco",rate(P.eco));
+    txt("ft-fast",rate(P.fast));
+  }
+  /* the economy and fastest targets off a /summary payload, the same fields
+     the /fees page reads */
+  function applyFees(d){
+    var f=d&&d.fees;if(!f)return false;
+    if(typeof f.economy==="number"&&f.economy>0)P.eco=f.economy;
+    if(typeof f.fastest==="number"&&f.fastest>0)P.fast=f.fastest;
+    return true;
+  }
+  /* live height arrives via the chrome hook (~1.5s and on new blocks);
+     chrome.js refreshes window.OB_LIVE before each call */
+  window.obPaintFiat=function(S){
+    if(typeof S.height==="number")P.height=S.height;
+    if(window.OB_LIVE)applyFees(window.OB_LIVE);
+    paint();
+  };
+  paint();
+  /* initial fetch: OB_DATA_API is set by Base.astro after this script parses,
+     so wait for DOMContentLoaded; on any failure the fallbacks stand */
+  function boot(){
+    try{
+      if(window.OB_LIVE&&applyFees(window.OB_LIVE)){paint();return;}
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/summary").then(function(r){return r.json();}).then(function(d){
+        if(applyFees(d))paint();
+      }).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

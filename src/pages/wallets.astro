@@ -1,0 +1,423 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+
+const PF = {
+  win: { t: 'Windows', svg: '<path d="M3 5.5 10.5 4.4V11.5H3V5.5ZM3 12.5H10.5V19.6L3 18.5V12.5ZM11.5 4.2 21 3V11.5H11.5V4.2ZM21 12.5V21L11.5 19.8V12.5H21Z"/>' },
+  mac: { t: 'macOS', svg: '<path d="M17.05 20.28c-.98.95-2.05.86-3.08.38-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.38C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8.79-.16 2.19-.91 3.7-.78 1.5.13 2.63.72 3.38 1.85-3.12 1.87-2.62 5.98.44 7.19-.57 1.5-1.31 2.98-2.6 3.91zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>' },
+  ios: { t: 'iOS', svg: '<path d="M17.05 20.28c-.98.95-2.05.86-3.08.38-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.38C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8.79-.16 2.19-.91 3.7-.78 1.5.13 2.63.72 3.38 1.85-3.12 1.87-2.62 5.98.44 7.19-.57 1.5-1.31 2.98-2.6 3.91zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>' },
+  and: { t: 'Android', svg: '<path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84 1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>' },
+  lin: { t: 'Linux', svg: '<path d="M12 1.6c-2.1 0-3.6 1.6-3.6 3.7 0 .9-.2 1.8-.7 2.7-1 2-2.6 4.3-2.6 7.2 0 3.9 2.9 7 6.9 7s6.9-3.1 6.9-7c0-2.9-1.6-5.2-2.6-7.2-.5-.9-.7-1.8-.7-2.7 0-2.1-1.5-3.7-3.6-3.7z"/><ellipse class="neg" cx="12" cy="16" rx="3.5" ry="4.4"/><circle class="neg" cx="10.6" cy="5.2" r=".75"/><circle class="neg" cx="13.4" cy="5.2" r=".75"/><path d="M12 6.1l1.5 1.1-1.5 1-1.5-1z"/><ellipse cx="9.6" cy="22" rx="1.8" ry="1"/><ellipse cx="14.4" cy="22" rx="1.8" ry="1"/>' },
+  desk: { t: 'Desktop', svg: '<path d="M3 4h18a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-7v2h3v2H7v-2h3v-2H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v9h16V6H4z"/>' },
+};
+const plats = (keys) => keys.map((k) =>
+  `<span class="wl-pf" title="${PF[k].t}"><svg viewBox="0 0 24 24" aria-hidden="true">${PF[k].svg}</svg><span class="wl-sr">${PF[k].t}</span></span>`
+).join('');
+---
+<Base title="Bitcoin Wallets: Hardware, Mobile, Desktop and Multisig - OpenBitcoin" description="A directory of self-custody bitcoin wallets: hardware, mobile, desktop, and multisig. Platforms, open-source status, and what each one suits.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Wallets</div>
+    <h1>Bitcoin wallets</h1>
+    <p class="doc-lede">Every wallet here is self-custody: keys are made on your device and stay under your control. Categories map to how coins are used, and no placement is paid. New to keys? Read <a href="/learn/self-custody">self-custody</a> first.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="wl-card">
+      <div class="wl-tlab">How to choose</div>
+      <p class="wl-p">There is no single correct wallet, but there is a reliable way to narrow the field: match the tool to the amount, and to how often the coins move. Most people end up with two wallets rather than one.</p>
+      <div class="wl-tiers">
+        <div class="wl-tier">
+          <b>Savings</b>
+          <i>Hardware wallet</i>
+          <p>The private keys sit on a device that never touches the internet. It signs a transaction and hands it back; the companion app on your phone or desktop only ever sees public data.</p>
+        </div>
+        <div class="wl-tier">
+          <b>Spending money</b>
+          <i>Mobile, hot by design</i>
+          <p>The keys live on a device that is online and in your pocket. That is the trade you accept for convenience. Suitable for an amount you would be annoyed to lose, not ruined.</p>
+        </div>
+        <div class="wl-tier">
+          <b>Large holdings</b>
+          <i>Multisig</i>
+          <p>Spending requires two or three keys out of a set, stored in different places. No single device, house, fire, or mistake loses the coins. More setup and more upkeep in exchange.</p>
+        </div>
+      </div>
+      <div class="wl-rulebox">
+        <div class="wl-tlab">Rules that apply to all of them</div>
+        <ul class="wl-rules">
+          <li><b>Buy hardware new, from the manufacturer.</b> A device bought used, or through a marketplace reseller, can arrive already initialized with a seed the seller kept. Intact packaging and holographic seals prove very little; a wallet that hands you a seed phrase instead of generating one in front of you is compromised.</li>
+          <li><b>Verify the download before you run it.</b> Wallet software is signed by its developers, and checking that signature is what tells you the file came from them rather than from a look-alike site with an ad at the top of the search results. Each maker's download page documents its own signing keys and steps.</li>
+          <li><b>The seed phrase is never typed into a website.</b> Not to validate, sync, migrate, or upgrade anything. Every wallet on this page asks for the seed only inside the app itself, during a restore you started. Anything else asking is theft; see <a href="/learn/scams">common scams</a>.</li>
+          <li><b>Practice the restore before it matters.</b> Wipe the wallet, restore from your written backup, and confirm the same addresses come back. A backup you have never tested is an assumption.</li>
+          <li><b>Send a small amount first</b> whenever a wallet, a device, or an address is new to you.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wl-card wl-mt">
+      <div class="wl-tlab">Hardware wallets</div>
+      <p class="wl-p">A hardware wallet keeps the private keys on a device that never connects to the internet. Transactions are built on your computer or phone, passed to the device, signed there, and passed back. The keys do not leave, so malware on the connected machine has nothing to steal, though it can still show you a wrong address; that is why the device has its own screen and why you check the address on it.</p>
+      <p class="wl-affline">Hardware rows are marked <span class="wl-chip">Affiliate</span> because referral programs are the intended commercial model for this page. The buy buttons currently go to each maker's own site, unpaid; when a program is signed, the link becomes an affiliate link and stays labeled, per the <a href="/disclosure">disclosure policy</a>. Affiliate status never changes what a row says. Rows are alphabetical; this is not a ranking.</p>
+
+      <div class="wl-warn">
+        <div class="wl-wlab">Before you order: the database problem</div>
+        <p>Hardware wallet makers run online shops, and shop databases leak. The best-known case is Ledger's 2020 e-commerce breach: customer names, emails, phone numbers, and home addresses from order records were later published, and the people on that list have spent years receiving phishing emails, threatening letters, and fake "replacement device" packages built to steal seed phrases. The devices themselves were never the problem; the customer list was. Assume any vendor's order database can end up public, and give it only what you can live with being public.</p>
+        <ul>
+          <li><b>Ship to a PO box, parcel locker, or pickup point,</b> not your home address.</li>
+          <li><b>Use a dedicated email alias</b> created for the purchase and used for nothing else; if it starts receiving "urgent security" mail, you know exactly what leaked.</li>
+          <li><b>Skip the phone number where possible,</b> or use a VoIP or secondary number, never your main line.</li>
+          <li><b>Pay with bitcoin where the maker accepts it;</b> it keeps your card identity out of the order record.</li>
+          <li><b>Use initials or a household name for delivery</b> where local rules allow it.</li>
+          <li><b>Never register the device with personal details</b> after setup; it works without an account.</li>
+        </ul>
+        <p class="wl-wfine">Already getting scam mail from an old leak? The letters and emails follow known patterns; see <a href="/learn/scams">common scams</a>. Nothing they claim requires your seed, ever.</p>
+      </div>
+
+      <div class="wl-scroll">
+      <table class="wl-table" aria-label="Bitcoin hardware wallets">
+        <thead>
+          <tr><th>Device</th><th>Connects by</th><th>Open source</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://bitbox.swiss" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/bitbox.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://bitbox.swiss" target="_blank" rel="noopener noreferrer">BitBox02</a></b><span class="wl-chip">Affiliate</span></span></td>
+            <td>USB-C</td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Swiss maker; a bitcoin-only edition exists alongside the multi-coin one; pairs with its own desktop and mobile app</td>
+            
+            <td class="wl-act"><a class="wl-buy" href="https://bitbox.swiss" target="_blank" rel="noopener noreferrer">Buy &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://coldcard.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/coldcard-icon.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://coldcard.com" target="_blank" rel="noopener noreferrer">Coldcard</a></b><span class="wl-chip">Affiliate</span></span></td>
+            <td>microSD or USB</td>
+            <td class="wl-part">Source published</td>
+            <td class="wl-notes">Bitcoin only; can sign fully air-gapped by moving PSBT files on a microSD card, so the device never touches a computer</td>
+            
+            <td class="wl-act"><a class="wl-buy" href="https://coldcard.com" target="_blank" rel="noopener noreferrer">Buy &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://blockstream.com/jade" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/blockstream.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://blockstream.com/jade" target="_blank" rel="noopener noreferrer">Jade</a></b><span class="wl-chip">Affiliate</span></span></td>
+            <td>USB or QR</td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Camera on board, so it can run air-gapped by scanning QR codes; works with Blockstream Green and with Sparrow</td>
+            
+            <td class="wl-act"><a class="wl-buy" href="https://blockstream.com/jade" target="_blank" rel="noopener noreferrer">Buy &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg wl-inv" href="https://www.ledger.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/ledger.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://www.ledger.com" target="_blank" rel="noopener noreferrer">Ledger</a></b><span class="wl-chip">Affiliate</span></span></td>
+            <td>USB, some models Bluetooth</td>
+            <td class="wl-part">Apps open, firmware closed</td>
+            <td class="wl-notes">The most widely sold line; secure-element devices with the Ledger Live app. Its 2020 shop-data breach is the case the warning above describes</td>
+            
+            <td class="wl-act"><a class="wl-buy" href="https://www.ledger.com" target="_blank" rel="noopener noreferrer">Buy &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://trezor.io" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/trezor.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://trezor.io" target="_blank" rel="noopener noreferrer">Trezor</a></b><span class="wl-chip">Affiliate</span></span></td>
+            <td>USB</td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Several models in the line; the current ones add a secure element, and a bitcoin-only firmware build is offered</td>
+            
+            <td class="wl-act"><a class="wl-buy" href="https://trezor.io" target="_blank" rel="noopener noreferrer">Buy &#8599;</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="wl-fine">Five devices is not the whole market, and an omission here is not a verdict on anything. Model lineups, firmware licensing, and companion apps change; check the maker's own site before buying, and buy there rather than from a marketplace listing.</p>
+    </div>
+
+    <div class="wl-card wl-mt">
+      <div class="wl-tlab">Mobile wallets</div>
+      <p class="wl-p">Phone wallets are the everyday tier. They hold keys on a connected device, which is what makes them convenient and what caps how much belongs in them. Several also speak Lightning for small, immediate payments.</p>
+      <div class="wl-scroll">
+      <table class="wl-table" aria-label="Self-custody mobile bitcoin wallets">
+        <thead>
+          <tr><th>Wallet</th><th>Platforms</th><th>Open source</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://electrum.org" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/electrum.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://electrum.org" target="_blank" rel="noopener noreferrer">Electrum</a></b></span></td>
+            <td set:html={plats(['and'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">The desktop veteran's official Android build: same seed formats, servers, and hardware wallet support; no iOS version. Install from electrum.org and verify the signature</td>
+            <td class="wl-act"><a class="wl-buy" href="https://electrum.org" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg wl-full" href="https://bluewallet.io" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/bluewallet.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://bluewallet.io" target="_blank" rel="noopener noreferrer">Blue Wallet</a></b></span></td>
+            <td set:html={plats(['ios','and'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">On-chain and Lightning in one app; can watch a hardware wallet and sign by PSBT</td>
+            <td class="wl-act"><a class="wl-buy" href="https://bluewallet.io" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://blockstream.com/app/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/blockstream.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://blockstream.com/app/" target="_blank" rel="noopener noreferrer">Blockstream Green</a></b></span></td>
+            <td set:html={plats(['ios','and','desk'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Singlesig, or a 2-of-2 where a Blockstream key cosigns and cannot spend alone; hardware wallet support</td>
+            <td class="wl-act"><a class="wl-buy" href="https://blockstream.com/app/" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://wallet.mycelium.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/mycelium.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://wallet.mycelium.com" target="_blank" rel="noopener noreferrer">Mycelium</a></b></span></td>
+            <td set:html={plats(['ios','and'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">One of the oldest mobile bitcoin wallets, Android-first; hardware wallet and watch-only support</td>
+            <td class="wl-act"><a class="wl-buy" href="https://wallet.mycelium.com" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg wl-full" href="https://phoenix.acinq.co" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/phoenix.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://phoenix.acinq.co" target="_blank" rel="noopener noreferrer">Phoenix</a></b></span></td>
+            <td set:html={plats(['ios','and'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Lightning focused; channel management is automated, with the on-chain cost of it charged as a fee</td>
+            <td class="wl-act"><a class="wl-buy" href="https://phoenix.acinq.co" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://zeusln.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/zeus.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://zeusln.com" target="_blank" rel="noopener noreferrer">Zeus</a></b></span></td>
+            <td set:html={plats(['ios','and'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Front end for a Lightning node you run, plus an embedded node option for people without one</td>
+            <td class="wl-act"><a class="wl-buy" href="https://zeusln.com" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="wl-fine">No affiliate relationship exists on any software row, here or below. These are open-source projects; download them from the project's own site or app store listing, and verify the signature where one is published.</p>
+    </div>
+
+    <div class="wl-card wl-mt">
+      <div class="wl-tlab">Desktop wallets</div>
+      <p class="wl-p">Desktop software is where coin control, transaction inspection, and hardware wallet workflows live. Two of the three below can point at a node you run yourself, which removes the third party that would otherwise learn which addresses are yours.</p>
+      <div class="wl-scroll">
+      <table class="wl-table" aria-label="Self-custody desktop bitcoin wallets">
+        <thead>
+          <tr><th>Wallet</th><th>Platforms</th><th>Open source</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://electrum.org" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/electrum.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://electrum.org" target="_blank" rel="noopener noreferrer">Electrum</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Lightweight and long-running; connects to Electrum servers, yours or public ones; hardware wallet support</td>
+            <td class="wl-act"><a class="wl-buy" href="https://electrum.org" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://bitcoincore.org" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/bitcoin-core.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://bitcoincore.org" target="_blank" rel="noopener noreferrer">Bitcoin Core</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Full node with a built-in wallet; checks every consensus rule against the whole chain itself rather than asking a server</td>
+            <td class="wl-act"><a class="wl-buy" href="https://bitcoincore.org" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/sparrow.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer">Sparrow</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Coin control, PSBT, fee and transaction detail; connects to your own node or an Electrum server; coordinates multisig</td>
+            <td class="wl-act"><a class="wl-buy" href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="wl-fine">Running your own node is what makes the server column moot. The <a href="/nodes">node map</a> shows how many are reachable and what they are running.</p>
+    </div>
+
+    <div class="wl-card wl-mt">
+      <div class="wl-tlab">Multisig and advanced</div>
+      <p class="wl-p">Multisig replaces one point of failure with a quorum: a 2-of-3 wallet spends only when two of its three keys sign, so one lost device or one stolen seed costs you nothing. The tools below create the wallet and coordinate signing across devices from different manufacturers, which is the point of spreading the keys in the first place.</p>
+      <div class="wl-scroll">
+      <table class="wl-table" aria-label="Multisig and advanced bitcoin wallets">
+        <thead>
+          <tr><th>Wallet</th><th>Platforms</th><th>Open source</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://lianawallet.com/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/liana.svg" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://lianawallet.com/" target="_blank" rel="noopener noreferrer">Liana</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Timelocked recovery paths: a backup key becomes able to spend only after a set period without activity</td>
+            <td class="wl-act"><a class="wl-buy" href="https://lianawallet.com/" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg wl-full" href="https://nunchuk.io" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/nunchuk.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://nunchuk.io" target="_blank" rel="noopener noreferrer">Nunchuk</a></b></span></td>
+            <td set:html={plats(['ios','and','desk'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Multisig with guided setup and inheritance features; works with several hardware devices</td>
+            <td class="wl-act"><a class="wl-buy" href="https://nunchuk.io" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/sparrow.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer">Sparrow</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Builds multisig from mixed hardware devices and exports the wallet descriptor you need to keep alongside the seeds</td>
+            <td class="wl-act"><a class="wl-buy" href="https://sparrowwallet.com" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="wl-name"><a class="wl-logo wl-limg" href="https://specter.solutions" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/wallets/specter.png" alt="" width="30" height="30" loading="lazy"></a><span><b><a href="https://specter.solutions" target="_blank" rel="noopener noreferrer">Specter Desktop</a></b></span></td>
+            <td set:html={plats(['win','mac','lin'])}></td>
+            <td class="wl-yes">Yes</td>
+            <td class="wl-notes">Multisig coordinator built around a Bitcoin Core node you run yourself</td>
+            <td class="wl-act"><a class="wl-buy" href="https://specter.solutions" target="_blank" rel="noopener noreferrer">Get &#8599;</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="wl-fine">Multisig adds a second backup obligation. As well as each seed, you must keep the wallet descriptor, the record of which public keys make up the wallet and how many signatures it needs, because the seeds alone may not be enough to rebuild it. Store the descriptor with your backups; it cannot spend anything on its own.</p>
+    </div>
+
+    <div class="wl-about doc-prose">
+      <p>A bitcoin wallet does not hold coins. It holds the keys that authorize spending the coins recorded on the chain, which is why the same balance can appear in any wallet restored from the same seed, and why the seed is the thing worth protecting; the <a href="/learn/self-custody">self-custody guide</a> covers that in full. Software chosen from this page should be verified before it runs, using the <a href="/verify">signature walkthrough</a>, and hardware should be bought from the manufacturer, with the ordering-privacy habits above. If you are still deciding where the coins come from, see <a href="/buy">buying bitcoin</a> and <a href="/learn/no-kyc">no-KYC bitcoin</a>; if they are for spending, <a href="/spend/gift-cards">gift cards</a> is one route. Affiliate relationships on this page, once any exist, are labeled where they appear and documented in the <a href="/disclosure">disclosure</a>. Everything here is informational, not advice, per the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Match the amount</div>
+      <div class="wl-rs"><b>Savings</b><i>hardware wallet</i></div>
+      <div class="wl-rs"><b>Spending</b><i>mobile wallet</i></div>
+      <div class="wl-rs"><b>Large holdings</b><i>multisig</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Order privately</div>
+      <ul class="wl-rl">
+        <li>PO box or pickup point, not home</li>
+        <li>Dedicated email alias for the order</li>
+        <li>VoIP or no phone number</li>
+        <li>Pay in bitcoin where accepted</li>
+        <li>Never register the device</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you install</div>
+      <ul class="wl-rl">
+        <li>Buy hardware new, from the maker</li>
+        <li>Verify the download signature</li>
+        <li>Write the seed on paper or metal</li>
+        <li>Never type the seed into a website</li>
+        <li>Test a restore, then a small amount</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/verify">Verify a download</a>
+        <a href="/learn/scams">Common scams</a>
+        <a href="/buy">Buying bitcoin</a>
+        <a href="/nodes">Reachable nodes</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .wl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .wl-mt{margin-top:14px}
+  .wl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .wl-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0 0 14px}
+  .wl-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wl-p a:hover{border-bottom-style:solid}
+  .wl-tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .wl-tier{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .wl-tier b{display:block;font:700 14px var(--sans);color:var(--ink)}
+  .wl-tier i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--acc);font-style:normal;margin-top:4px}
+  .wl-tier p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .wl-rulebox{margin-top:18px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .wl-rules{margin:0;padding-left:22px}
+  .wl-rules li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .wl-rules li:first-child{margin-top:0}
+  .wl-rules li::marker{color:var(--acc);font-weight:700}
+  .wl-rules b{color:var(--ink);font-weight:600}
+  .wl-rules a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wl-rules a:hover{border-bottom-style:solid}
+  .wl-affline{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0 0 12px}
+  .wl-affline a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wl-affline a:hover{border-bottom-style:solid}
+  .wl-warn{border:1px solid rgba(246,70,93,.45);background:rgba(246,70,93,.06);border-radius:12px;padding:16px 18px;margin:0 0 16px}
+  .wl-wlab{font:700 10px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--down);margin-bottom:8px}
+  .wl-warn p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .wl-warn ul{margin:10px 0 0;padding-left:20px}
+  .wl-warn li{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .wl-warn li::marker{color:var(--down)}
+  .wl-warn b{color:var(--ink);font-weight:600}
+  .wl-wfine{margin-top:16px;padding-top:12px;border-top:1px dotted rgba(246,70,93,.3);font-size:12.5px;color:var(--ink-3)}
+  .wl-warn a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wl-warn a:hover{border-bottom-style:solid}
+  .wl-scroll{overflow-x:auto}
+  .wl-table{width:100%;min-width:760px;border-collapse:collapse;table-layout:fixed}
+  .wl-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .wl-table td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .wl-table tr:last-child td{border-bottom:0}
+  .wl-name{white-space:nowrap}
+  .wl-name > span:last-child{display:inline-block;vertical-align:top}
+  .wl-name b{display:block;font:700 14px var(--sans);color:var(--ink)}
+  .wl-name b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
+  .wl-name b a:hover{color:var(--acc);border-bottom-color:rgba(247,147,26,.45)}
+  
+  .wl-table th:nth-child(1){width:176px}
+  .wl-table th:nth-child(2){width:120px}
+  .wl-table th:nth-child(3){width:130px}
+  .wl-table th:nth-child(5){width:118px}
+  .wl-logo{display:inline-flex;width:30px;height:30px;border-radius:8px;align-items:center;justify-content:center;
+    font:800 12px var(--sans);color:#fff;flex:none;border:1px solid rgba(255,255,255,.14);letter-spacing:.02em;
+    vertical-align:top;margin-right:10px;text-decoration:none}
+  a.wl-logo:hover{border-color:rgba(255,166,60,.6)}
+  .wl-pf{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-right:4px;
+    color:var(--ink-2);background:var(--field);border:1px solid var(--line-2);border-radius:6px;vertical-align:middle}
+  .wl-pf svg{width:13px;height:13px;fill:currentColor}
+  .wl-pf svg .neg{fill:var(--field)}
+  
+  .wl-limg{background:var(--field)}
+  .wl-limg img{width:100%;height:100%;object-fit:contain;padding:4px;border-radius:inherit;display:block;box-sizing:border-box}
+  .wl-full img{padding:0;object-fit:cover}
+  .wl-inv img{filter:invert(1)}
+  .wl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .wl-yes{font:700 12px var(--mono);color:var(--up);white-space:nowrap}
+  .wl-part{font:700 11px/1.6 var(--mono);color:var(--ink-3)}
+  .wl-notes{min-width:190px}
+  .wl-chip{display:inline-block;margin-top:5px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--acc);border:1px dashed rgba(247,147,26,.45);border-radius:5px;padding:2px 6px}
+  .wl-affline .wl-chip{margin-top:0;vertical-align:baseline}
+  .wl-act{text-align:right}
+  .wl-buy{display:inline-block;font:700 13.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    padding:11px 20px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .wl-buy:hover{background:var(--cta-hov);border-color:var(--orange)}
+  .wl-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .wl-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wl-fine a:hover{border-bottom-style:solid}
+  .wl-about{margin-top:14px}
+  .wl-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .wl-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .wl-rs:last-child{border-bottom:0}
+  .wl-rs b{display:block;font:700 13.5px var(--sans);color:var(--ink)}
+  .wl-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .wl-rl{margin:0;padding-left:16px}
+  .wl-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .wl-rl li:first-child{margin-top:0}
+  .wl-rl li::marker{color:var(--acc)}
+  @media(max-width:820px){
+    .wl-tiers{grid-template-columns:minmax(0,1fr)}
+  }
+  @media(max-width:700px){
+    .wl-card{padding:18px 16px}
+    
+    .wl-scroll{overflow:visible}
+    .wl-table{min-width:0;table-layout:auto}
+    .wl-table thead{display:none}
+    .wl-table,.wl-table tbody,.wl-table tr,.wl-table td{display:block;width:auto}
+    .wl-table tr{position:relative;padding:14px 0 13px;border-bottom:1px dotted var(--line-2)}
+    .wl-table tr:last-child{padding-bottom:4px;border-bottom:0}
+    .wl-table td{border-bottom:0;padding:0;font-size:13px}
+    .wl-name{padding-right:96px;white-space:normal}
+    .wl-table td:nth-child(2){display:inline-block;margin:8px 10px 0 0;color:var(--ink-3);font-size:12px}
+    .wl-table td:nth-child(3){display:inline-block;margin:8px 0 0}
+    .wl-yes::before,.wl-part::before{content:"Open source: ";font:600 9.5px var(--mono);
+      letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+    .wl-table[aria-label="Bitcoin hardware wallets"] td:nth-child(2)::before{content:"Connects: ";
+      font:600 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .wl-notes{margin-top:8px;min-width:0;font-size:13px;color:var(--ink-2)}
+    .wl-act{position:absolute;top:12px;right:0;text-align:right}
+    .wl-buy{font-size:11.5px;padding:9px 13px}
+  }
+</style>
+</Base>

@@ -1,0 +1,156 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="Gavin Andresen: The Man Satoshi Left in Charge - OpenBitcoin" description="Gavin Andresen, the developer Satoshi left in charge of bitcoin: the 2010 faucet that gave away roughly 19,700 BTC, the handoff, and his quiet exit.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History / People</div>
+    <h1>Gavin Andresen</h1>
+    <p class="doc-lede">Satoshi Nakamoto chose one person to hand bitcoin to before going silent. Gavin Andresen built the first faucet, held the keys to the code, spoke at the CIA, and then stepped quietly out of the story.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pg-id">
+      <div class="pg-tlab">The person</div>
+      <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+      <div class="pg-idgrid">
+        <p class="pg-p">Before bitcoin, Gavin Andresen was a graphics programmer with a long, unglamorous resume: a Princeton degree in 1988, years building 3D software at Silicon Graphics, a co-author credit on the 1996 VRML 2.0 specification for 3D on the web. He found bitcoin in the spring of 2010, read the code, and decided the design was worth his time. Within weeks he was contributing; within months, the anonymous creator of the system was quietly measuring him for the biggest handoff in the project's history.</p>
+        <div class="pg-facts">
+          <div class="pg-frow"><b>Born</b><span>1966</span></div>
+          <div class="pg-frow"><b>Educated</b><span>Princeton, class of 1988</span></div>
+          <div class="pg-frow"><b>Before</b><span>3D graphics at Silicon Graphics; VRML 2.0 spec co-author</span></div>
+          <div class="pg-frow"><b>Home</b><span>Amherst, Massachusetts</span></div>
+          <div class="pg-frow"><b>First project</b><span>The bitcoin faucet, June 2010</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-card pg-mt">
+      <div class="doc-sec">
+        <h2>Five bitcoin, first come first served</h2>
+        <div class="doc-prose">
+          <p>His opening move was a giveaway. On June 11, 2010, Andresen announced his first bitcoin project on the forum: a webpage at freebitcoins.appspot.com that handed five bitcoin, "Five &#3647; per customer, first come first served," to anyone who solved a captcha. He stocked it with 1,100 BTC of his own money and explained himself in the first post:</p>
+          <blockquote>"I want the Bitcoin project to succeed, and I think it is more likely to be a success if people can get a handful of coins to try it out."</blockquote>
+          <p>The faucet became the most effective onboarding tool bitcoin ever had, dispensing roughly 19,700 BTC before the era closed. The full story of that page and everything that wore its name afterward is at <a href="/history/faucets">the faucet era</a>.</p>
+          <div class="pg-stats">
+            <div class="pg-stat"><b>June 11, 2010</b><i>faucet announced on the forum</i></div>
+            <div class="pg-stat"><b>1,100 BTC</b><i>seeded from his own coins</i></div>
+            <div class="pg-stat"><b id="pg-seed">&#8230;</b><i>that seed at today's price</i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The handoff</h2>
+        <div class="doc-prose">
+          <p>The faucet earned a reply from Satoshi ("Excellent choice of a first project, nice work") and the code Andresen kept shipping earned something bigger. In September 2010, Satoshi told him he was moving on to other projects. Over the following months the creator transferred, piece by piece, everything a founder had to give: control of the source code repository, and the network alert key, the key that could broadcast a warning to every running copy of the software. By December 2010, Satoshi had stopped posting publicly, and Andresen was the closest thing bitcoin had to a lead developer.</p>
+          <p>The role was smaller than it sounds, which is the point of bitcoin: a maintainer merges code, and <a href="/nodes">the nodes</a> decide whether to run it. But somebody had to review the patches, coordinate the releases, and answer for the project in public, and for the next several years that somebody was Andresen.</p>
+          <p>The correspondence ended in April 2011. In one of the last emails Andresen has said he received, Satoshi wrote:</p>
+          <blockquote>"I wish you wouldn't keep talking about me as a mysterious shadowy figure, the press just turns that into a pirate currency angle. Maybe instead make it about the open source project and give more credit to your dev contributors; it helps motivate them."</blockquote>
+          <p>Andresen replied. No answer ever came, to him or to anyone. The wider record of that disappearance is at <a href="/learn/who-is-satoshi">who is Satoshi</a>.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>A talk at the CIA</h2>
+        <div class="doc-prose">
+          <p>In late April 2011, Andresen announced on the forum that he had accepted an unusual invitation: In-Q-Tel, the investment arm of the US intelligence community, wanted a bitcoin presentation at its emerging-technologies conference, held at CIA headquarters under the theme "Mobility of Money." He gave the talk on June 14, 2011, by his account a plain tutorial on how bitcoin works and the state of the young ecosystem. His reasoning was the same as the faucet's: bitcoin was designed to be explained, and hiding from governments would only make the project look like it had something to hide.</p>
+          <p class="pg-spec"><span class="pg-tag">speculation</span>The timing became a legend. Andresen mentioned the invitation in his reply to what turned out to be Satoshi's last email to him, and Satoshi never wrote to anyone again. Whether the two facts are connected has been argued about ever since; nothing verifiable links them, Satoshi never said, and this page does not pretend to know.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Chief scientist</h2>
+        <div class="doc-prose">
+          <p>When the Bitcoin Foundation formed in 2012 to fund development and speak for the project, Andresen took the title chief scientist, and for a stretch he was the public face of bitcoin: explaining it to journalists, regulators, and conference rooms that had never heard the word. In April 2014 he handed the day-to-day lead maintainer role for Bitcoin Core to Wladimir van der Laan to focus on the science, and in 2015, as the foundation's funding thinned, MIT's Digital Currency Initiative took over supporting his work.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>May 2016, briefly</h2>
+        <div class="doc-prose">
+          <p>In May 2016, after a private signing session, Andresen published a post stating "I believe Craig Steven Wright is the person who invented Bitcoin." Within days the other Bitcoin Core maintainers removed his commit access, citing the precaution that his account might be compromised. Wright never produced public proof, and in 2024 the UK High Court found that he is not Satoshi Nakamoto and had forged evidence on a grand scale; the findings are laid out on <a href="/learn/who-is-satoshi">the Satoshi page</a>. Andresen himself added a note to his post in 2023, writing that "it was a mistake to trust Craig Wright as much as I did," and that he was done with the who-is-Satoshi game. The episode cost him his last formal connection to the code he had stewarded, and he never sought it back.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The quiet years</h2>
+        <div class="doc-prose">
+          <p>By then Andresen had also landed on the losing side of bitcoin's great scaling argument, having backed proposals and alternative software to raise the block size limit that the network declined to adopt. After 2016 he withdrew from public bitcoin work almost entirely: occasional blog posts and experiments, no titles, no commits, home in Amherst. He has given few interviews since and this page respects the preference the silence implies.</p>
+          <p>The ledger of his years in the middle of bitcoin is unusually easy to read. He gave away a fortune in coins to strangers because the network needed users, kept the code alive through the founder's exit, and proved, twice, that bitcoin survives the departure of the person in charge. First Satoshi left and the system did not notice; then Andresen left and it did not notice again. That is the system working. The other people who built the early years are at <a href="/history/people">people of early bitcoin</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-about doc-prose">
+      <p>Dates and quotes above come from the archived forum record, Andresen's own posts, and major-outlet reporting, documented at <a href="/sources">/sources</a>; the court findings are stated as the court stated them. The live dollar figure is arithmetic against the current price and describes the past, not the future. More chapters are on the <a href="/history">history index</a>, and the faucet he built has its own page at <a href="/history/faucets">the faucet era</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Timeline</div>
+      <div class="pg-tl">
+        <div class="pg-trow"><b>2010</b><span>Finds bitcoin, builds the faucet; Satoshi begins the handoff</span></div>
+        <div class="pg-trow"><b>2011</b><span>Presents bitcoin at the CIA in June; Satoshi already silent</span></div>
+        <div class="pg-trow"><b>2012</b><span>Chief scientist of the new Bitcoin Foundation</span></div>
+        <div class="pg-trow"><b>2014</b><span>Hands Core maintainership to Wladimir van der Laan</span></div>
+        <div class="pg-trow"><b>2016</b><span>Wright post; commit access removed; steps back</span></div>
+        <div class="pg-trow"><b>Since</b><span>Out of public bitcoin work, home in Amherst</span></div>
+      </div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history/people">People of early bitcoin</a>
+        <a href="/history/faucets">The faucet era</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto</a>
+        <a href="/history/people/hal-finney">Hal Finney</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pg-id{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .pg-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .pg-idgrid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:20px;align-items:start}
+  .pg-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .pg-facts{border:1px solid var(--line-2);background:var(--field);border-radius:10px;padding:4px 14px;min-width:0}
+  .pg-frow{display:grid;grid-template-columns:82px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px dotted var(--line-2)}
+  .pg-frow:last-child{border-bottom:0}
+  .pg-frow b{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+  .pg-frow span{font:500 12px/1.5 var(--sans);color:var(--ink-2)}
+  .pg-mt{margin-top:14px}
+  .pg-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .pg-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .pg-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pg-stat i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pg-spec{border:1px solid var(--line-2);background:var(--panel-2);border-radius:10px;padding:12px 15px}
+  .pg-tag{display:inline-block;font:700 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(247,147,26,.45);border-radius:99px;padding:2px 9px;margin-right:10px;vertical-align:middle}
+  .pg-about{margin-top:14px}
+  .pg-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pg-tl{display:grid;gap:0}
+  .pg-trow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pg-trow:last-child{border-bottom:0}
+  .pg-trow b{font:700 12px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .pg-trow span{font:500 11.5px/1.5 var(--sans);color:var(--ink-2)}
+  @media(max-width:700px){
+    .pg-idgrid{grid-template-columns:minmax(0,1fr)}
+    .pg-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .pg-stat b{white-space:normal}
+    .pg-id{padding:18px 16px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  function m(n){return "$"+(n/1e6).toFixed(1)+"M";}
+  var s=document.getElementById("pg-seed");
+  function paint(){if(!P.price)return;if(s)s.textContent=m(1100*P.price);}
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipsis holds until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

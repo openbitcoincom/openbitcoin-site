@@ -1,0 +1,171 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="Nick Szabo: Bit Gold and Smart Contracts - OpenBitcoin" description="The work of Nick Szabo: bit gold, designed in 1998, and smart contracts, a term he coined in 1994, what bitcoin kept, and why he denies being Satoshi.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History / People</div>
+    <h1>Nick Szabo</h1>
+    <p class="doc-lede">Smart contracts in 1994, bit gold in 1998, the 2001 essay on trusted third parties. Nick Szabo published the ideas bitcoin was built from. Whether he built it too is a question he has always answered no.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pz-hero">
+      <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+      <div class="pz-hq">"Trusted Third Parties are Security Holes"</div>
+      <div class="pz-sub">the title of his 2001 essay, and the shortest summary of the work</div>
+      <div class="pz-stats">
+        <div class="pz-stat"><b>1994</b><i>coins the term smart contracts</i></div>
+        <div class="pz-stat"><b>1998</b><i>designs bit gold</i></div>
+        <div class="pz-stat"><b>2001</b><i>the trusted third parties essay</i></div>
+        <div class="pz-stat"><b>2005</b><i>bit gold published in full</i></div>
+      </div>
+      <div class="pz-noph">No freely licensed photograph of Nick Szabo exists. Given the subject, that reads less like a gap in the record than a preference of its keeper, and this page honors it.</div>
+    </div>
+
+    <div class="doc-card pz-mt">
+      <div class="doc-sec">
+        <h2>The ideas came first</h2>
+        <div class="doc-prose">
+          <p>Nick Szabo is a computer scientist and legal scholar who spent the 1990s in the cypherpunk world, working on a question that sat between his two fields: how much of law, money, and trust could be moved into code that enforces itself. His essays from that decade, and the blog Unenumerated that followed, read today like a parts list for bitcoin, written a decade before anyone assembled the machine.</p>
+          <p>The range was unusual. Alongside the protocol work he wrote monetary history, most famously "Shelling Out: The Origins of Money" (2002), which traces money from shell beads forward and asks what properties made some objects money and others junk. Unforgeable costliness, the property that would anchor bit gold, comes from that line of thinking: things become money when they are provably expensive to make and cheap to verify.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Smart contracts, 1994</h2>
+        <div class="doc-prose">
+          <p>Szabo coined the term "smart contract" in a 1994 essay, and expanded the idea in 1996 in "Smart Contracts: Building Blocks for Digital Markets." The proposal was to embed the clauses of an agreement in hardware and software so that breaking the deal becomes expensive, ideally more expensive than honoring it. His favorite ancestor of the idea was the humble vending machine: it takes payment and delivers the goods by mechanical logic alone, with no clerk, no court, and no trust in the buyer.</p>
+          <p>The term went on to name entire platforms he had nothing to do with, but the original idea is visible inside bitcoin itself: every transaction is a small self-enforcing contract, and constructions like multisignature spending and timelocks are Szabo's vending machine logic applied to money. The concept predates the network that made it real by fourteen years.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Trusted third parties are security holes, 2001</h2>
+        <div class="doc-prose">
+          <p>In 2001 Szabo published the essay whose title has become a proverb: "Trusted Third Parties are Security Holes." The argument is that when a protocol designer assumes a trusted party into a design, the problem the party is trusted with has not been solved, only relocated: the bank, the certificate authority, the payment processor becomes the exact point where the system can be robbed, coerced, or corrupted. The costs of propping up such parties, he argued, dwarf the costs of the protocols they serve.</p>
+          <blockquote>"The best 'TTP' of all is one that does not exist, but the necessity for which has been eliminated by the protocol design, or which has been automated and distributed amongst the parties to a protocol."</blockquote>
+          <p>Written seven years before the <a href="/learn/whitepaper">whitepaper</a>, that sentence is as close as anything to bitcoin's design brief. A currency whose issuer, ledger keeper, and settlement agent have all been automated and distributed amongst the parties is exactly what Satoshi Nakamoto later shipped.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Bit gold, 1998 to 2005</h2>
+        <div class="doc-prose">
+          <p>Bit gold is the design that earns Szabo the phrase "precursor to bitcoin" in every history of the subject. He has said he designed it in 1998, the same year Wei Dai proposed b-money, and he described it in full in a December 2005 post on his blog. It opens with the problem statement bitcoin would inherit:</p>
+          <blockquote>"The problem, in a nutshell, is that our money currently depends on trust in a third party for its value."</blockquote>
+          <p>His answer was to mint scarcity directly from computation, in a loop that will look familiar to anyone who knows how bitcoin blocks chain together:</p>
+          <div class="pz-flow">
+            <div class="pz-step"><span class="pz-sn">1</span><span class="pz-st">A public challenge string is created</span></div>
+            <div class="pz-step"><span class="pz-sn">2</span><span class="pz-st">A participant computes a proof-of-work string from those challenge bits</span></div>
+            <div class="pz-step"><span class="pz-sn">3</span><span class="pz-st">The solution is securely timestamped</span></div>
+            <div class="pz-step"><span class="pz-sn">4</span><span class="pz-st">Solution and timestamp are recorded in a distributed property title registry</span></div>
+            <div class="pz-step"><span class="pz-sn">5</span><span class="pz-st">The newest solution supplies the challenge bits for the next one, forming a chain</span></div>
+          </div>
+          <p>Costly to create, trivial to verify, owned through an unforgeable chain of title, and dependent on no bank: bit gold had most of bitcoin's skeleton. What it lacked kept it on paper.</p>
+          <ul>
+            <li><b>Fungibility.</b> Szabo saw this one himself. Proofs of work minted at different times cost different amounts to produce as hardware improved, so pieces of bit gold would trade at different values, and his fix was a layer of dealers bundling mixed pieces into units of roughly equal worth. Bitcoin dissolved the problem instead: the difficulty adjustment retunes the puzzle so that units are interchangeable by protocol, no dealers required.</li>
+            <li><b>The registry.</b> Bit gold's chain of title lived in a registry maintained by a quorum of servers, and the design had no answer to who gets to be in the quorum, or what stops one attacker from quietly becoming most of it. Bitcoin's proof-of-work voting, where influence costs electricity rather than identities, is the answer that question waited for.</li>
+            <li><b>Implementation.</b> Bit gold was never built. It stayed a published design until someone else shipped a system with its skeleton inside.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>What bitcoin kept, on the record</h2>
+        <div class="doc-prose">
+          <p>The connection is not a matter of resemblance hunting; Satoshi wrote it down. In a July 2010 forum post, bitcoin's author placed the project in its lineage:</p>
+          <blockquote>"Bitcoin is an implementation of Wei Dai's b-money proposal ... and Nick Szabo's Bitgold proposal."</blockquote>
+          <p>The whitepaper itself cites b-money and <a href="/history/people/adam-back">Adam Back's</a> Hashcash but not bit gold, an omission historians still argue about. Between the design and the implementation sits other proof-of-work groundwork too, including <a href="/history/people/hal-finney">Hal Finney's</a> RPOW system of 2004, which made hashcash tokens reusable through a trusted server, the very component bitcoin finally removed. Chained proof of work, unforgeable costliness, title by publication rather than permission: the parts are Szabo's parts. The difficulty adjustment, the fixed supply schedule, and the open quorum that made the registry attack-proof are what the implementer added, and they were the parts nobody had solved. <a href="/learn/what-is-bitcoin">What is bitcoin</a> covers the machine that resulted.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The Satoshi question</h2>
+        <div class="doc-prose">
+          <p>A man who published bitcoin's parts list, wrote like its author, and values his privacy was never going to escape the speculation. The record of it, and of his answers, is short:</p>
+          <div class="pz-den">
+            <div class="pz-drow"><b>Apr 2014</b><span>A forensic-linguistics exercise at Aston University, 40 final-year students led by Dr Jack Grieve, compared the whitepaper against the writings of 11 named candidates and found Szabo by far the closest match; Grieve called the similarities "uncanny." A class project, not a peer-reviewed study, and its authors claimed no proof.</span></div>
+            <div class="pz-drow"><b>2014</b><span>Author Dominic Frisby built a circumstantial case for Szabo in a book. Szabo answered by email: "I'm afraid you got it wrong doxing me as Satoshi, but I'm used to it."</span></div>
+            <div class="pz-drow"><b>May 2015</b><span>The New York Times named him the most likely candidate. He told the reporter plainly that he is not Satoshi.</span></div>
+          </div>
+          <p>Style analysis can narrow a search; it cannot prove an identity. The only proof that would settle the question, a signature from Satoshi's keys or movement of the earliest coins, has never appeared for Szabo or anyone else, and every person journalists have named has denied it. This site's full accounting of that question, including why it stays unanswered and why bitcoin does not care, is at <a href="/learn/who-is-satoshi">who is Satoshi</a>. Here it is enough to say: the record contains his denials, and nothing that outranks them.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The deliberate quiet</h2>
+        <div class="doc-prose">
+          <p>Szabo's public presence is his work, and he has kept it that way on purpose. He gives few interviews; when he sat for a rare long one in 2017, the episode was titled "The Quiet Master of Cryptocurrency," and the conversation stayed on ideas. No freely licensed photograph of him exists anywhere. The blog goes quiet for long stretches and returns, when it returns, with essays rather than announcements.</p>
+          <p>In a field that mints celebrities, that restraint is itself a position, and it is consistent with everything he wrote: systems should not depend on trusting a person, so the person declines to be depended on. This page keeps to the boundary he drew. The essays are public, the designs are public, the denials are public, and that is the whole of what anyone is owed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pz-about doc-prose">
+      <p>Nick Szabo named smart contracts, designed bit gold, and wrote the essay that reads as bitcoin's design brief, all before the network existed; the record above is his published work and his on-record statements, documented at <a href="/sources">/sources</a>. The other figures of the era are profiled at <a href="/history/people">people of bitcoin history</a>, and the wider record lives on the <a href="/history">history index</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Timeline</div>
+      <div class="pz-tl">
+        <div class="pz-trow"><b>1994</b><span>Coins the term smart contracts</span></div>
+        <div class="pz-trow"><b>1998</b><span>Designs bit gold</span></div>
+        <div class="pz-trow"><b>2001</b><span>Trusted Third Parties are Security Holes</span></div>
+        <div class="pz-trow"><b>2002</b><span>Shelling Out: The Origins of Money</span></div>
+        <div class="pz-trow"><b>2005</b><span>Bit gold published in full</span></div>
+        <div class="pz-trow"><b>2008</b><span>The whitepaper appears, citing b-money and Hashcash but not bit gold</span></div>
+      </div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history/people">People of bitcoin history</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto</a>
+        <a href="/history/people/adam-back">Adam Back and Hashcash</a>
+        <a href="/history/people/hal-finney">Hal Finney</a>
+        <a href="/learn/whitepaper">The whitepaper, typeset</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pz-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 24px 20px;text-align:center}
+  .pz-hq{font:800 28px/1.25 var(--sans);letter-spacing:-.5px;color:var(--ink);max-width:24ch;margin:0 auto}
+  .pz-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:10px}
+  .pz-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px;text-align:left}
+  .pz-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .pz-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pz-stat i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pz-noph{margin-top:14px;background:var(--panel-2);border:1px dashed var(--line-2);border-radius:10px;padding:11px 16px;
+    font:500 12px/1.6 var(--sans);color:var(--ink-3);font-style:italic}
+  .pz-mt{margin-top:14px}
+  .pz-flow{margin-top:14px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel-2);padding:4px 16px}
+  .pz-step{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .pz-step:last-child{border-bottom:0}
+  .pz-sn{flex:none;width:20px;font:700 11px var(--mono);letter-spacing:.06em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .pz-st{font:500 13px/1.55 var(--sans);color:var(--ink-2);min-width:0}
+  .pz-den{display:grid;gap:8px;margin-top:13px}
+  .pz-drow{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px}
+  .pz-drow b{font:700 11px var(--mono);letter-spacing:.04em;color:var(--acc);font-variant-numeric:tabular-nums;padding-top:2px}
+  .pz-drow span{font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .pz-about{margin-top:14px}
+  .pz-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pz-tl{display:grid;gap:0}
+  .pz-trow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pz-trow:last-child{border-bottom:0}
+  .pz-trow b{font:700 12px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .pz-trow span{font:500 11.5px/1.5 var(--sans);color:var(--ink-2)}
+  @media(max-width:700px){
+    .pz-hero{padding:20px 16px 16px}
+    .pz-hq{font-size:22px}
+    .pz-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .pz-flow{padding:2px 13px}
+    .pz-step{gap:11px}
+    .pz-drow{grid-template-columns:minmax(0,1fr);gap:4px}
+  }
+</style>
+</Base>

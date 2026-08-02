@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Fees Right Now: Current sat/vB Rates - OpenBitcoin" description="Current bitcoin fee rates for four confirmation speeds, in sat/vB, with what a typical payment costs at each rate in sats and fiat. Estimates from our own node.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Fees</div>
+    <h1>Bitcoin fees right now</h1>
+    <p class="doc-lede">Fee rates in sat/vB for four confirmation targets, with what a typical payment costs at each. Estimates come from our own node, not a third-party API.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="fe-tiers" aria-label="Fee tiers by confirmation speed">
+      <div class="fe-tier">
+        <div class="fe-tname">Fastest</div>
+        <div class="fe-rate">&hellip;<span>sat/vB</span></div>
+        <div class="fe-when">next block, about 10 min</div>
+        <div class="fe-cost"><span>Typical payment</span><b>&hellip; sats</b><i class="fe-fiat" data-rate="">&hellip;</i></div>
+      </div>
+      <div class="fe-tier def">
+        <div class="fe-tname">~30 min <em class="fe-tag">good default</em></div>
+        <div class="fe-rate">&hellip;<span>sat/vB</span></div>
+        <div class="fe-when">about 3 blocks</div>
+        <div class="fe-cost"><span>Typical payment</span><b>&hellip; sats</b><i class="fe-fiat" data-rate="">&hellip;</i></div>
+      </div>
+      <div class="fe-tier">
+        <div class="fe-tname">~1 hour</div>
+        <div class="fe-rate">&hellip;<span>sat/vB</span></div>
+        <div class="fe-when">about 6 blocks</div>
+        <div class="fe-cost"><span>Typical payment</span><b>&hellip; sats</b><i class="fe-fiat" data-rate="">&hellip;</i></div>
+      </div>
+      <div class="fe-tier">
+        <div class="fe-tname">Economy</div>
+        <div class="fe-rate">&hellip;<span>sat/vB</span></div>
+        <div class="fe-when">a few hours</div>
+        <div class="fe-cost"><span>Typical payment</span><b>&hellip; sats</b><i class="fe-fiat" data-rate="">&hellip;</i></div>
+      </div>
+    </div>
+    <div class="fe-foot">Typical payment: one input, two outputs, native segwit (P2WPKH), 141 vB. Fiat cost tracks the live price.</div>
+
+    <div class="doc-card fe-card">
+      <div class="doc-sec doc-prose">
+        <h2>Which tier should I pick</h2>
+        <ul>
+          <li><strong>Sending to an exchange, or to your own wallet:</strong> economy is fine. The deposit credits after a confirmation or two either way, and nobody is standing there waiting.</li>
+          <li><strong>Paying a merchant, or anything with a person waiting:</strong> fastest. It targets the very next block, usually about ten minutes away.</li>
+          <li><strong>Not sure:</strong> the 30 minute tier clears quickly without paying the next-block premium. It is the right answer most of the time.</li>
+          <li><strong>Picked too low?</strong> Your coins are not lost. The transaction waits in <a href="/mempool">the mempool</a> until its rate clears, and most wallets can bump the fee if you get tired of waiting.</li>
+        </ul>
+        <blockquote>Not in a hurry? Economy against the fastest tier saves <span id="fe-save">&hellip;</span> right now, and when the mempool is busy the same patience routinely saves 80% or more.</blockquote>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Where these numbers come from</h2>
+        <p>These targets are computed by our own Bitcoin Core node from its live view of the mempool, not pulled from someone else's API. The method, and everything else this site measures, is documented at <a href="/sources">/sources</a>.</p>
+      </div>
+    </div>
+
+    <div class="fe-about doc-prose">
+      <p>Bitcoin fees are a price for block space, quoted in satoshis per virtual byte (sat/vB), so what a transaction costs depends on its size in the block, not on the amount being sent. A common single-input payment from a modern wallet is about 141 vB, which is the size behind the costs shown above. Fee conditions change from minute to minute; data provenance is described at <a href="/sources">/sources</a> and estimates are informational under the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Mempool now</div>
+      <div class="fe-stat"><b id="fe-mc">&hellip;</b><i>transactions waiting</i></div>
+      <div class="fe-stat"><b id="fe-since">&hellip;</b><i>since last block</i></div>
+      <div class="fe-stat"><b id="fe-h">&hellip;</b><i>current height</i></div>
+      <nav><a href="/mempool">See the full queue, tier by tier</a></nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/mempool">Live mempool</a>
+        <a href="/fees/calculator">Fee calculator</a>
+        <a href="/fees/timing">When fees are cheap</a>
+        <a href="/fees/history">Fee history</a>
+        <a href="/fees/consolidate">Consolidating UTXOs</a>
+        <a href="/">Block lookup</a>
+        <a href="/chart">Price chart</a>
+        <a href="/halving">Halving countdown</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .fe-tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .fe-tier{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;min-width:0}
+  .fe-tier.def{border-color:rgba(255,166,60,.38)}
+  .fe-tname{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+    display:flex;align-items:baseline;justify-content:space-between;gap:6px;flex-wrap:wrap}
+  .fe-tag{font-style:normal;color:var(--acc);letter-spacing:.09em;white-space:nowrap}
+  .fe-rate{font:700 34px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px;margin-top:8px}
+  .fe-rate span{font:700 11px var(--mono);color:var(--ink-3);letter-spacing:.06em;margin-left:5px}
+  .fe-when{font:600 11.5px/1.4 var(--sans);color:var(--ink-2);margin-top:3px}
+  .fe-cost{margin-top:12px;padding-top:10px;border-top:1px dotted var(--line-2)}
+  .fe-cost span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .fe-cost b{display:block;font:700 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fe-cost i{display:block;font:600 12px var(--mono);color:var(--ink-2);font-style:normal;font-variant-numeric:tabular-nums;margin-top:1px}
+  .fe-foot{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:10px}
+  .fe-card{margin-top:14px}
+  .fe-about{margin-top:14px}
+  .fe-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .fe-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .fe-stat:last-child{border-bottom:0}
+  .fe-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fe-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:900px){.fe-tiers{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:380px){.fe-rate{font-size:28px}}
+</style>
+<script is:inline>
+(function(){
+  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
+      sym={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
+  var VB=141,ELL="…";
+  /* nothing is seeded: price, height and last-block age stay null until the
+     chrome band supplies them, and the tier rates stay unset until /summary
+     answers. Every unknown renders as an ellipsis, never as a plausible
+     figure. */
+  var P={price:null,cur:"USD",height:null,since:null,at:Date.now()};
+  var costs=document.querySelectorAll(".fe-fiat"),
+      elH=document.getElementById("fe-h"),elS=document.getElementById("fe-since");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function fiat(v){var s=sym[P.cur]||"",t=fmt(v,v>=100?0:2);return s?s+t:t+" "+P.cur;}
+  function sinceTxt(s){var m=Math.floor(s/60);return m?m+"m "+(s%60)+"s":s+"s";}
+  function paint(){
+    /* a fiat cost needs both a live tier rate and a live price */
+    var havePrice=typeof P.price==="number"&&P.price>0;
+    costs.forEach(function(el){
+      var r=parseFloat(el.dataset.rate);
+      el.textContent=(havePrice&&isFinite(r)&&r>0)?fiat(r*VB*P.price*fx[P.cur]/1e8):ELL;
+    });
+    if(elH)elH.textContent=(typeof P.height==="number")?fmt(P.height,0):ELL;
+  }
+  function paintSince(){
+    if(!elS)return;
+    elS.textContent=(typeof P.since==="number")
+      ?sinceTxt(P.since+Math.floor((Date.now()-P.at)/1000)):ELL;
+  }
+  setInterval(paintSince,1000);
+
+  /* live fee tiers: apply a /summary payload's fees.* to the four cards
+     (DOM order fastest, halfHour, hour, economy), the derived sats costs,
+     the economy-vs-fastest savings note and the mempool count */
+  var tiers=document.querySelectorAll(".fe-tier"),
+      elSave=document.getElementById("fe-save"),elMC=document.getElementById("fe-mc"),
+      TIER_KEYS=["fastest","halfHour","hour","economy"];
+  function rateTxt(r){return r%1?r.toFixed(1):String(r);}
+  function applyFees(d){
+    try{
+      var f=d&&d.fees;if(!f)return;
+      tiers.forEach(function(card,i){
+        var r=f[TIER_KEYS[i]];
+        if(typeof r!=="number"||!(r>0))return;
+        var re=card.querySelector(".fe-rate");
+        if(re&&re.firstChild&&re.firstChild.nodeType===3)re.firstChild.nodeValue=rateTxt(r);
+        var b=card.querySelector(".fe-cost b");
+        if(b)b.textContent=fmt(Math.round(r*VB),0)+" sats";
+        var fi=card.querySelector(".fe-fiat");
+        if(fi)fi.dataset.rate=String(r);
+      });
+      if(elSave&&typeof f.fastest==="number"&&typeof f.economy==="number"&&f.fastest>0)
+        elSave.textContent=Math.max(0,Math.round((1-f.economy/f.fastest)*100))+"%";
+      if(elMC&&typeof f.mempoolCount==="number")elMC.textContent=fmt(f.mempoolCount,0);
+      paint();
+    }catch(e){}
+  }
+
+  /* live tick + new blocks + footer currency changes arrive via the chrome hooks;
+     chrome.js refreshes window.OB_LIVE before each repaint call */
+  window.obPaintFiat=function(S){
+    /* the band fires as soon as EITHER price or height is known, so each
+       field is taken only when it is really a number */
+    if(typeof S.price==="number"&&S.price>0)P.price=S.price;
+    if(S.cur)P.cur=S.cur;
+    if(typeof S.height==="number")P.height=S.height;
+    if(typeof S.since==="number"){P.since=S.since;P.at=Date.now();}
+    if(window.OB_LIVE&&window.OB_LIVE.fees)applyFees(window.OB_LIVE);
+    paint();paintSince();
+  };
+  window.obCurrencyChange=function(S){P.cur=S.cur;paint();};
+  paint();paintSince();
+
+  /* initial fetch: OB_DATA_API is set by Base.astro after this script parses,
+     so wait for DOMContentLoaded; on any failure the ellipses stand */
+  function boot(){
+    try{
+      if(window.OB_LIVE&&window.OB_LIVE.fees){applyFees(window.OB_LIVE);return;}
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/summary").then(function(r){return r.json();}).then(applyFees).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

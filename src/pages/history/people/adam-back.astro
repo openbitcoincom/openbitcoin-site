@@ -1,0 +1,152 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="Adam Back: Hashcash and Bitcoin's Proof of Work - OpenBitcoin" description="Adam Back invented Hashcash in 1997, the proof-of-work scheme the bitcoin whitepaper cites, got one of Satoshi's first emails, and co-founded Blockstream.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History &#183; People</div>
+    <h1>Adam Back</h1>
+    <p class="doc-lede">He wrote Hashcash in 1997, the proof-of-work scheme the whitepaper cites by name, and answered one of the first emails Satoshi ever sent. The record of his role is precise: cited by the founder, not the founder.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pb-top">
+      <figure class="pb-port">
+        <img src="/img/people/adam-back-2025.webp" alt="Adam Back, portrait photograph, 2025" loading="lazy" width="500" height="750">
+        <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Portrait_Adam_Back_photographe_Alexandre_Sitter.webp" target="_blank" rel="noopener noreferrer">Alexandre Sitter, CC BY-SA 4.0</a>, via Wikimedia Commons</figcaption>
+      </figure>
+      <div class="pb-intro">
+        <p class="pb-p">British cryptographer. On the cypherpunks mailing list from its early years, a postdoctoral researcher at the University of Exeter when he announced Hashcash, and co-founder and CEO of Blockstream since 2014. Of everyone in bitcoin's prehistory, his contribution is the easiest to state exactly, because Satoshi stated it first: reference number six.</p>
+        <div class="pb-facts">
+          <div class="pb-fact"><b>1997</b><span>Announced Hashcash to the cypherpunks mailing list, the direct ancestor of bitcoin's proof of work.</span></div>
+          <div class="pb-fact"><b>Ref [6]</b><span>Hashcash is one of eight works cited by <a href="/learn/whitepaper">the bitcoin whitepaper</a>.</span></div>
+          <div class="pb-fact"><b>Aug 2008</b><span>Received one of the first known emails Satoshi Nakamoto ever sent, months before the whitepaper was public.</span></div>
+          <div class="pb-fact"><b>2014</b><span>Co-founded Blockstream, the bitcoin infrastructure company he still runs.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-card pb-mt">
+      <div class="doc-sec">
+        <h2>Three lines of Perl, legally a weapon</h2>
+        <div class="doc-prose">
+          <p>In the 1990s the United States classified strong cryptography as a munition, regulated for export alongside actual armaments. Publishing encryption source code where a foreigner might read it was, on paper, arms trafficking. The cypherpunks, the mailing-list movement Back belonged to from its early years, treated that rule as both a threat and a joke that wrote itself.</p>
+          <p>Back's contribution to the joke became famous. In 1995 he compressed a working RSA encryption implementation into three lines of Perl and put it on a t-shirt, labeled as the export-controlled munition it legally was. Wearing the shirt through an airport made the wearer, by the letter of the regulations, an arms exporter. The code doubled as an email signature that spread the same way. The export rules were relaxed around 2000, and the shirt survives as the era's sharpest one-liner: code is speech, and this much speech fits on cotton.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Hashcash: making email cost something</h2>
+        <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+        <div class="doc-prose">
+          <p>On March 28, 1997, Back posted an idea to the cypherpunks list that he called a "partial hash collision based postage scheme." The problem was spam, and the insight was economic: email is abused because sending it is free. Hashcash attached a cost, paid not in money but in computation. To send a message, your machine had to grind through hash attempts until it found one starting with a run of zero bits, a stamp that is expensive to produce and instant for anyone to check.</p>
+          <p>That asymmetry, hard to make, trivial to verify, is the whole trick, and it is the same trick securing every bitcoin <a href="/blocks">block</a> today. Hashcash itself never had money attached, never had a ledger, and never adjusted its difficulty; it was postage, not currency. Back formalized it in a 2002 paper, "Hashcash - A Denial of Service Counter-Measure," and the idea circulated for a decade among people trying to build digital cash, most of whom could not solve the remaining problem: how to turn a proof of burned electricity into a system of money nobody controls.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The sentence in the whitepaper</h2>
+        <div class="doc-prose">
+          <p>Somebody solved that remaining problem in 2008, and credited Back in the fourth section of the paper that did it:</p>
+          <blockquote>"To implement a distributed timestamp server on a peer-to-peer basis, we will need to use a proof-of-work system similar to Adam Back's Hashcash [6], rather than newspaper or Usenet posts."</blockquote>
+          <p>The whitepaper cites eight works in total, and Hashcash is reference six. That citation defines Back's place in the record more honestly than any title could: bitcoin's proof of work is Hashcash repurposed, with the additions that made it money, the chain, the difficulty adjustment, and the reward. The engine is his design; the vehicle is not. Back has never claimed otherwise, which is part of why the sentence has aged so well.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>August 2008: an email from a stranger</h2>
+        <div class="doc-prose">
+          <p>On August 20, 2008, more than two months before the whitepaper was posted anywhere public, Back received an email from someone calling himself Satoshi Nakamoto. It is one of the first emails Satoshi is known to have sent to anyone. The message was modest: Satoshi wanted to confirm he had the Hashcash citation right, and linked a pre-release draft of the paper. Back replied the next day and pointed him to something he seemed not to know: Wei Dai's b-money proposal, an earlier sketch of decentralized money.</p>
+          <p>The pointer landed. Satoshi wrote to Wei Dai on August 22, saying "Adam Back (hashcash.org) noticed the similarities and pointed me to your site," and b-money entered the whitepaper as its first reference. The whole exchange stayed private for sixteen years, until Back produced the emails as evidence in the 2024 COPA v Wright trial, where they helped establish what the real correspondence with Satoshi actually looked like. Two of bitcoin's eight citations trace through that two-day exchange: one to Back's own work, one to the reading he assigned.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Blockstream: the second act</h2>
+        <div class="doc-prose">
+          <p>Back spent bitcoin's first years watching from a distance, then stopped watching. In 2014 he co-founded Blockstream with a group of bitcoin developers and has run it as CEO since. The company builds infrastructure on the thesis that bitcoin is the settlement layer worth extending rather than replacing.</p>
+          <div class="pb-tl">
+            <div class="pb-tli"><span class="pb-tly">2014</span><span class="pb-tlt">Blockstream founded; its sidechains paper proposes moving coins between chains without new tokens</span></div>
+            <div class="pb-tli"><span class="pb-tly">2017</span><span class="pb-tlt">Blockstream Satellite begins broadcasting the bitcoin blockchain from space, receivable without internet</span></div>
+            <div class="pb-tli"><span class="pb-tly">2018</span><span class="pb-tlt">The Liquid Network launches, a federated sidechain for faster settlement between exchanges and desks</span></div>
+            <div class="pb-tli"><span class="pb-tly">2021</span><span class="pb-tlt">Blockstream Jade ships, an open-source hardware wallet for <a href="/learn/self-custody">self-custody</a></span></div>
+          </div>
+          <p>The through-line from the 1997 postage stamp to the satellite feed is the same person applying the same conviction: that money on the internet should be verifiable by anyone, beholden to no one, and available even where the infrastructure is hostile.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The Satoshi question</h2>
+        <div class="doc-prose">
+          <p>Inventor of the cited proof of work, recipient of one of the first Satoshi emails, cypherpunk of the right vintage: Back checks enough boxes that the speculation finds him on a schedule. An HBO documentary put the question to him on camera in 2024 before pointing its final guess elsewhere, and an April 2026 New York Times investigation built a long circumstantial case around writing style and timelines. He has denied being Satoshi consistently, every time the question has been put to him.</p>
+          <p>The evidence standard does not bend for good candidates. Nobody has signed a message with Satoshi's early keys, no attributed coin has moved, and stylometry has never proven an identity. Naming him here repeats the speculation, not an accusation; the full discipline for this question, what is verifiable, what is estimated, and what courts have found, lives at <a href="/learn/who-is-satoshi">who is Satoshi</a>. The verified record is remarkable enough: he built the engine, answered the email, and kept building.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pb-about doc-prose">
+      <p>Adam Back's place in bitcoin's history is anchored by documents anyone can check: a 1997 mailing-list post, a citation in <a href="/learn/whitepaper">the whitepaper</a>, and an email exchange entered into a court record. Dates and quotes above come from those primary documents and major-outlet reporting, documented at <a href="/sources">/sources</a>. The other figures of the early record are at <a href="/history/people">history: people</a>, including <a href="/history/people/hal-finney">Hal Finney</a> and <a href="/history/people/nick-szabo">Nick Szabo</a>, and the wider record lives on the <a href="/history">history index</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The record</div>
+      <div class="pb-rs"><b>1997</b><i>Hashcash announced</i></div>
+      <div class="pb-rs"><b>[6]</b><i>its reference number in the whitepaper</i></div>
+      <div class="pb-rs"><b>Aug 2008</b><i>first known Satoshi email received</i></div>
+      <div class="pb-rs"><b>2014</b><i>Blockstream co-founded</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history/people">All the early people</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto?</a>
+        <a href="/learn/whitepaper">The whitepaper, typeset</a>
+        <a href="/history">Bitcoin history index</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pb-top{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+    display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px;align-items:start}
+  .pb-port{margin:0}
+  .pb-port img{width:100%;height:auto;border-radius:10px;display:block;max-width:100%}
+  .pb-port figcaption{font:500 10px/1.5 var(--sans);color:var(--ink-3);margin-top:7px}
+  .pb-port figcaption a{color:var(--ink-3);text-decoration:none;border-bottom:1px dotted var(--line-2)}
+  .pb-port figcaption a:hover{color:var(--acc)}
+  .pb-intro{min-width:0}
+  .pb-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .pb-facts{display:grid;gap:8px;margin-top:14px}
+  .pb-fact{display:grid;grid-template-columns:92px minmax(0,1fr);gap:14px;background:var(--field);
+    border:1px solid var(--line-2);border-radius:10px;padding:10px 14px}
+  .pb-fact b{font:700 11px var(--mono);letter-spacing:.04em;color:var(--acc);font-variant-numeric:tabular-nums;padding-top:2px}
+  .pb-fact span{font:500 13px/1.55 var(--sans);color:var(--ink-2)}
+  .pb-fact a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pb-fact a:hover{border-bottom-style:solid}
+  .pb-mt{margin-top:14px}
+  .pb-tl{margin-top:14px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel-2);padding:4px 16px}
+  .pb-tli{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .pb-tli:last-child{border-bottom:0}
+  .pb-tly{flex:none;width:44px;font:700 11px var(--mono);letter-spacing:.06em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .pb-tlt{font:500 13px/1.55 var(--sans);color:var(--ink-2);min-width:0}
+  .pb-about{margin-top:14px}
+  .pb-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pb-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pb-rs:last-child{border-bottom:0}
+  .pb-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pb-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .pb-top{grid-template-columns:minmax(0,1fr);padding:18px 16px}
+    .pb-port{max-width:300px}
+    .pb-tl{padding:2px 13px}
+    .pb-tli{gap:11px}
+  }
+  @media(max-width:560px){
+    .pb-fact{grid-template-columns:1fr;gap:4px}
+    .pb-fact b{padding-top:0}
+  }
+</style>
+</Base>

@@ -1,0 +1,141 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="No-KYC Bitcoin: What It Means and the Lawful Routes - OpenBitcoin" description="What no-KYC bitcoin means: how ID checks tie your name to coins on a public ledger, the lawful ways to buy without an account, and the trade-offs.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>No-KYC bitcoin</h1>
+    <p class="doc-lede">KYC ties an exchange account to a legal name. No-KYC means buying coins without that check. This page covers what the ID does on a public ledger, the lawful routes around it, and their costs.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="nk-card">
+      <div class="nk-tlab">What KYC is</div>
+      <p class="nk-p">Regulated financial businesses, including bitcoin exchanges in most countries, must verify who their customers are before providing service. In practice that means a government ID, often a selfie or video check, sometimes proof of address and questions about where your money comes from. The requirement comes from anti-money-laundering law: the exchange is obligated to collect the records, retain them for years, and report certain activity to authorities. None of it is optional for the business, whatever its own preferences.</p>
+      <p class="nk-p nk-pm">Two things follow. First, your identity documents now live in a company database, and company databases get breached; every account you open is another copy of your ID sitting on someone else's server. Second, the exchange holds a permanent record linking your name to everything you did there: every purchase, every withdrawal, every address you withdrew to.</p>
+    </div>
+
+    <div class="nk-card nk-mt">
+      <div class="nk-tlab">Why it matters more in bitcoin</div>
+      <p class="nk-p">A bank's ledger is private to the bank. Bitcoin's ledger is public, forever. When you withdraw coins from a KYC exchange, the exchange records which addresses received them, and from that moment your legal name is tied to specific coins on a chain anyone can read. Chain-analysis tools follow those coins forward through later transactions, so the link does not fade with time; it compounds. Deleting the account does not help, because the records are retained by law and the ledger does not forget.</p>
+      <div class="nk-verdict"><b>The core point</b><span>KYC on a bank account labels an account. KYC on a bitcoin exchange labels the coins themselves, permanently, on a public record. How much the public ledger reveals, and what limits it, is covered in the <a href="/learn/privacy">bitcoin privacy guide</a>.</span></div>
+    </div>
+
+    <div class="nk-card nk-mt">
+      <div class="nk-tlab">Lawful no-KYC routes, by category</div>
+      <p class="nk-p">These are categories, not recommendations, and this page names no specific services on purpose; a directory of services, with jurisdiction notes, is planned. Within every category the same rule applies: prefer routes where you take custody of the coins yourself, directly, as covered in the <a href="/learn/self-custody">self-custody guide</a>.</p>
+      <div class="nk-routes">
+        <div class="nk-route">
+          <div class="nk-rhead"><span class="nk-num">01</span><h3>Peer-to-peer marketplaces</h3></div>
+          <p class="nk-rp">Platforms that match individual buyers and sellers who then trade directly with each other: you pay the seller by bank transfer, cash, or another agreed method, and the coins are released from an escrow the platform or protocol holds. Reputation scores and escrow stand in for the oversight an exchange would provide.</p>
+          <div class="nk-rnote">The oldest no-KYC route, and the one where counterparty care matters most.</div>
+        </div>
+        <div class="nk-route">
+          <div class="nk-rhead"><span class="nk-num">02</span><h3>Bitcoin ATMs under their ID thresholds</h3></div>
+          <p class="nk-rp">Physical machines that take cash and send bitcoin to an address you provide. Many operators require only a phone number below a purchase threshold, with ID checks kicking in above it; the thresholds are set by the operator and by local law, and they vary widely. Fees are high compared with any online exchange.</p>
+          <div class="nk-rnote">Simple and fast, at a steep premium. Some countries restrict or license ATMs heavily.</div>
+        </div>
+        <div class="nk-route">
+          <div class="nk-rhead"><span class="nk-num">03</span><h3>Gift-card and voucher routes</h3></div>
+          <p class="nk-rp">Buy a retail gift card or prepaid voucher with cash, then trade it for bitcoin through a marketplace or service that accepts it. Each layer takes a cut, so the effective price is well above the market rate, and gift cards are a favorite instrument of scammers on both sides of the trade.</p>
+          <div class="nk-rnote">Works with nothing but cash and a phone; costs the most per coin.</div>
+        </div>
+        <div class="nk-route">
+          <div class="nk-rhead"><span class="nk-num">04</span><h3>Non-custodial swaps</h3></div>
+          <p class="nk-rp">Services that exchange one cryptocurrency for another without accounts: you send one asset, they send back the other, and nobody holds your funds beyond the swap itself. This route only applies if you already hold some other asset; it is a conversion, not a way in from cash or a bank account.</p>
+          <div class="nk-rnote">For holders of other assets, not for first purchases from fiat.</div>
+        </div>
+        <div class="nk-route">
+          <div class="nk-rhead"><span class="nk-num">05</span><h3>Earning bitcoin directly</h3></div>
+          <p class="nk-rp">Sell goods or services priced in bitcoin, or take part of your pay in it. No exchange is in the loop at all, so no intermediary record is created; the coins arrive straight to a wallet you control. Income is still income, and the tax obligations that come with it apply exactly as they would in any currency.</p>
+          <div class="nk-rnote">The cleanest route on the list, and the slowest to accumulate anything.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nk-card nk-mt">
+      <div class="nk-tlab">The honest trade-offs</div>
+      <p class="nk-p">No-KYC routes are lawful and real, and they are not free. The premium you pay is the price of privacy, and it comes in four forms.</p>
+      <div class="nk-trades">
+        <div class="nk-trade"><b>Worse prices</b><span>Sellers price in their own risk and the scarcity of oversight. Expect a markup over the exchange rate, wider spreads, and higher fees, sometimes all three at once.</span></div>
+        <div class="nk-trade"><b>More friction</b><span>Finding a counterparty, negotiating a payment method, waiting on escrow, feeding cash into a machine. Nothing is one click, and small amounts take nearly as much effort as large ones.</span></div>
+        <div class="nk-trade"><b>More counterparty care</b><span>There is no support desk and no chargeback. You vet the counterparty, you read the escrow terms, you send a small test amount first. The diligence an exchange's compliance department did for you is now your job.</span></div>
+        <div class="nk-trade nk-warn"><b>Scams concentrate here</b><span>Fraud goes where oversight is thin, so fake sellers, fake escrow, and reversible payments reversed after the coins move are all common in this territory. Read <a href="/learn/scams">how bitcoin scams work</a> before trading with strangers, not after.</span></div>
+      </div>
+    </div>
+
+    <div class="nk-card nk-mt">
+      <div class="nk-tlab">The legal line, stated plainly</div>
+      <p class="nk-p">In most places, buying bitcoin without providing ID, through a route that lawfully offers it, is legal. The obligation to collect identity documents falls on regulated businesses, not on you; a person paying cash at an ATM under its threshold, trading peer to peer, or earning bitcoin for work is not breaking a law by declining to volunteer paperwork nobody asked for.</p>
+      <p class="nk-p nk-pm">What is illegal is the same through every route, KYC or not: evading taxes you owe, laundering the proceeds of crime, or moving money around sanctions. Privacy is lawful; concealment of unlawful activity is not, and no acquisition method changes which side of that line a given act falls on.</p>
+      <div class="nk-verdict nk-vlegal"><b>Know your jurisdiction</b><span>Rules differ sharply by country and change often; some countries restrict peer-to-peer trade or license ATMs out of practical existence, and thresholds move. Everything on this page is informational, not legal or tax advice, under the site's <a href="/terms">terms</a>. If your situation has stakes, ask a professional in your jurisdiction.</span></div>
+    </div>
+
+    <div class="nk-about doc-prose">
+      <p>No-KYC bitcoin is not a loophole; it is how bitcoin worked before exchanges industrialized the on-ramp, and the trade-offs are the ordinary ones between convenience and privacy. Whatever route the coins arrive by, they end up on the same public ledger, so the <a href="/learn/privacy">privacy guide</a> explains what observers can see, the <a href="/learn/self-custody">self-custody guide</a> covers holding them safely, and the <a href="/learn/scams">scams guide</a> covers the fraud that gathers around every route. For what bitcoin is in the first place, start at <a href="/learn/what-is-bitcoin">what is bitcoin</a> or browse <a href="/learn">all learn guides</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="nk-railp">No-KYC bitcoin means acquiring coins without tying your legal name to them on a permanent public ledger, through lawful routes that trade price and convenience for privacy.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The four costs</div>
+      <ul class="nk-nl">
+        <li>Worse prices than an exchange</li>
+        <li>More friction per purchase</li>
+        <li>Counterparty care is your job</li>
+        <li>Scams gather where oversight is thin</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/privacy">Bitcoin privacy</a>
+        <a href="/learn/scams">Bitcoin scams and how they work</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn/frozen-deposits">Frozen deposits</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .nk-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .nk-mt{margin-top:14px}
+  .nk-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .nk-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .nk-pm{margin-top:12px}
+  .nk-p a,.nk-rp a,.nk-verdict a,.nk-trade a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .nk-p a:hover,.nk-rp a:hover,.nk-verdict a:hover,.nk-trade a:hover{border-bottom-style:solid}
+  .nk-verdict{margin-top:14px;border-radius:12px;padding:16px 18px;border:1px solid rgba(255,166,60,.38);background:rgba(255,166,60,.06)}
+  .nk-verdict b{display:block;font:700 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .nk-verdict > span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .nk-vlegal{border-color:var(--line-2);background:var(--panel-2)}
+  .nk-vlegal b{color:var(--ink-3)}
+  .nk-routes{display:grid;gap:10px;margin-top:14px}
+  .nk-route{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .nk-rhead{display:flex;align-items:baseline;gap:9px}
+  .nk-num{font:700 10.5px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .nk-rhead h3{font:700 14px/1.35 var(--sans);color:var(--ink);margin:0}
+  .nk-rp{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:8px 0 0}
+  .nk-rnote{font:600 10px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:9px;padding-top:8px;border-top:1px dotted var(--line-2)}
+  .nk-trades{display:grid;gap:8px;margin-top:13px}
+  .nk-trade{border:1px solid var(--line-2);background:var(--panel-2);border-radius:10px;padding:12px 15px}
+  .nk-trade b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .nk-trade span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .nk-warn{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .nk-warn b{color:var(--down)}
+  .nk-about{margin-top:14px}
+  .nk-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .nk-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .nk-nl{margin:0;padding-left:16px}
+  .nk-nl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .nk-nl li:first-child{margin-top:0}
+  .nk-nl li::marker{color:var(--acc)}
+</style>
+</Base>

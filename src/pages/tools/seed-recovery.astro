@@ -1,0 +1,225 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base analytics={false} title="Seed Phrase Recovery: Fixing a Mis-Transcribed Backup - OpenBitcoin" description="What to do when a seed phrase will not restore, why no website should see your words, and an offline toolkit that checks the checksum and last word.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Seed recovery</div>
+    <h1>When the words will not restore</h1>
+    <p class="doc-lede">A seed that fails is usually a transcription slip: one word wrong, one missing, two rows read in the wrong order. Here is what to check, and an offline file to check it on.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="sr-dl">
+      <div class="sr-dl-top">
+        <div class="sr-dl-l">
+          <div class="sr-dl-kick">Download</div>
+          <h2>bip39-toolkit.html</h2>
+          <p class="sr-dl-sub">One HTML file, about 56 KB. Save it, disconnect, open it from disk. It tests a phrase against its own checksum and lists every final word that fits when the last one is missing.</p>
+        </div>
+        <a class="sr-dl-b" href="/tools/offline/bip39-toolkit.html" download="bip39-toolkit.html">Download the file<i>56 KB</i></a>
+      </div>
+      <div class="sr-dl-facts">
+        <div><b>One file</b><i>No install, no dependencies, no companions to fetch</i></div>
+        <div><b>No network</b><i>No requests in the code, and a policy telling the browser to refuse them</i></div>
+        <div><b>Locked on purpose</b><i>It takes no words at all unless the address bar reads file://</i></div>
+      </div>
+      <p class="sr-dl-alt">Prefer to read it before you trust it? <a href="/tools/offline/bip39-toolkit.html">Open it in a tab</a> and view the source. The copy served from this website deliberately refuses to accept a single word, so reading it costs you nothing.</p>
+    </div>
+
+    <p class="sr-warn">Never type a seed phrase, a private key or an xprv into any website, this one included. This page has no input box at all, and that is deliberate.</p>
+
+    <div class="sr-card sr-mt">
+      <div class="sr-lab">Getting it onto an offline machine</div>
+      <ol class="sr-steps">
+        <li>Download the file while you are still connected, and check that it opens.</li>
+        <li>Copy it by USB stick to a computer that will not go back online. A retired laptop is ideal; a phone is not, because you cannot see what else it is running.</li>
+        <li>Switch the wifi off or unplug the cable. The banner across the top of the tool turns green when the browser stops seeing a network, and the box for your words stays locked until it does.</li>
+        <li>Open the file by double clicking it. The address bar must read <code>file://</code>; the tool refuses to accept words from any other address.</li>
+        <li>Type the words. Results appear as you type, with nothing sent and nothing saved.</li>
+        <li>Close the tab, then keep that machine offline or wipe it. If you used a USB stick, wipe that too.</li>
+      </ol>
+      <p class="sr-note">The tool's banner reads <code>navigator.onLine</code>, which only reports whether the browser can see a network interface. It is a reminder, not proof of isolation. The unplugged cable is the proof. And if the phrase you are testing still holds coins, treat the machine as burnt afterwards: move the coins to a wallet made on a device that never saw those words.</p>
+    </div>
+
+    <div class="doc-card sr-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What usually goes wrong</h2>
+        <p>Almost every failed restore is a copying error, not a lost wallet. The pattern repeats: a word that was written down as something close but not quite, usually because a handwritten a looked like an o, an n like an r, or a 1 like an l. A word that never made it onto the paper at all, so the count reads eleven or twenty-three and everything after the gap sits one row too high. Or a backup written in two columns and read down the left instead of across, which produces a set of perfectly correct words in an order the wallet has never seen.</p>
+        <p>Two other things masquerade as a broken phrase. The first is a passphrase, the extra word some wallets add on top of the twelve or twenty-four; a phrase with one attached restores silently into a different, empty wallet, and the words themselves are fine. The second is the derivation path: the same phrase can produce several sets of addresses, so a wallet that shows nothing may be looking in the right place with the wrong map. Before you conclude the backup is damaged, check whether you ever set a passphrase and whether the wallet lets you try another account type.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why the last word is special</h2>
+        <p>A BIP39 phrase is not just a list. The words encode random bits, eleven per word, and the tail end of the last word is a checksum over everything before it: four bits in a twelve word phrase, eight bits in a twenty-four word one. That is why a phrase can be checked at all without touching the internet, and why a single wrong word almost always produces a visible failure instead of a silent empty wallet.</p>
+        <p>It also means a missing last word is a small problem. With the other eleven words known good, only 128 of the 2048 words complete a valid phrase, and for twenty-three known words the list is eight. That is a short evening of trying them one at a time in wallet software. A gap anywhere else is a different story: the checksum sits at the end, so a missing middle word leaves thousands of possibilities with nothing to rank them by, and a wrong word in a twelve word phrase still leaves about 128 replacements that pass. Arithmetic narrows the field; it does not pick the answer.</p>
+        <p>A word check for one word at a time lives on this site at <a href="/tools/bip39">BIP39 word check</a>, which is safe because a single word tells nobody anything. The full phrase belongs offline, and recording it properly in the first place is covered in <a href="/learn/seed-backup">backing up a seed</a>.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why this page has no box to type in</h2>
+        <p>A seed phrase typed into a web page has left your control. Whoever runs the server decides what the page does today and what it does tomorrow, the browser can cache or autofill the field, an extension can read it, and one bad deploy turns every visitor's backup into someone else's money. There is no version of that risk worth a convenience. So the rule here has no exceptions: <strong>no hosted page on this site accepts a seed phrase, a private key, an xprv or a 2FA secret.</strong> The work that genuinely needs a full phrase happens in a file you hold, on a machine with nothing listening.</p>
+        <p>Judge every other tool the same way. If a page asks for your words in order to "validate", "sync", "migrate" or "check the balance of" your wallet, the request itself is the theft, whatever the page looks like and whoever sent you the link. Nothing legitimate needs them.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Paying someone to recover it</h2>
+        <p>Real recovery firms exist. They work on problems where information survives: most of a phrase with one or two words uncertain, a passphrase you half remember, a corrupted wallet file, an old encrypted backup whose password is on the tip of your tongue. They run enormous searches over the possibilities you can describe, and they charge a percentage of what they recover, often about a fifth, with nothing owed when they fail. A serious one will tell you plainly when there is nothing to work with, because a phrase that is genuinely gone is gone for everyone including them.</p>
+        <p>The trouble is that the honest firms are heavily outnumbered. Recovery is one of the most crowded scam categories there is, and it feeds on people who have already lost something once. The tells are consistent: they contacted you rather than the other way round, in a reply to your post or a direct message from someone who saw you asking for help; they want a fee up front, or a "deposit to cover network costs"; they ask for the full phrase before doing any work; they promise a guaranteed result. Any one of those ends the conversation. <a href="/learn/scams">Common scams</a> covers the shape of these approaches, and the same pattern turns up wherever people are desperate.</p>
+        <p>Do the free checks first, because they cost nothing and they solve most cases: confirm each word is on the list, confirm the count, re-read the order from the original backup rather than from your retyped copy, try the missing last word list, and check for a passphrase or a different account type in the wallet. Only when all of that is exhausted, and there is still real information left in what you hold, is a paid search worth discussing.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Prevention, since you are already here</h2>
+        <p>The backup that fails is almost always the one nobody tested. Once a phrase is written down, restore it into a fresh wallet before any real money goes near it, then wipe that wallet. The five minutes proves the words, the order and your handwriting all at once, and it is the only check that proves anything. Metal beats paper for the same reason four letters are enough per word: no two words on the list share their first four letters, so a stamped plate holding four characters per word holds the whole phrase.</p>
+        <p>Then store it like a key rather than a note, and write down where it is for whoever comes after you. <a href="/learn/self-custody">Self custody</a> covers what the backup is actually protecting, and <a href="/learn/inheritance">inheritance planning</a> covers the failure where the words survive but nobody left knows what they are for.</p>
+      </div>
+    </div>
+
+    <div class="sr-about doc-prose">
+      <p>This page holds no data, has no input field and makes no requests. The tool it links to is a static file that implements SHA-256 in plain JavaScript, carries the official 2048 word list checked against its own published checksum, runs the BIP39 specification test vectors on every load, and refuses to answer anything if a single check fails. Guides on this site are informational under the <a href="/terms">terms</a>, and where the rest of the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Phrase arithmetic</div>
+      <div class="sr-pick" role="group" aria-label="Phrase length in words">
+        <button type="button" class="sr-pb is-on" data-n="12">12</button>
+        <button type="button" class="sr-pb" data-n="15">15</button>
+        <button type="button" class="sr-pb" data-n="18">18</button>
+        <button type="button" class="sr-pb" data-n="21">21</button>
+        <button type="button" class="sr-pb" data-n="24">24</button>
+      </div>
+      <div class="sr-w2"><span>Entropy</span><b id="sr-ent">128 bits</b></div>
+      <div class="sr-w2"><span>Checksum</span><b id="sr-cs">4 bits</b></div>
+      <div class="sr-w2"><span>Last word fits</span><b id="sr-cd">128 ways</b></div>
+      <p class="sr-wnote" id="sr-wnote">Words carry 11 bits each. The checksum is the tail of the last word, which is why a missing last word narrows to a short list.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">What the file does</div>
+      <div class="sr-t"><b>Checksum test</b><i>Tells you whether 12 to 24 words agree with themselves.</i></div>
+      <div class="sr-t"><b>Missing last word</b><i>Lists every final word that completes a valid phrase.</i></div>
+      <div class="sr-t"><b>Word by word</b><i>Flags anything not on the list and offers the closest entries.</i></div>
+      <div class="sr-t"><b>Refuses to guess</b><i>If its own test vectors fail, it answers nothing at all.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/bip39">BIP39 word check</a>
+        <a href="/learn/seed-backup">Backing up a seed</a>
+        <a href="/learn/scams">Scams and phishing patterns</a>
+        <a href="/learn/self-custody">Self custody, explained</a>
+        <a href="/wallets">Wallets worth using</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .sr-dl{background:var(--panel);border:1px solid rgba(255,166,60,.42);border-radius:12px;padding:20px 24px 22px}
+  .sr-dl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .sr-dl-l{min-width:0;flex:1 1 320px}
+  .sr-dl-kick{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .sr-dl h2{font:800 21px/1.2 var(--sans);letter-spacing:-.3px;color:var(--ink);margin:7px 0 0}
+  .sr-dl-sub{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:8px 0 0;max-width:52ch}
+  .sr-dl-b{display:inline-flex;align-items:center;gap:9px;flex:none;background:var(--cta);color:var(--cta-ink);
+    border-radius:10px;font:800 13.5px var(--sans);padding:14px 20px;text-decoration:none;white-space:nowrap}
+  .sr-dl-b:hover{background:var(--cta-hov)}
+  .sr-dl-b i{font:700 9.5px var(--mono);letter-spacing:.09em;font-style:normal;opacity:.7}
+  .sr-dl-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px;
+    padding-top:16px;border-top:1px dotted var(--line-2)}
+  .sr-dl-facts div{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;min-width:0}
+  .sr-dl-facts b{display:block;font:700 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--acc)}
+  .sr-dl-facts i{display:block;font:500 12px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:4px}
+  .sr-dl-alt{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:14px 0 0}
+  .sr-dl-alt a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .sr-dl-alt a:hover{border-bottom-style:solid}
+  .sr-warn{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:11px 2px 0}
+  .sr-mt{margin-top:14px}
+  .sr-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .sr-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .sr-steps{counter-reset:sr;list-style:none;margin:0;padding:0}
+  .sr-steps li{position:relative;padding-left:34px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .sr-steps li:first-child{margin-top:0}
+  .sr-steps li::before{counter-increment:sr;content:counter(sr);position:absolute;left:0;top:1px;width:22px;height:22px;
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line-2);color:var(--acc);
+    font:700 11px/21px var(--mono);text-align:center}
+  .sr-steps code,.sr-note code{font:600 12px var(--mono);background:var(--field);color:var(--ink);border-radius:5px;padding:2px 6px}
+  .sr-note{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin:15px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .sr-about{margin-top:14px}
+  .sr-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .sr-pick{display:flex;flex-wrap:wrap;gap:6px}
+  .sr-pb{flex:1 1 auto;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 12px var(--mono);padding:7px 0;cursor:pointer;font-variant-numeric:tabular-nums}
+  .sr-pb:hover{border-color:rgba(255,166,60,.4)}
+  .sr-pb.is-on{border-color:rgba(255,166,60,.55);background:rgba(247,147,26,.08);color:var(--acc)}
+  .sr-w2{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;
+    border-bottom:1px dotted var(--line-2)}
+  .sr-w2:first-of-type{margin-top:11px}
+  .sr-w2:last-of-type{border-bottom:0}
+  .sr-w2 span{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .sr-w2 b{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .sr-wnote{font:500 11px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  .sr-wnote.is-bad{color:var(--down)}
+  .sr-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .sr-t:last-child{border-bottom:0}
+  .sr-t b{display:block;font:700 12.5px var(--mono);color:var(--acc)}
+  .sr-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  @media(max-width:700px){
+    .sr-dl{padding:18px 18px 20px}
+    .sr-card{padding:18px 18px 20px}
+    .sr-dl-facts{grid-template-columns:minmax(0,1fr)}
+    .sr-dl-b{width:100%;justify-content:center}
+    .sr-dl h2{font-size:19px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* The only script on this page: the phrase arithmetic tile. No crypto, no
+     seed phrase, no input, no network. n words carry 11n bits; 11n/33 of them
+     are the checksum and the rest is entropy; a missing last word leaves
+     2048 / 2^checksum candidates.
+     SELF-TEST (both rows confirmed by brute force against the real wordlist
+     and SHA-256 while the offline file was written):
+       12 words -> 128 entropy bits, 4 checksum bits, 128 final words
+       24 words -> 256 entropy bits, 8 checksum bits, 8 final words
+     If either is wrong the tile shows a failed state instead of numbers. */
+  function shape(n){
+    var cs=(n*11)/33;
+    return {ent:n*11-cs,cs:cs,cand:2048/Math.pow(2,cs)};
+  }
+  var a=shape(12),b=shape(24),
+      selftest=(a.ent===128&&a.cs===4&&a.cand===128&&b.ent===256&&b.cs===8&&b.cand===8);
+
+  var ent=document.getElementById("sr-ent"),
+      cs=document.getElementById("sr-cs"),
+      cd=document.getElementById("sr-cd"),
+      note=document.getElementById("sr-wnote"),
+      btns=document.querySelectorAll(".sr-pb");
+  if(!ent)return;
+
+  if(!selftest){
+    console.error("[/tools/seed-recovery] self-test failed: phrase arithmetic did not match the known 12 and 24 word rows.");
+    ent.textContent="--";cs.textContent="--";cd.textContent="--";
+    btns.forEach(function(x){x.setAttribute("disabled","disabled");});
+    note.className="sr-wnote is-bad";
+    note.textContent="Self-test failed, so no numbers are shown here. The downloadable file runs the same kind of check against its own test vectors and refuses to answer when it fails.";
+    return;
+  }
+  console.log("[/tools/seed-recovery] self-test passed: 2 known phrase-length rows matched.");
+
+  function paint(n){
+    var s=shape(n);
+    ent.textContent=s.ent+" bits";
+    cs.textContent=s.cs+" bits";
+    cd.textContent=s.cand+(s.cand===1?" way":" ways");
+    btns.forEach(function(x){x.classList.toggle("is-on",parseInt(x.dataset.n,10)===n);});
+  }
+  btns.forEach(function(x){
+    x.addEventListener("click",function(){paint(parseInt(x.dataset.n,10));});
+  });
+  paint(12);
+})();
+</script>
+</Base>

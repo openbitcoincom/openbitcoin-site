@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<title>Block 958,218 - OpenBitcoin: Block Explorer</title>
+<meta name="description" content="Look up any bitcoin block: height, timestamp, transactions, size, miner, and fees, served from our own node.">
+<style>
+  /* ============ TOKENS (locked brand) ============ */
+  :root{
+    --mono:ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,Menlo,monospace;
+    --sans:system-ui,"Segoe UI",Roboto,sans-serif;
+    /* ---- LIGHT "white-orange": warm cream header · white-on-warm-grey body · deep umber footer ---- */
+    --bg:#F7F4EF;--panel:#FFFFFF;--panel-2:#F3EEE5;--line:#E9E2D5;--line-2:#D3C8B4;
+    --ink:#221C14;--ink-2:#5B5346;--ink-3:#98907F;
+    --acc:#D97800;--orange:#F7931A;--acc-rgb:247,147,26;
+    --up:#0E9F5A;--down:#DC3545;
+    --band:#FFF3E4;--band-line:#F0DEC4;
+    --band-nav:#6E4E28;--band-tag:rgba(90,64,30,.85);--band-tag-b:#3A2408;
+    --band-ink2:#B0946C;
+    --price-ink:#221C14;--price-glow:rgba(0,0,0,0);
+    --nav-hov:rgba(110,78,40,.10);
+    --field:#FFFFFF;--field-hov:#FBF3E7;--field-ink:#221C14;--ph:#B09B7E;
+    --shell:#F7931A;--shell-hov:#E07E06;--shell-ink:#241200;   /* search + converter chrome = the brand CTA orange */
+    --cta:#F7931A;--cta-hov:#E07E06;--cta-ink:#241200;
+    --btn:#2A2318;--btn-hov:#40372A;--btn-ink:#FFF7EA;
+    --tab-on-bg:#F7931A;--tab-on-line:#F7931A;--tab-on-ink:#241200;
+    --foot-bg:#201B14;--foot-line:rgba(255,255,255,.09);--foot-ink:#C9BCA6;--foot-ink2:#A8977C;
+    --foot-ink3:#847763;--foot-hi:#FFFFFF;--foot-quote:#DECFB4;--foot-acc:#F7931A;
+    --rad:10px;
+  }
+  :root[data-theme="dark"]{
+    /* ---- DARK "black-orange": warm black header · dark-umber body · true-black footer ---- */
+    --bg:#181512;--panel:#211D18;--panel-2:#151210;--line:#332C23;--line-2:#4A4033;
+    --ink:#F0E9DE;--ink-2:#BFB4A3;--ink-3:#877C6B;
+    --acc:#F7931A;
+    --up:#2EBD85;--down:#F6465D;
+    --band:#0F0D0A;--band-line:#2A241C;
+    --band-nav:#C2B49E;--band-tag:rgba(226,214,196,.85);--band-tag-b:#FFFFFF;
+    --band-ink2:#877C6B;
+    --price-ink:#FFFFFF;--price-glow:rgba(0,0,0,.35);
+    --nav-hov:rgba(255,255,255,.10);
+    --field:#241F19;--field-hov:#2C261E;--field-ink:#F0E9DE;--ph:#8A7C66;
+    --shell:#F7931A;--shell-hov:#FFA733;--shell-ink:#241200;
+    --cta:#F7931A;--cta-hov:#FFA733;--cta-ink:#241200;
+    --btn:#2E2820;--btn-hov:#3B3329;--btn-ink:#F0E6D6;
+    --tab-on-bg:#F7931A;--tab-on-line:#F7931A;--tab-on-ink:#241200;
+    --foot-bg:#0A0908;--foot-line:rgba(255,255,255,.07);--foot-ink:#B5A78F;--foot-ink2:#8E8069;
+    --foot-ink3:#6E6350;--foot-hi:#FFFFFF;--foot-quote:#CDBFA6;--foot-acc:#F7931A;
+  }
+  html{background:var(--bg)}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button,select,input{font-family:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid rgba(196,106,0,.55);outline-offset:2px}
+  .micro{font:600 10.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+
+  /* ============ THE ORANGE BAND ============ */
+  .band{position:relative;color:var(--band-tag-b);
+        background:var(--band);border-bottom:1px solid var(--band-line);
+        padding:14px 0 62px}
+  .band-clip{position:absolute;inset:0;overflow:hidden;pointer-events:none} /* clips the watermark WITHOUT clipping dropdown panels */
+  .band-deco{position:absolute;right:-70px;bottom:-110px;width:400px;height:400px;opacity:.07;
+             animation:coinroll 3.2s cubic-bezier(.25,.7,.25,1) both}
+  /* the watermark coin rolls in from the left and fades up to its resting ghost */
+  @keyframes coinroll{
+    from{transform:translateX(-72vw) rotate(-340deg);opacity:0}
+    60%{opacity:.05}
+    to{transform:translateX(0) rotate(0deg);opacity:.07}
+  }
+
+  /* masthead (lives inside the band) */
+  .mast{display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:relative;z-index:8}
+  /* the full logo is one outlined SVG (text converted to paths) served as a background image:
+     un-highlightable by construction, still a normal clickable link home */
+  .brand{display:inline-block;width:198px;height:36px;flex:none;
+         background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%230A0F1B%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat left center/contain;
+         filter:drop-shadow(0 2px 6px rgba(122,58,0,.30))}
+  .mast nav{display:flex;gap:2px;flex:1;flex-wrap:wrap;min-width:0}
+  .mast nav a{display:inline-flex;align-items:center;gap:4px;font:700 14px var(--mono);color:var(--band-nav);
+              padding:10px 8px;border-radius:7px;white-space:nowrap}
+  .mast nav a span{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.3px}
+  .mast nav a:hover span{text-decoration:none}
+  .mast nav a:hover{color:var(--band-tag-b);background:var(--nav-hov)}
+  .mast nav a svg,.cta a svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;
+                             stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .mast svg .f{fill:currentColor;stroke:none}
+  .bsel{border:1px solid var(--line-2);background:var(--field);color:var(--band-nav);border-radius:6px;
+        font:700 12px var(--mono);padding:0 8px;min-height:38px;cursor:pointer}
+  .bsel option{color:#000;background:var(--field)}
+
+  /* masthead CTAs — swap (quiet outline) + buy/sell (loud white) */
+  .cta{display:flex;gap:10px;flex:none;align-items:center}
+  .cta a{display:inline-flex;align-items:center;gap:8px;border-radius:8px;font:700 14.5px var(--sans);
+         letter-spacing:.02em;padding:0 14px;min-height:44px;white-space:nowrap}
+  .btn-swap,.btn-buy{background:var(--cta);color:var(--cta-ink);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .btn-swap:hover,.btn-buy:hover{background:var(--cta-hov);color:var(--cta-ink)}
+  /* theme picker + light/dark switcher — live with the CTAs */
+  .thm{display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;border:0;border-radius:8px;
+       background:var(--field);color:var(--field-ink);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.14)}
+  .thm:hover{background:var(--field-hov)}
+  .thm svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+  /* tablet/mobile MENU — third CTA that replaces the inline nav when it can't sit on one row */
+  #dd-menu{display:none}
+  .btn-menu{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:8px;font:700 14.5px var(--sans);
+            letter-spacing:.02em;padding:0 14px;min-height:44px;white-space:nowrap;cursor:pointer;
+            background:var(--cta);color:var(--cta-ink);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .btn-menu:hover{background:var(--cta-hov);color:var(--cta-ink)}
+  .btn-menu svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;
+                stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ddp.menu-pop{min-width:172px;max-height:440px}   /* 8 rows on phones — never scrolls */
+  .menu-pop a{display:flex;align-items:center;gap:10px;border-radius:7px;font:700 13.5px var(--mono);
+              color:var(--ink-2);padding:0 11px;min-height:44px}
+  .menu-pop a:hover{background:var(--panel-2);color:var(--ink)}
+  .menu-pop a svg{width:16px;height:16px;flex:none;fill:none;stroke:var(--acc);
+                  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .menu-pop a svg .f{fill:var(--acc);stroke:none}
+  .menu-pop .m-cta{display:none}   /* phones only: SWAP + BUY move into the menu */
+
+  .tagline{position:relative;z-index:1;margin:13px 0 10px;font:500 13px var(--sans);color:var(--band-tag)}
+  .tagline b{font-weight:700;color:var(--band-tag-b)}
+
+  /* ---- #1 LOOKUP — white box on orange ---- */
+  /* warm-cream skin (owner pick, 2026-07-19): quieter than white — the price wins the first glance */
+  .lookup{position:relative;z-index:1;display:flex;background:var(--field);border-radius:var(--rad);overflow:hidden;   /* shell wears the button color — its clipped edge is dark, never a light rim */
+          box-shadow:0 6px 16px rgba(0,0,0,.22)}
+  .lookup input{flex:1;min-width:0;border:0;outline:none;background:var(--field);color:var(--field-ink);
+                font:500 18px var(--mono);padding:15px 16px;min-height:54px;box-sizing:border-box}
+  .lookup input::placeholder{color:var(--ph);opacity:var(--pha,1)}   /* --pha animates the final placeholder fade-in */
+  .lookup button{border:0;background:var(--shell);color:var(--shell-ink);font:700 16px var(--sans);padding:0 26px;cursor:pointer;min-height:54px}
+  .lookup button:hover{background:var(--shell-hov)}
+  .s-res{position:relative;z-index:1;display:none;margin-top:8px;font:600 13px var(--mono);color:var(--band-tag-b)}
+  .s-res.show{display:block}
+  .s-res b{color:#3A2408}
+  .s-hints{position:relative;z-index:1;display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .s-hints.hide{display:none}
+  .s-hints span{font:600 10.5px var(--mono);color:var(--chip-ink);background:var(--field);
+                border:1px solid rgba(255,255,255,.28);border-radius:5px;padding:3px 9px}
+
+  /* ---- #2 PRICE + CONVERTER — inside the band ---- */
+  .bandgrid{position:relative;z-index:3;display:grid;grid-template-columns:minmax(min-content,1fr) auto;
+            gap:16px 30px;align-items:center;margin-top:18px}   /* price+delta row is unbreakable; converter takes the rest, wrapping to 2 lines beyond it */
+  .bandgrid>div:first-child{padding-left:48px}   /* mirrors the converter's gap from the right edge */
+  .bandgrid>div:last-child{padding-right:48px}
+  .bmicro{font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--band-ink2)}
+  .price-line{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;margin:6px 0 8px}   /* the delta never drops below the price */
+  .price{font:700 clamp(44px,6.6vw,76px)/1 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.015em;color:var(--price-ink);
+         text-shadow:0 2px 12px var(--price-glow)}
+  @keyframes pUp{0%{color:var(--up)}100%{color:var(--price-ink)}}
+  @keyframes pDn{0%{color:var(--down)}100%{color:var(--price-ink)}}
+  .price.fu{animation:pUp .9s ease}
+  .price.fd{animation:pDn .9s ease}
+  .delta{font:700 13.5px var(--mono);font-variant-numeric:tabular-nums;background:var(--field);border-radius:7px;
+         padding:6px 10px;white-space:nowrap}
+  .delta.up{color:var(--up)}.delta.down{color:var(--down)}
+  @keyframes dPulse{0%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .delta.tick{animation:dPulse .55s ease}
+  .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .chip{font:600 11.5px var(--mono);font-variant-numeric:tabular-nums;background:var(--field);color:var(--chip-ink);
+        border-radius:5px;padding:5px 10px;white-space:nowrap}
+  .chip.up{color:var(--up)}
+
+  /* preev pair: [amount][BTC▾] = [amount][USD▾] — tags ARE the selects */
+  .cv2{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-top:9px}
+  .pv{display:flex;align-items:stretch;max-width:100%;background:var(--field);border-radius:var(--rad);   /* container wears the button color — no light seams anywhere */
+      box-shadow:0 8px 20px rgba(0,0,0,.24)}
+  .pv input{border-radius:0}
+  .pv .tagbtn{border-radius:0}
+  .pv:focus-within{box-shadow:0 8px 20px rgba(0,0,0,.24),0 0 0 3px rgba(124,140,168,.35)}
+  .pv input{flex:0 1 auto;min-width:0;width:2ch;border:0;outline:none;background:var(--field);color:var(--field-ink);text-align:center;
+            font:600 28px var(--mono);font-variant-numeric:tabular-nums;padding:15px 16px;box-sizing:content-box}
+  .tag{position:relative;display:flex;flex:none}
+  .tag select{appearance:none;-webkit-appearance:none;border:0;border-left:1px solid var(--line-2);background:var(--panel-2);
+              color:var(--acc);font:700 15px var(--mono);padding:0 27px 0 13px;cursor:pointer;outline:none;min-height:100%}
+  .tag select:hover{background:var(--field-hov)}
+  .tag::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--acc);pointer-events:none;font-size:11px}
+  .eq{color:var(--price-ink);font:700 22px var(--mono);text-shadow:0 1px 6px var(--price-glow)}
+
+  /* ============ #3 NETWORK NOW — white strip riding the band seam ============ */
+  .stripzone{position:relative;z-index:2}
+  .strip{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);
+         box-shadow:0 3px 14px rgba(130,62,0,.10);margin-top:-38px;padding:12px 16px 13px}
+  .strip-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px}
+  .strip-head .meta{font:600 11px var(--mono);color:var(--ink-3)}
+  .nets{display:grid;grid-template-columns:.78fr .92fr 1fr 1.02fr .95fr .95fr}
+  .nst{padding:2px 16px;border-left:1px dashed var(--line)}
+  .nst:first-child{border-left:0;padding-left:2px}
+  .nst .nv{font:700 26px/1.15 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+  .nst .nv em{font-style:normal;font-size:13px;color:var(--ink-3);font-weight:600;margin-left:4px}
+  .nst .nk{font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+  .nst.hot .nv{color:var(--acc)}
+  #since em{margin:0 6px 0 2px}
+  #since em:last-child{margin-right:0}
+
+  /* ============ DATA ZONE ============ */
+  main.wrap{padding-top:18px} /* class+element specificity — beats .wrap's padding:0 18px, which silently zeroed every earlier attempt */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:15px 16px;min-width:0;box-sizing:border-box}
+  .rowA{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:18px}
+  .rowB{display:block;margin-top:18px}
+
+  /* live mempool table */
+  .live-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .live-toggle{display:flex;gap:4px}
+  .live-toggle button{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);
+                      font:600 11.5px var(--mono);padding:6px 13px;border-radius:6px;cursor:pointer;min-height:32px}
+  .live-toggle button:hover{background:var(--btn-hov)}
+  .live-toggle button.on{background:var(--tab-on-bg);border-color:var(--tab-on-line);color:var(--tab-on-ink)}
+  .ltx{width:100%;border-collapse:collapse;margin-top:8px;font:600 12px var(--mono);font-variant-numeric:tabular-nums}
+  .ltx th{font:600 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:4px 8px;border-bottom:1px solid var(--line)}
+  .ltx th.r,.ltx td.r{text-align:right}
+  .ltx td{padding:5px 8px;border-bottom:1px dashed var(--line);color:var(--ink-2);white-space:nowrap}
+  .ltx tr:last-child td{border-bottom:0}
+  .ltx td.txid{color:var(--acc);overflow:hidden;text-overflow:ellipsis}
+  .ltx td.txid a:hover{text-decoration:underline}
+  /* txid split across two lines on the left; figures vertically centred beside it */
+  #ltx{table-layout:fixed}
+  #ltx th:nth-child(2){width:158px}
+  #ltx th:nth-child(3){width:72px}
+  #ltx th:nth-child(4){width:74px}
+  #ltx td{vertical-align:middle;border-bottom:1px dashed var(--line)}
+  #ltx td.txid{line-height:1.35;white-space:normal;word-break:break-all}
+  #ltx tbody:last-child td{border-bottom:0}
+  /* HODLING — the header becomes a 10 s fuse while the list is frozen by a whale */
+  .lhead{position:relative;display:inline-flex;align-items:center;flex:1;min-height:18px}   /* tall enough for the HODL pause icon — the swap must not shift the layout */
+  .lhead b{font:inherit}
+  .hbar{display:none}
+  @keyframes hodlbar{from{width:100%}to{width:0}}
+  .lhead.hodl b{color:var(--acc);display:inline-flex;align-items:center;gap:7px;
+                animation:hodlflash 2.4s ease-in-out infinite}
+  @keyframes hodlflash{0%,100%{opacity:1}50%{opacity:.2}}
+  /* fuse sits to the right of HODL, its far end closing in toward the word */
+  .lhead.hodl .hbar{display:block;position:relative;flex:1;order:2;height:2px;margin-left:12px}
+  .lhead.hodl .hbar::after{content:"";position:absolute;left:0;top:0;height:2px;border-radius:1px;
+                           background:var(--orange);width:100%;animation:hodlbar 10s linear forwards}
+  .hstop{width:18px;height:18px;flex:none}
+  /* header icons: bolt for live data, newspaper for news — both headers centre on the same line */
+  .hico{width:14px;height:14px;flex:none;margin-right:7px;color:var(--orange)}
+  .hico.bolt{fill:currentColor}
+  .hico.paper{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .lhead.hodl .hico{display:none}
+  .nhead{display:flex;align-items:center;min-height:32px}
+  /* miner badge — generic "?" until per-provider logos arrive */
+  .mico{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;
+        border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink-3);
+        font:700 11px var(--mono);margin-right:8px;vertical-align:middle;position:relative;top:-1px}
+  /* nodes total line above the table + view-all buttons under blocks/nodes */
+  .ntotal{font:600 12px var(--mono);color:var(--ink-2)}
+  .ntotal b{color:var(--acc)}
+  /* nodes footer: two equal halves — total centred in the left, button filling the right */
+  .lfoot{display:flex;align-items:center;gap:12px;margin-top:11px}
+  .lfoot .ntotal{flex:1;text-align:center}
+  .lfoot .lbtn{flex:1;margin-top:0;padding:9px 0;text-align:center}
+  /* every view presents at the same card height (locked to the 6-entry tx list on load);
+     blocks/nodes tables stretch to fill it — their rows space out — and view-all rows sit at the bottom */
+  .lbody{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch}
+  #lbx,#lnx{flex:1}
+  #lbx td,#lnx td{padding-top:2px;padding-bottom:2px}   /* slim base padding — the flex stretch provides the spacing */
+  .ltx tr.mrow{display:none}   /* rows 9-10 of the nodes list appear on phones only */
+  .lbtn{display:block;text-align:center;margin-top:11px;border:1px solid var(--btn-hov);background:var(--btn);
+        color:var(--btn-ink);font:700 11px var(--mono);letter-spacing:.09em;padding:9px;border-radius:7px}
+  .lbtn:hover{background:var(--btn-hov)}
+  @keyframes rowin{from{background:rgba(var(--acc-rgb),.16)}to{background:transparent}}
+  .ltx tr.new,.ltx tbody.new tr{animation:rowin .5s ease}
+  /* whale tiers: ≥10 BTC glows orange, ≥100 BTC pulses red, ≥1,000 BTC goes full rainbow */
+  .ltx tbody.big td.amt{color:var(--acc);font-weight:800}
+  @keyframes wpulse{0%,100%{color:var(--down);opacity:1}50%{color:#FF9B8A;opacity:.75}}
+  .ltx tbody.whale td.amt{font-weight:800;color:var(--down);animation:wpulse 1s ease infinite}
+  .ltx tbody.whale td.txid{color:var(--down)}
+  @keyframes mega{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  .ltx tbody.mega td.amt{font-weight:800;color:transparent;
+    background:linear-gradient(90deg,#D64545,#F7931A,#E8A33D,#1E8A4C,#2E7CD6,#8A4FD3,#D64545);
+    background-size:200% 100%;-webkit-background-clip:text;background-clip:text;
+    animation:mega 1.6s linear infinite}
+  .ltx tbody.mega td.txid{color:#8A4FD3}
+  /* ≥10,000 BTC — on fire: white-hot amount riding a sweeping flame pill, entry warmly tinted */
+  @keyframes fsweep{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  @keyframes fglow{0%,100%{box-shadow:0 1px 5px rgba(214,69,69,.45)}50%{box-shadow:0 1px 12px rgba(247,147,26,.9)}}
+  .ltx tbody.fire .fpill{display:inline-block;padding:1px 4px;margin:-1px 0;border-radius:5px;color:#fff;font-weight:800;
+    background:linear-gradient(90deg,#C43131,#F7931A,#FFB84D,#F7931A,#C43131);background-size:200% 100%;
+    animation:fsweep 1.4s linear infinite,fglow .9s ease infinite}
+  .ltx tbody.fire td{background:rgba(247,147,26,.06)}
+  .ltx tbody.fire td.txid{color:#D64545}
+  .ltx tr.ntot td{color:var(--ink);font-weight:700}
+  .ltx tr.ntot td b{color:var(--acc)}
+  #balls{width:100%;height:246px;display:none;margin-top:8px}
+
+  /* news — the card flexes so the list fills the same height as the live card beside it */
+  .newscard{display:flex;flex-direction:column}
+  /* fixed equal rows (basis 0) that fit two lines — titles wrap then clamp, the box never moves */
+  .news-list{list-style:none;margin:8px 0 0;padding:0;flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .news-list li{flex:1 1 0;min-height:0;display:flex;overflow:hidden}
+  .news-list a{flex:1;display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);align-items:center;min-width:0}
+  .news-list li:last-child a{border-bottom:0}
+  .news-list li.fresh a{animation:rowin .6s ease}
+  .nt{flex:1;min-width:0;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* source logo placeholder — a small brand rectangle standing in for the real wordmark image */
+  .nlogo{display:inline-flex;align-items:center;justify-content:center;height:16px;padding:0 6px;border-radius:3px;
+         font:700 8px var(--mono);color:#fff;letter-spacing:.03em;flex:none}
+  .ns2{display:inline-flex;align-items:center;gap:6px}
+  svg.ext{width:11px;height:11px;fill:none;stroke:var(--ink-3);stroke-width:2;stroke-linecap:round;
+          stroke-linejoin:round;margin-left:3px;vertical-align:-1px}
+  .news-list .nt{font:13px var(--sans);color:var(--ink-2)}
+  .news-list a:hover .nt{color:var(--ink)}
+  .news-list .ns2{font:600 10.5px var(--mono);color:var(--ink-3);white-space:nowrap}
+  .morenews{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:6px;
+            font:600 11.5px var(--mono);padding:0 13px;min-height:32px;
+            display:inline-flex;align-items:center}
+  .morenews:hover{background:var(--btn-hov)}
+
+  /* (fear & greed lives in the network strip now) */
+  .fgmini .nv{color:var(--down)}
+  /* terminal segment meter — 10 blocky cells, lit count tracks the index (34 → 3 lit) */
+  .segs{display:inline-flex;gap:2px;margin-left:10px;vertical-align:1px}
+  .segs i{width:8px;height:13px;border-radius:2px;background:var(--line)}
+  .segs i.on1{background:#C93B3B}.segs i.on2{background:#D65454}.segs i.on3{background:#E07B5A}
+
+  /* tiny block perched on the strip's bottom-left corner — flashes ~10s when a block is found */
+  .bpop{position:absolute;left:-11px;top:-11px;width:30px;height:30px;opacity:0;pointer-events:none;
+        filter:drop-shadow(0 3px 7px rgba(130,62,0,.35))}
+  @keyframes bpop{0%{opacity:0;transform:scale(.7)}30%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0}}
+  .bpop.go{animation:bpop 1.25s ease 8}
+
+  /* sparkline */
+  .spark-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .spark-l{display:inline-flex;align-items:baseline;gap:14px}
+  .spark-h .rng{font:600 11.5px var(--mono);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  #spark{width:100%;height:194px;display:block;margin-top:8px;cursor:crosshair}
+
+  /* ============ CATEGORIES ============ */
+  .explore{padding:22px 0 6px}
+  .explore h2{font:600 11px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin:0 0 11px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px}
+  .ex{display:flex;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);
+      padding:13px 14px;transition:border-color .12s,transform .12s}
+  .ex:hover{border-color:var(--orange);transform:translateY(-1px)}
+  .ex .et{font:700 13.5px var(--sans);color:var(--ink)}
+  .ex .ed{font:11.5px var(--sans);color:var(--ink-2)}
+  .ex .em{margin-top:4px;font:600 10.5px var(--mono);color:var(--acc)}
+
+  /* ============ FOOTER — darker parchment: brand + tool directory + selectors ============ */
+  footer{position:relative;color:var(--foot-ink);margin-top:34px;background:var(--foot-bg)}
+  .foot-clip{position:absolute;inset:0;overflow:hidden;pointer-events:none}   /* clips the watermark WITHOUT clipping the upward dropdowns */
+  .foot-deco{position:absolute;right:-50px;bottom:-70px;width:340px;height:340px;opacity:.045}
+  footer::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+                 background:linear-gradient(90deg,var(--acc),var(--orange) 50%,var(--acc))}   /* accent line follows the theme */
+  .foot-main{max-width:1140px;margin:0 auto;padding:6px 18px 38px}
+  /* horizontal brand band under the link columns */
+  .foot-band{margin-top:34px;border-top:1px solid var(--foot-line);padding-top:24px;
+             display:flex;flex-direction:column;gap:14px}
+  .fb-row1{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .fb-row1 .foot-tag{padding-left:18px;border-left:1px solid var(--foot-line)}
+  .fb-row1 .foot-live:first-of-type{margin-left:auto}
+  .fb-row1 .foot-selects{margin-top:0}
+  .fb-row2{display:flex;align-items:baseline;gap:10px 18px;flex-wrap:wrap;justify-content:space-between}
+  .fb-row2 .foot-meta{margin-top:0;max-width:none}
+  .fb-row2 .foot-copy2{margin-top:0}
+  .foot-tag{margin:0;font:500 13px var(--sans);color:var(--foot-ink2)}
+  .foot-selects{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  /* satoshi quote band — one verified quote, randomly chosen each load */
+  .foot-quote{max-width:760px;margin:0 auto;padding:36px 18px 48px;text-align:center;position:relative}
+  .foot-quote::before{content:"\201C";display:block;font:700 44px/0.6 Georgia,serif;color:var(--orange);opacity:.55;margin-bottom:2px}
+  .foot-quote blockquote{margin:0;font:italic 500 15px/1.65 Georgia,"Times New Roman",serif;color:var(--foot-quote)}
+  .foot-quote cite{display:block;margin-top:8px;font:600 10.5px var(--mono);letter-spacing:.11em;
+                   text-transform:uppercase;font-style:normal;color:var(--foot-ink3)}
+  .foot-quote::after{content:"\201C";display:block;font:700 44px/0.6 Georgia,serif;color:var(--orange);opacity:.55;
+                     margin:8px auto 0;transform:rotate(180deg);width:max-content}
+  .foot-live{display:flex;align-items:center;gap:8px;font:600 11.5px var(--mono);
+             font-variant-numeric:tabular-nums;color:var(--foot-ink2)}
+  .fblock{width:14px;height:14px;flex:none;animation:fblockglow 2.6s ease infinite}
+  @keyframes fblockglow{0%,100%{filter:drop-shadow(0 0 3px rgba(247,147,26,.7))}
+                        50%{filter:drop-shadow(0 0 7px rgba(247,147,26,1))}}
+  .foot-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:24px 14px}
+  .fcol h3{margin:0 0 10px;font:700 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--foot-acc)}
+  .fcol h3::after{content:"";display:block;width:18px;height:2px;background:var(--foot-acc);margin-top:6px;border-radius:1px;opacity:.7;
+                  transition:width .9s ease}
+  .fcol:hover h3::after{width:50%}
+  .fcol ul{list-style:none;margin:0;padding:0}
+  .fcol a{display:inline-block;font:600 12px var(--mono);color:var(--foot-ink2);padding:4px 0;white-space:nowrap;
+          transition:color .12s}
+  .fcol a:hover{color:var(--foot-hi)}
+  .fcol .tag18{font:700 9.5px var(--mono);color:var(--foot-acc);margin-left:5px;vertical-align:1px}
+  /* brand-rail meta links + copyright */
+  .foot-meta{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:10px;max-width:200px;
+             font:600 11.5px var(--mono)}
+  .foot-meta a{color:var(--foot-ink2);transition:color .12s}
+  .foot-meta a:hover{color:var(--foot-hi)}
+  .foot-copy2{font:600 10.5px var(--mono);color:var(--foot-ink3);margin-top:6px}
+  .foot-bottom-in a:hover{color:var(--foot-hi);text-decoration:underline}
+  .flinks{display:flex;gap:12px;flex-wrap:wrap}
+  .foot-copy{margin-left:auto}
+  .dd.up .ddp{top:auto;bottom:calc(100% + 7px)}   /* footer dropdowns open upward */
+  footer .ddb{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink)}
+  footer .ddb:hover{background:var(--btn-hov)}
+  footer .brand{width:152px;height:27px}
+  footer .brand{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23AFBDD2%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%23070C16%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23AFBDD2%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23AFBDD2%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");filter:drop-shadow(0 1px 3px rgba(122,58,0,.18))}
+
+  /* ============ CUSTOM DROPDOWNS (header) + PREEV POP-UPS (converter) ============ */
+  .dd{position:relative}
+  .ddb{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--btn-hov);background:var(--btn);
+       color:var(--btn-ink);border-radius:7px;font:700 13.5px var(--mono);padding:0 14px;min-height:44px;cursor:pointer}
+  .ddb:hover{background:var(--btn-hov)}
+  .ddb .dda{font-size:10px;opacity:.9;margin-left:3px}
+  .ddi{width:23px;height:23px;border-radius:50%;background:var(--field);color:var(--acc);display:inline-flex;align-items:center;
+       justify-content:center;font:700 11px var(--mono);flex:none}
+  .ddp{position:absolute;right:0;top:calc(100% + 7px);min-width:225px;max-height:330px;overflow:auto;background:var(--field);
+       border:1px solid var(--line-2);border-radius:10px;box-shadow:0 14px 38px rgba(60,30,0,.28);padding:6px;display:none;z-index:60}
+  .dd.open .ddp{display:block}
+  .ddp button{display:flex;align-items:center;gap:9px;width:100%;border:0;background:none;text-align:left;border-radius:7px;
+              font:600 13px var(--mono);color:var(--ink-2);padding:8px 9px;cursor:pointer;min-height:42px}
+  .ddp button:hover{background:var(--panel-2);color:var(--ink)}
+  .ddp button.cur{background:var(--panel-2);color:var(--acc)}
+  .ddp .ddi{background:var(--panel-2);color:var(--acc);border:1px solid var(--line)}
+  .ddp .ddn{color:var(--ink-3);font-weight:500;font-size:12px;margin-left:auto;padding-left:12px;white-space:nowrap}
+  .ddp button.dev .ddn{color:var(--acc);font-style:italic}
+
+  .tag2{position:relative;display:flex;flex:none}
+  .tagbtn{border:0;background:var(--shell);color:var(--shell-ink);   /* dark converter unit buttons — no divider, they merge with the field shell */
+          font:700 28px var(--mono);padding:0 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:100%}
+  .tagbtn:hover{background:var(--shell-hov)}
+  .tagbtn .dda{font-size:13px}
+  .pop{position:absolute;right:6px;bottom:calc(100% + 10px);background:var(--field);border:1px solid var(--line-2);border-radius:10px;
+       box-shadow:0 10px 40px rgba(60,30,0,.28);padding:7px;display:none;z-index:60}
+  .tag2.open .pop{display:block}
+  .bandgrid.popopen{z-index:9}   /* converter pop-ups rise above the masthead while open (only one menu opens at a time) */
+  .pop::after{content:"";position:absolute;right:22px;top:100%;border:8px solid transparent;border-top-color:var(--field)}
+  .pop.below{bottom:auto;top:calc(100% + 10px)}
+  .pop.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--field)}
+  .pop .grid4{display:grid;grid-template-columns:repeat(4,auto);gap:5px}
+  .pop button{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:7px;
+              font:700 12.5px var(--mono);padding:8px 10px;cursor:pointer;min-width:54px;min-height:40px}
+  .pop button:hover{background:var(--btn-hov)}
+  .pop button.cur{background:var(--cta);border-color:rgba(255,166,60,.5);color:var(--cta-ink)}   /* selected = the house button, orange text, soft orange ring */
+
+  /* oversized-number fitting (MXN/KRW/JPY etc.) */
+  .price.sm{font-size:clamp(36px,5.2vw,58px)}
+  .price.xs{font-size:clamp(28px,4vw,44px)}
+
+  /* delta pill + currency code beneath it */
+  .dwrap{display:flex;flex-direction:column;align-items:flex-start;gap:7px} /* left-anchored: the pill grows rightward, the code never moves */
+  .dwrap .ccode{padding-left:2px}
+  .dwrap .ccode{font:700 11.5px var(--mono);letter-spacing:.08em;color:var(--price-ink)}
+  /* tiny SVG flags (emoji flags don't render on Windows) */
+  .flg{width:26px;height:18px;border-radius:3px;overflow:hidden;flex:none;display:inline-flex;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+  .flg svg{display:block;width:26px;height:18px}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:940px){
+    .news-list{flex:0 0 auto;overflow:visible}   /* stacked below the live card there's no height to share — grow naturally */
+    .news-list li{flex:0 0 auto}
+    .rowA,.rowB{grid-template-columns:1fr}
+    #spark{height:130px}
+  }
+  @media(max-width:1150px){
+    /* below 1150 the inline nav would wrap to two lines — swap it for the MENU dropdown */
+    .mast nav{display:none}
+    #dd-menu{display:block}
+    .cta{margin-left:auto}
+  }
+  @media(max-width:940px) and (min-width:721px){
+    /* tablet band: no big price — the converter IS the price. Delta rides its right, chips sit below */
+    .bandgrid{grid-template-columns:auto auto;justify-content:center;column-gap:16px;row-gap:14px}
+    .bandgrid>div,.price-line{display:contents}
+    .price{display:none}
+    .cv2{grid-column:1;grid-row:1;margin-top:0}
+    .dwrap{display:none}   /* no delta pill either — the converter alone carries the price */
+    .chips{grid-column:1/3;grid-row:2;justify-content:center}
+    /* tablet footer band: everything textual stacks under the logo, live bits + selectors keep the right edge */
+    .foot-band{display:grid;grid-template-columns:auto 1fr auto auto;column-gap:18px;align-items:start}
+    .fb-row1,.fb-row2{display:contents}
+    .fb-row1 .brand{grid-column:1;grid-row:1}
+    .fb-row1 .foot-tag{grid-column:2;grid-row:1;align-self:center;margin:0}
+    .fb-row2 .foot-meta{grid-column:1/3;grid-row:2;margin-top:4px;max-width:none}
+    .fb-row2 .foot-copy2{grid-column:1/3;grid-row:3;margin-top:4px}
+    .fb-row1 .foot-live{justify-self:end;align-self:center;margin-left:0}
+    .fb-row1 .foot-live:first-of-type{grid-column:3;grid-row:1}
+    .fb-row1 .foot-live+.foot-live{grid-column:4;grid-row:1}
+    .fb-row1 .foot-selects{grid-column:3/5;grid-row:2/4;justify-self:end;align-self:start;margin-top:6px}
+  }
+  @media(max-width:880px){
+    /* tablet: the six network cells breathe better as 3×2 */
+    .nets{grid-template-columns:repeat(3,1fr)}
+    .nst{padding:8px 14px}
+    .nst:nth-child(3n+1){border-left:0;padding-left:2px}
+    .nst:nth-child(n+4){border-top:1px dashed var(--line)}
+  }
+  @media(max-width:720px){
+    .mast nav{display:none}                    /* nav collapses; category cards below are the nav */
+    .cta .btn-swap,.cta .btn-buy{display:none} /* SWAP + BUY live inside the menu; MENU sits beside the logo */
+    .tagline{text-align:center}
+    .menu-pop .m-cta{display:flex}
+    .menu-pop .m-buy{padding-bottom:6px;border-bottom:1px dashed var(--line);border-radius:7px 7px 0 0;margin-bottom:6px}
+    /* no big price on phones — the converter IS the price, chips right below it */
+    .bandgrid{grid-template-columns:1fr;justify-content:center;row-gap:14px}
+    .bandgrid>div,.price-line{display:contents}
+    .price,.dwrap{display:none}
+    .cv2{grid-column:1;grid-row:1;margin-top:0}
+    .chips{grid-column:1;grid-row:2;justify-content:center}
+    .bsel{min-height:44px}
+    .band{padding-bottom:52px}
+    .band-deco{display:none}
+    .strip{margin-top:-30px;padding:11px 14px 12px}
+    .nets{grid-template-columns:1fr 1fr}
+    .nst{padding:8px 12px;border-left:1px dashed var(--line)}
+    .nst:nth-child(odd){border-left:0;padding-left:2px}
+    .nst:nth-child(even){border-left:1px dashed var(--line);padding-left:12px} /* beats the ≤880 3n+1 rule that stripped cell 4's divider */
+    .nk .nklg{display:none}   /* phones: "ECONOMY · FAST 4" and plain "FEAR" */
+    #lbx th:nth-child(n+5),#lbx td:nth-child(n+5){display:none}   /* blocks: nothing after the tx column */
+    .ltx tr.mrow{display:table-row}   /* nodes 9 + 10 — the longer phone card has the room */
+    .spark-l{flex-direction:column;align-items:flex-start;gap:2px}   /* range under the title; OPEN CHART keeps the right */
+    .nst:nth-child(n+3){border-top:1px dashed var(--line)}
+    .live-toggle button{min-height:36px;padding:6px 10px}
+    #spark{height:104px}
+    .fb-row1 .foot-live:first-of-type{margin-left:0}
+    .fb-row1 .foot-tag{border-left:0;padding-left:0}
+  }
+  @media(max-width:560px){
+    .chip{font-size:10.5px;padding:4px 8px}   /* the three chips hold one line even at 360 */
+    .ltx .hidem{display:none}
+    /* tx table on phones: drop VALUE, slim the numeric columns, tighten paddings — no page overflow */
+    #ltx th:nth-child(3),#ltx td:nth-child(3){display:none}
+    #ltx th:nth-child(2){width:132px}
+    #ltx th:nth-child(4){width:56px}
+    /* phones: one truncated txid line — the split hash needs more width than a phone has */
+    #ltx td.txid br{display:none}
+    #ltx td.txid{white-space:nowrap;word-break:normal}
+    .ltx{font-size:10.5px}
+    .ltx td,.ltx th{padding-left:5px;padding-right:5px}
+    .ltx tbody.fire .fpill{padding:1px 3px;font-size:9.5px}
+    .segs i{width:6px;height:11px}
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .ex{padding:11px 12px}
+  }
+  @media(max-width:520px){
+    .lookup input::placeholder{font-size:15px}   /* resting hint fits even at 360 */
+    .cv2{gap:8px}
+    .eq{display:none}
+    .pv input{font-size:20px;padding:12px 10px}
+    .tagbtn{font-size:20px;padding:0 10px}
+    .lookup button{padding:0 18px}
+    .price{font-size:clamp(40px,11.5vw,54px)}
+  }
+  /* ============ three-zone backdrop: full-bleed command bar above the band, crisp separators between zones ============ */
+  .topbar{background:var(--bar);border-bottom:1px solid var(--bar-line)}
+  .topbar .mast{padding:16px 0;gap:12px}
+  .topbar .mast nav a{color:var(--bar-nav);font-size:13px;padding:9px 6px}
+  .topbar .mast nav a:hover{color:var(--bar-hi);background:rgba(255,255,255,.08)}
+  .band{padding-top:8px}
+  .band .tagline{margin-top:6px}
+  /* glass fields (owner pick: picker F7) — translucent over the band, hairline edge, orange buttons untouched */
+  .btn-swap,.btn-buy,.btn-menu{box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .live-toggle button.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+  .lookup{background:transparent;border:0;overflow:visible;gap:10px}
+  .lookup input{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:var(--rad)}
+  .lookup button{border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .pv{background:transparent;gap:9px}
+  .pv input{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:var(--rad)}
+  .pv .tagbtn{border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  @media(prefers-reduced-motion:reduce){
+    .ltx tr.new,.ltx tbody.new tr,.ltx tbody.whale td.amt,.ltx tbody.mega td.amt,.ltx tbody.fire .fpill,.lhead.hodl .hbar::after,.lhead.hodl b,.news-list li.fresh a,.fblock,.price.fu,.price.fd,.delta.tick,.bpop.go,.band-deco{animation:none}
+    .ex,.ex:hover{transform:none;transition:none}
+  }
+
+  /* ===== BAKED FINAL PALETTE (midnight dark - no engine on content pages) ===== */
+  :root[data-theme="dark"]{
+    --band:#101A2C;--band-line:#22304A;--bg:#15202F;--panel:#1C2840;--panel-2:#121B2B;
+    --line:#2C3A55;--line-2:#41527A;--ink:#DCE3EF;--ink-2:#A9B5C9;--ink-3:#8B9DBA;
+    --band-nav:#B9C6DF;--band-tag:#B9C6DF;--band-tag-b:#C6D2E5;--band-ink2:#7C8CA8;
+    --field:#1E2C44;--field-hov:#263650;--field-ink:#DCE3EF;--ph:#7C8CA8;
+    --btn:#24334E;--btn-hov:#2E4160;--btn-ink:#DCE6F5;
+    --cta:#16273F;--cta-hov:#1E304C;--cta-ink:#F7931A;
+    --shell:#16273F;--shell-hov:#1E304C;--shell-ink:#F7931A;
+    --tab-on-bg:#16273F;--tab-on-line:#16273F;--tab-on-ink:#F7931A;
+    --acc:#F7931A;--orange:#F7931A;--acc-rgb:247,147,26;
+    --price-ink:#C6D1E4;--price-glow:rgba(0,0,0,.35);--nav-hov:rgba(255,255,255,.10);
+    --up:#2EBD85;--down:#F6465D;--down-soft:#DB8296;--chip-ink:#9FB0CB;
+    --bar:#0A0F1B;--bar-line:#1D2941;--bar-nav:#93A3C0;--bar-hi:#C9D6EA;
+    --foot-bg:#070C16;--foot-line:rgba(255,255,255,.07);--foot-ink:#AFBDD2;
+    --foot-ink2:#8593AC;--foot-ink3:#64718A;--foot-hi:#DCE4F0;
+    --foot-quote:#C6D1E4;--foot-acc:#F7931A;
+  }
+
+  /* ============ BLOCK PAGE ============ */
+  .band.slim{padding:16px 0 16px}
+  .band.slim .band-deco{width:250px;height:250px;right:-52px;bottom:-84px}
+  .apage{padding-top:20px}
+  .ahero{padding:0;overflow:hidden}
+  .rmain{padding:24px 26px 22px}
+  .bh-top{display:flex;justify-content:space-between;gap:20px 30px;align-items:flex-start;flex-wrap:wrap}
+  .bheight{font:700 48px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px;margin-top:9px}
+  .bwhen{font:600 12px var(--mono);color:var(--ink-3);margin-top:9px}
+  .bwhen b{color:var(--ink-2)}
+  .bnav{display:flex;gap:8px;flex-wrap:wrap}
+  .mbtn{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--btn);border:1px solid var(--btn-hov);
+        border-radius:8px;color:var(--btn-ink);font:700 10.5px var(--mono);letter-spacing:.08em;padding:7px 12px;min-height:30px;
+        cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.09);box-sizing:border-box;text-decoration:none;white-space:nowrap}
+  .mbtn:hover{background:var(--btn-hov)}
+  .mbtn[aria-disabled="true"]{opacity:.4;cursor:default}
+  .hashline{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  .hashline code{font:600 13.5px var(--mono);color:var(--acc);word-break:break-all;min-width:0;
+                 border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:3px}
+  .cico{position:relative;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;
+        background:var(--btn);border:1px solid var(--btn-hov);border-radius:7px;cursor:pointer;padding:0;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+  .cico svg{width:14px;height:14px;fill:none;stroke:var(--btn-ink);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+  .cico:hover{background:var(--btn-hov);border-color:rgba(247,147,26,.4)}
+  .cico.ok svg{display:none}
+  .cico.ok::after{content:"✓";font:700 13px var(--mono);color:var(--up)}
+  .abadges{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+  .abadges i{font:600 10.5px var(--mono);font-style:normal;background:var(--field);color:var(--chip-ink);border-radius:5px;padding:4px 9px}
+  .abadges i.ok{color:var(--up)}
+  .abadges i.miner{color:var(--orange)}
+  .ah-stats{display:flex;flex-wrap:wrap;gap:12px 0;margin-top:22px;border-top:1px dotted var(--line-2);padding-top:15px}
+  .ast{flex:1;min-width:max-content;padding:0 24px;border-left:1px dotted var(--line-2)}
+  .ast:first-child{border-left:0;padding-left:2px}
+  .ast b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ast b em{font-style:normal;font-size:10.5px;color:var(--ink-3);margin-left:3px}
+  .ast i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  /* fee span gauge (mempool.space idiom, house colors) */
+  .fgrow{display:flex;align-items:center;gap:14px;margin-top:18px;flex-wrap:wrap}
+  .fgl{font:600 10px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .fgl b{color:var(--ink-2);letter-spacing:0}
+  .fgauge{position:relative;flex:1;min-width:180px;height:6px;border-radius:3px;
+          background:linear-gradient(90deg,#2EBD85,#F7931A 45%,#DB8296)}
+  .fgauge span{position:absolute;top:-3px;width:2px;height:12px;background:#DCE3EF;border-radius:1px}
+  .acard{margin-top:18px}
+  /* fused control strip */
+  .cstrip{display:flex;justify-content:space-between;align-items:center;gap:12px 14px;flex-wrap:wrap;
+          background:var(--panel-2);border-top:1px solid var(--line);padding:13px 22px}
+  .tgl{display:inline-flex;border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
+  .tgl button{background:transparent;border:0;color:var(--ink-2);font:700 10.5px var(--mono);letter-spacing:.09em;
+              padding:8px 14px;min-height:32px;cursor:pointer;border-right:1px solid var(--line);display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .tgl button:last-child{border-right:0}
+  .tgl button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .tgl button.on{background:var(--cta);color:var(--cta-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 0 var(--orange)}
+  /* block tx list: compact rows (a 2,600-tx block cannot be full cards) */
+  .brow{display:flex;align-items:center;gap:14px;padding:11px 12px;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .txid{font:600 12.5px var(--mono);color:var(--acc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 220px;min-width:0;text-decoration:none}
+  .brow .txid:hover{text-decoration:underline}
+  .brow .io{font:600 10.5px var(--mono);color:var(--ink-3);white-space:nowrap}
+  .brow .val{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:auto}
+  .brow .val em{font-style:normal;font-size:10px;color:var(--ink-3);margin-left:3px}
+  .brow .rate{font:600 10.5px var(--mono);color:var(--chip-ink);background:var(--field);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .brow.cb{background:rgba(247,147,26,.05);border-radius:8px 8px 0 0;border-bottom:0}
+  .cbpill{display:inline-flex;align-items:center;font:700 9.5px var(--mono);letter-spacing:.08em;color:var(--orange);
+          background:rgba(247,147,26,.12);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  /* decoded coinbase message (the miner's tag riding the coinbase scriptSig) */
+  .cbmsg{font:600 11px var(--mono);color:var(--ink-3);background:rgba(247,147,26,.05);border-radius:0 0 8px 8px;
+         border-bottom:1px dashed var(--line);padding:0 12px 10px;word-break:break-all;line-height:1.5}
+  .cbmsg i{font-style:normal;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-right:8px}
+  .cbmsg b{color:var(--orange);font-weight:700}
+  /* technical details (behind its tab): terminal key/value rows */
+  #techwrap{display:none;padding:6px 2px 2px}
+  .trow{display:flex;gap:14px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:baseline;flex-wrap:wrap}
+  .trow:last-child{border-bottom:0}
+  .trow .k{font:700 10.5px var(--mono);letter-spacing:.14em;color:var(--ink-3);width:130px;flex-shrink:0;text-transform:uppercase}
+  .trow .val{font:600 12.5px var(--mono);color:var(--ink);word-break:break-all;min-width:0}
+  .pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+  .pbtn{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:7px;
+        font:600 11.5px var(--mono);padding:0 14px;min-height:34px;cursor:pointer}
+  .pbtn:hover{background:var(--btn-hov)}
+  .pbtn[disabled]{opacity:.35;cursor:default}
+  .pbtn[disabled]:hover{background:var(--btn)}
+  .pinfo{font:600 11.5px var(--mono);color:var(--ink-3)}
+  .pinfo b{color:var(--ink-2)}
+  /* band cockpit */
+  .cband{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+  .cband .lookup{flex:1 1 320px;min-width:220px}
+  .cstat{display:flex;align-items:center;gap:10px;background:var(--field);border-radius:var(--rad);padding:0 16px}
+  .cstat svg{width:19px;height:19px;flex:none;fill:none;stroke:var(--orange);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .cstat i{display:block;font:600 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal}
+  .cstat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:2px;
+           border-radius:5px;padding:0 4px;margin-left:-4px;margin-right:-4px}
+  .cband .lookup{flex:1 1 200px;min-width:200px;max-width:100%}
+  .cband .lookup input{width:0}
+  @keyframes cbflash{0%,45%{transform:scale(1.5);stroke:#FFFFFF;filter:drop-shadow(0 0 12px rgba(247,147,26,.9))}
+                     100%{transform:scale(1);stroke:var(--orange);filter:none}}
+  .cstat svg.flash{animation:cbflash .9s ease-out 3}
+  @keyframes chflash{0%,45%{color:#FFFFFF;background:rgba(247,147,26,.30);box-shadow:0 0 16px rgba(247,147,26,.45)}
+                     100%{color:var(--ink);background:transparent;box-shadow:none}}
+  .cstat b.flash{animation:chflash .9s ease-out 3}
+  /* responsive (same thresholds as the address page) */
+  @media(max-width:1280px){
+    .ast{border-left:0;padding:0 26px 0 0;flex:0 1 auto}
+  }
+  @media(max-width:1000px){
+    .cstat{padding:9px 13px;gap:9px;flex:0 1 auto;justify-content:center}
+    .cband{gap:9px;justify-content:center}
+    .cband .lookup{flex:1 1 100%;order:-1}
+    .cstrip{justify-content:center}
+  }
+  @media(max-width:700px){
+    .bh-top{flex-direction:column}
+    .bnav{order:-1;justify-content:center;align-self:center}
+  }
+  @media(max-width:860px){
+    .bheight{font-size:38px}
+    .ah-stats{gap:14px 0}
+    .ast{flex:1 1 46%;min-width:46%;padding:0 4px;border-left:0}
+    .brow .io{display:none}
+  }
+  @media(max-width:520px){
+    .cstat{padding:8px 8px;gap:7px;flex:1}
+    .cstat svg{width:15px;height:15px}
+    .cstat b{font-size:14px}
+    .cstat i{font-size:8px;letter-spacing:.09em}
+    .ast b{font-size:13.5px}
+    .brow .rate{display:none}
+    .tgl button{padding:8px 8px;letter-spacing:.06em}
+    /* copy icon rides the dashed underline, bottom-right (same as the address page) */
+    .hashline{position:relative}
+    .hashline .cico{position:absolute;right:0;bottom:-14px}
+    .hashline code{padding-right:38px}
+    .abadges{margin-top:26px}
+  }
+
+</style>
+
+<!-- ============ ORANGE BAND: masthead · lookup · price · converter ============ -->
+<header>
+<div class="topbar"><div class="wrap"><div class="mast">
+      <a class="brand" href="#" aria-label="OpenBitcoin — home"></a>
+      <nav aria-label="Primary">
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><polyline points="7 14 11 10 14 13 20 6"/></svg><span>Chart</span></a><a href="#"><svg viewBox="0 0 24 24"><rect x="3.5" y="6.5" width="17" height="12.5" rx="2.5"/><path d="M16.5 6.5v-1a2 2 0 0 0-2-2h-8"/><circle class="f" cx="16.8" cy="12.8" r="1.3"/></svg><span>Wallets</span></a><a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="10" rx="1.8"/><path d="M12 9.5v10M4.8 9.5h14.4"/><path d="M12 9.5c-4.2 0-5.7-1.7-5.2-3.6.4-1.5 2.8-1.8 3.9-.4 1 1.2 1.3 4 1.3 4z"/><path d="M12 9.5c4.2 0 5.7-1.7 5.2-3.6-.4-1.5-2.8-1.8-3.9-.4-1 1.2-1.3 4-1.3 4z"/></svg><span>Gift Cards</span></a><a href="#"><svg viewBox="0 0 24 24"><path d="M12 6.5C10 4.8 7 4.6 4 5.2v13.2c3-.6 6-.4 8 1.3 2-1.7 5-1.9 8-1.3V5.2c-3-.6-6-.4-8 1.3z"/><path d="M12 6.5v13.2"/></svg><span>Learn</span></a><a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle class="f" cx="9" cy="9" r="1.2"/><circle class="f" cx="15" cy="9" r="1.2"/><circle class="f" cx="12" cy="12" r="1.2"/><circle class="f" cx="9" cy="15" r="1.2"/><circle class="f" cx="15" cy="15" r="1.2"/></svg><span>Casinos</span></a>
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M7.5 8.5h9a5.5 5.5 0 0 1 5.4 6.6c-.4 2-3 2.7-4.3 1l-1.1-1.6h-9l-1.1 1.6c-1.3 1.7-3.9 1-4.3-1a5.5 5.5 0 0 1 5.4-6.6z"/><path d="M8.5 11v3M7 12.5h3"/><circle class="f" cx="15.5" cy="11.6" r="1"/><circle class="f" cx="17.6" cy="13.6" r="1"/></svg><span>Games</span></a>
+      </nav>
+      <div class="cta">
+        
+                <a class="btn-swap" href="#"><svg viewBox="0 0 24 24"><path d="M4 8.5h12.5M13.5 5.5l3 3-3 3"/><path d="M20 15.5H7.5M10.5 12.5l-3 3 3 3"/></svg>SWAP</a>
+        <a class="btn-buy" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M9.7 7.8v8.4M9.7 7.8h3.4a2.05 2.05 0 0 1 0 4.1H9.7M9.7 11.9h3.9a2.15 2.15 0 0 1 0 4.3H9.7M10.7 7.8V6.4M13.2 7.8V6.4M10.7 17.6v-1.4M13.2 17.6v-1.4"/></svg>BUY BITCOIN</a>
+        <div class="dd" id="dd-menu">
+          <button type="button" class="btn-menu" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>MENU</button>
+          <div class="ddp menu-pop" role="menu">
+            <a href="#" class="m-cta"><svg viewBox="0 0 24 24"><path d="M4 8.5h12.5M13.5 5.5l3 3-3 3"/><path d="M20 15.5H7.5M10.5 12.5l-3 3 3 3"/></svg><span>Swap</span></a>
+            <a href="#" class="m-cta m-buy"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M9.7 7.8v8.4M9.7 7.8h3.4a2.05 2.05 0 0 1 0 4.1H9.7M9.7 11.9h3.9a2.15 2.15 0 0 1 0 4.3H9.7M10.7 7.8V6.4M13.2 7.8V6.4M10.7 17.6v-1.4M13.2 17.6v-1.4"/></svg><span>Buy Bitcoin</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><polyline points="7 14 11 10 14 13 20 6"/></svg><span>Chart</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><rect x="3.5" y="6.5" width="17" height="12.5" rx="2.5"/><path d="M16.5 6.5v-1a2 2 0 0 0-2-2h-8"/><circle class="f" cx="16.8" cy="12.8" r="1.3"/></svg><span>Wallets</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="10" rx="1.8"/><path d="M12 9.5v10M4.8 9.5h14.4"/><path d="M12 9.5c-4.2 0-5.7-1.7-5.2-3.6.4-1.5 2.8-1.8 3.9-.4 1 1.2 1.3 4 1.3 4z"/><path d="M12 9.5c4.2 0 5.7-1.7 5.2-3.6-.4-1.5-2.8-1.8-3.9-.4-1 1.2-1.3 4-1.3 4z"/></svg><span>Gift Cards</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M12 6.5C10 4.8 7 4.6 4 5.2v13.2c3-.6 6-.4 8 1.3 2-1.7 5-1.9 8-1.3V5.2c-3-.6-6-.4-8 1.3z"/><path d="M12 6.5v13.2"/></svg><span>Learn</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle class="f" cx="9" cy="9" r="1.2"/><circle class="f" cx="15" cy="9" r="1.2"/><circle class="f" cx="12" cy="12" r="1.2"/><circle class="f" cx="9" cy="15" r="1.2"/><circle class="f" cx="15" cy="15" r="1.2"/></svg><span>Casinos</span></a>
+            <a href="#"><svg viewBox="0 0 24 24"><path d="M7.5 8.5h9a5.5 5.5 0 0 1 5.4 6.6c-.4 2-3 2.7-4.3 1l-1.1-1.6h-9l-1.1 1.6c-1.3 1.7-3.9 1-4.3-1a5.5 5.5 0 0 1 5.4-6.6z"/><path d="M8.5 11v3M7 12.5h3"/><circle class="f" cx="15.5" cy="11.6" r="1"/><circle class="f" cx="17.6" cy="13.6" r="1"/></svg><span>Games</span></a>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+<div class="band slim">
+    <div class="band-clip" aria-hidden="true"><svg class="band-deco" viewBox="0 0 64 64"><g transform="translate(0.006,-0.003)"><path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/><path fill="#FFF" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></g></svg></div>
+  <div class="wrap"><div class="cband">
+    <span class="cstat"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M9.7 7.8v8.4M9.7 7.8h3.4a2.05 2.05 0 0 1 0 4.1H9.7M9.7 11.9h3.9a2.15 2.15 0 0 1 0 4.3H9.7M10.7 7.8V6.4M13.2 7.8V6.4M10.7 17.6v-1.4M13.2 17.6v-1.4"/></svg><span><i><span id="c-cl">USD</span> price</i><b id="c-p">$64,362</b></span></span>
+    <span class="cstat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7 21 7.6v8.8l-9 4.9-9-4.9V7.6z"/><path d="M3 7.6l9 4.9 9-4.9M12 12.5v8.8"/></svg><span><i>Height</i><b id="c-h">958,341</b></span></span>
+    <span class="cstat"><span><i>Last block</i><b id="c-s">4m 12s</b></span></span>
+    <form class="lookup" id="sform" aria-label="Search the chain">
+      <input id="sin" maxlength="90" autocomplete="off" spellcheck="false" aria-label="Search">
+      <button type="submit">LOOKUP</button>
+    </form>
+  </div></div>
+</div>
+</header>
+
+<main class="wrap apage">
+  <!-- hero: block identity -->
+  <section class="card ahero">
+    <div class="rmain">
+      <div class="bh-top">
+        <div style="min-width:0;flex:1">
+          <span class="micro">Block</span>
+          <div class="bheight" id="bheight">958,218</div>
+          <div class="bwhen">Mined <b>2h ago</b> · <b id="butc">Jul 27, 2026 · 12:41 UTC</b></div>
+        </div>
+        <div class="bnav">
+          <a class="mbtn" href="#" rel="nofollow">‹ 958,217</a>
+          <a class="mbtn" href="#" rel="nofollow">958,219 ›</a>
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <span class="micro">Block hash</span>
+        <div class="hashline"><code id="bhash">00000000000000000001a7c2e9d3f4b8a06c5e21d94f7b83aa10fe6d2c48b7e1</code>
+          <button class="cico" id="copybtn" type="button" title="Copy block hash" aria-label="Copy block hash">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          </button></div>
+      </div>
+      <div class="abadges">
+        <i class="miner">MINER · FOUNDRY USA</i>
+        <i class="ok" id="bconf">124 CONFIRMATIONS</i>
+        <i>IN BEST CHAIN</i>
+      </div>
+      <div class="ah-stats">
+        <span class="ast"><b id="s-txs">2,648</b><i>Transactions</i></span>
+        <span class="ast"><b>0.10432180<em>BTC</em></b><i>Total fees</i></span>
+        <span class="ast"><b>3.22932180<em>BTC</em></b><i>Subsidy + fees</i></span>
+        <span class="ast"><b>3.99<em>MWU</em></b><i>Weight</i></span>
+        <span class="ast"><b>1.62<em>MB</em></b><i>Size</i></span>
+        <span class="ast"><b>86.39<em>T</em></b><i>Difficulty</i></span>
+      </div>
+      <div class="fgrow">
+        <span class="fgl">Fee span <b>2 - 480 sat/vB</b></span>
+        <div class="fgauge"><span style="left:34%" title="Median ~14 sat/vB"></span></div>
+        <span class="fgl">Median <b>~14 sat/vB</b></span>
+      </div>
+    </div>
+    <div class="cstrip">
+      <div class="tgl" id="secttabs">
+        <button type="button" class="on" data-t="tx">TRANSACTIONS · 2,648</button>
+        <button type="button" data-t="tech">TECHNICAL DETAILS</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- transactions / technical details -->
+  <section class="card acard">
+    <div id="techwrap">
+      <div class="trow"><span class="k">Height</span><span class="val">958,218</span></div>
+      <div class="trow"><span class="k">Hash</span><span class="val">00000000000000000001a7c2e9d3f4b8a06c5e21d94f7b83aa10fe6d2c48b7e1</span></div>
+      <div class="trow"><span class="k">Merkle root</span><span class="val">6c8a02cf41d3ab5e9d10f8be2377c1d54098aa12e6b34f78c1e05d9a3b62f4d0</span></div>
+      <div class="trow"><span class="k">Timestamp</span><span class="val">2026-07-27 12:41:07 UTC</span></div>
+      <div class="trow"><span class="k">Version</span><span class="val">0x2fffe000</span></div>
+      <div class="trow"><span class="k">Bits</span><span class="val">0x17034219</span></div>
+      <div class="trow"><span class="k">Nonce</span><span class="val">0x9ac31b7f</span></div>
+      <div class="trow"><span class="k">Difficulty</span><span class="val">86,388,558,925,171</span></div>
+      <div class="trow"><span class="k">Weight</span><span class="val">3,992,881 WU</span></div>
+      <div class="trow"><span class="k">Size</span><span class="val">1,624,536 B</span></div>
+      <div class="trow"><span class="k">Coinbase (hex)</span><span class="val">039a8a0e1b4d696e656420627920467f756e64727920555341f2f466f756e6472792055534120506f6f6c202364726f70676f6c642f2a56393c21fabe6d6d… <i style="font-style:normal;color:var(--ink-3)">(103 B)</i></span></div>
+      <div class="trow"><span class="k">Coinbase (ascii)</span><span class="val">·垊·rU@·<span style="color:var(--orange);font-weight:700">/Foundry USA Pool #dropgold/</span>*V9&lt;!·úŸmm·K^·1·qH´· <i style="font-style:normal;color:var(--ink-3)">(unprintable bytes shown as ·)</i></span></div>
+    </div>
+    <div id="txwrap"></div>
+    <div class="pager" id="pager">
+      <button class="pbtn" id="pprev" type="button">‹ PREV</button>
+      <span class="pinfo">Page <b id="pcur">1</b> of <b id="pmax">177</b></span>
+      <button class="pbtn" id="pnext" type="button">NEXT ›</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-clip" aria-hidden="true"><svg class="foot-deco" viewBox="0 0 64 64"><path fill="#F2E5CE" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></svg></div>
+  <div class="foot-quote">
+    <blockquote id="sq-text">The root problem with conventional currency is all the trust that's required to make it work.</blockquote>
+    <cite id="sq-cite">— Satoshi Nakamoto · P2P Foundation, February 2009</cite>
+  </div>
+  <div class="foot-main">
+    <nav class="foot-cols" aria-label="Site sections">
+      <div class="fcol"><h3>Explore</h3><ul>
+        <li><a href="#">Block explorer</a></li><li><a href="#">Mempool</a></li><li><a href="#">Blocks</a></li>
+        <li><a href="#">Nodes</a></li><li><a href="#">Rich list</a></li></ul></div>
+      <div class="fcol"><h3>Tools</h3><ul>
+        <li><a href="#">Converter</a></li><li><a href="#">Fee estimator</a></li><li><a href="#">Sats calculator</a></li>
+        <li><a href="#">DCA backtester</a></li><li><a href="#">Halving countdown</a></li></ul></div>
+      <div class="fcol"><h3>Wallets &amp; Keys</h3><ul>
+        <li><a href="#">Wallets</a></li><li><a href="#">Address validator</a></li><li><a href="#">Seed recovery</a></li>
+        <li><a href="#">BIP39 check</a></li><li><a href="#">Verify message</a></li></ul></div>
+      <div class="fcol"><h3>Buy &amp; Spend</h3><ul>
+        <li><a href="#">Buy / sell bitcoin</a></li><li><a href="#">Swap</a></li><li><a href="#">No-KYC list</a></li>
+        <li><a href="#">Gift cards</a></li><li><a href="#">Bitcoin ATMs</a></li><li><a href="#">Merchant map</a></li></ul></div>
+      <div class="fcol"><h3>Learn &amp; More</h3><ul>
+        <li><a href="quantum.html">Quantum</a></li><li><a href="#">Learn</a></li><li><a href="#">News</a></li>
+        <li><a href="#">Charts</a></li><li><a href="#">Games</a></li><li><a href="#">Bitcoin Casinos</a></li></ul></div>
+    </nav>
+    <div class="foot-band">
+      <div class="fb-row1">
+        <a class="brand" href="#" aria-label="OpenBitcoin — home"></a>
+        <p class="foot-tag">Bitcoin block explorer, prices and tools.</p>
+        <div class="foot-live"><svg class="fblock" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F9A93F" d="M12 1.8 21.8 6.9 12 12 2.2 6.9z"/><path fill="#E07E06" d="M2.2 6.9 12 12v10.2L2.2 17.1z"/><path fill="#C46A00" d="M21.8 6.9 12 12v10.2l9.8-5.1z"/></svg><span id="f-tip">Block 958,341</span></div>
+        <div class="foot-live"><svg class="fblock" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="#E07E06"/><circle cx="12" cy="12" r="7.4" fill="none" stroke="#F9A93F" stroke-width="1.8"/><circle cx="12" cy="12" r="10.5" fill="none" stroke="#C46A00" stroke-width="1.4"/></svg><span id="f-price">USD $64,362</span></div>
+        <div class="foot-selects">
+          <div class="dd up" id="dd-cur"></div>
+          <div class="dd up" id="dd-lang"></div>
+        </div>
+      </div>
+      <div class="fb-row2">
+        <nav class="foot-meta" aria-label="Site">
+          <a href="#">About</a><a href="#">API</a><a href="#">Status</a>
+          <a href="#">Sources</a><a href="#">Disclosure</a><a href="#">Sponsor</a>
+          <a href="#">Privacy</a><a href="contact.html">Contact</a>
+        </nav>
+        <span class="foot-copy2">© 2026 OpenBitcoin.com</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
+      sym={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
+  var S={price:64362.18,cur:"USD",lang:"EN",height:958341};
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  var FLAG={
+    US:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#B22234"/><g fill="#FFF"><rect y="2.14" width="22" height="2.14"/><rect y="6.43" width="22" height="2.14"/><rect y="10.71" width="22" height="2.15"/></g><rect width="9.5" height="8.57" fill="#3C3B6E"/><g fill="#FFF"><circle cx="1.2" cy="1.35" r=".42"/><circle cx="3.3" cy="1.35" r=".42"/><circle cx="5.4" cy="1.35" r=".42"/><circle cx="7.5" cy="1.35" r=".42"/><circle cx="2.25" cy="3.05" r=".42"/><circle cx="4.35" cy="3.05" r=".42"/><circle cx="6.45" cy="3.05" r=".42"/><circle cx="1.2" cy="4.75" r=".42"/><circle cx="3.3" cy="4.75" r=".42"/><circle cx="5.4" cy="4.75" r=".42"/><circle cx="7.5" cy="4.75" r=".42"/><circle cx="2.25" cy="6.45" r=".42"/><circle cx="4.35" cy="6.45" r=".42"/><circle cx="6.45" cy="6.45" r=".42"/></g></svg>',
+    EU:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#003399"/><g fill="#FFCC00"><circle cx="11" cy="3.6" r=".9"/><circle cx="14.4" cy="4.9" r=".9"/><circle cx="15.8" cy="7.5" r=".9"/><circle cx="14.4" cy="10.1" r=".9"/><circle cx="11" cy="11.4" r=".9"/><circle cx="7.6" cy="10.1" r=".9"/><circle cx="6.2" cy="7.5" r=".9"/><circle cx="7.6" cy="4.9" r=".9"/></g></svg>',
+    GB:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#012169"/><path d="M0,0 22,15 M22,0 0,15" stroke="#FFF" stroke-width="3"/><path d="M0,0 22,15 M22,0 0,15" stroke="#C8102E" stroke-width="1.4"/><rect x="9" width="4" height="15" fill="#FFF"/><rect y="5.5" width="22" height="4" fill="#FFF"/><rect x="9.9" width="2.2" height="15" fill="#C8102E"/><rect y="6.4" width="22" height="2.2" fill="#C8102E"/></svg>',
+    CA:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="5.5" height="15" fill="#D52B1E"/><rect x="16.5" width="5.5" height="15" fill="#D52B1E"/><path d="M11,3.2 12,5.4 14.2,5 12.8,7 14.6,8.6 11.9,8.8 11,11.2 10.1,8.8 7.4,8.6 9.2,7 7.8,5 10,5.4 Z" fill="#D52B1E"/></svg>',
+    AU:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#00247D"/><g fill="#FFF"><circle cx="16" cy="3" r=".8"/><circle cx="19" cy="6" r=".8"/><circle cx="16" cy="9.5" r=".8"/><circle cx="13.5" cy="6.5" r=".8"/><circle cx="17" cy="12.5" r="1"/></g><rect width="9" height="7" fill="#012169"/><path d="M0,0 9,7 M9,0 0,7" stroke="#FFF" stroke-width="1.6"/><rect x="3.7" width="1.6" height="7" fill="#FFF"/><rect y="2.7" width="9" height="1.6" fill="#FFF"/><rect x="4.1" width=".8" height="7" fill="#C8102E"/><rect y="3.1" width="9" height=".8" fill="#C8102E"/></svg>',
+    SE:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#006AA7"/><rect x="6" width="3" height="15" fill="#FECC00"/><rect y="6" width="22" height="3" fill="#FECC00"/></svg>',
+    JP:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><circle cx="11" cy="7.5" r="4.2" fill="#BC002D"/></svg>',
+    CN:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#DE2910"/><path d="M4,1.8 5,4 7.4,4.1 5.5,5.5 6.2,7.8 4,6.4 1.8,7.8 2.5,5.5 .6,4.1 3,4 Z" fill="#FFDE00"/></svg>',
+    RU:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect y="5" width="22" height="5" fill="#0039A6"/><rect y="10" width="22" height="5" fill="#D52B1E"/></svg>',
+    BR:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#009B3A"/><path d="M11,1.8 20.2,7.5 11,13.2 1.8,7.5 Z" fill="#FEDF00"/><circle cx="11" cy="7.5" r="3.4" fill="#002776"/></svg>',
+    MX:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="7.3" height="15" fill="#006847"/><rect x="14.7" width="7.3" height="15" fill="#CE1126"/><circle cx="11" cy="7.5" r="1.7" fill="#8C6239"/></svg>',
+    IN:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="22" height="5" fill="#FF9933"/><rect y="10" width="22" height="5" fill="#138808"/><circle cx="11" cy="7.5" r="1.8" fill="none" stroke="#000080" stroke-width=".8"/></svg>',
+    TR:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#E30A17"/><circle cx="9" cy="7.5" r="3.6" fill="#FFF"/><circle cx="10.1" cy="7.5" r="2.9" fill="#E30A17"/><circle cx="13.9" cy="7.5" r=".9" fill="#FFF"/></svg>',
+    KR:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><path d="M7.8,7.5 a3.2,3.2 0 0 1 6.4,0 Z" fill="#CD2E3A"/><path d="M14.2,7.5 a3.2,3.2 0 0 1 -6.4,0 Z" fill="#0047A0"/></svg>',
+    CH:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#D52B1E"/><rect x="9.6" y="3" width="2.8" height="9" fill="#FFF"/><rect x="6.5" y="6.1" width="9" height="2.8" fill="#FFF"/></svg>',
+    ES:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#AA151B"/><rect y="3.75" width="22" height="7.5" fill="#F1BF00"/></svg>',
+    PT:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#DA291C"/><rect width="8.8" height="15" fill="#046A38"/><circle cx="8.8" cy="7.5" r="2.2" fill="#FFE900"/></svg>',
+    FR:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="7.3" height="15" fill="#002395"/><rect x="14.7" width="7.3" height="15" fill="#ED2939"/></svg>',
+    DE:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFCE00"/><rect width="22" height="10" fill="#DD0000"/><rect width="22" height="5" fill="#000"/></svg>',
+    IT:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="7.3" height="15" fill="#009246"/><rect x="14.7" width="7.3" height="15" fill="#CE2B37"/></svg>',
+    PL:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#DC143C"/><rect width="22" height="7.5" fill="#FFF"/></svg>',
+    NL:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#21468B"/><rect width="22" height="10" fill="#FFF"/><rect width="22" height="5" fill="#AE1C28"/></svg>',
+    ID:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#FFF"/><rect width="22" height="7.5" fill="#CE1126"/></svg>',
+    VN:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#DA251D"/><path d="M11,3.4 12.1,6.5 15.4,6.5 12.7,8.4 13.7,11.6 11,9.6 8.3,11.6 9.3,8.4 6.6,6.5 9.9,6.5 Z" fill="#FFDE00"/></svg>',
+    SA:'<svg viewBox="0 0 22 15"><rect width="22" height="15" fill="#165B33"/><path d="M4.5,5.5 q2,-1.2 4,0 q2,1.2 4,0 q2,-1.2 4,0" fill="none" stroke="#FFF" stroke-width="1.1"/><rect x="4.5" y="9.2" width="13" height="1.1" rx=".55" fill="#FFF"/><path d="M17.5,9.75 l1.6,0" stroke="#FFF" stroke-width="1.1" stroke-linecap="round"/></svg>'
+  };
+  function flagOf(cc){return '<span class="flg">'+(FLAG[cc]||"")+'</span>';}
+  /* currency icons: original cartoon-banknote template (paper tint + ink) — same design for all, colorized per currency */
+  var NOTEC={USD:["#DFEAD9","#3E6B4F"],EUR:["#DCE4F5","#3A5AA0"],GBP:["#E8DFF2","#63498D"],CAD:["#F2DCDC","#A84848"],
+             AUD:["#F5EAD2","#A8863A"],SEK:["#DCEAF2","#46769B"],JPY:["#E2E6F0","#5D6C94"],CNY:["#F5DBDA","#A83E3C"],
+             RUB:["#D9EDE5","#47836F"],BRL:["#E4EED4","#6E8A3C"],MXN:["#F2DCE9","#94517A"],INR:["#E0E8ED","#64798A"],
+             TRY:["#F2E2D6","#96603F"],KRW:["#DDEAE3","#56826B"],CHF:["#E9DFF0","#74519A"]};
+  var NSYM={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"kr",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:"Fr"};
+  function noteOf(code){
+    var cc=NOTEC[code]||["#E6E6E6","#777"],P=cc[0],K=cc[1];
+    function bust(cx,rx,ry){return '<ellipse cx="'+cx+'" cy="7.5" rx="'+rx+'" ry="'+ry+'" fill="#FFF" stroke="'+K+'" stroke-width=".55"/>'+
+      '<circle cx="'+cx+'" cy="6.5" r="1.25" fill="'+K+'"/>'+
+      '<path d="M'+(cx-1.9)+',10.9 q1.9,-2.8 3.8,0 Z" fill="'+K+'"/>';}
+    function T(x,y,fs,t){return '<text x="'+x+'" y="'+y+'" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-size="'+fs+'" font-weight="700" fill="'+K+'">'+t+'</text>';}
+    function hatch(x,y,n){var h="";for(var i=0;i<n;i++)h+='<path d="M'+x+','+(y+i*0.75)+' h2.2" stroke="'+K+'" stroke-width=".3" opacity=".55"/>';return h;}
+    var ROS='<circle cx="3.1" cy="3.1" r=".45" fill="none" stroke="'+K+'" stroke-width=".35" opacity=".7"/>'+
+            '<circle cx="18.9" cy="11.9" r=".45" fill="none" stroke="'+K+'" stroke-width=".35" opacity=".7"/>';
+    var inner="";
+    switch(code){
+      case "USD": /* $1: center portrait, black+green seals, "1" in all four corners, engraving hatches */
+        inner=bust(11,3,4)+hatch(4.6,6.9,4)+hatch(15.2,6.9,4)+
+        '<circle cx="6.3" cy="9" r="1.05" fill="none" stroke="'+K+'" stroke-width=".5"/>'+
+        '<circle cx="15.7" cy="9" r="1.05" fill="'+K+'" opacity=".55"/>'+
+        T(3.7,12.4,3.8,"$")+T(18.3,5.2,3.8,"$");break;
+      case "EUR": /* €20: arch with columns, star arc, big 20, no portrait — true to the euro */
+        inner='<path d="M13,11.6 V7 a3.1,3.1 0 0 1 6.2,0 V11.6 Z" fill="#FFF" stroke="'+K+'" stroke-width=".5"/>'+
+        '<path d="M14.4,7.9 V11.6 M15.6,7.4 V11.6 M16.8,7.4 V11.6 M18,7.9 V11.6" stroke="'+K+'" stroke-width=".38"/>'+
+        '<g fill="'+K+'"><circle cx="13.4" cy="4.8" r=".42"/><circle cx="14.7" cy="4" r=".42"/><circle cx="16.1" cy="3.7" r=".42"/><circle cx="17.5" cy="4" r=".42"/><circle cx="18.8" cy="4.8" r=".42"/></g>'+
+        T(5.6,10.8,5.6,"€")+hatch(4,6.2,3);break;
+      case "GBP": /* £20: crowned monarch right, big 20 + £ left, guilloche wave */
+        inner=bust(15.3,2.8,3.8)+'<path d="M14.3,4.9 h2 l-.3,-1.1 -.4,.55 -.3,-.85 -.3,.85 -.4,-.55 Z" fill="'+K+'"/>'+
+        T(5.6,9.8,5.6,"£")+
+        '<path d="M3.2,8.6 q1,-.9 2,0 t2,0" fill="none" stroke="'+K+'" stroke-width=".35" opacity=".6"/>';break;
+      case "CAD": /* $50 polymer: portrait left, clear window band, two maple leaves, 50 */
+        inner=bust(7.8,2.8,3.8)+'<rect x="15.9" y="1.7" width="3.3" height="11.6" fill="#FFF" opacity=".72"/>'+
+        '<path d="M17.5,4.9 18,6.1 19.1,5.9 18.4,6.9 19.3,7.7 17.9,7.8 17.5,9 17.1,7.8 15.7,7.7 16.6,6.9 15.9,5.9 17,6.1 Z" fill="'+K+'"/>'+
+        '<path d="M17.5,10.2 17.8,10.9 18.4,10.8 18,11.4 18.5,11.9 17.7,11.9 17.5,12.6 17.3,11.9 16.5,11.9 17,11.4 16.6,10.8 17.2,10.9 Z" fill="'+K+'" opacity=".65"/>'+
+        T(4,5.6,4.2,"$")+hatch(11.2,5.4,3);break;
+      case "AUD": /* $50 polymer: portrait right, round clear window, diagonal band, 50 */
+        inner='<path d="M2.2,13.2 L8.8,1.8" stroke="#FFF" stroke-width="1.5" opacity=".65"/>'+bust(15,2.8,3.8)+
+        '<circle cx="4.7" cy="11" r="1.55" fill="#FFF" stroke="'+K+'" stroke-width=".4"/>'+
+        T(5,5.6,4.2,"$");break;
+      case "SEK": /* 100 kronor: portrait left, 100 kr, the three crowns */
+        inner=bust(7.4,2.8,3.8)+T(16.6,9.4,4.4,"kr")+
+        '<g fill="'+K+'"><path d="M14.9,4.2 l.6,-.9 .6,.9 Z"/><path d="M16.3,4.2 l.6,-.9 .6,.9 Z"/><path d="M17.7,4.2 l.6,-.9 .6,.9 Z"/></g>';break;
+      case "JPY": /* ¥1000: portrait right, red hanko, watermark oval, kanji-style strokes */
+        inner=bust(15.3,2.8,3.8)+'<circle cx="4.5" cy="11.6" r=".95" fill="#B03A2E"/>'+
+        '<ellipse cx="10" cy="7.5" rx="1.6" ry="2.4" fill="#FFF" opacity=".55"/>'+
+        '<path d="M3.6,3.4 h2.4 M4.8,3.4 v1.9 M3.6,6.2 h2.4 M4.2,6.2 l-.6,1.6 M5.4,6.2 l.6,1.6" stroke="'+K+'" stroke-width=".42"/>'+
+        T(5.4,10.7,4,"¥");break;
+      case "CNY": /* ¥100: portrait right, big 100, star cluster, peony watermark */
+        inner=bust(15.3,2.8,3.8)+
+        '<g fill="#E8C33A"><circle cx="3.5" cy="3.5" r=".6"/><circle cx="4.7" cy="3" r=".32"/><circle cx="5.4" cy="3.8" r=".32"/><circle cx="4.9" cy="4.6" r=".32"/></g>'+
+        '<g fill="#FFF" opacity=".6"><circle cx="9.7" cy="8.6" r=".7"/><circle cx="8.7" cy="7.8" r=".55"/><circle cx="10.7" cy="7.8" r=".55"/><circle cx="9.2" cy="9.6" r=".55"/><circle cx="10.2" cy="9.6" r=".55"/></g>'+
+        T(5.2,11,4.6,"¥");break;
+      case "RUB": /* 100₽: theatre facade with pediment + quadriga hint, laurels, ₽ corners */
+        inner='<path d="M7.6,6.3 L11,4.1 L14.4,6.3 Z" fill="#FFF" stroke="'+K+'" stroke-width=".5"/>'+
+        '<circle cx="11" cy="5.5" r=".4" fill="'+K+'" opacity=".7"/>'+
+        '<rect x="7.6" y="6.3" width="6.8" height="5.1" fill="#FFF" stroke="'+K+'" stroke-width=".5"/>'+
+        '<path d="M8.9,6.8 V11 M10.3,6.8 V11 M11.7,6.8 V11 M13.1,6.8 V11" stroke="'+K+'" stroke-width=".42"/>'+
+        '<path d="M6.4,10.6 a3.2,3.2 0 0 1 0,-4.6 M15.6,10.6 a3.2,3.2 0 0 0 0,-4.6" fill="none" stroke="'+K+'" stroke-width=".38" opacity=".6"/>'+
+        T(3.8,12.5,4,"₽");break;
+      case "BRL": /* 50 reais: effigy left, diagonal band with stars, 50 */
+        inner=bust(7.4,2.8,3.8)+'<path d="M13.2,13.4 L20.4,6.6 V13.4 Z" fill="#FFF" opacity=".5"/>'+
+        '<g fill="'+K+'" opacity=".7"><circle cx="16.4" cy="12" r=".35"/><circle cx="17.8" cy="10.8" r=".35"/><circle cx="19.2" cy="9.6" r=".35"/></g>'+
+        T(17.2,5.2,3.4,"R$");break;
+      case "MXN": /* 500 pesos: portrait left, wide band, 500 */
+        inner=bust(7.4,2.8,3.8)+'<rect x="14.9" y="1.7" width="5.2" height="11.6" fill="#FFF" opacity=".45"/>'+
+        T(17.5,9.4,4.4,"$")+hatch(12,4.4,4);break;
+      case "INR": /* ₹500: Gandhi right, security thread, Ashoka pillar, 500 */
+        inner=bust(15,2.8,3.8)+'<rect x="10.1" y="1.7" width="1.1" height="11.6" fill="#FFF" opacity=".62"/>'+
+        '<path d="M4.4,3.2 v2.4 M3.7,3.2 h1.4 M3.8,5.6 h1.2 M4,3 a.6,.35 0 0 1 .8,0" stroke="'+K+'" stroke-width=".45" fill="none"/>'+
+        T(5.4,10.7,4.4,"₹");break;
+      case "TRY": /* 200₺: Atatürk right, crescent AND star, 200 */
+        inner=bust(15.3,2.8,3.8)+'<circle cx="4.6" cy="4.3" r="1.25" fill="#FFF"/><circle cx="5.15" cy="4.3" r="1" fill="'+P+'"/>'+
+        '<circle cx="6.4" cy="4.3" r=".4" fill="#FFF"/>'+
+        T(5.2,11.4,4.4,"₺")+hatch(8.2,4.6,3);break;
+      case "KRW": /* ₩10000: portrait left, 10000, plum-branch wave */
+        inner=bust(7,2.8,3.8)+T(16.4,9,4.6,"₩")+
+        '<path d="M13.8,12.1 q2.2,-1.5 4.4,0" fill="none" stroke="'+K+'" stroke-width=".35" opacity=".6"/>'+
+        '<circle cx="15.2" cy="11.4" r=".3" fill="'+K+'" opacity=".6"/><circle cx="16.8" cy="11.2" r=".3" fill="'+K+'" opacity=".6"/>';break;
+      case "CHF": /* CHF 20: vertical white band + Swiss cross, globe motif (new-series style), 20 */
+        inner='<rect x="1.7" y="1.7" width="4.8" height="11.6" fill="#FFF" opacity=".8"/>'+
+        '<rect x="3.35" y="2.9" width="1.5" height="4.2" fill="#C23B3B"/><rect x="2" y="4.25" width="4.2" height="1.5" fill="#C23B3B"/>'+
+        '<circle cx="13.6" cy="7.5" r="3.1" fill="#FFF" stroke="'+K+'" stroke-width=".5"/>'+
+        '<path d="M10.5,7.5 h6.2 M13.6,4.4 v6.2 M11.6,5.5 q2,1.1 4,0 M11.6,9.5 q2,-1.1 4,0" fill="none" stroke="'+K+'" stroke-width=".35"/>'+
+        T(19.2,12.5,3.2,"Fr");break;
+      default: inner=bust(11,3,4);
+    }
+    inner+=ROS;
+    return '<span class="flg"><svg viewBox="0 0 22 15">'+
+      '<rect width="22" height="15" rx="1.5" fill="'+P+'"/>'+
+      '<rect x=".9" y=".9" width="20.2" height="13.2" rx=".9" fill="none" stroke="'+K+'" stroke-width=".9"/>'+
+      '<rect x="2.3" y="2.3" width="17.4" height="10.4" fill="none" stroke="'+K+'" stroke-width=".4" opacity=".5"/>'+
+      inner+'</svg></span>';
+  }
+  /* [code, flag country, menu label] */
+  var CURS=[["USD","US","$ · US Dollar"],["EUR","EU","€ · Euro"],["GBP","GB","£ · British Pound"],["CAD","CA","$ · Canadian Dollar"],
+            ["AUD","AU","$ · Australian Dollar"],["SEK","SE","kr · Swedish Krona"],["JPY","JP","¥ · Japanese Yen"],["CNY","CN","¥ · Chinese Yuan"],
+            ["RUB","RU","₽ · Russian Ruble"],["BRL","BR","R$ · Brazilian Real"],["MXN","MX","$ · Mexican Peso"],["INR","IN","₹ · Indian Rupee"],
+            ["TRY","TR","₺ · Turkish Lira"],["KRW","KR","₩ · South Korean Won"],["CHF","CH","Fr · Swiss Franc"]];
+  var LANGS=[["EN","US","English"],["ES","ES","Español"],["FR","FR","Français"],["DE","DE","Deutsch"],["JA","JP","日本語"],
+             ["RU","RU","Русский"],["ZH","CN","中文"],["PT","PT","Português"],["PL","PL","Polski"],["IT","IT","Italiano"],
+             ["KO","KR","한국어"],["VI","VN","Tiếng Việt"],["TR","TR","Türkçe"],["AR","SA","العربية"],["HI","IN","हिन्दी"],
+             ["NL","NL","Nederlands"],["ID","ID","Bahasa Indonesia"]];
+  var UNITS=[["btc","BTC"],["mbtc","mBTC"],["bits","bits"],["sats","sats"]];
+  function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+  function closeAllDD(){qa(".dd.open, .tag2.open").forEach(function(n){n.classList.remove("open");});
+    qa(".bandgrid.popopen").forEach(function(n){n.classList.remove("popopen");});}
+  document.addEventListener("click",function(e){
+    if(!e.target.closest||( !e.target.closest(".dd") && !e.target.closest(".tag2") ))closeAllDD();
+  });
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAllDD();});
+
+  /* MENU dropdown (tablet/mobile masthead) — outside-click + Escape close come from the global .dd handlers */
+  (function(){
+    var m=document.getElementById("dd-menu"),mb=m.querySelector(".btn-menu");
+    mb.addEventListener("click",function(e){e.stopPropagation();
+      var was=m.classList.contains("open");closeAllDD();
+      if(!was)m.classList.add("open");
+      mb.setAttribute("aria-expanded",m.classList.contains("open")?"true":"false");
+    });
+  })();
+  function mkHeaderDD(host,items,get,set,iconOf,veto){
+    function btnHTML(v){var it=null;items.forEach(function(x){if(x[0]===v)it=x;});
+      return iconOf(it)+v+'<span class="dda">▾</span>';}
+    var b=document.createElement("button");b.type="button";b.className="ddb";b.innerHTML=btnHTML(get());
+    var p=document.createElement("div");p.className="ddp";
+    items.forEach(function(x){
+      var o=document.createElement("button");o.type="button";
+      o.innerHTML=iconOf(x)+x[0]+'<span class="ddn">'+x[x.length-1]+'</span>';
+      if(x[0]===get())o.className="cur";
+      o.addEventListener("click",function(){
+        if(veto&&veto(x[0],o))return;
+        set(x[0]);b.innerHTML=btnHTML(x[0]);
+        Array.prototype.forEach.call(p.children,function(z){z.classList.toggle("cur",z===o);});
+        closeAllDD();
+      });
+      p.appendChild(o);
+    });
+    b.addEventListener("click",function(e){e.stopPropagation();var was=host.classList.contains("open");closeAllDD();
+      if(!was){host.classList.add("open");
+        p.style.left="";p.style.right="";p.style.maxWidth=Math.min(340,innerWidth-24)+"px";
+        var r=p.getBoundingClientRect();
+        if(r.left<12||r.right>innerWidth-12){p.style.right="auto";var h=host.getBoundingClientRect(),w=Math.min(r.width,innerWidth-24);p.style.left=(Math.max(12,Math.min(h.left,innerWidth-12-w))-h.left)+"px";}
+      }});
+    host.appendChild(b);host.appendChild(p);
+    host._sync=function(){b.innerHTML=btnHTML(get());
+      Array.prototype.forEach.call(p.children,function(z,i){z.classList.toggle("cur",items[i][0]===get());});};
+  }
+  function mkPop(host,items,get,set){
+    function lab(v){var l=v;items.forEach(function(x){if(x[0]===v)l=x[1];});return l+'<span class="dda">▾</span>';}
+    var b=document.createElement("button");b.type="button";b.className="tagbtn";b.innerHTML=lab(get());
+    var p=document.createElement("div");p.className="pop";
+    var g=document.createElement("div");g.className="grid4";
+    items.forEach(function(x){
+      var o=document.createElement("button");o.type="button";o.textContent=x[1];
+      if(x[0]===get())o.className="cur";
+      o.addEventListener("click",function(){
+        set(x[0]);b.innerHTML=lab(x[0]);
+        Array.prototype.forEach.call(g.children,function(z){z.classList.toggle("cur",z===o);});
+        closeAllDD();
+      });
+      g.appendChild(o);
+    });
+    p.appendChild(g);
+    b.addEventListener("click",function(e){e.stopPropagation();var was=host.classList.contains("open");closeAllDD();
+      if(!was){host.classList.add("open");
+        var bg=host.closest(".bandgrid");if(bg)bg.classList.add("popopen");
+        p.classList.remove("below");
+        if(p.getBoundingClientRect().top<4)p.classList.add("below");
+      }});
+    host.appendChild(b);host.appendChild(p);
+    host._sync=function(){b.innerHTML=lab(get());
+      Array.prototype.forEach.call(g.children,function(z,i){z.classList.toggle("cur",items[i][0]===get());});};
+  }
+  function sendLangStat(body){
+    var url="/api/lang-interest",sent=false;
+    try{if(navigator.sendBeacon)sent=navigator.sendBeacon(url,body);}catch(e){}
+    if(!sent){try{fetch(url,{method:"POST",body:body,keepalive:true}).catch(function(){});}catch(e){}}
+  }
+  function langInterest(v,row){
+    if(v==="EN")return false;
+    var voted=null,tainted=null;
+    try{voted=localStorage.getItem("ob_lang_vote");tainted=localStorage.getItem("ob_lang_tainted");}catch(e){}
+    if(!tainted){
+      if(!voted){sendLangStat("lang="+v);try{localStorage.setItem("ob_lang_vote",v);}catch(e){}}
+      else if(voted!==v){sendLangStat("retract="+voted);try{localStorage.setItem("ob_lang_tainted","1");}catch(e){}}
+    }
+    if(!row._t){
+      var n=row.querySelector(".ddn"),orig=n.textContent;
+      n.textContent="In Development";row.classList.add("dev");
+      row._t=setTimeout(function(){n.textContent=orig;row.classList.remove("dev");row._t=null;},1600);
+    }
+    return true;
+  }
+
+  function paintFiat(){
+    var fp=document.getElementById("f-price");if(fp)fp.textContent=S.cur+" "+(sym[S.cur]||"")+fmt(Math.round(S.price*fx[S.cur]),0);
+    var ft=document.getElementById("f-tip");if(ft)ft.textContent="Block "+fmt(S.height,0);
+  }
+  var ddCur=document.getElementById("dd-cur"),ddLang=document.getElementById("dd-lang");
+  mkHeaderDD(ddCur,CURS,function(){return S.cur;},function(v){S.cur=v;paintFiat();paintBandPrice();},function(it){return noteOf(it[0]);});
+  mkHeaderDD(ddLang,LANGS,function(){return S.lang;},function(v){S.lang=v;},function(it){return flagOf(it[1]);},langInterest);
+  setInterval(function(){S.price=Math.max(1000,S.price+(Math.random()-.485)*22);paintFiat();paintBandPrice();},1500);
+
+  /* ---- band cockpit ---- */
+  S.since=252;
+  var elCP=document.getElementById("c-p"),elCH=document.getElementById("c-h"),elCS=document.getElementById("c-s");
+  function paintBandPrice(){elCP.textContent=(sym[S.cur]||"")+fmt(Math.round(S.price*fx[S.cur]),0);
+    var cl=document.getElementById("c-cl");if(cl)cl.textContent=S.cur;}
+  function sinceTxt(s2){var m=Math.floor(s2/60);return m?m+"m "+(s2%60)+"s":s2+"s";}
+  paintBandPrice();elCH.textContent=fmt(S.height,0);elCS.textContent=sinceTxt(S.since);
+  setInterval(function(){S.since++;elCS.textContent=sinceTxt(S.since);},1000);
+  function newBlock(){
+    S.height++;S.since=0;
+    elCH.textContent=fmt(S.height,0);elCS.textContent=sinceTxt(0);paintFiat();
+    var bc=document.getElementById("bconf");if(bc)bc.textContent=fmt(S.height-958218+1,0)+" CONFIRMATIONS";
+    if(reduced)return;
+    var ic=elCH.closest(".cstat").querySelector("svg");
+    [ic,elCH,elCS].forEach(function(n){if(!n)return;n.classList.remove("flash");void n.getBoundingClientRect();n.classList.add("flash");});
+  }
+  setInterval(function(){if(Math.random()<0.1)newBlock();},20000);
+  setTimeout(newBlock,5000);
+
+  /* ---- search ---- */
+  var sform=document.getElementById("sform"),sin=document.getElementById("sin");
+  function route(q){
+    q=q.trim();if(!q)return null;
+    if(/^[0-9a-fA-F]{64}$/.test(q))return"/tx/"+q;
+    if(/^(bc1|[13])[a-zA-HJ-NP-Z0-9]{20,}$/.test(q))return"/address/"+q;
+    if(/^\d{1,7}$/.test(q.replace(/,/g,"")))return"/block/"+q.replace(/,/g,"");
+    return"/search/invalid";
+  }
+  sform.addEventListener("submit",function(e){e.preventDefault();route(sin.value);});
+  /* ---- animated typing placeholder (pauses while the user is in the field) ---- */
+  var PH=[{p:"Search for an address ",t:["bc1q7x9…","17HzK4…","36q5rD…","bc1p8s…"]},
+          {p:"Search for a transaction ",t:["081e2f4a…"]},
+          {p:"Search for a block ",t:["958641"]}];
+  var phI=0,phT=0,phPos=0,phMode="type";
+  var PH_STATIC="Address, Transaction ID or Block Height",phDone=false;
+  /* phones fit ~20 chars — same animation, mobile-sized script */
+  if(matchMedia("(max-width:720px)").matches){
+    PH=[{p:"Address ",t:["bc1q7x9…","17HzK4…","bc1p8s…"]},
+        {p:"Transaction ",t:["081e2f4a…"]},
+        {p:"Block ",t:["958641"]}];
+    PH_STATIC="Address, TXID or Block";
+  }
+  function phTick(){
+    if(document.activeElement===sin||sin.value){setTimeout(phTick,800);return;}
+    var seg=PH[phI],full=seg.p+seg.t[phT];
+    if(phMode==="type"){
+      phPos++;sin.placeholder=full.slice(0,phPos);
+      if(phPos>=full.length){phMode="hold";setTimeout(phTick,1600);return;}
+      setTimeout(phTick,52+Math.random()*56);return;
+    }
+    if(phMode==="hold"){phMode="erase";setTimeout(phTick,30);return;}
+    var lastTail=phT>=seg.t.length-1;
+    /* between examples erase only the id; between sections erase back to the shared prefix
+       ("Search for an address …" → keep "Search for a" → type "transaction …"); full erase only before the static rest */
+    var stop;
+    if(!lastTail){stop=seg.p.length;}
+    else if(phI===PH.length-1){stop=0;}
+    else{
+      var nfull=PH[phI+1].p+PH[phI+1].t[0],m=0;
+      while(m<full.length&&m<nfull.length&&full[m]===nfull[m])m++;
+      stop=m;
+    }
+    if(phPos>stop){phPos--;sin.placeholder=full.slice(0,phPos);setTimeout(phTick,24);return;}
+    if(lastTail){
+      if(phI===PH.length-1){                                                 /* one full rotation, then rest */
+        phDone=true;
+        sin.style.setProperty("--pha","0");
+        sin.placeholder=PH_STATIC;
+        var f0=null;
+        var fade=function(ts){
+          if(f0===null)f0=ts;
+          var k=Math.min(1,(ts-f0)/700);
+          sin.style.setProperty("--pha",String(1-Math.pow(1-k,2)));          /* ease-out */
+          if(k<1)requestAnimationFrame(fade);
+        };
+        requestAnimationFrame(fade);
+        return;
+      }
+      phI++;phT=0;
+    }else{phT++;}
+    phMode="type";setTimeout(phTick,380);
+  }
+  if(!reduced){setTimeout(phTick,150);}else{sin.placeholder=PH_STATIC;}
+  /* addresses, txids and heights never contain spaces — block the key, strip pasted ones */
+  sin.addEventListener("keydown",function(e){if(e.key===" ")e.preventDefault();});
+  sin.addEventListener("input",function(){
+    if(/\s/.test(sin.value)){
+      var c=sin.selectionStart||0,removed=(sin.value.slice(0,c).match(/\s/g)||[]).length;
+      sin.value=sin.value.replace(/\s+/g,"");
+      try{sin.setSelectionRange(c-removed,c-removed);}catch(e){}
+    }
+  });
+  sin.addEventListener("focus",function(){sin.placeholder=PH_STATIC;});
+  sin.addEventListener("blur",function(){if(!sin.value){
+    if(phDone){sin.placeholder=PH_STATIC;}
+    else{phI=0;phT=0;phPos=0;phMode="type";}
+  }});
+
+  var SATOSHI=[
+    ["The root problem with conventional currency is all the trust that's required to make it work.","P2P Foundation, February 2009"],
+    ["It might make sense just to get some in case it catches on.","Cryptography mailing list, January 2009"],
+    ["If you don't believe me or don't get it, I don't have time to try to convince you, sorry.","bitcointalk, July 2010"],
+    ["Lost coins only make everyone else's coins worth slightly more. Think of it as a donation to everyone.","bitcointalk, June 2010"],
+    ["The nature of Bitcoin is such that once version 0.1 was released, the core design was set in stone for the rest of its lifetime.","bitcointalk, June 2010"],
+    ["It's very attractive to the libertarian viewpoint if we can explain it properly. I'm better with code than with words though.","Cryptography mailing list, November 2008"],
+    ["Writing a description of Bitcoin for general audiences is bloody hard. There's nothing to relate it to.","bitcointalk, July 2010"],
+    ["We have proposed a system for electronic transactions without relying on trust.","Bitcoin whitepaper, October 2008"],
+    ["Governments are good at cutting off the heads of centrally controlled networks like Napster, but pure P2P networks like Gnutella and Tor seem to be holding their own.","Cryptography mailing list, November 2008"],
+    ["In a few decades when the reward gets too small, the transaction fee will become the main compensation for nodes.","bitcointalk, February 2010"],
+    ["I've moved on to other things. It's in good hands with Gavin and everyone.","Email to Mike Hearn, April 2011"]
+  ];
+  (function(){
+    /* deterministic per-page: the URL path picks the quote, so each page always shows the same one */
+    var h=0,p=location.pathname;
+    for(var i=0;i<p.length;i++)h=(h*31+p.charCodeAt(i))>>>0;
+    var q=SATOSHI[h%SATOSHI.length];
+    document.getElementById("sq-text").textContent=q[0];
+    document.getElementById("sq-cite").textContent="— Satoshi Nakamoto · "+q[1];
+  })();
+
+  /* ---- copy hash ---- */
+  var cb=document.getElementById("copybtn");
+  cb.addEventListener("click",function(){
+    if(cb.classList.contains("ok"))return;
+    var t=document.getElementById("bhash").textContent;
+    function ok(){cb.classList.add("ok");setTimeout(function(){cb.classList.remove("ok");},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,ok);else ok();
+  });
+
+  /* ===================== deterministic block tx list: 2,648 rows, 15/page ===================== */
+  function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+  function rhex(rnd,n){var s="";for(var i=0;i<n;i++)s+="0123456789abcdef"[Math.floor(rnd()*16)];return s;}
+  var NTX=2648,PAGE=15,page=1,maxP=Math.ceil(NTX/PAGE);
+  /* the block's story tx: the address page's most recent incoming payment, confirmed here */
+  var DEMO={id:"fb34f2c42791b183fe1471c72fc1e1a7a0727f51182d079d49014e77fb66e808",ins:1,outs:2,val:0.16433314,rate:32.1};
+  function rowFor(i){
+    if(i===0)return null; /* coinbase handled separately */
+    if(i===1)return DEMO;
+    var r=mulberry(958218*7+i);
+    var ins=1+Math.floor(Math.pow(r(),2.2)*4),outs=1+Math.floor(Math.pow(r(),1.8)*5);
+    var val=+(0.0004+Math.pow(r(),2.6)*38).toFixed(8);
+    var rate=+(2+Math.pow(r(),2)*(i<40?478:80)).toFixed(1);
+    return{id:rhex(r,64),ins:ins,outs:outs,val:val,rate:rate};
+  }
+  function renderTx(){
+    var out="";
+    for(var k=0;k<PAGE;k++){
+      var i=(page-1)*PAGE+k;
+      if(i>=NTX)break;
+      if(i===0){
+        out+="<div class='brow cb'>"+
+          "<a class='txid' href='#' onclick='return false'>8d1f0ac2e94b7a35c6d8e0f14b72a9c3855e6d10f2ab49c7d31e08b56f4a2c9e</a>"+
+          "<span class='cbpill'>COINBASE · FOUNDRY USA</span>"+
+          "<span class='val'>3.22932180<em>BTC</em></span>"+
+          "<span class='rate'>subsidy + fees</span></div>"+
+          "<div class='cbmsg'><i>Coinbase message</i>·垊·rU@·<b>/Foundry USA Pool #dropgold/</b>*V9&lt;!·úŸmm·K^·1·qH´·</div>";
+        continue;
+      }
+      var t=rowFor(i),link=(i===1)?"tx.html":"#",oc=(i===1)?"":" onclick='return false'";
+      out+="<div class='brow'>"+
+        "<a class='txid' href='"+link+"'"+oc+">"+t.id+"</a>"+
+        "<span class='io'>"+t.ins+" in → "+t.outs+" out</span>"+
+        "<span class='val'>"+fmt(t.val,8)+"<em>BTC</em></span>"+
+        "<span class='rate'>"+t.rate+" sat/vB</span></div>";
+    }
+    document.getElementById("txwrap").innerHTML=out;
+    document.getElementById("pcur").textContent=page;
+    document.getElementById("pmax").textContent=fmt(maxP,0);
+    document.getElementById("pprev").disabled=page<=1;
+    document.getElementById("pnext").disabled=page>=maxP;
+  }
+  renderTx();paintFiat();
+  document.getElementById("pprev").addEventListener("click",function(){if(page>1){page--;renderTx();}});
+  document.getElementById("pnext").addEventListener("click",function(){page++;renderTx();});
+
+  /* ---- strip tabs: transactions | technical details ---- */
+  qa("#secttabs button").forEach(function(b){
+    b.addEventListener("click",function(){
+      qa("#secttabs button").forEach(function(z){z.classList.remove("on");});
+      b.classList.add("on");
+      var t=b.getAttribute("data-t");
+      document.getElementById("techwrap").style.display=t==="tech"?"block":"none";
+      document.getElementById("txwrap").style.display=t==="tech"?"none":"block";
+      document.getElementById("pager").style.display=t==="tech"?"none":"flex";
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

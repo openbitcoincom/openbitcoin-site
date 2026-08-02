@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="How Bitcoin Mining Works, Explained Plainly - OpenBitcoin" description="What bitcoin miners actually do, why it takes so much electricity, what the halving changes, and why mining is what makes the ledger expensive to rewrite.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>How mining works</h1>
+    <p class="doc-lede">Mining is usually described as solving complex mathematical problems. It is not. It is guessing, billions of times a second, and the guessing is the point.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="mn-card">
+      <div class="mn-tlab">The guessing game</div>
+      <p class="mn-p">A miner takes the transactions they want to include, builds a block header from them, and runs it through a hash function that turns any input into a fixed length number. Then they change one small field and do it again. And again.</p>
+      <p class="mn-p">They are looking for a result below a target set by the network. There is no clever way to find one; the hash function gives no hint about which input will produce a small output, so the only method is to try. Whoever finds one first publishes their block, collects the reward, and everyone starts again on top of it.</p>
+      <div class="mn-note">
+        <b>Why guessing is the right design</b>
+        <span>Because it cannot be faked or shortcut. A block is proof that a real quantity of electricity was spent, and anyone can verify that in a fraction of a second by hashing the header once. Hard to produce, trivial to check: that asymmetry is the whole mechanism.</span>
+      </div>
+    </div>
+
+    <div class="mn-card mn-mt">
+      <div class="mn-tlab">What a miner gets paid</div>
+      <ol class="mn-steps">
+        <li><b>The subsidy:</b> newly issued bitcoin, created by the first transaction in the block. It started at 50 BTC in 2009 and halves every 210,000 blocks. Since the 2024 halving it has been 3.125 BTC.</li>
+        <li><b>The fees:</b> everything the transactions in that block chose to pay. This share grows as the subsidy shrinks, and on busy days it has already exceeded the subsidy for individual blocks.</li>
+      </ol>
+      <p class="mn-p">Miners cannot pay themselves more than the rules allow. A block claiming an extra coin is not a dispute to be argued about; every node computes the correct amount independently and rejects the block. This is why running your own node matters: it is you, not a miner, deciding what counts as valid.</p>
+      <p class="mn-p">The countdown to the next halving is on the <a href="/halving">halving page</a>, and current mining economics are on the <a href="/tools/mining">mining calculator</a>.</p>
+    </div>
+
+    <div class="mn-card mn-mt">
+      <div class="mn-tlab">Difficulty keeps the clock</div>
+      <p class="mn-p">More miners means blocks are found faster. Left alone, that would accelerate issuance and break the schedule. So every 2,016 blocks, roughly two weeks, every node independently measures how long those blocks actually took and resets the target so the next stretch averages ten minutes a block.</p>
+      <p class="mn-p">This is why hashrate can grow a thousandfold without bitcoin being issued any faster, and why a sudden loss of mining power slows blocks down until the next adjustment catches up. In 2021, when a large share of the network went offline within weeks, blocks slowed noticeably before difficulty corrected. The system absorbed it without anyone intervening.</p>
+      <p class="mn-p">Current difficulty, the history of every adjustment, and the hashrate behind it are on the <a href="/hashrate">hashrate page</a>.</p>
+    </div>
+
+    <div class="mn-card mn-mt">
+      <div class="mn-tlab">The electricity question</div>
+      <p class="mn-intro">The energy use is real, it is the point, and both of the usual arguments about it tend to skip that.</p>
+      <p class="mn-p">The work is not a byproduct that could be optimised away. It is what makes rewriting history expensive. A ledger secured by proof of work costs an attacker the same resources it costs everyone else, continuously, and that is the property being bought.</p>
+      <p class="mn-p">What follows from that is mostly economics. Miners buy the cheapest electricity they can find, which pushes them toward power that is stranded, curtailed or otherwise hard to sell: flared gas, remote hydro, grid surplus at three in the morning. They are also unusually interruptible customers, able to shut down within seconds when a grid needs the power back, which is a genuinely useful trait in a load that size.</p>
+      <p class="mn-p">None of that makes the consumption small. It makes it purposeful, and whether the purpose is worth it is a question about whether the money is worth it, not a question about the hardware.</p>
+    </div>
+
+    <div class="mn-card mn-mt">
+      <div class="mn-tlab">Pools, and who actually decides</div>
+      <p class="mn-p">Mining alone means waiting years for a block and earning nothing in between. Pools solve that by combining hashrate and paying members steadily for the partial work they submit. Nearly all hashrate is pooled today.</p>
+      <p class="mn-p">That concentrates a real decision in a few hands: which transactions go in a block. It does not concentrate the rules. A pool that produced an invalid block would have it rejected by every node and would lose the reward, and pool members can and do move their hashrate elsewhere. Newer protocols let individual miners choose their own block contents while still pooling the payouts, which pushes that decision back out.</p>
+    </div>
+
+    <div class="mn-about doc-prose">
+      <p>Home mining with a general purpose computer stopped being viable around 2011, when purpose built chips arrived. Today a single modern machine does more hashing than the entire network did in its first two years, and mining is an industrial business run on thin margins where the cost of power decides everything. Small scale mining still happens as a hobby, for heat, or to earn coins without an exchange account, and the <a href="/tools/mining">calculator</a> will tell you honestly what a given machine earns at a given electricity price.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="mn-railp">Miners guess trillions of times a second to find a block, and the electricity that costs is exactly what makes the ledger expensive to rewrite.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/hashrate">Hashrate and difficulty</a>
+        <a href="/tools/mining">Mining calculator</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/learn/double-spend">Double spending explained</a>
+        <a href="/learn/glossary">Glossary</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .mn-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .mn-mt{margin-top:14px}
+  .mn-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .mn-p{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .mn-p:last-child{margin-bottom:0}
+  .mn-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .mn-steps{margin:0 0 11px;padding-left:22px}
+  .mn-steps li{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin-top:10px}
+  .mn-steps li::marker{color:var(--acc);font-weight:700}
+  .mn-steps b{color:var(--ink);font-weight:600}
+  .mn-note{margin-top:14px;border-radius:12px;padding:15px 17px;border:1px solid rgba(255,166,60,.4);background:rgba(247,147,26,.06)}
+  .mn-note b{display:block;font:700 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .mn-note > span{display:block;font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:6px}
+  .mn-about{margin-top:14px}
+  .mn-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .mn-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+</style>
+</Base>

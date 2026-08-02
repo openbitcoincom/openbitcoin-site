@@ -1,0 +1,589 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+const SHEETS = [
+  {
+    n: 'Sheet 1 of 2',
+    h: 'Where things are',
+    warn: 'This sheet is a map, not a key. There is deliberately no line anywhere on it for a recovery phrase, a passphrase, a private key or a PIN, and none will ever be added. A sheet carrying those is the wallet itself, and whoever picks it up can spend everything on it, from anywhere, immediately, with nothing to stop them. Write down where things are. Never write down what they say.',
+    blocks: [
+      { t: 'Who wrote this, and when',
+        rows: [['Written by', 'Date written', 'Replaces any earlier sheet dated']] },
+      { t: 'Wallets in use',
+        note: 'One line per wallet. Name the software or the device, and where it sits. Nothing about its contents beyond a rough size.',
+        rows: [
+          ['Wallet or software', 'Where the device is', 'Roughly how much is here'],
+          ['Wallet or software', 'Where the device is', 'Roughly how much is here'],
+          ['Wallet or software', 'Where the device is', 'Roughly how much is here'],
+        ] },
+      { t: 'Hardware devices',
+        rows: [
+          ['Make and model', 'Where the device is kept', 'Where its backup card is kept'],
+          ['Make and model', 'Where the device is kept', 'Where its backup card is kept'],
+        ] },
+      { t: 'Backup cards, metal plates and sealed envelopes',
+        note: 'Where each one is, and who already knows it exists. Not one word of what is written on it.',
+        rows: [
+          ['What it is', 'Where it is', 'Who else knows it exists'],
+          ['What it is', 'Where it is', 'Who else knows it exists'],
+          ['What it is', 'Where it is', 'Who else knows it exists'],
+        ] },
+      { t: 'Multisig, if you use one', ms: true,
+        note: 'The wallet descriptor is public information and is required to rebuild the wallet. Losing it can strand coins even when every signing device survives, so a copy belongs with every person named below.',
+        rows: [
+          ['Wallet descriptor or xpub file, where a copy is kept'],
+          ['Which cosigner', 'Held by', 'Where that person keeps it'],
+          ['Which cosigner', 'Held by', 'Where that person keeps it'],
+          ['Which cosigner', 'Held by', 'Where that person keeps it'],
+        ] },
+    ],
+  },
+  {
+    n: 'Sheet 2 of 2',
+    h: 'Who helps, and what to do first',
+    warn: 'The same rule governs this sheet: names, places and phone numbers only. Nobody listed here should ever be asked to read a recovery phrase aloud, photograph one, or type one into a website, and nobody legitimate will ever ask them to.',
+    blocks: [
+      { t: 'People who can help',
+        note: 'Anyone holding part of the plan, and anyone who simply knows the plan exists. Tell each of them, while you are alive, that they are on this sheet.',
+        rows: [
+          ['Name', 'How to reach them', 'What they hold or know'],
+          ['Name', 'How to reach them', 'What they hold or know'],
+          ['Name', 'How to reach them', 'What they hold or know'],
+        ] },
+      { t: 'Professionals',
+        rows: [
+          ['Firm or practice', 'Contact', 'What they handle'],
+          ['Firm or practice', 'Contact', 'What they handle'],
+        ] },
+      { t: 'First steps for whoever is reading this',
+        list: [
+          'Nothing here is urgent. Coins do not expire and no deadline is improved by moving quickly. Read both sheets end to end before touching anything.',
+          'Go to the places named on sheet 1 and gather what is there. Keep it together, keep it dry, and do not take any of it to a computer yet.',
+          'Do not type anything you find into a website, a search box, a support chat or an app that told you to. There is no verification, migration or unlocking step that needs it.',
+          'Work down the people on this sheet in order, starting with anyone marked as holding part of the plan, then the professionals.',
+          'If the amount matters, involve the firm named above before anything moves, and expect the estate process to run for months rather than days.',
+        ] },
+      { t: 'Never, whatever anyone tells you',
+        bad: [
+          'Never read a backup card aloud, photograph it, or enter it into any website, including one that looks official and one that says it is checking your balance.',
+          'Never pay anybody who offers to recover, unlock, release or trace the coins. That offer is a theft every single time, with no exceptions.',
+          'Never accept help through a screen share, a remote session or any call in which somebody else can see your screen.',
+          'Never move the whole balance as a first act. Send a small amount, confirm it arrives, then decide the rest slowly.',
+        ] },
+      { t: 'Kept current',
+        checks: [
+          'Read again this year. Every location on sheet 1 is still true.',
+          'Everyone named above is still reachable, and still knows they are named here.',
+          'The will points to this letter and does not repeat anything from it.',
+          'This letter is stored where the executor can reach it, and it is not filed inside the will.',
+        ] },
+    ],
+  },
+];
+
+const LINES = SHEETS.map((s) =>
+  s.blocks.reduce((a, b) => a + (b.rows ? b.rows.reduce((x, r) => x + r.length, 0) : 0), 0));
+---
+<Base title="Bitcoin Inheritance Planning: The Letter of Instruction - OpenBitcoin" description="Bitcoin inheritance planning: why coins die with the keys, a letter of instruction that never holds a seed, a printable worksheet, and recovery options.">
+<main class="wrap doc-wrap">
+  <div class="doc-head ih-noprint">
+    <div class="doc-kicker">Learn</div>
+    <h1>Bitcoin inheritance</h1>
+    <p class="doc-lede">Coins with no living owner and no readable instructions are simply gone. How to leave a map that says where everything is and who to call, without ever writing down a seed.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="ih-card ih-noprint">
+      <div class="ih-lab">The problem</div>
+      <p class="ih-p">A bank account has a probate department. Somebody produces a death certificate, a form is signed, and a balance moves because a company is legally obliged to move it. Bitcoin has none of that machinery and never will. A coin moves when a valid signature appears, and a valid signature comes from a key. There is no support line, no beneficiary field on a wallet, no account to recover and no court order the network can be made to obey. If nobody can produce the key, nobody spends the coins: not your family, not a lawyer, not the developers, not anyone, permanently. That is the same property that makes the coins genuinely yours while you are alive, and it does not switch off when you die.</p>
+      <h3 class="ih-h3">The part nobody can count</h3>
+      <p class="ih-p">Coins that are lost do not look lost. An unspent output whose owner checks it every week and an unspent output whose owner died in 2013 are the same thing on-chain: the network records that the coins have not moved, and records nothing else. Every published estimate of how much bitcoin is permanently gone is an inference drawn from how long coins have sat still, the estimates disagree with each other by wide margins, and none of them can be checked. This page therefore quotes no figure at all.</p>
+      <p class="ih-p">What is not in doubt is the mechanism, because the wreckage is public. Coins from the earliest years sit in addresses that have never spent a satoshi. Drives went to landfill, wallet files were deleted as junk during a reinstall, phrases were written on paper that somebody tidied away. Every one of those balances is still visible, still valid and still unspendable by anybody alive. You can watch the oldest of them on the <a href="/rich-list">rich list</a>: the fiat value beside them changes constantly, and the coins never move.</p>
+      <h3 class="ih-h3">Two ways to fail, pulling in opposite directions</h3>
+      <p class="ih-p">Every decision on this page is a trade between two failures. In the first, nobody can find the keys and the coins join the pile above. In the second, the wrong person finds them first, which needs no court, no delay and no forgery, and leaves nothing to appeal to afterwards. Locking things down harder makes the first failure more likely; spreading copies around makes the second more likely. There is no arrangement that removes both, so the useful question is not how to be safe but which failure you are choosing to guard against, and for whom.</p>
+    </div>
+
+
+    <div class="ih-card ih-mt ih-noprint">
+      <div class="ih-lab">The letter of instruction</div>
+      <p class="ih-p">The pattern that works is boring and old, and estate lawyers have used it for other awkward assets for a century. You keep two documents that do different jobs and never overlap.</p>
+      <div class="ih-two">
+        <div class="ih-doc">
+          <b>The will</b>
+          <span>Legal, formal, and read by strangers. It appoints an executor, says who receives what, and states that bitcoin exists and that a separate letter of instruction exists and where. It contains no secret of any kind, because in many places a will becomes a public record once probated, and long before that it is handled by witnesses, clerks and office staff.</span>
+        </div>
+        <div class="ih-doc">
+          <b>The letter</b>
+          <span>Practical, private, and rewritten whenever anything changes. It says where the devices are, where the backups are, who to call and what to do first. It is not a legal instrument, so you can update it on a wet Sunday without paying anybody. It also contains no secret, and that is the part people get wrong.</span>
+        </div>
+      </div>
+      <h3 class="ih-h3">Where and how, never what</h3>
+      <p class="ih-p">The letter is a map to the keys, not a copy of them. It says there is a steel plate in the safe at the address below and that a spare key to that safe is with the person named on sheet 2. It never says what is stamped on the plate. This single rule is what makes the letter safe enough to store somewhere your family can actually reach it, to hand to a solicitor, to keep at a second address and to update casually. A document that contains the phrase itself has to be defended like the coins, which means it ends up somewhere so well hidden that it fails the only job it had.</p>
+      <p class="ih-p">The seed stays exactly where the <a href="/learn/seed-backup">backup guide</a> put it: handwritten, offline, in two places, never photographed and never typed into anything. Nothing about inheritance planning changes that. What changes is that one more person now knows the backup exists and where to look, which is the entire improvement.</p>
+      <h3 class="ih-h3">Tell somebody it exists</h3>
+      <p class="ih-p">A perfect letter in a drawer nobody opens is worth nothing. At least one person you trust needs to know, while you are alive, that there is bitcoin, that there is a letter, and roughly where to start. They do not need to understand bitcoin and they do not need to hold anything. They need to know enough to say the words "there was a letter about this" to the executor, because an executor who does not know the asset exists cannot list it, cannot value it, and will close the estate without it.</p>
+    </div>
+
+    <div class="ih-tpl ih-mt">
+      <div class="ih-tpl-top ih-noprint">
+        <div class="ih-tpl-l">
+          <div class="ih-kick">Printable worksheet</div>
+          <h2>The letter, as two sheets</h2>
+          <p class="ih-tpl-sub">Two sheets print, one page each: where things are, and who to call. Every line is blank and filled in by hand. There is no line for a phrase, a passphrase or a PIN on either sheet, and the page refuses to print if one ever appears.</p>
+        </div>
+        <div class="ih-ctl">
+          <div class="ih-seg" role="group" aria-label="Which worksheet blocks to print">
+            <button type="button" class="ih-s is-on" data-m="simple">Simple setup</button>
+            <button type="button" class="ih-s" data-m="multisig">Multisig setup</button>
+          </div>
+          <button type="button" class="ih-print" id="ih-print">Print the worksheet</button>
+        </div>
+      </div>
+      <p class="ih-tplnote ih-noprint" id="ih-tplnote">Set for a single-wallet plan: the cosigner and descriptor block is left off. Only the two sheets print; the guide, the menus and the rest of the page are left off the page.</p>
+
+      <div class="ih-fail ih-noprint" id="ih-fail">
+        <b>Self-test failed</b>
+        <span>The worksheet is not shown and printing is switched off. Before it prints anything, this page checks every field label on both sheets against a list of things that must never appear on paper, and checks that the sheets match their own line count. A worksheet that invites a recovery phrase onto a page is worse than no worksheet, so it is withheld rather than printed wrong. Reload the page; if this persists, write the same headings on plain paper by hand and leave the secret off, exactly as described above.</span>
+      </div>
+
+      <div class="ih-sheets" id="ih-sheets" data-mode="simple">
+        {SHEETS.map((s, si) => (
+        <article class="ih-sheet" data-lines={LINES[si]} aria-label={`Letter of instruction, ${s.n}`}>
+          <div class="ih-stop">
+            <div class="ih-stitle">Letter of instruction</div>
+            <div class="ih-scopy">{s.n}</div>
+          </div>
+          <div class="ih-sh">{s.h}</div>
+          <p class="ih-pwarn">{s.warn}</p>
+          {s.blocks.map((b) => (
+          <div class={b.ms ? 'ih-blk ih-ms' : 'ih-blk'}>
+            <div class="ih-blab">{b.t}</div>
+            {b.note && <p class="ih-bnote">{b.note}</p>}
+            {b.rows && b.rows.map((r) => (
+            <div class="ih-fr">
+              {r.map((lab) => (
+              <div class="ih-f"><i>{lab}</i><span class="ih-rule"></span></div>
+              ))}
+            </div>
+            ))}
+            {b.list && (
+            <ol class="ih-plist">
+              {b.list.map((x) => (<li>{x}</li>))}
+            </ol>
+            )}
+            {b.bad && (
+            <ul class="ih-pbad">
+              {b.bad.map((x) => (<li>{x}</li>))}
+            </ul>
+            )}
+            {b.checks && (
+            <div class="ih-pchecks">
+              {b.checks.map((x) => (
+              <div class="ih-pr"><span class="ih-box"></span>{x}<span class="ih-dl"><i>Date</i><span></span></span></div>
+              ))}
+            </div>
+            )}
+          </div>
+          ))}
+          <div class="ih-sfoot">This letter is not a will and grants nobody anything. It records where property is and who to ask. It contains no recovery phrase, no passphrase, no private key and no PIN, by design.</div>
+        </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="ih-card ih-mt ih-noprint">
+      <div class="ih-lab">The technical options, honestly</div>
+      <p class="ih-p">Below are the arrangements people actually use, with what each one costs. None of them is free, and the ones that sound cleverest tend to fail most quietly. Read each one against the two failures above: can they find it, and can the wrong person take it.</p>
+
+      <div class="ih-opt">
+        <div class="ih-oh"><b>A letter and one good backup</b><i>The baseline</i></div>
+        <p>Do this even if you do nothing else, and do it before anything more elaborate. One seed, backed up properly, with a letter saying where the backup is and who can help. It is the arrangement most estates need, it costs nothing, and it fails less often than the sophisticated alternatives because there is almost nothing in it to go wrong.</p>
+        <div class="ih-ol"><span>Heir needs</span><b>The letter, then the backup it points to, then anybody competent to restore a wallet.</b></div>
+        <div class="ih-ol"><span>Breaks when</span><b>The backup is not where the letter says, or whoever reaches it first keeps it. There is no delay, no court and no trace on that second one.</b></div>
+      </div>
+
+      <div class="ih-opt">
+        <div class="ih-oh"><b>Splitting the words between people</b><i>The dangerous favourite</i></div>
+        <p>Giving one person the first half of a phrase and another the second half feels like a clever balance. It is not. Half a phrase is not half a secret: each holder starts with a very large head start, and the work left to guess the rest is a tiny fraction of the original, so you have converted a secure backup into a race between two people you chose. Proper secret sharing is different mathematics and does not have that flaw, but it moves the problem rather than solving it: shares must be produced correctly on software or a device that supports the scheme, each share must be labelled with the threshold, heirs must understand that two of three means two and be able to run compatible software years later, and support for these formats is patchy and has changed more than once.</p>
+        <p>There is also a moment nobody plans for. Recovery requires the shares to come together in one room, and at that moment the arrangement is a single object again, in one place, that one person can walk away with. Meanwhile a share that is lost, damaged or held by somebody who dies first fails silently: nothing announces it, and you find out on the day it matters.</p>
+        <div class="ih-ol"><span>Heir needs</span><b>Enough shares, the threshold, software that still reads the format, and a careful reassembly.</b></div>
+        <div class="ih-ol"><span>Breaks when</span><b>A share is lost or garbled, a holder dies or is talked into sending it somewhere, or nothing current supports the format.</b></div>
+      </div>
+
+      <div class="ih-opt">
+        <div class="ih-oh"><b>Multisig with an heir holding a key</b><i>Real, with real overhead</i></div>
+        <p>A two-of-three wallet needs two signatures out of three to spend. An heir holds one, you hold one, and the third sits somewhere else or with a professional. No single holder can take the coins alone, which removes the theft failure without hiding anything, and the arrangement survives losing any one key. The part people lose is the wallet descriptor: the public record of which keys make the wallet. It is not secret, it is not a spending key, and without it a pile of surviving keys can still be unusable. A copy belongs with every holder and on the worksheet above.</p>
+        <p>The overhead is genuine. Setup takes an afternoon, spending takes more steps, coordinator software changes, and your heirs must be able to work it under stress at the worst time in their lives. <a href="/wallets">The wallets page</a> lists the practical tools: Sparrow builds multisig from mixed hardware devices and exports the descriptor you must keep, and Nunchuk offers guided multisig setup with inheritance features aimed at exactly this problem.</p>
+        <div class="ih-ol"><span>Heir needs</span><b>Enough keys, the descriptor, and software that can still open the wallet.</b></div>
+        <div class="ih-ol"><span>Breaks when</span><b>The descriptor is lost, the tooling moves on, or the heirs cannot coordinate the signatures between them.</b></div>
+      </div>
+
+      <div class="ih-opt">
+        <div class="ih-oh"><b>Timelocked recovery, the decaying wallet</b><i>Closest to automatic</i></div>
+        <p>Bitcoin can enforce waiting. A wallet can be built so that your own key spends at any time, while a second, recovery key becomes able to spend only after a set period with no activity. You keep the timer alive by moving the coins to yourself occasionally; if you stop, which is precisely what dying looks like from the outside, the recovery path opens on its own with nobody needing to be persuaded of anything. Liana is built around this idea of decaying paths, and Nunchuk offers inheritance features in the same spirit; both are on <a href="/wallets">the wallets page</a>.</p>
+        <p>What it costs is honesty about the countdown you have started. It has to be reset for the rest of your life, on-chain, paying a fee each time, and a long stretch of illness or simple forgetfulness opens the recovery path while you are very much alive. Choose the period accordingly: short timers are convenient and hazardous, long timers are safe and mean the heir waits. The recovery descriptor still has to survive alongside the recovery key, and the heir still has to be told, in advance, that the arrangement exists and what to expect.</p>
+        <div class="ih-ol"><span>Heir needs</span><b>The recovery key, the descriptor, patience until the timer expires, and to have been told all three exist.</b></div>
+        <div class="ih-ol"><span>Breaks when</span><b>You stop refreshing while alive, the period was set badly, or the descriptor is lost with the software that made it.</b></div>
+      </div>
+
+      <div class="ih-opt">
+        <div class="ih-oh"><b>A company holding a key for you</b><i>Buying a procedure</i></div>
+        <p>Collaborative custody services hold one key of a multisig and publish a documented process for what happens when a client dies. This is named here because it is a real answer for people whose heirs will never manage any of the above, not because it is recommended. The trade is explicit: you accept a counterparty that can change its terms, raise its fees, be acquired or close, and you accept the identity linkage that comes with it. Read the process before you rely on it, and keep enough keys that the company leaving does not end your plan. The <a href="/learn/self-custody">self-custody guide</a> covers what you are giving up.</p>
+        <div class="ih-ol"><span>Heir needs</span><b>The company's death process, documents it will accept, and the keys the family holds.</b></div>
+        <div class="ih-ol"><span>Breaks when</span><b>The company changes, closes, or asks the estate for something the estate cannot produce.</b></div>
+      </div>
+    </div>
+
+    <div class="ih-card ih-mt ih-noprint">
+      <div class="ih-lab">The lawyer question</div>
+      <p class="ih-p">Estates law is local and it varies more than people expect. Who may inherit, whether a share of the estate is reserved for children or a spouse by force of law, whether property is community or separate, how long probate takes and what the executor must inventory: all of it depends on the country and often on the state, province or canton. Nothing on this page is legal advice, and it cannot be, for exactly that reason. What follows is the short list of things worth taking to somebody qualified where you live, under the site's <a href="/terms">terms</a>.</p>
+      <ul class="ih-list">
+        <li><b>Never put a seed phrase or a passphrase in a will.</b> Wills are handled by witnesses and staff, are read by more people than you imagine, and in many places become a public record once probated. A will that contains a phrase is a phrase that is published on a schedule you cannot control.</li>
+        <li><b>Have the will point at the letter without repeating it.</b> A line saying the estate includes bitcoin and that a letter of instruction is held at a named place is enough. That single sentence is what stops the asset being invisible to the process.</li>
+        <li><b>Choose an executor who can either do this or knows to ask.</b> Competence beats enthusiasm. An executor who has never heard of a hardware wallet will not go looking for one, and an executor who knows their own limits will hire the help.</li>
+        <li><b>Expect the estate to be inventoried and valued.</b> Most systems require the executor to list what the estate holds and what it was worth at the date of death, which is another reason the executor has to know the coins exist at all.</li>
+        <li><b>Ask specifically how your jurisdiction treats bearer property.</b> The awkwardness of bitcoin in estates is that possession of a key is control, regardless of what any document says. Lawyers who have handled physical bearer assets tend to grasp it quickly.</li>
+        <li><b>Update the letter without touching the will.</b> That is the whole point of keeping them separate: houses move, devices get replaced, people fall out, and none of it should require an appointment.</li>
+      </ul>
+    </div>
+
+    <div class="ih-card ih-mt ih-noprint">
+      <div class="ih-lab">Tax, briefly</div>
+      <p class="ih-p">Death has tax consequences for bitcoin in most systems, and they take one of two broad shapes. In the first, death is treated as a disposal: the estate is taxed on the gain as though the coins had been sold at the date of death, and the heir starts from that value. In the second, the transfer itself is not a taxable disposal, but the heir's cost basis is set at the date-of-death value, so the tax arrives later, when they sell. Separate estate or inheritance taxes may sit on top of either, with thresholds that change.</p>
+      <p class="ih-p">Which applies to you is a question for a professional where you live, and nothing here is tax advice. What is universal is the paperwork: the estate will need a defensible valuation at the date of death and, in most cases, a record of what was acquired when and for how much. Records that only existed in your head become the heir's problem, and an heir who cannot show a cost basis can end up taxed as though the coins cost nothing. The <a href="/tax">tax guides</a> cover the ordinary rules that apply while you are alive, with detail for the <a href="/tax/us">United States</a> and <a href="/tax/ca">Canada</a>; keep the same records the letter points to, and note on the worksheet where they live.</p>
+    </div>
+
+    <div class="ih-card ih-mt ih-noprint">
+      <div class="ih-lab">Keeping it true</div>
+      <p class="ih-p">A plan written once is a plan that is wrong within a few years. You move house, a device is replaced, a contact dies, a wallet is abandoned by its developers, a safe deposit box is closed by the bank. A letter that sends your family to a drawer that no longer exists does more harm than an honest note saying you never wrote one, because they will stop looking.</p>
+      <ol class="ih-steps">
+        <li><b>Read it once a year, on a date you already remember.</b> Attach it to some other annual chore. You are checking three things: every location is still true, everyone named is still reachable, and everything you own is still on the list.</li>
+        <li><b>Date every version and destroy the old one.</b> Two undated letters disagreeing with each other is the worst outcome of all. The first line of sheet 1 exists for this.</li>
+        <li><b>Do a dry run with the person who would actually do it.</b> This is the test that matters and almost nobody performs it. Put a small amount in a wallet, hand them the sheet, and leave the room. If they can find it, reach it and move it using only the paper, the plan works. If they cannot, you have found the gap while it is still cheap.</li>
+        <li><b>Re-check it after any change to how you hold coins.</b> A new hardware device, a new multisig, a house move or a new passphrase habit invalidates part of the letter immediately. Update it the same week, not eventually.</li>
+        <li><b>Tell people when it changes.</b> The people named on sheet 2 should know that they are named and that a newer sheet exists. A trusted contact who does not know they are one is a stranger.</li>
+      </ol>
+      <p class="ih-note">Everything above assumes the backup itself is sound. If it has never been restored on another device, it is handwriting rather than a backup, and no amount of inheritance planning fixes that; the <a href="/learn/seed-backup">seed backup guide</a> covers the restore test.</p>
+    </div>
+
+    <div class="ih-about doc-prose ih-noprint">
+      <p>This page holds no data and makes no requests. It has no field to type in, by design, and the worksheet it prints has no line for a recovery phrase, a passphrase, a private key or a PIN, also by design; that absence is verified in code on every load and the worksheet is withheld rather than printed wrong if the check fails. Guides here are informational and are not legal, tax or financial advice, under the site's <a href="/terms">terms</a>. Where the rest of the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail ih-noprint">
+    <div class="doc-tile">
+      <div class="doc-tlab">Two ways to fail</div>
+      <p class="ih-railp">Nobody can find the keys, or the wrong person finds them first. Every choice on this page trades one against the other, and no arrangement removes both.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The letter, in one line</div>
+      <p class="ih-railp">It says where things are and who to call. It never says what a backup card has written on it. That rule is what lets you store it somewhere your family can actually reach.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Review, once a year</div>
+      <div class="ih-t"><b>Locations</b><i>Every place named still exists and still holds it.</i></div>
+      <div class="ih-t"><b>People</b><i>Still alive, still reachable, still know they are named.</i></div>
+      <div class="ih-t"><b>Coverage</b><i>Every wallet you own appears on the sheet.</i></div>
+      <div class="ih-t"><b>Dated</b><i>One current version, old copies destroyed.</i></div>
+      <div class="ih-t"><b>Rehearsed</b><i>Someone has walked it through without you.</i></div>
+      <div class="ih-t"><b>No secrets</b><i>Not one phrase, passphrase or PIN anywhere on it.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/wallets">Wallets, multisig and timelocks</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/tax">Bitcoin tax guides</a>
+        <a href="/learn/seed-backup">Backing up a seed</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  
+  .ih-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ih-mt{margin-top:14px}
+  .ih-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ih-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:10px 0 0}
+  .ih-p:first-of-type{margin-top:0}
+  .ih-h3{font:700 12.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin:20px 0 0}
+  .ih-card a,.ih-opt a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ih-card a:hover,.ih-opt a:hover{border-bottom-style:solid}
+  .ih-note{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin:15px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .ih-warn{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:13px 2px 0}
+  .ih-about{margin-top:14px}
+  .ih-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+
+  .ih-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+  .ih-doc{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:13px 16px 14px;min-width:0}
+  .ih-doc b{display:block;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+  .ih-doc span{display:block;font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+
+  .ih-list{margin:12px 0 0;padding-left:20px}
+  .ih-list li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .ih-list li::marker{color:var(--acc)}
+  .ih-list b{color:var(--ink);font-weight:600}
+  .ih-steps{counter-reset:ih;list-style:none;margin:12px 0 0;padding:0}
+  .ih-steps li{position:relative;padding-left:34px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .ih-steps li::before{counter-increment:ih;content:counter(ih);position:absolute;left:0;top:1px;width:22px;height:22px;
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line-2);color:var(--acc);
+    font:700 11px/21px var(--mono);text-align:center}
+  .ih-steps b{color:var(--ink);font-weight:600}
+
+  
+  .ih-opt{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 18px 15px;margin-top:12px}
+  .ih-oh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .ih-oh b{font:700 14.5px var(--sans);color:var(--ink)}
+  .ih-oh i{font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-style:normal;white-space:nowrap}
+  .ih-opt p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .ih-ol{display:flex;gap:12px;margin-top:9px;padding-top:9px;border-top:1px dotted var(--line-2)}
+  .ih-ol span{flex:none;width:86px;font:700 8.5px/1.7 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .ih-ol b{min-width:0;font:500 12.5px/1.6 var(--sans);color:var(--ink-2)}
+
+  
+  .ih-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .ih-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ih-t:last-child{border-bottom:0}
+  .ih-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .ih-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+
+  
+  .ih-tpl{background:var(--panel);border:1px solid rgba(255,166,60,.42);border-radius:12px;padding:20px 24px 22px}
+  .ih-tpl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .ih-tpl-l{min-width:0;flex:1 1 300px}
+  .ih-kick{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .ih-tpl h2{font:800 21px/1.2 var(--sans);letter-spacing:-.3px;color:var(--ink);margin:7px 0 0}
+  .ih-tpl-sub{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:8px 0 0;max-width:52ch}
+  .ih-ctl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;flex:none}
+  .ih-seg{display:flex;gap:5px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:11px;padding:4px}
+  .ih-s{background:none;border:0;border-radius:8px;padding:9px 13px;cursor:pointer;
+    font:700 11px var(--mono);letter-spacing:.06em;color:var(--ink-3);white-space:nowrap}
+  .ih-s:hover{color:var(--ink-2)}
+  .ih-s.is-on{background:rgba(247,147,26,.12);color:var(--acc)}
+  .ih-print{background:var(--cta);color:var(--cta-ink);border:0;border-radius:10px;
+    font:800 13.5px var(--sans);padding:13px 20px;cursor:pointer;white-space:nowrap}
+  .ih-print:hover{background:var(--cta-hov)}
+  .ih-print[disabled]{opacity:.4;cursor:not-allowed}
+  .ih-tplnote{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:13px 0 0}
+  .ih-fail{display:none;margin-top:14px;border-radius:12px;padding:15px 18px;
+    border:1px solid rgba(246,70,93,.45);background:rgba(246,70,93,.07)}
+  .ih-fail.is-on{display:block}
+  .ih-fail b{display:block;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--down)}
+  .ih-fail > span{display:block;font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+
+  
+  .ih-sheets{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+  .ih-sheets.is-off{display:none}
+  .ih-sheets[data-mode="simple"] .ih-ms{display:none!important}
+  .ih-sheet{background:#FFFDF8;color:#1A150F;border:1px solid #CFC5B2;border-radius:10px;padding:20px 22px 18px;min-width:0}
+  .ih-stop{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    border-bottom:1.5px solid #1A150F;padding-bottom:8px}
+  .ih-stitle{font:800 15px var(--sans);letter-spacing:-.2px;color:#1A150F}
+  .ih-scopy{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#5E5548}
+  .ih-sh{font:700 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#5E5548;margin-top:9px}
+  .ih-pwarn{font:600 10.5px/1.5 var(--sans);color:#5E5548;margin:7px 0 0;max-width:78ch}
+  .ih-blk{margin-top:15px}
+  .ih-blab{font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#1A150F;
+    border-bottom:1px solid #1A150F;padding-bottom:3px}
+  .ih-bnote{font:500 9.5px/1.45 var(--sans);color:#7C7264;margin:5px 0 0;max-width:78ch}
+  .ih-fr{display:flex;gap:16px;margin-top:6px}
+  .ih-f{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:flex-end}
+  .ih-f i{font:700 8px/1.35 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:#7C7264;font-style:normal}
+  .ih-rule{border-bottom:1px solid #B7AC98;height:19px;margin-top:1px}
+  .ih-plist{margin:7px 0 0;padding-left:18px;counter-reset:none}
+  .ih-plist li{font:500 10.5px/1.5 var(--sans);color:#3A342B;margin-top:5px}
+  .ih-pbad{margin:7px 0 0;padding-left:0;list-style:none}
+  .ih-pbad li{font:600 10.5px/1.5 var(--sans);color:#3A342B;margin-top:5px;padding-left:16px;position:relative}
+  .ih-pbad li::before{content:"\00d7";position:absolute;left:2px;top:0;font:700 12px/1.45 var(--mono);color:#1A150F}
+  .ih-pchecks{margin-top:5px}
+  .ih-pr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;
+    font:600 10.5px/1.5 var(--sans);color:#3A342B}
+  .ih-box{width:12px;height:12px;border:1.2px solid #1A150F;border-radius:2px;flex:none}
+  .ih-dl{display:inline-flex;align-items:flex-end;gap:6px;flex:1 1 110px;min-width:0}
+  .ih-dl i{font:700 8px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7C7264;font-style:normal;padding-bottom:2px}
+  .ih-dl > span{flex:1 1 auto;min-width:60px;border-bottom:1px solid #B7AC98;height:14px}
+  .ih-sfoot{margin-top:14px;padding-top:8px;border-top:1.5px solid #1A150F;
+    font:600 9px/1.5 var(--sans);color:#5E5548}
+
+  
+  @media screen and (max-width:700px){
+    .ih-card,.ih-tpl{padding:18px 18px 20px}
+    .ih-sheet{padding:16px 16px 15px}
+    .ih-opt{padding:13px 15px 14px}
+    .ih-ctl{width:100%}
+    .ih-print{flex:1 1 auto}
+    .ih-seg{flex:1 1 auto;justify-content:center}
+    .ih-s{flex:1 1 auto}
+    .ih-tpl h2{font-size:19px}
+    .ih-two{grid-template-columns:minmax(0,1fr)}
+    .ih-fr{flex-direction:column;gap:0}
+    .ih-f{margin-top:7px}
+    .ih-ol{flex-direction:column;gap:3px}
+    .ih-ol span{width:auto}
+  }
+
+  
+  @media print{
+    @page{margin:13mm}
+    body > *:not(main){display:none!important}
+    .ih-noprint{display:none!important}
+    html,body{background:#fff!important}
+    main.doc-wrap{max-width:none!important;margin:0!important;padding:0!important}
+    .doc-grid{display:block!important;gap:0!important}
+    .ih-tpl{background:none!important;border:0!important;border-radius:0!important;padding:0!important;margin:0!important}
+    .ih-sheets{display:block!important;margin:0!important}
+    .ih-sheets.is-off{display:none!important}
+    .ih-sheet{background:#fff!important;color:#000!important;border:1pt solid #000!important;border-radius:0!important;
+      padding:8mm 8mm 6mm!important;margin:0!important;break-inside:avoid;page-break-inside:avoid;
+      break-after:page;page-break-after:always}
+    .ih-sheet:last-child{break-after:auto;page-break-after:auto}
+    .ih-stop{border-bottom:1pt solid #000}
+    .ih-stitle{font-size:13pt;color:#000}
+    .ih-scopy,.ih-sh{font-size:7.5pt;color:#000}
+    .ih-pwarn{font-size:7.5pt;color:#000;max-width:none}
+    .ih-blk{margin-top:5mm;break-inside:avoid;page-break-inside:avoid}
+    .ih-blab{font-size:7.5pt;color:#000;border-bottom:.8pt solid #000}
+    .ih-bnote{font-size:7pt;color:#000;max-width:none}
+    .ih-fr{gap:7mm;margin-top:2mm}
+    .ih-f i{font-size:6.5pt;color:#000}
+    .ih-rule{height:9mm;border-bottom:.6pt solid #000}
+    .ih-plist li,.ih-pbad li,.ih-pr{font-size:8pt;color:#000}
+    .ih-pbad li::before{color:#000}
+    .ih-pr{padding:1.4mm 0}
+    .ih-box{border:.8pt solid #000;width:3.4mm;height:3.4mm}
+    .ih-dl i{font-size:6.5pt;color:#000}
+    .ih-dl > span{border-bottom:.6pt solid #000}
+    .ih-sfoot{border-top:1pt solid #000;font-size:7pt;color:#000}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* This page runs no cryptography and holds no secret. It makes exactly one
+     claim in code, and that claim is the reason the page exists:
+
+       the printed worksheet cannot invite a secret onto paper.
+
+     A worksheet with a line labelled "seed phrase" would be worse than no
+     worksheet at all, so the claim is tested rather than trusted. Every field
+     label on both sheets is read back out of the rendered page and run through
+     a banned-term test. The test itself is checked first, against labels whose
+     correct verdict is known.
+
+     TEST VECTORS, 18 in total.
+     MUST be rejected (a line a secret could be written on):
+       "Seed phrase", "Recovery words 13 to 24", "Private key", "xprv",
+       "Extra passphrase", "Hardware device PIN", "2FA secret",
+       "Master password", "Mnemonic"
+     MUST be accepted (a line that only records a place, a name or a date):
+       "Wallet or software", "Where the device is kept", "Backup card location",
+       "How to reach them",
+       "Wallet descriptor or xpub file, where a copy is kept",
+       "Date written", "Make and model", "Roughly how much is here",
+       "Which cosigner"
+     The xprv and xpub pair is deliberate: one is a spending key and must be
+     rejected, the other is public and must be accepted, so a lazy substring
+     test that treated them alike would fail here.
+
+     STRUCTURAL CHECKS, on top of the vectors:
+       both sheets exist, and each renders exactly the number of writing lines
+       its own data model declared;  every writing line has a non-empty label
+       and every label passes;  both sheets carry their printed warning;  and
+       <main> contains no input, textarea, select, form or contenteditable
+       element anywhere, because this page accepts nothing from anybody.
+
+     Any failure hides the worksheet, disables printing, shows a visible
+     failure state and logs the detail to the console. */
+
+  var BAN = [" seed "," seeds "," mnemonic "," phrase "," phrases "," word "," words ",
+             " key "," keys "," privkey "," xprv "," xpriv "," wif ",
+             " passphrase "," password "," passwords "," pin "," pins ",
+             " 2fa "," totp "," secret "," secrets "," code "," codes "," entropy "];
+
+  /* pad and flatten so every term is matched on word boundaries: "pin" must
+     not fire on "shipping", and "xpub" must not fire on the "xprv" term */
+  function norm(s){return (" "+String(s).toLowerCase().replace(/[^a-z0-9]+/g," ")+" ").replace(/\s+/g," ");}
+  function isSecretLabel(s){
+    var t=norm(s);
+    for(var i=0;i<BAN.length;i++){if(t.indexOf(BAN[i])>=0)return true;}
+    return false;
+  }
+
+  var POS=["Seed phrase","Recovery words 13 to 24","Private key","xprv","Extra passphrase",
+           "Hardware device PIN","2FA secret","Master password","Mnemonic"];
+  var NEG=["Wallet or software","Where the device is kept","Backup card location",
+           "How to reach them","Wallet descriptor or xpub file, where a copy is kept",
+           "Date written","Make and model","Roughly how much is here","Which cosigner"];
+
+  var pass=true,detail=[],i;
+  for(i=0;i<POS.length;i++){if(!isSecretLabel(POS[i])){pass=false;detail.push('vector not rejected: "'+POS[i]+'"');}}
+  for(i=0;i<NEG.length;i++){if(isSecretLabel(NEG[i])){pass=false;detail.push('vector not accepted: "'+NEG[i]+'"');}}
+
+  var wrap=document.getElementById("ih-sheets"),
+      fail=document.getElementById("ih-fail"),
+      note=document.getElementById("ih-tplnote"),
+      btn=document.getElementById("ih-print"),
+      main=document.querySelector("main.doc-wrap"),
+      sheets=document.querySelectorAll(".ih-sheet"),
+      segs=document.querySelectorAll(".ih-s");
+  if(!wrap||!main)return;
+
+  var controls=main.querySelectorAll("input,textarea,select,form,[contenteditable]");
+  if(controls.length!==0){pass=false;detail.push("page carries "+controls.length+" input element(s)");}
+
+  if(sheets.length!==2){pass=false;detail.push("sheet count "+sheets.length);}
+  var lines=0;
+  Array.prototype.forEach.call(sheets,function(sh,si){
+    var want=parseInt(sh.getAttribute("data-lines"),10),
+        rules=sh.querySelectorAll(".ih-rule"),
+        labs=sh.querySelectorAll(".ih-f > i"),
+        warn=sh.querySelector(".ih-pwarn");
+    if(!(want>0)||rules.length!==want){pass=false;detail.push("sheet "+(si+1)+" line count "+rules.length+" wanted "+want);}
+    if(labs.length!==rules.length){pass=false;detail.push("sheet "+(si+1)+" has "+labs.length+" labels for "+rules.length+" lines");}
+    if(!warn||warn.textContent.trim().length<60){pass=false;detail.push("sheet "+(si+1)+" printed warning missing");}
+    Array.prototype.forEach.call(labs,function(l,li){
+      var txt=l.textContent.trim();
+      if(!txt){pass=false;detail.push("sheet "+(si+1)+" label "+(li+1)+" empty");return;}
+      if(isSecretLabel(txt)){pass=false;detail.push('sheet '+(si+1)+' label '+(li+1)+' invites a secret: "'+txt+'"');}
+    });
+    lines+=rules.length;
+  });
+
+  if(!pass){
+    console.error("[/learn/inheritance] self-test failed: "+detail.join("; ")+
+      ". The worksheet is withheld rather than printed wrong.");
+    wrap.className="ih-sheets is-off";
+    fail.className="ih-fail ih-noprint is-on";
+    note.style.display="none";
+    btn.disabled=true;
+    btn.textContent="Printing disabled";
+    Array.prototype.forEach.call(segs,function(b){b.disabled=true;});
+    return;
+  }
+  console.log("[/learn/inheritance] self-test passed: 18 label vectors, "+lines+
+    " writing lines across "+sheets.length+" sheets, 0 input elements. No line invites a secret.");
+
+  var NOTE={
+    simple:"Set for a single-wallet plan: the cosigner and descriptor block is left off. Only the two sheets print; the guide, the menus and the rest of the page are left off the page.",
+    multisig:"Set for a multisig plan: the cosigner and descriptor block prints with the rest. Only the two sheets print; the guide, the menus and the rest of the page are left off the page."
+  };
+  function setMode(m){
+    if(m!=="simple"&&m!=="multisig")return;
+    wrap.setAttribute("data-mode",m);
+    Array.prototype.forEach.call(segs,function(b){b.classList.toggle("is-on",b.getAttribute("data-m")===m);});
+    note.textContent=NOTE[m];
+  }
+  Array.prototype.forEach.call(segs,function(b){
+    b.addEventListener("click",function(){setMode(b.getAttribute("data-m"));});
+  });
+  setMode("simple");
+
+  btn.addEventListener("click",function(){window.print();});
+})();
+</script>
+</Base>

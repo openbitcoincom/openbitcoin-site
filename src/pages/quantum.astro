@@ -1,0 +1,380 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Will Quantum Computers Break Bitcoin? Timeline and Fix - OpenBitcoin" description="Can quantum computers break bitcoin, and when? The honest timeline of 2035 to 2045 at the earliest, which coins are exposed, and the BIP-360 fix.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn · Security</div>
+    <h1>Will quantum computers crack bitcoin?</h1>
+    <p class="doc-lede">Quantum computers will eventually derive a bitcoin private key from an exposed public key, but not today, not this decade, and not by surprise. Here is when, which coins are at risk, and the fix.</p>
+    <div class="doc-updated">Learn · Security · updated July 2026</div>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="qt-verdict">
+      <span class="qt-vdot" aria-hidden="true"></span>
+      <p><b>The short version:</b> no quantum computer in existence can touch bitcoin today, and the latest expert survey puts roughly one-in-three odds on a cryptographically relevant machine within a decade, likely within fifteen years. The cryptography community already has standardized quantum-resistant signatures, Bitcoin has an upgrade path being actively designed, and the network would see a real attack coming years in advance. Nothing needs to happen to your coins this decade, but the work to protect the next one has already started.</p>
+    </div>
+
+    <div class="qt-stats">
+      <div class="qt-stat"><div class="qt-sv">1,200 to 1,450<em>logical qubits</em></div><div class="qt-sk">needed to break a bitcoin key</div></div>
+      <div class="qt-stat"><div class="qt-sv">&lt;100<em>logical qubits</em></div><div class="qt-sk">best machines today</div></div>
+      <div class="qt-stat"><div class="qt-sv">~4M<em>BTC</em></div><div class="qt-sk">in quantum-exposed outputs</div></div>
+      <div class="qt-stat"><div class="qt-sv">2024<em>done</em></div><div class="qt-sk">NIST post-quantum standards</div></div>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>What one of these machines actually is</h2>
+      <p class="qt-p">Every press photo of a quantum computer shows the same golden chandelier, and almost none of it is computer. It is a <b>dilution refrigerator</b>: a hanging stack of gold-plated stages, each colder than the last, stepping down from room temperature to about a hundredth of a degree above absolute zero. The computer is the fingernail-sized chip bolted to the very bottom, which is why the machine's imposing size says nothing about its computing power.</p>
+      <svg class="qt-fig-svg" viewBox="0 0 680 368" role="img" aria-label="Dilution refrigerator of a superconducting quantum computer: five gold plates hang in a narrowing stack, labeled from room temperature at the top through 4 kelvin, 800 millikelvin and 100 millikelvin down to about 10 millikelvin, connected by thin rods and looping cables, with the small qubit chip mounted at the lowest point" style="max-width:100%;height:auto;display:block;margin:14px auto 0">
+      <g stroke="#8FA1BF" stroke-width="1.4" fill="none">
+      <line x1="300" y1="49" x2="300" y2="120"/>
+      <line x1="360" y1="49" x2="360" y2="120"/>
+      <line x1="440" y1="49" x2="440" y2="120"/>
+      <line x1="500" y1="49" x2="500" y2="120"/>
+      <line x1="320" y1="126" x2="320" y2="190"/>
+      <line x1="368" y1="126" x2="368" y2="190"/>
+      <line x1="432" y1="126" x2="432" y2="190"/>
+      <line x1="480" y1="126" x2="480" y2="190"/>
+      <line x1="340" y1="195" x2="340" y2="252"/>
+      <line x1="376" y1="195" x2="376" y2="252"/>
+      <line x1="424" y1="195" x2="424" y2="252"/>
+      <line x1="460" y1="195" x2="460" y2="252"/>
+      <line x1="358" y1="256" x2="358" y2="306"/>
+      <line x1="384" y1="256" x2="384" y2="306"/>
+      <line x1="416" y1="256" x2="416" y2="306"/>
+      <line x1="442" y1="256" x2="442" y2="306"/>
+      <line x1="392" y1="310" x2="392" y2="340"/>
+      <line x1="408" y1="310" x2="408" y2="340"/>
+      </g>
+      <g stroke="#8FA1BF" stroke-width="1" fill="none" opacity="0.75">
+      <path d="M296 52 C244 74 246 96 300 114"/>
+      <path d="M504 52 C556 74 554 96 500 114"/>
+      <path d="M318 128 C274 148 276 166 322 186"/>
+      <path d="M482 128 C526 148 524 166 478 186"/>
+      <path d="M338 198 C300 216 302 232 344 248"/>
+      <path d="M462 198 C500 216 498 232 456 248"/>
+      <path d="M356 260 C328 274 330 288 362 302"/>
+      <path d="M444 260 C472 274 470 288 438 302"/>
+      <path d="M386 312 C372 322 374 332 392 340"/>
+      </g>
+      <g fill="#16273F">
+      <path d="M250 40 v9 a150 13 0 0 0 300 0 v-9" stroke="#C9A227" stroke-width="1.2"/>
+      <ellipse cx="400" cy="40" rx="150" ry="13" stroke="#E0B94B" stroke-width="1.2"/>
+      <path d="M278 118 v8 a122 11 0 0 0 244 0 v-8" stroke="#C9A227" stroke-width="1.2"/>
+      <ellipse cx="400" cy="118" rx="122" ry="11" stroke="#E0B94B" stroke-width="1.2"/>
+      <path d="M304 188 v7 a96 10 0 0 0 192 0 v-7" stroke="#C9A227" stroke-width="1.2"/>
+      <ellipse cx="400" cy="188" rx="96" ry="10" stroke="#E0B94B" stroke-width="1.2"/>
+      <path d="M326 250 v6 a74 9 0 0 0 148 0 v-6" stroke="#C9A227" stroke-width="1.2"/>
+      <ellipse cx="400" cy="250" rx="74" ry="9" stroke="#E0B94B" stroke-width="1.2"/>
+      <path d="M346 304 v6 a54 8 0 0 0 108 0 v-6" stroke="#C9A227" stroke-width="1.2"/>
+      <ellipse cx="400" cy="304" rx="54" ry="8" stroke="#E0B94B" stroke-width="1.2"/>
+      </g>
+      <g stroke="#8FA1BF" stroke-width="1" stroke-dasharray="2 3" fill="none">
+      <line x1="150" y1="40" x2="242" y2="40"/>
+      <line x1="150" y1="118" x2="270" y2="118"/>
+      <line x1="150" y1="188" x2="296" y2="188"/>
+      <line x1="150" y1="250" x2="318" y2="250"/>
+      <line x1="150" y1="304" x2="338" y2="304"/>
+      </g>
+      <rect x="388" y="338" width="24" height="14" rx="2" fill="#16273F" stroke="#F7931A" stroke-width="1.3"/>
+      <g fill="#F7931A">
+      <circle cx="394" cy="345" r="1.5"/><circle cx="400" cy="345" r="1.5"/><circle cx="406" cy="345" r="1.5"/>
+      </g>
+      <line x1="448" y1="345" x2="416" y2="345" stroke="#8FA1BF" stroke-width="1"/>
+      <g font-family="'Cascadia Mono',Consolas,monospace" fill="#DCE3EF" font-size="11" text-anchor="end">
+      <text x="142" y="44">room temp</text>
+      <text x="142" y="122">4 K</text>
+      <text x="142" y="192">800 mK</text>
+      <text x="142" y="254">100 mK</text>
+      <text x="142" y="308">~10 mK</text>
+      <text x="452" y="349" text-anchor="start">qubit chip</text>
+      </g>
+      </svg>
+      <p class="qt-figcap">All of it is a refrigerator. The whole chandelier exists to cool one fingernail-sized chip.</p>
+      <p class="qt-p">Zoom in on that chip and the qubit numbers above turn concrete. Each circle below is one <b>physical qubit</b>, noisy and error-prone, tied to its neighbors by couplers and to the outside world by control wiring. A clean <b>logical qubit</b>, the unit the 1,200 to 1,450 estimate counts, has to be assembled out of hundreds to thousands of these physical ones through error correction, which is the real distance between this chip and a machine that could threaten a bitcoin key.</p>
+      <svg class="qt-fig-svg" viewBox="0 0 660 260" role="img" aria-label="Quantum processor chip: a small square chip about one centimeter across holding a four by four grid of superconducting qubits connected by couplers, with control wiring leaving the chip edge; a logical qubit is built from many of these physical qubits through error correction" style="max-width:100%;height:auto;display:block;margin:14px auto 0">
+      <g stroke="#8FA1BF" stroke-width="1.2" fill="none">
+      <path d="M98 94 H42"/>
+      <path d="M98 138 H42"/>
+      <path d="M98 182 H42"/>
+      <path d="M230 182 H322"/>
+      </g>
+      <rect x="70" y="22" width="192" height="192" rx="8" fill="#16273F" stroke="#C9A227" stroke-width="1.4"/>
+      <g stroke="#8FA1BF" stroke-width="1.2" fill="none">
+      <line x1="98" y1="50" x2="230" y2="50"/>
+      <line x1="98" y1="94" x2="230" y2="94"/>
+      <line x1="98" y1="138" x2="230" y2="138"/>
+      <line x1="98" y1="182" x2="230" y2="182"/>
+      <line x1="98" y1="50" x2="98" y2="182"/>
+      <line x1="142" y1="50" x2="142" y2="182"/>
+      <line x1="186" y1="50" x2="186" y2="182"/>
+      <line x1="230" y1="50" x2="230" y2="182"/>
+      </g>
+      <g fill="#C9A227">
+      <rect x="66" y="90" width="8" height="8"/>
+      <rect x="66" y="134" width="8" height="8"/>
+      <rect x="66" y="178" width="8" height="8"/>
+      <rect x="258" y="178" width="8" height="8"/>
+      </g>
+      <g fill="#F7931A">
+      <circle cx="98" cy="50" r="6.5"/><circle cx="142" cy="50" r="6.5"/><circle cx="186" cy="50" r="6.5"/><circle cx="230" cy="50" r="6.5"/>
+      <circle cx="98" cy="94" r="6.5"/><circle cx="142" cy="94" r="6.5"/><circle cx="186" cy="94" r="6.5"/><circle cx="230" cy="94" r="6.5"/>
+      <circle cx="98" cy="138" r="6.5"/><circle cx="142" cy="138" r="6.5"/><circle cx="186" cy="138" r="6.5"/><circle cx="230" cy="138" r="6.5"/>
+      <circle cx="98" cy="182" r="6.5"/><circle cx="142" cy="182" r="6.5"/><circle cx="186" cy="182" r="6.5"/><circle cx="230" cy="182" r="6.5"/>
+      </g>
+      <g stroke="#8FA1BF" stroke-width="1" fill="none">
+      <line x1="326" y1="50" x2="240" y2="50"/>
+      <line x1="326" y1="116" x2="236" y2="116"/>
+      <path d="M70 226 v5 h192 v-5" />
+      </g>
+      <g font-family="'Cascadia Mono',Consolas,monospace" fill="#DCE3EF" font-size="11" text-anchor="start">
+      <text x="330" y="54">superconducting qubits</text>
+      <text x="330" y="120">couplers</text>
+      <text x="330" y="186">control wiring</text>
+      <g fill="#8FA1BF" font-size="10">
+      <text x="166" y="250" text-anchor="middle">about 1 cm across</text>
+      </g>
+      </g>
+      </svg>
+      <p class="qt-figcap">One logical qubit is built from many of these physical qubits through error correction.</p>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>Can a quantum computer crack bitcoin's private keys?</h2>
+      <p class="qt-p">Bitcoin's ownership rests on <b>elliptic-curve cryptography</b> (secp256k1): your private key produces a public key, and reversing that math is out of reach for normal computers, because every computer on Earth working together would need longer than the age of the universe. A large, error-corrected quantum computer changes that one specific equation. <b>Shor's algorithm</b> could derive a private key from a <em>known public key</em> in hours to days. That is the whole threat. It is real, it is taken seriously, and it is also routinely exaggerated.</p>
+      <p class="qt-p">Two limits up front. First, Shor's algorithm needs your <b>public key</b>, and most bitcoin is stored behind a <em>hash</em> of the public key, which quantum computers do not meaningfully break. Second, the other quantum algorithm people cite, <b>Grover's</b>, offers only a square-root speedup against hashing, far too weak to threaten SHA-256 mining or hashed addresses in practice. If the terms here are new, <a href="/learn/what-is-bitcoin">what bitcoin is</a> and the <a href="/learn/whitepaper">whitepaper guide</a> cover the ground underneath them.</p>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>Which bitcoins are actually at risk?</h2>
+      <p class="qt-p">Quantum exposure is not one property of "bitcoin." It depends entirely on whether an output's public key is already visible on-chain.</p>
+      <div class="qt-scroll">
+        <table class="qt-table" aria-label="Bitcoin output types and their quantum exposure">
+          <thead><tr><th>Output type</th><th>Public key visible?</th><th>Exposure</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="qt-k">P2PK (2009 to 2010 era)</td>
+              <td>Yes. Printed directly on-chain forever. Includes the roughly 1 million BTC attributed to <a href="/learn/who-is-satoshi">Satoshi's</a> miner.</td>
+              <td><span class="qt-risk qt-hi">Exposed</span></td>
+            </tr>
+            <tr>
+              <td class="qt-k">Reused addresses</td>
+              <td>Yes. The first outgoing spend reveals the key, and every coin still sitting there is exposed.</td>
+              <td><span class="qt-risk qt-hi">Exposed</span></td>
+            </tr>
+            <tr>
+              <td class="qt-k">Taproot (P2TR)</td>
+              <td>Yes. Taproot outputs carry a tweaked public key on-chain by design.</td>
+              <td><span class="qt-risk qt-md">Exposed class</span></td>
+            </tr>
+            <tr>
+              <td class="qt-k">Fresh legacy and SegWit (P2PKH, P2WPKH)</td>
+              <td>No. Only a hash is on-chain until the moment you spend. The key is revealed only in the spending transaction's brief confirmation window.</td>
+              <td><span class="qt-risk qt-lo">Protected until spend</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="qt-note">Roughly 4 million BTC, about a fifth of the supply, sits in the exposed categories today, mostly early P2PK coins and heavily reused addresses. You can see which output type an address uses with the <a href="/">address lookup</a>.</p>
+      <p class="qt-p">This split matters. A future quantum attacker's easy targets are the old, exposed coins, which is exactly why the network would get a loud and unmistakable warning, dormant Satoshi-era coins suddenly moving, long before ordinary wallets were at risk. The exposed coins are the canary, and the canary is a decade of engineering time wide.</p>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>When will quantum computers be able to break bitcoin?</h2>
+      <p class="qt-p">The headline qubit counts you see in press releases are <b>physical</b> qubits: noisy, error-prone components. Breaking secp256k1 requires roughly <b>1,200 to 1,450 clean "logical" qubits</b> on Google Quantum AI's 2026 estimate (earlier estimates said about 2,300), and with error correction each logical qubit costs hundreds to thousands of physical ones. The most recent engineering estimates put a practical key-cracking machine at <b>hundreds of thousands of physical qubits</b>, down from earlier estimates in the millions. Today's best processors sit at low thousands of physical qubits, and the first few dozen logical qubits. The gap is not one breakthrough. It is still orders of magnitude of scaling, error correction, and control engineering, and the most recent estimates have made it smaller, not larger.</p>
+      <p class="qt-p">The Global Risk Institute's 2025 expert survey puts roughly one-in-three odds on a "cryptographically relevant" quantum computer within a decade and calls one likely within fifteen years, with the heaviest expert weight on <b>2030 to 2035</b> and some respected researchers still saying much later or never. Progress is real, and error-correction milestones fall every year, which is precisely why Bitcoin's preparation started now rather than waiting.</p>
+      <p class="qt-p">One more myth worth retiring. <b>"Harvest now, decrypt later"</b> is a genuine concern for encrypted messages, and it mostly does not apply here. Bitcoin's blockchain is not encrypted, it is public. What matters is whether your public key is visible, which the table above already covers.</p>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>What is the Bitcoin network doing about the quantum threat?</h2>
+      <p class="qt-p"><b>The cryptography is ready.</b> In 2024 NIST finalized the first post-quantum signature standards, <code class="qt-code">ML-DSA</code> (Dilithium), <code class="qt-code">SLH-DSA</code> (SPHINCS+), and later <code class="qt-code">FN-DSA</code> (Falcon), after a decade-long global competition. Quantum-resistant signing is a solved problem. The open work is fitting it into Bitcoin well.</p>
+      <p class="qt-p"><b>A bitcoin upgrade path is being designed in the open.</b> The most developed proposal is <code class="qt-code">BIP-360</code>, "Pay to Quantum-Resistant Hash" (P2QRH), a soft fork that would add a new output type letting coins be locked to post-quantum keys, with hybrid schemes so wallets can hold both classical and quantum-resistant keys during the transition. Hash-based one-time signatures (Lamport and Winternitz) are studied as a conservative fallback, since they rely only on hash functions Bitcoin already trusts.</p>
+      <p class="qt-p"><b>The hard problems are trade-offs, not mysteries.</b> Post-quantum signatures are large. A Dilithium signature runs about 2.4&nbsp;KB against Schnorr's 64 bytes, so block space, <a href="/fees">fees</a>, and aggregation need real engineering. And the community must eventually answer an uncomfortable governance question: when the threat becomes concrete, what happens to exposed coins whose owners never migrate, including Satoshi's? Letting them be stolen rewards the attacker. Freezing them means confiscating someone's property by consensus. That debate, "burn versus steal," is already happening in public, years early, which is exactly where a debate like that belongs.</p>
+      <p class="qt-p"><b>Migration, when it comes, will look boring.</b> A soft fork activates quantum-resistant outputs, wallets add a "send coins to your new quantum-safe address" button, and users move funds in an ordinary transaction over a period of years. Your seed phrase today is what authorizes that move tomorrow, which is why the practical advice below is so short.</p>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>How do I protect my bitcoin today?</h2>
+      <ul class="qt-checks">
+        <li><b>Nothing urgent.</b> There is no action a normal holder needs to take today.</li>
+        <li><b>Never reuse addresses.</b> This is already best practice for privacy, and it is also the quantum-exposure difference you control. Fresh address for every receive, as the <a href="/learn/privacy">privacy guide</a> explains.</li>
+        <li><b>Keep your seed phrase safe.</b> Future migration is just a transaction, signed by the keys you hold now. Lost keys, not quantum computers, remain the realistic way bitcoin disappears. The <a href="/learn/self-custody">self-custody guide</a> covers storage, and <a href="/wallets">wallets</a> covers the software.</li>
+        <li><b>Ignore "quantum-proof coin" marketing.</b> Projects selling quantum panic are selling something. Bitcoin's fix is an upgrade, not a different asset, and the pitch shows up in the same places as the <a href="/learn/scams">scam families</a>.</li>
+        <li><b>Watch the BIPs, not the headlines.</b> The moment anything becomes actionable it will arrive as a reviewed soft-fork proposal, and this page will cover it.</li>
+      </ul>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <h2>Quick answers</h2>
+      <details class="qt-qa">
+        <summary>Could a quantum computer steal Satoshi's coins?</summary>
+        <p>Eventually, in principle, yes. The roughly 1 million BTC mined in 2009 and 2010 sits in P2PK outputs with public keys fully exposed, and presumably no one holds the keys to move them first. That is why those coins are widely expected to be the first target and the network's early-warning system. Whether the community would let that theft happen, or freeze exposed outputs first, is the open "burn versus steal" debate.</p>
+      </details>
+      <details class="qt-qa">
+        <summary>Would mining break?</summary>
+        <p>No. Grover's algorithm offers only a quadratic speedup against SHA-256, and quantum gate speeds are slow next to ASICs performing quintillions of hashes per second. Even optimistic quantum mining is uncompetitive, and if that ever changed, the difficulty adjustment absorbs it like any other hardware advance. The <a href="/halving">halving page</a> covers how issuance and difficulty actually work.</p>
+      </details>
+      <details class="qt-qa">
+        <summary>If my address only holds a hash, am I completely safe?</summary>
+        <p>Until you spend, effectively yes. At spend time your public key becomes visible while the transaction confirms, a short race window that a very fast attacker could theoretically exploit. That scenario requires a machine far beyond even the key-cracking threshold, and proposed migrations, plus commit-reveal spending schemes, close it. It is an argument for finishing the upgrade before such machines exist, which is the plan.</p>
+      </details>
+      <details class="qt-qa">
+        <summary>Does this change the case for holding bitcoin?</summary>
+        <p>Quantum computing threatens every system secured by today's public-key cryptography: banks, governments, TLS, all of it. Bitcoin is unusual in having its exposure mapped coin by coin in public, a standardized replacement ready, and an upgrade culture that has already shipped consensus changes. The honest risk here is real but distant, monitored, and fixable. Treat anyone claiming otherwise, in either direction, as selling something. Nothing on this page is investment advice; see the <a href="/terms">terms</a>.</p>
+      </details>
+    </div>
+
+    <div class="qt-card qt-mt">
+      <div class="qt-tlab">Sources</div>
+      
+      <ul class="qt-srcs">
+        <li>NIST post-quantum cryptography standards (FIPS 203, 204, 205)</li>
+        <li>BIP-360: Pay to Quantum-Resistant Hash (P2QRH) proposal</li>
+        <li>Deloitte, quantum-vulnerable bitcoin study</li>
+        <li>Webber et al., resource estimates for breaking secp256k1</li>
+        <li>Google Quantum AI, Securing Elliptic Curve Cryptocurrencies against Quantum Vulnerabilities (2026)</li>
+        <li>Global Risk Institute, Quantum Threat Timeline (2025 edition)</li>
+      </ul>
+      <p class="qt-note">Figures on this page are drawn from published research and change as the field moves. Where the site's own chain data comes from is documented at <a href="/sources">/sources</a>. Spotted an error? <a href="/contact">Tell us</a>.</p>
+    </div>
+
+    <div class="qt-about doc-prose">
+      <p>The quantum question about bitcoin has a narrow, answerable shape: a large error-corrected quantum computer running Shor's algorithm could recover a private key from a public key that is already visible on-chain, which is why old P2PK outputs and reused addresses are the exposed set and fresh, unspent hashed addresses are not. Expert surveys now put roughly one-in-three odds on that machine arriving within a decade, standardized post-quantum signatures already exist, and a Bitcoin soft-fork path is being drafted in public. Until it activates, the useful habits are the ordinary ones: a fresh address every time, a seed phrase you can still read in ten years, and no attention paid to coins sold on quantum panic. Everything here is informational, not financial or security advice, under the site's <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="qt-railp">No quantum computer can touch bitcoin today, the exposed coins would move first as a warning, and the replacement cryptography is already standardized.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The numbers</div>
+      <div class="qt-rs"><b>1,200 to 1,450</b><i>logical qubits to break a key</i></div>
+      <div class="qt-rs"><b>&lt;100</b><i>logical qubits available today</i></div>
+      <div class="qt-rs"><b>~4M BTC</b><i>in exposed outputs</i></div>
+      <div class="qt-rs"><b>2030 to 2035</b><i>heaviest expert weight</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Do this instead</div>
+      <ul class="qt-rl">
+        <li>Fresh address for every receive</li>
+        <li>Seed phrase stored offline</li>
+        <li>Ignore quantum-panic coin marketing</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn/privacy">Bitcoin privacy guide</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi</a>
+        <a href="/wallets">Bitcoin wallets</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .qt-verdict{display:flex;gap:12px;align-items:flex-start;background:rgba(46,189,133,.09);
+    border:1px solid var(--up);border-radius:12px;padding:15px 17px}
+  .qt-vdot{width:10px;height:10px;border-radius:50%;background:var(--up);flex:none;margin-top:7px}
+  .qt-verdict p{margin:0;font:500 14px/1.65 var(--sans);color:var(--ink-2);min-width:0}
+  .qt-verdict b{color:var(--up);font-weight:700}
+  .qt-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .qt-stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px;min-width:0}
+  .qt-sv{font:700 21px/1.2 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  .qt-sv em{font-style:normal;font-size:11.5px;color:var(--ink-3);font-weight:600;margin-left:4px}
+  .qt-sk{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-top:5px}
+  .qt-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .qt-mt{margin-top:14px}
+  .qt-card h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .qt-card h2::after{content:"";display:block;width:26px;height:3px;background:var(--orange);
+    margin-top:7px;border-radius:2px}
+  .qt-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .qt-fig-svg{max-width:100%;height:auto;display:block;margin:14px auto 0}
+  .qt-fig-svg text{user-select:none}
+  .qt-figcap{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);text-align:center;margin:9px auto 0;max-width:540px}
+  .qt-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:11px 0 0;overflow-wrap:anywhere}
+  .qt-p b{color:var(--ink);font-weight:600}
+  .qt-p em{font-style:italic}
+  .qt-p a,.qt-note a,.qt-checks a,.qt-qa a{color:var(--acc);text-decoration:none;
+    border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .qt-p a:hover,.qt-note a:hover,.qt-checks a:hover,.qt-qa a:hover{border-bottom-style:solid}
+  .qt-code{font:600 12px var(--mono);background:var(--field);color:var(--acc);
+    border:1px solid var(--line-2);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+  .qt-scroll{overflow-x:auto;margin-top:13px}
+  .qt-table{width:100%;min-width:480px;border-collapse:collapse}
+  .qt-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .qt-table td{font:500 13px/1.55 var(--sans);color:var(--ink-2);padding:10px 12px 10px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .qt-table td a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .qt-table td a:hover{border-bottom-style:solid}
+  .qt-table tr:last-child td{border-bottom:0}
+  .qt-k{font:600 12.5px var(--mono);color:var(--ink);min-width:130px}
+  .qt-risk{display:inline-block;font:700 9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+    border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .qt-hi{background:rgba(246,70,93,.12);color:var(--down);border:1px solid rgba(246,70,93,.42)}
+  .qt-md{background:rgba(247,147,26,.12);color:var(--acc);border:1px solid rgba(247,147,26,.42)}
+  .qt-lo{background:rgba(46,189,133,.12);color:var(--up);border:1px solid rgba(46,189,133,.42)}
+  .qt-note{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:11px 0 0}
+  .qt-checks{list-style:none;margin:13px 0 0;padding:0}
+  .qt-checks li{position:relative;padding:0 0 0 28px;margin-top:11px;
+    font:500 14px/1.65 var(--sans);color:var(--ink-2)}
+  .qt-checks li::before{content:"";position:absolute;left:0;top:3px;width:17px;height:17px;border-radius:50%;
+    background:var(--up);box-shadow:inset 0 0 0 4px var(--panel),inset 0 0 0 7px var(--up)}
+  .qt-checks b{color:var(--ink);font-weight:600}
+  .qt-qa{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;
+    margin-top:9px;overflow:hidden}
+  .qt-qa summary{cursor:pointer;font:600 14px/1.45 var(--sans);color:var(--ink);
+    padding:12px 40px 12px 15px;list-style:none;position:relative}
+  .qt-qa summary::-webkit-details-marker{display:none}
+  .qt-qa summary::after{content:"+";position:absolute;right:15px;top:11px;color:var(--acc);font:700 17px var(--mono)}
+  .qt-qa[open] summary::after{content:"-"}
+  .qt-qa p{margin:0;padding:0 15px 14px;font:500 13.5px/1.65 var(--sans);color:var(--ink-2)}
+  .qt-srcs{margin:0;padding-left:18px}
+  .qt-srcs li{font:600 11.5px/1.6 var(--mono);color:var(--ink-3);margin-top:5px;overflow-wrap:anywhere}
+  .qt-srcs li:first-child{margin-top:0}
+  .qt-srcs li::marker{color:var(--acc)}
+  .qt-about{margin-top:14px}
+  .qt-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .qt-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .qt-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .qt-rs:last-child{border-bottom:0}
+  .qt-rs b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .qt-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-top:2px}
+  .qt-rl{margin:0;padding-left:16px}
+  .qt-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .qt-rl li:first-child{margin-top:0}
+  .qt-rl li::marker{color:var(--acc)}
+  @media(max-width:700px){
+    .qt-card{padding:18px 17px 20px}
+    .qt-fig-svg{width:100%}
+    .qt-fig-svg text{font-size:16px}
+    .qt-scroll{overflow:visible}
+    .qt-table{min-width:0;table-layout:auto}
+    .qt-table thead{display:none}
+    .qt-table,.qt-table tbody{display:block;width:auto}
+    .qt-table tr{display:flex;flex-direction:column;align-items:flex-start;gap:7px;
+      padding:13px 0 12px;border-bottom:1px dotted var(--line-2)}
+    .qt-table tr:first-child{padding-top:4px}
+    .qt-table tr:last-child{border-bottom:0;padding-bottom:2px}
+    .qt-table td{display:block;width:auto;padding:0;border-bottom:0;font-size:13px}
+    .qt-table td:nth-child(2){order:3;width:100%}
+    .qt-table td:nth-child(3){order:2}
+    .qt-k{min-width:0;font-size:13px}
+  }
+  @media(max-width:560px){
+    .qt-stats{grid-template-columns:minmax(0,1fr)}
+    .qt-sv{font-size:19px}
+  }
+  @media(max-width:480px){
+    .qt-fig-svg text{font-size:22px}
+  }
+</style>
+</Base>

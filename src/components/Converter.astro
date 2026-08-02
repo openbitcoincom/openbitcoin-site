@@ -1,0 +1,139 @@
+---
+
+---
+<div class="cvp-card cvp-widget">
+  <div class="cvp-row">
+    <div class="cvp-side">
+      <div class="cvp-lab">Bitcoin</div>
+      <input id="cv-b" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Amount in bitcoin units">
+      <div class="cvp-units" role="tablist" aria-label="Bitcoin unit">
+        <button class="on" data-u="btc" role="tab" aria-selected="true">BTC</button><button data-u="mbtc" role="tab" aria-selected="false">mBTC</button><button data-u="bits" role="tab" aria-selected="false">bits</button><button data-u="sats" role="tab" aria-selected="false">sats</button>
+      </div>
+    </div>
+    <div class="cvp-eq" aria-hidden="true">=</div>
+    <div class="cvp-side">
+      <div class="cvp-lab">Fiat</div>
+      <input id="cv-f" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Amount in fiat">
+      <div class="cvp-units" id="cv-fiats" aria-label="Currency"></div>
+    </div>
+  </div>
+</div>
+<style is:global>
+  .cvp-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .cvp-row{display:flex;align-items:stretch;gap:16px}
+  .cvp-side{flex:1;min-width:0}
+  .cvp-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .cvp-side input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 30px var(--mono);font-variant-numeric:tabular-nums;
+    padding:12px 15px;outline:none;letter-spacing:-.5px}
+  .cvp-side input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .cvp-eq{align-self:center;font:700 22px var(--mono);color:var(--ink-3);padding-top:18px}
+  .cvp-units{display:flex;width:100%;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;margin-top:10px;flex-wrap:wrap}
+  .cvp-units button{background:transparent;border:0;color:var(--ink-2);font:700 10.5px var(--mono);letter-spacing:.08em;
+    padding:7px 12px;min-height:30px;cursor:pointer;border-right:1px solid var(--line);white-space:nowrap;
+    flex:1 1 auto;text-align:center}
+  .cvp-units button:last-child{border-right:0}
+  .cvp-units button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .cvp-units button.on{background:var(--cta);color:var(--cta-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 0 var(--orange)}
+  @media(max-width:700px){
+    .cvp-row{flex-direction:column;gap:12px}
+    .cvp-eq{align-self:flex-start;padding:0}
+    .cvp-side input{font-size:26px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var ELL="…";
+  /* pre-fetch fallback only: window.OB_FX, the site's one rate table, replaces
+     this on DOMContentLoaded and is then updated in place by chrome.js */
+  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
+      sym={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
+  var MUL={btc:1,mbtc:1e3,bits:1e6,sats:1e8},DEC={btc:8,mbtc:5,bits:2,sats:0},CAP=21e6;
+  /* price null until the feed answers: no fiat figure is invented from a seed */
+  var P={price:null,cur:"USD",unit:"btc",btc:1};
+  var elB=document.getElementById("cv-b"),elF=document.getElementById("cv-f"),
+      fwrap=document.getElementById("cv-fiats");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function parse(s){s=(""+s).replace(/[^0-9.]/g,"");var n=parseFloat(s);return isFinite(n)?n:null;}
+  function fiatDec(v){return v>=100?0:2;}
+  function rate(){var r=fx[P.cur];return typeof r==="number"?r:1;}
+
+  /* fiat selector: same toggle idiom, wraps into rows */
+  Object.keys(fx).forEach(function(c){
+    var b=document.createElement("button");
+    b.textContent=c;b.dataset.c=c;
+    if(c===P.cur)b.className="on";
+    b.addEventListener("click",function(){P.cur=c;
+      fwrap.querySelectorAll("button").forEach(function(x){x.className=x.dataset.c===c?"on":"";});
+      render("all");});
+    fwrap.appendChild(b);
+  });
+
+  function paintB(){elB.value=fmt(P.btc*MUL[P.unit],DEC[P.unit]);}
+  function paintF(){
+    if(P.price===null){elF.value=ELL;return;}
+    var v=P.btc*P.price*rate();elF.value=fmt(v,fiatDec(v));
+  }
+  function render(which){
+    if(which!=="fromB")paintB();
+    if(which!=="fromF")paintF();
+    /* followers (the /convert table and rail) repaint off this; the last
+       detail is stashed so a follower whose script parses after the widget's
+       first render can paint immediately instead of waiting for a tick */
+    var detail={btc:P.btc,unit:P.unit,cur:P.cur,price:P.price,fx:fx,sym:sym};
+    window.OB_CONV_LAST=detail;
+    document.dispatchEvent(new CustomEvent("ob-conv",{detail:detail}));
+  }
+
+  elB.addEventListener("input",function(){var n=parse(elB.value);if(n===null)return;
+    var btc=n/MUL[P.unit];if(btc>CAP)btc=CAP;P.btc=btc;render("fromB");});
+  /* fiat to bitcoin needs a rate: with no price yet the typing is left alone
+     rather than converted against a made-up one */
+  elF.addEventListener("input",function(){if(P.price===null)return;
+    var n=parse(elF.value);if(n===null)return;
+    var btc=n/(P.price*rate());if(btc>CAP)btc=CAP;P.btc=btc;render("fromF");});
+  [elB,elF].forEach(function(el){
+    el.addEventListener("focus",function(){el.select();});
+    el.addEventListener("blur",function(){
+      /* while the fiat box is holding the placeholder it is not an emptied
+         field, so leaving it must not reset the amount */
+      if(el===elF&&P.price===null)return;
+      if(parse(el.value)===null||parse(el.value)===0)P.btc=1;render("all");});
+  });
+  document.querySelectorAll(".cvp-widget .cvp-units[role=tablist] button").forEach(function(b){
+    b.addEventListener("click",function(){P.unit=b.dataset.u;
+      b.parentNode.querySelectorAll("button").forEach(function(x){
+        var on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-selected",on?"true":"false");});
+      render("all");});
+  });
+
+  /* live tick + footer currency changes arrive via the chrome hooks, CHAINED:
+     a page with its own hook (like /price) keeps it working regardless of
+     which script ran first */
+  var prevPaint=window.obPaintFiat;
+  window.obPaintFiat=function(S){
+    if(typeof prevPaint==="function")try{prevPaint(S);}catch(e){}
+    if(!S||typeof S.price!=="number"||!(S.price>0))return;
+    P.price=S.price;render("all");};
+  var prevCur=window.obCurrencyChange;
+  window.obCurrencyChange=function(S){
+    if(typeof prevCur==="function")try{prevCur(S);}catch(e){}
+    P.cur=S.cur;
+    fwrap.querySelectorAll("button").forEach(function(x){x.className=x.dataset.c===P.cur?"on":"";});
+    render("all");};
+  render("all");
+  /* chrome.js parses after this script: on DOMContentLoaded take its live rate
+     table (updated in place, so the reference stays current) and any summary it
+     is already holding */
+  function boot(){
+    try{
+      if(window.OB_FX&&typeof window.OB_FX.USD==="number")fx=window.OB_FX;
+      var L=window.OB_LIVE;
+      if(L&&L.price&&typeof L.price.usd==="number"&&L.price.usd>0)P.price=L.price.usd;
+    }catch(e){}
+    render("all");
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>

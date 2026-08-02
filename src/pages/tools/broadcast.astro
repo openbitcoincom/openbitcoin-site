@@ -1,0 +1,553 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Broadcast a Signed Bitcoin Transaction - OpenBitcoin" description="Paste a signed raw transaction, check its txid, inputs, outputs and size, then broadcast it to the Bitcoin network through this site's own node.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Broadcast</div>
+    <h1>Broadcast a signed transaction</h1>
+    <p class="doc-lede">Paste signed transaction hex, check what it really pays before it goes anywhere, then push it to the network. The summary is worked out in your browser.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="bx-card">
+      <div class="bx-lab">Signed transaction hex</div>
+      <textarea id="bx-in" class="bx-ta" rows="5" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="0100000001... paste the signed hex from your wallet" aria-label="Signed raw transaction hex to broadcast"></textarea>
+      <div class="bx-bar">
+        <div class="bx-ex" aria-label="Example transactions">
+          <span>Try:</span>
+          <button type="button" data-ex="legacy">legacy, block 170</button>
+          <button type="button" data-ex="segwit">segwit, BIP-143</button>
+          <button type="button" id="bx-clear">clear</button>
+        </div>
+        <div class="bx-count" id="bx-count">0 bytes</div>
+      </div>
+    </div>
+    <p class="bx-priv">Parsing and hashing run entirely in your browser. Nothing is sent anywhere while you read the summary, so the hex stays in the tab until you press Broadcast yourself.</p>
+
+    <div class="bx-res" id="bx-res" role="status" aria-live="polite">
+      <div class="bx-status bx-mut">Waiting for hex</div>
+      <div class="bx-note">The summary appears here: transaction id, how many coins are being spent, what each output pays, and how much block space the whole thing takes.</div>
+    </div>
+
+    <div class="bx-push">
+      <button type="button" class="bx-go" id="bx-go" disabled aria-disabled="true">Broadcast to the network</button>
+      <div class="bx-out" id="bx-out" role="status" aria-live="polite" hidden></div>
+      <p class="bx-gate">The button hands your signed transaction straight to this site's own Bitcoin node and nowhere else. It becomes live once the pasted bytes parse, and nothing is sent until you press it.</p>
+    </div>
+
+    <div class="doc-card bx-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Broadcasting is relay, not confirmation</h2>
+        <p>Pushing a transaction hands it to one node, which checks that it is well formed, that its inputs exist and are unspent, and that it pays enough to be worth passing on. If it survives those checks the node keeps a copy and offers it to its peers, they do the same, and within a few seconds most of the network is holding it in memory. That is the entire event. Nothing has been paid yet and nothing is final: the transaction now sits in the <a href="/mempool">mempool</a> waiting for a miner to choose it, and miners choose by fee rate. Broadcasting the same transaction twice, or through five different services, changes nothing at all, because every node already has it and duplicates are simply dropped. What decides the wait is the rate you signed into it, which is what the <a href="/fees">fee page</a> and the <a href="/fees/calculator">calculator</a> are for.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why push through this site's node</h2>
+        <p>A signed transaction is public information, so the risk in handing it to a stranger is not theft, it is linkage. Whoever receives it first learns which addresses you control and sees the connection it arrived on, and that pairing is exactly what chain surveillance firms buy. Most web broadcast forms are a thin front end over somebody else's API, so a transaction can pass through two or three companies before it ever reaches a node. Here the path is one hop: your browser to this site's own bitcoind, and from there straight to its peers, so your transaction goes to the network without passing a third party. Better still, run your own: a <a href="/nodes">node of your own</a> broadcasts your payments over your own connection and answers to nobody, and <a href="/learn/privacy">bitcoin privacy</a> covers what else leaks while you are at it.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Paid accelerators do nothing</h2>
+        <p>Search for a stuck payment and you will find services offering to push it through for a fee. Almost all of them are theft with a progress bar. A transaction confirms when a miner puts it in a block, and no outsider can change the fee rate on a transaction you already signed, because touching a single byte would break the signature. So the paid accelerator either does nothing while your payment confirms on its own schedule and then claims credit, or it takes payment and vanishes. The genuine remedies are both free of any middleman and both run from your own wallet: replace-by-fee, which resigns the transaction at a higher rate, and child-pays-for-parent, which spends the unconfirmed change at a rate high enough to drag the parent along. <a href="/tx/stuck">Stuck transaction help</a> walks through both, and <a href="/learn/scams">common scams</a> covers the rest of the pattern, including the support accounts that appear the moment you complain in public.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>When a node refuses it</h2>
+        <p>A rejection is usually informative rather than alarming. The commonest answer is that the network already has it, which means the push worked earlier and there is nothing left to do. Missing or already spent inputs mean the coins were used by another transaction, often one your own wallet made. A fee below the minimum relay rate, currently one satoshi per virtual byte, gets it dropped before it travels. Outputs too small to be worth spending are refused as dust, non-final locktimes wait until their height or time arrives, and a replacement is refused unless it pays for both itself and everything it evicts. If the bytes themselves will not even parse, the copy was truncated or something else came along with it; take the same hex apart in the <a href="/tools/decode">full decoder</a> and the field it breaks at is usually obvious.</p>
+      </div>
+    </div>
+
+    <div class="bx-about doc-prose">
+      <p>This page never signs anything. It reads bytes your wallet already signed, and the wallet is where the keys stay. It also cannot tell you a transaction confirmed: a push puts it on the network, after which the chain decides, so follow it up in the <a href="/mempool">mempool</a> or in <a href="/blocks">recent blocks</a> rather than here. If you are checking an address before paying it, use the <a href="/tools/validate">address validator</a>. Nothing here is financial advice and everything is informational under the <a href="/terms">terms</a>; data provenance for the rest of the site is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you push</div>
+      <div class="bx-t"><b>The outputs</b><i>Every amount and destination is fixed once it relays. Read the values back before, not after.</i></div>
+      <div class="bx-t"><b>The change</b><i>Output count and total should match what the wallet said. A missing change output is a fee.</i></div>
+      <div class="bx-t"><b>The rate</b><i>Fee is size times rate. The vsize here is the size half of that arithmetic.</i></div>
+      <div class="bx-t"><b>The id</b><i>The txid shown here is the one to search for once the transaction is out.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/decode">Full transaction decoder</a>
+        <a href="/tx/stuck">Stuck transaction help</a>
+        <a href="/mempool">Mempool right now</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .bx-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .bx-mt{margin-top:14px}
+  .bx-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .bx-ta{width:100%;box-sizing:border-box;display:block;background:rgba(124,140,168,.13);
+    border:1px dashed rgba(255,166,60,.32);border-radius:10px;color:var(--price-ink);
+    font:600 12.5px/1.65 var(--mono);padding:12px 14px;outline:none;resize:vertical;
+    word-break:break-all;min-height:118px}
+  .bx-ta:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .bx-ta::placeholder{color:var(--ph);font-weight:600}
+  .bx-ta[disabled]{opacity:.55;cursor:not-allowed}
+  .bx-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .bx-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+  .bx-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .bx-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .bx-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .bx-count{font:600 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;flex:none}
+  .bx-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:11px 0 0}
+  .bx-priv{font:600 11px/1.6 var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0}
+
+  .bx-res{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px;margin-top:14px}
+  .bx-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .bx-status.bx-ok{color:var(--up)}
+  .bx-status.bx-bad{color:var(--down)}
+  .bx-status.bx-mut{color:var(--ink-3)}
+  .bx-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:9px}
+  .bx-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .bx-note.bx-mute{color:var(--ink-3)}
+  .bx-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .bx-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .bx-badges span.bx-b-acc{border-style:solid;border-color:rgba(255,166,60,.55);color:var(--acc)}
+
+  .bx-id{margin-top:14px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 13px}
+  .bx-id i{display:block;font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-bottom:4px}
+  .bx-id b{display:block;font:700 13px/1.6 var(--mono);color:var(--acc);word-break:break-all}
+
+  .bx-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+  .bx-s{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;min-width:0}
+  .bx-s span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .bx-s b{display:block;font:700 17px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;
+    letter-spacing:-.3px;word-break:break-word}
+  .bx-s b em{font:700 10px var(--mono);font-style:normal;color:var(--ink-3);letter-spacing:.06em;margin-left:5px}
+
+  .bx-sec{margin-top:18px;padding-top:15px;border-top:1px dotted var(--line-2)}
+  .bx-sh{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .bx-sh em{font-style:normal;color:var(--acc);margin-left:6px}
+  .bx-o{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;
+    border-bottom:1px dotted var(--line-2)}
+  .bx-o:last-child{border-bottom:0}
+  .bx-o i{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal}
+  .bx-ov{text-align:right;min-width:0}
+  .bx-ov b{display:block;font:700 14px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bx-ov b em{font-style:normal;font-size:9.5px;color:var(--ink-3);letter-spacing:.06em;margin-left:5px}
+  .bx-ov span{display:block;font:600 9.5px var(--mono);letter-spacing:.06em;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;margin-top:2px}
+  .bx-more{font:600 10.5px/1.6 var(--mono);letter-spacing:.05em;color:var(--ink-3);padding-top:9px}
+  .bx-deep{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin-top:14px;padding-top:12px;
+    border-top:1px dotted var(--line-2)}
+  .bx-deep a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+
+  .bx-push{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 19px}
+  .bx-go{display:block;width:100%;box-sizing:border-box;background:var(--panel-2);border:1px dashed var(--line-2);
+    border-radius:10px;color:var(--ink-3);font:700 12px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    padding:15px 18px;cursor:not-allowed}
+  .bx-go:not([disabled]){border-style:solid;border-color:rgba(255,166,60,.55);color:var(--acc);cursor:pointer}
+  .bx-go:not([disabled]):hover{background:rgba(247,147,26,.08)}
+  .bx-out{margin-top:12px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+  .bx-out b{display:block;font:700 13px var(--mono);letter-spacing:.02em;color:var(--ink-3)}
+  .bx-out.is-ok b{color:var(--up)}
+  .bx-out.is-bad b{color:var(--down)}
+  .bx-out i{display:block;font:500 12.5px/1.6 var(--sans);color:var(--ink-2);font-style:normal;margin-top:7px}
+  .bx-out i a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);word-break:break-all}
+  .bx-out i a:hover{border-bottom-style:solid}
+  .bx-gate{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:11px 0 0}
+
+  .bx-about{margin-top:14px}
+  .bx-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .bx-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .bx-t:last-child{border-bottom:0}
+  .bx-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .bx-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .bx-card{padding:18px}
+    .bx-res,.bx-push{padding:16px 18px 18px}
+    .bx-ta{font-size:11.5px;min-height:132px}
+    .bx-stats{grid-template-columns:minmax(0,1fr)}
+    .bx-s{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .bx-s span{margin-bottom:0}
+    .bx-s b{font-size:15px;text-align:right}
+    .bx-id b{font-size:11.5px}
+    .bx-go{font-size:11px;letter-spacing:.08em}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* ================================================================
+     Reading is entirely local: parsing and hashing never touch the
+     network, and crypto.subtle.digest is local math, not a request. The
+     one and only request in this file is the POST the visitor asks for
+     by pressing Broadcast, which goes to this site's own node.
+
+     MINIMAL parser by design: transaction id, input and output counts,
+     output values, size and vsize. Scripts, witness items, sequence
+     flags and the wtxid are /tools/decode's job.
+
+     TEST VECTORS (see the frontmatter note for provenance; both were
+     re-derived with node through an independent path before commit):
+       legacy  block 170, 12 Jan 2009, first person to person payment
+               txid f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+       segwit  BIP-143 signed P2WPKH example
+               txid e8151a2af31c368a35053ddd4bdb285a8595c769a3ad83e0fa02314a602d4609
+     If any assertion fails the parser refuses to run and says so.
+     ================================================================ */
+
+  var EX={
+    legacy:"0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000",
+    segwit:"01000000000102fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f00000000494830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac000247304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee0121025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee635711000000"
+  };
+  var MAXHEX=1000000; /* 500 kB of transaction is far past any relay policy */
+  var MAXROWS=12;     /* outputs listed before the tail is summarised */
+
+  /* ---------- bytes and hex ---------- */
+  var HEXC="0123456789abcdef";
+  function fromHex(s){
+    var n=s.length/2,out=new Uint8Array(n),i;
+    for(i=0;i<n;i++)out[i]=parseInt(s.substr(i*2,2),16);
+    return out;
+  }
+  function revHex(b){
+    var s="",i;
+    for(i=b.length-1;i>=0;i--)s+=HEXC[b[i]>>4]+HEXC[b[i]&15];
+    return s;
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",bytes).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+
+  /* ---------- number formatting ---------- */
+  function grp(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function btcStr(sats){
+    var s=sats.toString();
+    while(s.length<9)s="0"+s;
+    return grp(s.slice(0,s.length-8))+"."+s.slice(s.length-8);
+  }
+
+  /* ---------- input cleaning ---------- */
+  function cleanHex(raw){
+    var s=(""+raw).replace(/\s+/g,"").replace(/^0x/i,"");
+    if(!s)return "";
+    if(/[^0-9a-fA-F]/.test(s))throw new Error("That is not hexadecimal. Signed transaction hex uses only the characters 0 to 9 and a to f.");
+    if(s.length%2)throw new Error("Odd number of hex characters. Every byte is two characters, so at least one is missing.");
+    if(s.length===64)throw new Error("That looks like a transaction id, not a transaction. A txid is 32 bytes and cannot be broadcast; the transaction itself is hundreds of bytes and starts with a version, usually 01000000 or 02000000.");
+    if(s.length<20)throw new Error("Too short to be a transaction. The header alone takes ten bytes.");
+    if(s.length>MAXHEX)throw new Error("Too long to handle here: that is over 500 kB, which no node would relay.");
+    return s.toLowerCase();
+  }
+
+  /* ---------- minimal parser ---------- */
+  function parse(hexStr){
+    var b=fromHex(hexStr),len=b.length,p=0;
+    var dv=new DataView(b.buffer,b.byteOffset,b.byteLength);
+    function need(n){
+      if(p+n>len)throw new Error("The hex ends in the middle of the transaction: "+grp(String(len))+" bytes were supplied and more were needed after byte "+grp(String(p))+", so it was probably copied short.");
+    }
+    function u8(){need(1);return b[p++];}
+    function u32(){need(4);var v=dv.getUint32(p,true);p+=4;return v;}
+    function i32(){need(4);var v=dv.getInt32(p,true);p+=4;return v;}
+    function u64(){need(8);var v=dv.getBigUint64(p,true);p+=8;return v;}
+    function varint(){
+      var t=u8();
+      if(t<0xfd)return t;
+      if(t===0xfd){need(2);var a=dv.getUint16(p,true);p+=2;return a;}
+      if(t===0xfe){need(4);var c=dv.getUint32(p,true);p+=4;return c;}
+      need(8);var d=dv.getBigUint64(p,true);p+=8;
+      if(d>BigInt(4000000))throw new Error("A count in the transaction is absurdly large, so these bytes are not a transaction.");
+      return Number(d);
+    }
+    function skip(n){
+      if(n>len)throw new Error("A length field claims "+grp(String(n))+" bytes but only "+grp(String(len))+" exist in total. These bytes are not a valid transaction.");
+      need(n);p+=n;
+    }
+
+    var version=i32(),segwit=false,mark=p,i,j;
+    if(len>p+1&&b[p]===0x00&&b[p+1]===0x01){segwit=true;p+=2;}
+    var nIn=varint();
+    if(nIn===0){
+      if(!segwit)throw new Error("This transaction claims zero inputs, which is not valid.");
+      p=mark;segwit=false;nIn=varint();
+      if(nIn===0)throw new Error("This transaction claims zero inputs, which is not valid.");
+    }
+    var bodyStart=segwit?6:4;
+    for(i=0;i<nIn;i++){skip(36);skip(varint());skip(4);} /* outpoint, scriptSig, sequence */
+    var nOut=varint();
+    if(nOut===0)throw new Error("This transaction claims zero outputs, which is not valid.");
+    var outs=[],total=BigInt(0),val;
+    for(i=0;i<nOut;i++){val=u64();skip(varint());total+=val;outs.push(val);}
+    var witStart=p,witItems=0;
+    if(segwit){
+      for(i=0;i<nIn;i++){
+        var cnt=varint();witItems+=cnt;
+        for(j=0;j<cnt;j++)skip(varint());
+      }
+      if(witItems===0)throw new Error("The segwit marker is set but no witness data follows, so this serialization is malformed.");
+    }
+    var ltStart=p;u32(); /* locktime is read for length, its meaning lives in the full decoder */
+    if(p!==len)throw new Error((len-p)+" byte"+(len-p===1?"":"s")+" left over after the locktime. Extra characters were probably copied along with the transaction.");
+
+    /* stripped serialization: header without marker and flag, body, locktime */
+    var stripped;
+    if(segwit){
+      var slen=4+(witStart-bodyStart)+4;
+      stripped=new Uint8Array(slen);
+      stripped.set(b.subarray(0,4),0);
+      stripped.set(b.subarray(bodyStart,witStart),4);
+      stripped.set(b.subarray(ltStart,ltStart+4),4+(witStart-bodyStart));
+    }else{
+      stripped=b;
+    }
+    var weight=stripped.length*3+len;
+    return {version:version,segwit:segwit,bytes:b,stripped:stripped,nIn:nIn,outs:outs,
+            total:total,size:len,strippedSize:stripped.length,weight:weight,
+            vsize:Math.ceil(weight/4)};
+  }
+  function txidOf(tx){
+    return sha256d(tx.stripped).then(function(h){return revHex(h);});
+  }
+
+  /* ---------- rendering ---------- */
+  var res=document.getElementById("bx-res"),
+      inp=document.getElementById("bx-in"),
+      cnt=document.getElementById("bx-count"),
+      btn=document.getElementById("bx-go"),
+      out=document.getElementById("bx-out");
+  function esc(s){return (""+s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function paint(html){res.innerHTML=html;}
+  function paintIdle(){
+    paint('<div class="bx-status bx-mut">Waiting for hex</div>'
+      +'<div class="bx-note">The summary appears here: transaction id, how many coins are being spent, what each output pays, and how much block space the whole thing takes.</div>');
+  }
+  function paintErr(msg){
+    paint('<div class="bx-status bx-bad">&#10007; Cannot read this</div>'
+      +'<div class="bx-note">'+esc(msg)+"</div>"
+      +'<div class="bx-note bx-mute">Signed transaction hex is one unbroken string of hex characters with no 0x prefix and no labels. A wallet usually offers it as "raw transaction", "signed hex" or "transaction hex". Anything that will not parse here would be refused by a node too.</div>');
+  }
+  function paintTx(tx,txid){
+    var h='<div class="bx-status bx-ok">&#10003; Reads as a valid transaction</div>'
+      +'<div class="bx-note">The bytes parse and the identifier below is what this transaction will be called on the network. Parsing is not validation: signatures are not checked here, and only a node can say whether the inputs are still unspent.</div>'
+      +'<div class="bx-badges">'
+      +'<span class="bx-b-acc">'+(tx.segwit?"Segwit":"Legacy")+'</span>'
+      +"<span>version "+esc(String(tx.version))+"</span>"
+      +"<span>"+grp(String(tx.size))+" bytes</span>"
+      +"<span>"+grp(String(tx.vsize))+" vB</span>"
+      +"</div>"
+      +'<div class="bx-id"><i>Transaction id</i><b>'+esc(txid)+"</b></div>"
+      +'<div class="bx-stats">'
+      +"<div class=\"bx-s\"><span>Inputs</span><b>"+grp(String(tx.nIn))+"</b></div>"
+      +"<div class=\"bx-s\"><span>Outputs</span><b>"+grp(String(tx.outs.length))+"</b></div>"
+      +"<div class=\"bx-s\"><span>Total out</span><b>"+btcStr(tx.total)+"<em>BTC</em></b></div>"
+      +"</div>";
+    h+='<div class="bx-sec"><div class="bx-sh">Outputs<em>'+grp(String(tx.outs.length))+"</em></div>";
+    var shown=Math.min(tx.outs.length,MAXROWS),i,v;
+    for(i=0;i<shown;i++){
+      v=tx.outs[i];
+      h+='<div class="bx-o"><i>Output '+i+'</i><div class="bx-ov"><b>'+btcStr(v)+"<em>BTC</em></b>"
+        +"<span>"+grp(v.toString())+" sats</span></div></div>";
+    }
+    if(tx.outs.length>shown){
+      h+='<div class="bx-more">'+grp(String(tx.outs.length-shown))+" more output"+(tx.outs.length-shown===1?"":"s")
+        +" not listed, all of them counted in the total above.</div>";
+    }
+    h+="</div>";
+    h+='<div class="bx-deep">Destinations, scripts, witness items, sequence flags and the wtxid are not shown here, and no fee can be worked out from hex alone because the amounts being spent are not part of it. <a href="/tools/decode">The full decoder</a> takes the same hex apart field by field.</div>';
+    paint(h);
+  }
+
+  /* ---------- the Broadcast button ----------
+     Armed only while the pasted bytes parse, and disarmed again the moment
+     they change, so the hex that is sent is always the hex that was read.
+     A transaction already accepted stays disarmed: every node on the path
+     drops a duplicate, so pushing it twice achieves nothing. */
+  var armed=null,sending=false,sentHex=null;
+  function showOut(cls,head,body){
+    if(!out)return;
+    out.className="bx-out"+(cls?" "+cls:"");
+    out.innerHTML="<b>"+head+"</b>"+(body?"<i>"+body+"</i>":"");
+    out.hidden=false;
+  }
+  function armBtn(){
+    if(!btn)return;
+    var on=!!armed&&!sending&&armed!==sentHex;
+    btn.disabled=!on;
+    btn.setAttribute("aria-disabled",on?"false":"true");
+  }
+  function arm(hex){armed=hex;armBtn();}
+  /* a changed textarea means any outcome still on screen describes bytes that
+     are no longer the ones in the box, so it goes with them */
+  function disarm(){armed=null;if(out&&!sending)out.hidden=true;armBtn();}
+
+  /* ---------- self-test ---------- */
+  var ready=false,failed=false,queued=null;
+  function fail(why){
+    failed=true;
+    console.error("[/tools/broadcast] self-test FAILED: "+why);
+    paint('<div class="bx-status bx-bad">&#10007; Self-test failed</div>'
+      +'<div class="bx-note">This page checks itself against two known transactions every time it loads, and one of those checks did not match ('+esc(why)+'). Rather than show a summary that might be wrong, reading is switched off. Please <a href="/contact">tell us</a> so it can be fixed.</div>');
+    inp.setAttribute("disabled","disabled");
+    disarm();
+  }
+  function selfTest(){
+    var checks=[],passed=0;
+    function eq(name,got,want){
+      checks.push(name);
+      if(String(got)!==String(want))throw new Error(name+": got "+got+", expected "+want);
+      passed++;
+    }
+    if(!window.crypto||!crypto.subtle||!crypto.subtle.digest){
+      fail("crypto.subtle is unavailable in this browser");
+      return;
+    }
+    var a,b;
+    try{
+      a=parse(cleanHex(EX.legacy));
+      b=parse(cleanHex(EX.segwit));
+    }catch(e){fail("a test vector did not parse: "+e.message);return;}
+    Promise.all([txidOf(a),txidOf(b)]).then(function(r){
+      /* legacy: block 170, the first person to person bitcoin payment */
+      eq("legacy txid",r[0],"f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16");
+      eq("legacy segwit flag",a.segwit,false);
+      eq("legacy inputs",a.nIn,1);
+      eq("legacy outputs",a.outs.length,2);
+      eq("legacy out0 value",a.outs[0].toString(),"1000000000");
+      eq("legacy out1 value",a.outs[1].toString(),"4000000000");
+      eq("legacy total out",a.total.toString(),"5000000000");
+      eq("legacy size",a.size,275);
+      eq("legacy weight",a.weight,1100);
+      eq("legacy vsize",a.vsize,275);
+      /* segwit: the signed P2WPKH example from BIP-143; this txid also proves
+         the stripped serialization is rebuilt correctly, since hashing the
+         full bytes would give the wtxid instead */
+      eq("segwit txid",r[1],"e8151a2af31c368a35053ddd4bdb285a8595c769a3ad83e0fa02314a602d4609");
+      eq("segwit flag",b.segwit,true);
+      eq("segwit inputs",b.nIn,2);
+      eq("segwit outputs",b.outs.length,2);
+      eq("segwit out0 value",b.outs[0].toString(),"112340000");
+      eq("segwit total out",b.total.toString(),"335790000");
+      eq("segwit size",b.size,343);
+      eq("segwit stripped size",b.strippedSize,233);
+      eq("segwit weight",b.weight,1042);
+      eq("segwit vsize",b.vsize,261);
+      /* formatting: ten BTC, one satoshi and a grouped thousand, so a
+         misplaced decimal point or a lost separator shows up here */
+      eq("btc formatting",btcStr(BigInt(1000000000)),"10.00000000");
+      eq("sat formatting",btcStr(BigInt(1)),"0.00000001");
+      eq("grouped formatting",btcStr(BigInt(100000000000)),"1,000.00000000");
+      ready=true;
+      console.log("[/tools/broadcast] self-test "+passed+"/"+checks.length+" passed (block 170 legacy tx, BIP-143 segwit tx)");
+      if(queued!==null){var q=queued;queued=null;go(q);}
+    })["catch"](function(e){fail(e&&e.message?e.message:"unknown assertion failure");});
+  }
+
+  /* ---------- wiring ---------- */
+  var run=0,deb=null;
+  function go(raw){
+    if(failed)return;
+    if(!ready){queued=raw;return;}
+    var token=++run,s;
+    disarm();
+    try{s=cleanHex(raw);}catch(e){paintErr(e.message);return;}
+    if(!s){paintIdle();return;}
+    var tx;
+    try{tx=parse(s);}catch(e2){paintErr(e2.message);return;}
+    txidOf(tx).then(function(id){
+      if(token!==run)return;
+      paintTx(tx,id);
+      arm(s);
+    })["catch"](function(){
+      if(token!==run)return;
+      paintErr("Hashing failed in this browser, so no transaction id can be shown.");
+    });
+  }
+  function count(){
+    var s=(""+inp.value).replace(/\s+/g,"").replace(/^0x/i,"");
+    var n=Math.floor(s.length/2);
+    cnt.textContent=grp(String(n))+" byte"+(n===1?"":"s");
+  }
+  inp.addEventListener("input",function(){
+    count();
+    clearTimeout(deb);
+    deb=setTimeout(function(){go(inp.value);},150);
+  });
+  document.querySelectorAll(".bx-ex button[data-ex]").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(failed)return;
+      inp.value=EX[b.dataset.ex];
+      count();go(inp.value);
+    });
+  });
+  document.getElementById("bx-clear").addEventListener("click",function(){
+    if(failed)return;
+    inp.value="";count();go("");inp.focus();
+  });
+
+  /* ---------- the one request this page makes ----------
+     POST {"hex":"..."} to this site's own node, same origin. OB_DATA_API is
+     set by Base.astro in a script at the end of body, so it is read here, in
+     the handler, and never at parse time. */
+  function api(){
+    return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";
+  }
+  /* a transaction id is 64 hex characters or it is not one, and only one that
+     shape is ever turned into a link */
+  function txLink(id){
+    return /^[0-9a-f]{64}$/.test(""+id)?'<a href="/'+id+'">'+id+"</a>":"";
+  }
+  if(btn)btn.addEventListener("click",function(){
+    if(failed||sending||!armed)return;
+    var hex=armed;
+    sending=true;armBtn();
+    showOut("","Pushing it to the node&hellip;","The node checks the transaction against mempool policy first, then relays it to its peers.");
+    fetch(api()+"/broadcast",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({hex:hex})
+    }).then(function(r){
+      return r.json()["catch"](function(){return null;}).then(function(d){return {status:r.status,body:d};});
+    }).then(function(r){
+      var d=r.body||{},link=txLink(d.txid);
+      if(r.status===200&&d.ok&&link){
+        sentHex=hex;
+        showOut("is-ok","&#10003; Accepted and relayed",
+          "The node took it and passed it to its peers. It is now waiting for a miner, not confirmed. Follow it at "+link+".");
+      }else if(r.status===422){
+        var why=d.reason||"not accepted by mempool policy";
+        /* "already in mempool" and "already in block chain" are not failures:
+           the push worked earlier and there is nothing left to do */
+        if(/already/i.test(why)){
+          sentHex=hex;
+          showOut("is-ok","&#10003; The network already has it",
+            "The node answered: "+esc(why)
+            +". That means this transaction was pushed before and is already known, so there is nothing left to do"
+            +(link?" here. Follow it at "+link+".":" here."));
+        }else{
+          showOut("is-bad","&#10007; The node refused it",
+            "Reason given: "+esc(why)
+            +'. Nothing was relayed. The section below on refusals covers the common ones, and <a href="/tools/decode">the full decoder</a> shows the field a malformed transaction breaks at.');
+        }
+      }else if(r.status===429){
+        showOut("is-bad","&#10007; Too many pushes from this connection",
+          "The broadcast endpoint is rate limited to a small burst a minute per address. Wait a minute and press it again; nothing was relayed.");
+      }else{
+        showOut("is-bad","&#10007; The push did not go through",
+          "The node could not be reached, or answered in a way this page could not read"
+          +(typeof d.error==="string"?" ("+esc(d.error)+")":"")
+          +". Nothing was relayed. Try again, and if it keeps failing you can push the same hex from your own wallet or node.");
+      }
+    })["catch"](function(){
+      showOut("is-bad","&#10007; The push did not go through",
+        "The request never reached the node, so nothing was relayed. Check the connection and try again.");
+    })["then"](function(){
+      sending=false;armBtn();
+    });
+  });
+  selfTest();
+})();
+</script>
+</Base>

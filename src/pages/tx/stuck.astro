@@ -1,0 +1,227 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Stuck Bitcoin Transaction: What to Do, Step by Step - OpenBitcoin" description="A stuck, unconfirmed Bitcoin transaction is not lost. How to check where it stands, compare its fee to current rates, and bump it with RBF or CPFP.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Stuck transaction</div>
+    <h1>Your transaction is not lost</h1>
+    <p class="doc-lede">An unconfirmed transaction is waiting in line, nothing more. It ends one of two ways: a miner confirms it, or the network forgets it and the coins are spendable in your wallet again. Here is how to check where yours stands and what, if anything, to do.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="tk-card">
+      <div class="tk-tlab">First, the truth</div>
+      <p class="tk-truthline">While a transaction is unconfirmed, the coins have not gone anywhere. They are queued, and the queue has exactly two exits.</p>
+      <div class="tk-outcomes">
+        <div class="tk-out">
+          <b class="tk-ok">It confirms</b>
+          <p>A miner includes it in a block and the payment completes. This is how most waiting transactions end, usually within hours.</p>
+        </div>
+        <div class="tk-out">
+          <b>It drops back</b>
+          <p>If the fee stays below the going rate for long enough, nodes forget it (about two weeks is the common default) and the coins are spendable in your wallet again, as if the send never happened.</p>
+        </div>
+      </div>
+      <p class="tk-fine">There is no third outcome. Waiting cannot destroy, shrink, or misplace the coins.</p>
+    </div>
+
+    <div class="tk-card tk-mt">
+      <div class="tk-tlab">Triage, three steps</div>
+      <ol class="tk-steps">
+        <li><b>Look up your transaction.</b> Paste the transaction ID (txid) into the <a href="/">transaction lookup</a> and read the confirmation count. Zero means it is waiting in the mempool; one or more means it is already in the chain and finishing on its own. Your wallet shows the txid on the transaction's detail screen.</li>
+        <li><b>Compare what you paid to what clears now.</b> The lookup and most wallets show your fee in sat/vB. Right now the targets are
+          <span class="tk-chip">economy <b id="tk-eco">2</b> sat/vB</span> <span class="tk-chip">fastest <b id="tk-fast">5</b> sat/vB</span>.
+          At or above the fastest rate, expect the next block or two. In between, expect hours. Below economy, it can sit for days. The full picture is on <a href="/fees">/fees</a> and <a href="/mempool">/mempool</a> (<b class="tk-num" id="tk-mp">4,182</b> transactions waiting right now).</li>
+        <li><b>Decide, without hurry.</b> Three options, and the first one is right for most people:</li>
+      </ol>
+      <div class="tk-opts">
+        <div class="tk-opt">
+          <b>Wait</b>
+          <p>Free, and usually enough. The queue drains with every block, and quiet hours clear fees that looked hopeless at the peak.</p>
+        </div>
+        <div class="tk-opt">
+          <b>Speed it up</b>
+          <p>Bump the fee with RBF, or use CPFP if you control an output of the transaction. Both are explained below.</p>
+        </div>
+        <div class="tk-opt">
+          <b>Replace or cancel</b>
+          <p>An RBF replacement can also redirect the payment back to your own wallet, which cancels it. Only possible while unconfirmed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tk-duo tk-mt">
+      <div class="tk-card">
+        <div class="tk-tlab">Speed-up 1: RBF (replace-by-fee)</div>
+        <div class="tk-row">
+          <span class="tk-rlab">What it does</span>
+          <p>Your wallet resends the same payment with a higher fee. The new version replaces the old one in the queue; only one of the two can ever confirm, so nothing is paid twice.</p>
+        </div>
+        <div class="tk-row">
+          <span class="tk-rlab">When it works</span>
+          <p>Only if the original was sent with RBF enabled. Most modern wallets enable it by default and label the action something like Bump fee or Increase fee.</p>
+        </div>
+        <div class="tk-row">
+          <span class="tk-rlab tk-warn">One caution</span>
+          <p>Bump to a rate that actually clears; check the fastest target on <a href="/fees">/fees</a> first. A series of small bumps spends more than a single adequate one.</p>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-tlab">Speed-up 2: CPFP (child-pays-for-parent)</div>
+        <div class="tk-row">
+          <span class="tk-rlab">What it does</span>
+          <p>You spend an output of the stuck transaction back to yourself with a high fee. A miner cannot take the child without the parent, so the pair is confirmed together.</p>
+        </div>
+        <div class="tk-row">
+          <span class="tk-rlab">When it works</span>
+          <p>Whenever you control an output of the stuck transaction: you are the receiver, or the sender with change coming back. No RBF flag is needed.</p>
+        </div>
+        <div class="tk-row">
+          <span class="tk-rlab tk-warn">One caution</span>
+          <p>The child's fee has to carry both transactions, so it is priced by their combined size. Wallets with a built-in CPFP option do this math for you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tk-card tk-mt">
+      <div class="tk-tlab">Four myths, retired</div>
+      <ul class="tk-myths">
+        <li><b>"The network ate my coins."</b><span>It cannot. An unconfirmed transaction either confirms or is forgotten, and forgotten coins are spendable again. Nothing is consumed by waiting.</span></li>
+        <li><b>"Someone froze my transaction."</b><span>Nobody can freeze a normal transaction. There is no operator, support desk, or admin switch between you and the miners; there is only a queue ordered by fee rate.</span></li>
+        <li><b>"A paid accelerator will push it through."</b><span>Paying a third party to "accelerate" is usually a scam; see the <a href="/learn/scams">scams guide</a>. The honest accelerators are RBF and CPFP above, run from your own wallet, costing nothing beyond the fee itself.</span></li>
+        <li><b>"I have to act right now."</b><span>Patience is free and usually works. Nothing gets worse while you wait; the worst case is the coins returning to your wallet.</span></li>
+      </ul>
+    </div>
+
+    <div class="tk-about doc-prose">
+      <p>A stuck transaction is an unconfirmed Bitcoin transaction paying a lower fee rate than miners are currently including, so it waits in the mempool behind better-paying traffic. Everything this page compares against (fee targets, mempool depth, block height) is read from our own node, as documented at <a href="/sources">/sources</a>, and is informational under the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="tk-rs"><b id="tk-reco">2 sat/vB</b><i>economy, a few hours</i></div>
+      <div class="tk-rs"><b id="tk-rfast">5 sat/vB</b><i>fastest, next block</i></div>
+      <div class="tk-rs"><b id="tk-rmp">4,182</b><i>transactions waiting</i></div>
+      <div class="tk-rs"><b id="tk-since">4m 12s</b><i>since last block</i></div>
+      <div class="tk-rs"><b id="tk-h">958,341</b><i>current height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees">Fee rates right now</a>
+        <a href="/mempool">The mempool right now</a>
+        <a href="/learn/scams">Common bitcoin scams</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .tk-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .tk-mt{margin-top:14px}
+  .tk-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .tk-truthline{font:600 14.5px/1.65 var(--sans);color:var(--ink);margin:0}
+  .tk-outcomes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .tk-out{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:12px 14px}
+  .tk-out b{display:block;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .tk-out b.tk-ok{color:var(--up)}
+  .tk-out p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:6px 0 0}
+  .tk-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .tk-steps{margin:0;padding-left:22px}
+  .tk-steps li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .tk-steps li::marker{color:var(--acc);font-weight:700}
+  .tk-steps b{color:var(--ink);font-weight:600}
+  .tk-steps a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tk-steps a:hover{border-bottom-style:solid}
+  .tk-chip{display:inline-block;background:var(--field);border:1px solid var(--line-2);border-radius:6px;padding:2px 9px;
+    font:600 11.5px var(--mono);color:var(--ink-2);white-space:nowrap}
+  .tk-chip b{color:var(--price-ink);font-weight:700;font-variant-numeric:tabular-nums}
+  .tk-num{font:700 13px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums}
+  .tk-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .tk-opt{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:12px 14px}
+  .tk-opt b{display:block;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+  .tk-opt p{font:500 12.5px/1.6 var(--sans);color:var(--ink-2);margin:6px 0 0}
+  .tk-duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .tk-row+.tk-row{margin-top:12px;padding-top:12px;border-top:1px dotted var(--line-2)}
+  .tk-rlab{display:block;font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--acc)}
+  .tk-rlab.tk-warn{color:var(--down)}
+  .tk-row p{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:5px 0 0}
+  .tk-row a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tk-row a:hover{border-bottom-style:solid}
+  .tk-myths{margin:0;padding:0;list-style:none}
+  .tk-myths li{padding:11px 0;border-bottom:1px dotted var(--line-2)}
+  .tk-myths li:first-child{padding-top:0}
+  .tk-myths li:last-child{border-bottom:0;padding-bottom:0}
+  .tk-myths b{display:block;font:600 14px/1.5 var(--sans);color:var(--ink)}
+  .tk-myths span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:4px}
+  .tk-myths a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tk-myths a:hover{border-bottom-style:solid}
+  .tk-about{margin-top:14px}
+  .tk-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .tk-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .tk-rs:last-child{border-bottom:0}
+  .tk-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .tk-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .tk-outcomes,.tk-opts,.tk-duo{grid-template-columns:1fr}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* fallback baseline; every figure below repaints from the live summary */
+  var P={height:958341,since:252,at:Date.now(),eco:2,fast:5,mp:4182};
+  function fmt(n){return n.toLocaleString("en-US");}
+  function rate(r){return r%1?r.toFixed(1):String(r);}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function sinceTxt(s){var m=Math.floor(s/60);return m?m+"m "+(s%60)+"s":s+"s";}
+  function paint(){
+    txt("tk-eco",rate(P.eco));
+    txt("tk-fast",rate(P.fast));
+    txt("tk-reco",rate(P.eco)+" sat/vB");
+    txt("tk-rfast",rate(P.fast)+" sat/vB");
+    txt("tk-mp",fmt(P.mp));
+    txt("tk-rmp",fmt(P.mp));
+    txt("tk-h",fmt(P.height));
+  }
+  function paintSince(){
+    txt("tk-since",sinceTxt(P.since+Math.floor((Date.now()-P.at)/1000)));
+  }
+  setInterval(paintSince,1000);
+  /* a /summary payload's fee targets and mempool depth, the same fields the
+     /fees page reads */
+  function applyFees(d){
+    var f=d&&d.fees;if(!f)return false;
+    if(typeof f.economy==="number"&&f.economy>0)P.eco=f.economy;
+    if(typeof f.fastest==="number"&&f.fastest>0)P.fast=f.fastest;
+    if(typeof f.mempoolCount==="number"&&f.mempoolCount>=0)P.mp=f.mempoolCount;
+    return true;
+  }
+  /* live tick + new blocks arrive via the chrome hook (~1.5s); chrome.js
+     refreshes window.OB_LIVE with the newest summary before each call */
+  window.obPaintFiat=function(S){
+    if(typeof S.height==="number")P.height=S.height;
+    if(typeof S.since==="number"){P.since=S.since;P.at=Date.now();}
+    if(window.OB_LIVE)applyFees(window.OB_LIVE);
+    paint();paintSince();
+  };
+  paint();paintSince();
+  /* initial fetch: OB_DATA_API is set by Base.astro after this script parses,
+     so wait for DOMContentLoaded; on any failure the fallbacks stand */
+  function boot(){
+    try{
+      if(window.OB_LIVE&&applyFees(window.OB_LIVE)){paint();return;}
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/summary").then(function(r){return r.json();}).then(function(d){
+        if(applyFees(d))paint();
+      }).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

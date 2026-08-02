@@ -1,0 +1,516 @@
+﻿---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base analytics={false} title="BIP39 Word Check: Is This Word on the Seed Wordlist? - OpenBitcoin" description="Check a single BIP39 word against the official 2048-word English wordlist in your browser, with autocomplete and near-miss suggestions for typos.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Word check</div>
+    <h1>BIP39 word check</h1>
+    <p class="doc-lede">Type one word and see whether it is on the official 2048-word list, with autocomplete for partial words and near misses when it is not. One word at a time: no page here takes a phrase.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="wc-card">
+      <div class="wc-lab">One word</div>
+      <input id="wc-in" class="wc-input" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" maxlength="32" placeholder="abandon" aria-label="One BIP39 word to check" disabled>
+      <div class="wc-ex" aria-label="Example words">
+        <span>Try:</span>
+        <button type="button" data-ex="abandon">abandon</button>
+        <button type="button" data-ex="satoshi">satoshi</button>
+        <button type="button" data-ex="recieve">a misspelling</button>
+        <button type="button" data-ex="aba">a fragment</button>
+      </div>
+      <div class="wc-res" id="wc-res" role="status" aria-live="polite">
+        <div class="wc-status wc-mut">Checking the wordlist against its published checksum</div>
+        <div class="wc-note">The 2048-word English list is built into this page. Before it answers anything, it verifies its own copy.</div>
+      </div>
+      <div class="wc-sugwrap" id="wc-sugwrap" hidden>
+        <div class="wc-suglab" id="wc-suglab">Suggestions</div>
+        <div class="wc-sug" id="wc-sug"></div>
+      </div>
+    </div>
+    <p class="wc-fine">Never type a seed phrase, a private key, an xprv or a 2FA secret into any website, including this one. This field keeps one word and discards everything after it.</p>
+
+    <div class="wc-warn">
+      <div class="wc-wlab">Why there is no phrase box on this page</div>
+      <div class="doc-prose">
+        <p>A seed phrase typed into a web page is a seed phrase that has left your control. Whoever runs the server can change what the page does between one visit and the next, the browser can cache and autofill the field, an extension can read it, and a single bad deploy turns every visitor's backup into someone else's money. So the rule here is absolute and has no exceptions: <strong>no hosted page on this site accepts a seed phrase, a private key, an xprv or a 2FA secret.</strong> This one takes a word.</p>
+        <p>Checking a whole phrase is genuinely useful, because the last word of a BIP39 phrase is a checksum and a damaged backup can often be repaired. That work belongs on a machine with no network. The <a href="/tools/seed-recovery">offline seed toolkit</a> is a single self-contained file you download, disconnect from the internet, and open from your own disk; it does the full phrase, the checksum and missing-word recovery with nothing to send anywhere. Read its instructions before you use it, and never open it while you are online.</p>
+      </div>
+    </div>
+
+    <div class="doc-card wc-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What the list is</h2>
+        <p>BIP39 turns random entropy into words a human can write down. The English list holds exactly 2048 entries, which is two to the eleventh, so every word carries eleven bits: twelve words are 128 bits of entropy plus a four-bit checksum, twenty-four words are 256 bits plus eight. The words were picked to be common, unambiguous and clearly different from one another. Bitcoin is not among them. Satoshi is, at position 1,532.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The first four letters</h2>
+        <p>No two words on the list share their first four letters, and 103 of the words are only three letters long, so four characters per word is always enough to name a word exactly. That is why steel backup plates stamp four letters per word and stop. If your metal backup recorded four letters, it recorded the phrase. It also means a smudged fifth character is usually harmless, while a wrong first letter is not: check the start of a word before you worry about its ending.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>A word being valid proves very little</h2>
+        <p>This page answers one narrow question: is this string one of the 2048 words. It cannot tell you the word belongs in your phrase, sits in the right position, or that the phrase as a whole passes its checksum, because it never sees the phrase. A phrase made entirely of valid words can still be wrong, and a phrase that is right for the wrong wallet type is still empty. <a href="/learn/seed-backup">How to back up a seed</a> covers recording them properly, and <a href="/learn/self-custody">self custody</a> covers what a backup is actually protecting.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>If a site asks for the whole thing</h2>
+        <p>Nothing legitimate needs your twelve or twenty-four words typed into a browser. Not a wallet upgrade, not a support agent, not an airdrop check, not a "validation" page that appeared in a search result or a direct message. The request itself is the fraud, and it is the single most common way people lose bitcoin. <a href="/learn/scams">Common scams</a> lists the patterns; <a href="/wallets">wallets</a> covers software that never asks.</p>
+      </div>
+    </div>
+
+    <div class="wc-about doc-prose">
+      <p>The list embedded here is the English wordlist from the BIP39 specification, unchanged since 2013, verified in your browser against its published SHA-256 checksum before this page will answer anything. Everything runs locally: no request is made with what you type, and the field is limited to one word by design. To check an address instead, use the <a href="/tools/validate">address validator</a>. Data provenance for the rest of the site is at <a href="/sources">/sources</a>; figures and tools are informational under the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The list</div>
+      <div class="wc-t"><b>2,048 words</b><i>Two to the eleventh, so 11 bits per word</i></div>
+      <div class="wc-t"><b>3 to 8 letters</b><i>103 are three letters; 88 are eight</i></div>
+      <div class="wc-t"><b>4 letters identify</b><i>No two words share a four-letter start</i></div>
+      <div class="wc-t"><b>English, sorted</b><i>Alphabetical, lowercase, no accents</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/seed-recovery">Offline seed toolkit</a>
+        <a href="/learn/seed-backup">How to back up a seed</a>
+        <a href="/learn/self-custody">Self custody, explained</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .wc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .wc-mt{margin-top:14px}
+  .wc-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .wc-input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 16.5px var(--mono);padding:13px 15px;outline:none;letter-spacing:.02em}
+  .wc-input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .wc-input::placeholder{color:var(--ph);font-weight:600}
+  .wc-input:disabled{opacity:.55;cursor:not-allowed}
+  .wc-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .wc-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .wc-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .wc-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .wc-res{margin-top:16px;padding-top:14px;border-top:1px dotted var(--line-2)}
+  .wc-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .wc-status.wc-ok{color:var(--up)}
+  .wc-status.wc-bad{color:var(--down)}
+  .wc-status.wc-mut{color:var(--ink-3)}
+  .wc-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .wc-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .wc-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:10px}
+  .wc-note b{color:var(--ink);font-weight:700}
+  .wc-note code{font:700 12.5px var(--mono);background:var(--field);color:var(--acc);border-radius:5px;padding:2px 6px}
+  .wc-alert{font:600 12px/1.6 var(--mono);letter-spacing:.03em;color:var(--down);margin-top:9px}
+  .wc-sugwrap{margin-top:14px;padding-top:12px;border-top:1px dotted var(--line-2)}
+  .wc-suglab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .wc-sug{display:flex;gap:6px;flex-wrap:wrap}
+  .wc-sug button{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 12px var(--mono);letter-spacing:.02em;padding:6px 10px;cursor:pointer}
+  .wc-sug button:hover{border-color:rgba(255,166,60,.5);color:var(--acc)}
+  .wc-sug em{font:600 11px var(--mono);font-style:normal;color:var(--ink-3);align-self:center;padding-left:2px}
+  .wc-fine{font:600 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin:10px 2px 0}
+  .wc-warn{margin-top:14px;background:var(--panel);border:1px solid rgba(255,166,60,.4);border-left:3px solid var(--acc);
+    border-radius:12px;padding:16px 24px 20px}
+  .wc-wlab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .wc-about{margin-top:14px}
+  .wc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .wc-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .wc-t:last-child{border-bottom:0}
+  .wc-t b{display:block;font:700 13px var(--mono);color:var(--acc)}
+  .wc-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .wc-card{padding:18px 18px 20px}
+    .wc-warn{padding:14px 18px 18px}
+    .wc-input{font-size:15px}
+    .wc-status{font-size:13.5px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* ================= BIP39 word check, hosted-safe =================
+     SAFETY: single-word lookup only. No fetch, no XHR, no beacon, no storage
+     anywhere in this script. The word you type is compared against an inline
+     array and then forgotten. Four or more words pasted in wipes the field
+     without checking anything.
+
+     The wordlist below is bip-0039/english.txt from the bitcoin/bips
+     repository, inlined verbatim in list order.
+
+     SELF-TEST VECTORS (all checked on load; results are refused if any fail):
+       V1  length is 2048
+       V2  first word "abandon", last word "zoo"
+       V3  sorted ascending, every entry lowercase a-z, 3 to 8 letters
+       V4  first four letters unique across all 2048 words
+       V5  known indices: abandon 0, ability 1, about 3, acid 15, legal 1019,
+           letter 1028, winner 2015, wrong 2037, zone 2046, zoo 2047
+           (the BIP39 spec vectors "abandon...about", "legal winner...",
+           "letter advice..." and "zoo zoo...wrong" all land on these)
+       V6  SHA-256 of the list joined by newlines, with a trailing newline,
+           equals 2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda
+           which is the published checksum of bip-0039/english.txt
+     ================================================================= */
+
+  var WL=(
+   "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid"
+  +" acoustic acquire across act action actor actress actual adapt add addict address adjust admit adult advance"
+  +" advice aerobic affair afford afraid again age agent agree ahead aim air airport aisle alarm album"
+  +" alcohol alert alien all alley allow almost alone alpha already also alter always amateur amazing among"
+  +" amount amused analyst anchor ancient anger angle angry animal ankle announce annual another answer antenna antique"
+  +" anxiety any apart apology appear apple approve april arch arctic area arena argue arm armed armor"
+  +" army around arrange arrest arrive arrow art artefact artist artwork ask aspect assault asset assist assume"
+  +" asthma athlete atom attack attend attitude attract auction audit august aunt author auto autumn average avocado"
+  +" avoid awake aware away awesome awful awkward axis baby bachelor bacon badge bag balance balcony ball"
+  +" bamboo banana banner bar barely bargain barrel base basic basket battle beach bean beauty because become"
+  +" beef before begin behave behind believe below belt bench benefit best betray better between beyond bicycle"
+  +" bid bike bind biology bird birth bitter black blade blame blanket blast bleak bless blind blood"
+  +" blossom blouse blue blur blush board boat body boil bomb bone bonus book boost border boring"
+  +" borrow boss bottom bounce box boy bracket brain brand brass brave bread breeze brick bridge brief"
+  +" bright bring brisk broccoli broken bronze broom brother brown brush bubble buddy budget buffalo build bulb"
+  +" bulk bullet bundle bunker burden burger burst bus business busy butter buyer buzz cabbage cabin cable"
+  +" cactus cage cake call calm camera camp can canal cancel candy cannon canoe canvas canyon capable"
+  +" capital captain car carbon card cargo carpet carry cart case cash casino castle casual cat catalog"
+  +" catch category cattle caught cause caution cave ceiling celery cement census century cereal certain chair chalk"
+  +" champion change chaos chapter charge chase chat cheap check cheese chef cherry chest chicken chief child"
+  +" chimney choice choose chronic chuckle chunk churn cigar cinnamon circle citizen city civil claim clap clarify"
+  +" claw clay clean clerk clever click client cliff climb clinic clip clock clog close cloth cloud"
+  +" clown club clump cluster clutch coach coast coconut code coffee coil coin collect color column combine"
+  +" come comfort comic common company concert conduct confirm congress connect consider control convince cook cool copper"
+  +" copy coral core corn correct cost cotton couch country couple course cousin cover coyote crack cradle"
+  +" craft cram crane crash crater crawl crazy cream credit creek crew cricket crime crisp critic crop"
+  +" cross crouch crowd crucial cruel cruise crumble crunch crush cry crystal cube culture cup cupboard curious"
+  +" current curtain curve cushion custom cute cycle dad damage damp dance danger daring dash daughter dawn"
+  +" day deal debate debris decade december decide decline decorate decrease deer defense define defy degree delay"
+  +" deliver demand demise denial dentist deny depart depend deposit depth deputy derive describe desert design desk"
+  +" despair destroy detail detect develop device devote diagram dial diamond diary dice diesel diet differ digital"
+  +" dignity dilemma dinner dinosaur direct dirt disagree discover disease dish dismiss disorder display distance divert divide"
+  +" divorce dizzy doctor document dog doll dolphin domain donate donkey donor door dose double dove draft"
+  +" dragon drama drastic draw dream dress drift drill drink drip drive drop drum dry duck dumb"
+  +" dune during dust dutch duty dwarf dynamic eager eagle early earn earth easily east easy echo"
+  +" ecology economy edge edit educate effort egg eight either elbow elder electric elegant element elephant elevator"
+  +" elite else embark embody embrace emerge emotion employ empower empty enable enact end endless endorse enemy"
+  +" energy enforce engage engine enhance enjoy enlist enough enrich enroll ensure enter entire entry envelope episode"
+  +" equal equip era erase erode erosion error erupt escape essay essence estate eternal ethics evidence evil"
+  +" evoke evolve exact example excess exchange excite exclude excuse execute exercise exhaust exhibit exile exist exit"
+  +" exotic expand expect expire explain expose express extend extra eye eyebrow fabric face faculty fade faint"
+  +" faith fall false fame family famous fan fancy fantasy farm fashion fat fatal father fatigue fault"
+  +" favorite feature february federal fee feed feel female fence festival fetch fever few fiber fiction field"
+  +" figure file film filter final find fine finger finish fire firm first fiscal fish fit fitness"
+  +" fix flag flame flash flat flavor flee flight flip float flock floor flower fluid flush fly"
+  +" foam focus fog foil fold follow food foot force forest forget fork fortune forum forward fossil"
+  +" foster found fox fragile frame frequent fresh friend fringe frog front frost frown frozen fruit fuel"
+  +" fun funny furnace fury future gadget gain galaxy gallery game gap garage garbage garden garlic garment"
+  +" gas gasp gate gather gauge gaze general genius genre gentle genuine gesture ghost giant gift giggle"
+  +" ginger giraffe girl give glad glance glare glass glide glimpse globe gloom glory glove glow glue"
+  +" goat goddess gold good goose gorilla gospel gossip govern gown grab grace grain grant grape grass"
+  +" gravity great green grid grief grit grocery group grow grunt guard guess guide guilt guitar gun"
+  +" gym habit hair half hammer hamster hand happy harbor hard harsh harvest hat have hawk hazard"
+  +" head health heart heavy hedgehog height hello helmet help hen hero hidden high hill hint hip"
+  +" hire history hobby hockey hold hole holiday hollow home honey hood hope horn horror horse hospital"
+  +" host hotel hour hover hub huge human humble humor hundred hungry hunt hurdle hurry hurt husband"
+  +" hybrid ice icon idea identify idle ignore ill illegal illness image imitate immense immune impact impose"
+  +" improve impulse inch include income increase index indicate indoor industry infant inflict inform inhale inherit initial"
+  +" inject injury inmate inner innocent input inquiry insane insect inside inspire install intact interest into invest"
+  +" invite involve iron island isolate issue item ivory jacket jaguar jar jazz jealous jeans jelly jewel"
+  +" job join joke journey joy judge juice jump jungle junior junk just kangaroo keen keep ketchup"
+  +" key kick kid kidney kind kingdom kiss kit kitchen kite kitten kiwi knee knife knock know"
+  +" lab label labor ladder lady lake lamp language laptop large later latin laugh laundry lava law"
+  +" lawn lawsuit layer lazy leader leaf learn leave lecture left leg legal legend leisure lemon lend"
+  +" length lens leopard lesson letter level liar liberty library license life lift light like limb limit"
+  +" link lion liquid list little live lizard load loan lobster local lock logic lonely long loop"
+  +" lottery loud lounge love loyal lucky luggage lumber lunar lunch luxury lyrics machine mad magic magnet"
+  +" maid mail main major make mammal man manage mandate mango mansion manual maple marble march margin"
+  +" marine market marriage mask mass master match material math matrix matter maximum maze meadow mean measure"
+  +" meat mechanic medal media melody melt member memory mention menu mercy merge merit merry mesh message"
+  +" metal method middle midnight milk million mimic mind minimum minor minute miracle mirror misery miss mistake"
+  +" mix mixed mixture mobile model modify mom moment monitor monkey monster month moon moral more morning"
+  +" mosquito mother motion motor mountain mouse move movie much muffin mule multiply muscle museum mushroom music"
+  +" must mutual myself mystery myth naive name napkin narrow nasty nation nature near neck need negative"
+  +" neglect neither nephew nerve nest net network neutral never news next nice night noble noise nominee"
+  +" noodle normal north nose notable note nothing notice novel now nuclear number nurse nut oak obey"
+  +" object oblige obscure observe obtain obvious occur ocean october odor off offer office often oil okay"
+  +" old olive olympic omit once one onion online only open opera opinion oppose option orange orbit"
+  +" orchard order ordinary organ orient original orphan ostrich other outdoor outer output outside oval oven over"
+  +" own owner oxygen oyster ozone pact paddle page pair palace palm panda panel panic panther paper"
+  +" parade parent park parrot party pass patch path patient patrol pattern pause pave payment peace peanut"
+  +" pear peasant pelican pen penalty pencil people pepper perfect permit person pet phone photo phrase physical"
+  +" piano picnic picture piece pig pigeon pill pilot pink pioneer pipe pistol pitch pizza place planet"
+  +" plastic plate play please pledge pluck plug plunge poem poet point polar pole police pond pony"
+  +" pool popular portion position possible post potato pottery poverty powder power practice praise predict prefer prepare"
+  +" present pretty prevent price pride primary print priority prison private prize problem process produce profit program"
+  +" project promote proof property prosper protect proud provide public pudding pull pulp pulse pumpkin punch pupil"
+  +" puppy purchase purity purpose purse push put puzzle pyramid quality quantum quarter question quick quit quiz"
+  +" quote rabbit raccoon race rack radar radio rail rain raise rally ramp ranch random range rapid"
+  +" rare rate rather raven raw razor ready real reason rebel rebuild recall receive recipe record recycle"
+  +" reduce reflect reform refuse region regret regular reject relax release relief rely remain remember remind remove"
+  +" render renew rent reopen repair repeat replace report require rescue resemble resist resource response result retire"
+  +" retreat return reunion reveal review reward rhythm rib ribbon rice rich ride ridge rifle right rigid"
+  +" ring riot ripple risk ritual rival river road roast robot robust rocket romance roof rookie room"
+  +" rose rotate rough round route royal rubber rude rug rule run runway rural sad saddle sadness"
+  +" safe sail salad salmon salon salt salute same sample sand satisfy satoshi sauce sausage save say"
+  +" scale scan scare scatter scene scheme school science scissors scorpion scout scrap screen script scrub sea"
+  +" search season seat second secret section security seed seek segment select sell seminar senior sense sentence"
+  +" series service session settle setup seven shadow shaft shallow share shed shell sheriff shield shift shine"
+  +" ship shiver shock shoe shoot shop short shoulder shove shrimp shrug shuffle shy sibling sick side"
+  +" siege sight sign silent silk silly silver similar simple since sing siren sister situate six size"
+  +" skate sketch ski skill skin skirt skull slab slam sleep slender slice slide slight slim slogan"
+  +" slot slow slush small smart smile smoke smooth snack snake snap sniff snow soap soccer social"
+  +" sock soda soft solar soldier solid solution solve someone song soon sorry sort soul sound soup"
+  +" source south space spare spatial spawn speak special speed spell spend sphere spice spider spike spin"
+  +" spirit split spoil sponsor spoon sport spot spray spread spring spy square squeeze squirrel stable stadium"
+  +" staff stage stairs stamp stand start state stay steak steel stem step stereo stick still sting"
+  +" stock stomach stone stool story stove strategy street strike strong struggle student stuff stumble style subject"
+  +" submit subway success such sudden suffer sugar suggest suit summer sun sunny sunset super supply supreme"
+  +" sure surface surge surprise surround survey suspect sustain swallow swamp swap swarm swear sweet swift swim"
+  +" swing switch sword symbol symptom syrup system table tackle tag tail talent talk tank tape target"
+  +" task taste tattoo taxi teach team tell ten tenant tennis tent term test text thank that"
+  +" theme then theory there they thing this thought three thrive throw thumb thunder ticket tide tiger"
+  +" tilt timber time tiny tip tired tissue title toast tobacco today toddler toe together toilet token"
+  +" tomato tomorrow tone tongue tonight tool tooth top topic topple torch tornado tortoise toss total tourist"
+  +" toward tower town toy track trade traffic tragic train transfer trap trash travel tray treat tree"
+  +" trend trial tribe trick trigger trim trip trophy trouble truck true truly trumpet trust truth try"
+  +" tube tuition tumble tuna tunnel turkey turn turtle twelve twenty twice twin twist two type typical"
+  +" ugly umbrella unable unaware uncle uncover under undo unfair unfold unhappy uniform unique unit universe unknown"
+  +" unlock until unusual unveil update upgrade uphold upon upper upset urban urge usage use used useful"
+  +" useless usual utility vacant vacuum vague valid valley valve van vanish vapor various vast vault vehicle"
+  +" velvet vendor venture venue verb verify version very vessel veteran viable vibrant vicious victory video view"
+  +" village vintage violin virtual virus visa visit visual vital vivid vocal voice void volcano volume vote"
+  +" voyage wage wagon wait walk wall walnut want warfare warm warrior wash wasp waste water wave"
+  +" way wealth weapon wear weasel weather web wedding weekend weird welcome west wet whale what wheat"
+  +" wheel when where whip whisper wide width wife wild will win window wine wing wink winner"
+  +" winter wire wisdom wise wish witness wolf woman wonder wood wool word work world worry worth"
+  +" wrap wreck wrestle wrist write wrong yard year yellow you young youth zebra zero zone zoo"
+  ).split(" ");
+
+  var LIST_SHA="2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda";
+  var VEC={abandon:0,ability:1,about:3,acid:15,legal:1019,letter:1028,winner:2015,wrong:2037,zone:2046,zoo:2047};
+
+  var IDX={},i;
+  for(i=0;i<WL.length;i++)IDX[WL[i]]=i;
+
+  var el=document.getElementById("wc-in"),
+      res=document.getElementById("wc-res"),
+      sugWrap=document.getElementById("wc-sugwrap"),
+      sugLab=document.getElementById("wc-suglab"),
+      sug=document.getElementById("wc-sug"),
+      OK=false,deb=null;
+
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function num(n){return n.toLocaleString("en-US");}
+
+  /* ---------------- self-test ---------------- */
+  function syncTests(){
+    var out=[],seen={},k,w,p;
+    out.push(["V1 length 2048",WL.length===2048]);
+    out.push(["V2 abandon/zoo",WL[0]==="abandon"&&WL[WL.length-1]==="zoo"]);
+    var shape=true;
+    for(k=0;k<WL.length;k++){
+      w=WL[k];
+      if(!/^[a-z]{3,8}$/.test(w)){shape=false;break;}
+      if(k>0&&!(WL[k-1]<w)){shape=false;break;}
+    }
+    out.push(["V3 sorted lowercase 3-8",shape]);
+    var uniq=true;
+    for(k=0;k<WL.length;k++){
+      p=WL[k].length>=4?WL[k].slice(0,4):WL[k];
+      if(seen[p]){uniq=false;break;}
+      seen[p]=1;
+    }
+    out.push(["V4 four-letter prefixes unique",uniq]);
+    var vecOk=true;
+    for(k in VEC)if(IDX[k]!==VEC[k])vecOk=false;
+    out.push(["V5 known indices",vecOk]);
+    return out;
+  }
+  function sha256hex(str){
+    var b=new TextEncoder().encode(str);
+    return crypto.subtle.digest("SHA-256",b).then(function(buf){
+      var a=new Uint8Array(buf),s="",n;
+      for(n=0;n<a.length;n++)s+=("0"+a[n].toString(16)).slice(-2);
+      return s;
+    });
+  }
+  function report(rows){
+    var passed=0,n;
+    for(n=0;n<rows.length;n++){
+      if(rows[n][1])passed++;
+      else console.error("[bip39 word check] SELF-TEST FAIL: "+rows[n][0]);
+    }
+    var line="[bip39 word check] self-test "+passed+"/"+rows.length+" passed";
+    if(passed===rows.length)console.log(line);
+    else console.error(line+" - results suppressed");
+    return passed===rows.length;
+  }
+  function selfTest(){
+    var rows=syncTests();
+    return sha256hex(WL.join("\n")+"\n").then(function(h){
+      rows.push(["V6 list SHA-256 "+LIST_SHA.slice(0,12),h===LIST_SHA]);
+      return report(rows);
+    }).catch(function(e){
+      rows.push(["V6 list SHA-256 (crypto.subtle unavailable)",false]);
+      console.error("[bip39 word check] hash check could not run",e);
+      report(rows);
+      return false;
+    });
+  }
+
+  /* ---------------- lookup helpers ---------------- */
+  function prefixMatches(q,cap){
+    var r=[],n;
+    for(n=0;n<WL.length&&r.length<cap;n++)if(WL[n].indexOf(q)===0)r.push(WL[n]);
+    return r;
+  }
+  function prefixCount(q){
+    var c=0,n;
+    for(n=0;n<WL.length;n++)if(WL[n].indexOf(q)===0)c++;
+    return c;
+  }
+  function dist(a,b,cut){
+    if(Math.abs(a.length-b.length)>cut)return cut+1;
+    var prev=[],cur=[],x,y,best;
+    for(y=0;y<=b.length;y++)prev[y]=y;
+    for(x=1;x<=a.length;x++){
+      cur[0]=x;best=x;
+      for(y=1;y<=b.length;y++){
+        cur[y]=Math.min(prev[y]+1,cur[y-1]+1,prev[y-1]+(a.charAt(x-1)===b.charAt(y-1)?0:1));
+        if(cur[y]<best)best=cur[y];
+      }
+      if(best>cut)return cut+1;
+      prev=cur.slice();
+    }
+    return prev[b.length];
+  }
+  function nearMisses(q,cap){
+    var hits=[],n,d;
+    for(n=0;n<WL.length;n++){
+      d=dist(q,WL[n],2);
+      if(d<=2)hits.push([WL[n],d]);
+    }
+    hits.sort(function(a,b){return a[1]-b[1]||(a[0]<b[0]?-1:1);});
+    return hits.slice(0,cap).map(function(h){return h[0];});
+  }
+
+  /* ---------------- painting ---------------- */
+  function showSug(label,words,note){
+    if(!words.length){sugWrap.hidden=true;sug.innerHTML="";return;}
+    sugLab.textContent=label;
+    var html=words.map(function(w){return '<button type="button" data-w="'+esc(w)+'">'+esc(w)+"</button>";}).join("");
+    if(note)html+="<em>"+esc(note)+"</em>";
+    sug.innerHTML=html;
+    sugWrap.hidden=false;
+  }
+  function paint(html){res.innerHTML=html;}
+  function badges(list){
+    return '<div class="wc-badges">'+list.map(function(b){return "<span>"+esc(b)+"</span>";}).join("")+"</div>";
+  }
+  function paintIdle(){
+    paint('<div class="wc-status wc-mut">Waiting for a word</div>'
+      +'<div class="wc-note">Type or paste a single word. Partial words get autocomplete; words that are not on the list get the closest matches.</div>');
+    showSug("",[]);
+  }
+  function paintFailed(){
+    paint('<div class="wc-status wc-bad">Self-test failed</div>'
+      +'<div class="wc-note">Either the wordlist built into this page did not match its published checksum, or the checksum could not be computed in this browser. Rather than risk a wrong answer about a backup word, the page will not answer at all. The console has the detail. Reload; if it keeps failing, check your word against a copy of BIP39 you obtained yourself.</div>');
+    showSug("",[]);
+  }
+  function paintValid(w){
+    var idx=IDX[w],
+        pre=w.length>=4?w.slice(0,4):w,
+        bits=idx.toString(2),
+        note;
+    while(bits.length<11)bits="0"+bits;
+    if(w.length>=4){
+      note="The first four letters, <code>"+esc(pre)+"</code>, name this word on their own: no other word on the list starts with them. That is what a four-character metal backup is recording.";
+    }else{
+      note="This word is only "+w.length+" letters, so there is nothing to shorten: write all "+w.length+". A backup that stores four characters per word stores this one whole.";
+    }
+    paint('<div class="wc-status wc-ok">&#10003; On the BIP39 English list</div>'
+      +badges(["position "+num(idx+1)+" of 2,048","index "+num(idx),"bits "+bits])
+      +'<div class="wc-note">'+note+"</div>"
+      +'<div class="wc-note">Being on the list does not mean it belongs in your phrase, or sits in the right place. Only a full check, done offline, can say that.</div>');
+    showSug("",[]);
+  }
+  function paintPartial(w,hits){
+    var total=prefixCount(w);
+    paint('<div class="wc-status wc-mut">Not a whole word yet</div>'
+      +badges([total===1?"1 word starts with "+w:num(total)+" words start with "+w])
+      +'<div class="wc-note">'+(total===1
+        ? "Only one word on the list begins <b>"+esc(w)+"</b>, so those letters already identify it."
+        : "Keep typing, or pick one below. Four letters is always enough to reach exactly one word.")+"</div>");
+    showSug("Starts with "+w,hits,total>hits.length?"and "+num(total-hits.length)+" more":"");
+  }
+  function paintMissing(w){
+    var near=nearMisses(w,8);
+    paint('<div class="wc-status wc-bad">&#10007; Not on the BIP39 English list</div>'
+      +badges(["not a BIP39 word"])
+      +'<div class="wc-note">'+(near.length
+        ? "No word on the list is spelled <b>"+esc(w)+"</b>. The closest entries are below; check the first four letters of yours against them, since that is the part that identifies a word."
+        : "No word on the list is spelled <b>"+esc(w)+"</b>, and nothing on it is close. Check the word against your backup rather than guessing at it.")
+      +"</div>"
+      +'<div class="wc-note">Other language lists exist (Japanese, Spanish, French and more). This page only holds the English one, which is what almost every wallet uses.</div>');
+    showSug("Closest words",near,"");
+  }
+  function paintTooMany(){
+    paint('<div class="wc-status wc-bad">&#10007; That was more than one word</div>'
+      +'<div class="wc-note">The field has been cleared and nothing was checked. Never paste a seed phrase into a website, including this one. If you need to check a whole phrase or repair a damaged one, use the <a href="/tools/seed-recovery">offline seed toolkit</a> with the machine disconnected.</div>'
+      +'<div class="wc-alert">Field cleared. Nothing left the browser.</div>');
+    showSug("",[]);
+  }
+
+  /* ---------------- input handling ---------------- */
+  /* Strip everything that is not a letter, keep ONE word. Two or three words
+     are trimmed to the first with a note; four or more wipes the field. */
+  function handle(raw){
+    if(!OK){paintFailed();return;}
+    var toks=String(raw).toLowerCase().replace(/[^a-z]+/g," ").split(" ").filter(Boolean);
+    if(toks.length>=4){el.value="";paintTooMany();return;}
+    if(!toks.length){paintIdle();return;}
+    var w=toks[0],trimmed=toks.length>1;
+    if(el.value!==w)el.value=w;
+    if(w.length>8){paintMissing(w);return;}
+    if(Object.prototype.hasOwnProperty.call(IDX,w)){paintValid(w);}
+    else{
+      var hits=prefixMatches(w,12);
+      if(hits.length)paintPartial(w,hits);
+      else paintMissing(w);
+    }
+    if(trimmed){
+      res.insertAdjacentHTML("beforeend",
+        '<div class="wc-alert">Only the first word was kept. This page checks one word at a time, by design.</div>');
+    }
+  }
+
+  el.addEventListener("input",function(){
+    clearTimeout(deb);
+    deb=setTimeout(function(){handle(el.value);},90);
+  });
+  el.addEventListener("paste",function(){
+    setTimeout(function(){handle(el.value);},0);
+  });
+  document.querySelectorAll(".wc-ex button").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(!OK)return;
+      el.value=b.dataset.ex;handle(el.value);el.focus();
+    });
+  });
+  sug.addEventListener("click",function(e){
+    var b=e.target.closest("button");
+    if(!b||!OK)return;
+    el.value=b.dataset.w;handle(el.value);el.focus();
+  });
+
+  selfTest().then(function(pass){
+    OK=pass;
+    if(!pass){el.disabled=true;paintFailed();return;}
+    el.disabled=false;
+    paintIdle();
+  });
+})();
+</script>
+</Base>

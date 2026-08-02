@@ -1,0 +1,258 @@
+---
+import { createHash } from 'node:crypto';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+
+function offlineTool(name, tool, page) {
+  const candidates = [
+    resolve(process.cwd(), 'public', 'tools', 'offline', name),         // npm run from site/
+    resolve(process.cwd(), 'site', 'public', 'tools', 'offline', name), // run from repo root
+  ];
+  const path = candidates.find(existsSync);
+  if (!path) throw new Error(`offline tool missing, cannot publish its checksum: ${name}`);
+  const bytes = readFileSync(path);
+  return {
+    name,
+    tool,
+    page,
+    href: `/tools/offline/${name}`,
+    size: bytes.length.toLocaleString('en-US') + ' bytes',
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  };
+}
+const TOOLS = [
+  offlineTool('authenticator.html', 'Offline authenticator', '/tools/2fa'),
+  offlineTool('bip39-toolkit.html', 'Seed phrase toolkit', '/tools/seed-recovery'),
+];
+---
+<Base title="Verify a Download: SHA-256 Checksums for the Offline Tools - OpenBitcoin" description="How to verify a download from this site: compute its SHA-256 with certutil, shasum or sha256sum and compare it against the checksum published here, computed from the shipped file at every build.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Verify</div>
+    <h1>Verify our tools</h1>
+    <p class="doc-lede">A tool that handles keys should not be taken on faith. Every offline build is one readable HTML file, and its SHA-256 checksum is published below, computed from the exact file this site serves: arithmetic you can rerun on your own machine.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="vf-card">
+      <div class="vf-tlab">The files and their checksums</div>
+      <p class="vf-p">Two tools ship as offline builds. Each is one HTML file with its script and styles inside it, no build step and no dependencies, and nothing fetched at runtime. The checksums are not typed in by hand: the build computes them from the exact bytes of the files it ships, so the values on this page and the files they describe cannot disagree.</p>
+      <div class="vf-scroll">
+      <table class="vf-table" aria-label="SHA-256 checksums of the offline tool files">
+        <thead>
+          <tr><th>File</th><th>Size</th><th>SHA-256</th></tr>
+        </thead>
+        <tbody>
+          {TOOLS.map((t) => (
+            <tr>
+              <td class="vf-f"><b><a href={t.href}>{t.name}</a></b><i><a href={t.page}>{t.tool}</a></i></td>
+              <td class="vf-sz">{t.size}</td>
+              <td class="vf-ht"><code class="vf-hash">{t.sha256}</code></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
+      <p class="vf-fine">A tool qualifies for an offline build when it does its work in your browser rather than on our server. The address validator at <a href="/tools/validate">/tools/validate</a> is the live example of the same principle: the checksum math runs in the page, and nothing typed into it is sent anywhere.</p>
+    </div>
+
+    <div class="vf-card vf-mt">
+      <div class="vf-tlab">Why a checked file, and not just a web page</div>
+      <p class="vf-p">A hosted page is a promise renewed on every request. You get whatever the server sends you today, and a server can be compromised, coerced, or quietly changed for one visitor and not the next. A file you have hashed and verified is a fact about the bytes on your disk. It does not change when we change, and it keeps working when the site is gone.</p>
+      <div class="vf-cols">
+        <div class="vf-col">
+          <div class="vf-clab vf-clab-no">Trusting a server</div>
+          <ul class="vf-clist">
+            <li>You trust the host, the domain, the certificate, and whoever can reach any of them.</li>
+            <li>Every visit is a fresh chance to serve different code.</li>
+            <li>You cannot prove afterward what you were served.</li>
+            <li>If the site disappears, so does the tool.</li>
+          </ul>
+        </div>
+        <div class="vf-col">
+          <div class="vf-clab vf-clab-yes">Trusting a checked file</div>
+          <ul class="vf-clist">
+            <li>The hash is arithmetic you run yourself, on your own machine.</li>
+            <li>The file is fixed: it cannot be swapped under you after the check.</li>
+            <li>You can read it, diff it against another copy, and keep it.</li>
+            <li>It runs offline, with the network cable out if you want.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="vf-card vf-mt">
+      <div class="vf-tlab">How to verify</div>
+      <p class="vf-p">Download the file and work in the folder where it landed. The commands are written for <code class="vf-c">authenticator.html</code>; swap in <code class="vf-c">bip39-toolkit.html</code> to check the other file. Nothing needs installing: every system below ships its own SHA-256 tool.</p>
+
+      <div class="vf-step">
+        <div class="vf-snum">Step 1</div>
+        <div class="vf-sbody">
+          <h3>Hash the file</h3>
+          <p class="vf-sp">Run the line for your system. It prints 64 hexadecimal characters.</p>
+          <div class="vf-cmd">
+            <div class="vf-os">Windows, Command Prompt or PowerShell</div>
+            <pre class="vf-pre"><code>certutil -hashfile authenticator.html SHA256</code></pre>
+          </div>
+          <div class="vf-cmd">
+            <div class="vf-os">macOS and Linux</div>
+            <pre class="vf-pre"><code>shasum -a 256 authenticator.html</code></pre>
+          </div>
+          <div class="vf-cmd">
+            <div class="vf-os">Linux, coreutils alternative</div>
+            <pre class="vf-pre"><code>sha256sum authenticator.html</code></pre>
+          </div>
+          <p class="vf-sp">Windows prints a header line and may space the hash into groups; ignore the spacing and the letter case. The 64 characters depend on every byte of the file: change one character in the file and the whole hash changes beyond recognition.</p>
+        </div>
+      </div>
+
+      <div class="vf-step">
+        <div class="vf-snum">Step 2</div>
+        <div class="vf-sbody">
+          <h3>Compare it against this page</h3>
+          <p class="vf-sp">Compare the printed hex with the checksum in the table above, all 64 characters, not just the first few. A match means your copy is, byte for byte, the file this site was serving when the page was built; the published values are recomputed from the served files on every build, so they cannot drift out of date.</p>
+          <p class="vf-sp">Be precise about what that buys you. Verification here is checksum-based; there is no signing key and no signature file. A checksum published on the same site that serves the file is strong against a corrupted download, a broken transfer, a tampered mirror, or an altered copy someone passed along. It is not a defense against this server itself being compromised, because whoever could change the file could change the published value to match. For that threat the useful check is the one no server can fake: read the file you downloaded.</p>
+        </div>
+      </div>
+
+      <div class="vf-step">
+        <div class="vf-snum">Step 3</div>
+        <div class="vf-sbody">
+          <h3>Read it, then run it</h3>
+          <p class="vf-sp">Open the file in a text editor before you open it in a browser. It is one file, in plain HTML and JavaScript, meant to be read end to end in a sitting. Then open it from your disk. Nothing in an offline build reaches the network, which you can confirm by pulling the connection and using it anyway.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="vf-card vf-mt vf-honest">
+      <div class="vf-tlab">What a checksum proves, and what it does not</div>
+      <div class="vf-rows">
+        <div class="vf-row vf-yes">
+          <b>It proves integrity</b>
+          <span>Your copy has not changed by one byte since this site was built. A corrupted download, a modified mirror, or an altered copy passed along by someone else all fail the check.</span>
+        </div>
+        <div class="vf-row vf-yes">
+          <b>It travels well</b>
+          <span>Anyone you hand the file to can run the same arithmetic and compare it with this page. A copy that came through email, a USB stick, or a mirror is checkable without trusting whoever carried it.</span>
+        </div>
+        <div class="vf-row vf-no">
+          <b>It does not vouch for this server</b>
+          <span>The checksum is published by the same site that serves the file. If the server were compromised, the file and the value could be changed together and the check would still pass. It protects the path between us and you, not us.</span>
+        </div>
+        <div class="vf-row vf-no">
+          <b>It does not prove the code is safe</b>
+          <span>A checksum says which bytes you have, not what they do. The point of shipping one readable file instead of a bundle is that you, or anyone you ask, can check the code itself rather than take our word for it.</span>
+        </div>
+      </div>
+      <p class="vf-fine">If a tool ever touches a seed phrase or a private key, treat any claim about it, including ours, as unproven until you have read the file. That is the whole reason the builds are readable.</p>
+    </div>
+
+    <div class="vf-about doc-prose">
+      <p>Verification is a habit, not a badge. A checksum tells you the bytes are the ones we published, and reading the file tells you what those bytes actually do; the two together are what makes a tool checkable rather than merely reassuring. The same reasoning runs through the rest of the site, from running your own <a href="/nodes">node</a> instead of asking someone else's, to the in-browser <a href="/tools/validate">address validator</a> that never sends what you type. Who publishes this is on <a href="/about">about</a>, and where the data behind the explorer comes from is documented at <a href="/sources">sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="vf-railp">A checksum says your copy is the file we published; only reading the file says what it does.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The offline builds</div>
+      <ul class="vf-rl">
+        {TOOLS.map((t) => (
+          <li><b>{t.name}</b> <a href={t.page}>{t.tool}</a>, {t.size}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/validate">Address validator, in-browser</a>
+        <a href="/about">About this site</a>
+        <a href="/sources">Data sources</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .vf-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .vf-mt{margin-top:14px}
+  .vf-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .vf-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .vf-p a,.vf-fine a,.vf-clist a,.vf-sp a,.vf-rl a,.vf-f a{color:var(--acc);text-decoration:none;
+    border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .vf-p a:hover,.vf-fine a:hover,.vf-clist a:hover,.vf-sp a:hover,.vf-rl a:hover,.vf-f a:hover{border-bottom-style:solid}
+  .vf-f b a{color:inherit}
+  .vf-c{font:600 12.5px var(--mono);background:var(--field);color:var(--ink);border-radius:5px;padding:2px 6px}
+  .vf-scroll{overflow-x:auto;margin-top:12px}
+  .vf-table{width:100%;border-collapse:collapse}
+  .vf-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .vf-table td{font:500 13px/1.55 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .vf-table tr:last-child td{border-bottom:0}
+  .vf-f{white-space:nowrap}
+  .vf-f b{font:700 12.5px var(--mono);color:var(--acc)}
+  .vf-f i{display:block;font:500 11px/1.5 var(--sans);font-style:normal;color:var(--ink-3);margin-top:4px}
+  .vf-f i a{color:var(--ink-3)}
+  .vf-sz{white-space:nowrap;font:600 12px var(--mono)}
+  .vf-ht{min-width:300px}
+  .vf-hash{font:600 11.5px/1.7 var(--mono);color:var(--price-ink);word-break:break-all;
+    -webkit-user-select:all;user-select:all}
+  .vf-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .vf-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:14px}
+  .vf-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .vf-clab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;
+    display:flex;align-items:center;gap:7px}
+  .vf-clab::before{content:"";width:9px;height:9px;border-radius:2px}
+  .vf-clab-yes{color:var(--up)}
+  .vf-clab-yes::before{background:var(--up)}
+  .vf-clab-no{color:var(--down)}
+  .vf-clab-no::before{background:var(--down)}
+  .vf-clist{margin:0;padding-left:18px}
+  .vf-clist li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .vf-clist li::marker{color:var(--ink-3)}
+  .vf-step{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;margin-top:16px;
+    padding-top:16px;border-top:1px dotted var(--line-2)}
+  .vf-snum{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);padding-top:3px}
+  .vf-sbody{min-width:0}
+  .vf-sbody h3{font:700 14.5px var(--sans);color:var(--ink);margin:0}
+  .vf-sp{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:8px 0 0}
+  .vf-cmd{margin-top:10px}
+  .vf-os{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+  .vf-pre{margin:10px 0 0;padding:12px 14px;background:var(--panel-2);border:1px solid var(--line-2);
+    border-radius:9px;overflow-x:auto;max-width:100%}
+  .vf-cmd .vf-pre{margin-top:0}
+  .vf-pre code{font:600 12.5px/1.7 var(--mono);color:var(--price-ink);white-space:pre;display:block}
+  .vf-honest{border-color:rgba(255,166,60,.38)}
+  .vf-rows{display:grid;gap:8px}
+  .vf-row{border-radius:10px;padding:12px 15px}
+  .vf-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  .vf-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .vf-yes{border:1px solid var(--line-2);background:var(--panel-2)}
+  .vf-yes b{color:var(--up)}
+  .vf-no{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .vf-no b{color:var(--down)}
+  .vf-about{margin-top:14px}
+  .vf-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .vf-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .vf-rl{margin:0;padding-left:16px}
+  .vf-rl li{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin-top:7px}
+  .vf-rl li:first-child{margin-top:0}
+  .vf-rl li::marker{color:var(--acc)}
+  .vf-rl b{display:block;font:700 11px var(--mono);color:var(--ink-2)}
+  @media(max-width:700px){
+    .vf-card{padding:18px 16px}
+    .vf-cols{grid-template-columns:minmax(0,1fr)}
+    .vf-step{grid-template-columns:minmax(0,1fr);gap:6px}
+    .vf-table td{font-size:12.5px}
+    .vf-ht{min-width:230px}
+    .vf-hash{font-size:10.5px}
+    .vf-pre code{font-size:11.5px}
+  }
+</style>
+</Base>

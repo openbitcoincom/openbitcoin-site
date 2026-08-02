@@ -1,0 +1,168 @@
+---
+
+---
+<div class="cv2 pcv">
+  <div class="pv">
+    <input id="pcv-b" value="1" inputmode="decimal" aria-label="Amount in bitcoin units">
+    <span class="tag2" id="pcv-unit"></span>
+  </div>
+  <div class="eq" aria-hidden="true">=</div>
+  <div class="pv">
+    <input id="pcv-f" inputmode="decimal" aria-label="Amount in fiat">
+    <span class="tag2" id="pcv-fiat"></span>
+  </div>
+</div>
+<script is:inline>
+(function(){
+  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807};
+  var S={price:null,unit:"btc",fiat:"USD",mul:{btc:1,mbtc:1e3,bits:1e6,sats:1e8}};
+  var CAP_BTC=21e6,UNIT_DEC={btc:8,mbtc:5,bits:2,sats:0},lastEdited="btc";
+  var elB=document.getElementById("pcv-b"),elF=document.getElementById("pcv-f");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function fitW(el){el.style.width=(Math.max(1,el.value.length)+0.4)+"ch";}
+  function fmtT(n,d){var s=fmt(n,d);return s.indexOf(".")<0?s:s.replace(/0+$/,"").replace(/\.$/,"");}
+  function liveFmt(el,maxDec){
+    var raw=el.value,caret=el.selectionStart||0,right=0,i;
+    for(i=caret;i<raw.length;i++)if(/[\d.]/.test(raw[i]))right++;
+    var clean=raw.replace(/[^\d.]/g,""),parts=clean.split("."),intPart=parts.shift()||"";
+    var frac=parts.length?"."+parts.join(""):"";
+    if(maxDec!=null&&frac){
+      frac=maxDec>0?"."+frac.slice(1).slice(0,maxDec):"";   /* sub-sat precision doesn't exist */
+    }
+    intPart=intPart.replace(/^0+(?=\d)/,"");
+    var out=(intPart?intPart.replace(/\B(?=(\d{3})+(?!\d))/g,","):intPart)+frac;
+    if(out!==raw){
+      el.value=out;
+      var pos=out.length,cnt=0;
+      for(var j=out.length-1;j>=0;j--){if(cnt>=right)break;if(/[\d.]/.test(out[j]))cnt++;pos=j;}
+      if(cnt<right)pos=0;
+      try{el.setSelectionRange(pos,pos);}catch(e){}
+    }
+  }
+  function convB(){
+    var v=parseFloat(elB.value.replace(/,/g,""));
+    if(isNaN(v)||S.price==null){if(isNaN(v))elF.value="";fitW(elB);fitW(elF);return;}
+    var btc=v/S.mul[S.unit];
+    if(btc>CAP_BTC){btc=CAP_BTC;elB.value=fmt(btc*S.mul[S.unit],0);}   /* hard cap: total supply */
+    var out=btc*S.price*fx[S.fiat];
+    if(document.activeElement!==elF){             /* never rewrite the box the user is in */
+      elF.value=fmt(out,out>=1000?0:(out<1?4:2)); /* no pennies at/above 1,000 */
+    }
+    fitW(elB);fitW(elF);
+  }
+  function convF(){
+    var v=parseFloat(elF.value.replace(/,/g,""));
+    if(isNaN(v)||S.price==null){if(isNaN(v))elB.value="";fitW(elB);fitW(elF);return;}
+    var btc=(v/fx[S.fiat])/S.price;
+    if(btc>CAP_BTC){btc=CAP_BTC;var capF=btc*S.price*fx[S.fiat];
+      elF.value=fmt(capF,capF>=1000?0:2);}                             /* hard cap: total supply */
+    var units=btc*S.mul[S.unit];
+    if(document.activeElement!==elB){
+      elB.value=S.unit==="sats"?fmt(Math.round(units),0):fmtT(units,units>=1000?2:6);
+    }
+    fitW(elB);fitW(elF);
+  }
+  elB.addEventListener("input",function(){lastEdited="btc";liveFmt(elB,UNIT_DEC[S.unit]);convB();});
+  elF.addEventListener("input",function(){lastEdited="fiat";liveFmt(elF);convF();});
+  /* clicking into a box selects the whole number; leaving both empty resets to 1 BTC */
+  [elB,elF].forEach(function(el){
+    el.addEventListener("focus",function(){el.select();el._selArm=1;});
+    el.addEventListener("mouseup",function(e){if(el._selArm){e.preventDefault();el._selArm=0;}});
+    el.addEventListener("blur",function(){
+      var bv=parseFloat(elB.value.replace(/,/g,"")),fv=parseFloat(elF.value.replace(/,/g,""));
+      if(isNaN(bv)&&isNaN(fv)){
+        var units=S.mul[S.unit];
+        elB.value=S.unit==="sats"?fmt(units,0):fmtT(units,units>=1000?2:6);
+        lastEdited="btc";convB();
+      }
+    });
+  });
+  function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+  function closeAllDD(){qa(".pcv .tag2.open").forEach(function(n){n.classList.remove("open");});}
+  document.addEventListener("click",closeAllDD);
+  function mkPop(host,items,get,set){
+    function lab(v){var l=v;items.forEach(function(x){if(x[0]===v)l=x[1];});return l+'<span class="dda">▾</span>';}
+    var b=document.createElement("button");b.type="button";b.className="tagbtn";b.innerHTML=lab(get());
+    var p=document.createElement("div");p.className="pop";
+    var g=document.createElement("div");g.className="grid4";
+    items.forEach(function(x){
+      var o=document.createElement("button");o.type="button";o.textContent=x[1];
+      if(x[0]===get())o.className="cur";
+      o.addEventListener("click",function(){
+        set(x[0]);b.innerHTML=lab(x[0]);
+        Array.prototype.forEach.call(g.children,function(z){z.classList.toggle("cur",z===o);});
+        closeAllDD();
+      });
+      g.appendChild(o);
+    });
+    p.appendChild(g);
+    b.addEventListener("click",function(e){e.stopPropagation();var was=host.classList.contains("open");closeAllDD();
+      if(!was){host.classList.add("open");
+        p.classList.remove("below");
+        /* on a narrow screen the right-anchored panel can miss the viewport;
+           measure, re-anchor from the left, aim the arrow back at the button
+           (same fix as the homepage, 2026-08-02) */
+        p.style.left="";p.style.right="";p.style.removeProperty("--arrow");
+        p.style.maxWidth=Math.min(340,innerWidth-24)+"px";
+        var r=p.getBoundingClientRect();
+        if(r.left<12||r.right>innerWidth-12){
+          p.style.right="auto";
+          var h=host.getBoundingClientRect(),w=Math.min(r.width,innerWidth-24);
+          p.style.left=(Math.max(12,Math.min(h.left,innerWidth-12-w))-h.left)+"px";
+          var pr=p.getBoundingClientRect();
+          p.style.setProperty("--arrow",Math.max(10,Math.min(pr.width-26,pr.right-(h.left+h.width/2)-8))+"px");
+        }
+        if(p.getBoundingClientRect().top<4)p.classList.add("below");
+      }});
+    host.appendChild(b);host.appendChild(p);
+    host._sync=function(){b.innerHTML=lab(get());
+      Array.prototype.forEach.call(g.children,function(z,i){z.classList.toggle("cur",items[i][0]===get());});};
+  }
+  var CURS=["USD","EUR","GBP","CAD","AUD","SEK","JPY","CNY","RUB","BRL","MXN","INR","TRY","KRW","CHF"];
+  var UNITS=[["btc","BTC"],["mbtc","mBTC"],["bits","bits"],["sats","sats"]];
+  var ddUnit=document.getElementById("pcv-unit"),ddFiat=document.getElementById("pcv-fiat");
+  mkPop(ddUnit,UNITS,function(){return S.unit;},function(v){
+    var btc=(parseFloat(elB.value.replace(/,/g,""))||0)/S.mul[S.unit];
+    S.unit=v;var units=btc*S.mul[S.unit];
+    elB.value=S.unit==="sats"?fmt(Math.round(units),0):fmtT(units,units>=1000?2:6);
+    convB();
+  });
+  function applyCur(v){
+    S.fiat=v;
+    lastEdited==="btc"?convB():convF();
+  }
+  /* the footer selector built by chrome.js stays the single source of truth:
+     picking a currency here clicks its matching option and the chrome calls
+     back through obCurrencyChange; without a footer the change applies direct */
+  mkPop(ddFiat,CURS.map(function(c){return[c,c];}),function(){return S.fiat;},function(v){
+    var idx=CURS.indexOf(v),opts=document.querySelectorAll("#dd-cur .ddp button");
+    if(idx>=0&&opts.length>idx)opts[idx].click();
+    else applyCur(v);
+  });
+  /* chrome hooks, CHAINED: pages with their own hooks keep them */
+  var prevPaint=window.obPaintFiat;
+  window.obPaintFiat=function(Sv){
+    if(typeof prevPaint==="function")try{prevPaint(Sv);}catch(e){}
+    if(Sv&&typeof Sv.price==="number"&&Sv.price>0){S.price=Sv.price;
+      lastEdited==="btc"?convB():convF();}
+  };
+  var prevCur=window.obCurrencyChange;
+  window.obCurrencyChange=function(cs){
+    if(typeof prevCur==="function")try{prevCur(cs);}catch(e){}
+    if(!cs||!fx[cs.cur])return;
+    applyCur(cs.cur);
+    if(ddFiat._sync)ddFiat._sync();
+  };
+  function boot(){
+    try{
+      if(window.OB_FX&&typeof window.OB_FX.USD==="number")fx=window.OB_FX;
+      var L=window.OB_LIVE;
+      if(L&&L.price&&typeof L.price.usd==="number"&&L.price.usd>0)S.price=L.price.usd;
+    }catch(e){}
+    convB();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+  fitW(elB);fitW(elF);
+})();
+</script>

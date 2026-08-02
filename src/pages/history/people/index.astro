@@ -1,0 +1,108 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="The People of Early Bitcoin - OpenBitcoin" description="The people of early bitcoin: Satoshi Nakamoto, Hal Finney, Gavin Andresen, Laszlo Hanyecz, Adam Back, and Nick Szabo, and what each verifiably did.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History</div>
+    <h1>The people of early bitcoin</h1>
+    <p class="doc-lede">Six people whose work bitcoin still runs on: the author, the first user, the steward of the code, the first spender, and the two designers whose earlier ideas the whitepaper was built on.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+    <div class="hp-grid">
+      <a class="hp-card hp-satoshi" href="/learn/who-is-satoshi">
+        <div class="hp-meta"><span class="hp-year">2008</span><span class="hp-role">The author</span></div>
+        <div class="hp-name">Satoshi Nakamoto</div>
+        <p class="hp-hook">Wrote the whitepaper, mined the genesis block, handed the code to others, and went silent in 2011. The identity question has its own page, kept separate from the record.</p>
+        <div class="hp-go">What is known and what is not &#8594;</div>
+      </a>
+      <a class="hp-card" href="/history/people/hal-finney">
+        <div class="hp-meta"><span class="hp-year">2009</span><span class="hp-role">Cryptographer</span></div>
+        <div class="hp-name">Hal Finney</div>
+        <p class="hp-hook">Ran the software in its first days and received the first bitcoin transaction, ten coins sent by Satoshi in January 2009.</p>
+        <div class="hp-go">Read the profile &#8594;</div>
+      </a>
+      <a class="hp-card" href="/history/people/gavin-andresen">
+        <div class="hp-meta"><span class="hp-year">2010</span><span class="hp-role">Lead developer</span></div>
+        <div class="hp-name">Gavin Andresen</div>
+        <p class="hp-hook">Gave away roughly 19,700 BTC through the first faucet, then took stewardship of the code when Satoshi stepped back.</p>
+        <div class="hp-go">Read the profile &#8594;</div>
+      </a>
+      <a class="hp-card" href="/history/people/laszlo-hanyecz">
+        <div class="hp-meta"><span class="hp-year">2010</span><span class="hp-role">Developer and miner</span></div>
+        <div class="hp-name">Laszlo Hanyecz</div>
+        <p class="hp-hook">Paid 10,000 BTC for two pizzas in May 2010. The part people skip: he also pioneered GPU mining and helped bring bitcoin to the Mac.</p>
+        <div class="hp-go">Read the profile &#8594;</div>
+      </a>
+      <a class="hp-card" href="/history/people/adam-back">
+        <div class="hp-meta"><span class="hp-year">1997</span><span class="hp-role">Cryptographer</span></div>
+        <div class="hp-name">Adam Back</div>
+        <p class="hp-hook">Invented Hashcash, the 1997 proof of work the whitepaper cites, and was among the first people Satoshi wrote to.</p>
+        <div class="hp-go">Read the profile &#8594;</div>
+      </a>
+      <a class="hp-card" href="/history/people/nick-szabo">
+        <div class="hp-meta"><span class="hp-year">1998</span><span class="hp-role">Computer scientist</span></div>
+        <div class="hp-name">Nick Szabo</div>
+        <p class="hp-hook">Designed bit gold, the nearest precursor to bitcoin's architecture, and coined the term smart contract years before the chain existed.</p>
+        <div class="hp-go">Read the profile &#8594;</div>
+      </a>
+    </div>
+
+    <div class="hp-about doc-prose">
+      <p>The roster grows. These six open the shelf because their contributions are load-bearing and on the public record; more of the builders and correspondents of the first years will get profiles as the record for each is assembled. Every profile keeps to what its subject did and said publicly, with dates checked against primary sources and documented at <a href="/sources">/sources</a>. The wider record lives on the <a href="/history">history index</a>, and the long tradition of premature goodbyes at <a href="/obituaries">/obituaries</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In the story</div>
+      <div class="hp-tl">
+        <div class="hp-trow"><b>1997</b><span>Hashcash, the whitepaper's proof of work, is published</span></div>
+        <div class="hp-trow"><b>1998</b><span>Bit gold, the closest precursor design, is proposed</span></div>
+        <div class="hp-trow"><b>2008</b><span>The whitepaper is posted under the name Satoshi Nakamoto</span></div>
+        <div class="hp-trow"><b>2009</b><span>The first transaction: ten coins to Hal Finney</span></div>
+        <div class="hp-trow"><b>2010</b><span>The faucet opens, the pizzas are bought, the code changes hands</span></div>
+        <div class="hp-trow"><b>2011</b><span>Satoshi's last accepted messages, then silence</span></div>
+      </div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history">Bitcoin history index</a>
+        <a href="/history/faucets">The faucet era</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto</a>
+        <a href="/obituaries">Bitcoin obituaries</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .hp-card{display:flex;flex-direction:column;min-width:0;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:18px 20px 16px;text-decoration:none;transition:border-color .15s ease}
+  .hp-card:hover{border-color:rgba(247,147,26,.55)}
+  .hp-satoshi{border-style:dashed;border-color:rgba(255,166,60,.38)}
+  .hp-satoshi:hover{border-color:rgba(247,147,26,.6)}
+  .hp-meta{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .hp-year{font:700 10.5px var(--mono);letter-spacing:.12em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .hp-role{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);text-align:right}
+  .hp-name{font:700 16.5px/1.25 var(--sans);letter-spacing:-.2px;color:var(--ink);margin-top:9px}
+  .hp-hook{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:7px 0 0;flex:1}
+  .hp-go{font:700 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--acc);
+    margin-top:13px;padding-top:11px;border-top:1px dotted var(--line-2)}
+  .hp-about{margin-top:14px}
+  .hp-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hp-tl{display:grid;gap:0}
+  .hp-trow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hp-trow:last-child{border-bottom:0}
+  .hp-trow b{font:700 12px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .hp-trow span{font:500 11.5px/1.5 var(--sans);color:var(--ink-2)}
+  @media(max-width:700px){
+    .hp-grid{grid-template-columns:minmax(0,1fr)}
+    .hp-card{padding:16px 16px 14px}
+  }
+</style>
+</Base>

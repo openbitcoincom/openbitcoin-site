@@ -1,0 +1,60 @@
+{
+  "slug": "sources",
+  "title": "Sources: Where Every Number Comes From - OpenBitcoin",
+  "metaDescription": "Data sources for OpenBitcoin: chain data from our own Bitcoin full node, a median-of-three price, ECB reference rates, and self-logged fee and candle series.",
+  "kicker": "Data sources",
+  "h1": "Where every number comes from",
+  "lede": "This page documents where each figure on the site originates: chain data, spot price, historical candles, fee estimates, and foreign exchange rates, and what happens when a source degrades.",
+  "sections": [
+    {
+      "id": "chain-data",
+      "heading": "Chain data: our own node",
+      "html": "<p>Every block, transaction, address, and mempool figure on this site comes from our own Bitcoin Core full node, running with a full transaction index and our own address index, on hardware we rent and administer. When you look up an address, the answer comes from our copy of the chain rather than a third-party blockchain API. Fee estimates come from the same node, with one labeled exception described below.</p><p>Because the node is ours, chain data is served from our own infrastructure. Errors can be reported through the corrections section below.</p>"
+    },
+    {
+      "id": "spot-price",
+      "heading": "Spot price: a median of three",
+      "html": "<p>The spot price is BTC/USD from three exchanges: Kraken, Coinbase, and Bitstamp, sampled continuously. We publish the median. Deviation gates compare each feed against the other two, and a feed that strays too far from the others is removed from the blend until it recovers.</p><p>When feeds fail, the published price degrades step by step: three feeds, then two, then one, then the last good value with a staleness label.</p><p>The site logs this series on its own infrastructure; logging began before launch, so the published history is a continuous record.</p>"
+    },
+    {
+      "id": "historical-candles",
+      "heading": "Historical candles",
+      "html": "<p>Candle history going forward is our own logged series, built from the blend described above. Backfill comes from exchange-published history: Bitstamp daily candles reaching back to 2011, and Kraken's published OHLC archives.</p><p>Data from before 2011 reflects thin, early markets on small venues and is labeled accordingly.</p>"
+    },
+    {
+      "id": "fees",
+      "heading": "Fee estimates",
+      "html": "<p>Fee figures are computed by our own node's estimator every minute and logged. A labeled third-party fallback is used to bridge outages, and each row in the series is marked with its source.</p>"
+    },
+    {
+      "id": "fx-rates",
+      "heading": "Foreign exchange rates",
+      "html": "<p>Conversions into fiat currencies other than the US dollar use European Central Bank reference rates.</p><p>There is currently one exception: the ECB suspended its ruble reference rate in 2022, so RUB conversions use a market source instead and are labeled where they appear.</p>"
+    },
+    {
+      "id": "editorial-practice",
+      "heading": "Editorial practice",
+      "html": "<p>The site does not publish price predictions. News headlines are collected automatically from monitored feeds, filtered by bitcoin keywords, and link to the original source; content published here is built from our own node and datasets. Historical pages cite primary sources such as court records, original forum posts, archived pages, and first-party disclosures.</p><p>The historical daily price series behind the <a href=\"/price/calendar\">price calendar</a> and the date lookup combines Bitstamp's published BTC/USD daily candles (UTC days, from August 2011) with Blockchain.info's historical daily closes for the Mt. Gox era (August 2010 to August 2011, close only), ingested at build time; our own continuously logged series extends it going forward.</p><p>Sponsored and affiliate placements are labeled. The labeling policy is described at <a href=\"/disclosure\">/disclosure</a>.</p>"
+    },
+    {
+      "id": "corrections",
+      "heading": "Corrections",
+      "html": "<p>To report an error in any figure on this site, email <a href=\"mailto:inbox@openbitcoin.com\">inbox@openbitcoin.com</a>. Corrections are noted on the page they affect.</p>"
+    }
+  ],
+  "proofLinks": [
+    {
+      "label": "How sponsored placements are labeled",
+      "href": "/disclosure"
+    },
+    {
+      "label": "About this site",
+      "href": "/about"
+    },
+    {
+      "label": "Terms of service",
+      "href": "/terms"
+    }
+  ],
+  "updated": "July 2026"
+}

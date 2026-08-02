@@ -1,0 +1,447 @@
+---
+import Base from '../layouts/Base.astro';
+import ConverterBand from '../components/ConverterBand.astro';
+import '../styles/doc.css';
+import { recentCloses } from '../lib/monthly-prices.js';
+
+const sparkDays = recentCloses(90);
+const sparkCloses = sparkDays.map((d) => d.usd);
+const SPARK_N = sparkCloses.length;
+
+const SW = 640, SH = 200, SPT = 26, SPB = 26, SPL = 10, SPR = 10;
+const sparkLo = Math.min(...sparkCloses), sparkHi = Math.max(...sparkCloses);
+const sparkSpan = (sparkHi - sparkLo) || 1;
+const sx = (i) => SPL + (i / (SPARK_N - 1)) * (SW - SPL - SPR);
+const sy = (v) => SPT + (1 - (v - sparkLo) / sparkSpan) * (SH - SPT - SPB);
+const sparkLine = 'M' + sparkCloses.map((v, i) => sx(i).toFixed(1) + ',' + sy(v).toFixed(1)).join('L');
+const sparkArea = sparkLine + 'L' + sx(SPARK_N - 1).toFixed(1) + ',' + (SH - SPB) + 'L' + sx(0).toFixed(1) + ',' + (SH - SPB) + 'Z';
+const sparkGrid = [0.25, 0.5, 0.75].map((q) => (SPT + q * (SH - SPT - SPB)).toFixed(1));
+const sparkUsd = (v) => '$' + Math.round(v).toLocaleString('en-US');
+const sparkHiX = Math.min(Math.max(sx(sparkCloses.indexOf(sparkHi)), 50), SW - 50).toFixed(1);
+const sparkHiY = Math.max(sy(sparkHi) - 9, 18).toFixed(1);
+const sparkLoX = Math.min(Math.max(sx(sparkCloses.indexOf(sparkLo)), 50), SW - 50).toFixed(1);
+const sparkLoY = Math.min(sy(sparkLo) + 16, SH - 6).toFixed(1);
+const sparkEndX = sx(SPARK_N - 1).toFixed(1), sparkEndY = sy(sparkCloses[SPARK_N - 1]).toFixed(1);
+const sparkEnd = sparkCloses[SPARK_N - 1].toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(sparkLo) + ' and ' + sparkUsd(sparkHi) + ', ending at $' + sparkEnd + '. Daily closes; opens the full chart.';
+---
+<Base title="Bitcoin Price Live: BTC to USD, Market Cap and ATH Distance - OpenBitcoin" description="The live bitcoin price in US dollars, a median of three exchange feeds, with 24 hour change, market cap, sats per dollar, and distance from the all-time high.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Price</div>
+    <h1>Bitcoin price</h1>
+    <p class="doc-lede">The live price of one bitcoin in US dollars, taken as the median of three exchange feeds. Everything below it is arithmetic against that number: market capitalization, sats per dollar, and the gap to the all-time high. No forecasts appear anywhere on this site.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pc-hero">
+      <div class="pc-hlab">Bitcoin price, USD</div>
+      <div class="pc-big" id="pc-big">&hellip;</div>
+      <div class="pc-hsub">median of three exchanges, updating live &middot; <span id="pc-height">&hellip;</span> blocks deep</div>
+      
+      <div class="pc-convwrap"><ConverterBand /></div>
+      <div class="pc-chips">
+        <div class="pc-chip">
+          <span class="pc-ck">24 hour change</span>
+          <b id="pc-chg">&hellip;</b>
+          <i>versus 24 hours ago</i>
+        </div>
+        <div class="pc-chip">
+          <span class="pc-ck">All-time high</span>
+          <b>$126,272</b>
+          <i>October 6, 2025 &middot; <span id="pc-dd">&hellip;</span> below</i>
+        </div>
+        <div class="pc-chip">
+          <span class="pc-ck">Sats per dollar</span>
+          <b id="pc-spd">$1 = &hellip; sats</b>
+          <i>the price, inverted</i>
+        </div>
+        <div class="pc-chip">
+          <span class="pc-ck">Market capitalization</span>
+          <b id="pc-mcap">&hellip;</b>
+          <i>issued supply times price</i>
+        </div>
+      </div>
+    </div>
+
+    <a class="pc-card pc-sparkcard" href="/chart" aria-label={sparkAria}>
+      <div class="pc-tlab">Price, last 90 days</div>
+      <svg class="pc-spark" viewBox={'0 0 ' + SW + ' ' + SH} role="img" aria-label={sparkAria}>
+        <defs>
+          <linearGradient id="pc-sparkfill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="rgba(247,147,26,.20)" />
+            <stop offset="1" stop-color="rgba(247,147,26,0)" />
+          </linearGradient>
+        </defs>
+        {sparkGrid.map((y) => <line class="pc-spark-grid" x1={SPL} x2={SW - SPR} y1={y} y2={y} />)}
+        <path class="pc-spark-fill" d={sparkArea} />
+        <path class="pc-spark-line" d={sparkLine} />
+        <circle class="pc-spark-dot" cx={sparkEndX} cy={sparkEndY} r="3.5" />
+        <text x={sparkHiX} y={sparkHiY} text-anchor="middle">{sparkUsd(sparkHi)}</text>
+        <text x={sparkLoX} y={sparkLoY} text-anchor="middle">{sparkUsd(sparkLo)}</text>
+      </svg>
+      <div class="pc-sparkfoot">
+        <span class="pc-sparkcap">90 days, USD, daily closes</span>
+        <span class="pc-sparkmore">Open the full chart <span aria-hidden="true">&rarr;</span></span>
+      </div>
+    </a>
+
+    <div class="pc-card">
+      <div class="pc-tlab">Key figures right now</div>
+      <div class="pc-scroll">
+      <table class="pc-table pc-fig" aria-label="Live bitcoin price figures">
+        <tbody>
+          <tr class="pc-group"><td colspan="2">Price</td></tr>
+          <tr><td>Price of 1 BTC</td><td><b id="pf-price">&hellip;</b></td></tr>
+          <tr><td>Price of 1 satoshi</td><td><b id="pf-sat">&hellip;</b></td></tr>
+          <tr><td>Satoshis per dollar</td><td><b id="pf-spd">&hellip;</b></td></tr>
+          <tr><td>Change over 24 hours</td><td><b id="pf-chg">&hellip;</b></td></tr>
+          <tr class="pc-group"><td colspan="2">Against the record</td></tr>
+          <tr><td>All-time high</td><td><b>$126,272</b></td></tr>
+          <tr><td>Date of the all-time high</td><td><b>October 6, 2025</b></td></tr>
+          <tr><td>Days since the all-time high</td><td><b id="pf-since">&hellip;</b></td></tr>
+          <tr><td>Distance from the all-time high</td><td><b id="pf-dd">&hellip;</b></td></tr>
+          <tr><td>Gain required to reclaim it</td><td><b id="pf-gain">&hellip;</b></td></tr>
+          <tr class="pc-group"><td colspan="2">Supply and market size</td></tr>
+          <tr><td>Bitcoin issued so far</td><td><b id="pf-supply">&hellip;</b></td></tr>
+          <tr><td>Maximum supply</td><td><b>21,000,000 BTC</b></td></tr>
+          <tr><td>Market capitalization</td><td><b id="pf-mcap">&hellip;</b></td></tr>
+          <tr><td>Market cap at the maximum supply</td><td><b id="pf-mcapmax">&hellip;</b></td></tr>
+          <tr><td>Block height behind these figures</td><td><b id="pf-height">&hellip;</b></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="pc-fine">Issued supply is computed from the block height using the subsidy schedule, so market capitalization moves with every block as well as with the price. Coins that are lost or unspendable are still counted as issued; no estimate is subtracted.</p>
+    </div>
+
+    <div class="pc-card">
+      <div class="pc-tlab">The price on this site</div>
+      <p class="pc-p">The figure at the top of the page is a median of BTC/USD from three exchanges, sampled continuously. A median is used rather than an average because one bad print, one stale feed, or one venue with a thin book cannot drag the middle value the way it drags a mean. Deviation gates compare each feed against the other two, and a feed that strays too far is dropped from the blend until it comes back in line.</p>
+      <div class="pc-scroll">
+      <table class="pc-table pc-feeds" aria-label="Exchange feeds behind the published price">
+        <thead><tr><th>Exchange</th><th>Pair</th><th>Role in the blend</th></tr></thead>
+        <tbody>
+          <tr><td>Bitstamp</td><td>BTC/USD</td><td>Median input, deviation gated</td></tr>
+          <tr><td>Coinbase</td><td>BTC/USD</td><td>Median input, deviation gated</td></tr>
+          <tr><td>Kraken</td><td>BTC/USD</td><td>Median input, deviation gated</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="pc-degrade">
+        <div class="pc-dlab">When a feed fails, the page degrades in the open</div>
+        <ol class="pc-steps">
+          <li><b>Three feeds.</b> The published price is the median of the three.</li>
+          <li><b>Two feeds.</b> The midpoint of the two survivors, labeled as such.</li>
+          <li><b>One feed.</b> That single exchange's price, named on the page.</li>
+          <li><b>No feed.</b> The last good value, carrying a staleness label with its age. Before any price has reached this page, the live figures stay blank rather than showing a number that is not current.</li>
+        </ol>
+        <p class="pc-fine">The rule is that a degraded price says so rather than quietly looking normal. What each step means, and where the historical series comes from, is documented at <a href="/sources">/sources</a>.</p>
+      </div>
+    </div>
+
+    <div class="pc-card">
+      <div class="pc-tlab">Do more with the price</div>
+      <div class="pc-routes">
+        <a class="pc-route" href="/convert"><b>Converter</b><span>Any amount of bitcoin into dollars, or the other way around, in one field.</span></a>
+        <a class="pc-route" href="/chart"><b>Price chart</b><span>The same series over time, with the ranges the number above sits inside.</span></a>
+        <a class="pc-route" href="/sats-per-dollar"><b>Sats per dollar</b><span>The price inverted: how many satoshis one dollar currently buys.</span></a>
+        <a class="pc-route" href="/ath"><b>Distance from the ATH</b><span>Drawdown from $126,272 and the gain that would reclaim it.</span></a>
+        <a class="pc-route" href="/dca"><b>Averaging calculator</b><span>What a repeated fixed purchase would have accumulated over a past window.</span></a>
+        <a class="pc-route" href="/usd-to-sats"><b>Dollars to sats</b><span>Type a dollar amount and read it back in satoshis at the live rate.</span></a>
+        <a class="pc-route" href="/m2"><b>Bitcoin versus M2</b><span>The fixed 21 million cap against the growing dollar supply, on one chart.</span></a>
+      </div>
+    </div>
+
+    <div class="pc-card">
+      <div class="pc-tlab">What "the bitcoin price" actually is</div>
+      <p class="pc-p">There is no official bitcoin price. Bitcoin trades on hundreds of venues at once, and each venue runs its own order book with its own buyers, sellers, fees, and withdrawal frictions. Every one of those books produces its own last-traded price, and two of them can print different numbers in the same second without either being wrong. What people call the bitcoin price is a summary of many markets, not a reading taken from one.</p>
+      <p class="pc-p">Because a summary can be built in more than one way, indexes exist to make the method explicit. A published index states which venues it includes, how it weights them, how it handles a venue that goes offline or prints a bad tick, and how often it recomputes. Some weight by traded volume, some take a median, some trim outliers first. Two honest indexes reading the same markets will still disagree by a few dollars, which is normal and is the reason a price on any site should come with its method attached.</p>
+      <p class="pc-p">Currency is the other half of the quote. A price is bitcoin measured in something, and the something moves too: a dollar chart and a euro chart of the same day differ because the exchange rate between those two currencies also changed. Pricing in satoshis avoids the question entirely, which is why <a href="/sats-per-dollar">sats per dollar</a> is on this site next to the dollar figure, and why the <a href="/m2">money supply page</a> exists as a second yardstick.</p>
+      <p class="pc-p">The price also does not tell you where your coins are. An exchange balance is a claim on a company, priced at the same number as coins you hold yourself, with different failure modes; that distinction is covered in <a href="/learn/self-custody">self-custody</a> and in <a href="/learn/frozen-deposits">frozen deposits</a>.</p>
+    </div>
+
+    <div class="pc-about doc-prose">
+      <p>The bitcoin price on this page is the median of BTC/USD from Bitstamp, Coinbase, and Kraken, recomputed continuously, with the method and the degrade ladder documented at <a href="/sources">/sources</a>. Market capitalization, sats per dollar, and the distance from the October 2025 all-time high are computed from that price and the current <a href="/blocks">block height</a>, so they update as the chain does. Nothing here is a prediction or advice of any kind; the site's <a href="/terms">terms</a> carry the full disclaimer. For the same number in other shapes, see the <a href="/convert">converter</a>, the <a href="/chart">chart</a>, and <a href="/usd-to-sats">dollars to sats</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="pc-rs"><b id="pc-r1">&hellip;</b><i>1 BTC in USD</i></div>
+      <div class="pc-rs"><b id="pc-r2">&hellip;</b><i>for one dollar</i></div>
+      <div class="pc-rs"><b id="pc-r3">&hellip;</b><i>current block height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Price pages</div>
+      <nav>
+        <a href="/chart">Bitcoin price chart</a>
+        <a href="/convert">Bitcoin converter</a>
+        <a href="/sats-per-dollar">Sats per dollar</a>
+        <a href="/usd-to-sats">Dollars to sats</a>
+        <a href="/ath">All-time high</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/price/calendar">Price calendar, every day since 2011</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/m2">Bitcoin versus M2</a>
+        <a href="/dca">Averaging calculator</a>
+        <a href="/sources">Where the price comes from</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pc-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
+  
+  .pc-hlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);text-align:center}
+  .pc-big{font:800 clamp(34px,7vw,58px)/1.05 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+    color:var(--price-ink);margin-top:9px;white-space:nowrap;text-align:center}
+  .pc-hsub{font:600 11.5px var(--mono);letter-spacing:.03em;color:var(--ink-3);margin-top:9px;font-variant-numeric:tabular-nums;text-align:center}
+  .pc-chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px}
+  .pc-convwrap{margin:20px auto 0;display:flex;justify-content:center}
+  .pc-convwrap .cv2{justify-content:center}
+  .pc-chip{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:11px 13px;min-width:0}
+  .pc-ck{display:block;font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .pc-chip b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:6px}
+  .pc-chip b.pc-up{color:var(--up)}
+  .pc-chip b.pc-down{color:var(--down)}
+  .pc-chip i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;margin-top:4px}
+  .pc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .pc-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .pc-scroll{overflow-x:auto}
+  .pc-table{width:100%;border-collapse:collapse}
+  .pc-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .pc-table td{font:600 14px var(--mono);color:var(--ink-2);padding:10px 12px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pc-table tr:last-child td{border-bottom:0}
+  .pc-table td:first-child{color:var(--ink);font-weight:700}
+  .pc-table td b{color:var(--price-ink);font-weight:700}
+  .pc-fig td:first-child{font:600 13.5px var(--sans);color:var(--ink-2)}
+  .pc-fig td:last-child{text-align:right}
+  .pc-fig tr.pc-group td{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);
+    padding-top:16px;border-bottom:1px solid var(--line-2);text-align:left}
+  .pc-feeds td:first-child{color:var(--ink)}
+  .pc-feeds td:last-child{font:500 13px var(--sans);white-space:normal;min-width:170px}
+  .pc-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0 0 10px}
+  .pc-p:last-child{margin-bottom:0}
+  .pc-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pc-p a:hover{border-bottom-style:solid}
+  .pc-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .pc-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pc-fine a:hover{border-bottom-style:solid}
+  .pc-degrade{margin-top:16px;padding-top:14px;border-top:1px dotted var(--line-2)}
+  .pc-dlab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  .pc-steps{margin:0;padding-left:20px}
+  .pc-steps li{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .pc-steps li::marker{color:var(--acc);font-weight:700}
+  .pc-steps b{color:var(--ink);font-weight:600}
+  .pc-routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .pc-route{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;
+    text-decoration:none;min-width:0}
+  .pc-route:hover{border-color:rgba(247,147,26,.45)}
+  .pc-route b{display:block;font:700 12.5px var(--mono);letter-spacing:.03em;color:var(--acc)}
+  .pc-route span{display:block;font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin-top:5px}
+  .pc-about{margin-top:14px}
+  .pc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pc-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pc-rs:last-child{border-bottom:0}
+  .pc-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pc-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;margin-top:2px}
+  .pc-sparkcard{display:block;text-decoration:none}
+  .pc-sparkcard:hover{border-color:rgba(247,147,26,.45)}
+  .pc-spark{display:block;width:100%;height:auto;margin-top:2px}
+  .pc-spark-grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}
+  .pc-spark-fill{fill:url(#pc-sparkfill)}
+  .pc-spark-line{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;
+    vector-effect:non-scaling-stroke}
+  .pc-spark-dot{fill:var(--acc);stroke:var(--panel);stroke-width:2}
+  .pc-spark text{font:600 10.5px var(--mono);letter-spacing:.05em;fill:var(--ink-3);font-variant-numeric:tabular-nums}
+  .pc-sparkfoot{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:8px}
+  .pc-sparkcap{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .pc-sparkmore{font:700 12px var(--mono);color:var(--acc);border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pc-sparkcard:hover .pc-sparkmore{border-bottom-style:solid}
+  @media(max-width:700px){
+    .pc-hero{padding:20px 18px}
+    .pc-card{padding:18px 18px}
+    
+    .pc-scroll{overflow:visible}
+    .pc-table{min-width:0;table-layout:auto}
+    .pc-table td{white-space:normal;padding-right:8px;font-size:13px}
+    .pc-table td:last-child{padding-right:0}
+    .pc-fig,.pc-fig tbody{display:block;width:auto}
+    .pc-fig tr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;column-gap:12px;
+      padding:9px 0;border-bottom:1px dotted var(--line-2)}
+    .pc-fig tr:last-child{border-bottom:0}
+    .pc-fig td{display:block;border-bottom:0;padding:0}
+    .pc-fig td:first-child{font-size:12.5px}
+    .pc-fig td:last-child{margin-left:auto;text-align:right}
+    .pc-fig tr.pc-group{border-bottom:1px solid var(--line-2);padding:14px 0 6px}
+    .pc-fig tr.pc-group td{border-bottom:0;padding:0;margin-left:0;text-align:left}
+    .pc-feeds th{padding-right:8px}
+    .pc-feeds td:last-child{min-width:0;font-size:12.5px}
+    
+    .pc-spark text{font-size:17px}
+    .pc-spark-dot{r:5}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* Nothing is seeded: price, height and the 24h change start null and every
+     cell that depends on them keeps the ellipsis it was served with until a
+     real figure lands. Price and height arrive on the chrome hook; the 24h
+     change is read off the newest summary (window.OB_LIVE). Days since the ATH
+     is arithmetic on the record date, so it paints straight away. */
+  var ATH=126272, ATHTS=Date.UTC(2025,9,6), MAX=21000000, EPOCH=210000;
+  var st={price:null,height:null,chg24:null};
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function supplyAt(h){
+    var s=0,sub=50;
+    for(var e=0;e<64;e++){
+      var start=e*EPOCH;if(h<=start)break;
+      s+=Math.min(h-start,EPOCH)*sub;sub/=2;
+    }
+    return s;
+  }
+  function big(n){
+    if(n>=1e12)return "$"+fmt(n/1e12,2)+" trillion";
+    if(n>=1e9)return "$"+fmt(n/1e9,1)+" billion";
+    return "$"+fmt(n,0);
+  }
+  function pct(v,d){return (v<0?"-":"+")+fmt(Math.abs(v),d)+"%";}
+  function paint(){
+    var p=st.price,h=st.height,sup=null;
+    txt("pf-since",fmt(Math.floor((Date.now()-ATHTS)/86400000),0)+" days");
+    if(h!==null){
+      sup=supplyAt(h);
+      txt("pc-height",fmt(h,0));
+      txt("pf-supply",fmt(Math.round(sup),0)+" BTC");
+      txt("pf-height",fmt(h,0));
+      txt("pc-r3",fmt(h,0));
+    }
+    if(p!==null){
+      var spd=1e8/p,dd=(p/ATH-1)*100,gain=(ATH/p-1)*100;
+      txt("pc-big","$"+fmt(p,2));
+      txt("pc-spd","$1 = "+fmt(spd,0)+" sats");
+      txt("pc-dd",pct(dd,1));
+      txt("pf-price","$"+fmt(p,2));
+      txt("pf-sat","$"+fmt(p/1e8,6));
+      txt("pf-spd",fmt(spd,0)+" sats");
+      txt("pf-dd",pct(dd,1));
+      txt("pf-gain",pct(gain,1));
+      txt("pf-mcapmax","$"+fmt(Math.round(MAX*p),0));
+      txt("pc-r1","$"+fmt(p,0));
+      txt("pc-r2",fmt(spd,0)+" sats");
+      /* market cap needs both halves: issued supply from the height, price from
+         the feed. One without the other stays at the ellipsis. */
+      if(sup!==null){
+        var mcap=sup*p;
+        txt("pc-mcap",big(mcap));
+        txt("pf-mcap","$"+fmt(Math.round(mcap),0));
+      }
+    }
+    if(st.chg24!==null){
+      var chg=document.getElementById("pc-chg");
+      if(chg){chg.textContent=pct(st.chg24,2);chg.className=st.chg24<0?"pc-down":"pc-up";}
+      txt("pf-chg",pct(st.chg24,2));
+    }
+  }
+  function syncLive(){
+    try{
+      var L=window.OB_LIVE;
+      if(L&&L.price&&typeof L.price.change24h==="number")st.chg24=L.price.change24h;
+    }catch(e){}
+  }
+  /* the chrome only calls this once it holds a real figure, but price and
+     height can land separately, so each is taken only when it is a number.
+     CHAINED: the converter widget on this page registers the same hook, and
+     whichever script parses second must keep the other alive. */
+  var prevPaintFiat=window.obPaintFiat;
+  window.obPaintFiat=function(S){
+    if(typeof prevPaintFiat==="function")try{prevPaintFiat(S);}catch(e){}
+    if(S&&typeof S.price==="number"&&S.price>0)st.price=S.price;
+    if(S&&typeof S.height==="number"&&S.height>0)st.height=S.height;
+    syncLive();paint();
+  };
+  paint();
+  /* chrome.js parses after this script, so a summary it already holds is read
+     on DOMContentLoaded rather than here */
+  function boot(){
+    try{
+      var L=window.OB_LIVE;
+      if(L){
+        if(L.price&&typeof L.price.usd==="number"&&L.price.usd>0)st.price=L.price.usd;
+        if(typeof L.height==="number"&&L.height>0)st.height=L.height;
+      }
+    }catch(e){}
+    syncLive();paint();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+<script is:inline>
+(function(){
+  /* 90 day spark card: fetch {OB_DATA_API}/candles?interval=1d&limit=90 and,
+     when exactly 90 rows arrive, redraw the built SVG from the newest daily
+     closes, using the same 640x200 geometry the frontmatter used on the
+     committed series. Both paths are 90 daily closes, so this only slides the
+     window forward to today. Any failure leaves the built line, which is real
+     closes from the committed file, exactly as served. */
+  try{
+    var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
+    if(!api)return;
+    var card=document.querySelector(".pc-sparkcard");
+    if(!card)return;
+    var svg=card.querySelector(".pc-spark"),
+        line=card.querySelector(".pc-spark-line"),
+        fill=card.querySelector(".pc-spark-fill"),
+        dot=card.querySelector(".pc-spark-dot"),
+        texts=card.querySelectorAll(".pc-spark text"),
+        cap=card.querySelector(".pc-sparkcap");
+    if(!svg||!line||!fill||!dot||texts.length<2||!cap)return;
+    var SW=640,SH=200,SPT=26,SPB=26,SPL=10,SPR=10;
+    function usd(v){return "$"+Math.round(v).toLocaleString("en-US");}
+    function draw(closes){
+      var n=closes.length,lo=Math.min.apply(null,closes),hi=Math.max.apply(null,closes),
+          span=(hi-lo)||1;
+      function sx(i){return SPL+(i/(n-1))*(SW-SPL-SPR);}
+      function sy(v){return SPT+(1-(v-lo)/span)*(SH-SPT-SPB);}
+      var d="M"+closes.map(function(v,i){return sx(i).toFixed(1)+","+sy(v).toFixed(1);}).join("L");
+      line.setAttribute("d",d);
+      fill.setAttribute("d",d+"L"+sx(n-1).toFixed(1)+","+(SH-SPB)+"L"+sx(0).toFixed(1)+","+(SH-SPB)+"Z");
+      dot.setAttribute("cx",sx(n-1).toFixed(1));
+      dot.setAttribute("cy",sy(closes[n-1]).toFixed(1));
+      texts[0].setAttribute("x",Math.min(Math.max(sx(closes.indexOf(hi)),50),SW-50).toFixed(1));
+      texts[0].setAttribute("y",Math.max(sy(hi)-9,18).toFixed(1));
+      texts[0].textContent=usd(hi);
+      texts[1].setAttribute("x",Math.min(Math.max(sx(closes.indexOf(lo)),50),SW-50).toFixed(1));
+      texts[1].setAttribute("y",Math.min(sy(lo)+16,SH-6).toFixed(1));
+      texts[1].textContent=usd(lo);
+      cap.textContent="90 days, USD, daily closes";
+      var end=closes[n-1].toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),
+          aria="Bitcoin price over the last 90 days, between "+usd(lo)+" and "+usd(hi)+
+               ", ending at $"+end+". Daily closes; opens the full chart.";
+      svg.setAttribute("aria-label",aria);
+      card.setAttribute("aria-label",aria);
+    }
+    fetch(api+"/candles?interval=1d&limit=90").then(function(r){
+      if(!r.ok)throw new Error("candles "+r.status);
+      return r.json();
+    }).then(function(j){
+      if(!j||!Array.isArray(j.candles)||j.candles.length!==90)return;
+      var closes=j.candles.map(function(c){return +c[4];});
+      for(var i=0;i<closes.length;i++)if(!isFinite(closes[i])||closes[i]<=0)return;
+      draw(closes);
+    }).catch(function(){});
+  }catch(e){}
+})();
+</script>
+</Base>

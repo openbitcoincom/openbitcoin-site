@@ -1,0 +1,46 @@
+{
+  "slug": "disclosure",
+  "title": "Advertising and Affiliate Disclosure - OpenBitcoin",
+  "metaDescription": "How OpenBitcoin.com is supported: advertising, affiliate links, and sponsorship. How paid placements are labeled and how third-party ad content is handled.",
+  "kicker": "Disclosure",
+  "h1": "Advertising and Affiliate Disclosure",
+  "lede": "OpenBitcoin.com is supported by advertising, affiliate links, and sponsorship. This page explains how those placements work and how they are identified on the site.",
+  "sections": [
+    {
+      "id": "how-the-site-is-supported",
+      "heading": "How the site is supported",
+      "html": "<p>OpenBitcoin.com is independently operated. It does not charge for access, require user accounts, or sell subscriptions. Operating costs are covered by advertising, affiliate links, and sponsorship.</p><p>Paid placements do not affect the data the site displays. Block, transaction, and address data comes from our own Bitcoin full node, and the displayed price of bitcoin is a median of three exchanges.</p>"
+    },
+    {
+      "id": "affiliate-links",
+      "heading": "Affiliate links",
+      "html": "<p>Some links on this site are affiliate links. If you use one of these links to sign up for or purchase a product or service, we may earn a commission. This does not typically change the price you pay.</p><p>Affiliate placements are labeled where they appear. Our policy is to label every paid placement; anything not labeled as paid is intended to be unpaid.</p>"
+    },
+    {
+      "id": "advertising-and-sponsorship",
+      "heading": "Advertising and sponsorship",
+      "html": "<p>The site may display advertising from third-party ad networks, which may include mainstream or cryptocurrency-focused networks. Ad content is selected and served by those networks, not by us, and its appearance on the site is not an endorsement of the products or services advertised.</p><p>Sponsored placements are labeled as such. Sponsorship inquiries can be made through the <a href=\"/contact\">contact page</a>.</p><p>Promotional content may be unavailable in some regions.</p>"
+    },
+    {
+      "id": "third-party-risk-reports",
+      "heading": "Third-party risk reports",
+      "html": "<p>When live, address pages may link out to third-party risk-report and compliance-scoring services. The scores, labels, and verdicts those services publish are their own, not ours, and we do not produce or edit them. Third-party risk scores can be wrong and have been revised, so treat them as one input rather than a conclusion.</p>"
+    },
+    {
+      "id": "questions",
+      "heading": "Questions",
+      "html": "<p>Questions about this disclosure, or about whether a specific placement is paid, can be sent to <a href=\"mailto:inbox@openbitcoin.com\">inbox@openbitcoin.com</a>.</p>"
+    }
+  ],
+  "proofLinks": [
+    {
+      "label": "Privacy policy",
+      "href": "/privacy"
+    },
+    {
+      "label": "Terms of service",
+      "href": "/terms"
+    }
+  ],
+  "updated": "July 2026"
+}

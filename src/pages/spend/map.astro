@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Places That Accept Bitcoin: The Merchant Map - OpenBitcoin" description="A live map of places that accept bitcoin, from BTC Map: physical shops pinned by volunteers. How to read the pins and why the verified date matters.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Spend bitcoin</div>
+    <h1>The merchant map</h1>
+    <p class="doc-lede">BTC Map, embedded below, is the community map of businesses that accept bitcoin, pinned by volunteers. Zoom to your city, read pins skeptically; the <a href="/spend/gift-cards">gift card route</a> still reaches more shelves.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="mm-card">
+      <div class="mm-maphead">
+        <div class="mm-tlab">BTC Map: merchants that accept bitcoin</div>
+        <a class="mm-open" href="https://btcmap.org/map" target="_blank" rel="noopener noreferrer">Full map &#8599;</a>
+      </div>
+      
+      <div class="mm-frame">
+        <iframe id="mm-map" title="BTC Map merchant map" src="https://btcmap.org/map" loading="lazy" allowfullscreen="true" allow="geolocation"></iframe>
+      </div>
+      <div class="mm-fallback" id="mm-fallback">The map has not loaded. It is served by btcmap.org and can be blocked by a network filter or a content blocker; <a href="https://btcmap.org/map" target="_blank" rel="noopener noreferrer">open the map on btcmap.org directly</a>.</div>
+      <p class="mm-cap">The map above is served by <a href="https://btcmap.org" target="_blank" rel="noopener noreferrer">btcmap.org</a>, an open-source community project, and is the one third-party embed on this site. If the frame stays blank, the direct link works the same.</p>
+    </div>
+
+    <div class="mm-card mm-mt">
+      <div class="mm-chead"><span class="mm-num">01</span><h2>How to read the map</h2></div>
+      <p class="mm-how">A pin is a claim, not a guarantee. Someone added the listing, and someone may or may not have checked it since. Businesses close, change hands, and quietly stop accepting bitcoin without telling a map about it, so read a pin the way you would read a review: useful, dated, and written by a stranger.</p>
+      <div class="mm-rows">
+        <div class="mm-row"><b>Check the last-verified date</b><span>Open a pin and look for when the listing was last confirmed. A date from last month means a volunteer recently stood in front of the till; a date from years ago means you are reading history. The date is the single most useful field on the listing.</span></div>
+        <div class="mm-row"><b>Check what the till takes</b><span>Listings carry payment badges: on-chain, Lightning, or NFC. At a physical counter the practical rail is almost always Lightning, paid from your phone in seconds; nobody wants to wait for an on-chain confirmation at a register. The <a href="/spend">spending guide</a> covers the rails.</span></div>
+        <div class="mm-row mm-watch"><b>Bring a fallback</b><span>Confirm at the counter before you rely on the pin, and carry another way to pay. If the card reader is broken the shop still wants your custom; the same is true when the bitcoin checkout is.</span></div>
+      </div>
+    </div>
+
+    <div class="mm-card mm-mt">
+      <div class="mm-chead"><span class="mm-num">02</span><h2>Who maintains the listings</h2></div>
+      <p class="mm-how">Community volunteers. There is no sales team signing merchants up and no company charging for placement; people add the businesses they know, and other people confirm them. The listing data lives in OpenStreetMap, the open map database, and BTC Map reads from it, which means a fixed listing is fixed for every app built on the same data, not just this map.</p>
+      <p class="mm-how">That model buys coverage no company would bother with, small towns included, and it costs consistency: a well-tagged city sitting next to an empty one usually says more about the local volunteers than the local merchants. Tens of thousands of listings worldwide, maintained this way since 2022, is the honest description; how current any one pin is depends on who last walked past it.</p>
+    </div>
+
+    <div class="mm-card mm-mt">
+      <div class="mm-chead"><span class="mm-num">03</span><h2>When a pin is stale</h2></div>
+      <div class="mm-rows">
+        <div class="mm-row"><b>Before you travel for it</b><span>If the last-verified date is old and the trip is long, call ahead or check the business's own site first. A pin with a years-old date is a lead to follow up, not a reason to cross town.</span></div>
+        <div class="mm-row"><b>When you find it wrong</b><span>Fix it. Each listing has a way to report or update it, and an edit takes minutes. Marking a closed shop or confirming a live one is how the map stays worth reading, and it fixes the record for everyone downstream of the same data.</span></div>
+        <div class="mm-row"><b>At the counter</b><span>If the person at the till says no, the answer is no, whatever the pin says. Pay another way, and update the listing afterwards; do not argue a merchant into a payment method from a map entry.</span></div>
+      </div>
+    </div>
+
+    <div class="mm-card mm-mt mm-note">
+      <div class="mm-tlab">The honest note</div>
+      <p class="mm-how">Direct acceptance is real, and where a pin is nearby it is the purest way to spend bitcoin: an invoice at the till, no middleman. It is also thin on the ground in most cities, and it comes and goes. If the question is whether you can buy what you actually need this week, the <a href="/spend/gift-cards">gift card catalog</a> answers yes far more often than the map does: the reseller takes the bitcoin and the retailer takes the card, which puts nearly any shelf in reach. Use the map when a pin is close and fresh; use the cards for everything else.</p>
+    </div>
+
+    <div class="mm-about doc-prose">
+      <p>The map is the discovery half of spending bitcoin directly, and its habits carry the day: read the last-verified date, prefer Lightning at a counter, confirm before you queue, and fix stale pins when you find them. The <a href="/spend">spending guide</a> covers the other routes, the <a href="/buy">buying guide</a> covers the direction most people are still going, and if what you are looking for is a machine rather than a merchant, the <a href="/atms">ATM page</a> covers those and their fees.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="mm-stat"><b id="mm-px">&#8230;</b><i>1 BTC</i></div>
+      <div class="mm-stat"><b id="mm-sats">&#8230;</b><i>what $100 buys</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Reading a pin</div>
+      <ul class="mm-rl">
+        <li>A pin is a claim, not a guarantee</li>
+        <li>Check the last-verified date</li>
+        <li>Prefer Lightning at the counter</li>
+        <li>Carry a fallback way to pay</li>
+        <li>Update stale listings you find</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/spend">How to spend bitcoin</a>
+        <a href="/spend/gift-cards">Gift card catalog</a>
+        <a href="/buy">How to buy bitcoin</a>
+        <a href="/atms">Bitcoin ATMs</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .mm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .mm-mt{margin-top:14px}
+  .mm-maphead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .mm-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .mm-open{display:inline-block;flex:none;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1px solid rgba(255,166,60,.55);border-radius:8px;
+    padding:8px 14px;text-decoration:none;white-space:nowrap}
+  .mm-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+  .mm-frame{margin-top:12px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+  .mm-frame iframe{display:block;width:100%;height:520px;border:0}
+  .mm-fallback{display:none;margin-top:10px;border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06);
+    border-radius:10px;padding:11px 14px;font:500 13px/1.55 var(--sans);color:var(--ink-2)}
+  .mm-fallback.mm-show{display:block}
+  .mm-fallback a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .mm-fallback a:hover{border-bottom-style:solid}
+  .mm-cap{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  .mm-cap a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .mm-cap a:hover{border-bottom-style:solid}
+  .mm-chead{display:flex;align-items:baseline;gap:10px}
+  .mm-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .mm-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .mm-how{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .mm-how a,.mm-row a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .mm-how a:hover,.mm-row a:hover{border-bottom-style:solid}
+  .mm-rows{display:grid;gap:8px;margin-top:13px}
+  .mm-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .mm-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .mm-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .mm-watch{border-color:rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .mm-watch b{color:var(--down)}
+  .mm-note{border-color:rgba(255,166,60,.32)}
+  .mm-note .mm-tlab{margin-bottom:2px}
+  .mm-about{margin-top:14px}
+  .mm-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .mm-rl{margin:0;padding-left:16px}
+  .mm-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .mm-rl li:first-child{margin-top:0}
+  .mm-rl li::marker{color:var(--acc)}
+  .mm-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .mm-stat:last-child{border-bottom:0}
+  .mm-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .mm-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .mm-card{padding:18px 18px 20px}
+    .mm-frame iframe{height:420px}
+    .mm-maphead{flex-wrap:wrap}
+    .mm-open{font-size:10.5px;padding:7px 12px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  var px=document.getElementById("mm-px"),sats=document.getElementById("mm-sats");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipsis in place */
+    if(px)px.textContent="$"+fmt(P.price,0);
+    if(sats)sats.textContent=fmt(100/P.price*1e8,0)+" sats";
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipsis holds until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+  /* graceful fallback: if the embed's load event has not fired after 8s,
+     surface the direct-link notice. The iframe stays put in case it is merely
+     slow; the notice hides again if the load event arrives late. */
+  var f=document.getElementById("mm-map"),n=document.getElementById("mm-fallback"),loaded=false;
+  if(f&&n){
+    f.addEventListener("load",function(){loaded=true;n.classList.remove("mm-show");});
+    setTimeout(function(){if(!loaded)n.classList.add("mm-show");},8000);
+  }
+})();
+</script>
+</Base>

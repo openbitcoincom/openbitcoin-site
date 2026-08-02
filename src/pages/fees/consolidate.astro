@@ -1,0 +1,258 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="UTXO Consolidation: Merge Small Coins While Fees Are Cheap - OpenBitcoin" description="How UTXO consolidation works: why wallets fill with small coins, and how merging during a cheap fee week saves money later, with a sats and USD estimator.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Fees</div>
+    <h1>UTXO consolidation</h1>
+    <p class="doc-lede">Every payment you receive becomes a separate coin in your wallet, and each one costs about 68 vB to spend. Merging them into one while fees are cheap pays those vbytes at the quiet-week rate, not the busy-week one.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="fo-hero">
+      <div class="fo-tlab">Savings estimator</div>
+      <div class="fo-grid2">
+        <div>
+          <div class="fo-field">
+            <label class="fo-lab" for="fo-n">Small coins to merge</label>
+            <input id="fo-n" class="fo-in" type="text" inputmode="numeric" value="12" autocomplete="off" spellcheck="false" />
+            <div class="fo-hint">inputs in the cleanup transaction</div>
+          </div>
+          <div class="fo-field">
+            <label class="fo-lab" for="fo-c">Consolidate at, sat/vB</label>
+            <input id="fo-c" class="fo-in" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false" />
+            <div class="fo-hint">the quiet-week rate you pay now</div>
+          </div>
+          <div class="fo-field">
+            <label class="fo-lab" for="fo-f">Later spend at, sat/vB</label>
+            <input id="fo-f" class="fo-in" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false" />
+            <div class="fo-hint">the rate when you eventually spend</div>
+          </div>
+        </div>
+        <div class="fo-res">
+          <div class="fo-big">
+            <span class="fo-blab" id="fo-blab">Saved across both transactions</span>
+            <b id="fo-net">2,024 sats</b>
+            <i id="fo-netu">$1.30 at the current price</i>
+          </div>
+          <div class="fo-brk" aria-label="Fee breakdown">
+            <div class="fo-br"><span>Cleanup now, all coins to one output</span><i id="fo-cv">858 vB</i><b id="fo-cs">1,716 sats</b></div>
+            <div class="fo-br"><span>Later spend without merging</span><i id="fo-bv">889 vB</i><b id="fo-bs">4,445 sats</b></div>
+            <div class="fo-br"><span>Later spend after merging</span><i id="fo-av">141 vB</i><b id="fo-as">705 sats</b></div>
+            <div class="fo-br"><span>Trimmed from the later spend</span><i id="fo-tv">748 vB</i><b></b></div>
+          </div>
+          <p class="fo-verd" id="fo-verd">The total covers both transactions: the cleanup you pay for now and the single spend you make later.</p>
+        </div>
+      </div>
+      <div class="fo-foot">Weights: native segwit (P2WPKH), 10.5 vB overhead, 68 vB per input, 31 vB per output; a typical 1-in-2-out payment is 141 vB, matching the <a href="/fees">fee page</a>.</div>
+    </div>
+
+    <div class="fo-steps fo-mt">
+      <div class="fo-step"><span class="fo-sn">01</span><b>Wait for a lull</b><i>Weekends and overnight hours run cheapest</i></div>
+      <div class="fo-step"><span class="fo-sn">02</span><b>Send to yourself</b><i>All the small coins, one output, a fresh address of your own</i></div>
+      <div class="fo-step"><span class="fo-sn">03</span><b>Pick the economy rate</b><i>Nobody is waiting on this transaction</i></div>
+      <div class="fo-step"><span class="fo-sn">04</span><b>Hold one coin</b><i>Future spends are 141 vB, whatever fees do</i></div>
+    </div>
+
+    <div class="fo-cols fo-mt">
+      <div class="fo-card">
+        <h2 class="fo-h2">What a UTXO is</h2>
+        <p class="fo-p">A bitcoin balance is not one number in an account. It is a set of discrete coins, unspent transaction outputs, one for every payment the wallet has received and not yet spent. When you send bitcoin, the wallet picks coins to fund the payment, and every coin it picks becomes an input that adds about 68 vB to the transaction. That is the whole reason consolidation exists: fewer, larger coins make cheaper transactions later. If coins and keys are new territory, <a href="/learn/self-custody">self-custody</a> covers the model from the start.</p>
+      </div>
+      <div class="fo-card">
+        <h2 class="fo-h2">Why wallets fill up</h2>
+        <p class="fo-p">Nobody sets out to own forty tiny coins; schedules do it for them. A recurring buy creates one new coin per purchase, so a year of weekly buys leaves 52 of them. Cashback rewards, small earnings, and the change output from almost every send each add another. The coins never merge on their own: a wallet showing one tidy balance can be sitting on dozens of outputs, and each will cost its own 68 vB at whatever the rate happens to be when it finally moves.</p>
+      </div>
+      <div class="fo-card fo-warn">
+        <h2 class="fo-h2">The privacy trade-off</h2>
+        <p class="fo-p">Consolidation is a privacy trade, stated plainly. Merging coins signs them into one transaction, which links their histories on a public ledger, permanently: an observer now knows one wallet held all of them. Merge coins bought under your identity on an exchange with coins received privately and the two histories become one. Consolidate coins that already share a history; think hard before merging ones that do not. The <a href="/learn/privacy">privacy guide</a> covers what follows a coin around.</p>
+      </div>
+      <div class="fo-card">
+        <h2 class="fo-h2">Dust: coins too small to spend</h2>
+        <p class="fo-p">A coin becomes dust when spending it costs more than it is worth. At 68 vB per input, a 500 sat coin costs 340 sats to move at 5 sat/vB and is pure loss at 10. The network bakes this in: default relay rules refuse outputs below roughly 546 sats, 294 for native segwit, because they would likely never be economical to spend. Dust is the end state of the problem this page exists for; consolidating during a cheap week rescues small coins before they get there.</p>
+      </div>
+    </div>
+
+    <div class="fo-card fo-mt fo-note">
+      <h2 class="fo-h2">When to consolidate</h2>
+      <p class="fo-p">Fee rates move with demand, and demand has a schedule: weekends and late nights run quieter, whole weeks can pass at the economy rate, and a busy stretch can multiply it many times over. Consolidation is the definition of a patient transaction, since nobody is waiting on it, so it should pay the cheapest rate the mempool offers and never a rush rate. <a href="/fees/timing">Fee timing</a> maps where the quiet windows fall, and the <a href="/fees">fee page</a> shows what the mempool is charging right now. When a cheap weekend arrives, that is the moment the estimator above is pricing.</p>
+    </div>
+
+    <div class="fo-about doc-prose">
+      <p>Consolidation is fee arbitrage across time. The vbytes a pile of small coins will eventually cost are fixed the day the coins arrive; the rate those vbytes are paid at is not. Settle them during a quiet week at the economy rate and every spend that follows is a 141 vB payment like anyone else's, regardless of what fees are doing that day. The <a href="/fees/calculator">fee calculator</a> prices any transaction shape from the same weights, and estimates on this page are informational, per the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="fo-stat"><b id="fo-px">$64,362</b><i>1 BTC</i></div>
+      <div class="fo-stat"><b id="fo-er">2 sat/vB</b><i>economy rate</i></div>
+      <div class="fo-stat"><b id="fo-ec">136 sats</b><i>to spend one extra coin at economy</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees">Current fees</a>
+        <a href="/fees/calculator">Fee calculator</a>
+        <a href="/fees/timing">Cheap fee windows</a>
+        <a href="/learn/privacy">Privacy guide</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .fo-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 18px}
+  .fo-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .fo-grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:22px}
+  .fo-field{margin-top:12px}
+  .fo-field:first-child{margin-top:0}
+  .fo-lab{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .fo-in{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 24px var(--mono);font-variant-numeric:tabular-nums;
+    padding:10px 14px;outline:none;letter-spacing:-.5px}
+  .fo-in:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .fo-hint{font:600 10px var(--mono);letter-spacing:.06em;color:var(--ink-3);margin-top:6px}
+  .fo-res{min-width:0}
+  .fo-blab{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .fo-big b{display:block;font:700 32px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px;margin-top:6px}
+  .fo-big b.fo-neg{color:var(--down)}
+  .fo-big i{display:block;font:600 12.5px var(--mono);color:var(--ink-2);font-style:normal;font-variant-numeric:tabular-nums;margin-top:2px}
+  .fo-brk{margin-top:14px;border-top:1px solid var(--line-2)}
+  .fo-br{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px dotted var(--line-2)}
+  .fo-br span{flex:1;min-width:0;font:500 12.5px/1.5 var(--sans);color:var(--ink-2)}
+  .fo-br i{font:600 11.5px var(--mono);color:var(--ink-3);font-style:normal;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .fo-br b{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;min-width:74px;text-align:right}
+  .fo-verd{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin:10px 0 0}
+  .fo-foot{font:600 10.5px/1.6 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:8px}
+  .fo-foot a{color:var(--acc);text-decoration:none}
+  .fo-foot a:hover{text-decoration:underline}
+  .fo-mt{margin-top:14px}
+  .fo-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .fo-step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .fo-sn{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
+  .fo-step b{display:block;font:700 14px var(--sans);color:var(--ink);margin-top:5px}
+  .fo-step i{display:block;font:500 11.5px/1.45 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .fo-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .fo-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px;min-width:0}
+  .fo-warn{border-color:rgba(246,70,93,.42)}
+  .fo-warn .fo-h2{color:var(--down)}
+  .fo-note{border-color:rgba(255,166,60,.32)}
+  .fo-h2{font:700 15.5px/1.3 var(--sans);color:var(--ink);margin:0 0 8px}
+  .fo-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .fo-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .fo-p a:hover{border-bottom-style:solid}
+  .fo-about{margin-top:14px}
+  .fo-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .fo-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .fo-stat:last-child{border-bottom:0}
+  .fo-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fo-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .fo-hero{padding:18px 18px 16px}
+    .fo-grid2{grid-template-columns:minmax(0,1fr);gap:16px}
+    .fo-cols{grid-template-columns:minmax(0,1fr)}
+    .fo-card{padding:16px 18px 18px}
+    .fo-in{font-size:22px}
+    .fo-big b{font-size:28px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* P2WPKH weights, matching /fees and /fees/calculator */
+  var W={ovh:10.5,inp:68,out:31};
+  var P={price:64362.18};
+  var S={n:12,c:2,f:5};
+  var D={n:12,c:2,f:5};
+  var elN=document.getElementById("fo-n"),elC=document.getElementById("fo-c"),elF=document.getElementById("fo-f");
+  var out={net:document.getElementById("fo-net"),netu:document.getElementById("fo-netu"),
+    blab:document.getElementById("fo-blab"),verd:document.getElementById("fo-verd"),
+    cv:document.getElementById("fo-cv"),cs:document.getElementById("fo-cs"),
+    bv:document.getElementById("fo-bv"),bs:document.getElementById("fo-bs"),
+    av:document.getElementById("fo-av"),as:document.getElementById("fo-as"),
+    tv:document.getElementById("fo-tv"),px:document.getElementById("fo-px"),
+    er:document.getElementById("fo-er"),ec:document.getElementById("fo-ec")};
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function usd(sats){var v=sats/1e8*P.price;return "$"+fmt(v,v>=100?0:2);}
+  function parse(s){s=(""+s).replace(/[^0-9.]/g,"");var n=parseFloat(s);return isFinite(n)?n:null;}
+  function clamp(v,lo,hi){return Math.min(hi,Math.max(lo,v));}
+  function vb(nIn,nOut){return Math.ceil(W.ovh+W.inp*nIn+W.out*nOut);}
+  function paint(){
+    var cons=vb(S.n,1),before=vb(S.n,2),after=vb(1,2);
+    var consFee=Math.ceil(cons*S.c),beforeFee=Math.ceil(before*S.f),afterFee=Math.ceil(after*S.f);
+    var net=beforeFee-afterFee-consFee,trim=before-after;
+    out.cv.textContent=fmt(cons,0)+" vB";out.cs.textContent=fmt(consFee,0)+" sats";
+    out.bv.textContent=fmt(before,0)+" vB";out.bs.textContent=fmt(beforeFee,0)+" sats";
+    out.av.textContent=fmt(after,0)+" vB";out.as.textContent=fmt(afterFee,0)+" sats";
+    out.tv.textContent=fmt(trim,0)+" vB";
+    out.net.textContent=(net<0?"-":"")+fmt(Math.abs(net),0)+" sats";
+    out.net.classList.toggle("fo-neg",net<0);
+    out.netu.textContent=usd(Math.abs(net))+(net<0?" extra at the current price":" at the current price");
+    out.blab.textContent=net<0?"Lost by consolidating at these rates":"Saved across both transactions";
+    out.verd.textContent=net<0
+      ?"At these rates the cleanup costs more than it saves. Consolidation pays when the later rate is meaningfully higher than the rate you consolidate at; wait for a cheaper week or a wider gap."
+      :"The total covers both transactions: the cleanup you pay for now and the single spend you make later.";
+    out.px.textContent="$"+fmt(P.price,0);
+  }
+  function read(){
+    var n=parse(elN.value),c=parse(elC.value),f=parse(elF.value);
+    if(n!==null)S.n=clamp(Math.round(n),2,5000);
+    if(c!==null)S.c=clamp(c,0.1,5000);
+    if(f!==null)S.f=clamp(f,0.1,5000);
+    paint();
+  }
+  function normalize(){
+    if(parse(elN.value)===null)S.n=D.n;
+    if(parse(elC.value)===null)S.c=D.c;
+    if(parse(elF.value)===null)S.f=D.f;
+    elN.value=fmt(S.n,0);elC.value=fmt(S.c,2);elF.value=fmt(S.f,2);
+    paint();
+  }
+  [elN,elC,elF].forEach(function(el){
+    el.addEventListener("input",read);
+    el.addEventListener("focus",function(){el.select();});
+    el.addEventListener("blur",normalize);
+  });
+  /* live price arrives via the chrome hook (~1.5s and on new blocks) */
+  window.obPaintFiat=function(Sx){P.price=Sx.price;paint();};
+  paint();
+  /* live fee tiers: one summary fetch on load swaps the prefills to
+     fees.economy and fees.fastest. A field is only replaced while it is
+     unfocused and still holding its fallback value, so the feed never
+     fights the user's typing; on any failure the shipped figures stay. */
+  function applyFees(d){
+    var f=d&&d.fees;if(!f)return;
+    var econ=f.economy,fast=f.fastest;
+    if(typeof econ==="number"&&isFinite(econ)&&econ>0){
+      econ=clamp(econ,0.1,5000);
+      if(document.activeElement!==elC&&parse(elC.value)===D.c){S.c=econ;elC.value=fmt(econ,2);}
+      D.c=econ;
+      if(out.er)out.er.textContent=fmt(econ,1)+" sat/vB";
+      if(out.ec)out.ec.textContent=fmt(Math.ceil(W.inp*econ),0)+" sats";
+    }
+    if(typeof fast==="number"&&isFinite(fast)&&fast>0){
+      fast=clamp(fast,0.1,5000);
+      if(document.activeElement!==elF&&parse(elF.value)===D.f){S.f=fast;elF.value=fmt(fast,2);}
+      D.f=fast;
+    }
+    paint();
+  }
+  /* OB_DATA_API is set by Base.astro in a script at the end of body, after
+     this one parses, so read it on DOMContentLoaded or the fetch never fires */
+  function boot(){
+    try{
+      if(window.OB_LIVE&&window.OB_LIVE.fees){applyFees(window.OB_LIVE);return;}
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/summary").then(function(res){
+        return res.ok?res.json():null;
+      }).then(applyFees).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

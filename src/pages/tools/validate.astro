@@ -1,0 +1,347 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Address Validator with Typo Locator - OpenBitcoin" description="Validate any bitcoin address in your browser: bech32 and base58check checksums, address type and network, plus a locator for a single typo.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Validator</div>
+    <h1>Bitcoin address validator</h1>
+    <p class="doc-lede">Paste an address and the checksum is verified as you type. When exactly one character is wrong, the validator points at it. It locates, it never corrects. Everything runs in your browser; the address is never sent anywhere.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="va-card">
+      <div class="va-lab">Bitcoin address</div>
+      <input id="va-in" class="va-input" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="bc1q... / bc1p... / 3... / 1..." aria-label="Bitcoin address to validate">
+      <div class="va-ex" aria-label="Example addresses">
+        <span>Try:</span>
+        <button data-ex="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4">segwit</button>
+        <button data-ex="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa">genesis</button>
+        <button data-ex="bc1qw508d6qejxtdg4y5x3zarvary0c5xw7kv8f3t4">with a typo</button>
+      </div>
+      <div class="va-res" id="va-res" role="status" aria-live="polite">
+        <div class="va-status va-mut">Waiting for an address</div>
+        <div class="va-note">Mainnet and testnet, all standard types: legacy (1...), script hash (3...), native segwit (bc1q...) and taproot (bc1p...).</div>
+      </div>
+    </div>
+    <p class="va-priv">Validation runs entirely in your browser; the address is never sent anywhere. This page makes no network requests with what you type.</p>
+
+    <div class="va-card" style="margin-top:14px">
+      <div class="va-tlab">What gets checked</div>
+      <div class="doc-prose">
+        <table aria-label="Checks performed by the validator">
+          <thead><tr><th>Check</th><th>How</th></tr></thead>
+          <tbody>
+            <tr><td>Character set</td><td>bech32 uses 32 characters and excludes 1, b, i, o past the separator; base58 excludes 0, O, I, l</td></tr>
+            <tr><td>Checksum</td><td>bech32/bech32m BCH code (BIP-173, BIP-350) or base58check double SHA-256</td></tr>
+            <tr><td>Witness program</td><td>version 0 must be 20 bytes (P2WPKH) or 32 bytes (P2WSH); version 1 with 32 bytes is taproot</td></tr>
+            <tr><td>Network</td><td>1, 3, bc1 are mainnet; m, n, 2, tb1 are testnet</td></tr>
+            <tr><td>Typo locator</td><td>every single-character substitution is tried; if exactly one produces a valid address, that position is flagged</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="va-about doc-prose">
+      <p>Every Bitcoin address ends in a checksum, so a mistyped address is almost always caught before money moves. Bech32 addresses (bc1...) carry a BCH error-detecting code specified in BIP-173 and BIP-350; legacy base58 addresses embed the first four bytes of a double SHA-256 hash. Most validators stop at "invalid". This one goes one step further: it substitutes every character position in turn, and when exactly one substitution yields a valid address, it points at that character. It never rewrites the address for you, because an address you are about to pay deserves a fresh copy from its source, not a machine guess.</p>
+      <p>The checks are pure arithmetic from the address specifications and run entirely in your browser; this page uses no chain data and sends nothing you type to any server. To look up an address on the chain instead, use the <a href="/">address explorer</a>. For the look-alike-address scam and how to avoid it, see <a href="/learn/address-poisoning">address poisoning</a>. Where the data behind the rest of the site comes from is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Address types</div>
+      <div class="va-t"><b>1...</b><i>P2PKH, legacy. The original format; largest transactions, highest fees to spend.</i></div>
+      <div class="va-t"><b>3...</b><i>P2SH, script hash. Multisig and wrapped segwit.</i></div>
+      <div class="va-t"><b>bc1q...</b><i>Native segwit v0. P2WPKH or P2WSH; lower fees.</i></div>
+      <div class="va-t"><b>bc1p...</b><i>P2TR, taproot. Witness v1, bech32m encoding.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/">Look up an address on the chain</a>
+        <a href="/learn/address-poisoning">Address poisoning, explained</a>
+        <a href="/sats">What is a satoshi</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .va-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .va-lab,.va-tlab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .va-input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 16.5px var(--mono);padding:13px 15px;outline:none;letter-spacing:0}
+  .va-input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .va-input::placeholder{color:var(--ph);font-weight:600}
+  .va-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .va-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .va-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .va-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink);border-color:var(--line-2)}
+  .va-res{margin-top:16px;padding-top:14px;border-top:1px dotted var(--line-2)}
+  .va-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .va-status.va-ok{color:var(--up)}
+  .va-status.va-bad{color:var(--down)}
+  .va-status.va-mut{color:var(--ink-3)}
+  .va-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .va-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .va-render{margin-top:12px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;
+    padding:11px 13px;font:600 14.5px var(--mono);color:var(--ink-2);word-break:break-all;line-height:1.7}
+  .va-render mark{background:rgba(246,70,93,.16);color:var(--down);border:1px solid var(--down);
+    border-radius:3px;padding:0 2px;font-weight:700}
+  .va-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:10px}
+  .va-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin-top:8px}
+  .va-priv{font:600 11px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0}
+  .va-about{margin-top:14px}
+  .va-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .va-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .va-t:last-child{border-bottom:0}
+  .va-t b{display:block;font:700 13px var(--mono);color:var(--acc)}
+  .va-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .va-input{font-size:13.5px}
+    .va-render{font-size:13px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* No fetch, no XHR, no beacons anywhere in this script: the zero-network
+     claim on the page depends on it. crypto.subtle.digest is local math.
+
+     Test vectors (verified with node before commit):
+       valid   1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa                               genesis, P2PKH mainnet
+       valid   3P14159f73E4gFr7JterCCQh9QjiTjiZrG                               P2SH mainnet
+       valid   bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4                       BIP-173, P2WPKH mainnet
+       valid   bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3   BIP-173, P2WSH mainnet
+       valid   bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0   BIP-350, P2TR mainnet
+       invalid bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5                       v0 with bech32m constant
+       typo    bc1qw508d6qejxtdg4y5x3zarvary0c5xw7kv8f3t4                       locator flags char 21, expects r
+       typo    1A1zPQeP5QGefi2DMPTfTL5SLmv7DivfNa                               locator flags char 6, expects 1 */
+
+  /* ---------- bech32 / bech32m (BIP-173 / BIP-350) ---------- */
+  var CS="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+  var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+  function polymod(v){
+    var chk=1,i,j,top;
+    for(i=0;i<v.length;i++){
+      top=chk>>>25;chk=((chk&0x1ffffff)<<5)^v[i];
+      for(j=0;j<5;j++)if((top>>>j)&1)chk^=GEN[j];
+    }
+    return chk>>>0;
+  }
+  function hrpExpand(h){
+    var r=[],i;
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)>>5);
+    r.push(0);
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)&31);
+    return r;
+  }
+  function convert5to8(d){
+    var acc=0,bits=0,out=[],i;
+    for(i=0;i<d.length;i++){
+      acc=(acc<<5)|d[i];bits+=5;
+      while(bits>=8){bits-=8;out.push((acc>>bits)&255);}
+    }
+    if(bits>=5||((acc<<(8-bits))&255))return null;
+    return out;
+  }
+  /* full validity of a lowercase candidate: checksum AND witness rules */
+  function bech32Check(a){
+    if(a.length>90)return null;
+    var pos=a.lastIndexOf("1");
+    if(pos<1||pos+7>a.length)return null;
+    var hrp=a.slice(0,pos);
+    if(hrp!=="bc"&&hrp!=="tb"&&hrp!=="bcrt")return null;
+    var data=[],i,d;
+    for(i=pos+1;i<a.length;i++){
+      d=CS.indexOf(a[i]);
+      if(d<0)return null;
+      data.push(d);
+    }
+    var pm=polymod(hrpExpand(hrp).concat(data));
+    var enc=pm===1?"bech32":(pm===0x2bc830a3?"bech32m":null);
+    if(!enc)return null;
+    var ver=data[0];
+    if(ver>16)return null;
+    if(ver===0&&enc!=="bech32")return null;
+    if(ver>0&&enc!=="bech32m")return null;
+    var prog=convert5to8(data.slice(1,data.length-6));
+    if(!prog||prog.length<2||prog.length>40)return null;
+    if(ver===0&&prog.length!==20&&prog.length!==32)return null;
+    var type=ver===0?(prog.length===20?"P2WPKH":"P2WSH")
+            :(ver===1&&prog.length===32)?"P2TR"
+            :"witness v"+ver;
+    return {enc:enc,ver:ver,bytes:prog.length,type:type,
+            net:hrp==="bc"?"mainnet":(hrp==="tb"?"testnet":"regtest")};
+  }
+  /* single-character substitution search over the data part */
+  function bech32Fix(a){
+    var pos=a.lastIndexOf("1"),fixes=[],i,c,ch;
+    if(pos<1)return fixes;
+    for(i=pos+1;i<a.length;i++){
+      for(c=0;c<32;c++){
+        ch=CS[c];
+        if(ch===a[i])continue;
+        if(bech32Check(a.slice(0,i)+ch+a.slice(i+1)))fixes.push({i:i,ch:ch});
+        if(fixes.length>1)return fixes;
+      }
+    }
+    return fixes;
+  }
+
+  /* ---------- base58check ---------- */
+  var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  function b58decode(s){
+    if(!s.length||s.length>40)return null;
+    var bytes=[0],i,j,v,carry,x;
+    for(i=0;i<s.length;i++){
+      v=B58.indexOf(s[i]);
+      if(v<0)return null;
+      carry=v;
+      for(j=0;j<bytes.length;j++){
+        x=bytes[j]*58+carry;
+        bytes[j]=x&255;carry=x>>8;
+      }
+      while(carry){bytes.push(carry&255);carry>>=8;}
+    }
+    for(i=0;i<s.length&&s[i]==="1";i++)bytes.push(0);
+    return bytes.reverse();
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",new Uint8Array(bytes)).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+  var B58VER={0:["P2PKH","mainnet"],5:["P2SH","mainnet"],111:["P2PKH","testnet"],196:["P2SH","testnet"]};
+  function b58Check(s){
+    var bytes=b58decode(s);
+    if(!bytes||bytes.length!==25||!B58VER[bytes[0]])return Promise.resolve(null);
+    return sha256d(bytes.slice(0,21)).then(function(h){
+      for(var i=0;i<4;i++)if(h[i]!==bytes[21+i])return null;
+      return {type:B58VER[bytes[0]][0],net:B58VER[bytes[0]][1]};
+    });
+  }
+  function b58Fix(s){
+    var fixes=[],cands=[],i,c,ch;
+    for(i=0;i<s.length;i++){
+      for(c=0;c<58;c++){
+        ch=B58[c];
+        if(ch!==s[i])cands.push({i:i,ch:ch});
+      }
+    }
+    var k=0;
+    function step(){
+      if(k>=cands.length||fixes.length>1)return Promise.resolve(fixes);
+      var batch=cands.slice(k,k+64);k+=64;
+      return Promise.all(batch.map(function(f){
+        return b58Check(s.slice(0,f.i)+f.ch+s.slice(f.i+1)).then(function(r){
+          if(r)fixes.push(f);
+        });
+      })).then(step);
+    }
+    return step();
+  }
+
+  /* ---------- UI ---------- */
+  var el=document.getElementById("va-in"),res=document.getElementById("va-res"),
+      run=0,deb=null;
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function badges(list){
+    return '<div class="va-badges">'+list.map(function(b){return "<span>"+esc(b)+"</span>";}).join("")+"</div>";
+  }
+  function renderAddr(s,hi){
+    var out="",i;
+    for(i=0;i<s.length;i++)out+=(i===hi?"<mark>"+esc(s[i])+"</mark>":esc(s[i]));
+    return '<div class="va-render">'+out+"</div>";
+  }
+  function paint(html){res.innerHTML=html;}
+  var TYPENOTE={
+    P2PKH:"Pay to public key hash: the legacy format in use since 2009.",
+    P2SH:"Pay to script hash: multisig, timelocks or wrapped segwit behind the scenes.",
+    P2WPKH:"Native segwit v0, pay to witness public key hash, 20-byte program.",
+    P2WSH:"Native segwit v0, pay to witness script hash, 32-byte program.",
+    P2TR:"Taproot: witness version 1, 32-byte x-only public key, bech32m encoding."
+  };
+  function paintValid(r,enc){
+    var note=TYPENOTE[r.type]||("Witness version "+r.ver+", "+r.bytes+"-byte program: a valid encoding with no standard spending rules yet.");
+    if(r.net!=="mainnet")note+=" This is a "+r.net+" address; coins on the main network cannot be sent to it.";
+    paint('<div class="va-status va-ok">&#10003; Valid address</div>'
+      +badges([r.type,r.net,enc])
+      +'<div class="va-note">'+note+" A valid checksum proves the address is well formed, not that it belongs to who you think it does.</div>");
+  }
+  function paintTypo(s,f,enc,net){
+    paint('<div class="va-status va-bad">&#10007; Checksum fails</div>'
+      +badges(["typo located",enc,net])
+      +renderAddr(s,f.i)
+      +'<div class="va-note">Character '+(f.i+1)+" looks wrong: did you mean <b>"+esc(f.ch)+"</b>? Exactly one single-character fix exists, at the highlighted position. We locate the character, we never rewrite an address you might send money to: re-copy it from its source.</div>"
+      +'<div class="va-fine">If you pasted this rather than typed it, note that clipboard malware swaps addresses in transit. Verify the source.</div>');
+  }
+  function paintNoFix(enc,net,why){
+    paint('<div class="va-status va-bad">&#10007; '+why+"</div>"
+      +badges([enc,net])
+      +'<div class="va-note">No single-character substitution produces a valid address, so this is not a locatable typo: more than one character is likely wrong, or characters are missing. Re-copy the address from its source.</div>');
+  }
+  function paintIdle(){
+    paint('<div class="va-status va-mut">Waiting for an address</div>'
+      +'<div class="va-note">Mainnet and testnet, all standard types: legacy (1...), script hash (3...), native segwit (bc1q...) and taproot (bc1p...).</div>');
+  }
+  function paintNotAddr(){
+    paint('<div class="va-status va-bad">&#10007; Not recognized as a Bitcoin address</div>'
+      +'<div class="va-note">Bitcoin addresses start with 1 or 3 (base58) or bc1 (bech32); testnet addresses start with m, n, 2 or tb1. Extended public keys (xpub...), payment codes and Lightning invoices are not addresses.</div>');
+  }
+
+  function validate(raw,token){
+    var s=raw.replace(/\s+/g,"");
+    if(!s){paintIdle();return;}
+    if(s.length>100){paintNotAddr();return;}
+    var lower=s.toLowerCase();
+    if(/^(bc1|tb1|bcrt1)/.test(lower)){
+      var net=lower.slice(0,3)==="bc1"?"mainnet":(lower.slice(0,3)==="tb1"?"testnet":"regtest");
+      if(s!==lower&&s!==s.toUpperCase()){
+        paint('<div class="va-status va-bad">&#10007; Mixed case</div>'
+          +badges(["bech32",net])
+          +'<div class="va-note">Bech32 addresses must be all lowercase or all uppercase (BIP-173). Fix the casing and check again.</div>');
+        return;
+      }
+      var r=bech32Check(lower);
+      if(r){paintValid(r,r.enc);return;}
+      if(lower.length>90){paintNoFix("bech32",net,"Too long");return;}
+      var fx=bech32Fix(lower);
+      if(fx.length===1)paintTypo(lower,fx[0],"bech32",net);
+      else paintNoFix("bech32",net,"Checksum fails");
+      return;
+    }
+    if(/^[13mn2]/.test(s)){
+      var bnet=(s[0]==="1"||s[0]==="3")?"mainnet":"testnet";
+      paint('<div class="va-status va-mut">Checking&hellip;</div>');
+      b58Check(s).then(function(r){
+        if(token!==run)return;
+        if(r){paintValid(r,"base58check");return;}
+        if(s.length<25||s.length>36){paintNoFix("base58",bnet,"Wrong length");return;}
+        b58Fix(s).then(function(fx){
+          if(token!==run)return;
+          if(fx.length===1)paintTypo(s,fx[0],"base58",bnet);
+          else paintNoFix("base58",bnet,"Checksum fails");
+        });
+      });
+      return;
+    }
+    paintNotAddr();
+  }
+
+  el.addEventListener("input",function(){
+    clearTimeout(deb);
+    deb=setTimeout(function(){validate(el.value,++run);},120);
+  });
+  document.querySelectorAll(".va-ex button").forEach(function(b){
+    b.addEventListener("click",function(){
+      el.value=b.dataset.ex;
+      validate(el.value,++run);
+      el.focus();
+    });
+  });
+})();
+</script>
+</Base>

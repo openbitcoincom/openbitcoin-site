@@ -1,0 +1,520 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin API: Public JSON Endpoints from Our Own Node - OpenBitcoin" description="A public Bitcoin API: price, candles, blocks, transactions, addresses, mempool, and fees as plain JSON, served from our own full node with no third-party pass-through.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">API</div>
+    <h1>A public JSON API, from our own node</h1>
+    <p class="doc-lede">Eighteen small endpoints, one push, and a live event stream for the numbers this site runs on: price, candles, blocks, transactions, addresses, the mempool, fees, network stats, and history going back to the genesis block. Plain JSON over GET, CORS open to any origin, no wrapper objects, no third-party pass-through. Every data path the server answers is documented on this page.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ai-gate">
+      <span class="ai-glab">Status</span>
+      <p>Live. Every path on this page answers today, served from our own node and index. Limits may apply, and the surface may still change before 1.0.</p>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/price</code></div>
+      <p class="ai-purpose">The current dollar price of one bitcoin: a blend of exchange feeds, with the 24 hour change and the number of feeds that contributed. The same number the <a href="/price">price page</a> shows.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "usd": 64362.18,
+  "change24h": 1.42,
+  "feeds": 3,
+  "asOf": "2026-07-31T12:00:05.000Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/fees</code></div>
+      <p class="ai-purpose">Current feerate tiers in sat/vB, the same four tiers the <a href="/fees">fee page</a> shows, plus the mempool figures they were read against. mempoolVsize is in vbytes; source names the process that produced the tiers.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "fastest": 5,
+  "halfHour": 4,
+  "hour": 3,
+  "economy": 2,
+  "minimum": 1,
+  "mempoolCount": 4182,
+  "mempoolVsize": 12400000,
+  "source": "node",
+  "asOf": "2026-07-31T11:59:41.000Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/height</code></div>
+      <p class="ai-purpose">The current block height from our fully validating node. The smallest possible poll.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "height": 960469,
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/network</code></div>
+      <p class="ai-purpose">Chain state as our node reports it: height, the raw difficulty, and the network hashrate implied by it in exahashes per second, worked out as difficulty times 2^32 divided by the 600 second block target. The <a href="/hashrate">hashrate page</a> and the <a href="/tools/mining">mining calculator</a> both start here.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "height": 960469,
+  "difficulty": 127853476647240.5,
+  "hashrateEhs": 915.1,
+  "chain": "main",
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/summary</code></div>
+      <p class="ai-purpose">One call for the whole band: price, fee tiers, and height in a single body, the same feed the site chrome runs on. lastBlockAt is when our node last saw the tip advance.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "price": { "usd": 64362.18, "change24h": 1.42, "feeds": 3, "asOf": "2026-07-31T12:00:05.000Z" },
+  "fees": ,
+  "height": 960469,
+  "lastBlockAt": "2026-07-31T11:58:27.402Z",
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/mempool</code></div>
+      <p class="ai-purpose">What is waiting to confirm, as our node sees it: transaction count, total virtual size in vbytes, node memory use, the minimum feerate to get in, and a fee histogram from our index. The <a href="/mempool">mempool page</a> reads the same feed.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "count": 4182,
+  "vsize": 12400000,
+  "memoryUsage": 486512640,
+  "minFeerate": 1,
+  "histogram": [
+    [12.1, 431200],
+    [8.4, 1230400]
+    /* [feerate sat/vB, vsize] pairs, highest feerate first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/candles</code></div>
+      <p class="ai-purpose">Price candles for charting, the series behind the <a href="/chart">chart page</a>. interval is 1m, 1h, or 1d; limit is how many candles you want (default 90). Times are unix seconds.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/candles?interval=1d&amp;limit=90</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "exchange": "bitstamp",
+  "interval": "1d",
+  "candles": [
+    [1777766400, 60110.0, 61240.5, 59802.1, 60981.3]
+    /* one [time, open, high, low, close] per interval, oldest first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/fear-greed</code></div>
+      <p class="ai-purpose">A house sentiment index, 0 to 100, computed from our own price store and nothing else. Four components: momentum against the 30 day average, trend against the 200 day average, drawdown from the 365 day high, and 7 day against 90 day realized volatility. method spells out the weights, so the number can be argued with. Mempool and fee pressure were a fifth component until they were found pushing the index up while the price fell: a backlog is blockspace demand, not sentiment. value is null with an "insufficient history" label if there is not enough price history to compute it.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "value": 41,
+  "label": "Fear",
+  "components": {
+    "momentum": 48,
+    "trend": 33,
+    "drawdown": 29,
+    "volatility": 62,
+    "activity": 54
+  },
+  "method": "House index from our own data: momentum vs 30d average (20%), ...",
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/blocks</code></div>
+      <p class="ai-purpose">The most recent blocks, newest first, with the miner where the coinbase names one and the fees actually paid in each. limit is how many blocks you want (default 15, up to 30). The four fee fields are null for a block our node cannot produce statistics for. The <a href="/blocks">blocks page</a> shows the same feed.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/blocks?limit=15</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "tip": 960469,
+  "blocks": [
+    {
+      "height": 960469,
+      "hash": "00000000000000000000a1c3...9f42",
+      "time": 1785455901,
+      "nTx": 4306,
+      "size": 1748231,
+      "weight": 3993412,
+      "miner": "F2Pool",
+      "minerTag": "/F2Pool/",
+      "totalFeeSat": 1642318,
+      "medianFeerate": 4,
+      "minFeerate": 1,
+      "maxFeerate": 402
+    }
+    /* one row per block, newest first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/block/{height|hash}</code></div>
+      <p class="ai-purpose">One block in full, by height or hash: header fields, fee statistics, the decoded coinbase, and the transaction list 15 rows at a time via ?page=N. The <a href="/958218">block pages</a> render this body.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/block/960469</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "hash": "00000000000000000000a1c3...9f42",
+  "height": 960469,
+  "time": 1785455901,
+  "mediantime": 1785452710,
+  "nTx": 4306,
+  "size": 1748231,
+  "weight": 3993412,
+  "version": 537346048,
+  "versionHex": "20074000",
+  "bits": "1702f128",
+  "nonce": 3407548215,
+  "difficulty": 127853476647240.5,
+  "merkleroot": "8c4d21f0...b3e7",
+  "previousblockhash": "00000000000000000001c6d8...4af2",
+  "nextblockhash": null,
+  "confirmations": 1,
+  "stats": {
+    "totalFeeSat": 9214321,
+    "subsidySat": 312500000,
+    "minFeerate": 1,
+    "maxFeerate": 402,
+    "medianFeerate": 4
+  },
+  "coinbase": {
+    "ascii": "···/F2Pool/···",
+    "bytes": 58,
+    "hexPreview": "03d5a70e...",
+    "tag": "/F2Pool/",
+    "miner": "F2Pool"
+  },
+  "page": 1,
+  "pages": 288,
+  "pageSize": 15,
+  "txs": [
+    { "txid": "b6f1c2d8...9d02", "ins": 1, "outs": 4, "outSat": 321714321, "feeSat": null, "feerate": null, "coinbase": true }
+    /* 15 rows per page */
+  ]
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/tx/{txid}</code></div>
+      <p class="ai-purpose">One transaction in full: sizes, fee, confirmation state, the segwit, RBF, and coinbase flags, every input and output with addresses and amounts in sats, the dollar close on the day it confirmed, and the raw hex for all but the very largest transactions. The <a href="/a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d">transaction pages</a> render this body.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/tx/9c2e0f24629a...41aa</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "txid": "9c2e0f24629a...41aa",
+  "size": 222,
+  "vsize": 141,
+  "weight": 561,
+  "version": 2,
+  "locktime": 0,
+  "feeSat": 705,
+  "confirmations": 3,
+  "blockhash": "000000000000000000018f2c...66d1",
+  "height": 960467,
+  "time": 1785454102,
+  "segwit": true,
+  "rbf": true,
+  "coinbase": false,
+  "usdThen": 64105.2,
+  "hex": "02000000000101...",
+  "vin": [
+    {
+      "txid": "5b0c7d31...77e3",
+      "vout": 1,
+      "sequence": 4294967293,
+      "valueSat": 2158000,
+      "address": "bc1q...",
+      "type": "witness_v0_keyhash",
+      "scriptSigHex": null,
+      "witness": ["3044...01", "02c1..."]
+    }
+  ],
+  "vout": [
+    {
+      "n": 0,
+      "valueSat": 1500000,
+      "address": "bc1q...",
+      "type": "witness_v0_keyhash",
+      "asm": "0 c93a5f89...",
+      "hex": "0014c93a5f89..."
+    }
+    /* one entry per output */
+  ]
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/address/{address}</code></div>
+      <p class="ai-purpose">Confirmed and unconfirmed balance in sats, activity counts, first and last activity, and the most recent transaction ids for one address, read from our own index. An address that does not parse answers with valid false.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/address/bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "address": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+  "valid": true,
+  "typeLabel": "bech32 · SegWit v0",
+  "confirmedSat": 155386,
+  "unconfirmedSat": 0,
+  "txCount": 2,
+  "mempoolCount": 0,
+  "utxoCount": 1,
+  "firstSeen": { "height": 481824, "time": 1503539857 },
+  "lastActivity": { "height": 960301, "time": 1785361200 },
+  "recent": [
+    { "txid": "9c2e0f24629a...41aa", "height": 960301 }
+    /* newest first, up to 50 */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/address/{address}/txs</code></div>
+      <p class="ai-purpose">The full transaction history for one address, newest first, 15 rows at a time via ?page=N. deltaSat is the net effect on the address in sats; height and time are null while a transaction waits in the mempool.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/address/bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4/txs?page=1</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "address": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+  "page": 1,
+  "pages": 1,
+  "txCount": 2,
+  "txs": [
+    {
+      "txid": "9c2e0f24629a...41aa",
+      "height": 960301,
+      "time": 1785361200,
+      "deltaSat": 155386,
+      "feeSat": 705
+    }
+    /* newest first, 15 rows per page */
+  ]
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/address/{address}/balance-history</code></div>
+      <p class="ai-purpose">The running confirmed balance of one address after every transaction that touched it, oldest first, as [unix seconds, balance in sats] pairs. Rebuilding it means walking the whole history, so it is only offered for addresses with a workable number of confirmed transactions: past that, available comes back false with the count, and nothing else. Unconfirmed transactions are left out. The chart on the address page reads this.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/address/bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4/balance-history</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "address": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+  "available": true,
+  "points": [
+    [1503539857, 155386]
+    /* [time, running balance in sats], oldest first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}
+
+/* an address with too much history, or none at all */
+{ "address": "bc1q...", "available": false, "txCount": 1842 }</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/difficulty-history</code></div>
+      <p class="ai-purpose">Every difficulty retarget since the genesis block, oldest first, as [unix seconds, height, difficulty] triples, built from our own chain index. Implied hashrate is difficulty times 2^32 divided by 600. The chart on the <a href="/hashrate">hashrate page</a> is drawn from this.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "points": [
+    [1231006505, 0, 1],
+    [1233063531, 2016, 1]
+    /* [time, height, difficulty], one per retarget, oldest first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/fee-history</code></div>
+      <p class="ai-purpose">What blocks have actually paid, one sample every 144 blocks (roughly daily) since 2009, oldest first. Each point is [unix seconds, height, median feerate, average feerate, total fees in sats, subsidy in sats]; feerates are sat/vB and any of the last four can be null for a sample our node has no statistics for. days caps how many samples come back, newest kept (default and maximum 10000). The <a href="/fees/history">fee history page</a> plots it.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/fee-history?days=3650</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "points": [
+    [1503539857, 481824, 12, 21.4, 184203118, 1250000000]
+    /* [time, height, medianFeerate, avgFeerate, totalFeeSat, subsidySat] */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/txfeed</code></div>
+      <p class="ai-purpose">The newest transactions our node has seen arrive in the mempool, newest first, up to fifty of them. Parsed straight from bitcoind's raw transaction stream, so at is when we saw it rather than anything the transaction itself claims. Not confirmation: everything here is unconfirmed by definition.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "txs": [
+    {
+      "txid": "9c2e0f24629a...41aa",
+      "valueSat": 321714321,
+      "vsize": 141,
+      "at": "2026-07-31T12:00:07.884Z"
+    }
+    /* newest first, up to 50 */
+  ]
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/news</code></div>
+      <p class="ai-purpose">Bitcoin headlines from the last fourteen days, newest first, gathered by our own scanner: title, link, outlet and publication time. limit is how many you want (default 20, up to 50). Links point at the outlet, not at us. The <a href="/news">news page</a> reads the same feed.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/news?limit=20</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "items": [
+    {
+      "title": "Difficulty falls 5 percent at the July retarget",
+      "url": "https://example.org/story",
+      "outlet": "Example Wire",
+      "date": "2026-07-31T09:14:00.000Z"
+    }
+    /* newest first */
+  ],
+  "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">POST</span><code class="ai-path">/api/v1/broadcast</code></div>
+      <p class="ai-purpose">Push a signed raw transaction to the network through our node, and nothing else: it runs testmempoolaccept first and only then sendrawtransaction, so a transaction that will not be accepted is never relayed. The one endpoint here that is not a GET, and the only one that takes a body. Send JSON with a single hex field. This is what the <a href="/tools/broadcast">broadcast tool</a> does when you press the button. Rate limited to a small burst a minute per address, so it answers 429 if you hammer it, and the body is capped at 1 MB.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req" is:raw>POST /api/v1/broadcast
+Content-Type: application/json
+
+{"hex": "0200000000010138f5...b400000000"}</div>
+      <div class="ai-exl">Accepted, 200</div>
+      <pre class="ai-json" is:raw>{ "ok": true, "txid": "9c2e0f24629a...41aa" }</pre>
+      <div class="ai-exl">Refused by the node, 422</div>
+      <pre class="ai-json" is:raw>{
+  "error": "rejected",
+  "reason": "min relay fee not met",
+  "txid": "9c2e0f24629a...41aa"
+}
+/* reason is the node's own words; txid is null when the bytes never got
+   far enough to have one */</pre>
+      <div class="ai-exl">Malformed request, 400</div>
+      <pre class="ai-json" is:raw>{ "error": "not a hex transaction" }</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/stream</code></div>
+      <p class="ai-purpose">Server-sent events over one long-lived GET, for anything that wants the numbers pushed rather than polled: a summary event roughly every ten seconds with the same body as /api/v1/summary, a block event the moment our node sees a new block, and a tx event as transactions arrive in the mempool, sampled so a busy minute cannot flood you. One summary is sent immediately on connect, so nothing has to wait for the first tick. Point an EventSource at it.</p>
+      <div class="ai-exl">Example events</div>
+      <pre class="ai-json" is:raw>event: summary
+data: {"price":{"usd":64362.18, ...},"height":960469,"asOf":"2026-07-31T12:00:09.311Z"}
+
+event: block
+data: {"height":960470,"lastBlockAt":"2026-07-31T12:07:44.120Z"}
+
+event: tx
+data: {"txid":"9c2e0f24629a...41aa","valueSat":321714321,"vsize":141}</pre>
+    </div>
+
+    <div class="ai-card ai-mt">
+      <div class="ai-tlab">How it is served</div>
+      <ul class="ai-list">
+        <li><b>Our own node and index answer every request.</b> The stack behind these endpoints is the one described on <a href="/about">about</a> and <a href="/sources">sources</a>: a fully validating Bitcoin node and an index built from it, on hardware we run.</li>
+        <li><b>No third-party pass-through.</b> No request is proxied to someone else's API. An answer from these endpoints is our node's answer, which is the point of having them.</li>
+        <li><b>Plain GET, open CORS.</b> Every endpoint on this page answers JSON with CORS open to any origin, so a page anywhere can read it directly, and all of them are GET except the one that pushes a transaction. Limits may apply; be gentle, and cache what you can.</li>
+        <li><b>The surface may change before 1.0.</b> The aim for v1 is that fields are added, not renamed or removed, and a new shape gets a new version prefix. Until 1.0 the endpoints may still be adjusted, and this page changes with them.</li>
+      </ul>
+      <p class="ai-fine">Figures in the example bodies are representative rather than captured output; the field names and shapes match what the server answers. If you would rather not trust our node at all, <a href="/nodes">running your own</a> is the better answer, and we mean that.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="ai-stat"><b id="ai-px">$64,362</b><i>1 BTC</i></div>
+      <div class="ai-stat"><b id="ai-h">&hellip;</b><i>block height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/sources">Where the numbers come from</a>
+        <a href="/about">About this site</a>
+        <a href="/nodes">Run your own node</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ai-mt{margin-top:14px}
+  .ai-gate{display:flex;align-items:baseline;gap:14px;background:var(--panel);border:1px solid rgba(255,166,60,.38);
+    border-radius:12px;padding:14px 18px}
+  .ai-glab{flex:none;font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .ai-gate p{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0}
+  .ai-ep{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px}
+  .ai-ephead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ai-method{font:700 10px var(--mono);letter-spacing:.12em;color:var(--acc);
+    border:1px solid rgba(247,147,26,.45);border-radius:6px;padding:3px 8px}
+  .ai-path{font:700 14px var(--mono);color:var(--ink);letter-spacing:.01em;overflow-wrap:anywhere}
+  .ai-purpose{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .ai-purpose a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ai-purpose a:hover{border-bottom-style:solid}
+  .ai-exl{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:13px 0 6px}
+  .ai-req{font:600 12.5px/1.5 var(--mono);color:var(--ink-2);background:var(--field);border:1px solid var(--line-2);
+    border-radius:8px;padding:9px 12px;overflow-x:auto;white-space:pre}
+  .ai-json{font:600 12.5px/1.65 var(--mono);color:var(--ink-2);background:var(--field);border:1px solid var(--line-2);
+    border-radius:10px;padding:12px 14px;margin:0;overflow-x:auto;font-variant-numeric:tabular-nums}
+  .ai-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ai-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .ai-list{margin:0;padding-left:22px}
+  .ai-list li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .ai-list li:first-child{margin-top:0}
+  .ai-list li::marker{color:var(--acc)}
+  .ai-list b{color:var(--ink);font-weight:600}
+  .ai-list a,.ai-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ai-list a:hover,.ai-fine a:hover{border-bottom-style:solid}
+  .ai-fine{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:13px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .ai-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ai-stat:last-child{border-bottom:0}
+  .ai-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .ai-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .ai-gate{flex-direction:column;gap:6px;padding:13px 16px}
+    .ai-ep{padding:16px 16px 18px}
+    .ai-card{padding:18px 18px 20px}
+    .ai-json,.ai-req{font-size:11.5px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* height ships as null, not as a baked figure: a block height is stale ten
+     minutes after it is written, so the tile holds an ellipsis until the
+     chrome hook paints the real one */
+  var P={price:64362.18,height:null};
+  function fmt(n){return n.toLocaleString("en-US");}
+  var px=document.getElementById("ai-px"),h=document.getElementById("ai-h");
+  function paint(){
+    if(px)px.textContent="$"+fmt(Math.round(P.price));
+    if(h)h.textContent=(P.height===null?"…":fmt(P.height));
+  }
+  /* live price and height arrive via the chrome hook (~1.5s and on new blocks) */
+  window.obPaintFiat=function(S){if(S.price)P.price=S.price;if(S.height)P.height=S.height;paint();};
+  paint();
+})();
+</script>
+</Base>

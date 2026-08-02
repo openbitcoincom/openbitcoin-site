@@ -1,0 +1,181 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Privacy Basics: Pseudonymous, Not Anonymous - OpenBitcoin" description="Bitcoin is pseudonymous, not anonymous: every transaction is public forever. How KYC, address reuse, and clustering expose you, and the habits that help.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Bitcoin privacy basics</h1>
+    <p class="doc-lede">Every transaction is public, forever, to everyone. Addresses are pseudonyms, not names, and bitcoin privacy is the work of keeping those two facts apart: what the ledger shows, and who you are.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pv-card">
+      <div class="pv-tlab">The chain is public forever</div>
+      <p class="pv-p">Every bitcoin transaction ever made sits in a ledger that anyone can read and thousands of independent nodes replicate. There is no private mode and no deletion: a payment you make today will still be readable in fifty years, tied to the addresses it moved between. What the ledger does not record is who owns those addresses. Bitcoin is pseudonymous, not anonymous, and the difference matters: your activity is fully public under a pseudonym, and the moment that pseudonym is connected to your name, your history comes with it. Open any address in the <a href="/">explorer</a> and you are seeing exactly what the entire world sees.</p>
+      <div class="pv-compare">
+        <div class="pv-col">
+          <div class="pv-clab pv-clab-r">On the ledger, visible to everyone</div>
+          <ul class="pv-clist">
+            <li>Every transaction, permanently and in full.</li>
+            <li>The addresses that sent and the addresses that received.</li>
+            <li>The exact amounts, timestamped block by block.</li>
+            <li>The trail of each coin, traceable back through every previous owner.</li>
+          </ul>
+        </div>
+        <div class="pv-col">
+          <div class="pv-clab pv-clab-g">Not on the ledger</div>
+          <ul class="pv-clist">
+            <li>Your name. No transaction carries an identity.</li>
+            <li>Your IP address; the chain never stores it, though the network can observe it (covered below).</li>
+            <li>Which addresses belong to the same person. That has to be inferred.</li>
+            <li>Anything you do not attach to it yourself.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-card pv-mt">
+      <div class="pv-tlab">How identity gets attached</div>
+      <p class="pv-p">Nothing in the protocol connects an address to a person. The connections are made outside the chain, through three main channels.</p>
+      <div class="pv-leaks">
+        <div class="pv-leak"><b>KYC records</b><span>An exchange that verified your identity knows exactly which addresses it sent your withdrawals to. The link between your name and your coins lives in its database, subject to its sharing agreements, its legal obligations, and its data breaches. How to buy without creating that record is its own topic; see the <a href="/learn/no-kyc">no-KYC guide</a>.</span></div>
+        <div class="pv-leak"><b>Address reuse</b><span>Use one address for everything and it becomes a running identity. Every counterparty who pays it can read its entire history and watch everything it does next, and a reused address published anywhere ties all of that to whatever name sits beside it.</span></div>
+        <div class="pv-leak"><b>Clustering</b><span>Merchants, counterparties, and chain-analysis firms group addresses into wallets using spending patterns, chiefly the fact that addresses spent together in a single transaction usually share an owner. Once a cluster exists, identifying one address in it can label every address in it, and those labels are bought and sold.</span></div>
+      </div>
+    </div>
+
+    <div class="pv-card pv-mt">
+      <div class="pv-tlab">Habits that help</div>
+      <ul class="pv-do">
+        <li><b>Use a new address for every receive.</b> Wallets generate them endlessly and old ones keep working, so this costs nothing. Fresh addresses keep your counterparties from seeing each other, and your history stays split instead of pooled under one pseudonym.</li>
+        <li><b>Consolidate deliberately, not by accident.</b> Spending coins from unrelated sources in one transaction declares, through the clustering pattern above, that all of them were yours. Consolidation is sometimes worth doing for fees; just know that it merges histories when you do it.</li>
+        <li><b>Be careful what you publish.</b> An address posted in a profile, a repository, or a fundraiser is bound to your name permanently, along with everything that ever touches it. If you want a public address, set one aside for exactly that purpose and nothing else.</li>
+        <li><b>Look at your own trail.</b> Put your addresses through the <a href="/">address explorer</a> occasionally. The view it gives you is the view everyone else already has.</li>
+      </ul>
+    </div>
+
+    <div class="pv-card pv-mt">
+      <div class="pv-tlab">Network-level privacy</div>
+      <p class="pv-p">There is a second layer that has nothing to do with the ledger. Most wallets do not store the chain themselves; they ask a server which transactions touch your addresses. Whoever runs that server learns two things at once: your complete address list, because you asked about it, and your IP address, because you connected. For ordinary wallets, that pairing on a stranger's server is the main network leak.</p>
+      <div class="pv-fixrow">
+        <div class="pv-fl"><b>The leak</b><span>A public wallet server learns every address you own, tied to your IP.</span></div>
+        <div class="pv-ff"><b>The fix</b><span>Run your own node and point your wallet at it. Address queries run against your own copy of the chain and never leave your machine. The <a href="/nodes">nodes guide</a> covers how.</span></div>
+      </div>
+      <div class="pv-fixrow">
+        <div class="pv-fl"><b>The leak</b><span>Servers and network observers see your IP, and your internet provider sees what you connect to.</span></div>
+        <div class="pv-ff"><b>The fix</b><span>Route the connection through Tor, or through a VPN. Either hides your IP from the far end. The <a href="/vpn">VPN page</a> lists providers you can pay in bitcoin.</span></div>
+      </div>
+      <p class="pv-p pv-pm">The two fixes stack and do not substitute for each other: the node closes the address leak, Tor or a VPN closes the IP leak.</p>
+    </div>
+
+    <div class="pv-card pv-mt">
+      <div class="pv-tlab">What a VPN does not do</div>
+      <p class="pv-p">VPNs are marketed heavily to bitcoin users, so it is worth being exact about the boundary. A VPN operates on network metadata, which means it changes nothing about the chain.</p>
+      <div class="pv-compare">
+        <div class="pv-col">
+          <div class="pv-clab pv-clab-g">A VPN hides</div>
+          <ul class="pv-clist">
+            <li>Your IP address from wallet servers and node peers.</li>
+            <li>Your bitcoin traffic from your local network and internet provider.</li>
+            <li>Your location, roughly, from the services you connect to.</li>
+          </ul>
+        </div>
+        <div class="pv-col">
+          <div class="pv-clab pv-clab-r">A VPN does not touch</div>
+          <ul class="pv-clist">
+            <li>Anything on the chain. Transactions, amounts, and address links stay exactly as public as before.</li>
+            <li>The record your exchange holds of your identity and withdrawal addresses.</li>
+            <li>Address reuse and clustering, which happen in the data, not on the wire.</li>
+            <li>What the VPN operator itself can see. You are moving trust from your internet provider to the provider you chose.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="pv-p pv-pm">In short: a VPN is a network-metadata tool. Useful, narrow, and not an on-chain privacy tool.</p>
+    </div>
+
+    <div class="pv-card pv-mt pv-limits">
+      <div class="pv-tlab">Honest limits</div>
+      <p class="pv-p">Everything on this page reduces what a given observer can see; none of it makes a public ledger private. Old transactions cannot be edited, so a link made once is made forever. Analysis only improves, so a connection nobody can prove today may be obvious in five years, applied retroactively to the whole record. And anyone selling a product that claims to erase on-chain history is describing something the protocol does not allow.</p>
+      <div class="pv-verdict"><b>The practice</b><span>Privacy on a public ledger is a practice, not a switch. A fresh address for every receive, deliberate consolidation, care with what you publish, your own node for the address leak, and Tor or a VPN for the IP leak. Each habit closes one channel. The record itself stays public forever, which is exactly why the habits start before the first transaction, not after a mistake.</span></div>
+    </div>
+
+    <div class="pv-about doc-prose">
+      <p>Bitcoin privacy has three fronts: the ledger, where habits around addresses and consolidation decide how much your history says; the network, where <a href="/nodes">running your own node</a> and the <a href="/vpn">VPNs you can pay in bitcoin</a> decide who sees your addresses and your IP; and identity, which starts with how you buy, covered in the <a href="/learn/no-kyc">no-KYC guide</a>. Holding your own keys is the precondition for all of it; the <a href="/learn/self-custody">self-custody guide</a> covers that, and the <a href="/">address explorer</a> shows any address the way the whole world sees it. Informational only, not advice, per the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="pv-railp">Every transaction is public forever and addresses are pseudonyms; privacy is the set of habits that keeps your name from being attached to that record, practiced before you transact, not after.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The two leaks</div>
+      <ul class="pv-rl">
+        <li><b>Records</b> The chain plus KYC files can say who paid whom.</li>
+        <li><b>Network</b> A public wallet server sees your addresses and your IP together.</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/vpn">VPNs you can pay in bitcoin</a>
+        <a href="/nodes">Running your own node</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pv-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .pv-mt{margin-top:14px}
+  .pv-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .pv-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .pv-pm{margin-top:12px}
+  .pv-p a,.pv-leak a,.pv-do a,.pv-ff a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pv-p a:hover,.pv-leak a:hover,.pv-do a:hover,.pv-ff a:hover{border-bottom-style:solid}
+  .pv-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .pv-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .pv-clab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .pv-clab::before{content:"";width:9px;height:9px;border-radius:2px}
+  .pv-clab-r{color:var(--down)}
+  .pv-clab-r::before{background:var(--down)}
+  .pv-clab-g{color:var(--up)}
+  .pv-clab-g::before{background:var(--up)}
+  .pv-clist{margin:0;padding-left:18px}
+  .pv-clist li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .pv-clist li::marker{color:var(--ink-3)}
+  .pv-leaks{display:grid;gap:8px;margin-top:13px}
+  .pv-leak{border:1px solid var(--line-2);background:var(--panel-2);border-radius:10px;padding:12px 15px}
+  .pv-leak b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .pv-leak span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .pv-do{margin:0;padding-left:0;list-style:none}
+  .pv-do li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px;padding-left:22px;position:relative}
+  .pv-do li:first-child{margin-top:0}
+  .pv-do li::before{content:"\2713";position:absolute;left:0;top:0;font:700 13px/1.7 var(--mono);color:var(--up)}
+  .pv-do b{color:var(--ink);font-weight:600}
+  .pv-fixrow{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;margin-top:12px}
+  .pv-fl,.pv-ff{border-radius:10px;padding:12px 15px}
+  .pv-fl{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .pv-ff{border:1px solid var(--line-2);background:var(--panel-2)}
+  .pv-fl b,.pv-ff b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  .pv-fl b{color:var(--down)}
+  .pv-ff b{color:var(--up)}
+  .pv-fl span,.pv-ff span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .pv-limits{border-color:rgba(255,166,60,.38)}
+  .pv-verdict{margin-top:14px;border-radius:12px;padding:16px 18px;border:1px dashed rgba(255,166,60,.32);background:var(--field)}
+  .pv-verdict b{display:block;font:700 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .pv-verdict > span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .pv-about{margin-top:14px}
+  .pv-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pv-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .pv-rl{margin:0;padding-left:0;list-style:none}
+  .pv-rl li{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin-top:8px}
+  .pv-rl li:first-child{margin-top:0}
+  .pv-rl b{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+  @media(max-width:700px){.pv-compare{grid-template-columns:1fr}.pv-fixrow{grid-template-columns:1fr}}
+</style>
+</Base>

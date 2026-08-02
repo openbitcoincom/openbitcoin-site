@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import Converter from '../components/Converter.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Converter: BTC, sats, mBTC and bits to USD - OpenBitcoin" description="Live bitcoin converter: BTC to USD and 14 other currencies, with sats, mBTC and bits. Updates as you type. Rates from a median of three exchanges.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Converter</div>
+    <h1>Bitcoin converter</h1>
+    <p class="doc-lede">BTC, sats, mBTC and bits to 15 currencies, live as you type. The rate is a median of three exchanges, documented at /sources.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <Converter />
+    <div class="cvp-card" style="margin-top:14px">
+      <div class="cvp-tlab">The same amount in every unit</div>
+      <table class="cvp-table" id="cv-table" aria-label="Amount in every bitcoin unit">
+        <thead><tr><th>Unit</th><th>Amount</th><th id="cv-percol">≈ USD each</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="cvp-about doc-prose">
+      <p>One bitcoin divides into 100,000,000 satoshis. A milli-bitcoin (mBTC) is a thousandth of a bitcoin, and a bit (µBTC) is a millionth: 100 sats. This page converts between all of them and 15 fiat currencies using a spot price computed as a median of three exchanges, described at <a href="/sources">/sources</a>. Rates are informational; see the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="cvp-stat"><b id="cv-s1">&hellip;</b><i>1 BTC</i></div>
+      <div class="cvp-stat"><b id="cv-s2">&hellip;</b><i>1 satoshi</i></div>
+      <div class="cvp-stat"><b id="cv-s3">&hellip;</b><i>per US dollar</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/chart">Full price chart</a>
+        <a href="/sources">Where the rate comes from</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  
+  .cvp-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .cvp-table{width:100%;border-collapse:collapse}
+  .cvp-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .cvp-table td{font:600 14.5px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cvp-table tr:last-child td{border-bottom:0}
+  .cvp-table td:first-child{color:var(--ink);font-weight:700}
+  .cvp-table td b{color:var(--price-ink);font-weight:700}
+  .cvp-about{margin-top:14px}
+  .cvp-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .cvp-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .cvp-stat:last-child{border-bottom:0}
+  .cvp-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .cvp-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+</style>
+<script is:inline>
+(function(){
+  /* The widget itself is components/Converter.astro; this page only paints
+     its followers, the per-unit table and the rail, off the widget's ob-conv
+     event, which carries everything needed: {btc, unit, cur, price, fx, sym}. */
+  var ELL="…";
+  var MUL={btc:1,mbtc:1e3,bits:1e6,sats:1e8},DEC={btc:8,mbtc:5,bits:2,sats:0};
+  var UNITS=[["btc","BTC"],["mbtc","mBTC"],["bits","bits (µBTC)"],["sats","sats"]];
+  var tbl=document.querySelector("#cv-table tbody"),percol=document.getElementById("cv-percol");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function paint(d){
+    var rate=(d.fx&&typeof d.fx[d.cur]==="number")?d.fx[d.cur]:1,s=(d.sym&&d.sym[d.cur])||"";
+    percol.textContent="≈ "+d.cur+" each";
+    tbl.innerHTML=UNITS.map(function(u){
+      /* the bitcoin column is unit arithmetic and always real; the fiat column
+         waits for a price */
+      var cell=ELL;
+      if(d.price!==null){
+        var per=d.price*rate/MUL[u[0]];
+        cell=s+fmt(per,per>=100?0:(per>=1?2:6));
+      }
+      return "<tr><td>"+u[1]+"</td><td><b>"+fmt(d.btc*MUL[u[0]],DEC[u[0]])+"</b></td><td>"+cell+"</td></tr>";
+    }).join("");
+    var r1=document.getElementById("cv-s1"),r2=document.getElementById("cv-s2"),r3=document.getElementById("cv-s3");
+    if(d.price===null){r1.textContent=ELL;r2.textContent=ELL;r3.textContent=ELL;return;}
+    var v=d.price*rate;
+    r1.textContent=s+fmt(v,0)+(s?"":" "+d.cur);
+    r2.textContent=s+fmt(v/1e8,6);
+    r3.textContent=fmt(1e8/d.price,0)+" sats";
+  }
+  document.addEventListener("ob-conv",function(ev){paint(ev.detail);});
+  /* the widget's first render fired before this script parsed */
+  if(window.OB_CONV_LAST)paint(window.OB_CONV_LAST);
+})();
+</script>
+</Base>

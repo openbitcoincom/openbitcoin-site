@@ -1,0 +1,296 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+
+const MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+let real = false;
+let fetched = '';
+let series = []; // [{ ym: 'YYYY-MM', b: billions }], 2000-01 onward
+try {
+  const res = await fetch('https://fred.stlouisfed.org/graph/fredgraph.csv?id=M2SL');
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const text = await res.text();
+  series = text.split(/\r?\n/)
+    .map((l) => l.split(','))
+    .filter((c) => /^\d{4}-\d{2}-\d{2}$/.test(c[0]) && c[0] >= '2000-01-01' && c[1] && c[1] !== '.')
+    .map((c) => ({ ym: c[0].slice(0, 7), b: Number(c[1]) }))
+    .filter((r) => Number.isFinite(r.b) && r.b > 0);
+  if (series.length < 250) throw new Error('unexpectedly short series: ' + series.length + ' rows');
+  real = true;
+  fetched = new Date().toISOString().slice(0, 10);
+} catch (err) {
+  series = [];
+  console.warn('[m2] FRED M2SL build-time fetch failed; the page ships approximate illustrative figures:',
+    err instanceof Error ? err.message : String(err));
+}
+
+const tT = (b) => '$' + (b / 1000).toFixed(1) + 'T';
+const xT = (b, base) => (b / base).toFixed(1) + '×';
+let M2CHART, Y1, M2MAX, d;
+if (real) {
+  const latest = series[series.length - 1];
+  const prior = series[series.length - 13];
+  const dec = (y) => series.find((r) => r.ym === y + '-12');
+  const base = dec(2000);
+  const latestYear = parseInt(latest.ym.slice(0, 4), 10);
+  Y1 = latestYear;
+  M2CHART = [];
+  for (let y = 2000; y <= latestYear; y += 1) {
+    const r = y === latestYear && !dec(y) ? latest : dec(y);
+    if (r) M2CHART.push([y, Number((r.b / 1000).toFixed(2))]);
+  }
+  const maxT = Math.max(...M2CHART.map((p) => p[1]));
+  M2MAX = Math.max(25, Math.ceil((maxT + 1) / 5) * 5);
+  const yoy = (latest.b / prior.b - 1) * 100;
+  const covid = Math.round((dec(2021).b / dec(2019).b - 1) * 100);
+  const sinceN = latest.b / base.b;
+  const shareTxt = sinceN >= 5 ? 'less than a fifth' : sinceN >= 4 ? 'less than a quarter' : sinceN >= 3 ? 'less than a third' : 'a fraction';
+  d = {
+    now: tT(latest.b),
+    yearAgo: tT(prior.b),
+    yoy: (yoy >= 0 ? '+' : '') + yoy.toFixed(1) + '%',
+    since: sinceN.toFixed(1) + '×',
+    latestYear,
+    latestLabel: MONTH_FULL[parseInt(latest.ym.slice(5, 7), 10) - 1] + ' ' + latestYear,
+    t2000: tT(base.b), x2000: xT(base.b, base.b),
+    t2008: tT(dec(2008).b), x2008: xT(dec(2008).b, base.b),
+    t2020: tT(dec(2020).b), x2020: xT(dec(2020).b, base.b),
+    t2022: tT(dec(2022).b), x2022: xT(dec(2022).b, base.b),
+    dilution: 'A money supply that grows dilutes the units already in it: every newly created dollar means each existing dollar is a smaller share of all dollars. M2 has grown from $'
+      + (base.b / 1000).toFixed(1) + ' trillion at the end of 2000 to $' + (latest.b / 1000).toFixed(1)
+      + ' trillion at the latest reading, a ' + sinceN.toFixed(1) + "× increase, so a dollar's share of the total supply is "
+      + shareTxt + ' of what it was in 2000. In 2020 and 2021 alone the supply expanded by about ' + covid
+      + ' percent. How much new supply is created, and when, is a policy decision, and holders of existing dollars do not take part in it.',
+  };
+} else {
+  Y1 = 2026;
+  M2MAX = 25;
+  M2CHART = [[2000, 4.6], [2001, 5.0], [2002, 5.4], [2003, 5.8], [2004, 6.1], [2005, 6.4], [2006, 6.9], [2007, 7.3],
+    [2008, 7.8], [2009, 8.4], [2010, 8.6], [2011, 9.2], [2012, 10.2], [2013, 10.9], [2014, 11.5], [2015, 12.1],
+    [2016, 12.7], [2017, 13.6], [2018, 14.1], [2019, 14.9], [2020, 19.1], [2021, 21.5], [2022, 21.3],
+    [2023, 20.8], [2024, 20.9], [2025, 21.2], [2026, 22.1]];
+  d = {
+    now: '$22.1T', yearAgo: '$21.2T', yoy: '+4.2%', since: '4.8×',
+    latestYear: 2026, latestLabel: '',
+    t2000: '$4.6T', x2000: '1.0×', t2008: '$7.8T', x2008: '1.7×',
+    t2020: '$19.1T', x2020: '4.2×', t2022: '$21.3T', x2022: '4.6×',
+    dilution: "A money supply that grows dilutes the units already in it: every newly created dollar means each existing dollar is a smaller share of all dollars. On the approximate figures shown here, M2 has grown from roughly $4.6 trillion in 2000 to roughly $22.1 trillion, about a 4.8× increase, so a dollar's share of the total supply is around one fifth of what it was in 2000; in 2020 and 2021 alone the supply expanded by roughly 40 percent. How much new supply is created, and when, is a policy decision, and holders of existing dollars do not take part in it.",
+  };
+}
+---
+<Base title="US M2 Money Supply Chart Since 2000 - OpenBitcoin" description="The US M2 money supply from 2000 to today: how growth in the dollar supply dilutes savings, beside bitcoin's fixed 21 million cap.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">M2 supply</div>
+    <h1>US M2 money supply</h1>
+    <p class="doc-lede">M2 is the Federal Reserve's broad count of US dollars: currency, deposits, and retail money market funds. This page charts how that supply has grown since 2000, and what growth in a money supply means for every dollar already in it.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="m2-hero">
+      <div class="m2-big" id="m2-now">{d.now}</div>
+      {real
+        ? <div class="m2-sub">US M2 money supply, latest monthly reading from the <b>Federal Reserve</b> (series M2SL, {d.latestLabel})</div>
+        : <div class="m2-sub">US M2 money supply, approximate figure for illustration; not a current <b>Federal Reserve</b> reading</div>}
+      <div class="m2-stats">
+        <div class="m2-stat"><b>{d.yearAgo}</b><i>M2 one year ago</i></div>
+        <div class="m2-stat"><b>{d.yoy}</b><i>M2 change over one year</i></div>
+        <div class="m2-stat"><b>{d.since}</b><i>M2 growth since 2000</i></div>
+        <div class="m2-stat"><b>21,000,000</b><i>bitcoin supply cap, fixed</i></div>
+      </div>
+      {!real && <p class="m2-fine">Every M2 figure on this page is an approximation for illustration: the build-time fetch of the Fed's published series did not succeed, and real readings return with the next successful build.</p>}
+    </div>
+
+    <div class="m2-card">
+      <div class="m2-tlab">US M2, 2000 to {Y1}</div>
+      <div class="m2-cwrap" id="m2-cwrap">
+        <canvas id="m2-canvas" role="img" aria-label={`Line chart of the US M2 money supply in trillions of dollars from 2000 to ${Y1}`}></canvas>
+      </div>
+      <div class="m2-read" id="m2-read"></div>
+      {real
+        ? <p class="m2-fine">M2 is the Federal Reserve's published monthly series (FRED M2SL, fetched at build, {fetched}), plotted in trillions of dollars at each December's reading, with the latest monthly reading as the final point. The jump readable at 2020 to 2021 is the fastest expansion in the series' history.</p>
+        : <p class="m2-fine">M2 values here are approximations for illustration, not the Fed's published readings: the build-time FRED fetch did not succeed, and the real series returns with the next successful build. The shape mirrors the published series, whose fastest expansion came in 2020 and 2021.</p>}
+    </div>
+
+    <div class="m2-card">
+      <div class="m2-tlab">Dilution, in plain terms</div>
+      <div class="doc-prose">
+        <p>{d.dilution}</p>
+        <p>Bitcoin is built the opposite way. Its supply schedule is fixed in consensus rules that every node enforces: issuance halves every 210,000 blocks (<a href="/halving">the halving</a>), the current issuance rate is under one percent per year and falling, and the total can never exceed 21 million. A bitcoin's share of all bitcoin that will ever exist is knowable today, decades in advance. No authority can decide to add more.</p>
+      </div>
+    </div>
+
+    <div class="m2-card">
+      <div class="m2-tlab">Growth in context</div>
+      <table class="m2-table" aria-label="US M2 at selected years with the multiple versus 2000, beside bitcoin's supply at the same dates">
+        <thead><tr><th>Year</th><th>US M2</th><th>vs 2000</th><th>Bitcoin in circulation</th></tr></thead>
+        <tbody>
+          <tr><td>2000</td><td><b>{d.t2000}</b></td><td>{d.x2000}</td><td>0 (network launched 2009)</td></tr>
+          <tr><td>2008</td><td><b>{d.t2008}</b></td><td>{d.x2008}</td><td>0 (genesis block January 3, 2009)</td></tr>
+          <tr><td>2020</td><td><b>{d.t2020}</b></td><td>{d.x2020}</td><td><b>18,586,900 BTC</b></td></tr>
+          <tr><td>2022</td><td><b>{d.t2022}</b></td><td>{d.x2022}</td><td><b>19,248,813 BTC</b></td></tr>
+          <tr><td>{d.latestYear}</td><td><b>{d.now}</b></td><td>{d.since}</td><td><b id="m2-sup">20,057,316 BTC</b></td></tr>
+          <tr class="m2-caprow"><td>Cap</td><td>no fixed cap</td><td></td><td><b>21,000,000 BTC, fixed</b></td></tr>
+        </tbody>
+      </table>
+      {real
+        ? <p class="m2-fine">Bitcoin supply figures are computed from the block height at each year end; past heights are historical record, and the {d.latestYear} figure tracks the live height. M2 rows are the Federal Reserve's December reading for each year, with the latest monthly reading for {d.latestYear} (FRED M2SL, fetched at build, {fetched}); multiples are relative to December 2000. The comparison is supply against supply; this page does not chart or compare prices.</p>
+        : <p class="m2-fine">Bitcoin supply figures are computed from the block height at each year end; past heights are historical record, and the {d.latestYear} figure tracks the live height. M2 rows are approximations for illustration, not Federal Reserve readings; real readings return with the next successful build, and multiples are relative to the 2000 row. The comparison is supply against supply; this page does not chart or compare prices.</p>}
+    </div>
+
+    <div class="m2-about doc-prose">
+      {real
+        ? <p>The Fed publishes the M2 series monthly, and this page bakes that published series in when the site is built (FRED series M2SL, fetched {fetched}); nothing on it is a live feed. Bitcoin's issuance schedule is detailed at <a href="/halving">/halving</a>, and where the site's other numbers come from is documented at <a href="/sources">/sources</a>. The two systems appear side by side as data about supply; this site publishes no price predictions, and nothing here models one against the other.</p>
+        : <p>The Fed publishes the M2 series monthly. This build could not fetch that series, so the M2 figures above are approximations for illustration until a rebuild succeeds; nothing on this page is a Fed reading. Bitcoin's issuance schedule is detailed at <a href="/halving">/halving</a>, and where the site's other numbers come from is documented at <a href="/sources">/sources</a>. The two systems appear side by side as data about supply; this site publishes no price predictions, and nothing here models one against the other.</p>}
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="m2-rs"><b>{d.now}</b><i>{real ? 'US M2, latest reading' : 'US M2, approximate'}</i></div>
+      <div class="m2-rs"><b>{d.yoy}</b><i>{real ? 'M2 change over one year' : 'approximate change over one year'}</i></div>
+      <div class="m2-rs"><b id="m2-riss">0.82%</b><i>bitcoin annual issuance</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/halving">Halving countdown and issuance</a>
+        <a href="/sources">Where our data comes from</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .m2-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .m2-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .m2-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .m2-sub b{color:var(--acc);font-weight:700}
+  .m2-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .m2-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .m2-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .m2-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .m2-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .m2-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .m2-cwrap{background:#0E1929;border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+  .m2-cwrap canvas{display:block;width:100%}
+  .m2-read{font:600 11px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin-top:8px;font-variant-numeric:tabular-nums;min-height:15px}
+  .m2-table{width:100%;border-collapse:collapse}
+  .m2-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .m2-table td{font:600 14px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .m2-table tr:last-child td{border-bottom:0}
+  .m2-table td:first-child{color:var(--ink);font-weight:700}
+  .m2-table td b{color:var(--price-ink);font-weight:700}
+  .m2-table tr.m2-caprow td{background:rgba(247,147,26,.07)}
+  .m2-table tr.m2-caprow td:first-child{color:var(--acc)}
+  .m2-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .m2-about{margin-top:14px}
+  .m2-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .m2-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .m2-rs:last-child{border-bottom:0}
+  .m2-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .m2-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .m2-big{font-size:40px}
+    .m2-table{display:block;overflow-x:auto}
+  }
+</style>
+<script is:inline define:vars={{ M2: M2CHART, Y0: 2000, Y1, M2MAX }}>
+(function(){
+  /* M2, Y0, Y1, M2MAX arrive at build via define:vars: annual points in
+     trillions (December readings plus the latest month) when the FRED fetch
+     succeeded, or the approximate illustrative fallback when it did not. */
+  var T={bg:"#0E1929",grid:"#22304A",tx:"#8FA1BF",m2:"#F7931A",cross:"#8B9DBA"};
+  var EPOCH=210000,MAX=21000000;
+  var st={height:958341,hover:null};
+  var cv=document.getElementById("m2-canvas"),cw=document.getElementById("m2-cwrap"),
+      read=document.getElementById("m2-read");
+  var geo={padL:54,plotW:0};
+
+  function fmt(n){return n.toLocaleString("en-US");}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function fmtT(v){return "$"+v.toFixed(1)+"T";}
+  function supplyAt(h){
+    var s=0,sub=50;
+    for(var e=0;e<64;e++){
+      var start=e*EPOCH;if(h<=start)break;
+      s+=Math.min(h-start,EPOCH)*sub;sub/=2;
+    }
+    return s;
+  }
+
+  function draw(){
+    var dpr=window.devicePixelRatio||1,W=cw.clientWidth,H=360;
+    cv.style.height=H+"px";cv.width=W*dpr;cv.height=H*dpr;
+    var x=cv.getContext("2d");x.scale(dpr,dpr);
+    var padT=14,padB=26,padR=16,padL=54;
+    var plotW=W-padL-padR,plotH=H-padT-padB;
+    geo.padL=padL;geo.plotW=plotW;
+    function X(y){return padL+(y-Y0)/(Y1-Y0)*plotW;}
+    function Ym(v){return padT+(1-v/M2MAX)*plotH;}
+    x.fillStyle=T.bg;x.fillRect(0,0,W,H);
+    x.font="600 10.5px ui-monospace,Consolas,monospace";
+    /* dotted horizontal gridlines + $T axis on the left */
+    x.setLineDash([2,4]);
+    for(var m=0;m<=M2MAX;m+=5){
+      var gy=Ym(m);
+      x.strokeStyle=T.grid;x.beginPath();x.moveTo(padL,gy+.5);x.lineTo(W-padR,gy+.5);x.stroke();
+      x.fillStyle=T.tx;x.textAlign="left";x.fillText(m===0?"$0":"$"+m+"T",10,gy+4);
+    }
+    /* dotted vertical gridlines + year labels */
+    x.textAlign="center";
+    for(var yr=Y0;yr<=Y1;yr+=5){
+      var gx=X(yr);
+      x.strokeStyle=T.grid;x.beginPath();x.moveTo(gx+.5,padT);x.lineTo(gx+.5,padT+plotH);x.stroke();
+      x.fillStyle=T.tx;x.fillText(String(yr),gx,H-8);
+    }
+    x.setLineDash([]);
+    /* M2 area fill + line */
+    x.beginPath();
+    M2.forEach(function(p,i){var px=X(p[0]),py=Ym(p[1]);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.lineTo(X(Y1),Ym(0));x.lineTo(X(Y0),Ym(0));x.closePath();
+    x.fillStyle="rgba(247,147,26,.07)";x.fill();
+    x.beginPath();
+    M2.forEach(function(p,i){var px=X(p[0]),py=Ym(p[1]);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.strokeStyle=T.m2;x.lineWidth=2;x.lineJoin="round";x.stroke();
+    var lastM=M2[M2.length-1];
+    x.fillStyle=T.m2;x.beginPath();x.arc(X(lastM[0]),Ym(lastM[1]),3,0,7);x.fill();
+    /* hover crosshair */
+    if(st.hover!==null){
+      var hx=X(st.hover);
+      x.strokeStyle=T.cross;x.setLineDash([4,4]);x.lineWidth=1;
+      x.beginPath();x.moveTo(hx+.5,padT);x.lineTo(hx+.5,padT+plotH);x.stroke();
+      x.setLineDash([]);
+    }
+    x.lineWidth=1;
+    paintRead();
+  }
+  function paintRead(){
+    var y=st.hover===null?Y1:st.hover,mv=null;
+    M2.forEach(function(p){if(p[0]===y)mv=p[1];});
+    var base=M2[0][1];
+    read.textContent=y+" · M2 "+fmtT(mv)+" · "+(mv/base).toFixed(1)+"x the 2000 supply";
+  }
+  cv.addEventListener("mousemove",function(e){
+    var r=cv.getBoundingClientRect(),mx=e.clientX-r.left;
+    var y=Math.round(Y0+(mx-geo.padL)/geo.plotW*(Y1-Y0));
+    if(y<Y0)y=Y0;if(y>Y1)y=Y1;
+    if(y!==st.hover){st.hover=y;draw();}
+  });
+  cv.addEventListener("mouseleave",function(){st.hover=null;draw();});
+  window.addEventListener("resize",function(){draw();});
+
+  function paintLive(){
+    var sup=supplyAt(st.height),iss=(450*365/sup*100).toFixed(2)+"%";
+    txt("m2-riss",iss);
+    txt("m2-sup",fmt(Math.round(sup))+" BTC");
+  }
+  /* live height arrives via the chrome hook */
+  window.obPaintFiat=function(S){st.height=S.height;paintLive();};
+  paintLive();draw();
+})();
+</script>
+</Base>

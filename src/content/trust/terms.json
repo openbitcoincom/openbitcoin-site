@@ -1,0 +1,74 @@
+{
+  "slug": "terms",
+  "title": "Terms of Service - OpenBitcoin",
+  "metaDescription": "The terms of service for OpenBitcoin.com, an independent Bitcoin block explorer: acceptable use, third-party content, disclaimers, and limits on liability.",
+  "kicker": "Terms",
+  "h1": "Terms of Service",
+  "lede": "These terms govern your use of OpenBitcoin.com and every page and tool on the site. By using the service you accept them in full.",
+  "sections": [
+    {
+      "id": "acceptance",
+      "heading": "Acceptance and Eligibility",
+      "html": "<p>By accessing or using OpenBitcoin.com (the \"site\" or the \"service\"), you agree to these terms of service. If you do not agree to them, do not use the site.</p><p>You may use the service only if you have reached the age of majority in your jurisdiction and have the legal capacity to enter into an agreement. You are responsible for making sure that your use of the service complies with the laws that apply to you.</p>"
+    },
+    {
+      "id": "service",
+      "heading": "Description of the Service",
+      "html": "<p>OpenBitcoin.com is an independently operated block explorer and set of tools for the Bitcoin network. Blockchain data shown on the site is read from our own Bitcoin full node. The bitcoin price shown is calculated as a median of three exchanges. Details of how figures are produced are documented on the <a href=\"/sources\">sources</a> page.</p><p>The service is informational only. It has no user accounts. It does not hold, transmit, or have access to funds, and it does not provide custody, brokerage, exchange, or wallet services.</p><p>Some tools are designed to run entirely in your browser. If interactive features are added in the future, they may carry additional terms presented at the time of use.</p>"
+    },
+    {
+      "id": "no-advice",
+      "heading": "No Advice; Accuracy of Information",
+      "html": "<p>Nothing on this site is financial, investment, legal, accounting, or tax advice, and nothing on it is a recommendation to buy, sell, or hold any asset. You are solely responsible for decisions you make based on information from the service.</p><p>Data on the service may be delayed, estimated, or inaccurate. Prices are derived figures, fee estimates are approximations, and recently broadcast transactions and blocks can be reorganized or replaced. Verify any information independently, for example against your own node, before relying on it or acting on it.</p>"
+    },
+    {
+      "id": "risk",
+      "heading": "Assumption of Risk",
+      "html": "<p>The service depends on the internet, on the Bitcoin network, and on supporting infrastructure. You accept the risks inherent in internet-based services and public blockchain data, including outages, delays, data errors, and chain reorganizations.</p><p>Some tools on the site handle private keys, seed phrases, or related material. These tools are designed so that key material is processed locally in your browser and is not transmitted to our servers. Because of this, you are solely responsible for generating, storing, and safeguarding your keys and seeds, and for independently verifying any output of these tools before using it with real funds. We bear no responsibility for how the tools are used or for any loss of funds that results from their use.</p>"
+    },
+    {
+      "id": "third-party",
+      "heading": "Third-Party Content, Links, and Advertising",
+      "html": "<p>The site links to external websites and services for convenience. A link is not an endorsement. External sites have their own terms and policies, and you use them at your own risk.</p><p>The site may display advertising served by third-party advertising networks, which may include mainstream or cryptocurrency-focused networks. Ad content is selected and delivered by those networks, and its appearance on the site is not an endorsement by us. Sponsored and affiliate placements are labeled as such; see the <a href=\"/disclosure\">disclosure</a> page for how these placements work.</p>"
+    },
+    {
+      "id": "acceptable-use",
+      "heading": "Acceptable Use",
+      "html": "<p>When using the service you agree that you will not:</p><ul><li>use the service for any unlawful purpose or in violation of any applicable law;</li><li>interfere with or disrupt the service, its servers, or its networks;</li><li>engage in abusive scraping, bulk automated access, or any activity that circumvents rate limits or security measures;</li><li>misrepresent an affiliation with the site or its operator.</li></ul><p>We may limit, restrict, or block access to the service, in whole or in part, at our discretion and without notice, to protect the service and its users. If a public API is offered in the future, separate API terms may apply to it.</p>"
+    },
+    {
+      "id": "intellectual-property",
+      "heading": "Intellectual Property",
+      "html": "<p>The design, text, graphics, code, and other original content of the site belong to the operator of the site or its licensors. You may not reproduce, distribute, or create derivative works from that content without permission, beyond the copying that ordinary browser use involves.</p><p>Third-party names, logos, and trademarks that appear on the site belong to their respective owners and are used for identification only.</p><p>Bitcoin blockchain data is public. We claim no ownership of the underlying network data displayed on the service.</p>"
+    },
+    {
+      "id": "liability",
+      "heading": "Warranties, Liability, and Indemnification",
+      "html": "<h3>Disclaimer of warranties</h3><p>THE SERVICE IS PROVIDED \"AS IS\" AND \"AS AVAILABLE\", WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WITHOUT LIMITATION IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE, THAT DEFECTS WILL BE CORRECTED, OR THAT INFORMATION DISPLAYED WILL BE ACCURATE, COMPLETE, OR CURRENT. DATA MAY BE DELAYED, LOST, OR UNAVAILABLE.</p><h3>Limitation of liability</h3><p>TO THE FULLEST EXTENT PERMITTED BY LAW, THE OPERATOR OF THIS SITE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, OR DIGITAL ASSETS, ARISING OUT OF OR RELATING TO YOUR USE OF, OR INABILITY TO USE, THE SERVICE, INCLUDING ANY RELIANCE ON INFORMATION OBTAINED FROM THE SERVICE, WHETHER THE CLAIM IS BASED ON WARRANTY, CONTRACT, TORT, OR ANY OTHER LEGAL THEORY, AND WHETHER OR NOT WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT SHALL THE OPERATOR'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THE SERVICE EXCEED ONE HUNDRED US DOLLARS (USD $100).</p><p>SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF CERTAIN WARRANTIES OR THE LIMITATION OF CERTAIN DAMAGES, SO SOME OF THE ABOVE EXCLUSIONS AND LIMITATIONS MAY NOT APPLY TO YOU. IN THOSE JURISDICTIONS, LIABILITY IS LIMITED TO THE FULLEST EXTENT PERMITTED BY LAW.</p><h3>Indemnification</h3><p>You agree to defend, indemnify, and hold harmless the operator of the site from and against any claims, damages, liabilities, costs, and expenses, including reasonable legal fees, arising out of your use of the service or your violation of these terms.</p>"
+    },
+    {
+      "id": "changes-general",
+      "heading": "Changes, Discontinuance, and General Terms",
+      "html": "<p>We may modify, suspend, or discontinue any feature of the service, or the service as a whole, at any time, without notice and without liability to you.</p><p>We may amend these terms from time to time. Amended terms take effect when posted on this page, and your continued use of the service after a change constitutes acceptance of the amended terms.</p><p>If any provision of these terms is found unenforceable, the remaining provisions stay in full effect. A failure to enforce any provision is not a waiver of it. We are not responsible for delay or failure to perform caused by events beyond our reasonable control. These terms are the entire agreement between you and the operator concerning the service, and you may not assign them without our consent.</p><p>Your use of the service is also subject to the <a href=\"/privacy\">Privacy Policy</a>.</p><p>Questions about these terms can be sent to inbox@openbitcoin.com or submitted through the <a href=\"/contact\">contact</a> page.</p>"
+    }
+  ],
+  "proofLinks": [
+    {
+      "label": "Privacy Policy",
+      "href": "/privacy"
+    },
+    {
+      "label": "Advertising and Affiliate Disclosure",
+      "href": "/disclosure"
+    },
+    {
+      "label": "Data Sources",
+      "href": "/sources"
+    },
+    {
+      "label": "About OpenBitcoin",
+      "href": "/about"
+    }
+  ],
+  "updated": "July 2026"
+}

@@ -1,0 +1,124 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+import { years, monthsOf, monthRows, monthSummary, fmtUsd, fmtPct, fullDate, MONTH_NAMES } from '../../../lib/prices.js';
+
+export function getStaticPaths() {
+  const out = [];
+  for (const y of years()) for (const m of monthsOf(y)) out.push({ params: { year: y, month: m } });
+  return out;
+}
+const { year, month } = Astro.params;
+const name = MONTH_NAMES[parseInt(month, 10) - 1];
+const rowsM = monthRows(year, month);
+const s = monthSummary(year, month);
+const all = [];
+for (const y of years()) for (const m of monthsOf(y)) all.push([y, m]);
+const idx = all.findIndex(([y, m]) => y === year && m === month);
+const prev = idx > 0 ? all[idx - 1] : null;
+const next = idx < all.length - 1 ? all[idx + 1] : null;
+const mLabel = ([y, m]) => `${MONTH_NAMES[parseInt(m, 10) - 1].slice(0, 3)} ${y}`;
+---
+<Base title={`Bitcoin Price in ${name} ${year}: Daily Open, High, Low, Close - OpenBitcoin`} description={`The bitcoin price every day of ${name} ${year}: closed at $${fmtUsd(s.close)} (${fmtPct(s.changePct)} on the month), high $${fmtUsd(s.high)}, low $${fmtUsd(s.low)}. Full daily table.`}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker"><a class="pm-crumb" href="/price/calendar">Price calendar</a> / <a class="pm-crumb" href={`/price/${year}`}>{year}</a> / {name}</div>
+    <h1>Bitcoin price in {name} {year}</h1>
+    <p class="doc-lede">Every trading day of {name} {year}: the month {s.changePct >= 0 ? 'rose' : 'fell'} {fmtPct(Math.abs(s.changePct)).replace('+','')}, closing at ${fmtUsd(s.close)} with a high of ${fmtUsd(s.high)} and a low of ${fmtUsd(s.low)}.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pm-card">
+      <table class="pm-table" aria-label={`Daily bitcoin prices for ${name} ${year}`}>
+        <thead>
+          <tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Change</th></tr>
+        </thead>
+        <tbody>
+          {rowsM.map((r) => {
+            const day = parseInt(r.date.slice(8, 10), 10);
+            const chg = r.prevC ? ((r.c - r.prevC) / r.prevC) * 100 : null;
+            return (
+              <tr id={`d${day}`}>
+                <td class="pm-date">{fullDate(r.date)}</td>
+                <td class="pm-n">{r.closeOnly ? <span class="pm-mut">--</span> : fmtUsd(r.o)}</td>
+                <td class="pm-n">{r.closeOnly ? <span class="pm-mut">--</span> : fmtUsd(r.h)}</td>
+                <td class="pm-n">{r.closeOnly ? <span class="pm-mut">--</span> : fmtUsd(r.l)}</td>
+                <td class="pm-n pm-c">{fmtUsd(r.c)}</td>
+                <td class={'pm-n pm-chg ' + (chg === null ? '' : chg >= 0 ? 'up' : 'down')}>{chg === null ? '' : fmtPct(chg)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {s.closeOnly && <p class="pm-fine pm-era">Mt. Gox era: this month carries daily closes only, because open, high and low were not reliably recorded. The market was thin and every figure is approximate.</p>}
+      <p class="pm-fine">Prices in USD, UTC days. Change is against the previous day's close. Series provenance at <a href="/sources">/sources</a>; informational per the <a href="/terms">terms</a>.</p>
+    </div>
+
+    <div class="pm-nav pm-mt">
+      {prev ? <a href={`/price/${prev[0]}/${prev[1]}`}>&#8592; {mLabel(prev)}</a> : <span></span>}
+      <a href={`/price/${year}`}>{year} overview</a>
+      {next ? <a href={`/price/${next[0]}/${next[1]}`}>{mLabel(next)} &#8594;</a> : <span></span>}
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">{name} {year}</div>
+      <div class="pm-rstat"><b>${fmtUsd(s.open)}</b><i>Open</i></div>
+      <div class="pm-rstat"><b>${fmtUsd(s.close)}</b><i>Close</i></div>
+      <div class="pm-rstat"><b>${fmtUsd(s.high)}</b><i>High</i></div>
+      <div class="pm-rstat"><b>${fmtUsd(s.low)}</b><i>Low</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/price-on-date">Price on a date lookup</a>
+        <a href="/dca">DCA backtester</a>
+        <a href="/whatif">What-if calculator</a>
+        <a href="/price">Bitcoin price now</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pm-crumb{color:var(--acc);text-decoration:none}
+  .pm-crumb:hover{text-decoration:underline}
+  .pm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px}
+  .pm-mt{margin-top:14px}
+  .pm-table{width:100%;border-collapse:collapse}
+  .pm-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:right;padding:0 0 8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .pm-table th:first-child{text-align:left;padding-left:0}
+  .pm-table td{padding:7px 0 7px 10px;border-bottom:1px dotted var(--line-2);text-align:right}
+  .pm-table tr:last-child td{border-bottom:0}
+  .pm-table tr:target td{background:rgba(247,147,26,.08)}
+  .pm-date{font:700 12px var(--mono);color:var(--ink);white-space:nowrap;text-align:left;padding-left:0}
+  .pm-n{font:600 12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pm-c{color:var(--ink);font-weight:700}
+  .pm-chg.up{color:var(--up)}
+  .pm-chg.down{color:var(--down)}
+  .pm-mut{color:var(--ink-3);opacity:.6}
+  .pm-era{border-left:2px solid rgba(247,147,26,.4);padding-left:10px}
+  .pm-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .pm-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pm-fine a:hover{border-bottom-style:solid}
+  .pm-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .pm-nav a{font:700 12px var(--mono);letter-spacing:.05em;color:var(--acc);text-decoration:none;
+    background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 14px}
+  .pm-nav a:hover{border-color:rgba(255,166,60,.45)}
+  .pm-rstat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pm-rstat:last-child{border-bottom:0}
+  .pm-rstat b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pm-rstat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .pm-card{padding:14px 10px 16px}
+    .pm-table td{padding:6px 0 6px 6px}
+    .pm-table th{padding-left:6px}
+    .pm-n{font-size:10.5px}
+    .pm-date{font-size:10px;white-space:normal}
+    
+    .pm-table th:nth-child(3),.pm-table td:nth-child(3),
+    .pm-table th:nth-child(4),.pm-table td:nth-child(4){display:none}
+  }
+</style>
+</Base>

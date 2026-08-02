@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="USD to Sats Converter: How Many Satoshis per Dollar - OpenBitcoin" description="Convert US dollars to satoshis live as you type. See how many sats $1, $10, $100, or $1,000 buys at the current bitcoin price, plus sats per dollar right now.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">USD to sats</div>
+    <h1>USD to sats converter</h1>
+    <p class="doc-lede">How many satoshis your dollars buy, live as you type. One bitcoin is 100,000,000 sats; the rate is a median of three exchanges, documented at /sources.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="us-card">
+      <div class="us-row">
+        <div class="us-side">
+          <div class="us-lab">US dollars</div>
+          <input id="us-u" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Amount in US dollars">
+          <div class="us-hint">USD only. Other currencies: <a href="/sats">/sats</a></div>
+        </div>
+        <div class="us-eq" aria-hidden="true">=</div>
+        <div class="us-side">
+          <div class="us-lab">Satoshis</div>
+          <input id="us-s" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Amount in satoshis">
+          <div class="us-hint">1 BTC = 100,000,000 sats</div>
+        </div>
+      </div>
+    </div>
+    <div class="us-card" style="margin-top:14px">
+      <div class="us-tlab">Dollars to sats, right now</div>
+      <table class="us-table" id="us-table" aria-label="Common dollar amounts and their value in satoshis">
+        <thead><tr><th>USD</th><th>Sats</th><th>Bitcoin</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="us-note">Click a row to load it into the converter.</div>
+    </div>
+    <div class="us-about doc-prose">
+      <p>A satoshi, or sat, is the smallest unit of bitcoin: one hundred-millionth of a coin, so one bitcoin is exactly 100,000,000 sats. Quoting in sats answers the practical question directly: how much bitcoin a dollar actually buys. This page converts US dollars to sats using a spot price computed as a median of three exchanges, described at <a href="/sources">/sources</a>. For euros, pounds, and other currencies, use the <a href="/sats">sats converter</a>; for the running inverse rate, see <a href="/sats-per-dollar">sats per dollar</a>. Rates are informational; see the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="us-stat"><b id="us-r1">&hellip;</b><i>per US dollar</i></div>
+      <div class="us-stat"><b id="us-r2">&hellip;</b><i>1 BTC</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/sats">Sats converter, 15 currencies</a>
+        <a href="/sats-per-dollar">Sats per dollar</a>
+        <a href="/convert">Full bitcoin converter</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .us-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .us-row{display:flex;align-items:stretch;gap:16px}
+  .us-side{flex:1;min-width:0}
+  .us-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .us-side input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 30px var(--mono);font-variant-numeric:tabular-nums;
+    padding:12px 15px;outline:none;letter-spacing:-.5px}
+  .us-side input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .us-eq{align-self:center;font:700 22px var(--mono);color:var(--ink-3);padding-top:18px}
+  .us-hint{font:600 10px var(--mono);letter-spacing:.08em;color:var(--ink-3);margin-top:12px}
+  .us-hint a{color:var(--acc);text-decoration:none}
+  .us-hint a:hover{text-decoration:underline}
+  .us-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .us-table{width:100%;border-collapse:collapse}
+  .us-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .us-table td{font:600 14.5px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .us-table tr:last-child td{border-bottom:0}
+  .us-table td:first-child{color:var(--ink);font-weight:700}
+  .us-table td b{color:var(--price-ink);font-weight:700}
+  .us-table tbody tr{cursor:pointer}
+  .us-table tbody tr:hover td{background:rgba(36,51,78,.35)}
+  .us-note{font:600 10px var(--mono);letter-spacing:.06em;color:var(--ink-3);margin-top:10px}
+  .us-about{margin-top:14px}
+  .us-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .us-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .us-stat:last-child{border-bottom:0}
+  .us-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .us-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .us-row{flex-direction:column;gap:12px}
+    .us-eq{align-self:flex-start;padding:0}
+    .us-side input{font-size:26px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var ELL="…";
+  var SATS=1e8,CAP=21e6,DEF=100,AMTS=[1,5,10,20,50,100,500,1000];
+  /* price null until the feed answers: no sats figure is invented from a seed */
+  var P={price:null,usd:DEF};
+  var elU=document.getElementById("us-u"),elS=document.getElementById("us-s"),
+      tbl=document.querySelector("#us-table tbody");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function parse(s){s=(""+s).replace(/[^0-9.]/g,"");var n=parseFloat(s);return isFinite(n)?n:null;}
+  function usdDec(v){return v>=100?0:2;}
+  function satsOf(usd){return usd/P.price*SATS;}
+
+  function paintU(){elU.value=fmt(P.usd,usdDec(P.usd));}
+  function paintS(){elS.value=P.price===null?ELL:fmt(satsOf(P.usd),0);}
+  function paintTable(){
+    tbl.innerHTML=AMTS.map(function(a){
+      /* the dollar column is the given; both bitcoin columns wait for a price */
+      var sats=ELL,btc=ELL;
+      if(P.price!==null){sats=fmt(satsOf(a),0);btc=fmt(a/P.price,8)+" BTC";}
+      return "<tr data-a="+a+"><td>$"+fmt(a,0)+"</td><td><b>"+sats+"</b></td><td>"+btc+"</td></tr>";
+    }).join("");
+    tbl.querySelectorAll("tr").forEach(function(r){
+      r.addEventListener("click",function(){P.usd=parseInt(r.dataset.a,10);render("all");});
+    });
+  }
+  function paintRail(){
+    var r1=document.getElementById("us-r1"),r2=document.getElementById("us-r2");
+    if(P.price===null){r1.textContent=ELL;r2.textContent=ELL;return;}
+    r1.textContent=fmt(SATS/P.price,0)+" sats";
+    r2.textContent="$"+fmt(P.price,0);
+  }
+  function render(which){
+    if(which!=="fromU")paintU();
+    if(which!=="fromS")paintS();
+    paintTable();paintRail();
+  }
+
+  elU.addEventListener("input",function(){var n=parse(elU.value);if(n===null)return;
+    /* the 21M cap is a price times a supply, so it only binds once there is a
+       price; the dollar box stays usable either way */
+    if(P.price!==null&&n>P.price*CAP)n=P.price*CAP;
+    P.usd=n;render("fromU");});
+  /* sats to dollars needs a rate: with no price yet the typing is left alone
+     rather than converted against a made-up one */
+  elS.addEventListener("input",function(){if(P.price===null)return;
+    var n=parse(elS.value);if(n===null)return;
+    if(n>CAP*SATS)n=CAP*SATS;P.usd=n/SATS*P.price;render("fromS");});
+  [elU,elS].forEach(function(el){
+    el.addEventListener("focus",function(){el.select();});
+    el.addEventListener("blur",function(){
+      /* while the sats box is holding the placeholder it is not an emptied
+         field, so leaving it must not reset the amount */
+      if(el===elS&&P.price===null)return;
+      if(parse(el.value)===null||parse(el.value)===0)P.usd=DEF;render("all");});
+  });
+
+  /* live tick arrives via the chrome hook; page is USD-only, so the footer
+     currency switch intentionally does not change it */
+  window.obPaintFiat=function(S){
+    if(!S||typeof S.price!=="number"||!(S.price>0))return;
+    P.price=S.price;render("all");};
+  render("all");
+  /* chrome.js parses after this script, so a summary it already holds is read
+     on DOMContentLoaded rather than here */
+  function boot(){
+    try{
+      var L=window.OB_LIVE;
+      if(L&&L.price&&typeof L.price.usd==="number"&&L.price.usd>0){P.price=L.price.usd;render("all");}
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

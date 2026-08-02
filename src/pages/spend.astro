@@ -1,0 +1,224 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="How to Spend Bitcoin: Gift Cards, Merchants, and Bills - OpenBitcoin" description="Four ways to spend bitcoin: gift cards for 900+ retailers, merchants that accept it directly, travel, and phone top-ups and bills. What to check first.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Spend bitcoin</div>
+    <h1>How to spend bitcoin</h1>
+    <p class="doc-lede">Four routes, from widest to most direct: gift cards reach almost any retailer, direct merchants take bitcoin at the till, travel sites sell flights for it, and top-ups cover the phone bill.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="sh-steps">
+      <div class="sh-step"><span class="sh-sn">01</span><b>Gift cards</b><i>The widest bridge, 900+ retailers</i></div>
+      <div class="sh-step"><span class="sh-sn">02</span><b>Direct merchants</b><i>Businesses that take bitcoin itself</i></div>
+      <div class="sh-step"><span class="sh-sn">03</span><b>Travel</b><i>Flights and hotels paid in bitcoin</i></div>
+      <div class="sh-step"><span class="sh-sn">04</span><b>Bills and top-ups</b><i>Phone refills, and utilities where offered</i></div>
+    </div>
+
+    <div class="sh-card sh-mt">
+      <div class="sh-chead"><span class="sh-num">01</span><h2>Gift cards</h2></div>
+      <p class="sh-how">The route that reaches the most shelves. A reseller sells you a retailer's gift card for bitcoin, and the retailer never touches a coin: you pay a Lightning invoice or an on-chain address, the code arrives, and you spend it like any other gift card. The catalog on this site lists more than 900 cards across the United States, Canada, and Australia, plus international coverage, with search and category filters.</p>
+      <a class="sh-deep" href="/spend/gift-cards"><b>Browse the gift card catalog</b><i>900+ cards by country and category, with how the bridge works &#8594;</i></a>
+      <div class="sh-wlab">Where to go</div>
+      
+      <div class="sh-svcs">
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Bitrefill</a></b><span class="sh-since">Since 2014</span><a class="sh-nokyc" href="/no-kyc">No-KYC</a></div>
+            <p class="sh-svcp">The broadest international catalog: gift cards, phone refills, and esims across a long list of countries, payable over Lightning or on-chain.</p>
+          </div>
+          
+          <a class="sh-open" href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://coincards.com" target="_blank" rel="noopener noreferrer">CoinCards</a></b><span class="sh-since">Since 2014</span><a class="sh-nokyc" href="/no-kyc">No-KYC</a></div>
+            <p class="sh-svcp">Deep North American coverage with Australian cards alongside; the US and Canadian sections of the catalog above are its published listings.</p>
+          </div>
+          
+          <a class="sh-open" href="https://coincards.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh-card sh-mt">
+      <div class="sh-chead"><span class="sh-num">02</span><h2>Direct merchants</h2></div>
+      <p class="sh-how">Some businesses accept bitcoin itself: a cafe, a barber, an online store with a bitcoin checkout. Accepting directly means the merchant, or a processor it hired, gives you an invoice and receives the coins; no gift card sits in between. At a physical till this is almost always a Lightning invoice on a screen, paid from your phone in a few seconds for a fee of a few sats. On-chain payments work too, but waiting for a confirmation at a counter is nobody's idea of checkout, which is why point-of-sale acceptance settled on Lightning.</p>
+      <div class="sh-wlab">Where to find them</div>
+      <div class="sh-svcs">
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://btcmap.org" target="_blank" rel="noopener noreferrer">BTC Map</a></b><span class="sh-since">Since 2022</span></div>
+            <p class="sh-svcp">The live merchant discovery map: tens of thousands of merchant listings, community maintained, with what each place accepts and when the listing was last verified.</p>
+          </div>
+          
+          <a class="sh-open" href="https://btcmap.org" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+      </div>
+      <p class="sh-linknote">Listings are maintained by volunteers, so treat the map as a starting point: a pin is a claim, not a guarantee. Check the last-verified date, and have a fallback way to pay. If a payment gets stuck on-chain, <a href="/tx/stuck">the stuck transaction guide</a> covers what to do.</p>
+    </div>
+
+    <div class="sh-card sh-mt">
+      <div class="sh-chead"><span class="sh-num">03</span><h2>Travel</h2></div>
+      <p class="sh-how">Travel is where larger bitcoin payments are most routine. Booking platforms sell flights and hotel rooms for bitcoin the way any travel site sells them for a card, and a handful of airlines accept it directly for tickets. The quote is set in fiat and converted at payment time, so the bitcoin amount holds only for the invoice window; pay promptly and keep the confirmation.</p>
+      <div class="sh-wlab">Where to go</div>
+      <div class="sh-svcs">
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://www.airbaltic.com" target="_blank" rel="noopener noreferrer">airBaltic</a></b><span class="sh-since">Bitcoin since 2014</span></div>
+            <p class="sh-svcp">Latvian airline and one of the first to take bitcoin for tickets directly; a working example of an established carrier accepting it at checkout.</p>
+          </div>
+          
+          <a class="sh-open" href="https://www.airbaltic.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://www.travala.com" target="_blank" rel="noopener noreferrer">Travala</a></b><span class="sh-since">Since 2017</span></div>
+            <p class="sh-svcp">Booking platform for flights and hotels paid in bitcoin; the mainstream inventory you would expect from a travel site, with a bitcoin checkout on the end.</p>
+          </div>
+          
+          <a class="sh-open" href="https://www.travala.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+      </div>
+      <p class="sh-linknote">Travala lists other coins besides bitcoin; stay on the bitcoin option. Refunds on bitcoin bookings follow the platform's own policy and usually come back as credit or fiat value, not the coins you sent; read the terms before booking anything expensive.</p>
+    </div>
+
+    <div class="sh-card sh-mt">
+      <div class="sh-chead"><span class="sh-num">04</span><h2>Bills and top-ups</h2></div>
+      <p class="sh-how">The most ordinary spending there is: airtime and data for a prepaid phone, paid in bitcoin. Top-up services cover carriers in most countries, and the credit lands on the number within minutes of the payment confirming. In some markets the same services extend to utility payments and other household bills; coverage varies widely by country, so check yours in the catalog rather than assuming.</p>
+      <div class="sh-wlab">Where to go</div>
+      <div class="sh-svcs">
+        <div class="sh-svc">
+          <div class="sh-svcm">
+            <div class="sh-svct"><b><a href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Bitrefill</a></b><span class="sh-since">Since 2014</span><a class="sh-nokyc" href="/no-kyc">No-KYC</a></div>
+            <p class="sh-svcp">Phone refills across a long list of carriers and countries, with utility and bill payments offered in some markets; small payments suit Lightning best.</p>
+          </div>
+          
+          <a class="sh-open" href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+      </div>
+      <p class="sh-linknote">A phone top-up is usually a few dollars, and a few dollars on-chain can lose a visible slice to the network fee; check <a href="/fees">current fee levels</a> and use Lightning where the service offers it.</p>
+    </div>
+
+    <div class="sh-card sh-mt sh-note">
+      <div class="sh-tlab">The honest caveats</div>
+      <div class="sh-rows">
+        <div class="sh-row"><b>Spending is a disposal</b><span>In most places, paying with bitcoin is treated like selling it: the difference between what you paid for the coins and their value when you spent them can be a taxable gain, even on a coffee. Keep records of what you spend and the rate that day. Nothing on this page is tax advice, per the <a href="/terms">terms</a>.</span></div>
+        <div class="sh-row"><b>Merchants price in fiat</b><span>Almost every price on every route above is set in dollars or euros and converted to a bitcoin amount at payment time. You are not escaping fiat pricing by spending bitcoin; you are paying a fiat price through a different rail. The <a href="/convert">converter</a> shows what any quote comes to at the current rate.</span></div>
+        <div class="sh-row"><b>Gift cards are usually the widest bridge</b><span>Direct acceptance is real but thin on the ground in most cities, and it comes and goes. If the question is "can I actually buy the thing I need with bitcoin this week", the gift card route answers yes far more often than the map does. Start at <a href="/spend/gift-cards">the catalog</a>; use the map when a pin is nearby.</span></div>
+      </div>
+    </div>
+
+    <div class="sh-about doc-prose">
+      <p>Spending bitcoin comes down to matching the route to the purchase. Gift cards reach the most retailers and work everywhere the card does. Direct merchants are the purest form of it, a Lightning invoice at a counter, and the map tells you where they are. Travel handles the big-ticket case, and top-ups handle the smallest. In every case the price started in fiat, the payment is final once it settles, and the fee you pay depends on the rail: check <a href="/fees">fees</a> before an on-chain payment, and if you are still accumulating rather than spending, the <a href="/buy">buying guide</a> is the other half of this page.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="sh-stat"><b id="sh-px">&#8230;</b><i>1 BTC</i></div>
+      <div class="sh-stat"><b id="sh-sats">&#8230;</b><i>what $100 buys</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you pay</div>
+      <ul class="sh-rl">
+        <li>Check the quote against the market rate</li>
+        <li>Use Lightning for small amounts</li>
+        <li>Pay inside the invoice window</li>
+        <li>Keep the receipt and the rate that day</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/spend/gift-cards">Gift card catalog</a>
+        <a href="/no-kyc">No-KYC directory</a>
+        <a href="/buy">How to buy bitcoin</a>
+        <a href="/convert">BTC to fiat converter</a>
+        <a href="/fees">Current network fees</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .sh-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .sh-step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .sh-sn{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
+  .sh-step b{display:block;font:700 14px var(--sans);color:var(--ink);margin-top:5px}
+  .sh-step i{display:block;font:500 11.5px/1.45 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .sh-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .sh-mt{margin-top:14px}
+  .sh-chead{display:flex;align-items:baseline;gap:10px}
+  .sh-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .sh-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .sh-how{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .sh-how a,.sh-linknote a,.sh-row a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .sh-how a:hover,.sh-linknote a:hover,.sh-row a:hover{border-bottom-style:solid}
+  .sh-deep{display:block;margin-top:13px;background:var(--field);border:1.5px solid rgba(255,166,60,.45);border-radius:10px;
+    padding:13px 16px;text-decoration:none}
+  .sh-deep:hover{border-color:var(--orange);background:var(--panel-2)}
+  .sh-deep b{display:block;font:700 14px var(--sans);color:var(--ink)}
+  .sh-deep i{display:block;font:500 12px/1.5 var(--sans);color:var(--acc);font-style:normal;margin-top:3px}
+  .sh-wlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 8px}
+  .sh-svcs{margin-top:2px}
+  .sh-svc{display:flex;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dotted var(--line-2)}
+  .sh-svc:last-child{border-bottom:0;padding-bottom:4px}
+  .sh-svcm{flex:1;min-width:0}
+  .sh-svct{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .sh-svct b{font:700 14px var(--sans);color:var(--ink)}
+  .sh-svct b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
+  .sh-svct b a:hover{color:var(--acc);border-bottom-color:rgba(247,147,26,.45)}
+  .sh-nokyc{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--up);
+    border:1px solid rgba(14,203,129,.4);border-radius:5px;padding:2px 7px;white-space:nowrap;text-decoration:none}
+  .sh-nokyc:hover{border-color:var(--up)}
+  .sh-since{font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
+  .sh-svcp{font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  .sh-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    padding:10px 18px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .sh-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+  .sh-linknote{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin:8px 0 0}
+  .sh-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .sh-rows{display:grid;gap:8px}
+  .sh-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .sh-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .sh-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .sh-note{border-color:rgba(255,166,60,.32)}
+  .sh-about{margin-top:14px}
+  .sh-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .sh-rl{margin:0;padding-left:16px}
+  .sh-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .sh-rl li:first-child{margin-top:0}
+  .sh-rl li::marker{color:var(--acc)}
+  .sh-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .sh-stat:last-child{border-bottom:0}
+  .sh-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .sh-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .sh-card{padding:18px 18px 20px}
+    .sh-svc{gap:12px}
+    .sh-open{font-size:11.5px;padding:9px 13px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  var px=document.getElementById("sh-px"),sats=document.getElementById("sh-sats");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipsis in place */
+    if(px)px.textContent="$"+fmt(P.price,0);
+    if(sats)sats.textContent=fmt(100/P.price*1e8,0)+" sats";
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipsis holds until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

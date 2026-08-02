@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Nodes: Reachable Node Census and How to Run Your Own - OpenBitcoin" description="Approximately how many reachable Bitcoin nodes there are, where they run, and what it takes to run your own node with Bitcoin Core.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Nodes</div>
+    <h1>Bitcoin nodes</h1>
+    <p class="doc-lede">A census of the nodes anyone can reach, on the open internet and over Tor, plus what it takes to add one of your own. Every node independently verifies every block; running one is how you check the rules yourself instead of trusting someone who says they did.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="nd-hero">
+      <div class="nd-big">21,547</div>
+      <div class="nd-sub">reachable Bitcoin nodes, approximate, as of July 2026</div>
+      <div class="nd-chips">
+        <div class="nd-chip"><b>~60%</b><i>reached over Tor</i></div>
+        <div class="nd-chip"><b>Bitcoin Core 29.x</b><i>most common version, 34%</i></div>
+        <div class="nd-chip"><b>98</b><i>countries with a located node</i></div>
+      </div>
+      <p class="nd-fine">These are illustrative approximate figures based on publicly reported censuses of the reachable network, as of July 2026, not our own measurement; the site's own crawler ships later. Reachable means accepting inbound connections. Nodes behind home firewalls are invisible to any census, so the true total is higher; a count like this is a floor, not a ceiling.</p>
+    </div>
+
+    <div class="nd-card">
+      <div class="nd-tlab">Where the located nodes run</div>
+      <table class="nd-table" aria-label="Top ten countries by reachable node count">
+        <thead><tr><th>#</th><th>Country</th><th>Nodes</th><th>Share of located</th></tr></thead>
+        <tbody>
+          <tr><td class="nd-rank">1</td><td>United States</td><td>1,842</td><td><div class="nd-share"><span class="nd-bar"><i style="width:100%"></i></span><b>21.5%</b></div></td></tr>
+          <tr><td class="nd-rank">2</td><td>Germany</td><td>1,236</td><td><div class="nd-share"><span class="nd-bar"><i style="width:67%"></i></span><b>14.4%</b></div></td></tr>
+          <tr><td class="nd-rank">3</td><td>France</td><td>512</td><td><div class="nd-share"><span class="nd-bar"><i style="width:28%"></i></span><b>6.0%</b></div></td></tr>
+          <tr><td class="nd-rank">4</td><td>Netherlands</td><td>401</td><td><div class="nd-share"><span class="nd-bar"><i style="width:22%"></i></span><b>4.7%</b></div></td></tr>
+          <tr><td class="nd-rank">5</td><td>Canada</td><td>388</td><td><div class="nd-share"><span class="nd-bar"><i style="width:21%"></i></span><b>4.5%</b></div></td></tr>
+          <tr><td class="nd-rank">6</td><td>United Kingdom</td><td>344</td><td><div class="nd-share"><span class="nd-bar"><i style="width:19%"></i></span><b>4.0%</b></div></td></tr>
+          <tr><td class="nd-rank">7</td><td>Finland</td><td>296</td><td><div class="nd-share"><span class="nd-bar"><i style="width:16%"></i></span><b>3.5%</b></div></td></tr>
+          <tr><td class="nd-rank">8</td><td>Switzerland</td><td>243</td><td><div class="nd-share"><span class="nd-bar"><i style="width:13%"></i></span><b>2.8%</b></div></td></tr>
+          <tr><td class="nd-rank">9</td><td>Japan</td><td>221</td><td><div class="nd-share"><span class="nd-bar"><i style="width:12%"></i></span><b>2.6%</b></div></td></tr>
+          <tr><td class="nd-rank">10</td><td>Singapore</td><td>198</td><td><div class="nd-share"><span class="nd-bar"><i style="width:11%"></i></span><b>2.3%</b></div></td></tr>
+        </tbody>
+      </table>
+      <p class="nd-fine">Approximate figures from publicly reported censuses, as of July 2026. Country is known only for nodes reached over the open internet; the roughly 60% reached over Tor announce no location by design, so this table describes the located minority, about 8,564 nodes.</p>
+    </div>
+
+    <div class="nd-card">
+      <div class="nd-tlab">Why run a node</div>
+      <ul class="nd-list">
+        <li><b>Verify your own transactions.</b> Your node checks every block and every payment against the consensus rules itself. When it shows a confirmation, that is your machine's verdict, not a website's.</li>
+        <li><b>Privacy for your wallet.</b> A wallet pointed at a public server tells that server exactly which addresses are yours. Pointed at your own node, the lookup never leaves your house.</li>
+        <li><b>No trusted third party.</b> Balances, fees, and confirmations come from software you run and can read, not from a service that can lie, log, or shut down.</li>
+        <li><b>Strengthen the network.</b> Every independent node is another copy of the chain, another peer to sync from, and another vote that quietly changing the rules will not go unnoticed.</li>
+      </ul>
+    </div>
+
+    <div class="nd-card">
+      <div class="nd-tlab">What it takes</div>
+      <table class="nd-table nd-hw" aria-label="Hardware options for running a node">
+        <thead><tr><th>Hardware</th><th>Disk</th><th>RAM</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Any recent desktop or laptop</td><td>1 TB or larger, SSD preferred</td><td>8 GB or more</td><td>Nothing extra if you already own it; the node runs alongside normal use</td></tr>
+          <tr><td>Raspberry Pi-class board</td><td>1 TB SSD over USB</td><td>4 to 8 GB</td><td>A complete dedicated build lands in the low hundreds of dollars</td></tr>
+          <tr><td>An old laptop</td><td>Add a 1 TB drive if needed</td><td>4 GB or more</td><td>Close to free, with a built-in battery for power cuts</td></tr>
+        </tbody>
+      </table>
+      <p class="nd-fine">Disk: the chain is roughly 750 GB and growing, so 1 TB is the practical minimum for a full archive; pruned mode can cut that to a few gigabytes if you give up serving historical blocks. Bandwidth: the initial sync downloads the whole chain once, then a node typically moves tens of gigabytes a month, more if it serves many peers. An unmetered connection suits it well, and upload can be capped in the settings.</p>
+    </div>
+
+    <div class="nd-card">
+      <div class="nd-tlab">Getting started</div>
+      <ol class="nd-list">
+        <li><b>Download Bitcoin Core from bitcoin.org.</b> The reference implementation, free and open source, for Windows, macOS, and Linux. Type the address yourself; never install a node from an ad or a link someone sent you.</li>
+        <li><b>Verify the download.</b> The release page publishes checksums and signatures with step-by-step instructions. It takes a few minutes and is the step that catches a tampered installer.</li>
+        <li><b>Let the initial block download run.</b> Your node fetches and verifies every block since 2009. Expect days rather than hours on most hardware; that is normal, because it is verifying everything, not just downloading it.</li>
+        <li><b>Optional: route it over Tor.</b> Bitcoin Core can run as a Tor onion service, which hides your home IP address from the peers you connect to and lets others reach you without port forwarding.</li>
+        <li><b>Optional: connect your own wallet.</b> Open-source wallets such as Sparrow and Electrum can point at your node, so checking a balance no longer tells a stranger's server which coins are yours.</li>
+      </ol>
+    </div>
+
+    <div class="nd-about doc-prose">
+      <p>A node count is always an estimate. A crawler only sees nodes that accept inbound connections, and the many nodes listening to the network from behind home routers never appear in any census, this one included. The census figures on this page are illustrative approximations drawn from publicly reported censuses of the reachable network, as of July 2026, not our own measurement; the site's own crawler ships later, and when it does these figures become our own measured census with the method documented at <a href="/sources">/sources</a>. Running a node pairs naturally with holding your own keys, covered in the <a href="/learn/self-custody">self-custody guide</a>; the blocks it verifies are the same ones on the <a href="/blocks">latest blocks</a> page.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Census, approx., July 2026</div>
+      <div class="nd-rs"><b>21,547</b><i>reachable nodes</i></div>
+      <div class="nd-rs"><b>12,983</b><i>reached over Tor (~60%)</i></div>
+      <div class="nd-rs"><b>8,564</b><i>located on the open internet</i></div>
+      <div class="nd-rs"><b>98</b><i>countries</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/mempool">Mempool now</a>
+        <a href="/sources">Data sources</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .nd-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 20px;text-align:center}
+  .nd-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .nd-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .nd-chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .nd-chip{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .nd-chip b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .nd-chip i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .nd-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .nd-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .nd-table{width:100%;border-collapse:collapse}
+  .nd-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .nd-table td{font:600 13.5px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .nd-table tr:last-child td{border-bottom:0}
+  .nd-table td:nth-child(2){color:var(--ink);font-weight:700}
+  .nd-rank{color:var(--ink-3);width:26px}
+  .nd-share{display:flex;align-items:center;gap:8px;min-width:150px}
+  .nd-bar{flex:1;height:6px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:99px;overflow:hidden}
+  .nd-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--acc));border-radius:99px}
+  .nd-share b{font:700 12px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
+  .nd-hw td{white-space:normal;font:500 13.5px/1.5 var(--sans);vertical-align:top}
+  .nd-hw td:first-child{color:var(--ink);font-weight:700}
+  .nd-hw td:nth-child(2){color:var(--ink);font-weight:600}
+  .nd-list{margin:0;padding-left:22px}
+  .nd-list li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .nd-list li::marker{color:var(--acc);font-weight:700}
+  .nd-list b{color:var(--ink);font-weight:600}
+  .nd-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .nd-about{margin-top:14px}
+  .nd-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .nd-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .nd-rs:last-child{border-bottom:0}
+  .nd-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .nd-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .nd-big{font-size:40px}
+    .nd-table{display:block;overflow-x:auto}
+    .nd-hw td{min-width:150px}
+  }
+</style>
+</Base>

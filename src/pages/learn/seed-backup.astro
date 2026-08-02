@@ -1,0 +1,380 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+const wordsForEntropy = (ent) => (ent + ent / 32) / 11;
+const N24 = wordsForEntropy(256);
+const N12 = wordsForEntropy(128);
+const SLOTS = Array.from({ length: N24 }, (_, i) => i + 1);
+const COPIES = ['A', 'B'];
+---
+<Base title="Seed Phrase Backup: How to Write It Down Safely - OpenBitcoin" description="How to back up a bitcoin seed phrase: pen and paper, two copies, two places, never digital. Includes a printable card and the restore test that proves it.">
+<main class="wrap doc-wrap">
+  <div class="doc-head sb-noprint">
+    <div class="doc-kicker">Learn</div>
+    <h1>Backing up a seed</h1>
+    <p class="doc-lede">Write it once, correctly, and the backup outlives every wallet you will ever use. How to record 12 or 24 words by hand, a blank card to print, and the restore test that proves it works.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="sb-card sb-noprint">
+      <div class="sb-lab">Write it by hand, twice</div>
+      <ol class="sb-steps">
+        <li><b>Number every line.</b> Order is part of the secret. A phrase with the right words in the wrong order opens nothing, and a card with no numbers hides a missing word until the day you need it.</li>
+        <li><b>Pen, not pencil, and not a printer.</b> Pencil smudges, thermal receipts fade blank within a few years, and printing the words means they passed through a computer, a spool file and often a network. Ballpoint or pigment ink on decent paper.</li>
+        <li><b>Block capitals, slowly.</b> Your handwriting is the weak link, not the wordlist. The pairs that ruin backups are 1 and l, 0 and O, u and v, and rn read as m. Write the whole word, not an abbreviation.</li>
+        <li><b>Copy the spelling from the wallet screen exactly.</b> Every word is from a fixed list of 2048, so a near miss is not a word at all. If you want to check a single word's spelling later, the <a href="/tools/bip39">wordlist tool</a> checks one word at a time and never a phrase.</li>
+        <li><b>Make the second copy from the screen, not from the first card.</b> Copying a copy copies the mistake. Two independent transcriptions catch the slip that one never will.</li>
+        <li><b>Two places, both dry, both under your control.</b> A safe at home and a second location you can actually reach: a relative you trust, a second property, a box you hold the only key to. Two copies in one building is one copy.</li>
+        <li><b>Seal it and store it flat.</b> Paper's enemies, in order, are water, sunlight, and helpful people who tidy drawers. A sealed bag inside something boring solves most of that.</li>
+      </ol>
+      <p class="sb-note">Nothing about this is digital. The words never touch a keyboard except during a restore you started yourself, on a device you chose, and they never touch a camera at all.</p>
+    </div>
+
+
+    <div class="sb-tpl sb-mt">
+      <div class="sb-tpl-top sb-noprint">
+        <div class="sb-tpl-l">
+          <div class="sb-kick">Printable template</div>
+          <h2>The card</h2>
+          <p class="sb-tpl-sub">Two blank cards print, marked A and B, one per page, so the pair is made in a single sitting. Nothing is filled in for you, and nothing on this page can be.</p>
+        </div>
+        <div class="sb-ctl">
+          <div class="sb-seg" role="group" aria-label="Number of words on the card">
+            <button type="button" class="sb-s" data-n="12">12 words</button>
+            <button type="button" class="sb-s is-on" data-n="24">24 words</button>
+          </div>
+          <button type="button" class="sb-print" id="sb-print">Print the card</button>
+        </div>
+      </div>
+      <p class="sb-tplnote sb-noprint" id="sb-tplnote">Set for 24 numbered lines. Only the card prints: the guide, the menus and the rest of the page are left off the page.</p>
+
+      <div class="sb-fail sb-noprint" id="sb-fail">
+        <b>Self-test failed</b>
+        <span>The card is not shown, and printing is switched off. The page checks its own word-count arithmetic and the numbering of every line before it lets you print, because a card with the wrong number of lines is worse than no card. Reload the page; if this persists, write the words on plain numbered paper instead.</span>
+      </div>
+
+      <div class="sb-papers" id="sb-papers">
+        {COPIES.map((c) => (
+        <article class="sb-paper" aria-label={`Blank seed backup card, copy ${c}`}>
+          <div class="sb-ptop">
+            <div class="sb-ptitle">Seed backup card</div>
+            <div class="sb-pcopy">Copy {c} &middot; <span class="sb-pn">{N24}</span> words</div>
+          </div>
+          <p class="sb-pwarn">Anyone who can read these words can spend the coins, from anywhere, at any time. Handwrite only. Never photograph this card, never type it into a website, never keep a copy on a computer or a phone.</p>
+          <div class="sb-pmeta">
+            <div class="sb-f"><i>Wallet or device</i><span class="sb-rule"></span></div>
+            <div class="sb-f"><i>Date written</i><span class="sb-rule"></span></div>
+          </div>
+          <div class="sb-plab">Words, in order</div>
+          <div class="sb-words" data-n={N24}>
+            {SLOTS.map((n) => (
+            <div class={n > N12 ? 'sb-w sb-w-x' : 'sb-w'}><i>{n}</i></div>
+            ))}
+          </div>
+          <div class="sb-pfoot">
+            <div class="sb-pr"><span class="sb-box"></span>Restore tested on a wiped or spare device, first receiving address matched.<span class="sb-dl"><i>Date</i><span></span></span></div>
+            <div class="sb-pr"><span class="sb-box"></span>Second copy written by hand from the wallet screen and stored in a different place.</div>
+            <div class="sb-pr"><span class="sb-box"></span>Read again, every word still legible.<span class="sb-dl"><i>Date</i><span></span></span></div>
+            <div class="sb-pr sb-pr-q">Extra passphrase in use? <span class="sb-box"></span>No <span class="sb-box"></span>Yes, kept somewhere else. Never write the passphrase on this card.</div>
+          </div>
+        </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="sb-card sb-mt sb-noprint">
+      <div class="sb-lab">Metal, honestly</div>
+      <p class="sb-p">Paper handles time and handles nothing else. It ignites at roughly 230 degrees Celsius, and a room fire that has properly caught runs far past that, so a card in a drawer is gone long before the building is. Water is slower and just as final: ink runs, the page cockles, and the words that survive are the ones you cannot quite read. Metal exists for exactly these two events and for nothing else.</p>
+      <h3 class="sb-h3">What actually works</h3>
+      <ul class="sb-list">
+        <li><b>Letters stamped or punched into solid plate.</b> Stainless steel melts near 1400 degrees and titanium higher still, so the plate outlasts the house. The failure is never the metal, it is the method: printed, painted or heat-marked letters can char away, and adhesive tiles or small loose parts come apart in a fire and leave you a pile of letters with no order.</li>
+        <li><b>Four letters per word is enough.</b> Every word in the list is identified by its first four letters, so a stamped plate can hold ABAN for abandon. Half the stamping, none of the ambiguity. Paper cards get the whole word; there is no reason to abbreviate when you have room.</li>
+        <li><b>A punch set and a plate from a hardware shop do the job.</b> Steel washers on a bolt, in order, is a well-worn approach and costs almost nothing. Named products are fine too, and no product is being recommended here: the metal and the stamp are the whole technology, and the price differences are packaging.</li>
+      </ul>
+      <h3 class="sb-h3">What metal does not do</h3>
+      <ul class="sb-list">
+        <li><b>It does not hide anything.</b> A plate in a drawer is a plate anybody can read, and it is heavier and more obviously valuable than a sheet of paper. Fireproofing is not a substitute for a place people do not look.</li>
+        <li><b>It does not fix a wrong word.</b> Stamping is permanent, which is exactly why you stamp after the restore test passes and not before.</li>
+        <li><b>It does not survive being in the hottest part of the fire.</b> Hot gas rises, so store the plate low in the building rather than in a loft, and away from things that burn hard.</li>
+        <li><b>It is not a service.</b> Nobody stamps your words for you, and no shop, engraver or storage company ever sees them. A backup somebody else has read is not a backup.</li>
+      </ul>
+    </div>
+
+    <div class="sb-card sb-mt sb-noprint">
+      <div class="sb-lab">What not to do</div>
+      <ul class="sb-mist">
+        <li><b>Photograph it.</b> Phone photos sync to a cloud account protected by a password and a support queue. That is the entire security of your coins, handed to a company, silently.</li>
+        <li><b>Type it into a website.</b> Any website, including this one. There is no check, sync, migration, verification or upgrade that needs your words. Real recovery work happens offline with the <a href="/tools/seed-recovery">downloadable seed toolkit</a>, and asking is itself the theft; see <a href="/learn/scams">how scams work</a>.</li>
+        <li><b>Keep it in a password manager, a notes app, an email draft or an encrypted archive in a synced folder.</b> Malware looks for precisely these, and a synced folder is a copy on somebody else's computer whatever the file is called.</li>
+        <li><b>Print the words.</b> Print the blank card, write on it by hand. A printer has a queue, a memory, and frequently a network connection.</li>
+        <li><b>Split the words across places to be clever.</b> Half a phrase is not half a secret; it cuts the work of guessing the rest by an enormous margin, and it doubles the number of places that must survive. If you want a real split, that is what multiple keys are for; see <a href="/learn/self-custody">self-custody</a>.</li>
+        <li><b>Invent a personal cipher.</b> Shifted words, a private ordering, a word only you would add. You will remember it perfectly for about two years. Your heirs never will; <a href="/learn/inheritance">inheritance planning</a> covers the alternative.</li>
+        <li><b>Write the words into a will, or read them to anybody over the phone.</b> Wills can end up on a public record, and a phone call is a recording somewhere. Tell people the backup exists and where, never what it says.</li>
+        <li><b>Accept a phrase somebody else generated.</b> A device that arrives with words already written, a card handed over with a wallet, a phrase from a website: the person who saw it first still has it. Generate your own, or roll it yourself with <a href="/learn/dice-seed">dice</a>.</li>
+        <li><b>Trust an untested backup.</b> Until it has restored a wallet, it is handwriting, not a backup.</li>
+      </ul>
+    </div>
+
+    <div class="sb-card sb-mt sb-noprint">
+      <div class="sb-lab">The restore test</div>
+      <p class="sb-p">This is the step almost everybody skips, and it is the one that decides whether any of the rest mattered. Do it before the wallet holds real money, and do it again once a year.</p>
+      <ol class="sb-steps">
+        <li><b>Wait a day, then work only from the card.</b> Put the original away. If you can read your own writing a day later, in ordinary light, without the wallet in front of you, the card is good. If you cannot, rewrite it now.</li>
+        <li><b>Restore onto something that is not the original.</b> A spare phone, a second computer, a fresh install of the same software, or the hardware signer wiped and set up from scratch. Restoring onto the device that already has the wallet proves nothing.</li>
+        <li><b>Type the words in order, from the card.</b> Not from memory, not from the screen you copied them off. This is the only time the words are ever typed anywhere, and it is into wallet software you chose and opened yourself. Any of the wallets on the <a href="/wallets">wallets page</a> will do it.</li>
+        <li><b>Compare the first receiving address, character by character.</b> Same seed gives the same first address, every time, in any wallet using the same account. If it matches, the card is the wallet. If it does not, one word is wrong, and it is far better to find that now. The <a href="/tools/validate">address checker</a> is useful for reading long strings without going cross-eyed.</li>
+        <li><b>Wipe the test device or delete the test wallet.</b> The point was the check, not a third copy of your keys on a phone in a drawer.</li>
+        <li><b>Only then move real money in, and only then stamp metal.</b> Send a small amount first, confirm it arrives, then the rest. The extra fee is the cheapest insurance in bitcoin, and <a href="/learn/self-custody">self-custody</a> covers the rest of the habit.</li>
+      </ol>
+      <p class="sb-note">Put the annual re-read in the same slot as some other yearly chore. You are checking three things: the words are still legible, both copies still exist where you think they do, and the person who would need to find them still knows they are there.</p>
+    </div>
+
+    <div class="sb-about doc-prose sb-noprint">
+      <p>This page holds no data and makes no requests. It has no field to type in, by design, and the card it prints is blank, by design. The word-count arithmetic and the numbering of every line are checked against the published values on each load, and the card is withheld rather than printed wrong if a check fails. Guides here are informational under the <a href="/terms">terms</a>, and where the rest of the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail sb-noprint">
+    <div class="doc-tile">
+      <div class="doc-tlab">The one rule</div>
+      <p class="sb-railp">The words are the wallet. Whoever reads them owns the coins, and nobody legitimate will ever ask to see them. Everything on this page follows from those two sentences.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Card checklist</div>
+      <div class="sb-t"><b>In order</b><i>Numbered, every line filled, no gaps.</i></div>
+      <div class="sb-t"><b>Whole words</b><i>Block capitals, spelled off the wallet screen.</i></div>
+      <div class="sb-t"><b>Two copies</b><i>Both written by hand, both from the screen.</i></div>
+      <div class="sb-t"><b>Two places</b><i>Dry, boring, and reachable by you.</i></div>
+      <div class="sb-t"><b>Tested</b><i>Restored once on another device before it matters.</i></div>
+      <div class="sb-t"><b>Never digital</b><i>No photo, no cloud, no keyboard except a restore.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/seed-recovery">Offline seed toolkit</a>
+        <a href="/learn/dice-seed">Rolling a seed with dice</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  
+  .sb-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .sb-mt{margin-top:14px}
+  .sb-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .sb-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .sb-h3{font:700 12.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin:18px 0 0}
+  .sb-steps{counter-reset:sb;list-style:none;margin:0;padding:0}
+  .sb-steps li{position:relative;padding-left:34px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .sb-steps li:first-child{margin-top:0}
+  .sb-steps li::before{counter-increment:sb;content:counter(sb);position:absolute;left:0;top:1px;width:22px;height:22px;
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line-2);color:var(--acc);
+    font:700 11px/21px var(--mono);text-align:center}
+  .sb-steps b{color:var(--ink);font-weight:600}
+  .sb-list{margin:10px 0 0;padding-left:20px}
+  .sb-list li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .sb-list li::marker{color:var(--acc)}
+  .sb-list b{color:var(--ink);font-weight:600}
+  .sb-mist{margin:0;padding-left:0;list-style:none}
+  .sb-mist li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px;padding-left:24px;position:relative}
+  .sb-mist li:first-child{margin-top:0}
+  .sb-mist li::before{content:"\00d7";position:absolute;left:0;top:0;font:700 15px/1.55 var(--mono);color:var(--down)}
+  .sb-mist b{color:var(--ink);font-weight:600}
+  .sb-card a,.sb-mist a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .sb-card a:hover,.sb-mist a:hover{border-bottom-style:solid}
+  .sb-note{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin:15px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .sb-warn{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:13px 2px 0}
+  .sb-about{margin-top:14px}
+  .sb-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .sb-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .sb-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .sb-t:last-child{border-bottom:0}
+  .sb-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .sb-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+
+  
+  .sb-tpl{background:var(--panel);border:1px solid rgba(255,166,60,.42);border-radius:12px;padding:20px 24px 22px}
+  .sb-tpl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .sb-tpl-l{min-width:0;flex:1 1 300px}
+  .sb-kick{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .sb-tpl h2{font:800 21px/1.2 var(--sans);letter-spacing:-.3px;color:var(--ink);margin:7px 0 0}
+  .sb-tpl-sub{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:8px 0 0;max-width:52ch}
+  .sb-ctl{display:flex;align-items:center;gap:9px;flex-wrap:wrap;flex:none}
+  .sb-seg{display:flex;gap:5px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:11px;padding:4px}
+  .sb-s{background:none;border:0;border-radius:8px;padding:9px 13px;cursor:pointer;
+    font:700 11px var(--mono);letter-spacing:.06em;color:var(--ink-3);white-space:nowrap}
+  .sb-s:hover{color:var(--ink-2)}
+  .sb-s.is-on{background:rgba(247,147,26,.12);color:var(--acc)}
+  .sb-print{background:var(--cta);color:var(--cta-ink);border:0;border-radius:10px;
+    font:800 13.5px var(--sans);padding:13px 20px;cursor:pointer;white-space:nowrap}
+  .sb-print:hover{background:var(--cta-hov)}
+  .sb-print[disabled]{opacity:.4;cursor:not-allowed}
+  .sb-tplnote{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:13px 0 0}
+  .sb-fail{display:none;margin-top:14px;border-radius:12px;padding:15px 18px;
+    border:1px solid rgba(246,70,93,.45);background:rgba(246,70,93,.07)}
+  .sb-fail.is-on{display:block}
+  .sb-fail b{display:block;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--down)}
+  .sb-fail > span{display:block;font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+
+  
+  .sb-papers{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+  .sb-papers.is-off{display:none}
+  .sb-paper{background:#FFFDF8;color:#1A150F;border:1px solid #CFC5B2;border-radius:10px;padding:20px 22px 18px;min-width:0}
+  .sb-ptop{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    border-bottom:1.5px solid #1A150F;padding-bottom:8px}
+  .sb-ptitle{font:800 15px var(--sans);letter-spacing:-.2px;color:#1A150F}
+  .sb-pcopy{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#5E5548}
+  .sb-pwarn{font:600 10.5px/1.5 var(--sans);color:#5E5548;margin:9px 0 0;max-width:70ch}
+  .sb-pmeta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:13px}
+  .sb-f{display:flex;align-items:flex-end;gap:8px;min-width:0}
+  .sb-f i{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7C7264;
+    font-style:normal;white-space:nowrap;padding-bottom:4px}
+  .sb-rule{flex:1 1 auto;min-width:0;border-bottom:1px solid #B7AC98;height:20px}
+  .sb-plab{font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#7C7264;margin:16px 0 2px}
+  .sb-words{display:grid;grid-auto-flow:column;grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-rows:repeat(12,auto);gap:0 24px}
+  .sb-words[data-n="12"]{grid-template-rows:repeat(6,auto)}
+  .sb-words[data-n="12"] .sb-w-x{display:none}
+  .sb-w{display:flex;align-items:flex-end;gap:10px;height:34px;border-bottom:1px solid #B7AC98;min-width:0}
+  .sb-w i{font:700 10px var(--mono);font-style:normal;color:#7C7264;font-variant-numeric:tabular-nums;
+    min-width:16px;text-align:right;padding-bottom:4px}
+  .sb-pfoot{margin-top:16px;padding-top:10px;border-top:1.5px solid #1A150F}
+  .sb-pr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;
+    font:600 10.5px/1.5 var(--sans);color:#3A342B}
+  .sb-box{width:12px;height:12px;border:1.2px solid #1A150F;border-radius:2px;flex:none}
+  .sb-dl{display:inline-flex;align-items:flex-end;gap:6px;flex:1 1 120px;min-width:0}
+  .sb-dl i{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7C7264;
+    font-style:normal;padding-bottom:2px}
+  .sb-dl > span{flex:1 1 auto;min-width:60px;border-bottom:1px solid #B7AC98;height:14px}
+  .sb-pr-q{color:#5E5548}
+
+  
+  @media screen and (max-width:700px){
+    .sb-card,.sb-tpl{padding:18px 18px 20px}
+    .sb-paper{padding:16px 16px 15px}
+    .sb-ctl{width:100%}
+    .sb-print{flex:1 1 auto}
+    .sb-seg{flex:1 1 auto;justify-content:center}
+    .sb-tpl h2{font-size:19px}
+    .sb-words,.sb-words[data-n="12"]{grid-auto-flow:row;grid-template-columns:minmax(0,1fr);grid-template-rows:auto}
+    .sb-pmeta{grid-template-columns:minmax(0,1fr)}
+  }
+
+  
+  @media print{
+    @page{margin:14mm}
+    body > *:not(main){display:none!important}
+    .sb-noprint{display:none!important}
+    html,body{background:#fff!important}
+    main.doc-wrap{max-width:none!important;margin:0!important;padding:0!important}
+    .doc-grid{display:block!important;gap:0!important}
+    .sb-tpl{background:none!important;border:0!important;border-radius:0!important;padding:0!important;margin:0!important}
+    .sb-papers{display:block!important;margin:0!important}
+    .sb-papers.is-off{display:none!important}
+    .sb-paper{background:#fff!important;color:#000!important;border:1pt solid #000!important;border-radius:0!important;
+      padding:9mm 9mm 7mm!important;margin:0!important;break-inside:avoid;page-break-inside:avoid;
+      break-after:page;page-break-after:always}
+    .sb-paper:last-child{break-after:auto;page-break-after:auto}
+    .sb-ptop{border-bottom:1pt solid #000}
+    .sb-ptitle{font-size:13pt;color:#000}
+    .sb-pcopy{font-size:7.5pt;color:#000}
+    .sb-pwarn{font-size:7.5pt;color:#000;max-width:none}
+    .sb-plab,.sb-f i,.sb-dl i,.sb-w i{color:#000}
+    .sb-f i,.sb-dl i,.sb-plab{font-size:7pt}
+    .sb-w i{font-size:8pt}
+    .sb-rule,.sb-dl > span{border-bottom:.6pt solid #000}
+    .sb-words{gap:0 8mm}
+    .sb-w{height:11mm;border-bottom:.6pt solid #000}
+    .sb-pfoot{border-top:1pt solid #000}
+    .sb-pr{font-size:8pt;color:#000;padding:1.6mm 0}
+    .sb-box{border:.8pt solid #000;width:3.4mm;height:3.4mm}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* This page runs no cryptography and holds no secret. The one piece of logic
+     that can be wrong is the number of lines on the card, and a card with the
+     wrong number of lines silently ruins a backup, so it is checked before the
+     card is allowed to print.
+
+     BIP39 fixes the word count from the entropy length:  (ENT + ENT/32) / 11
+     TEST VECTORS (the published BIP39 table):
+       128 bits -> 12 words      160 -> 15      192 -> 18
+       224 bits -> 21 words      256 -> 24
+     plus two structural vectors read back out of the rendered page:
+       every card carries exactly 24 slots, numbered 1 to 24 in order;
+       exactly the last 12 of them are the optional ones (a 24 word phrase
+       only). If any check fails, the card is hidden, printing is disabled and
+       a visible failure state replaces it. */
+  function wordsForEntropy(ent){return (ent+ent/32)/11;}
+
+  var VEC=[[128,12],[160,15],[192,18],[224,21],[256,24]];
+  var pass=true,detail=[];
+  for(var i=0;i<VEC.length;i++){
+    if(wordsForEntropy(VEC[i][0])!==VEC[i][1]){pass=false;detail.push("entropy "+VEC[i][0]);}
+  }
+  var FULL=wordsForEntropy(256),SHORT=wordsForEntropy(128);
+
+  var papers=document.getElementById("sb-papers"),
+      fail=document.getElementById("sb-fail"),
+      note=document.getElementById("sb-tplnote"),
+      btn=document.getElementById("sb-print"),
+      grids=document.querySelectorAll(".sb-words"),
+      segs=document.querySelectorAll(".sb-s"),
+      counts=document.querySelectorAll(".sb-pn");
+  if(!papers)return;
+
+  if(grids.length!==2){pass=false;detail.push("card count "+grids.length);}
+  Array.prototype.forEach.call(grids,function(g,gi){
+    var slots=g.querySelectorAll(".sb-w"),opt=0;
+    if(slots.length!==FULL){pass=false;detail.push("card "+gi+" slot count "+slots.length);return;}
+    Array.prototype.forEach.call(slots,function(s,si){
+      var n=s.querySelector("i"),want=String(si+1);
+      if(!n||n.textContent.trim()!==want){pass=false;detail.push("card "+gi+" slot "+(si+1));}
+      var isOpt=s.className.indexOf("sb-w-x")>=0;
+      if(isOpt)opt++;
+      if(isOpt!==(si+1>SHORT)){pass=false;detail.push("card "+gi+" optional flag at "+(si+1));}
+    });
+    if(opt!==FULL-SHORT){pass=false;detail.push("card "+gi+" optional count "+opt);}
+  });
+
+  if(!pass){
+    console.error("[/learn/seed-backup] self-test failed: "+detail.join(", ")+". The card is withheld rather than printed wrong.");
+    papers.className="sb-papers is-off";
+    fail.className="sb-fail sb-noprint is-on";
+    note.style.display="none";
+    btn.disabled=true;
+    btn.textContent="Printing disabled";
+    Array.prototype.forEach.call(segs,function(b){b.disabled=true;});
+    return;
+  }
+  console.log("[/learn/seed-backup] self-test passed: 5 BIP39 word-count vectors and "+
+    (grids.length*FULL)+" numbered slots verified.");
+
+  function setMode(n){
+    Array.prototype.forEach.call(grids,function(g){g.setAttribute("data-n",String(n));});
+    Array.prototype.forEach.call(counts,function(c){c.textContent=String(n);});
+    Array.prototype.forEach.call(segs,function(b){
+      b.classList.toggle("is-on",parseInt(b.dataset.n,10)===n);
+    });
+    note.textContent="Set for "+n+" numbered lines. Only the card prints: the guide, the menus and the rest of the page are left off the page.";
+  }
+  Array.prototype.forEach.call(segs,function(b){
+    b.addEventListener("click",function(){
+      var n=parseInt(b.dataset.n,10);
+      if(n!==SHORT&&n!==FULL)return;
+      setMode(n);
+    });
+  });
+  setMode(FULL);
+
+  btn.addEventListener("click",function(){window.print();});
+})();
+</script>
+</Base>

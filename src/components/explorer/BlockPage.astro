@@ -1,0 +1,222 @@
+---
+import { fmtInt, fmtBtc, utcStamp, utcFull, agoText } from '../../lib/explorer.js';
+const { b } = Astro.props;
+
+const minerName = b.coinbase?.miner || null;
+const inBestChain = b.confirmations >= 0;
+const stats = b.stats;
+const subsidyPlusFees = stats ? stats.subsidySat + stats.totalFeeSat : null;
+const gaugePos = (() => {
+  if (!stats || stats.medianFeerate == null) return 50;
+  if (!(stats.maxFeerate > stats.minFeerate)) return 50;
+  const lo = Math.max(1, stats.minFeerate);
+  const hi = Math.max(lo + 1, stats.maxFeerate);
+  const mid = Math.min(hi, Math.max(lo, stats.medianFeerate));
+  const pct = ((Math.log(mid) - Math.log(lo)) / (Math.log(hi) - Math.log(lo))) * 100;
+  return Math.min(95, Math.max(5, pct));
+})();
+function scaled(n, steps) {
+  const x = Number(n);
+  if (n == null || !Number.isFinite(x)) return { v: '…', u: '' };
+  let v = x, i = 0;
+  while (Math.abs(v) >= 1000 && i < steps.length - 1) { v /= 1000; i++; }
+  return { v: i === 0 ? fmtInt(Math.round(v)) : v.toFixed(2), u: steps[i] };
+}
+const tileWeight = scaled(b.weight, ['WU', 'KWU', 'MWU']);
+const tileSize = scaled(b.size, ['B', 'KB', 'MB']);
+const tileDiff = scaled(b.difficulty, ['', 'K', 'M', 'G', 'T']);
+const noFeeTxs = b.nTx <= 1 || (stats != null && !stats.totalFeeSat && !stats.maxFeerate);
+const nonceHex = '0x' + (b.nonce >>> 0).toString(16);
+const cbAscii = b.coinbase?.ascii || '';
+const tagAt = b.coinbase?.tag ? cbAscii.indexOf(b.coinbase.tag) : -1;
+const cbPre = tagAt >= 0 ? cbAscii.slice(0, tagAt) : cbAscii;
+const cbTag = tagAt >= 0 ? b.coinbase.tag : null;
+const cbPost = tagAt >= 0 ? cbAscii.slice(tagAt + b.coinbase.tag.length) : '';
+const prevHref = b.height > 0 ? `/${b.height - 1}` : null;
+const nextHref = b.nextblockhash ? `/${b.height + 1}` : null;
+const pageHref = (p) => `/${b.height}${p > 1 ? `/${p}` : ''}`;
+---
+<main class="wrap apage">
+  <section class="card ahero">
+    <div class="rmain">
+      <div class="bh-top">
+        <div style="min-width:0;flex:1">
+          <span class="micro">Block</span>
+          <div class="bheight">{fmtInt(b.height)}</div>
+          <div class="bwhen">Mined <b>{agoText(b.time)}</b> · <b>{utcStamp(b.time)}</b></div>
+        </div>
+        <div class="bnav">
+          {prevHref ? <a class="mbtn" href={prevHref}>&lsaquo; {fmtInt(b.height - 1)}</a> : <a class="mbtn" aria-disabled="true">&lsaquo; GENESIS</a>}
+          {nextHref ? <a class="mbtn" href={nextHref}>{fmtInt(b.height + 1)} &rsaquo;</a> : <a class="mbtn" aria-disabled="true">CHAIN TIP</a>}
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <span class="micro">Block hash</span>
+        <div class="hashline"><code id="bhash">{b.hash}</code>
+          <button class="cico" id="copybtn" type="button" title="Copy block hash" aria-label="Copy block hash">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          </button></div>
+      </div>
+      <div class="abadges">
+        <i class="miner">MINER · {minerName ? minerName.toUpperCase() : 'UNKNOWN'}</i>
+        {inBestChain
+          ? <i class="ok">{fmtInt(b.confirmations)} CONFIRMATIONS</i>
+          : <i>NOT IN BEST CHAIN</i>}
+        {inBestChain && <i>IN BEST CHAIN</i>}
+      </div>
+      <div class="ah-stats">
+        <span class="ast"><b>{fmtInt(b.nTx)}</b><i>Transactions</i></span>
+        {stats && <span class="ast"><b>{fmtBtc(stats.totalFeeSat)}<em>BTC</em></b><i>Total fees</i></span>}
+        {subsidyPlusFees != null && <span class="ast"><b>{fmtBtc(subsidyPlusFees)}<em>BTC</em></b><i>Subsidy + fees</i></span>}
+        <span class="ast"><b>{tileWeight.v}<em>{tileWeight.u}</em></b><i>Weight</i></span>
+        <span class="ast"><b>{tileSize.v}<em>{tileSize.u}</em></b><i>Size</i></span>
+        <span class="ast"><b>{tileDiff.v}{tileDiff.u && <em>{tileDiff.u}</em>}</b><i>Difficulty</i></span>
+      </div>
+      {b.height === 0 && (
+      <p class="gnote" id="genesisnote">The reward in this block can never be spent: the genesis coinbase output is unspendable by consensus and was never added to the UTXO set.</p>
+      )}
+      {noFeeTxs ? (
+      <div class="fgrow"><span class="fgl nofee" id="nofeenote">No fee-paying transactions in this block</span></div>
+      ) : stats && stats.medianFeerate != null && (
+      <div class="fgrow">
+        <span class="fgl">Fee span <b>{stats.minFeerate} - {stats.maxFeerate} sat/vB</b></span>
+        <div class="fgauge"><span style={`left:${gaugePos}%`} title={`Median ~${stats.medianFeerate} sat/vB`}></span></div>
+        <span class="fgl">Median <b>~{stats.medianFeerate} sat/vB</b></span>
+      </div>
+      )}
+    </div>
+    <div class="cstrip">
+      <div class="tgl" id="secttabs">
+        <button type="button" class="on" data-t="tx">TRANSACTIONS · {fmtInt(b.nTx)}</button>
+        <button type="button" data-t="tech">TECHNICAL DETAILS</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card acard">
+    <div id="techwrap">
+      <div class="trow"><span class="k">Height</span><span class="val">{fmtInt(b.height)}</span></div>
+      <div class="trow"><span class="k">Hash</span><span class="val">{b.hash}</span></div>
+      <div class="trow"><span class="k">Merkle root</span><span class="val">{b.merkleroot}</span></div>
+      <div class="trow"><span class="k">Timestamp</span><span class="val">{utcFull(b.time)}</span></div>
+      <div class="trow"><span class="k">Version</span><span class="val">0x{b.versionHex}</span></div>
+      <div class="trow"><span class="k">Bits</span><span class="val">0x{b.bits}</span></div>
+      <div class="trow"><span class="k">Nonce</span><span class="val">{nonceHex}</span></div>
+      <div class="trow"><span class="k">Difficulty</span><span class="val">{fmtInt(Math.round(b.difficulty))}</span></div>
+      <div class="trow"><span class="k">Weight</span><span class="val">{fmtInt(b.weight)} WU</span></div>
+      <div class="trow"><span class="k">Size</span><span class="val">{fmtInt(b.size)} B</span></div>
+      {b.coinbase && <div class="trow"><span class="k">Coinbase (hex)</span><span class="val">{b.coinbase.hexPreview} <i style="font-style:normal;color:var(--ink-3)">({b.coinbase.bytes} B)</i></span></div>}
+      {b.coinbase && <div class="trow"><span class="k">Coinbase (ascii)</span><span class="val">{cbPre}{cbTag && <b style="color:var(--orange);font-weight:700">{cbTag}</b>}{cbPost} <i style="font-style:normal;color:var(--ink-3)">(unprintable bytes shown as &middot;)</i></span></div>}
+    </div>
+    <div id="txwrap">
+      {b.txs.map((t) => t.coinbase ? (
+        <>
+        <div class={cbAscii ? 'brow cb' : 'brow cb solo'}>
+          <a class="txid" href={`/${t.txid}`}>{t.txid}</a>
+          <span class="cbpill">COINBASE · {minerName ? minerName.toUpperCase() : 'UNKNOWN'}</span>
+          {t.outSat != null && <span class="val">{fmtBtc(t.outSat)}<em>BTC</em></span>}
+          <span class="rate">subsidy + fees</span>
+        </div>
+        {cbAscii && <div class="cbmsg"><i>Coinbase message</i>{cbPre}{cbTag && <b>{cbTag}</b>}{cbPost}</div>}
+        </>
+      ) : (
+        <div class="brow">
+          <a class="txid" href={`/${t.txid}`}>{t.txid}</a>
+          {t.ins != null && <span class="io">{t.ins} in &rarr; {t.outs} out</span>}
+          {t.outSat != null && <span class="val">{fmtBtc(t.outSat)}<em>BTC</em></span>}
+          {t.feerate != null && <span class="rate">{t.feerate} sat/vB</span>}
+        </div>
+      ))}
+    </div>
+    <div class="pager" id="pager">
+      {b.page > 1 ? <a class="pbtn" href={pageHref(b.page - 1)}>&lsaquo; PREV</a> : <span class="pbtn" aria-disabled="true">&lsaquo; PREV</span>}
+      <span class="pinfo">Page <b>{fmtInt(b.page)}</b> of <b>{fmtInt(b.pages)}</b></span>
+      {b.page < b.pages ? <a class="pbtn" href={pageHref(b.page + 1)}>NEXT &rsaquo;</a> : <span class="pbtn" aria-disabled="true">NEXT &rsaquo;</span>}
+    </div>
+  </section>
+</main>
+
+<script is:inline>
+(function(){
+  var tabs=document.querySelectorAll("#secttabs button");
+  tabs.forEach(function(b){
+    b.addEventListener("click",function(){
+      tabs.forEach(function(z){z.classList.remove("on");});
+      b.classList.add("on");
+      var t=b.getAttribute("data-t");
+      document.getElementById("techwrap").style.display=t==="tech"?"block":"none";
+      document.getElementById("txwrap").style.display=t==="tech"?"none":"block";
+      document.getElementById("pager").style.display=t==="tech"?"none":"flex";
+    });
+  });
+  // copy control: the approved tick holds for 1400ms, a second click while it
+  // is showing is ignored, and a browser without the clipboard API still gets
+  // the tick rather than a dead button
+  var cb=document.getElementById("copybtn");
+  if(cb)cb.addEventListener("click",function(){
+    if(cb.classList.contains("ok"))return;
+    var h=document.getElementById("bhash").textContent;
+    function ok(){cb.classList.add("ok");setTimeout(function(){cb.classList.remove("ok");},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(h).then(ok,ok);else ok();
+  });
+})();
+</script>
+
+<style is:global>
+  .bh-top{display:flex;justify-content:space-between;gap:20px 30px;align-items:flex-start;flex-wrap:wrap}
+  .bheight{font:700 48px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px;margin-top:9px}
+  .bwhen{font:600 12px var(--mono);color:var(--ink-3);margin-top:9px}
+  .bwhen b{color:var(--ink-2)}
+  .bnav{display:flex;gap:8px;flex-wrap:wrap}
+  .mbtn{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--btn);border:1px solid var(--btn-hov);
+        border-radius:8px;color:var(--btn-ink);font:700 10.5px var(--mono);letter-spacing:.08em;padding:7px 12px;min-height:30px;
+        cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.09);box-sizing:border-box;text-decoration:none;white-space:nowrap}
+  .mbtn:hover{background:var(--btn-hov)}
+  .mbtn[aria-disabled="true"]{opacity:.4;cursor:default}
+  .gnote{font:600 10.5px/1.6 var(--mono);letter-spacing:.03em;color:var(--ink-3);margin-top:14px;max-width:70ch}
+  .fgrow{display:flex;align-items:center;gap:14px;margin-top:18px;flex-wrap:wrap}
+  .fgl{font:600 10px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .fgl b{color:var(--ink-2);letter-spacing:0}
+  .fgl.nofee{white-space:normal;line-height:1.6}
+  .fgauge{position:relative;flex:1;min-width:180px;height:6px;border-radius:3px;
+          background:linear-gradient(90deg,#2EBD85,#F7931A 45%,#DB8296)}
+  .fgauge span{position:absolute;top:-3px;width:2px;height:12px;background:#DCE3EF;border-radius:1px}
+  .brow{display:flex;align-items:center;gap:14px;padding:11px 12px;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .txid{font:600 12.5px var(--mono);color:var(--acc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 220px;min-width:0;text-decoration:none}
+  .brow .txid:hover{text-decoration:underline}
+  .brow .io{font:600 10.5px var(--mono);color:var(--ink-3);white-space:nowrap}
+  .brow .val{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:auto}
+  .brow .val em{font-style:normal;font-size:10px;color:var(--ink-3);margin-left:3px}
+  .brow .rate{font:600 10.5px var(--mono);color:var(--chip-ink);background:var(--field);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .brow.cb{background:rgba(247,147,26,.05);border-radius:8px 8px 0 0;border-bottom:0}
+  .cbpill{display:inline-flex;align-items:center;font:700 9.5px var(--mono);letter-spacing:.08em;color:var(--orange);
+          background:rgba(247,147,26,.12);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .cbmsg{font:600 11px var(--mono);color:var(--ink-3);background:rgba(247,147,26,.05);border-radius:0 0 8px 8px;
+         border-bottom:1px dashed var(--line);padding:0 12px 10px;word-break:break-all;line-height:1.5}
+  .cbmsg i{font-style:normal;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-right:8px}
+  .cbmsg b{color:var(--orange);font-weight:700}
+  
+  .cbmsg:last-child{border-bottom:0}
+  .brow.cb.solo{border-radius:8px;border-bottom:1px dashed var(--line)}
+  .brow.cb.solo:last-child{border-bottom:0}
+  .pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+  .pbtn{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:7px;
+        font:600 11.5px var(--mono);padding:0 14px;min-height:34px;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+  .pbtn:hover{background:var(--btn-hov)}
+  .pbtn[aria-disabled="true"]{opacity:.35;cursor:default}
+  .pbtn[aria-disabled="true"]:hover{background:var(--btn)}
+  .pinfo{font:600 11.5px var(--mono);color:var(--ink-3)}
+  .pinfo b{color:var(--ink-2)}
+  @media(max-width:700px){
+    .bh-top{flex-direction:column}
+    .bnav{order:-1;justify-content:center;align-self:center}
+  }
+  @media(max-width:860px){
+    .bheight{font-size:38px}
+    .brow .io{display:none}
+  }
+  @media(max-width:520px){
+    .brow .rate{display:none}
+  }
+</style>

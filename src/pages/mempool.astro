@@ -1,0 +1,331 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Mempool Right Now: Size, Fee Bands, Next Block - OpenBitcoin" description="The Bitcoin mempool right now: transactions waiting, total virtual size, depth by fee band, and a projected next block, read from our own node.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Mempool</div>
+    <h1>The Bitcoin mempool right now</h1>
+    <p class="doc-lede">Every transaction waits here until a miner includes it in a block. Totals, depth by fee band, and a projected next block, all read from our own node.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="mp-hero">
+      <div class="mp-big" id="mp-big">&hellip;</div>
+      <div class="mp-sub">transactions waiting in our node's mempool at block <b id="mp-h">&hellip;</b></div>
+      <div class="mp-cells">
+        <div class="mp-cell"><b id="mp-vsz">&hellip;</b><i>total virtual size</i></div>
+        <div class="mp-cell"><b id="mp-clear">&hellip;</b><i>to clear 2 sat/vB and up</i></div>
+        <div class="mp-cell"><b>~1.00 MvB</b><i>cleared per block (4 MWU)</i></div>
+      </div>
+    </div>
+
+    <div class="mp-card">
+      <div class="mp-tlab">Depth by fee band</div>
+      <div aria-label="Mempool depth by feerate band">
+        <div class="mp-band">
+          <div class="mp-bhead">
+            <span class="mp-brate">10+ <em>sat/vB</em></span>
+            <span class="mp-beta">next block</span>
+            <span class="mp-bnums"><b id="mp-t10">&hellip;</b> txs · <b id="mp-v10">&hellip;</b> MvB</span>
+          </div>
+          <div class="mp-bbar"><div class="mp-bfill" id="mp-f10" style="width:0;background:#DB8296"></div></div>
+        </div>
+        <div class="mp-band">
+          <div class="mp-bhead">
+            <span class="mp-brate">5-10 <em>sat/vB</em></span>
+            <span class="mp-beta">next block</span>
+            <span class="mp-bnums"><b id="mp-t5">&hellip;</b> txs · <b id="mp-v5">&hellip;</b> MvB</span>
+          </div>
+          <div class="mp-bbar"><div class="mp-bfill" id="mp-f5" style="width:0;background:#E98A5E"></div></div>
+        </div>
+        <div class="mp-band">
+          <div class="mp-bhead">
+            <span class="mp-brate">3-5 <em>sat/vB</em></span>
+            <span class="mp-beta">~30 min to ~1 hour</span>
+            <span class="mp-bnums"><b id="mp-t3">&hellip;</b> txs · <b id="mp-v3">&hellip;</b> MvB</span>
+          </div>
+          <div class="mp-bbar"><div class="mp-bfill" id="mp-f3" style="width:0;background:#F7931A"></div></div>
+        </div>
+        <div class="mp-band">
+          <div class="mp-bhead">
+            <span class="mp-brate">2-3 <em>sat/vB</em></span>
+            <span class="mp-beta">a few hours</span>
+            <span class="mp-bnums"><b id="mp-t2">&hellip;</b> txs · <b id="mp-v2">&hellip;</b> MvB</span>
+          </div>
+          <div class="mp-bbar"><div class="mp-bfill" id="mp-f2" style="width:0;background:#8FB553"></div></div>
+        </div>
+        <div class="mp-band">
+          <div class="mp-bhead">
+            <span class="mp-brate">1-2 <em>sat/vB</em></span>
+            <span class="mp-beta">can wait days</span>
+            <span class="mp-bnums"><b id="mp-t1">&hellip;</b> txs · <b id="mp-v1">&hellip;</b> MvB</span>
+          </div>
+          <div class="mp-bbar"><div class="mp-bfill" id="mp-f1" style="width:0;background:#2EBD85"></div></div>
+        </div>
+      </div>
+      <p class="mp-fine">Bars are proportional to virtual size; the deepest band sets the scale. Wait estimates match the <a href="/fees">fee page</a> tiers and assume current depth and inflow.</p>
+    </div>
+
+    <div class="mp-card">
+      <div class="mp-tlab">Projected next block</div>
+      <div class="mp-cells mp-ncells">
+        <div class="mp-cell"><b id="mp-nfill">&hellip;</b><i>fill, of ~1.00 MvB</i></div>
+        <div class="mp-cell"><b id="mp-nmed">&hellip;</b><i>median feerate</i></div>
+        <div class="mp-cell"><b id="mp-ntx">&hellip;</b><i>transactions</i></div>
+        <div class="mp-cell"><b id="mp-nh">&hellip;</b><i>height if mined now</i></div>
+      </div>
+      <div class="mp-comp" aria-hidden="true">
+        <span class="mp-cseg" id="mp-c10" style="width:0;background:#DB8296"></span>
+        <span class="mp-cseg" id="mp-c5" style="width:0;background:#E98A5E"></span>
+        <span class="mp-cseg" id="mp-c3" style="width:0;background:#F7931A"></span>
+        <span class="mp-cseg" id="mp-c2" style="width:0;background:#8FB553"></span>
+        <span class="mp-cseg" id="mp-c1" style="width:0;background:#2EBD85"></span>
+      </div>
+      <div class="mp-fgrow">
+        <span class="mp-fgl">Fee span <b id="mp-span">&hellip;</b></span>
+        <div class="mp-fgauge"><span id="mp-fmark" style="left:0;visibility:hidden" title="Median feerate"></span></div>
+        <span class="mp-fgl">Median <b id="mp-med2">&hellip;</b></span>
+      </div>
+      <p class="mp-fine">What would leave the mempool if a block were found this instant: the highest-feerate transactions first, up to the ~1 MvB (4,000,000 weight unit) limit. When a block arrives, watch the top bands drain.</p>
+    </div>
+
+    <div class="doc-card mp-prose">
+      <div class="doc-sec doc-prose">
+        <h2>What the mempool is</h2>
+        <p>When a wallet broadcasts a transaction, it does not go into a block right away. Nodes check it against the consensus and relay rules, then hold it in memory, in the mempool, until a miner includes it. Block space is the constraint: each block carries at most 4,000,000 weight units, about 1 MvB, roughly every ten minutes, and miners fill that space from the highest feerates down. That is why the bands above predict waiting time, and why <a href="/fees">fees</a> are quoted per virtual byte rather than as a flat charge.</p>
+        <p>Each new block drains about 1 MvB from the top of the queue. The projected block above shows what would leave right now; recent drains are visible on <a href="/blocks">the block list</a> and inside <a href="/">the latest block</a>.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why it is not one global queue</h2>
+        <p>There is no single, official mempool. Every node assembles its own from the transactions it has heard about, so two nodes rarely agree exactly: transactions propagate at different moments, relay policies and minimum feerates differ, and when memory fills, each node evicts its lowest feerates on its own schedule. Explorers therefore disagree slightly on how many transactions are waiting, and none of them is wrong. The numbers on this page are our node's view of the network, read directly from Bitcoin Core; how we run it is documented at <a href="/sources">/sources</a>.</p>
+      </div>
+    </div>
+
+    <div class="mp-about doc-prose">
+      <p>The mempool (memory pool) is the set of valid, unconfirmed Bitcoin transactions a node holds while they wait to be mined. This page groups our node's mempool by feerate band, in satoshis per virtual byte, and projects which transactions would go into the next block. Because every node builds its own mempool, figures differ slightly between explorers; ours come from our own Bitcoin Core node, as documented at <a href="/sources">/sources</a>. Depth and wait estimates are informational under the <a href="/terms">terms</a>; for what to pay right now, see <a href="/fees">/fees</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="mp-rs"><b id="mp-rmed">&hellip;</b><i>median, next block</i></div>
+      <div class="mp-rs"><b id="mp-eta">&hellip;</b><i>next block, 10 min average</i></div>
+      <div class="mp-rs"><b id="mp-last">&hellip;</b><i>last block</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees">Fee rates right now</a>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/">Inside the latest block</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .mp-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .mp-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  @keyframes mppop{0%,45%{color:#FFFFFF;text-shadow:0 0 18px rgba(247,147,26,.55)}100%{color:var(--price-ink);text-shadow:none}}
+  .mp-big.mp-pop{animation:mppop .9s ease-out 2}
+  .mp-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .mp-sub b{color:var(--acc);font-weight:700;font-variant-numeric:tabular-nums}
+  .mp-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .mp-cell{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .mp-cell b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mp-cell i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .mp-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .mp-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .mp-band{padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .mp-band:last-child{border-bottom:0;padding-bottom:4px}
+  .mp-bhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .mp-brate{font:700 12.5px var(--mono);color:var(--ink);white-space:nowrap;min-width:74px}
+  .mp-brate em{font-style:normal;font:700 9.5px var(--mono);color:var(--ink-3);letter-spacing:.06em}
+  .mp-beta{font:600 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .mp-bnums{margin-left:auto;font:600 11.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mp-bnums b{color:var(--price-ink);font-weight:700}
+  .mp-bbar{height:12px;margin-top:7px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:4px;overflow:hidden}
+  .mp-bfill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+  .mp-ncells{margin-top:0}
+  .mp-comp{display:flex;height:14px;margin-top:16px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:4px;overflow:hidden}
+  .mp-cseg{display:block;height:100%;flex:0 0 auto;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+  
+  .mp-fgrow{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .mp-fgl{font:600 10px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .mp-fgl b{color:var(--ink-2);letter-spacing:0;font-variant-numeric:tabular-nums}
+  .mp-fgauge{position:relative;flex:1;min-width:180px;height:6px;border-radius:3px;
+    background:linear-gradient(90deg,#2EBD85,#F7931A 45%,#DB8296)}
+  .mp-fgauge span{position:absolute;top:-3px;width:2px;height:12px;background:var(--price-ink);border-radius:1px;
+    transition:left .8s cubic-bezier(.22,.61,.36,1)}
+  .mp-prose{margin-top:14px}
+  .mp-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .mp-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .mp-fine a:hover{border-bottom-style:solid}
+  .mp-about{margin-top:14px}
+  .mp-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .mp-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .mp-rs:last-child{border-bottom:0}
+  .mp-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .mp-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(prefers-reduced-motion:reduce){
+    .mp-bfill,.mp-cseg,.mp-fgauge span{transition:none}
+  }
+  @media(max-width:700px){
+    .mp-big{font-size:40px}
+    .mp-bnums{margin-left:0;width:100%}
+  }
+</style>
+<script is:inline>
+(function(){
+  var BLOCK=1.0; /* MvB cleared per block (4 MWU) */
+  var ELL="…";   /* what every figure shows until the node reports it */
+  /* top-first: highest feerate band drains first. rep = the band's midpoint,
+     a property of the band itself, used for the median readout until the live
+     histogram supplies a vsize-weighted mean. Depths start unknown: no depth
+     is ever shown that the node did not report. */
+  var BND=[
+    {k:"10",lo:10,rep:12, color:"#DB8296",txs:null,vsz:null},
+    {k:"5", lo:5, rep:6,  color:"#E98A5E",txs:null,vsz:null},
+    {k:"3", lo:3, rep:4,  color:"#F7931A",txs:null,vsz:null},
+    {k:"2", lo:2, rep:2.5,color:"#8FB553",txs:null,vsz:null},
+    {k:"1", lo:1, rep:1.5,color:"#2EBD85",txs:null,vsz:null}
+  ];
+  var S={height:null,since:null,at:Date.now()},last=null,topFee=null;
+  var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  function fmt(n){return Math.round(n).toLocaleString("en-US");}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function repTxt(r){return "~"+(r%1?r.toFixed(1):r)+" sat/vB";}
+  function paint(){
+    /* the height comes from the chrome band and can be known while the
+       mempool read has not landed yet */
+    txt("mp-h",S.height===null?ELL:fmt(S.height));
+    txt("mp-nh",S.height===null?ELL:fmt(S.height+1));
+    /* nothing measured yet: every served ellipsis stands rather than a guess */
+    if(!live)return;
+    var tot=0,totV=0,v2=0,maxV=0;
+    BND.forEach(function(b){tot+=b.txs;totV+=b.vsz;if(b.lo>=2)v2+=b.vsz;if(b.vsz>maxV)maxV=b.vsz;});
+    txt("mp-big",fmt(tot));
+    txt("mp-vsz",totV.toFixed(1)+" MvB");
+    txt("mp-clear","~"+Math.max(1,Math.round(v2/BLOCK))+" blocks");
+    BND.forEach(function(b){
+      txt("mp-t"+b.k,fmt(b.txs));
+      txt("mp-v"+b.k,b.vsz.toFixed(2));
+      var f=document.getElementById("mp-f"+b.k);
+      if(f)f.style.width=Math.max(2,b.vsz/maxV*100).toFixed(1)+"%";
+    });
+    /* projected next block: fill top-down to the 1 MvB limit */
+    var fill=Math.min(BLOCK,totV),need=fill,ptx=0,low=null;
+    BND.forEach(function(b){
+      var take=Math.min(need,b.vsz);if(take<0)take=0;
+      b._take=take;need-=take;
+      if(take>0.0005){ptx+=b.txs*(b.vsz?take/b.vsz:0);low=b.lo;}
+      var c=document.getElementById("mp-c"+b.k);
+      if(c)c.style.width=(fill?take/fill*100:0).toFixed(1)+"%";
+    });
+    var half=fill/2,cum=0,med=BND[BND.length-1].rep;
+    for(var i=0;i<BND.length;i++){cum+=BND[i]._take;
+      if(BND[i]._take>0.0005&&cum>=half){med=BND[i].rep;break;}}
+    txt("mp-nfill","~"+fill.toFixed(2)+" MvB");
+    txt("mp-ntx","~"+fmt(ptx));
+    txt("mp-nmed",repTxt(med));
+    txt("mp-med2",repTxt(med));
+    txt("mp-rmed",repTxt(med));
+    /* the span high is only ever the top feerate the node reported */
+    txt("mp-span",topFee===null?ELL:(low||1)+" - "+topFee+" sat/vB");
+    var mark=document.getElementById("mp-fmark");
+    if(mark){mark.style.visibility="visible";mark.style.left=Math.max(4,Math.min(92,med*6))+"%";}
+  }
+  function pop(){
+    if(reduced)return;
+    var big=document.getElementById("mp-big");
+    if(big){big.classList.remove("mp-pop");void big.getBoundingClientRect();big.classList.add("mp-pop");}
+  }
+  function sinceTxt(s){var m=Math.floor(s/60);return m?m+"m "+(s%60)+"s":s+"s";}
+  function paintClock(){
+    if(S.since===null){txt("mp-last",ELL);txt("mp-eta",ELL);return;}
+    var s=S.since+Math.floor((Date.now()-S.at)/1000);
+    txt("mp-last",sinceTxt(s)+" ago");
+    var left=600-s;
+    txt("mp-eta",left>0?"~"+Math.floor(left/60)+"m "+(left%60)+"s":"any moment");
+  }
+  setInterval(paintClock,1000);
+  /* ticks + new blocks arrive via the chrome hook; once the live feed is on,
+     a height change pops the hero and refetches so the real bands drain. With
+     no live feed a new block changes nothing on screen: there is no simulated
+     drain, because there is nothing measured to drain. */
+  window.obPaintFiat=function(Sx){
+    if(typeof Sx.height==="number"){
+      if(live&&last!==null&&Sx.height>last){pop();fetchLive();}
+      last=Sx.height;S.height=Sx.height;
+    }
+    if(typeof Sx.since==="number"){S.since=Sx.since;S.at=Date.now();}
+    paint();paintClock();
+  };
+  /* live wiring: {OB_DATA_API}/mempool histogram -> the five bands, /summary
+     -> height and last-block clock. Until this succeeds, and after any
+     failure, every depth figure stays the ellipsis it shipped as. */
+  var live=false,fetching=false;
+  /* api is read on DOMContentLoaded (boot below), not here: Base.astro sets
+     window.OB_DATA_API in a script at the end of body, so at parse time it is
+     still undefined */
+  var api=null;
+  function applyLive(mp,sum){
+    if(!mp||!Array.isArray(mp.histogram)||!isFinite(mp.count)||!(mp.count>0))return;
+    var acc=[0,0,0,0,0],w=[0,0,0,0,0],tot=0,maxR=0;
+    mp.histogram.forEach(function(e){
+      var r=+e[0],v=+e[1];
+      if(!isFinite(r)||!isFinite(v)||v<=0)return;
+      var i=r>=10?0:r>=5?1:r>=3?2:r>=2?3:4;
+      acc[i]+=v;w[i]+=r*v;tot+=v;if(r>maxR)maxR=r;
+    });
+    if(!(tot>0))return;
+    var scale=(isFinite(mp.vsize)&&mp.vsize>0)?mp.vsize/tot:1,used=0;
+    BND.forEach(function(b,i){
+      b.vsz=acc[i]*scale/1e6;
+      if(acc[i]>0)b.rep=Math.max(0.1,Math.round(w[i]/acc[i]*10)/10);
+      var t=(i===BND.length-1)?Math.max(0,Math.round(mp.count)-used):Math.round(mp.count*acc[i]/tot);
+      used+=t;b.txs=t;
+    });
+    if(maxR>0)topFee=Math.max(1,Math.round(maxR));
+    if(sum&&typeof sum.height==="number"){
+      if(live&&last!==null&&sum.height>last)pop();
+      S.height=sum.height;
+      if(last===null||sum.height>last)last=sum.height;
+    }
+    if(sum&&sum.lastBlockAt){
+      var s2=Math.floor((Date.now()-Date.parse(sum.lastBlockAt))/1000);
+      if(isFinite(s2)){S.since=Math.max(0,s2);S.at=Date.now();}
+    }
+    live=true;
+    paint();paintClock();
+  }
+  function fetchLive(){
+    if(!api||fetching)return;
+    fetching=true;
+    try{
+      Promise.all([
+        fetch(api+"/mempool").then(function(r){if(!r.ok)throw new Error("mempool");return r.json();}),
+        fetch(api+"/summary").then(function(r){if(!r.ok)throw new Error("summary");return r.json();}).catch(function(){return null;})
+      ]).then(function(res){try{applyLive(res[0],res[1]);}catch(e){}fetching=false;})
+       .catch(function(){fetching=false;});
+    }catch(e){fetching=false;}
+  }
+  paint();paintClock();
+  /* OB_DATA_API is set by Base.astro after this script parses, so wait for
+     DOMContentLoaded before reading it, firing the first fetch, and starting
+     the 30s poll */
+  function boot(){
+    try{
+      api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
+      if(!api)return;
+      fetchLive();
+      setInterval(fetchLive,30000);
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

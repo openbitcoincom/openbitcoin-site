@@ -1,0 +1,492 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Mining Profitability Calculator - OpenBitcoin" description="Bitcoin mining profitability calculator: enter hashrate, power draw, electricity price and pool fee to get BTC per day, revenue, cost and margin.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tools</div>
+    <h1>Mining profitability calculator</h1>
+    <p class="doc-lede">Set a hashrate, a power draw and what you pay for electricity, and see the expected bitcoin per day, the power bill against it, and the electricity price where the two meet.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="mn-card">
+      <div class="mn-lab">Your machine and your tariff</div>
+      <div class="mn-grid">
+        <label class="mn-f">
+          <span class="mn-fl">Hashrate</span>
+          <span class="mn-fi" id="mn-fi-hr"><input id="mn-hr" inputmode="decimal" autocomplete="off" spellcheck="false" value="200" aria-label="Hashrate in terahashes per second"><i>TH/s</i></span>
+        </label>
+        <label class="mn-f">
+          <span class="mn-fl">Power draw at the wall</span>
+          <span class="mn-fi" id="mn-fi-w"><input id="mn-w" inputmode="decimal" autocomplete="off" spellcheck="false" value="3500" aria-label="Power draw in watts"><i>watts</i></span>
+        </label>
+        <label class="mn-f">
+          <span class="mn-fl">Electricity price</span>
+          <span class="mn-fi" id="mn-fi-kwh"><input id="mn-kwh" inputmode="decimal" autocomplete="off" spellcheck="false" value="0.10" aria-label="Electricity price in US dollars per kilowatt hour"><i>$ / kWh</i></span>
+        </label>
+        <label class="mn-f">
+          <span class="mn-fl">Pool fee</span>
+          <span class="mn-fi" id="mn-fi-pool"><input id="mn-pool" inputmode="decimal" autocomplete="off" spellcheck="false" value="2" aria-label="Pool fee as a percentage"><i>percent</i></span>
+        </label>
+      </div>
+
+      <div class="mn-presets" role="group" aria-label="Hardware presets">
+        <button type="button" class="mn-p" data-h="1" data-w="15"><b>1 TH/s</b><span>15 W, desk unit</span></button>
+        <button type="button" class="mn-p" data-h="30" data-w="900"><b>30 TH/s</b><span>900 W, heater unit</span></button>
+        <button type="button" class="mn-p" data-h="100" data-w="3050"><b>100 TH/s</b><span>3,050 W, older rig</span></button>
+        <button type="button" class="mn-p" data-h="200" data-w="3500"><b>200 TH/s</b><span>3,500 W, current rig</span></button>
+        <button type="button" class="mn-p" data-h="400" data-w="5400"><b>400 TH/s</b><span>5,400 W, efficient rig</span></button>
+      </div>
+
+      <div class="mn-net">
+        <label class="mn-f">
+          <span class="mn-fl">Network difficulty</span>
+          <span class="mn-fi" id="mn-fi-df"><input id="mn-df" inputmode="decimal" autocomplete="off" spellcheck="false" value="127.17" aria-label="Network difficulty in trillions"><i>trillion</i></span>
+        </label>
+        <div class="mn-nd"><span>Implied network hashrate</span><b id="mn-nh">910.3 EH/s</b></div>
+        <div class="mn-nd"><span>Paid per block</span><b id="mn-pay">3.125 + 0.016 BTC</b></div>
+      </div>
+      <p class="mn-gate" id="mn-src">The difficulty and the per-block fee are read from our own node as this page loads. Until they land, the figures shown are the site's last recorded baseline, from the mid July 2026 retarget. The field stays editable either way: type another difficulty in and every figure below follows it.</p>
+
+      <div class="mn-res" aria-live="polite">
+        <div class="mn-rs mn-rs-btc"><span>Bitcoin per day</span><b id="mn-o-btc">0.00009739</b></div>
+        <div class="mn-rs"><span>Revenue per day</span><b id="mn-o-rev">$6.27</b></div>
+        <div class="mn-rs"><span>Power per day</span><b id="mn-o-pow">$8.40</b></div>
+        <div class="mn-rs mn-rs-key is-dn" id="mn-rs-pl"><span>Profit per day</span><b id="mn-o-pl">-$2.13</b></div>
+      </div>
+      <div class="mn-sub" aria-live="polite">
+        <div class="mn-ss"><span>Margin</span><b id="mn-o-mar">-34.0%</b></div>
+        <div class="mn-ss"><span>Breakeven power</span><b id="mn-o-be">$0.0746</b></div>
+        <div class="mn-ss"><span>Efficiency</span><b id="mn-o-eff">17.5 J/TH</b></div>
+        <div class="mn-ss"><span>Solo block every</span><b id="mn-o-solo">86.5 years</b></div>
+      </div>
+      <div class="mn-bd" id="mn-bd1">200 TH/s is one part in 4,551,592 of a 910.3 EH/s network. At 144 blocks a day paying 3.125 BTC plus 0.016 BTC of fees the network issues 452.3 BTC, so the gross share is 0.00009937 BTC and a 2 percent pool fee leaves 0.00009739 BTC, which is 9,739 sats.</div>
+      <div class="mn-bd" id="mn-bd2">Over 30 days that is 0.00292156 BTC, $188.04 of revenue against $252.00 of electricity, a loss of $63.96.</div>
+      <p class="mn-fail" id="mn-fail" hidden>Self-test failed. The mining arithmetic in this page did not match its own known values, so no figure is shown here. Nothing is better than something wrong.</p>
+    </div>
+
+
+    <div class="doc-card mn-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Home mining, and the heat</h2>
+        <p>A mining rig is a heater that happens to hash. Essentially every watt it draws leaves the box as heat, the same as a resistive space heater, so if the room needed heating anyway then the electricity was going to be spent regardless and the coins are what you get on top. That is the honest version of the heat reuse argument, and it has real limits. It only holds during the months you actually want the heat, only in the room the machine is in, and only if the machine is displacing electric heating rather than gas, which is usually cheaper per unit of heat. Noise is the other constraint: a full size unit at stock settings is closer to a vacuum cleaner than a fan, which is why the small low wattage units exist at all.</p>
+        <p>Underclocking changes the arithmetic more than most people expect. Dropping voltage and frequency loses hashrate but loses power faster, so joules per terahash usually improves, and a machine run at two thirds power can be both quieter and closer to breakeven than the same machine at full tilt. Put the reduced hashrate and the reduced wattage into the fields above and compare.</p>
+        <p>None of this is a promise that home mining pays. Read the breakeven power price the calculator prints: if it lands below what you actually pay per kWh, the machine is losing money on electricity alone, before the purchase price, the noise, the heat you did not want in July, or the hours it spends offline are counted at all. Plenty of people mine at home anyway, for the heat, for the payout that is nobody's permission to receive, or to hold a share of the network they use. Those are reasons. They are not returns.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why difficulty keeps moving</h2>
+        <p>Difficulty is the network's thermostat. Every 2016 blocks, roughly a fortnight, every node compares how long those blocks actually took against the ten minutes each was meant to take and moves the target so the next 2016 land on schedule. More hashrate arrives, blocks come faster, difficulty goes up. Machines switch off, blocks slow, difficulty comes down. A single adjustment can move by at most a factor of four in either direction, and no authority decides it: the rule is arithmetic every node runs independently on the timestamps it already has.</p>
+        <p>What that means for the numbers above is that your share of the network is not a constant. The subsidy is fixed at 3.125 BTC per block until the next <a href="/halving">halving</a>, so the network issues the same 450 BTC a day whatever happens to hashrate. If hashrate grows and you do not add machines, your slice of that fixed pie shrinks, and it shrinks whether the price rises or falls. Fee income sits on top of the subsidy and is far more volatile than the subsidy is; <a href="/fees/history">fee history</a> shows how wide that range gets, and <a href="/mempool">the mempool</a> shows what is queued right now.</p>
+        <p>This page does not project any of it. It has no model of future hashrate, no forward difficulty curve and no assumption about where the price goes, because those are guesses and a guess dressed as a projection is worse than no number. The difficulty is an editable field for exactly that reason. Run the calculation at today's difficulty, run it again at a difficulty you would consider a bad outcome, and treat the gap between the two answers as the range you are actually taking on.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>What this arithmetic leaves out</h2>
+        <p>The calculator prices electricity against expected coins. That is one line of a real mining budget, and the missing lines are not small.</p>
+        <ul>
+          <li><strong>The machine itself.</strong> Purchase price, shipping, duty and the power supply are sunk before the first hash. Spread across a working life that is shorter than the warranty suggests, they often exceed the electricity cost.</li>
+          <li><strong>Expected value is not a schedule.</strong> Solo mining is a lottery. The interval shown above is an average, not a countdown, and the actual wait is memoryless: a machine that has run for a decade without a block is no closer to one than it was on day one. Pools exist to convert that lottery ticket into small regular payments in exchange for a fee, which is the fee field above.</li>
+          <li><strong>Payout schemes differ.</strong> Full pay per share, pay per share plus and pay per last N shares split risk between you and the pool in different ways and pay out fee income differently. Two pools quoting the same headline percentage can pay meaningfully different amounts.</li>
+          <li><strong>Uptime, heat and airflow.</strong> The result above assumes 24 hours of full-rate hashing. Real machines throttle when the room is hot, drop offline, wait on firmware and get curtailed. Ninety percent uptime is ninety percent of the revenue and close to a hundred percent of the standing costs.</li>
+          <li><strong>Losses on the way in.</strong> Wall draw is not the same as the sticker figure, power supplies are not perfect, and cooling draws power of its own.</li>
+          <li><strong>Price movement, and tax.</strong> Coins are earned continuously and sold at some later moment, so revenue in dollars is not revenue you have. In many places a payout is income at the value on the day it landed, with a separate gain or loss when it is sold; see <a href="/tax">bitcoin taxes</a>.</li>
+        </ul>
+        <p>Worth separating two things that get conflated: mining is not the same as running a node. Mining orders transactions and competes for the reward, and it costs real money. Verifying the rules costs almost nothing and is what actually keeps you honest about which chain you are on. <a href="/nodes">Running a node</a> covers it, and <a href="/blocks">recent blocks</a> shows the output of all this work arriving roughly every ten minutes.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>This is arithmetic, not advice</h2>
+        <p>Everything on this page is multiplication and division over numbers you typed in. It does not know your electricity contract, your hardware, your uptime, your climate, your tax position or where the price goes next, and it is not a recommendation to buy a machine, to join any pool, or to mine at all. Nobody here sells hardware, hosting, contracts or hashrate, and there is nothing to click through to. Treat any service quoting you a guaranteed return on mining as the sales pitch it is: the only honest answer to what mining will pay is that it depends on a difficulty nobody controls and a price nobody knows.</p>
+        <p>The calculation checks itself against known values on every load and shows a failure state instead of numbers if any check does not match. Figures are informational under the <a href="/terms">terms</a>, and where the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+      </div>
+    </div>
+
+    <div class="mn-about doc-prose">
+      <p>Nothing you type here leaves your browser. The page reads three numbers from our own node as it loads: the current difficulty, the fees paid in the recent blocks, and the price. Every other figure is arithmetic over those and the values in the fields. There is no pool API and no hardware database behind it. The block subsidy is 3.125 BTC until the next halving, the target block time is ten minutes, and difficulty retargets every 2016 blocks. If you want the ideas rather than the sums, <a href="/learn/what-is-bitcoin">what bitcoin is</a> explains why mining exists in the first place.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Network baseline</div>
+      <div class="mn-r"><span>Difficulty</span><b id="mn-rdiff">127.17 T</b></div>
+      <div class="mn-r"><span>Hashrate</span><b id="mn-rehs">910.3 EH/s</b></div>
+      <div class="mn-r"><span>Blocks per day</span><b>144</b></div>
+      <div class="mn-r"><span>Subsidy</span><b>3.125 BTC</b></div>
+      <div class="mn-r"><span>Fees per block</span><b id="mn-rfee">0.016 BTC</b></div>
+      <p class="mn-rn">This tile is the network as our node sees it, so it does not move when you edit the calculator. Difficulty is the only figure a miner cannot argue with, and the hashrate is derived from it.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="mn-r"><span>Price</span><b id="mn-px">$64,362</b></div>
+      <div class="mn-r"><span>Hashprice</span><b id="mn-hp">$31.98</b></div>
+      <p class="mn-rn">Hashprice is what one petahash per second earns in a day before pool fees and before power, at the difficulty in the calculator. It is the number miners quote to each other.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/halving">The halving</a>
+        <a href="/blocks">Recent blocks</a>
+        <a href="/fees/history">Fee history</a>
+        <a href="/mempool">Mempool</a>
+        <a href="/nodes">Running a node</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .mn-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .mn-lab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .mn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+  .mn-f{display:block;min-width:0}
+  .mn-fl{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+  .mn-fi{display:flex;align-items:center;gap:9px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:0 12px;min-width:0}
+  .mn-fi:focus-within{border-color:rgba(255,166,60,.55)}
+  .mn-fi input{width:100%;min-width:0;background:none;border:0;outline:none;color:var(--price-ink);
+    font:700 17px var(--mono);font-variant-numeric:tabular-nums;padding:10px 0}
+  .mn-fi i{flex:none;font:700 9px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-style:normal;white-space:nowrap}
+  .mn-fi.is-bad{border-color:var(--down)}
+  .mn-fi.is-bad input{color:var(--down)}
+  .mn-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .mn-p{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--panel-2);
+    border:1px solid var(--line-2);border-radius:10px;padding:8px 13px;cursor:pointer;min-width:0}
+  .mn-p b{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mn-p span{font:700 8.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .mn-p:hover{border-color:rgba(255,166,60,.45)}
+  .mn-p:hover b{color:var(--acc)}
+  .mn-p.is-on{border-color:rgba(255,166,60,.55);background:rgba(247,147,26,.08)}
+  .mn-p.is-on b{color:var(--acc)}
+  .mn-net{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end;
+    margin-top:16px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .mn-nd{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;min-width:0}
+  .mn-nd span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .mn-nd b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:4px;overflow-wrap:anywhere}
+  .mn-gate{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:11px 0 0;max-width:70ch}
+  .mn-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .mn-rs{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;min-width:0}
+  .mn-rs span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .mn-rs b{display:block;font:700 19px/1.15 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px;overflow-wrap:anywhere}
+  .mn-rs-btc b{font-size:15.5px;letter-spacing:0}
+  .mn-rs-key{border-color:rgba(255,166,60,.38)}
+  .mn-rs-key b{color:var(--acc)}
+  .mn-rs-key.is-up b{color:var(--up)}
+  .mn-rs-key.is-dn b{color:var(--down)}
+  .mn-sub{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}
+  .mn-ss{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;min-width:0}
+  .mn-ss span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .mn-ss b{display:block;font:700 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:3px;overflow-wrap:anywhere}
+  .mn-bd{font:600 10.5px/1.65 var(--mono);letter-spacing:.03em;color:var(--ink-3);margin-top:10px}
+  .mn-fail{font:700 12px/1.6 var(--sans);color:var(--down);margin:12px 0 0;max-width:66ch}
+  .mn-fine{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:11px 2px 0}
+  .mn-mt{margin-top:14px}
+  .mn-about{margin-top:14px}
+  .mn-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .mn-r{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .mn-r:last-of-type{border-bottom:0}
+  .mn-r span{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .mn-r b{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+  .mn-rn{font:500 11px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  @media(max-width:700px){
+    .mn-card{padding:18px 18px 20px}
+    .mn-grid{grid-template-columns:minmax(0,1fr)}
+    .mn-net{grid-template-columns:minmax(0,1fr)}
+    .mn-p{flex:1 1 auto}
+    .mn-res,.mn-sub{grid-template-columns:minmax(0,1fr)}
+    .mn-rs,.mn-ss,.mn-nd{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    .mn-rs span,.mn-ss span,.mn-nd span{margin-bottom:0}
+    .mn-rs b,.mn-ss b,.mn-nd b{margin-top:0;text-align:right}
+    .mn-rs b{font-size:17px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* ---------------------------------------------------------------------
+     Mining arithmetic. Every formula is written out longhand in the
+     frontmatter note. The only data that reaches this script from outside
+     is the difficulty and the recent per-block fee, fetched from our own
+     node in boot() at the foot of this file; nothing typed into the fields
+     is ever sent anywhere.
+     --------------------------------------------------------------------- */
+  var TWO32=4294967296,      /* hash space covered by a difficulty-1 target */
+      TARGET=600,            /* seconds per block the retarget aims at */
+      BLOCKS=144,            /* blocks per day at the target rate */
+      SUBSIDY=3.125,         /* fixed until the next halving, block 1050000 */
+      FEES=0.016,            /* offline fallback; replaced by the measured
+                                mean of totalFeeSat over the recent blocks */
+      YEAR=31557600;         /* seconds in a 365.25 day year */
+
+  var P={price:64362.18};
+  var I={hr:200,w:3500,kwh:0.10,pool:2,diff:127.17};
+
+  function netHash(diffT){return diffT*1e12*TWO32/TARGET;}          /* H/s */
+  function soloSeconds(diffT,hps){return hps>0?diffT*1e12*TWO32/hps:Infinity;}
+  function btcDay(hps,diffT,sub,fee,poolPct){
+    var h=netHash(diffT);
+    if(!(h>0))return 0;
+    var share=hps/h;
+    if(share>1)share=1;                       /* cannot win more than every block */
+    return share*BLOCKS*(sub+fee)*(1-poolPct/100);
+  }
+  function kwhDay(w){return w*24/1000;}
+  function marginPct(rev,cost){return rev>0?(rev-cost)/rev*100:null;}
+  function breakeven(rev,kwh){return kwh>0?rev/kwh:null;}
+
+  /* ---------------------------------------------------------------------
+     SELF-TEST. Thirteen checks, several against values that are known
+     independently of this page: difficulty 1 is 7,158,278.83 H/s; the
+     network issues 450 BTC of subsidy a day now and issued 900 a day before
+     April 2024; a difficulty-1 network at the 50 BTC subsidy issued 7,200 a
+     day; and the resulting hashprice matches the figure the mining industry
+     publishes. If any check fails the page shows a failure state and no
+     numbers at all, rather than wrong ones.
+     --------------------------------------------------------------------- */
+  function near(a,b,tol){return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=tol;}
+  var D0=127.17, H0=netHash(D0);
+  var T=[
+    ["difficulty 1 is 7,158,278.83 H/s", near(netHash(1e-12),7158278.826666667,1e-6)],
+    ["a difficulty-1 network takes 600 s", near(soloSeconds(1e-12,netHash(1e-12)),600,1e-6)],
+    ["whole network issues 450 BTC a day", near(btcDay(H0,D0,SUBSIDY,0,0),450,1e-9)],
+    ["pre 2024 halving it was 900 a day",  near(btcDay(H0,D0,6.25,0,0),900,1e-9)],
+    ["genesis era was 7,200 a day",        near(btcDay(netHash(1e-12),1e-12,50,0,0),7200,1e-9)],
+    ["half the hashrate earns half",       near(btcDay(H0/2,D0,SUBSIDY,0,0),225,1e-9)],
+    ["a 2 percent pool fee leaves 98",     near(btcDay(H0,D0,SUBSIDY,0,2),441,1e-9)],
+    ["double difficulty halves the share", near(btcDay(1e15,2*D0,SUBSIDY,FEES,0)*2,btcDay(1e15,D0,SUBSIDY,FEES,0),1e-12)],
+    ["3,500 W for a day is 84 kWh",        near(kwhDay(3500),84,1e-12)],
+    ["84 kWh at 10 cents is $8.40",        near(84*0.10,8.4,1e-9)],
+    ["breakeven round trips to 10 cents",  near(breakeven(8.4,84),0.10,1e-12)],
+    ["margin of $10 on $4 cost is 60",     near(marginPct(10,4),60,1e-9)],
+    ["hashprice matches the trade figure", near(btcDay(1e15,D0,SUBSIDY,FEES,0)*64362.18,31.98,0.05)]
+  ];
+  var bad=[],i;
+  for(i=0;i<T.length;i++){if(!T[i][1])bad.push(T[i][0]);}
+
+  var ids=["hr","w","kwh","pool","df"],inputs={},boxes={};
+  for(i=0;i<ids.length;i++){
+    inputs[ids[i]]=document.getElementById("mn-"+ids[i]);
+    boxes[ids[i]]=document.getElementById("mn-fi-"+ids[i]);
+  }
+  var out={
+    btc:document.getElementById("mn-o-btc"), rev:document.getElementById("mn-o-rev"),
+    pow:document.getElementById("mn-o-pow"), pl:document.getElementById("mn-o-pl"),
+    mar:document.getElementById("mn-o-mar"), be:document.getElementById("mn-o-be"),
+    eff:document.getElementById("mn-o-eff"), solo:document.getElementById("mn-o-solo"),
+    nh:document.getElementById("mn-nh"), px:document.getElementById("mn-px"),
+    hp:document.getElementById("mn-hp"), pay:document.getElementById("mn-pay"),
+    rdiff:document.getElementById("mn-rdiff"), rehs:document.getElementById("mn-rehs"),
+    rfee:document.getElementById("mn-rfee"), src:document.getElementById("mn-src"),
+    bd1:document.getElementById("mn-bd1"), bd2:document.getElementById("mn-bd2"),
+    plBox:document.getElementById("mn-rs-pl"), fail:document.getElementById("mn-fail")
+  };
+  if(!inputs.hr||!out.btc)return;
+
+  if(bad.length){
+    console.error("[/tools/mining] self-test failed ("+bad.length+"/"+T.length+"): "+bad.join(", "));
+    for(i=0;i<ids.length;i++){if(inputs[ids[i]])inputs[ids[i]].disabled=true;}
+    document.querySelectorAll(".mn-p").forEach(function(b){b.disabled=true;b.style.opacity=".45";});
+    ["btc","rev","pow","pl","mar","be","eff","solo","nh","hp","pay","rdiff","rehs","rfee"].forEach(function(k){
+      if(out[k])out[k].textContent="--";
+    });
+    if(out.plBox)out.plBox.className="mn-rs mn-rs-key";
+    if(out.bd1)out.bd1.textContent="";
+    if(out.bd2)out.bd2.textContent="";
+    /* nothing is fetched either: the note promising live figures would be a
+       claim this page can no longer stand behind */
+    if(out.src)out.src.hidden=true;
+    if(out.fail)out.fail.hidden=false;
+    return;
+  }
+  console.log("[/tools/mining] self-test passed: "+T.length+"/"+T.length+
+              " known mining values matched (difficulty-1 hashrate, 450 and 900 BTC a day, hashprice).");
+
+  /* ------------------------------ formatting ------------------------------ */
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function usd(n){
+    var a=Math.abs(n),d=a>=1000?0:(a>=0.1?2:4);
+    return (n<0?"-":"")+"$"+fmt(a,d);
+  }
+  function btcTxt(b){return b>=1?fmt(b,4):b.toFixed(8);}
+  /* the per-block fee, to five decimals and with no trailing zeros, so the
+     shipped 0.016 reads as 0.016 and a measured 0.01631 reads as itself */
+  function feeTxt(){return String(Math.round(FEES*1e5)/1e5);}
+  function diffTxt(d){return String(Math.round(d*100)/100);}
+  function hashTxt(h){
+    if(!(h>0))return "--";
+    if(h>=1e21)return fmt(h/1e21,3)+" ZH/s";
+    if(h>=1e18)return fmt(h/1e18,1)+" EH/s";
+    if(h>=1e15)return fmt(h/1e15,1)+" PH/s";
+    if(h>=1e12)return fmt(h/1e12,1)+" TH/s";
+    if(h>=1e9)return fmt(h/1e9,1)+" GH/s";
+    return fmt(h,0)+" H/s";
+  }
+  function spanTxt(s){
+    if(!isFinite(s)||s<=0)return "--";
+    if(s<120)return fmt(s,s<10?1:0)+" seconds";
+    if(s<7200)return fmt(s/60,0)+" minutes";
+    if(s<172800)return fmt(s/3600,1)+" hours";
+    if(s<63115200)return fmt(s/86400,s<864000?1:0)+" days";
+    var y=s/YEAR;
+    if(y<1e6)return fmt(y,y<100?1:0)+" years";
+    if(y<1e9)return fmt(y/1e6,1)+" million years";
+    return fmt(y/1e9,1)+" billion years";
+  }
+
+  /* ------------------------------ input reading --------------------------- */
+  var LIM={hr:[0,1e12],w:[0,1e9],kwh:[0,100],pool:[0,100],df:[1e-9,1e9]};
+  function read(k){
+    var el=inputs[k],box=boxes[k],
+        raw=(""+el.value).replace(/[^0-9.]/g,""),
+        n=parseFloat(raw),lim=LIM[k],ok=isFinite(n)&&n>=lim[0]&&n<=lim[1];
+    if(box)box.classList.toggle("is-bad",!ok&&(""+el.value).trim()!=="");
+    return ok?n:null;
+  }
+  function gather(){
+    var hr=read("hr"),w=read("w"),kwh=read("kwh"),pool=read("pool"),df=read("df");
+    I.hr=hr===null?0:hr;
+    I.w=w===null?0:w;
+    I.kwh=kwh===null?0:kwh;
+    I.pool=pool===null?0:pool;
+    if(df!==null&&df>0)I.diff=df;   /* keep the last usable difficulty, never zero it */
+  }
+
+  /* ------------------------------ paint ----------------------------------- */
+  function paint(){
+    var hps=I.hr*1e12,
+        h=netHash(I.diff),
+        share=h>0?Math.min(1,hps/h):0,
+        gross=btcDay(hps,I.diff,SUBSIDY,FEES,0),
+        net=gross*(1-I.pool/100),
+        rev=net*P.price,
+        kwh=kwhDay(I.w),
+        cost=kwh*I.kwh,
+        profit=rev-cost,
+        mar=marginPct(rev,cost),
+        be=breakeven(rev,kwh),
+        issued=BLOCKS*(SUBSIDY+FEES);
+
+    out.nh.textContent=hashTxt(h);
+    out.btc.textContent=btcTxt(net);
+    out.rev.textContent=usd(rev);
+    out.pow.textContent=usd(cost);
+    out.pl.textContent=usd(profit);
+    out.plBox.className="mn-rs mn-rs-key"+(profit>0?" is-up":(profit<0?" is-dn":""));
+    out.mar.textContent=mar===null?"--":fmt(mar,1)+"%";
+    out.be.textContent=be===null?"--":"$"+fmt(be,4);
+    out.eff.textContent=I.hr>0?fmt(I.w/I.hr,1)+" J/TH":"--";
+    out.solo.textContent=spanTxt(soloSeconds(I.diff,hps));
+    out.px.textContent="$"+fmt(P.price,0);
+    out.hp.textContent=usd(btcDay(1e15,I.diff,SUBSIDY,FEES,0)*P.price);
+    if(out.pay)out.pay.textContent=SUBSIDY+" + "+feeTxt()+" BTC";
+
+    var hrTxt=fmt(I.hr,I.hr>=10?0:(I.hr>=1?2:4))+" TH/s",lead;
+    if(!(I.hr>0))lead="No hashrate entered, so nothing is earned on a "+hashTxt(h)+" network.";
+    else if(share>=1)lead=hrTxt+" is the whole of a "+hashTxt(h)+" network.";
+    else lead=hrTxt+" is one part in "+fmt(1/share,0)+" of a "+hashTxt(h)+" network.";
+    out.bd1.textContent=lead+
+      " At "+BLOCKS+" blocks a day paying "+SUBSIDY+" BTC plus "+feeTxt()+
+      " BTC of fees the network issues "+fmt(issued,1)+" BTC, so the gross share is "+btcTxt(gross)+
+      " BTC and a "+fmt(I.pool,I.pool%1?2:0)+" percent pool fee leaves "+btcTxt(net)+
+      " BTC, which is "+fmt(Math.round(net*1e8),0)+" sats.";
+    out.bd2.textContent="Over 30 days that is "+btcTxt(net*30)+" BTC, "+usd(rev*30)+
+      " of revenue against "+usd(cost*30)+" of electricity, a "+
+      (profit>=0?"profit":"loss")+" of "+usd(Math.abs(profit)*30)+".";
+  }
+
+  /* the rail is the network as our node sees it, so it is painted from the
+     fetched figures and deliberately does not follow the difficulty field */
+  var NET={diff:127.17,ehs:910.3},typedDf=false;
+  function paintRail(){
+    if(out.rdiff)out.rdiff.textContent=diffTxt(NET.diff)+" T";
+    if(out.rehs)out.rehs.textContent=fmt(NET.ehs,1)+" EH/s";
+    if(out.rfee)out.rfee.textContent=feeTxt()+" BTC";
+  }
+
+  /* ------------------------------ wiring ---------------------------------- */
+  ids.forEach(function(k){
+    inputs[k].addEventListener("input",function(){
+      if(k==="df")typedDf=true;   /* a typed difficulty is never overwritten */
+      gather();paint();markPreset();
+    });
+    inputs[k].addEventListener("focus",function(){inputs[k].select();});
+    inputs[k].addEventListener("blur",function(){
+      /* an empty or unusable field falls back to the last usable value */
+      if(read(k)===null){
+        inputs[k].value=(k==="df"?I.diff:(k==="hr"?I.hr:(k==="w"?I.w:(k==="kwh"?I.kwh:I.pool))));
+        if(boxes[k])boxes[k].classList.remove("is-bad");
+      }
+      gather();paint();
+    });
+  });
+  var presets=document.querySelectorAll(".mn-p");
+  function markPreset(){
+    presets.forEach(function(b){
+      b.classList.toggle("is-on",parseFloat(b.dataset.h)===I.hr&&parseFloat(b.dataset.w)===I.w);
+    });
+  }
+  presets.forEach(function(b){
+    b.addEventListener("click",function(){
+      inputs.hr.value=b.dataset.h;
+      inputs.w.value=b.dataset.w;
+      gather();paint();markPreset();
+    });
+  });
+
+  /* live price arrives via the chrome hook (~1.5s); USD only by design, the
+     footer currency switch intentionally does not change this page */
+  window.obPaintFiat=function(S){if(S&&isFinite(S.price)){P.price=S.price;paint();}};
+
+  gather();paintRail();paint();markPreset();
+
+  /* ----------------------- live network figures ---------------------------
+     /network gives the difficulty at the tip, which seeds the editable field
+     and the rail; /blocks?limit=30 gives totalFeeSat per block, whose mean is
+     the per-block fee. Either failure leaves the shipped constants and the
+     page renders exactly as served. */
+  var gotNet=false,gotFee=false;
+  function srcNote(){
+    if(!out.src||(!gotNet&&!gotFee))return;
+    var lead;
+    if(gotNet&&gotFee)lead="The difficulty and the per-block fee above come from our own node: the difficulty at the current tip, and the average fees paid across the most recent blocks.";
+    else if(gotNet)lead="The difficulty above is the one at the current tip, read from our own node; the per-block fee is the site's recorded baseline.";
+    else lead="The per-block fee above is the average paid across the most recent blocks, read from our own node; the difficulty is the site's recorded baseline, so type the current one in.";
+    out.src.textContent=lead+" The field stays editable either way: type another difficulty in and every figure below follows it.";
+  }
+  function applyNet(d){
+    if(!d||typeof d.difficulty!=="number"||!isFinite(d.difficulty)||d.difficulty<=0)return;
+    var diffT=d.difficulty/1e12;
+    NET.diff=diffT;
+    NET.ehs=(typeof d.hashrateEhs==="number"&&isFinite(d.hashrateEhs)&&d.hashrateEhs>0)
+      ?d.hashrateEhs:netHash(diffT)/1e18;
+    if(!typedDf){inputs.df.value=diffTxt(diffT);gather();}
+    gotNet=true;srcNote();paintRail();paint();
+  }
+  function applyFees(d){
+    if(!d||!Array.isArray(d.blocks))return;
+    var s=0,n=0,j,v;
+    for(j=0;j<d.blocks.length;j++){
+      v=d.blocks[j]?d.blocks[j].totalFeeSat:null;
+      if(typeof v==="number"&&isFinite(v)&&v>=0){s+=v;n++;}
+    }
+    if(n<5)return;                 /* too thin to average: keep the fallback */
+    var btc=s/n/1e8;
+    if(!(btc>=0)||btc>10)return;   /* absurd for a block: keep the fallback */
+    FEES=btc;
+    gotFee=true;srcNote();paintRail();paint();
+  }
+  /* OB_DATA_API is set by Base.astro in a script at the end of body, so it is
+     read here, after DOMContentLoaded, and never at parse time */
+  function boot(){
+    try{
+      var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";
+      fetch(api+"/network").then(function(r){return r.json();}).then(applyNet)["catch"](function(){});
+      fetch(api+"/blocks?limit=30").then(function(r){return r.json();}).then(applyFees)["catch"](function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

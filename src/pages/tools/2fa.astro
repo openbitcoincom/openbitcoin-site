@@ -1,0 +1,208 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Offline Authenticator: TOTP Codes with No Network - OpenBitcoin" description="How TOTP two-factor codes work, why a backup authenticator prevents lost-phone lockouts, and a single-file offline authenticator you can download.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Two-factor</div>
+    <h1>Offline authenticator</h1>
+    <p class="doc-lede">An authenticator is a shared secret plus a clock. Here is how that works, plus a single-file authenticator you can download, disconnect, and run offline so a lost phone never locks you out.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="fa-dl">
+      <div class="fa-dl-top">
+        <div class="fa-dl-l">
+          <div class="fa-dl-kick">Download</div>
+          <h2>authenticator.html</h2>
+          <p class="fa-dl-sub">One HTML file, about 45 KB. Save it, pull the plug, open it from disk. It computes the same codes your phone app would, using nothing but your browser and your clock.</p>
+        </div>
+        <a class="fa-dl-b" href="/tools/offline/authenticator.html" download="authenticator.html">Download the file<i>45 KB</i></a>
+      </div>
+      <div class="fa-dl-facts">
+        <div><b>One file</b><i>No install, no dependencies, no companions to fetch</i></div>
+        <div><b>No network</b><i>No requests in the code, and a policy telling the browser to refuse them</i></div>
+        <div><b>Memory only if you ask</b><i>Save entries with a nickname to keep codes ready in that browser, or use it stateless; either way, keep the original secret backed up on paper</i></div>
+      </div>
+      <p class="fa-dl-alt">Prefer to read it before you trust it? <a href="/tools/offline/authenticator.html">Open it in a tab</a> and view the source. It is one page of plain JavaScript with the published test vectors sitting in it, and the tool refuses to show a code if any of them fails.</p>
+    </div>
+
+
+    <div class="fa-card fa-mt">
+      <div class="fa-lab">Running it offline</div>
+      <ol class="fa-steps">
+        <li>Download the file while you are still connected, then check it opens.</li>
+        <li>For an exchange or email secret, copy it by USB stick to a computer that does not go back online. A retired laptop with the radio off is enough.</li>
+        <li>Switch the wifi off or unplug the cable. The banner across the top of the tool turns green when the browser stops seeing a network.</li>
+        <li>Open the file by double clicking it. The address bar should read <code>file://</code> and nothing should load from anywhere else.</li>
+        <li>Type or paste the secret. Codes appear at once and roll over every 30 seconds.</li>
+        <li>Close the tab when you are finished, then reconnect. Nothing was written to disk.</li>
+      </ol>
+      <p class="fa-note">The tool's banner reads <code>navigator.onLine</code>, which only reports whether the browser can see a network interface. It is a reminder, not proof of isolation. The unplugged cable is the proof. This one is safe enough on an everyday desktop for a low-value account, but a secret guarding an exchange balance belongs on a machine that stays offline for good.</p>
+    </div>
+
+    <div class="doc-card fa-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What a six digit code actually is</h2>
+        <p>When you enrolled, the service showed you a QR code. Inside it was a random secret, usually 20 bytes written as 32 base32 characters, and your authenticator app kept a copy. From then on both sides do identical arithmetic: take the current Unix time, divide by 30 to get a counter, run HMAC over that counter using the shared secret as the key, then squeeze six digits out of the result. That is the whole of the standard, RFC 6238, and there is nothing else in it.</p>
+        <p>Two things follow. The first is that your authenticator app never talks to anything. It has no idea whether the account still exists; it just does the arithmetic and shows the answer. The second is that any device holding the same secret and roughly the same time produces the same digits, forever, with no permission from anyone. That is what makes a written-down setup secret a real backup, and it is also what makes a stolen setup secret a permanent compromise rather than a temporary one.</p>
+        <p>Clock drift is the everyday failure. Codes are valid for a 30 second window, most servers accept the window either side of their own, and a computer whose clock is a minute out will produce codes for the wrong window every time. An offline machine drifts faster than a connected one because nothing corrects it, so the tool includes a clock offset control and shows the time it is actually using.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why you want a second authenticator</h2>
+        <p>The event that costs people their accounts is almost never a hack. It is a phone that fell in a river, got wiped by a repair shop, or was replaced by a shop assistant who migrated everything except the authenticator app. The secret lived in one app on one device, the device is gone, and now the only route back in is a support queue: identity documents, weeks of waiting, and on some exchanges a permanent lockout with the balance still inside.</p>
+        <p>The fix is unglamorous. When you enroll, take the setup secret, the string of letters and digits the site offers behind a link like "can't scan the code?", and write it down alongside your other access records. Then test it once, offline, so you know the backup actually produces the right digits before you need it at three in the morning. A second copy is not a weakness if you store it the way you store a key rather than the way you store a note.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The honest caveat</h2>
+        <p>A second factor is only second if it lives somewhere the first one does not. Keep the TOTP secret on the same laptop where you type the password and you have not got two factors: malware that reads one file reads both, and the account is defended by a single factor wearing two hats. Password managers that store both the password and the code have the same shape of problem, traded for real convenience.</p>
+        <p>So be clear about what this tool is. It is a recovery aid and a way to test a backup, not a replacement for the phone in your pocket or the hardware key on your keyring. Use the separate device for the daily login. Use this file when the separate device is gone, or when you want to check that the secret you wrote down at enrollment is the secret that actually works. If you keep it on a machine, keep it on one that never goes online.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Nothing legitimate asks for the secret</h2>
+        <p>Services ask for six digits. They never ask for the setup secret, and they never ask you to rescan your enrollment QR code into a page that is not theirs. A site offering to "sync", "verify" or "migrate" your authenticator is asking for the one thing that grants codes forever, and handing it over is worse than handing over a password, because it is silent. Recognizing that pattern is the same skill as spotting every other <a href="/learn/scams">common scam</a>.</p>
+        <p>Codes have a weaker limit worth knowing too. A convincing fake login page can take the six digits you type and replay them to the real site within the same 30 second window, which is why a code you did not initiate should never be typed and why hardware security keys, which check the domain before they sign, are stronger where a service supports them. And the deepest version of the problem is not a login at all: an account you can be locked out of is an account somebody else controls. Coins held in your own wallet have no support queue and no second factor to lose, which is the point of <a href="/learn/self-custody">self-custody</a>.</p>
+      </div>
+    </div>
+
+    <div class="fa-about doc-prose">
+      <p>This page holds no data and makes no requests. The tool it links to is a static file that computes codes with the browser's own WebCrypto, carries the published RFC 6238 and RFC 4648 test vectors, checks itself against them on every load, and shows a failure state rather than a wrong code if any check does not match. Guides on this site are informational under the <a href="/terms">terms</a>, and where the rest of the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The current window</div>
+      <div class="fa-win">
+        <b id="fa-secs">--</b><i>seconds left in this window</i>
+        <div class="fa-bar"><i id="fa-bar"></i></div>
+      </div>
+      <div class="fa-w2"><span>Counter</span><b id="fa-ctr">--</b></div>
+      <div class="fa-w2"><span>Period</span><b>30 s</b></div>
+      <p class="fa-wnote" id="fa-wnote">Every authenticator in the world is on this same 30 second grid. No secret is involved in showing it.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">What the file does</div>
+      <div class="fa-t"><b>Base32 or otpauth</b><i>Paste the secret or the whole otpauth link; it reads the digits, period and algorithm from the link.</i></div>
+      <div class="fa-t"><b>Current and next</b><i>Shows the code now and the one after it, with a countdown ring.</i></div>
+      <div class="fa-t"><b>Clock offset</b><i>Nudge the time when an offline machine has drifted.</i></div>
+      <div class="fa-t"><b>Refuses to guess</b><i>If its own test vectors fail, it shows no code at all.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/scams">Scams and phishing patterns</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn/seed-backup">Backing up a seed</a>
+        <a href="/learn/inheritance">Inheritance planning</a>
+        <a href="/wallets">Wallets worth using</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .fa-dl{background:var(--panel);border:1px solid rgba(255,166,60,.42);border-radius:12px;padding:20px 24px 22px}
+  .fa-dl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .fa-dl-l{min-width:0;flex:1 1 320px}
+  .fa-dl-kick{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+  .fa-dl h2{font:800 21px/1.2 var(--sans);letter-spacing:-.3px;color:var(--ink);margin:7px 0 0}
+  .fa-dl-sub{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:8px 0 0;max-width:52ch}
+  .fa-dl-b{display:inline-flex;align-items:center;gap:9px;flex:none;background:var(--cta);color:var(--cta-ink);
+    border-radius:10px;font:800 13.5px var(--sans);padding:14px 20px;text-decoration:none;white-space:nowrap}
+  .fa-dl-b:hover{background:var(--cta-hov)}
+  .fa-dl-b i{font:700 9.5px var(--mono);letter-spacing:.09em;font-style:normal;opacity:.7}
+  .fa-dl-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px;
+    padding-top:16px;border-top:1px dotted var(--line-2)}
+  .fa-dl-facts div{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;min-width:0}
+  .fa-dl-facts b{display:block;font:700 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--acc)}
+  .fa-dl-facts i{display:block;font:500 12px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:4px}
+  .fa-dl-alt{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:14px 0 0}
+  .fa-dl-alt a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .fa-dl-alt a:hover{border-bottom-style:solid}
+  .fa-warn{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:11px 2px 0}
+  .fa-mt{margin-top:14px}
+  .fa-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .fa-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .fa-steps{counter-reset:fa;list-style:none;margin:0;padding:0}
+  .fa-steps li{position:relative;padding-left:34px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .fa-steps li:first-child{margin-top:0}
+  .fa-steps li::before{counter-increment:fa;content:counter(fa);position:absolute;left:0;top:1px;width:22px;height:22px;
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line-2);color:var(--acc);
+    font:700 11px/21px var(--mono);text-align:center}
+  .fa-steps code,.fa-note code{font:600 12px var(--mono);background:var(--field);color:var(--ink);border-radius:5px;padding:2px 6px}
+  .fa-note{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin:15px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .fa-about{margin-top:14px}
+  .fa-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .fa-win b{display:block;font:700 30px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .fa-win i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;margin-top:5px}
+  .fa-bar{height:6px;border-radius:4px;background:var(--panel-2);border:1px solid var(--line-2);overflow:hidden;margin-top:10px}
+  .fa-bar i{display:block;height:100%;width:100%;background:var(--acc);margin:0}
+  .fa-bar i.is-low{background:var(--down)}
+  .fa-w2{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;
+    border-bottom:1px dotted var(--line-2);margin-top:2px}
+  .fa-w2:first-of-type{margin-top:12px}
+  .fa-w2:last-of-type{border-bottom:0}
+  .fa-w2 span{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .fa-w2 b{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fa-wnote{font:500 11px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  .fa-wnote.is-bad{color:var(--down)}
+  .fa-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .fa-t:last-child{border-bottom:0}
+  .fa-t b{display:block;font:700 12.5px var(--mono);color:var(--acc)}
+  .fa-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  @media(max-width:700px){
+    .fa-dl{padding:18px 18px 20px}
+    .fa-card{padding:18px 18px 20px}
+    .fa-dl-facts{grid-template-columns:minmax(0,1fr)}
+    .fa-dl-b{width:100%;justify-content:center}
+    .fa-dl h2{font-size:19px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* The only script on this page: a 30 second window ticker. No crypto, no
+     secret, no network. It is arithmetic on Date.now(), and it verifies that
+     arithmetic against the two counter values published in RFC 6238 Appendix B
+     before it shows anything:
+       t = 59          gives T = 1
+       t = 1111111109  gives T = 0x023523EC = 37037036
+     If either is wrong the tile shows a failed state instead of numbers. */
+  var PERIOD=30;
+  function counterAt(t){return Math.floor(t/PERIOD);}
+  var selftest=(counterAt(59)===1)&&(counterAt(1111111109)===37037036);
+
+  var secs=document.getElementById("fa-secs"),
+      bar=document.getElementById("fa-bar"),
+      ctr=document.getElementById("fa-ctr"),
+      note=document.getElementById("fa-wnote");
+  if(!secs)return;
+
+  if(!selftest){
+    console.error("[/tools/2fa] self-test failed: RFC 6238 Appendix B counter values did not match.");
+    secs.textContent="--";
+    ctr.textContent="--";
+    bar.parentNode.style.display="none";
+    note.className="fa-wnote is-bad";
+    note.textContent="Self-test failed, so no window is shown here. The downloadable tool runs the same kind of check on its own arithmetic and refuses to show a code when it fails.";
+    return;
+  }
+  console.log("[/tools/2fa] self-test passed: 2 RFC 6238 Appendix B counter values matched.");
+
+  function tick(){
+    var t=Date.now()/1000,c=counterAt(t),into=t-c*PERIOD,left=PERIOD-into;
+    secs.textContent=Math.ceil(left);
+    ctr.textContent=c.toLocaleString("en-US");
+    bar.style.width=(100*(left/PERIOD)).toFixed(1)+"%";
+    bar.className=left<=5?"is-low":"";
+  }
+  tick();
+  setInterval(tick,200);
+})();
+</script>
+</Base>

@@ -1,0 +1,1018 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Hash Playground: SHA-256, Base58Check, Bech32 - OpenBitcoin" description="Run the hashes and encodings Bitcoin uses in your browser: SHA-256, double SHA-256, RIPEMD-160, HASH160, Base58Check and Bech32. Nothing is sent.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tools</div>
+    <h1>Hash and encoding playground</h1>
+    <p class="doc-lede">Run the primitives bitcoin is built from on your own bytes: SHA-256, double SHA-256, RIPEMD-160, HASH160, Base58Check, Bech32 and Bech32m, plus a byte order flip. All of it in this tab.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="hx-fail" id="hx-fail" hidden role="alert">
+      <b>Self-test failed</b>
+      <span id="hx-failwhy">One of the checks this page runs on load did not match its known answer, so every card has been switched off rather than show a digest that might be wrong.</span>
+    </div>
+
+    <div class="hx-card">
+      <div class="hx-top">
+        <div class="hx-lab">Shared input</div>
+        <div class="hx-modes" role="group" aria-label="How to read the shared input">
+          <button type="button" class="hx-m is-on" data-m="text">Text, UTF-8</button>
+          <button type="button" class="hx-m" data-m="hex">Hex</button>
+        </div>
+      </div>
+      <textarea id="hx-in" class="hx-ta" rows="2" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="abc" aria-label="Shared input bytes"></textarea>
+      <div class="hx-bar">
+        <div class="hx-ex" aria-label="Example inputs">
+          <span>Try:</span>
+          <button type="button" data-ex="abc">abc</button>
+          <button type="button" data-ex="empty">empty</button>
+          <button type="button" data-ex="pubkey">public key</button>
+          <button type="button" data-ex="merkle">merkle root</button>
+        </div>
+        <div class="hx-cnt" id="hx-cnt">3 bytes</div>
+      </div>
+      <div class="hx-seed" id="hx-seed" hidden role="alert">
+        <b>That looks like a recovery phrase.</b> It was cleared and nothing was hashed. A seed phrase belongs on paper or metal, never in a browser tab, and no honest website has any use for one. If those words really are not a seed, switch to hex and paste the bytes instead.
+      </div>
+      <p class="hx-fine">Never type a seed phrase, a private key, an xprv or a 2FA secret into any website, this one included. Hashing a secret inside a browser tab does not make it safe.</p>
+    </div>
+    <p class="hx-priv">Every function below runs on your machine. This page makes no network requests with what you type, so the bytes never leave the tab. Each card starts out following the shared input; type in a card to give it its own.</p>
+
+    <div class="hx-cards">
+      <div class="hx-c">
+        <div class="hx-ch"><b>SHA-256</b><em>32 bytes out</em></div>
+        <p class="hx-cd">One pass of SHA-256. The workhorse behind mining, merkle trees and message commitments.</p>
+        <textarea class="hx-i" id="hx-i-sha" rows="1" data-fn="sha" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Input for SHA-256"></textarea>
+        <div class="hx-cbar"><span class="hx-fol" id="hx-fol-sha">following shared input</span><button type="button" class="hx-re" data-fn="sha" hidden>follow shared</button><span class="hx-n" id="hx-n-sha"></span></div>
+        <div class="hx-o" id="hx-o-sha"></div>
+      </div>
+
+      <div class="hx-c">
+        <div class="hx-ch"><b>Double SHA-256</b><em>32 bytes out</em></div>
+        <p class="hx-cd">SHA-256 applied twice. This is the hash bitcoin means when it says hash: txids, block ids, merkle nodes, checksums.</p>
+        <textarea class="hx-i" id="hx-i-dsha" rows="1" data-fn="dsha" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Input for double SHA-256"></textarea>
+        <div class="hx-cbar"><span class="hx-fol" id="hx-fol-dsha">following shared input</span><button type="button" class="hx-re" data-fn="dsha" hidden>follow shared</button><span class="hx-n" id="hx-n-dsha"></span></div>
+        <div class="hx-o" id="hx-o-dsha"></div>
+      </div>
+
+      <div class="hx-c">
+        <div class="hx-ch"><b>RIPEMD-160</b><em>20 bytes out</em></div>
+        <p class="hx-cd">A 1996 European hash, kept in bitcoin for one job: shortening public keys. Implemented inline, since no browser ships it.</p>
+        <textarea class="hx-i" id="hx-i-rmd" rows="1" data-fn="rmd" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Input for RIPEMD-160"></textarea>
+        <div class="hx-cbar"><span class="hx-fol" id="hx-fol-rmd">following shared input</span><button type="button" class="hx-re" data-fn="rmd" hidden>follow shared</button><span class="hx-n" id="hx-n-rmd"></span></div>
+        <div class="hx-o" id="hx-o-rmd"></div>
+      </div>
+
+      <div class="hx-c">
+        <div class="hx-ch"><b>HASH160</b><em>20 bytes out</em></div>
+        <p class="hx-cd">RIPEMD-160 of SHA-256. Feed it a public key and you get the 20 bytes that sit inside an address or a witness program.</p>
+        <textarea class="hx-i" id="hx-i-h160" rows="1" data-fn="h160" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Input for HASH160"></textarea>
+        <div class="hx-cbar"><span class="hx-fol" id="hx-fol-h160">following shared input</span><button type="button" class="hx-re" data-fn="h160" hidden>follow shared</button><span class="hx-n" id="hx-n-h160"></span></div>
+        <div class="hx-o" id="hx-o-h160"></div>
+      </div>
+
+      <div class="hx-c hx-w">
+        <div class="hx-ch"><b>Base58Check encode</b><em>version byte plus payload plus 4-byte checksum</em></div>
+        <p class="hx-cd">Take the input bytes as a payload, prepend a version byte, append the first four bytes of the double SHA-256, and write the lot in base 58. Twenty bytes of payload is what makes a real address.</p>
+        <textarea class="hx-i" id="hx-i-b58e" rows="1" data-fn="b58e" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Payload for Base58Check encoding"></textarea>
+        <div class="hx-cbar">
+          <span class="hx-fol" id="hx-fol-b58e">following shared input</span>
+          <button type="button" class="hx-re" data-fn="b58e" hidden>follow shared</button>
+          <span class="hx-n" id="hx-n-b58e"></span>
+          <label class="hx-sel"><span>Version</span>
+            <select id="hx-ver" aria-label="Version byte">
+              <option value="0">0x00, P2PKH mainnet, 1...</option>
+              <option value="5">0x05, P2SH mainnet, 3...</option>
+              <option value="111">0x6f, P2PKH testnet, m or n</option>
+              <option value="196">0xc4, P2SH testnet, 2...</option>
+            </select>
+          </label>
+        </div>
+        <div class="hx-o" id="hx-o-b58e"></div>
+      </div>
+
+      <div class="hx-c hx-w">
+        <div class="hx-ch"><b>Byte order flip</b><em>hex, reversed</em></div>
+        <p class="hx-cd">Reverse the bytes. Transaction ids, block hashes and merkle roots are stored one way and printed the other, which is the single most common reason two tools disagree about the same 32 bytes.</p>
+        <textarea class="hx-i" id="hx-i-flip" rows="1" data-fn="flip" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Bytes to reverse"></textarea>
+        <div class="hx-cbar"><span class="hx-fol" id="hx-fol-flip">following shared input</span><button type="button" class="hx-re" data-fn="flip" hidden>follow shared</button><span class="hx-n" id="hx-n-flip"></span></div>
+        <div class="hx-o" id="hx-o-flip"></div>
+      </div>
+
+      <div class="hx-c hx-w">
+        <div class="hx-ch"><b>Base58Check decode</b><em>takes an encoded string, not bytes</em></div>
+        <p class="hx-cd">Paste a legacy address. The checksum is verified against the double SHA-256 of the body, and the version byte is named. Private keys are refused, not decoded.</p>
+        <textarea class="hx-i hx-i-str" id="hx-i-b58d" rows="1" data-fn="b58d" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" aria-label="Base58Check string to decode"></textarea>
+        <div class="hx-cbar hx-cbar-ex">
+          <div class="hx-ex">
+            <span>Try:</span>
+            <button type="button" data-b58="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa">genesis address</button>
+            <button type="button" data-b58="3P14159f73E4gFr7JterCCQh9QjiTjiZrG">a P2SH address</button>
+            <button type="button" data-b58="1A1zP1eP5QGefi2DMPTfTL5SLmv7Divfna">one typo</button>
+          </div>
+        </div>
+        <div class="hx-o" id="hx-o-b58d"></div>
+      </div>
+
+      <div class="hx-c hx-w">
+        <div class="hx-ch"><b>Bech32 and Bech32m decode</b><em>takes an encoded string, not bytes</em></div>
+        <p class="hx-cd">Paste a bc1 address. The human-readable part, the checksum constant, the witness version and the witness program all come out, and the version has to match the constant.</p>
+        <textarea class="hx-i hx-i-str" id="hx-i-b32d" rows="1" data-fn="b32d" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4" aria-label="Bech32 string to decode"></textarea>
+        <div class="hx-cbar hx-cbar-ex">
+          <div class="hx-ex">
+            <span>Try:</span>
+            <button type="button" data-b32="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4">P2WPKH</button>
+            <button type="button" data-b32="bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0">P2TR</button>
+            <button type="button" data-b32="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5">bad checksum</button>
+          </div>
+        </div>
+        <div class="hx-o" id="hx-o-b32d"></div>
+      </div>
+    </div>
+
+    <div class="hx-card hx-mt hx-cta-card">
+      <div class="hx-lab">Next step</div>
+      <p>These are the parts. To watch them assembled into something real, take a signed transaction apart on the <a href="/tools/decode">raw transaction decoder</a>, where the same double SHA-256 produces the txid and the same byte reversal is what turns it into the string block explorers print.</p>
+      <a class="hx-cta" href="/tools/decode">Decode a raw transaction</a>
+    </div>
+
+    <div class="doc-card hx-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Why bitcoin hashes twice</h2>
+        <p>Almost everywhere bitcoin says hash it means SHA-256 run twice over the same bytes. The habit dates from 2008, when the standard advice for defending against length extension attacks on the SHA-2 family was to hash the digest again, and it stuck: transaction ids, block ids, merkle nodes and the four-byte checksum inside every legacy address are all double SHA-256. The doubling buys little against any attack known today and costs one extra compression per hash, but it is consensus now, so every node computes it the same way. Try the two cards above on the same input and you can see for yourself that the second is not the first hashed by eye, it is a completely unrelated 32 bytes.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>HASH160, and why addresses are short</h2>
+        <p>A public key is 33 bytes compressed, or 65 uncompressed. An address holds only 20, because a key is put through SHA-256 and then RIPEMD-160, a combination bitcoin calls HASH160. Two different hash families in sequence means a break in either one alone still leaves the other standing, and 160 bits is small enough to write down while still needing about 2 to the 80th work to collide. Those 20 bytes are what sits inside a legacy address after the version byte, and what sits inside a native segwit address as the witness program. Load the example public key above, copy the 20 bytes the HASH160 card returns, and paste them into the Base58Check card: out comes an address beginning with 1, which is exactly the sequence a wallet runs when it makes you one.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Two checksums, two eras</h2>
+        <p>Base58Check, from 2009, drops the four characters that look alike in most fonts (zero, capital O, capital I, lower case l) and protects the rest with four bytes of double SHA-256. It catches essentially any accidental change, but it cannot tell you where the mistake is. Bech32, specified in BIP-173 and amended by BIP-350, replaces that with a BCH error correcting code over 32 characters: it is guaranteed to catch up to four wrong characters, is very unlikely to miss more, and it can point at the character that went wrong. BIP-350 also changed the checksum constant for witness versions 1 and up after a flaw was found in the original, which is why a taproot address is bech32m and a segwit v0 address is not. The <a href="/tools/validate">address validator</a> uses that property to locate single typos.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The byte order trap</h2>
+        <p>A transaction id is stored inside blocks and inside other transactions in one byte order, and printed by explorers and wallets in the opposite one. Nothing about the hash changes; only the direction it is written. The genesis merkle root is the classic demonstration: internally it begins 3ba3edfd, and every explorer shows it as 4a5e1e4b, the same 32 bytes read backwards. If a hash you computed looks nothing like the one a tool shows, reverse it before assuming either side is broken. The flip card does exactly that, and it also reads four and eight byte values both ways, which is how transaction amounts, in little endian satoshis, are stored.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>A hash is not encryption</h2>
+        <p>Every function on this page goes one way. There is no key, nothing is hidden, and nothing can be undone: a digest cannot be turned back into what produced it, which is exactly why it is safe to publish one. That also means hashing a secret does not protect it. If you paste a seed phrase into any web page, hashing it afterwards changes nothing about the fact that the words were typed into a browser, sat in a text field, and may have been captured by an extension, an autofill store or a sync service before a single byte was hashed. Tools that genuinely need a seed belong on an offline machine; <a href="/learn/self-custody">self custody</a> covers where the line sits, and <a href="/learn/scams">common scams</a> covers what happens when people cross it.</p>
+      </div>
+    </div>
+
+    <div class="hx-about doc-prose">
+      <p>This page is a workbench, not an authority: it computes digests and checks checksums, and that is all. A valid checksum means the string was typed correctly, never that an address belongs to whoever sent it to you, and a matching hash proves two byte strings are identical, not that either one is honest. To check an address you are about to pay, use the <a href="/tools/validate">address validator</a>; to see these primitives at work inside a real transaction, use the <a href="/tools/decode">raw transaction decoder</a>; for where the double hash came from in the first place, read the <a href="/learn/whitepaper">whitepaper</a>. Everything here is informational under the <a href="/terms">terms</a>; data provenance for the rest of the site is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">What runs here</div>
+      <div class="hx-t"><b>SHA-256</b><i>From crypto.subtle, the browser's own audited implementation.</i></div>
+      <div class="hx-t"><b>RIPEMD-160</b><i>Written out inline: browsers do not expose it. Checked against the specification's own vectors on load.</i></div>
+      <div class="hx-t"><b>Base58Check</b><i>Encode and decode, with the four-byte double SHA-256 checksum verified and the version byte named.</i></div>
+      <div class="hx-t"><b>Bech32, Bech32m</b><i>BIP-173 and BIP-350 decode: human-readable part, witness version, program, checksum constant.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Checked on load</div>
+      <div class="hx-t"><b id="hx-selft">Running self-test</b><i id="hx-selfd">Known answers for every function are recomputed each time this page opens. If one disagrees, the cards refuse to run.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/decode">Raw transaction decoder</a>
+        <a href="/tools/validate">Address validator</a>
+        <a href="/learn/whitepaper">The whitepaper, explained</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hx-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px}
+  .hx-mt{margin-top:14px}
+  .hx-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:9px}
+  .hx-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .hx-modes{display:flex;gap:6px;flex-wrap:wrap}
+  .hx-m{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:6px 12px;cursor:pointer;white-space:nowrap}
+  .hx-m:hover{border-color:rgba(255,166,60,.4);color:var(--ink)}
+  .hx-m.is-on{border-color:rgba(255,166,60,.55);background:rgba(247,147,26,.08);color:var(--acc)}
+  .hx-ta,.hx-i{width:100%;box-sizing:border-box;display:block;background:rgba(124,140,168,.13);
+    border:1px dashed rgba(255,166,60,.32);border-radius:10px;color:var(--price-ink);
+    font:600 12.5px/1.6 var(--mono);padding:11px 13px;outline:none;resize:vertical;word-break:break-all}
+  .hx-ta{min-height:62px}
+  .hx-i{min-height:46px;margin-top:9px}
+  .hx-ta:focus,.hx-i:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .hx-ta::placeholder,.hx-i::placeholder{color:var(--ph);font-weight:600}
+  .hx-ta[disabled],.hx-i[disabled]{opacity:.45;cursor:not-allowed}
+  .hx-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .hx-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+  .hx-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .hx-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .hx-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .hx-cnt{font:600 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;flex:none}
+  .hx-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:11px 0 0}
+  .hx-priv{font:600 11px/1.6 var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0}
+  .hx-seed{margin-top:11px;background:rgba(246,70,93,.09);border:1px solid var(--down);border-radius:10px;
+    padding:11px 14px;font:500 12.5px/1.65 var(--sans);color:var(--ink-2)}
+  .hx-seed b{color:var(--down);font-weight:700}
+  .hx-fail{background:rgba(246,70,93,.09);border:1px solid var(--down);border-radius:12px;padding:14px 18px;margin-bottom:14px}
+  .hx-fail b{display:block;font:700 14px var(--mono);color:var(--down);letter-spacing:.03em}
+  .hx-fail span{display:block;font:500 13px/1.65 var(--sans);color:var(--ink-2);margin-top:6px}
+
+  .hx-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+  .hx-c{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 18px 17px;min-width:0}
+  .hx-c.hx-w{grid-column:1/-1}
+  .hx-ch{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .hx-ch b{font:700 14px var(--sans);color:var(--ink)}
+  .hx-ch em{font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);font-style:normal}
+  .hx-cd{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:6px 0 0}
+  .hx-cbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .hx-cbar-ex{margin-top:9px}
+  .hx-fol{font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .hx-fol.is-own{color:var(--acc)}
+  .hx-re{background:transparent;border:1px solid var(--line-2);border-radius:7px;color:var(--ink-2);
+    font:700 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
+  .hx-re:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .hx-n{margin-left:auto;font:600 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;flex:none}
+  .hx-sel{display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 100%}
+  .hx-sel span{font:700 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);flex:none}
+  .hx-sel select{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:600 10.5px var(--mono);padding:7px 8px;flex:1 1 auto;min-width:0;max-width:100%;cursor:pointer}
+
+  .hx-o{margin-top:11px}
+  .hx-st{font:700 11.5px var(--mono);letter-spacing:.04em;margin-bottom:8px}
+  .hx-st.hx-ok{color:var(--up)}
+  .hx-st.hx-bad{color:var(--down)}
+  .hx-st.hx-mut{color:var(--ink-3)}
+  .hx-r{display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:10px;align-items:start;
+    padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hx-r:last-child{border-bottom:0;padding-bottom:0}
+  .hx-r i{font:700 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;padding-top:3px}
+  .hx-r u{font:600 12px/1.65 var(--mono);color:var(--ink-2);text-decoration:none;word-break:break-all;display:block;min-width:0}
+  .hx-r.hx-key u{color:var(--acc);font-weight:700}
+  .hx-r.hx-num u{font-variant-numeric:tabular-nums;color:var(--price-ink)}
+  .hx-cp{background:transparent;border:1px solid var(--line-2);border-radius:6px;color:var(--ink-3);
+    font:700 8.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:4px 7px;cursor:pointer;flex:none}
+  .hx-cp:hover{color:var(--acc);border-color:rgba(255,166,60,.5)}
+  .hx-note{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin-top:9px}
+  .hx-note.hx-warn{color:var(--down)}
+
+  .hx-cta-card p{font:500 13.5px/1.7 var(--sans);color:var(--ink-2);margin:8px 0 0}
+  .hx-cta-card a:not(.hx-cta){color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .hx-cta{display:inline-block;margin-top:12px;background:rgba(247,147,26,.08);border:1px solid rgba(255,166,60,.55);
+    border-radius:10px;color:var(--acc);font:700 11.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+    padding:10px 16px;text-decoration:none}
+  .hx-cta:hover{background:rgba(247,147,26,.14)}
+  .hx-about{margin-top:14px}
+  .hx-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hx-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hx-t:last-child{border-bottom:0}
+  .hx-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .hx-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .hx-card{padding:16px 16px 18px}
+    .hx-cards{grid-template-columns:minmax(0,1fr)}
+    .hx-c{padding:14px 15px 16px}
+    .hx-ta,.hx-i{font-size:11.5px}
+    .hx-ta{min-height:76px}
+    .hx-i{min-height:56px}
+    .hx-r{grid-template-columns:minmax(0,1fr) auto;gap:3px 10px}
+    .hx-r i{grid-column:1/-1;padding-top:0}
+    .hx-r u{font-size:11.5px}
+    .hx-n{margin-left:0}
+    .hx-sel{flex:1 1 100%}
+    .hx-sel select{flex:1 1 auto;min-width:0}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* ================================================================
+     No fetch, no XHR, no beacons, no images: the "nothing leaves the
+     browser" claim on this page depends on this script staying local.
+     crypto.subtle.digest is local math, not a request.
+
+     TEST VECTORS (provenance in the frontmatter note; every one of them
+     was re-derived with node against these exact implementations):
+       sha256("")            e3b0c442...b7852b855
+       sha256("abc")         ba7816bf...f20015ad
+       sha256d("")           5df6e0e2...5d4c9456
+       sha256d("abc")        4f8b42c2...3e6c6358
+       ripemd160 official specification vectors, six of them
+       hash160(pubkey)       010966776006953d5567439e5e39f86a0d273bee
+       base58check(0x00||hash160)  16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM
+       base58check decode    1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+       bech32 decode         bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4
+       bech32m decode        bc1p0xlxvlhemja...k9hcz7vqzk5jj0
+       byte order            genesis merkle root, both directions
+     If a single assertion fails, every card refuses to compute.
+     ================================================================ */
+
+  var MAXCHARS=200000; /* 100 kB of hex, far more than anyone pastes */
+
+  /* ---------- bytes and hex ---------- */
+  var HEXC="0123456789abcdef";
+  function toHex(b){
+    var s="",i;
+    for(i=0;i<b.length;i++)s+=HEXC.charAt(b[i]>>4)+HEXC.charAt(b[i]&15);
+    return s;
+  }
+  function fromHex(s){
+    var o=[],i;
+    for(i=0;i<s.length;i+=2)o.push(parseInt(s.substr(i,2),16));
+    return o;
+  }
+  function grp(s){return String(s).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function plural(n,w){return grp(String(n))+" "+w+(n===1?"":"s");}
+
+  /* ---------- SHA-256 through the browser's own implementation ---------- */
+  function sha256(bytes){
+    return crypto.subtle.digest("SHA-256",new Uint8Array(bytes)).then(function(a){
+      return new Uint8Array(a);
+    });
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",new Uint8Array(bytes)).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+
+  /* ---------- RIPEMD-160, written out because no browser exposes it ----------
+     Dobbertin, Bosselaers and Preneel, 1996. Two parallel lines of 80 steps
+     over little endian words, combined at the end of every 64-byte block. */
+  var RZL=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+           7,4,13,1,10,6,15,3,12,0,9,5,2,14,11,8,
+           3,10,14,4,9,15,8,1,2,7,0,6,13,11,5,12,
+           1,9,11,10,0,8,12,4,13,3,7,15,14,5,6,2,
+           4,0,5,9,7,12,2,10,14,1,3,8,11,6,15,13];
+  var RZR=[5,14,7,0,9,2,11,4,13,6,15,8,1,10,3,12,
+           6,11,3,7,0,13,5,10,14,15,8,12,4,9,1,2,
+           15,5,1,3,7,14,6,9,11,8,12,2,10,0,4,13,
+           8,6,4,1,3,11,15,0,5,12,2,13,9,7,10,14,
+           12,15,10,4,1,5,8,7,6,2,13,14,0,3,9,11];
+  var RSL=[11,14,15,12,5,8,7,9,11,13,14,15,6,7,9,8,
+           7,6,8,13,11,9,7,15,7,12,15,9,11,7,13,12,
+           11,13,6,7,14,9,13,15,14,8,13,6,5,12,7,5,
+           11,12,14,15,14,15,9,8,9,14,5,6,8,6,5,12,
+           9,15,5,11,6,8,13,12,5,12,13,14,11,8,5,6];
+  var RSR=[8,9,9,11,13,15,15,5,7,7,8,11,14,14,12,6,
+           9,13,15,7,12,8,9,11,7,7,12,7,6,15,13,11,
+           9,7,15,11,8,6,6,14,12,13,5,14,13,13,7,5,
+           15,5,8,11,14,14,6,14,6,9,12,9,12,5,15,8,
+           8,5,12,9,12,5,14,6,8,13,6,5,15,13,11,11];
+  var RKL=[0x00000000,0x5a827999,0x6ed9eba1,0x8f1bbcdc,0xa953fd4e];
+  var RKR=[0x50a28be6,0x5c4dd124,0x6d703ef3,0x7a6d76e9,0x00000000];
+  function rf(j,x,y,z){
+    if(j<16)return x^y^z;
+    if(j<32)return (x&y)|(~x&z);
+    if(j<48)return (x|~y)^z;
+    if(j<64)return (x&z)|(y&~z);
+    return x^(y|~z);
+  }
+  function rol(x,n){return (x<<n)|(x>>>(32-n));}
+  function ripemd160(bytes){
+    var len=bytes.length,i;
+    var padded=new Uint8Array((((len+8)>>6)+1)<<6);
+    padded.set(bytes);
+    padded[len]=0x80;
+    var bitsLo=(len<<3)>>>0,bitsHi=Math.floor(len/536870912)>>>0,p=padded.length-8;
+    padded[p]=bitsLo&255;padded[p+1]=(bitsLo>>>8)&255;padded[p+2]=(bitsLo>>>16)&255;padded[p+3]=(bitsLo>>>24)&255;
+    padded[p+4]=bitsHi&255;padded[p+5]=(bitsHi>>>8)&255;padded[p+6]=(bitsHi>>>16)&255;padded[p+7]=(bitsHi>>>24)&255;
+    var h0=0x67452301,h1=0xefcdab89,h2=0x98badcfe,h3=0x10325476,h4=0xc3d2e1f0;
+    var X=new Array(16),blk,j,al,bl,cl,dl,el,ar,br,cr,dr,er,t;
+    for(blk=0;blk<padded.length;blk+=64){
+      for(i=0;i<16;i++){
+        X[i]=(padded[blk+i*4])|(padded[blk+i*4+1]<<8)|(padded[blk+i*4+2]<<16)|(padded[blk+i*4+3]<<24);
+      }
+      al=h0;bl=h1;cl=h2;dl=h3;el=h4;
+      ar=h0;br=h1;cr=h2;dr=h3;er=h4;
+      for(j=0;j<80;j++){
+        t=(al+rf(j,bl,cl,dl))|0;
+        t=(t+X[RZL[j]])|0;
+        t=(t+RKL[(j/16)|0])|0;
+        t=(rol(t,RSL[j])+el)|0;
+        al=el;el=dl;dl=rol(cl,10);cl=bl;bl=t;
+        t=(ar+rf(79-j,br,cr,dr))|0;
+        t=(t+X[RZR[j]])|0;
+        t=(t+RKR[(j/16)|0])|0;
+        t=(rol(t,RSR[j])+er)|0;
+        ar=er;er=dr;dr=rol(cr,10);cr=br;br=t;
+      }
+      t=(h1+cl+dr)|0;
+      h1=(h2+dl+er)|0;
+      h2=(h3+el+ar)|0;
+      h3=(h4+al+br)|0;
+      h4=(h0+bl+cr)|0;
+      h0=t;
+    }
+    var out=new Uint8Array(20),hs=[h0,h1,h2,h3,h4];
+    for(i=0;i<5;i++){
+      out[i*4]=hs[i]&255;out[i*4+1]=(hs[i]>>>8)&255;
+      out[i*4+2]=(hs[i]>>>16)&255;out[i*4+3]=(hs[i]>>>24)&255;
+    }
+    return out;
+  }
+  function hash160(bytes){
+    return sha256(bytes).then(function(h){return ripemd160(h);});
+  }
+
+  /* ---------- base58 ---------- */
+  var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  function b58encode(bytes){
+    var digits=[],i,j,carry,s="";
+    for(i=0;i<bytes.length;i++){
+      carry=bytes[i];
+      for(j=0;j<digits.length;j++){
+        carry+=digits[j]*256;
+        digits[j]=carry%58;
+        carry=(carry/58)|0;
+      }
+      while(carry>0){digits.push(carry%58);carry=(carry/58)|0;}
+    }
+    for(i=0;i<bytes.length&&bytes[i]===0;i++)s+="1";
+    for(j=digits.length-1;j>=0;j--)s+=B58.charAt(digits[j]);
+    return s;
+  }
+  function b58decode(s){
+    if(!s.length||s.length>200)return null;
+    var bytes=[0],i,j,v,carry,x;
+    for(i=0;i<s.length;i++){
+      v=B58.indexOf(s.charAt(i));
+      if(v<0)return null;
+      carry=v;
+      for(j=0;j<bytes.length;j++){
+        x=bytes[j]*58+carry;
+        bytes[j]=x&255;carry=x>>8;
+      }
+      while(carry){bytes.push(carry&255);carry>>=8;}
+    }
+    for(i=0;i<s.length&&s.charAt(i)==="1";i++)bytes.push(0);
+    return bytes.reverse();
+  }
+  var B58VER={
+    0:["P2PKH address","mainnet","20-byte HASH160 of a public key"],
+    5:["P2SH address","mainnet","20-byte HASH160 of a redeem script"],
+    111:["P2PKH address","testnet","20-byte HASH160 of a public key"],
+    196:["P2SH address","testnet","20-byte HASH160 of a redeem script"]
+  };
+  /* version bytes that mean a secret. These are identified and refused,
+     never decoded: see the safety note in the frontmatter. */
+  var B58SECRET={128:"a WIF private key, mainnet",239:"a WIF private key, testnet"};
+  var XPREFIX={
+    "0488b21e":["xpub, extended public key, mainnet",false],
+    "043587cf":["tpub, extended public key, testnet",false],
+    "0488ade4":["xprv, extended private key, mainnet",true],
+    "04358394":["tprv, extended private key, testnet",true]
+  };
+
+  /* ---------- bech32 and bech32m, BIP-173 and BIP-350 ---------- */
+  var CS="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+  var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+  function polymod(v){
+    var chk=1,i,j,top;
+    for(i=0;i<v.length;i++){
+      top=chk>>>25;chk=((chk&0x1ffffff)<<5)^v[i];
+      for(j=0;j<5;j++)if((top>>>j)&1)chk^=GEN[j];
+    }
+    return chk>>>0;
+  }
+  function hrpExpand(h){
+    var r=[],i;
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)>>5);
+    r.push(0);
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)&31);
+    return r;
+  }
+  function convert5to8(d){
+    var acc=0,bits=0,out=[],i;
+    for(i=0;i<d.length;i++){
+      acc=(acc<<5)|d[i];bits+=5;
+      while(bits>=8){bits-=8;out.push((acc>>bits)&255);}
+    }
+    if(bits>=5||((acc<<(8-bits))&255))return null;
+    return out;
+  }
+  function bech32Parse(str){
+    var s=String(str).trim();
+    if(!s)return null;
+    var hasU=/[A-Z]/.test(s),hasL=/[a-z]/.test(s),i,c;
+    if(hasU&&hasL)return {err:"Mixed upper and lower case. BIP-173 allows one or the other, never both."};
+    for(i=0;i<s.length;i++){
+      c=s.charCodeAt(i);
+      if(c<33||c>126)return {err:"Character "+(i+1)+" is outside the printable range bech32 allows."};
+    }
+    var a=s.toLowerCase(),pos=a.lastIndexOf("1");
+    if(pos<0)return {err:"No separator. A bech32 string is a human-readable part, then the digit 1, then the data."};
+    if(pos<1)return {err:"The human-readable part is empty; something has to come before the separator."};
+    if(pos+7>a.length)return {err:"The data part is too short to hold a six-character checksum."};
+    var hrp=a.slice(0,pos),data=[],d;
+    for(i=pos+1;i<a.length;i++){
+      d=CS.indexOf(a.charAt(i));
+      if(d<0)return {err:"Character "+(i+1)+", "+a.charAt(i)+", is not in the 32-character bech32 alphabet, which leaves out 1, b, i and o."};
+      data.push(d);
+    }
+    var pm=polymod(hrpExpand(hrp).concat(data));
+    var enc=pm===1?"bech32":(pm===0x2bc830a3?"bech32m":null);
+    var out={hrp:hrp,enc:enc,ok:!!enc,groups:data.length-6,len:a.length,upper:hasU};
+    if(!enc)return out;
+    if(data.length>=7&&data[0]<=16){
+      var body=data.slice(1,data.length-6),prog=convert5to8(body),left=(body.length*5)%8;
+      if(!prog){
+        out.progErr=left>=5
+          ? "the data part leaves "+left+" bits over, and BIP-173 allows at most four bits of padding"
+          : "the padding bits at the end are not zero, which BIP-173 forbids";
+      }else if(prog.length<2||prog.length>40){
+        out.progErr="a witness program has to be 2 to 40 bytes, and this one is "+plural(prog.length,"byte");
+      }else{
+        out.ver=data[0];out.prog=prog;
+        out.encOk=(out.ver===0)?(enc==="bech32"):(enc==="bech32m");
+        out.type=(out.ver===0)?(prog.length===20?"P2WPKH":(prog.length===32?"P2WSH":"witness v0, non-standard length"))
+                :((out.ver===1&&prog.length===32)?"P2TR":"witness v"+out.ver);
+        out.script=(out.ver===0?"00":(0x50+out.ver).toString(16))
+          +(prog.length<16?"0":"")+prog.length.toString(16)+toHex(prog);
+      }
+    }
+    return out;
+  }
+
+  /* ---------- safety: refuse anything shaped like a recovery phrase ---------- */
+  function looksLikeSeed(s){
+    var t=String(s).replace(/\s+/g," ").trim();
+    if(!t||!/^[a-z ]+$/.test(t))return false;
+    var w=t.split(" "),n=w.length,i;
+    if(n!==12&&n!==15&&n!==18&&n!==21&&n!==24)return false;
+    for(i=0;i<n;i++)if(w[i].length<3||w[i].length>8)return false;
+    return true;
+  }
+
+  /* ---------- elements ---------- */
+  var IN=document.getElementById("hx-in"),
+      CNT=document.getElementById("hx-cnt"),
+      SEED=document.getElementById("hx-seed"),
+      FAILBOX=document.getElementById("hx-fail"),
+      FAILWHY=document.getElementById("hx-failwhy"),
+      VER=document.getElementById("hx-ver"),
+      STLAB=document.getElementById("hx-selft"),
+      STDESC=document.getElementById("hx-selfd");
+  var BYTECARDS=["sha","dsha","rmd","h160","b58e","flip"],
+      STRCARDS=["b58d","b32d"],
+      ALL=BYTECARDS.concat(STRCARDS);
+  var EL={},FOLLOW={},TOK={};
+  ALL.forEach(function(id){
+    EL[id]={i:document.getElementById("hx-i-"+id),o:document.getElementById("hx-o-"+id),
+            n:document.getElementById("hx-n-"+id),f:document.getElementById("hx-fol-"+id)};
+    FOLLOW[id]=1;TOK[id]=0;
+  });
+  var MODE="text",ready=false,failed=false;
+
+  var EX={
+    abc:{mode:"text",v:"abc"},
+    empty:{mode:"text",v:""},
+    pubkey:{mode:"hex",v:"0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"},
+    merkle:{mode:"hex",v:"3ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a"}
+  };
+
+  /* ---------- rendering helpers ---------- */
+  function row(lab,val,opt){
+    opt=opt||{};
+    return '<div class="hx-r'+(opt.cls?" "+opt.cls:"")+'"><i>'+esc(lab)+"</i><u>"+esc(val)+"</u>"
+      +(opt.copy?'<button type="button" class="hx-cp" data-c="'+esc(opt.copy)+'">copy</button>':"")
+      +"</div>";
+  }
+  function st(kind,text){return '<div class="hx-st hx-'+kind+'">'+esc(text)+"</div>";}
+  function note(text,warn){return '<div class="hx-note'+(warn?" hx-warn":"")+'">'+esc(text)+"</div>";}
+  function put(id,html){if(EL[id]&&EL[id].o)EL[id].o.innerHTML=html;}
+  function count(id,text){if(EL[id]&&EL[id].n)EL[id].n.textContent=text;}
+
+  /* ---------- turning a card's input into bytes ---------- */
+  function toBytes(raw){
+    var s=String(raw);
+    if(s.length>MAXCHARS)return {err:"That is longer than this page will take, "+grp(String(MAXCHARS))+" characters."};
+    if(MODE==="hex"){
+      var h=s.replace(/\s+/g,"").replace(/^0x/i,"");
+      if(!h.length)return {bytes:[]};
+      if(/[^0-9a-fA-F]/.test(h))return {err:"Hex mode takes 0 to 9 and a to f only. Switch to text mode to hash this as characters."};
+      if(h.length%2)return {err:"Hex needs an even number of characters; there are "+grp(String(h.length))+"."};
+      return {bytes:fromHex(h.toLowerCase())};
+    }
+    return {bytes:Array.prototype.slice.call(new TextEncoder().encode(s))};
+  }
+
+  /* ---------- the cards ---------- */
+  var CALC={
+    sha:function(b){
+      return sha256(b).then(function(h){
+        var x=toHex(h);
+        return st("ok","SHA-256")+row("Digest",x,{cls:"hx-key",copy:x})
+          +row("Length",plural(h.length,"byte")+", "+grp(String(h.length*8))+" bits",{cls:"hx-num"});
+      });
+    },
+    dsha:function(b){
+      return sha256(b).then(function(one){
+        return sha256(one).then(function(two){
+          var x=toHex(two),first=toHex(one),
+              rev=toHex(Array.prototype.slice.call(two).reverse());
+          return st("ok","SHA-256 applied twice")+row("Digest",x,{cls:"hx-key",copy:x})
+            +row("First pass",first,{copy:first})
+            +row("Reversed",rev,{copy:rev})
+            +note("The reversed line is how this hash would be printed if it were a transaction or block id.");
+        });
+      });
+    },
+    rmd:function(b){
+      var h=ripemd160(b),x=toHex(h);
+      return Promise.resolve(st("ok","RIPEMD-160")+row("Digest",x,{cls:"hx-key",copy:x})
+        +row("Length",plural(h.length,"byte")+", 160 bits",{cls:"hx-num"}));
+    },
+    h160:function(b){
+      return sha256(b).then(function(one){
+        var h=ripemd160(one),x=toHex(h);
+        return st("ok","RIPEMD-160 of SHA-256")+row("HASH160",x,{cls:"hx-key",copy:x})
+          +row("SHA-256 step",toHex(one),{copy:toHex(one)})
+          +note(b.length===33||b.length===65
+            ? "That input is public-key shaped, so those 20 bytes are what an address or a witness program would carry."
+            : "Feed this a 33-byte compressed or 65-byte uncompressed public key to get the payload of a real address.");
+      });
+    },
+    b58e:function(b){
+      var v=parseInt(VER.value,10),payload=[v].concat(b);
+      return sha256d(payload).then(function(c){
+        var full=payload.concat([c[0],c[1],c[2],c[3]]),s=b58encode(full),meta=B58VER[v],tail;
+        if(b.length===20)tail="Twenty bytes of payload, so this is a well-formed address of that type.";
+        else if(b.length===33||b.length===65)tail="Those bytes are a public key, not an address payload. An address carries the HASH160 of a key: copy the 20 bytes out of the HASH160 card, paste them here while hex mode is on, and a real address comes out.";
+        else tail="A real address of this type needs a 20-byte payload; this one has "+plural(b.length,"byte")+", so the string encodes correctly but it is not an address.";
+        return st("ok","Base58Check encoded")+row("Result",s,{cls:"hx-key",copy:s})
+          +row("Version",("0x"+(v<16?"0":"")+v.toString(16))+", "+meta[0]+", "+meta[1])
+          +row("Payload",b.length?toHex(b):"(empty)",{copy:toHex(b)})
+          +row("Checksum",toHex([c[0],c[1],c[2],c[3]])+", first 4 bytes of the double SHA-256")
+          +row("Total",plural(full.length,"byte")+" in, "+plural(s.length,"character")+" out",{cls:"hx-num"})
+          +note(tail);
+      });
+    },
+    flip:function(b){
+      var f=b.slice().reverse(),x=toHex(b),r=toHex(f),out;
+      out=st("ok","Bytes reversed")+row("As given",x||"(empty)",{copy:x})
+        +row("Reversed",r||"(empty)",{cls:"hx-key",copy:r})
+        +row("Length",plural(b.length,"byte"),{cls:"hx-num"});
+      if(b.length===1)out+=row("uint8",grp(String(b[0])),{cls:"hx-num"});
+      if(b.length===2){
+        out+=row("uint16 LE",grp(String(b[0]|(b[1]<<8))),{cls:"hx-num"});
+        out+=row("uint16 BE",grp(String((b[0]<<8)|b[1])),{cls:"hx-num"});
+      }
+      if(b.length===4){
+        out+=row("uint32 LE",grp(String(((b[0]|(b[1]<<8)|(b[2]<<16))>>>0)+b[3]*16777216)),{cls:"hx-num"});
+        out+=row("uint32 BE",grp(String(((b[3]|(b[2]<<8)|(b[1]<<16))>>>0)+b[0]*16777216)),{cls:"hx-num"});
+      }
+      if(b.length===8&&typeof BigInt!=="undefined"){
+        var lo=BigInt(0),hi=BigInt(0),k,sats;
+        for(k=7;k>=0;k--)lo=(lo*BigInt(256))+BigInt(b[k]);
+        for(k=0;k<8;k++)hi=(hi*BigInt(256))+BigInt(b[k]);
+        out+=row("uint64 LE",grp(lo.toString()),{cls:"hx-num"});
+        out+=row("uint64 BE",grp(hi.toString()),{cls:"hx-num"});
+        sats=lo.toString();
+        while(sats.length<9)sats="0"+sats;
+        out+=row("As BTC",grp(sats.slice(0,sats.length-8))+"."+sats.slice(sats.length-8),{cls:"hx-num"});
+        out+=note("Transaction output amounts are exactly this: eight bytes of little endian satoshis, which is why the LE reading is the one a decoder uses.");
+      }
+      if(b.length===32)out+=note("Thirty-two bytes, so this is the length of a txid, a block hash or a merkle root, and the reversed line is the other way round from however you got it.");
+      return Promise.resolve(out);
+    }
+  };
+
+  function decodeB58(raw){
+    var s=String(raw).trim();
+    if(!s)return Promise.resolve(st("mut","Waiting for a base58 string")
+      +note("Legacy addresses starting with 1 or 3, or testnet addresses starting with m, n or 2. Private keys are refused."));
+    var b=b58decode(s);
+    if(!b)return Promise.resolve(st("bad","Not base58")
+      +note("Base58 leaves out the digit 0, capital O, capital I and lower case l, because they are easy to confuse. One of those, a space or a punctuation mark is in this string.",true));
+    if(b.length<5)return Promise.resolve(st("bad","Too short")
+      +note("A Base58Check string needs at least a version byte and a four-byte checksum.",true));
+    var pre4=toHex(b.slice(0,4));
+    if(B58SECRET[b[0]]||(XPREFIX[pre4]&&XPREFIX[pre4][1])){
+      EL.b58d.i.value="";
+      return Promise.resolve(st("bad","Refused: that is a private key")
+        +note("The version byte says this is "+(B58SECRET[b[0]]||XPREFIX[pre4][0])+", so it was cleared and nothing was decoded. Anything that can spend coins belongs on an offline machine, never in a web page, and a key that has been pasted into a browser should be treated as spent already.",true));
+    }
+    var body=b.slice(0,b.length-4),tail=b.slice(b.length-4);
+    return sha256d(body).then(function(c){
+      var good=c[0]===tail[0]&&c[1]===tail[1]&&c[2]===tail[2]&&c[3]===tail[3];
+      var out=good?st("ok","Checksum valid"):st("bad","Checksum fails");
+      var xp=XPREFIX[pre4]&&b.length===82?XPREFIX[pre4][0]:null;
+      var meta=B58VER[b[0]];
+      out+=row("Total",plural(b.length,"byte")+", "+plural(s.length,"character")+" of base58",{cls:"hx-num"});
+      if(xp){
+        out+=row("Version",pre4+", "+xp);
+        out+=row("Checksum",toHex(tail)+(good?", matches":", expected "+toHex(c.slice(0,4))));
+        out+=note("The payload is not printed. An extended public key derives every address in a wallet, so pasting one anywhere exposes the whole history at once; treat it as private even though it cannot spend.");
+        return out;
+      }
+      out+=row("Version",("0x"+(b[0]<16?"0":"")+b[0].toString(16))+", "+(meta?meta[0]+", "+meta[1]:"not a version bitcoin uses"));
+      out+=row("Payload",toHex(body.slice(1)),{cls:"hx-key",copy:toHex(body.slice(1))});
+      out+=row("Payload size",plural(body.length-1,"byte"),{cls:"hx-num"});
+      out+=row("Checksum",toHex(tail)+(good?", matches the double SHA-256":", but the body hashes to "+toHex(c.slice(0,4))));
+      if(good&&meta)out+=note("The payload is the "+meta[2]+".");
+      else if(good)out+=note("The string is internally consistent, but that version byte is not one bitcoin assigns to an address.");
+      else out+=note("One or more characters are wrong. Do not send anything to this string. The address validator can often point at the single character that changed.",true);
+      return out;
+    });
+  }
+
+  function decodeB32(raw){
+    var s=String(raw).trim();
+    if(!s)return st("mut","Waiting for a bech32 string")
+      +note("Native segwit addresses starting with bc1q, taproot addresses starting with bc1p, or any other bech32 string you want the checksum checked on.");
+    var r=bech32Parse(s);
+    if(r&&r.err)return st("bad","Cannot parse")+note(r.err,true);
+    var out=r.ok?st("ok","Checksum valid, "+r.enc):st("bad","Checksum fails");
+    out+=row("Human part",r.hrp+(r.hrp==="bc"?", mainnet":(r.hrp==="tb"?", testnet":(r.hrp==="bcrt"?", regtest":""))),{cls:"hx-key"});
+    out+=row("Encoding",r.enc?(r.enc==="bech32"?"bech32, checksum constant 1":"bech32m, checksum constant 0x2bc830a3"):"neither constant matches");
+    out+=row("Data groups",plural(r.groups,"group")+" of 5 bits, plus a 6-character checksum",{cls:"hx-num"});
+    if(!r.ok){
+      out+=note("At least one character is wrong. Bech32 catches up to four such errors with certainty, so a failure here is real; do not send to this string.",true);
+      return out;
+    }
+    if(r.prog){
+      out+=row("Witness version",String(r.ver)+(r.ver===0?", segwit v0":(r.type==="P2TR"?", taproot":"")),{cls:"hx-num"});
+      out+=row("Program",toHex(r.prog),{cls:"hx-key",copy:toHex(r.prog)});
+      out+=row("Program size",plural(r.prog.length,"byte"),{cls:"hx-num"});
+      out+=row("Script",r.script,{copy:r.script});
+      out+=row("Type",r.type);
+      if(!r.encOk)out+=note("Version "+r.ver+" must use "+(r.ver===0?"bech32":"bech32m")+", but this string uses "+r.enc+". BIP-350 split the two after a flaw was found in the original constant, and wallets reject the mismatch.",true);
+      else if(r.len>90)out+=note("Longer than the 90 characters BIP-173 allows for an address, so the checksum guarantee no longer holds even though it matches here.",true);
+      else out+=note("The script line is the scriptPubKey this address pays to: the witness version as an opcode, a push of the program length, then the program.");
+    }else if(r.progErr){
+      out+=note("The checksum is good, so this was typed correctly, but it is not a usable address: "+r.progErr+". A wallet would reject it.",true);
+    }else{
+      out+=note(r.len>90
+        ? "The checksum is good, but the data does not decode as a witness program, and at "+r.len+" characters this is longer than an address. Lightning invoices and other bech32 payloads look like this."
+        : "The checksum is good, but the data does not decode as a witness program, so this is bech32 carrying something other than an address.");
+    }
+    return out;
+  }
+
+  /* ---------- driving the cards ---------- */
+  function runByteCard(id){
+    if(failed||!ready)return;
+    /* the token moves first, so a hash still in flight from an earlier
+       keystroke can never paint over a refusal or an error below */
+    var t=++TOK[id],raw=EL[id].i.value;
+    if(MODE==="text"&&looksLikeSeed(raw)){
+      EL[id].i.value="";
+      if(FOLLOW[id]){IN.value="";shared();}
+      showSeed();
+      ++TOK[id];
+      put(id,st("bad","Refused")+note("That looked like a recovery phrase, so it was cleared and nothing was computed.",true));
+      count(id,"");
+      return;
+    }
+    var r=toBytes(raw);
+    if(r.err){put(id,st("bad","Cannot read the input")+note(r.err,true));count(id,"");return;}
+    count(id,plural(r.bytes.length,"byte")+" in");
+    CALC[id](r.bytes).then(function(html){
+      if(t!==TOK[id])return;
+      put(id,html);
+    })["catch"](function(){
+      if(t!==TOK[id])return;
+      put(id,st("bad","Computation failed")+note("This browser refused to run the hash. crypto.subtle needs a secure context, which every visit to this site over https has.",true));
+    });
+  }
+  function runStrCard(id){
+    if(failed||!ready)return;
+    if(id==="b32d"){put(id,decodeB32(EL[id].i.value));return;}
+    var t=++TOK[id];
+    decodeB58(EL[id].i.value).then(function(html){
+      if(t!==TOK[id])return;
+      put(id,html);
+    });
+  }
+  function runAll(){
+    BYTECARDS.forEach(runByteCard);
+    STRCARDS.forEach(runStrCard);
+  }
+  function showSeed(){
+    SEED.hidden=false;
+    try{SEED.scrollIntoView({block:"nearest"});}catch(e){}
+  }
+  function shared(){
+    var v=IN.value;
+    if(MODE==="text"&&looksLikeSeed(v)){
+      IN.value="";
+      BYTECARDS.forEach(function(id){if(FOLLOW[id])EL[id].i.value="";});
+      showSeed();
+      CNT.textContent="0 bytes";
+      BYTECARDS.forEach(runByteCard);
+      return;
+    }
+    var r=toBytes(v);
+    CNT.textContent=r.err?"unreadable":plural(r.bytes.length,"byte");
+    BYTECARDS.forEach(function(id){
+      if(FOLLOW[id])EL[id].i.value=v;
+      runByteCard(id);
+    });
+  }
+  function setFollow(id,on){
+    FOLLOW[id]=on?1:0;
+    EL[id].f.textContent=on?"following shared input":"own input";
+    EL[id].f.classList.toggle("is-own",!on);
+    var btn=document.querySelector('.hx-re[data-fn="'+id+'"]');
+    if(btn)btn.hidden=!!on;
+  }
+
+  /* ---------- self-test ---------- */
+  function fail(why){
+    failed=true;
+    console.error("[/tools/hash] self-test FAILED: "+why);
+    FAILWHY.textContent="A check this page runs on load did not match its known answer ("+why
+      +"). Rather than show a digest that might be wrong, every card has been switched off. Please tell us so it can be fixed.";
+    FAILBOX.hidden=false;
+    if(STLAB){STLAB.textContent="Self-test failed";STLAB.style.color="var(--down)";}
+    if(STDESC)STDESC.textContent=why;
+    ALL.forEach(function(id){
+      EL[id].i.setAttribute("disabled","disabled");
+      put(id,st("bad","Self-test failed")+note("This function is switched off until the page checks out against its known answers.",true));
+      count(id,"");
+    });
+    IN.setAttribute("disabled","disabled");
+    if(VER)VER.setAttribute("disabled","disabled");
+    document.querySelectorAll(".hx-ex button, .hx-m, .hx-re").forEach(function(b){b.setAttribute("disabled","disabled");});
+  }
+  function selfTest(){
+    var checks=0;
+    function eq(name,got,want){
+      checks++;
+      if(String(got)!==String(want))throw new Error(name+": got "+got+", expected "+want);
+    }
+    if(!window.crypto||!crypto.subtle||!crypto.subtle.digest){
+      fail("crypto.subtle is unavailable in this browser");
+      return;
+    }
+    if(typeof TextEncoder==="undefined"){
+      fail("TextEncoder is unavailable in this browser");
+      return;
+    }
+    var T=function(s){return Array.prototype.slice.call(new TextEncoder().encode(s));};
+    var PUB="0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6";
+    var MERKLE="3ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a";
+    try{
+      /* RIPEMD-160, the vectors from the 1996 specification */
+      eq('ripemd160("")',toHex(ripemd160(T(""))),"9c1185a5c5e9fc54612808977ee8f548b2258d31");
+      eq('ripemd160("a")',toHex(ripemd160(T("a"))),"0bdc9d2d256b3ee9daae347be6f4dc835a467ffe");
+      eq('ripemd160("abc")',toHex(ripemd160(T("abc"))),"8eb208f7e05d987a9b044a8e98c6b087f15a0bfc");
+      eq('ripemd160("message digest")',toHex(ripemd160(T("message digest"))),"5d0689ef49d2fae572b881b123a85ffa21595f36");
+      eq("ripemd160(alphabet)",toHex(ripemd160(T("abcdefghijklmnopqrstuvwxyz"))),"f71c27109c692c1b56bbdceb5b9d2865b3708dbc");
+      eq("ripemd160(80 digits)",toHex(ripemd160(T("12345678901234567890123456789012345678901234567890123456789012345678901234567890"))),"9b752e45573d4b39f4dbd3323cab82bf63326bfb");
+      /* base58 edge cases: leading zeros and the base itself */
+      eq("b58encode([0])",b58encode([0]),"1");
+      eq("b58encode([0,0,1])",b58encode([0,0,1]),"112");
+      eq("b58encode([58])",b58encode([58]),"21");
+      /* bech32 and bech32m, BIP-173 and BIP-350 */
+      var w=bech32Parse("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4");
+      eq("BIP-173 encoding",w.enc,"bech32");
+      eq("BIP-173 hrp",w.hrp,"bc");
+      eq("BIP-173 witness version",w.ver,0);
+      eq("BIP-173 program",toHex(w.prog),"751e76e8199196d454941c45d1b3a323f1433bd6");
+      eq("BIP-173 script",w.script,"0014751e76e8199196d454941c45d1b3a323f1433bd6");
+      eq("BIP-173 type",w.type,"P2WPKH");
+      var p=bech32Parse("bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0");
+      eq("BIP-350 encoding",p.enc,"bech32m");
+      eq("BIP-350 witness version",p.ver,1);
+      eq("BIP-350 program",toHex(p.prog),"79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
+      eq("BIP-350 script",p.script,"512079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
+      eq("BIP-350 type",p.type,"P2TR");
+      eq("tampered bech32 rejected",bech32Parse("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5").ok,false);
+      eq("BIP-173 A12UEL5L valid",bech32Parse("A12UEL5L").ok,true);
+      eq("BIP-173 A12UEL5L hrp",bech32Parse("A12UEL5L").hrp,"a");
+      eq("mixed case rejected",!!bech32Parse("bc1QW508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4").err,true);
+      /* byte order */
+      eq("merkle root reversed",toHex(fromHex(MERKLE).reverse()),
+        "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
+      /* the seed guard has to actually fire */
+      eq("seed guard fires",looksLikeSeed("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"),true);
+      eq("seed guard leaves prose alone",looksLikeSeed("the quick brown fox jumps over the lazy dog"),false);
+    }catch(e){fail(e&&e.message?e.message:"an assertion failed");return;}
+    /* the asynchronous half: SHA-256, HASH160 and both address formats */
+    Promise.all([
+      sha256(T("")),sha256(T("abc")),sha256d(T("")),sha256d(T("abc")),
+      hash160(fromHex(PUB)),
+      decodeB58("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"),
+      decodeB58("3P14159f73E4gFr7JterCCQh9QjiTjiZrG"),
+      decodeB58("1A1zP1eP5QGefi2DMPTfTL5SLmv7Divfna")
+    ]).then(function(r){
+      var h;
+      eq('sha256("")',toHex(r[0]),"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+      eq('sha256("abc")',toHex(r[1]),"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+      eq('sha256d("")',toHex(r[2]),"5df6e0e2761359d30a8275058e299fcc0381534545f55cf43e41983f5d4c9456");
+      eq('sha256d("abc")',toHex(r[3]),"4f8b42c22dd3729b519ba6f68d2da7cc5b2d606d05daed5ad5128cc03e6c6358");
+      eq("hash160(public key)",toHex(r[4]),"010966776006953d5567439e5e39f86a0d273bee");
+      /* the genesis address decodes, the P2SH one names its version, and a
+         single wrong character has to be caught */
+      eq("genesis address checksum",r[5].indexOf("Checksum valid")>=0,true);
+      eq("genesis address payload",r[5].indexOf("62e907b15cbf27d5425399ebf6f0fb50ebb88f18")>=0,true);
+      eq("genesis address version",r[5].indexOf("0x00, P2PKH address, mainnet")>=0,true);
+      eq("P2SH address version",r[6].indexOf("0x05, P2SH address, mainnet")>=0,true);
+      eq("one wrong character caught",r[7].indexOf("Checksum fails")>=0,true);
+      /* base58check encode, round tripping the same hash160 back to 16UwLL... */
+      var payload=[0].concat(Array.prototype.slice.call(r[4]));
+      return sha256d(payload).then(function(c){
+        h=b58encode(payload.concat([c[0],c[1],c[2],c[3]]));
+        eq("base58check encode",h,"16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM");
+        ready=true;
+        console.log("[/tools/hash] self-test passed, "+checks+" checks (SHA-256 on the empty string and abc, double SHA-256, six RIPEMD-160 specification vectors, HASH160 and a Base58Check round trip to 16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM, genesis and P2SH address decode with a one-character tamper caught, BIP-173 and BIP-350 address decode, byte order flip)");
+        if(STLAB)STLAB.textContent=checks+" checks passed";
+        if(STDESC)STDESC.textContent="SHA-256 on the empty string and abc, double SHA-256, six RIPEMD-160 vectors from the specification, HASH160 and a Base58Check round trip, the genesis address decoded, BIP-173 and BIP-350 addresses decoded, and a byte order flip.";
+        shared();
+        STRCARDS.forEach(runStrCard);
+      });
+    })["catch"](function(e){fail(e&&e.message?e.message:"an assertion failed");});
+  }
+
+  /* ---------- wiring ---------- */
+  var deb=null;
+  IN.addEventListener("input",function(){
+    SEED.hidden=true;
+    clearTimeout(deb);
+    deb=setTimeout(shared,120);
+  });
+  document.querySelectorAll(".hx-m").forEach(function(b){
+    b.addEventListener("click",function(){
+      MODE=b.dataset.m;
+      document.querySelectorAll(".hx-m").forEach(function(x){x.classList.toggle("is-on",x===b);});
+      IN.placeholder=MODE==="hex"?"616263":"abc";
+      BYTECARDS.forEach(function(id){EL[id].i.placeholder=MODE==="hex"?"hex bytes":"text";});
+      shared();
+    });
+  });
+  document.querySelectorAll(".hx-ex button[data-ex]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var ex=EX[b.dataset.ex];
+      SEED.hidden=true;
+      if(ex.mode!==MODE){
+        var m=document.querySelector('.hx-m[data-m="'+ex.mode+'"]');
+        MODE=ex.mode;
+        document.querySelectorAll(".hx-m").forEach(function(x){x.classList.toggle("is-on",x===m);});
+        IN.placeholder=MODE==="hex"?"616263":"abc";
+        BYTECARDS.forEach(function(id){EL[id].i.placeholder=MODE==="hex"?"hex bytes":"text";});
+      }
+      IN.value=ex.v;
+      BYTECARDS.forEach(function(id){setFollow(id,true);});
+      shared();
+    });
+  });
+  BYTECARDS.forEach(function(id){
+    EL[id].i.addEventListener("input",function(){
+      if(EL[id].i.value!==IN.value)setFollow(id,false);
+      runByteCard(id);
+    });
+  });
+  STRCARDS.forEach(function(id){
+    EL[id].i.addEventListener("input",function(){runStrCard(id);});
+  });
+  document.querySelectorAll(".hx-re").forEach(function(b){
+    b.addEventListener("click",function(){
+      var id=b.dataset.fn;
+      setFollow(id,true);
+      EL[id].i.value=IN.value;
+      runByteCard(id);
+    });
+  });
+  VER.addEventListener("change",function(){runByteCard("b58e");});
+  document.querySelectorAll("button[data-b58]").forEach(function(b){
+    b.addEventListener("click",function(){
+      EL.b58d.i.value=b.dataset.b58;
+      runStrCard("b58d");
+    });
+  });
+  document.querySelectorAll("button[data-b32]").forEach(function(b){
+    b.addEventListener("click",function(){
+      EL.b32d.i.value=b.dataset.b32;
+      runStrCard("b32d");
+    });
+  });
+  document.addEventListener("click",function(e){
+    var b=e.target&&e.target.closest?e.target.closest(".hx-cp"):null;
+    if(!b)return;
+    var v=b.getAttribute("data-c"),label=b.textContent;
+    function done(t){b.textContent=t;setTimeout(function(){b.textContent=label;},1200);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(v).then(function(){done("copied");},function(){done("select it");});
+    }else done("select it");
+  });
+
+  IN.value="abc";
+  BYTECARDS.forEach(function(id){EL[id].i.placeholder="text";});
+  selfTest();
+})();
+</script>
+</Base>

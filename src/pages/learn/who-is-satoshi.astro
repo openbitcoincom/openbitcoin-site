@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Who Is Satoshi Nakamoto? What Is Known and What Is Not - OpenBitcoin" description="Who is Satoshi Nakamoto? The verifiable record: the 2008 whitepaper, the 2009 genesis block, the 2011 silence, and why the mystery still holds today.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Who is Satoshi Nakamoto?</h1>
+    <p class="doc-lede">Nobody has proven who created Bitcoin, and the network does not need anyone to. This page keeps three things separate that are usually blended: what is verifiable, what is estimated, and what courts have actually found.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ws-card">
+      <div class="ws-tlab">The verifiable record</div>
+      <p class="ws-p">Satoshi Nakamoto is the name attached to a specific body of public work. The work is real and checkable regardless of who produced it.</p>
+      <div class="ws-rec">
+        <div class="ws-rrow"><b>Oct 31, 2008</b><span>Posted <a href="/learn/whitepaper">the whitepaper</a>, "Bitcoin: A Peer-to-Peer Electronic Cash System," to a cryptography mailing list under the name Satoshi Nakamoto.</span></div>
+        <div class="ws-rrow"><b>Jan 3, 2009</b><span>Mined the genesis block, block 0 of the chain every <a href="/nodes">node</a> still verifies today. Its coinbase carries a newspaper headline from that day about bank bailouts.</span></div>
+        <div class="ws-rrow"><b>Jan 2009</b><span>Released the first Bitcoin client, software Satoshi wrote and then maintained in public.</span></div>
+        <div class="ws-rrow"><b>2009 to 2010</b><span>Posted publicly on the project's mailing list and forum, answering questions, shipping fixes, and gradually handing the code to other developers.</span></div>
+        <div class="ws-rrow"><b>Spring 2011</b><span>Sent the messages widely accepted as the last, saying he had moved on to other things. Nothing verifiably from Satoshi has appeared since.</span></div>
+      </div>
+    </div>
+
+    <div class="ws-card ws-mt">
+      <div class="ws-tlab">What is estimated, not known</div>
+      <div class="ws-est">
+        <div class="ws-efig">~1,000,000 BTC <i class="ws-etag">estimate</i></div>
+        <div class="ws-esub">commonly attributed to Satoshi's early mining. Never moved.</div>
+      </div>
+      <p class="ws-p ws-pm">In Bitcoin's first months, Satoshi was one of very few miners, and researchers later identified a distinctive pattern in how many early blocks were mined. Coins in blocks matching that pattern have never been spent. The attribution of the pattern and the total are estimates built on that research, not facts recorded on the chain, which is why the figure above carries a label. What the chain does show is narrower: the specific early coins people point to as Satoshi's have sat untouched for more than fifteen years.</p>
+    </div>
+
+    <div class="ws-card ws-mt">
+      <div class="ws-tlab">Why the mystery holds</div>
+      <p class="ws-p">Bitcoin makes proving you are Satoshi easy and faking it hard. The real Satoshi could settle the question in one move: sign a message with a key from the earliest blocks, or spend one of the coins attributed to him. Since the 2011 silence, no such signature has appeared, no attributed coin has moved, and no identity claim has passed that test. That is the whole state of the evidence. Everything beyond it is inference from writing style, time zones, and code habits, which can narrow a search but cannot prove an identity.</p>
+    </div>
+
+    <div class="ws-card ws-mt">
+      <div class="ws-tlab">The people journalists named</div>
+      <p class="ws-p">Over the years, reporters and researchers have speculated about several figures from the small world of pre-Bitcoin digital cash. Naming them here repeats the speculation, not an accusation: each of them denied being Satoshi, and no proof has ever connected any of them to the keys.</p>
+      <div class="ws-cands">
+        <div class="ws-cand">
+          <div class="ws-cname">Hal Finney</div>
+          <p class="ws-cwhy">Cryptographer, an early contributor to the code, and the recipient of the first bitcoin transaction, sent by Satoshi in January 2009.</p>
+          <div class="ws-cden">Denied it. Died in 2014.</div>
+          <figure class="ws-photo">
+            <img src="/img/people/hal-finney-1972.jpg" alt="Hal Finney as a teenager in 1972, working at a blackboard" loading="lazy" width="960" height="966">
+            <figcaption>Finney in 1972, the only freely licensed photograph of him. <a href="https://commons.wikimedia.org/wiki/File:Hal_Finney_doing_math.jpg" target="_blank" rel="noopener noreferrer">Daily News-Post, public domain</a></figcaption>
+          </figure>
+        </div>
+        <div class="ws-cand">
+          <div class="ws-cname">Nick Szabo</div>
+          <p class="ws-cwhy">Designed bit gold, a precursor to Bitcoin's design; writing-style comparisons kept his name in circulation.</p>
+          <div class="ws-cden">Has repeatedly denied it.</div>
+          <figure class="ws-photo ws-nophoto">
+            <span>No freely licensed photograph of him exists, which says something in itself.</span>
+          </figure>
+        </div>
+        <div class="ws-cand">
+          <div class="ws-cname">Adam Back</div>
+          <p class="ws-cwhy">Invented Hashcash, the proof-of-work scheme the whitepaper cites, and was among the first people Satoshi emailed.</p>
+          <div class="ws-cden">Has repeatedly denied it.</div>
+          <figure class="ws-photo">
+            <img src="/img/people/adam-back-2025.webp" alt="Adam Back, portrait photograph, 2025" loading="lazy" width="500" height="750">
+            <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Portrait_Adam_Back_photographe_Alexandre_Sitter.webp" target="_blank" rel="noopener noreferrer">Alexandre Sitter, CC BY-SA 4.0</a>, via Wikimedia Commons</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-card ws-mt ws-court">
+      <div class="ws-tlab">Craig Wright: the court record</div>
+      <p class="ws-p">One man spent years asserting under oath that he is Satoshi. This section reports what a court found, and nothing else.</p>
+      <div class="ws-crows">
+        <div class="ws-crow"><b>Finding</b><span>In COPA v Wright (2024), the UK High Court found that Craig Wright is not the author of the bitcoin whitepaper, is not the person who operated as Satoshi Nakamoto from 2008 to 2011, did not create the Bitcoin system, and did not write its original software.</span></div>
+        <div class="ws-crow"><b>Forgery</b><span>The court found that Wright had forged documents "on a grand scale" in support of his claim and had repeatedly lied to the court.</span></div>
+        <div class="ws-crow"><b>Injunction</b><span>The court subsequently issued orders restraining Wright from bringing or threatening legal action asserting that he is Satoshi Nakamoto, and required him to publicise the judgment.</span></div>
+        <div class="ws-crow"><b>Contempt</b><span>In December 2024, the court found Wright in contempt for breaching those orders and imposed a prison sentence, suspended for two years.</span></div>
+      </div>
+      <p class="ws-fine">Each statement above is the court's finding, as recorded in the COPA v Wright judgments, not this site's characterization.</p>
+    </div>
+
+    <div class="ws-card ws-mt ws-close">
+      <div class="ws-tlab">Why it matters that it does not matter</div>
+      <p class="ws-p">Bitcoin was built so that its creator's identity would be irrelevant, and the creator's disappearance proved the design. Every rule of the system is enforced by <a href="/nodes">thousands of independent nodes</a> checking every block against the same code; none of them ask who wrote it. If Satoshi returned tomorrow, signed a message, and demanded a change, his signature would buy him exactly as much authority as yours: none. The <a href="/learn/whitepaper">whitepaper</a> proposed replacing trust in people with verification by machines, and the author making himself unnecessary was the first demonstration that it works.</p>
+    </div>
+
+    <div class="ws-about doc-prose">
+      <p>Satoshi Nakamoto wrote <a href="/learn/whitepaper">the whitepaper</a>, mined the genesis block, released the first client, and left. Everything else is estimate, speculation, or a court record, and this page keeps those labels attached. For what the system he left behind actually does, start with <a href="/learn/what-is-bitcoin">what is bitcoin</a>, see the network of <a href="/nodes">reachable nodes</a> enforcing its rules today, or browse the rest of the <a href="/learn">learn guides</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Timeline</div>
+      <div class="ws-tl">
+        <div class="ws-trow"><b>2008</b><span>Whitepaper posted to a cryptography mailing list</span></div>
+        <div class="ws-trow"><b>2009</b><span>Genesis block mined, first client released</span></div>
+        <div class="ws-trow"><b>2011</b><span>Last accepted messages, then silence</span></div>
+      </div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/whitepaper">The whitepaper, typeset</a>
+        <a href="/learn/what-is-bitcoin">What is bitcoin</a>
+        <a href="/nodes">Reachable nodes right now</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ws-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .ws-mt{margin-top:14px}
+  .ws-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ws-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .ws-pm{margin-top:14px}
+  .ws-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ws-p a:hover{border-bottom-style:solid}
+  .ws-rec{display:grid;gap:8px;margin-top:14px}
+  .ws-rrow{display:grid;grid-template-columns:110px 1fr;gap:14px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px}
+  .ws-rrow b{font:700 11px var(--mono);letter-spacing:.04em;color:var(--acc);font-variant-numeric:tabular-nums;padding-top:2px}
+  .ws-rrow span{font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .ws-rrow a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ws-rrow a:hover{border-bottom-style:solid}
+  .ws-est{background:var(--field);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:16px 18px;text-align:center}
+  .ws-efig{font:800 30px/1.1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .ws-etag{display:inline-block;vertical-align:middle;font:700 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;font-style:normal;color:var(--acc);border:1px solid rgba(247,147,26,.45);border-radius:99px;padding:3px 9px;margin-left:10px}
+  .ws-esub{font:600 11.5px var(--mono);letter-spacing:.03em;color:var(--ink-3);margin-top:7px}
+  .ws-cands{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .ws-cand{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px;min-width:0;display:flex;flex-direction:column}
+  .ws-photo{margin:12px 0 0;padding-top:12px;border-top:1px dotted var(--line-2)}
+  .ws-photo img{width:100%;height:210px;object-fit:cover;object-position:center 22%;border-radius:8px;display:block}
+  .ws-photo figcaption{font:500 10px/1.5 var(--sans);color:var(--ink-3);margin-top:6px}
+  .ws-photo figcaption a{color:var(--ink-3);text-decoration:none;border-bottom:1px dotted var(--line-2)}
+  .ws-photo figcaption a:hover{color:var(--acc)}
+  .ws-nophoto{display:flex;align-items:center;justify-content:center;min-height:210px;background:var(--panel-2);
+    border:1px dashed var(--line-2);border-radius:8px;margin-top:12px;padding:16px}
+  .ws-nophoto span{font:500 12px/1.6 var(--sans);color:var(--ink-3);text-align:center;font-style:italic}
+  .ws-cname{font:700 13px var(--mono);letter-spacing:.05em;color:var(--ink)}
+  .ws-cwhy{font:500 12.5px/1.6 var(--sans);color:var(--ink-2);margin:8px 0 0;flex:1}
+  .ws-cden{font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:11px;padding-top:9px;border-top:1px dotted var(--line-2)}
+  .ws-court{border-color:rgba(246,70,93,.42)}
+  .ws-crows{display:grid;gap:8px;margin-top:13px}
+  .ws-crow{display:grid;grid-template-columns:96px 1fr;gap:14px;border:1px solid var(--line-2);background:var(--panel-2);border-radius:10px;padding:12px 15px}
+  .ws-crow b{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--down);padding-top:2px}
+  .ws-crow span{font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .ws-fine{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin:11px 0 0}
+  .ws-close{border-color:rgba(255,166,60,.38)}
+  .ws-about{margin-top:14px}
+  .ws-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ws-tl{display:grid;gap:0}
+  .ws-trow{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ws-trow:last-child{border-bottom:0}
+  .ws-trow b{font:700 12px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .ws-trow span{font:500 11.5px/1.5 var(--sans);color:var(--ink-2)}
+  @media(max-width:900px){.ws-cands{grid-template-columns:1fr}}
+  @media(max-width:560px){
+    .ws-rrow{grid-template-columns:1fr;gap:4px}
+    .ws-crow{grid-template-columns:1fr;gap:4px}
+    .ws-efig{font-size:24px}
+  }
+</style>
+</Base>

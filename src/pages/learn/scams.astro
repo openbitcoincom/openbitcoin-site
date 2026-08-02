@@ -1,0 +1,146 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base analytics={false} title="Common Bitcoin Scams: How Each One Works and the Defense - OpenBitcoin" description="Common bitcoin scams and how to avoid them: giveaway doubling, seed phishing, pig butchering, address poisoning, fake support, and recovery scams.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Common bitcoin scams</h1>
+    <p class="doc-lede">Six families cover nearly every bitcoin scam in circulation. Each card explains how the scam works, the one detail that gives it away, and the habit that defeats it. If something already happened, <a class="ss-jump" href="#ss-crisis">start with the last section</a>.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ss-card">
+      <div class="ss-chead"><span class="ss-num">01</span><h2>Giveaway and doubling scams</h2></div>
+      <p class="ss-how">A stream, post, or video announces that any bitcoin you send to an address will be returned doubled, usually fronted by a deepfaked celebrity or a hijacked verified account. The video is often a real interview with a fake overlay, and the account can have millions of followers. Everything sent to the address is simply kept.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>You are asked to send coins first in order to receive more back. That is the whole scam, in any costume.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>Nobody doubles money. Do not send, and do not test it with a small amount; the small amount is what they wanted.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt">
+      <div class="ss-chead"><span class="ss-num">02</span><h2>Seed phishing</h2></div>
+      <p class="ss-how">Fake wallet apps in app stores, look-alike wallet websites, and "support" pages ask you to enter your 12 or 24 word seed phrase to validate, sync, migrate, or unlock your wallet. The seed is the wallet: anyone who has the words has the coins, from anywhere, immediately, and no validation step on any website has ever needed it.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>Anything, anywhere, asks you to type your seed: a website, a form, a pop-up, a chat, an app you did not install on purpose to restore into.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>The seed lives on paper or metal and goes into wallet software only during a restore you started yourself. Never type it into a website, never photograph it, never read it to anyone. The <a href="/learn/self-custody">self-custody guide</a> covers how to store it.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt">
+      <div class="ss-chead"><span class="ss-num">03</span><h2>Fake exchanges and investment platforms</h2></div>
+      <p class="ss-how">A stranger builds trust for weeks, often starting from a dating app or a wrong-number text, then introduces the trading platform where they are making steady profits. This is the "pig butchering" scam. Small withdrawals work at first, the on-screen balance grows, and when you finally try to cash out for real, the platform invents a tax, a fee, or an unlock deposit, and each payment surfaces another.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>Profits that exist only on their website, and a withdrawal that always needs one more fee paid separately.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>Never fund a platform that a new contact steered you to, however long the relationship has run. No real exchange charges a separately paid fee to release your own money; the first such demand is the confirmation. Stop paying.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt">
+      <div class="ss-chead"><span class="ss-num">04</span><h2>Address poisoning</h2></div>
+      <p class="ss-how">The attacker plants a look-alike address in your wallet's transaction history by sending you dust from an address ground to match the first and last characters of one you actually use. Later you copy the address from history, glance at the ends, and hand the payment to the attacker yourself.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>Matching first and last characters with a completely different middle, which is exactly what a wallet's shortened address display hides.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>Never copy an address from your transaction history; take it from the source every time. The <a href="/learn/address-poisoning">full guide</a> walks through the attack character by character.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt">
+      <div class="ss-chead"><span class="ss-num">05</span><h2>Impersonated support</h2></div>
+      <p class="ss-how">Post about a wallet problem in a forum or a Discord and "support" arrives in your DMs within minutes, polite, patient, and wearing the project's logo. The email version warns that your wallet or account is at risk and links to the fix. The fix always ends at your seed phrase or at a deposit address.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>They contacted you first, and solving the problem somehow involves your seed or sending coins.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>Nobody legitimate DMs first, and no support, real or fake, ever needs your seed. Reach support only by navigating to the official site yourself, from your own bookmark, and treat every inbound "fix" as hostile.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt">
+      <div class="ss-chead"><span class="ss-num">06</span><h2>Recovery scams</h2></div>
+      <p class="ss-how">This is the second strike. After a scam, "recovery agents," "blockchain investigators," and "ethical hackers" appear in replies, DMs, and search ads, offering to trace and retrieve your stolen coins for an upfront fee. Victim lists are resold, so the pitch often comes from the same operation that took the coins, and it works because it arrives exactly when you want to believe it.</p>
+      <div class="ss-rows">
+        <div class="ss-row ss-tell"><b>The tell</b><span>An upfront fee, or your remaining keys, in exchange for recovering coins a scammer already controls.</span></div>
+        <div class="ss-row ss-def"><b>The defense</b><span>Treat every recovery offer as the same scam in a different jacket. Paid recovery of stolen on-chain funds is a scam category, not a service category, and this site never recommends recovery services. No exceptions.</span></div>
+      </div>
+    </div>
+
+    <div class="ss-card ss-mt ss-crisis" id="ss-crisis">
+      <div class="ss-chead"><h2>If you were scammed</h2></div>
+      <p class="ss-how">These operations are industrialized and rehearsed, and they work on careful people. What matters now is the next hour, not the last one.</p>
+      <ul class="ss-steps">
+        <li><b>If your seed or private keys were exposed and anything remains, move it now.</b> Create a new wallet with a new seed and send everything to it. The old seed is permanently burned; nothing makes it safe again.</li>
+        <li><b>Stop all contact with the scammer.</b> Every further message, apology, or "final step" is designed to extract more. Do not announce that you know; just stop.</li>
+        <li><b>Know what is realistic.</b> A confirmed bitcoin transaction is final. No authority, exchange, or service can reverse it, and on-chain funds do not come back by asking. If the money left through an exchange account, contact that exchange through its official site; it may be able to freeze what has not moved or flag destination accounts.</li>
+        <li><b>Document everything.</b> Addresses, transaction IDs, screenshots, usernames, phone numbers, URLs, and dates. You can pull the on-chain records with the <a href="/">transaction</a> and <a href="/">address</a> lookups.</li>
+        <li><b>Report it.</b> To local police, and in the United States to the FBI's Internet Crime Complaint Center (IC3); most countries run an equivalent cybercrime portal. Individual reports rarely bring funds back, but they build the cases that shut operations down.</li>
+        <li><b>Expect the second strike.</b> Recovery offers will find you, sometimes within hours, often quoting details of your loss. Decline all of them; see card 06.</li>
+      </ul>
+    </div>
+
+    <div class="ss-about doc-prose">
+      <p>Scams change costumes constantly, but nearly all of them reduce to the same two asks: give us your keys, or send coins to receive something back. Refusing both defeats families that have not been invented yet. Everything on this page is informational, not legal or financial advice, under the site's <a href="/terms">terms</a>; to check that an address you were given is at least well formed, use the <a href="/tools/validate">address validator</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="ss-railp">If someone else ends up with your keys or your coins, no authority can reverse it; every defense happens before you send.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Never</div>
+      <ul class="ss-nl">
+        <li>Type your seed into anything you did not set up yourself</li>
+        <li>Send coins to receive more back</li>
+        <li>Pay a fee to withdraw your own money</li>
+        <li>Pay anyone to recover lost coins</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/learn/address-poisoning">Address poisoning in depth</a>
+        <a href="/tools/validate">Address validator</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ss-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ss-mt{margin-top:14px}
+  .ss-chead{display:flex;align-items:baseline;gap:10px}
+  .ss-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .ss-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .ss-how{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .ss-how a,.ss-row a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ss-how a:hover,.ss-row a:hover{border-bottom-style:solid}
+  .ss-rows{display:grid;gap:8px;margin-top:13px}
+  .ss-row{border-radius:10px;padding:12px 15px}
+  .ss-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  .ss-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .ss-tell{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .ss-tell b{color:var(--down)}
+  .ss-def{border:1px solid var(--line-2);background:var(--panel-2)}
+  .ss-def b{color:var(--up)}
+  .ss-crisis{border-color:rgba(255,166,60,.38)}
+  .ss-steps{margin:12px 0 0;padding-left:22px}
+  .ss-steps li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .ss-steps li::marker{color:var(--acc);font-weight:700}
+  .ss-steps b{color:var(--ink);font-weight:600}
+  .ss-steps a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ss-steps a:hover{border-bottom-style:solid}
+  .ss-about{margin-top:14px}
+  .ss-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ss-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .ss-nl{margin:0;padding-left:16px}
+  .ss-nl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ss-nl li:first-child{margin-top:0}
+  .ss-nl li::marker{color:var(--down)}
+  .ss-jump{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ss-jump:hover{border-bottom-style:solid}
+  .ss-crisis h2{scroll-margin-top:18px}
+</style>
+</Base>

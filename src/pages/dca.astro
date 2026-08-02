@@ -1,0 +1,367 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import { monthlyAverages, lastClose } from '../lib/monthly-prices.js';
+
+const Y0 = 2010;
+let DEMO_PRICE = 64362.18;
+try {
+  const r = await fetch('http://127.0.0.1:8090/v1/price', { signal: AbortSignal.timeout(4000) });
+  if (r.ok) { const d = await r.json(); if (typeof d.usd === 'number' && d.usd > 0) DEMO_PRICE = d.usd; }
+} catch {
+  const lc = lastClose();
+  if (lc) DEMO_PRICE = lc.usd;
+  console.warn('[build] price service unreachable; baseline falls back to the committed series close');
+}
+const MONTHLY = monthlyAverages();
+const idxOf = (ym) => (parseInt(ym.slice(0, 4), 10) - Y0) * 12 + parseInt(ym.slice(5, 7), 10) - 1;
+const END = idxOf(MONTHLY[MONTHLY.length - 1].ym);
+const SERIES = Array.from({ length: END + 1 }, () => null);
+for (const m of MONTHLY) SERIES[idxOf(m.ym)] = m.avg;
+const MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+const endLabel = MONTH_FULL[END % 12] + ' ' + (Y0 + Math.floor(END / 12));
+const startLabel = MONTH_FULL[idxOf(MONTHLY[0].ym) % 12] + ' ' + MONTHLY[0].ym.slice(0, 4);
+const lastFullYear = Y0 + Math.floor(END / 12) - (END % 12 === 11 ? 0 : 1);
+const YEARS = Array.from({ length: lastFullYear - Y0 + 1 }, (_, i) => Y0 + i);
+
+const dAmt = 50;
+let dBtc = 0, dBuys = 0;
+for (let t = Date.UTC(2022, 0, 1); dBuys < 6000; t += 7 * 86400000) {
+  const dt = new Date(t), k = (dt.getUTCFullYear() - Y0) * 12 + dt.getUTCMonth();
+  if (k > END) break;
+  dBtc += dAmt / SERIES[k];
+  dBuys += 1;
+}
+const fmt = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: d });
+const money = (v) => '$' + fmt(Math.round(v));
+const fbtc = (b) => (b >= 100 ? fmt(b, 2) : b >= 1 ? fmt(b, 4) : b.toFixed(8));
+const dInvested = dAmt * dBuys;
+const dValue = dBtc * DEMO_PRICE;
+const dGain = dValue - dInvested;
+const dPl = dValue / dInvested - 1;
+---
+<Base title="Bitcoin DCA Calculator: Backtest a Recurring Buy - OpenBitcoin" description="Bitcoin DCA calculator: pick an amount and schedule back to 2010, and see total invested, BTC accumulated, value today, and average cost.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">DCA backtest</div>
+    <h1>Bitcoin DCA Backtester</h1>
+    <p class="doc-lede">Pick an amount, a schedule, and a start month, and see what a steady recurring buy did: total invested, bitcoin accumulated, and what the stack is worth at the live price. Backtests describe the past; nothing here is a forecast.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="dc-card">
+      <div class="dc-controls">
+        <div class="dc-field">
+          <div class="dc-lab">Amount per buy, USD</div>
+          <input id="dc-amt" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Amount per buy in US dollars">
+        </div>
+        <div class="dc-field">
+          <div class="dc-lab">Frequency</div>
+          <div class="dc-units" role="tablist" aria-label="Buy frequency">
+            <button class="on" data-f="w" role="tab" aria-selected="true">Weekly</button><button data-f="b" role="tab" aria-selected="false">Biweekly</button><button data-f="m" role="tab" aria-selected="false">Monthly</button>
+          </div>
+        </div>
+        <div class="dc-field">
+          <div class="dc-lab">Starting</div>
+          <div class="dc-selrow">
+            <select id="dc-mon" class="dc-sel" aria-label="Start month">
+              <option value="0" selected>January</option><option value="1">February</option><option value="2">March</option><option value="3">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option>
+            </select>
+            <select id="dc-yr" class="dc-sel" aria-label="Start year">
+              {YEARS.map((y) => <option selected={y === 2022}>{y}</option>)}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="dc-note">Buys run from the start month through {endLabel}, each priced at its month's average of daily closes.</div>
+    </div>
+
+    <div class="dc-card">
+      <div class="dc-tlab">Backtest result</div>
+      <div class="dc-stats">
+        <div class="dc-stat"><b id="dc-inv">{money(dInvested)}</b><i id="dc-invi">total invested, {fmt(dBuys)} buys</i></div>
+        <div class="dc-stat"><b id="dc-btc">{fbtc(dBtc)} BTC</b><i id="dc-sats">{fmt(Math.round(dBtc * 1e8))} sats accumulated</i></div>
+        <div class="dc-stat"><b id="dc-val">{money(dValue)}</b><i id="dc-vali">value now, at {money(DEMO_PRICE)}</i></div>
+        <div class="dc-stat"><b id="dc-pl" class={dPl >= 0 ? 'up' : 'down'}>{(dPl >= 0 ? '+' : '-') + Math.abs(dPl * 100).toFixed(1)}%</b><i id="dc-pli">{(dGain >= 0 ? '+' : '-') + '$' + fmt(Math.abs(Math.round(dGain)))} vs invested</i></div>
+        <div class="dc-stat"><b id="dc-avg">{money(dInvested / dBtc)}</b><i>average cost per BTC</i></div>
+      </div>
+      <p class="dc-disc">Backtests describe the past; nothing on this page forecasts returns. All figures are informational under the <a href="/terms">terms</a>.</p>
+    </div>
+
+    <div class="dc-card">
+      <div class="dc-tlab">Portfolio value vs invested</div>
+      <div class="dc-legend">
+        <span class="dc-key"><i class="dc-sw"></i>Portfolio value</span>
+        <span class="dc-key"><i class="dc-sw dc-sw-inv"></i>Total invested</span>
+      </div>
+      <div class="dc-cwrap" id="dc-cwrap">
+        <canvas id="dc-canvas" role="img" aria-label="Line chart of portfolio value against total invested over the backtest period, both in US dollars on one axis"></canvas>
+      </div>
+      <div class="dc-read" id="dc-read"></div>
+      <p class="dc-fine">Both lines share one dollar axis. Buy prices are monthly averages of our recorded daily closes, so intra-month timing is not modeled; the final point tracks the live price.</p>
+    </div>
+
+    <div class="dc-about doc-prose">
+      <p>Dollar-cost averaging (DCA) means buying a fixed dollar amount of bitcoin on a fixed schedule, regardless of price. This backtester replays that plan against monthly averages of the site's committed daily close series from {startLabel} onward, counting every simulated buy and pricing today's value with the live rate. It reports what happened over a period you choose, which is not evidence about any future period; the required reading is at the <a href="/terms">terms</a>, and where our price history comes from is documented at <a href="/sources">/sources</a>. For a single lump-sum date instead of a schedule, see <a href="/whatif">/whatif</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="dc-rs"><b id="dc-rp">{money(DEMO_PRICE)}</b><i>1 BTC</i></div>
+      <div class="dc-rs"><b id="dc-rb">{fmt(dBuys)}</b><i>buys simulated</i></div>
+      <div class="dc-rs"><b id="dc-ri">{money(dInvested)}</b><i>total invested</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/whatif">What a single buy did</a>
+        <a href="/convert">Bitcoin converter</a>
+        <a href="/chart">Full price chart</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .dc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .dc-card:first-child{margin-top:0}
+  .dc-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .dc-controls{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .dc-field{flex:1 1 170px;min-width:0}
+  .dc-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .dc-field input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 22px var(--mono);font-variant-numeric:tabular-nums;
+    padding:10px 14px;outline:none;letter-spacing:-.5px}
+  .dc-field input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .dc-units{display:inline-flex;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+  .dc-units button{background:transparent;border:0;color:var(--ink-2);font:700 10.5px var(--mono);letter-spacing:.08em;
+    padding:7px 12px;min-height:44px;cursor:pointer;border-right:1px solid var(--line);white-space:nowrap}
+  .dc-units button:last-child{border-right:0}
+  .dc-units button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .dc-units button.on{background:var(--cta);color:var(--cta-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 0 var(--orange)}
+  .dc-selrow{display:flex;gap:8px}
+  .dc-sel{flex:1;min-width:0;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 14px var(--mono);padding:11px 10px;outline:none;cursor:pointer}
+  .dc-sel:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .dc-sel option{background:var(--panel);color:var(--ink)}
+  .dc-sel option{background:var(--panel);color:var(--ink)}
+  .dc-note{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:12px}
+  .dc-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .dc-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .dc-stat b{display:block;font:700 16.5px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .dc-stat b.up{color:var(--up)}
+  .dc-stat b.down{color:var(--down)}
+  .dc-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .dc-disc{font:600 11.5px/1.6 var(--sans);color:var(--ink-2);margin:14px 0 0;padding-top:12px;border-top:1px dotted var(--line-2)}
+  .dc-disc a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .dc-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+  .dc-key{display:inline-flex;align-items:center;gap:6px;font:600 10.5px var(--mono);letter-spacing:.05em;color:var(--ink-2)}
+  .dc-sw{display:inline-block;width:16px;height:0;border-top:2px solid #F7931A}
+  .dc-sw-inv{border-top-style:dashed;border-top-color:#C9D6EA}
+  .dc-cwrap{background:#0E1929;border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+  .dc-cwrap canvas{display:block;width:100%}
+  .dc-read{font:600 11px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin-top:8px;font-variant-numeric:tabular-nums;min-height:15px}
+  .dc-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .dc-about{margin-top:14px}
+  .dc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .dc-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .dc-rs:last-child{border-bottom:0}
+  .dc-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .dc-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .dc-controls{flex-direction:column;gap:14px}
+    .dc-field{width:100%}
+    .dc-field input{font-size:20px}
+  }
+</style>
+<script is:inline define:vars={{ SERIES, Y0, PRICE0: DEMO_PRICE }}>
+(function(){
+  /* SERIES and Y0 arrive at build via define:vars: monthly averages of the
+     committed daily close series (src/lib/monthly-prices.js over
+     src/data/btc-daily.json), padded with nulls for the months before the
+     data starts (2010-08). /whatif is built from the same function. */
+  var END=SERIES.length-1;
+  var FIRST=0;while(FIRST<SERIES.length&&SERIES[FIRST]==null)FIRST++;
+  var FY=Y0+Math.floor(FIRST/12),FM=FIRST%12;
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var T={bg:"#0E1929",grid:"#22304A",tx:"#8FA1BF",val:"#F7931A",inv:"#C9D6EA",cross:"#8B9DBA"};
+  var P={price:PRICE0,amt:50,freq:"w",y:2022,m:0};
+  var R=null,C=null,st={hover:null},geo={padL:14,plotW:1,i0:0};
+  var elAmt=document.getElementById("dc-amt"),elMon=document.getElementById("dc-mon"),
+      elYr=document.getElementById("dc-yr"),cv=document.getElementById("dc-canvas"),
+      cw=document.getElementById("dc-cwrap"),read=document.getElementById("dc-read");
+
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d||0});}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function money(v){return "$"+fmt(Math.round(v));}
+  function fbtc(b){return b>=100?fmt(b,2):(b>=1?fmt(b,4):b.toFixed(8));}
+  function parse(s){s=(""+s).replace(/[^0-9.]/g,"");var n=parseFloat(s);return isFinite(n)?n:null;}
+
+  function simulate(){
+    var perC=new Array(SERIES.length).fill(0),perB=new Array(SERIES.length).fill(0),
+        btc=0,buys=0,i0=(P.y-Y0)*12+P.m;
+    if(P.freq==="m"){
+      for(var i=i0;i<=END;i++){btc+=P.amt/SERIES[i];perB[i]+=P.amt/SERIES[i];perC[i]+=P.amt;buys++;}
+    }else{
+      var step=(P.freq==="w"?7:14)*86400000,t=Date.UTC(P.y,P.m,1);
+      while(buys<6000){
+        var d=new Date(t),idx=(d.getUTCFullYear()-Y0)*12+d.getUTCMonth();
+        if(idx>END)break;
+        btc+=P.amt/SERIES[idx];perB[idx]+=P.amt/SERIES[idx];perC[idx]+=P.amt;buys++;t+=step;
+      }
+    }
+    R={btc:btc,buys:buys,invested:P.amt*buys,i0:i0};
+    /* cumulative monthly chart arrays: invested and stack value at each month */
+    var inv=[],val=[],stack=[],ci=0,cb=0;
+    for(var k=i0;k<=END;k++){
+      ci+=perC[k];cb+=perB[k];
+      inv.push(ci);val.push(cb*SERIES[k]);stack.push(cb);
+    }
+    C={inv:inv,val:val,stack:stack};
+  }
+
+  function paintStats(){
+    var valNow=R.btc*P.price,pl=R.invested>0?valNow/R.invested-1:0,gain=valNow-R.invested;
+    txt("dc-inv",money(R.invested));
+    txt("dc-invi","total invested, "+fmt(R.buys)+" buys");
+    txt("dc-btc",fbtc(R.btc)+" BTC");
+    txt("dc-sats",fmt(Math.round(R.btc*1e8))+" sats accumulated");
+    txt("dc-val",money(valNow));
+    txt("dc-vali","value now, at "+money(P.price));
+    var elPl=document.getElementById("dc-pl");
+    elPl.textContent=(pl>=0?"+":"-")+Math.abs(pl*100).toFixed(1)+"%";
+    elPl.className=pl>=0?"up":"down";
+    txt("dc-pli",(gain>=0?"+":"-")+"$"+fmt(Math.abs(Math.round(gain)))+" vs invested");
+    txt("dc-avg",R.btc>0?money(R.invested/R.btc):"$0");
+    txt("dc-rp",money(P.price));
+    txt("dc-rb",fmt(R.buys));
+    txt("dc-ri",money(R.invested));
+  }
+
+  function fm(v){
+    if(v>=1e6)return "$"+(v/1e6>=10?Math.round(v/1e6):(v/1e6).toFixed(1))+"M";
+    if(v>=1e3)return "$"+(v/1e3>=10?Math.round(v/1e3):(v/1e3).toFixed(1))+"k";
+    return "$"+Math.round(v);
+  }
+  function niceStep(raw){
+    var mag=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)),r=raw/mag;
+    return (r<=1?1:r<=2?2:r<=2.5?2.5:r<=5?5:10)*mag;
+  }
+
+  function draw(){
+    var dpr=window.devicePixelRatio||1,W=cw.clientWidth,H=300;
+    cv.style.height=H+"px";cv.width=W*dpr;cv.height=H*dpr;
+    var x=cv.getContext("2d");x.scale(dpr,dpr);
+    var padT=14,padB=26,padR=56,padL=14,plotW=W-padL-padR,plotH=H-padT-padB;
+    var i0=R.i0,n=C.val.length,last=n-1;
+    var vals=C.val.slice();vals[last]=C.stack[last]*P.price;
+    var maxV=1;
+    for(var i=0;i<n;i++){if(vals[i]>maxV)maxV=vals[i];if(C.inv[i]>maxV)maxV=C.inv[i];}
+    var step=niceStep(maxV/4.5),yMax=Math.ceil(maxV*1.02/step)*step;
+    geo.padL=padL;geo.plotW=plotW;geo.i0=i0;
+    function X(i){return padL+(n<2?0:(i/(n-1)))*plotW;}
+    function Y(v){return padT+(1-v/yMax)*plotH;}
+    x.fillStyle=T.bg;x.fillRect(0,0,W,H);
+    x.font="600 10.5px ui-monospace,Consolas,monospace";
+    /* dotted horizontal gridlines + dollar axis on the right */
+    x.setLineDash([2,4]);
+    for(var g=0;g<=yMax+step/2;g+=step){
+      var gy=Y(g);
+      x.strokeStyle=T.grid;x.beginPath();x.moveTo(padL,gy+.5);x.lineTo(W-padR,gy+.5);x.stroke();
+      x.fillStyle=T.tx;x.textAlign="left";x.fillText(g===0?"$0":fm(g),W-padR+8,gy+4);
+    }
+    /* dotted vertical gridlines + time labels */
+    x.textAlign="center";
+    var span=n,ticks=[];
+    if(span>=36){
+      var ys=span>=96?2:1;
+      for(var k=0;k<n;k++){var mi=i0+k;if(mi%12===0&&(Y0+mi/12)%ys===0)ticks.push([k,String(Y0+mi/12)]);}
+    }else{
+      var ev=Math.max(1,Math.round(span/6));
+      for(var k2=0;k2<n;k2+=ev){var mi2=i0+k2;ticks.push([k2,MON[mi2%12]+" "+String(Y0+Math.floor(mi2/12)).slice(2)]);}
+    }
+    ticks.forEach(function(t){
+      var gx=X(t[0]);
+      x.strokeStyle=T.grid;x.beginPath();x.moveTo(gx+.5,padT);x.lineTo(gx+.5,padT+plotH);x.stroke();
+      x.fillStyle=T.tx;x.fillText(t[1],gx,H-8);
+    });
+    x.setLineDash([]);
+    /* invested: dashed reference line */
+    x.setLineDash([5,4]);x.beginPath();
+    C.inv.forEach(function(v,i){var px=X(i),py=Y(v);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.strokeStyle=T.inv;x.lineWidth=1.6;x.stroke();x.setLineDash([]);
+    /* portfolio value: solid line with area fill */
+    x.beginPath();
+    vals.forEach(function(v,i){var px=X(i),py=Y(v);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.lineTo(X(last),Y(0));x.lineTo(X(0),Y(0));x.closePath();
+    x.fillStyle="rgba(247,147,26,.07)";x.fill();
+    x.beginPath();
+    vals.forEach(function(v,i){var px=X(i),py=Y(v);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.strokeStyle=T.val;x.lineWidth=2;x.lineJoin="round";x.stroke();
+    x.fillStyle=T.val;x.beginPath();x.arc(X(last),Y(vals[last]),3,0,7);x.fill();
+    /* hover crosshair */
+    if(st.hover!==null){
+      var hx=X(st.hover);
+      x.strokeStyle=T.cross;x.setLineDash([4,4]);x.lineWidth=1;
+      x.beginPath();x.moveTo(hx+.5,padT);x.lineTo(hx+.5,padT+plotH);x.stroke();
+      x.setLineDash([]);
+    }
+    x.lineWidth=1;
+    paintRead();
+  }
+  function paintRead(){
+    var n=C.val.length,k=st.hover===null?n-1:st.hover,mi=R.i0+k;
+    var v=(k===n-1)?C.stack[k]*P.price:C.val[k];
+    read.textContent=MON[mi%12]+" "+(Y0+Math.floor(mi/12))+" · invested "+money(C.inv[k])+
+      " · value "+money(v)+" · "+fbtc(C.stack[k])+" BTC";
+  }
+
+  cv.addEventListener("mousemove",function(e){
+    var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,n=C.val.length;
+    var k=Math.round((mx-geo.padL)/geo.plotW*(n-1));
+    if(k<0)k=0;if(k>n-1)k=n-1;
+    if(k!==st.hover){st.hover=k;draw();}
+  });
+  cv.addEventListener("mouseleave",function(){st.hover=null;draw();});
+  window.addEventListener("resize",function(){draw();});
+
+  function recompute(){st.hover=null;simulate();paintStats();draw();}
+
+  elAmt.addEventListener("input",function(){
+    var n=parse(elAmt.value);if(n===null)return;
+    if(n>1e6)n=1e6;if(n<=0)return;
+    P.amt=n;recompute();
+  });
+  elAmt.addEventListener("focus",function(){elAmt.select();});
+  elAmt.addEventListener("blur",function(){
+    var n=parse(elAmt.value);
+    if(n===null||n===0){P.amt=50;recompute();}
+    elAmt.value=fmt(P.amt,P.amt%1?2:0);
+  });
+  document.querySelectorAll(".dc-units button").forEach(function(b){
+    b.addEventListener("click",function(){
+      P.freq=b.dataset.f;
+      b.parentNode.querySelectorAll("button").forEach(function(o){
+        var on=o===b;o.classList.toggle("on",on);o.setAttribute("aria-selected",on?"true":"false");
+      });
+      recompute();
+    });
+  });
+  function syncStart(){
+    for(var i=0;i<12;i++)elMon.options[i].disabled=(P.y===FY&&i<FM);
+    if(P.y===FY&&P.m<FM){P.m=FM;elMon.value=String(FM);}
+    recompute();
+  }
+  elMon.addEventListener("change",function(){P.m=parseInt(elMon.value,10);syncStart();});
+  elYr.addEventListener("change",function(){P.y=parseInt(elYr.value,10);syncStart();});
+
+  /* live tick arrives via the chrome hook (~1.5s); repaints value-now and the chart's final point */
+  window.obPaintFiat=function(S){P.price=S.price;paintStats();draw();};
+
+  elAmt.value="50";
+  recompute();
+})();
+</script>
+</Base>

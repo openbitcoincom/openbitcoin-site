@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import data from '../content/obituaries.json';
+const entries = data.entries;
+const years = [...new Set(entries.map((e) => e.y))].sort((a, b) => b - a);
+const byYear = years.map((y) => ({ y, items: entries.filter((e) => e.y === y) }));
+const count = entries.length;
+const busiest = byYear.reduce((a, b) => (b.items.length > a.items.length ? b : a));
+const first = entries[entries.length - 1];
+const fmtUsd = (p) => (p >= 100 ? '$' + Math.round(p).toLocaleString('en-US') : '$' + p.toFixed(2));
+---
+<Base title={'Bitcoin Obituaries: Declared Dead ' + count + ' Times - OpenBitcoin'} description={'The full record of bitcoin death declarations: ' + count + ' obituaries since 2010, each with the source, the price that day, and where the price stands now.'}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Obituaries</div>
+    <h1>Bitcoin obituaries</h1>
+    <p class="doc-lede">The record of declarations that bitcoin is dead, from the first in 2010 to the most recent, each with its source, the price on the day, and a live measure of how the call aged.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ob-hero">
+      <div class="ob-big">{count}</div>
+      <div class="ob-sub">times bitcoin has been declared dead in the record below</div>
+      <div class="ob-line">The first entry called it at <b>{fmtUsd(first.p)}</b> in {first.y}. Bitcoin trades at <b id="ob-now">&#8230;</b> today, <b id="ob-mult" class="ob-up">&#8230;</b> that price.</div>
+      <div class="ob-stats">
+        <div class="ob-stat"><b>{first.y}</b><i>first recorded obituary</i></div>
+        <div class="ob-stat"><b>{busiest.y}</b><i>busiest year, {busiest.items.length} obituaries</i></div>
+        <div class="ob-stat"><b>$126,272</b><i>all-time high, October 6, 2025</i></div>
+        <div class="ob-stat"><b id="ob-h">&#8230;</b><i>current block height</i></div>
+      </div>
+    </div>
+
+    {byYear.map((g) => (
+      <div class="ob-card" id={'y' + g.y}>
+        <div class="ob-yh">{g.y}<span>{g.items.length} {g.items.length === 1 ? 'obituary' : 'obituaries'}</span></div>
+        {g.items.map((e) => (
+          <div class="ob-row">
+            <div class="ob-t">"{e.t}"<span class="ob-o">{e.o}</span></div>
+            <div class="ob-px">{e.p != null ? <span>&#8776; {fmtUsd(e.p)} then</span> : <span>price unrecorded</span>}{e.p != null && <b data-p={e.p}>&#183;</b>}</div>
+          </div>
+        ))}
+      </div>
+    ))}
+
+    <div class="ob-about doc-prose">
+      <p>Each entry records a published claim that bitcoin is dead, dying, or worthless: the headline or its short paraphrase, the outlet or platform it appeared on, and the approximate price of bitcoin on the day. The count counts recorded declarations, not an official statistic; there are certainly more. The live multiples are arithmetic against the current price from our feed, documented at <a href="/sources">/sources</a>, and they describe the past, not the future: this site publishes no predictions, and a declaration aging badly is not evidence about tomorrow.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The first obituary</div>
+      <div class="ob-rs"><b>{first.y}</b><i>{first.o}</i></div>
+      <div class="ob-rs"><b>{fmtUsd(first.p)}</b><i>price that day</i></div>
+      <div class="ob-rs"><b id="ob-rnow">&#8230;</b><i>price now</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Jump to a year</div>
+      <nav class="ob-years">
+        {byYear.map((g) => <a href={'#y' + g.y}>{g.y} <span>({g.items.length})</span></a>)}
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/ath">All-time high and drawdown</a>
+        <a href="/chart">Full price chart</a>
+        <a href="/contact">Report an obituary we missed</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ob-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .ob-big{font:800 64px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-2px}
+  .ob-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .ob-line{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:12px}
+  .ob-line b{font:700 13.5px var(--mono);color:var(--ink)}
+  .ob-line b.ob-up{color:var(--up)}
+  .ob-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:18px;text-align:left}
+  .ob-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .ob-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ob-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .ob-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 24px 8px;margin-top:14px;scroll-margin-top:18px}
+  .ob-yh{display:flex;align-items:baseline;gap:10px;font:800 22px var(--mono);color:var(--acc);letter-spacing:-.5px;
+    border-bottom:1px solid var(--line-2);padding-bottom:10px}
+  .ob-yh span{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .ob-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .ob-row:last-child{border-bottom:0}
+  .ob-t{font:600 13.5px/1.5 var(--sans);color:var(--ink);min-width:0}
+  .ob-o{display:block;font:600 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:2px}
+  .ob-px{font:600 12px var(--mono);color:var(--ink-3);white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+  .ob-px b{display:block;color:var(--up);font-weight:700;margin-top:2px}
+  .ob-about{margin-top:14px}
+  .ob-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ob-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ob-rs:last-child{border-bottom:0}
+  .ob-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .ob-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .ob-years{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+  .ob-years a{font:600 11px var(--mono);color:var(--ink-2);text-decoration:none}
+  .ob-years a:hover{color:var(--acc)}
+  .ob-years a span{color:var(--ink-3)}
+  @media(max-width:700px){
+    .ob-big{font-size:48px}
+    .ob-row{flex-direction:column;gap:4px}
+    .ob-px{text-align:left}
+    .ob-px b{display:inline;margin-left:8px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var els=null,now=document.getElementById("ob-now"),rnow=document.getElementById("ob-rnow"),
+      mult=document.getElementById("ob-mult"),hEl=document.getElementById("ob-h"),
+      FIRST_P=0.23;
+  function fmt(n){return n.toLocaleString("en-US");}
+  function multTxt(x){return x>=1000?fmt(Math.round(x))+"x now":x>=10?Math.round(x)+"x now":x.toFixed(1)+"x now";}
+  function paint(S){
+    if(!els)els=document.querySelectorAll("[data-p]");
+    var pr=S.price;
+    now.textContent="$"+fmt(Math.round(pr));
+    rnow.textContent="$"+fmt(Math.round(pr));
+    mult.textContent=fmt(Math.round(pr/FIRST_P))+"x";
+    if(S.height)hEl.textContent=fmt(S.height);
+    for(var i=0;i<els.length;i++){
+      var p=parseFloat(els[i].getAttribute("data-p"));
+      var x=pr/p;
+      els[i].textContent=multTxt(x);
+      els[i].style.color=x>=1?"":"var(--down)";
+    }
+  }
+  /* live price and height arrive via the chrome hook; window.OB_LIVE is only
+     set once a real summary lands, so the placeholders hold until then */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE||!S||!S.price)return;paint(S);};
+})();
+</script>
+</Base>

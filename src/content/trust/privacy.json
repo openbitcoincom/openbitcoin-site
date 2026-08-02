@@ -1,0 +1,65 @@
+{
+  "slug": "privacy",
+  "title": "Privacy Policy - OpenBitcoin",
+  "metaDescription": "How OpenBitcoin.com handles data: no user accounts, short-lived server logs, Google Analytics usage measurement, and third-party services such as Cloudflare.",
+  "kicker": "Privacy",
+  "h1": "Privacy Policy",
+  "lede": "OpenBitcoin.com has no user accounts. This policy describes what the service collects, how that data is used, and which third-party services are involved.",
+  "sections": [
+    {
+      "id": "information-we-collect",
+      "heading": "Information we collect",
+      "html": "<p>OpenBitcoin.com does not offer user accounts. There is no registration, no login, and no profile associated with your visits.</p><p>The service collects two categories of data:</p><ul><li><strong>Server logs.</strong> Like most websites, our servers record standard access logs: IP address, requested URL, timestamp, and user agent. These logs are kept for 7 to 30 days for security and abuse prevention, then deleted.</li><li><strong>Usage analytics.</strong> We measure site usage with Google Analytics. It collects information about your visit, such as pages viewed, approximate location derived from your IP address, and device and browser details, and it sets cookies to distinguish visitors. Google processes this data under its own privacy policy. Where the law requires consent, analytics runs only after you accept.</li><li><strong>Comments.</strong> If you post a comment, we store the comment text, the display name or sign-in identity you choose to post under, and related moderation records. We do not store passwords; if you sign in through a third-party provider, that provider handles your login under its own privacy policy.</li></ul>"
+    },
+    {
+      "id": "cookies",
+      "heading": "Cookies",
+      "html": "<p>The site does not use cookies for accounts or logins. Google Analytics sets cookies to measure usage, as described above. Where consent is required by law, these cookies are set only after you accept.</p><p>Where advertising is served, third-party ad networks may set cookies or use similar technologies under their own privacy policies. The site manages applicable consent requirements on a regional basis.</p>"
+    },
+    {
+      "id": "how-we-use-information",
+      "heading": "How we use information",
+      "html": "<p>We use the data described above to operate, maintain, and secure the service, to investigate abuse and technical problems, and to measure aggregate usage. We do not use it to build individual profiles of visitors.</p>"
+    },
+    {
+      "id": "third-party-services",
+      "heading": "Third-party services",
+      "html": "<p><strong>Cloudflare.</strong> All traffic to the site passes through Cloudflare, which provides DDoS protection and caching. Cloudflare sees your IP address and request metadata and processes them under its own privacy policy.</p><p><strong>Google Analytics.</strong> Usage measurement is provided by Google Analytics. Collected data is processed by Google under its own privacy policy. You can prevent analytics from running with browser settings, content blockers, or Google's opt-out browser add-on.</p><p><strong>Advertising networks.</strong> The site may display advertising from third-party ad networks, which may include mainstream or cryptocurrency-focused networks. Ad content is selected and delivered by those networks under their own policies and is not an endorsement by OpenBitcoin. Sponsored and affiliate placements are labeled; see <a href=\"/disclosure\">/disclosure</a>.</p><p><strong>Comments.</strong> The comment system runs on our own infrastructure; comment content stays on our servers. Sign-in providers you choose to authenticate with (such as Google or email) process your login under their own policies, and we receive only the resulting public identity.</p><p><strong>Planned features.</strong> Features such as push alerts would involve additional data handling. If and when they launch, this policy will describe them.</p>"
+    },
+    {
+      "id": "address-and-transaction-lookups",
+      "heading": "Address and transaction lookups",
+      "html": "<p>Looking up an address, block, or transaction is an ordinary page request. It appears in the standard short-lived server logs described above, and no separate lookup database is kept. We keep no record of which addresses you look up beyond short-lived security logs.</p>"
+    },
+    {
+      "id": "third-party-links",
+      "heading": "Links to third-party websites",
+      "html": "<p>The site links to external websites and services that we do not operate. Their privacy policies, not this one, govern any data you provide to them, and we are not responsible for their practices. Review their policies before use.</p>"
+    },
+    {
+      "id": "your-rights-and-contact",
+      "heading": "Your rights and contact",
+      "html": "<p>Depending on where you live, you may have rights regarding personal data, such as access, correction, or deletion. Aside from comments you choose to post, the service retains only short-lived logs, so there is usually little data we can associate with a specific person. Comments can be removed on request. To ask a question or make a request, contact <a href=\"mailto:inbox@openbitcoin.com\">inbox@openbitcoin.com</a>.</p>"
+    },
+    {
+      "id": "changes-to-this-policy",
+      "heading": "Changes to this policy",
+      "html": "<p>We may revise this policy from time to time, for example when features launch or third-party services change. The current version is always posted on this page, and continued use of the site after a revision is posted constitutes acceptance of the revised policy.</p>"
+    }
+  ],
+  "proofLinks": [
+    {
+      "label": "Terms of Use",
+      "href": "/terms"
+    },
+    {
+      "label": "Ad and affiliate disclosure",
+      "href": "/disclosure"
+    },
+    {
+      "label": "About OpenBitcoin",
+      "href": "/about"
+    }
+  ],
+  "updated": "July 2026"
+}

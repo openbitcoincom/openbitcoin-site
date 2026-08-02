@@ -1,0 +1,276 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import { monthlyAverages, lastClose } from '../lib/monthly-prices.js';
+
+const Y0 = 2010;
+const ATH = 126272;
+let DEMO_PRICE = 64362.18;
+try {
+  const r = await fetch('http://127.0.0.1:8090/v1/price', { signal: AbortSignal.timeout(4000) });
+  if (r.ok) { const d = await r.json(); if (typeof d.usd === 'number' && d.usd > 0) DEMO_PRICE = d.usd; }
+} catch {
+  const lc = lastClose();
+  if (lc) DEMO_PRICE = lc.usd;
+  console.warn('[build] price service unreachable; baseline falls back to the committed series close');
+}
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHLY = monthlyAverages();
+const idxOf = (ym) => (parseInt(ym.slice(0, 4), 10) - Y0) * 12 + parseInt(ym.slice(5, 7), 10) - 1;
+const END = idxOf(MONTHLY[MONTHLY.length - 1].ym);
+const PRICES = Array.from({ length: END + 1 }, () => null);
+for (const m of MONTHLY) PRICES[idxOf(m.ym)] = m.avg;
+const YEARS = Array.from({ length: Math.floor(END / 12) + 1 }, (_, i) => Y0 + i);
+const startLabel = MONTHS[idxOf(MONTHLY[0].ym) % 12] + ' ' + MONTHLY[0].ym.slice(0, 4);
+
+const fmt = (n, d) => n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: d });
+const money = (n) => '$' + fmt(n, n >= 100 ? 0 : 2);
+const labelOf = (i) => (i >= PRICES.length ? 'today' : MONTHS[i % 12] + ' ' + (Y0 + Math.floor(i / 12)));
+const dIdx = idxOf('2013-05');
+const dThen = PRICES[dIdx];
+const dBtc = 1000 / dThen;
+const dVal = dBtc * DEMO_PRICE;
+const dMult = DEMO_PRICE / dThen;
+let peak = 0, peakI = dIdx, worst = 0, wp = dIdx, wt = dIdx, n50 = 0, inDD = false;
+for (let i = dIdx; i <= PRICES.length; i += 1) {
+  const p = i < PRICES.length ? PRICES[i] : DEMO_PRICE;
+  if (p >= peak) { peak = p; peakI = i; inDD = false; }
+  else {
+    const dd = 1 - p / peak;
+    if (dd > worst) { worst = dd; wp = peakI; wt = i; }
+    if (dd >= 0.5 && !inDD) { inDD = true; n50 += 1; }
+  }
+}
+const dMultText = (dMult >= 100 ? fmt(Math.round(dMult), 0) : fmt(dMult, dMult >= 10 ? 1 : 2))
+  + '× the purchase, at the live price';
+const dHonest = 'Between ' + labelOf(dIdx) + ' and today you would have held through ' + n50
+  + (n50 === 1 ? ' drawdown' : ' separate drawdowns') + ' of 50% or more. The deepest ran from '
+  + labelOf(wp) + ' to ' + labelOf(wt) + ', -' + Math.round(worst * 100)
+  + '% peak to trough. The multiple above was only available to someone who did not sell through that.';
+---
+<Base title="What If I Had Bought Bitcoin: Lump-Sum Calculator - OpenBitcoin" description="What if you had bought bitcoin? Pick a dollar amount and a month back to 2010, and see the BTC it bought, its value today, and the multiple.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">What if</div>
+    <h1>What if I had bought bitcoin?</h1>
+    <p class="doc-lede">Pick an amount and a month, back to {startLabel}. The page shows what that one purchase would hold and be worth at the live price, and the part usually left out: the drawdowns sitting between then and now.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="wf-card">
+      <div class="wf-form">
+        <div class="wf-f">
+          <label for="wf-amt">If you had spent</label>
+          <div class="wf-amt"><span>$</span><input id="wf-amt" value="1,000" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Amount in US dollars"></div>
+        </div>
+        <div class="wf-f">
+          <label for="wf-m">In</label>
+          <div class="wf-sels">
+            <select id="wf-m" aria-label="Month">
+              {MONTHS.map((m, i) => <option value={i} selected={i === 4}>{m}</option>)}
+            </select>
+            <select id="wf-y" aria-label="Year">
+              {YEARS.map((y) => <option value={y} selected={y === 2013}>{y}</option>)}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf-hero">
+      <div class="wf-klab" id="wf-klab">{money(1000)} spent in {labelOf(dIdx)} would now be</div>
+      <div class="wf-big" id="wf-big">{money(dVal)}</div>
+      <div class={'wf-mult ' + (dMult >= 1 ? 'up' : 'dn')} id="wf-mult">{dMultText}</div>
+      <div class="wf-stats">
+        <div class="wf-stat"><b id="wf-btc">{fmt(dBtc, 8)} BTC</b><i id="wf-sats">{fmt(Math.round(dBtc * 1e8), 0)} sats</i></div>
+        <div class="wf-stat"><b id="wf-then">${fmt(dThen, 0)}</b><i>price then, monthly average</i></div>
+        <div class="wf-stat"><b id="wf-now">${fmt(Math.round(DEMO_PRICE), 0)}</b><i>price now, live</i></div>
+        <div class="wf-stat"><b id="wf-dd">-{Math.round(worst * 100)}%</b><i>deepest drawdown since then</i></div>
+      </div>
+      <div class="wf-honest">
+        <span class="wf-hlab">The ride</span>
+        <span class="wf-htxt" id="wf-htxt">{dHonest}</span>
+      </div>
+    </div>
+
+    <div class="wf-route">A lump sum is one lucky or unlucky day. The same math with steady monthly buys is at <a href="/dca">/dca</a>.</div>
+
+    <p class="wf-fine">Backtests describe the past; nothing on this page forecasts returns. All figures are informational under the <a href="/terms">terms</a>. Past performance does not indicate future results. Prices before today are monthly averages of daily closes, so intramonth highs and lows ran beyond the figures shown.</p>
+
+    <div class="wf-about doc-prose">
+      <p>This calculator answers the question exactly as asked: if you had spent a fixed number of US dollars on bitcoin in one past month, what would that single purchase hold and be worth at today's live price. It also reports what the headline multiple hides, the peak-to-trough drawdowns between the purchase and now, because holding through them is what the result required. Historical prices are monthly averages of the site's committed daily close series and the live price is a median of three exchanges, both documented at <a href="/sources">/sources</a>; the all-time high used for context is covered at <a href="/ath">/ath</a>. Figures are informational under the <a href="/terms">terms</a>; for the version of this math that does not depend on picking a day, see the DCA backtester at <a href="/dca">/dca</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="wf-rs"><b id="wf-rp">${fmt(Math.round(DEMO_PRICE), 0)}</b><i>1 BTC</i></div>
+      <div class="wf-rs"><b>${fmt(ATH, 0)}</b><i>all-time high, October 6, 2025</i></div>
+      <div class="wf-rs"><b id="wf-rdd">-{Math.round((1 - DEMO_PRICE / ATH) * 100)}%</b><i>below the all-time high</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/dca">DCA backtester</a>
+        <a href="/ath">All-time high</a>
+        <a href="/chart">Full price chart</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .wf-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 24px 20px}
+  .wf-form{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap}
+  .wf-f label{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .wf-amt{display:flex;align-items:center;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding-left:12px}
+  .wf-amt span{font:700 18px var(--mono);color:var(--ink-3)}
+  .wf-amt input{width:140px;background:transparent;border:0;outline:none;color:var(--price-ink);
+    font:700 22px var(--mono);font-variant-numeric:tabular-nums;padding:10px 12px 10px 6px;letter-spacing:-.5px}
+  .wf-amt:focus-within{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .wf-sels{display:flex;gap:8px;flex-wrap:wrap}
+  .wf-sels select{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;
+    color:var(--price-ink);font:700 15px var(--mono);padding:11px 10px;outline:none;cursor:pointer}
+  .wf-sels select:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .wf-sels option{color:var(--ink);background:var(--panel)}
+  .wf-form{justify-content:center}
+  .wf-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 24px 22px;text-align:center;margin-top:14px}
+  .wf-klab{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .wf-big{font:800 54px/1.05 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px;margin-top:10px}
+  .wf-mult{display:inline-block;font:700 13px var(--mono);font-variant-numeric:tabular-nums;margin-top:10px;
+    padding:5px 12px;border-radius:99px;border:1px solid var(--line-2)}
+  .wf-mult.up{color:var(--up);border-color:rgba(46,189,133,.4)}
+  .wf-mult.dn{color:var(--down);border-color:rgba(246,70,93,.4)}
+  .wf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .wf-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .wf-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wf-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .wf-honest{margin-top:16px;text-align:left;background:var(--panel-2);border-left:2px solid var(--acc);border-radius:0 8px 8px 0;padding:12px 16px}
+  .wf-hlab{display:block;font:700 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+  .wf-htxt{font:500 13.5px/1.65 var(--sans);color:var(--ink-2)}
+  .wf-route{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:14px;
+    font:600 12px/1.6 var(--mono);letter-spacing:.02em;color:var(--ink-2)}
+  .wf-route a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .wf-route a:hover{border-bottom-style:solid}
+  .wf-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .wf-fine a{color:var(--ink-3);text-decoration:underline}
+  .wf-about{margin-top:14px}
+  .wf-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .wf-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .wf-rs:last-child{border-bottom:0}
+  .wf-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .wf-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .wf-big{font-size:40px}
+    .wf-amt input{font-size:20px}
+  }
+</style>
+<script is:inline define:vars={{ PRICES, Y0, PRICE0: DEMO_PRICE }}>
+(function(){
+  var ATH=126272;
+  var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  /* PRICES and Y0 arrive at build via define:vars: monthly averages of the
+     committed daily close series (src/lib/monthly-prices.js over
+     src/data/btc-daily.json), padded with nulls for the months before the
+     data starts (2010-08). /dca is built from the same function. */
+  var FIRST=0;while(FIRST<PRICES.length&&PRICES[FIRST]==null)FIRST++;
+  var END=PRICES.length-1;
+  var FY=Y0+Math.floor(FIRST/12),FM=FIRST%12,LY=Y0+Math.floor(END/12),LM=END%12;
+  var P={price:PRICE0,amt:1000,idx:(2013-Y0)*12+4}; /* May 2013 */
+  var elA=document.getElementById("wf-amt"),
+      selM=document.getElementById("wf-m"),
+      selY=document.getElementById("wf-y");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function money(n){return "$"+fmt(n,n>=100?0:2);}
+  function parse(s){s=(""+s).replace(/[^0-9.]/g,"");var n=parseFloat(s);return isFinite(n)?n:null;}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function labelOf(i){return i>=PRICES.length?"today":MONTHS[i%12]+" "+(Y0+Math.floor(i/12));}
+
+  /* worst peak-to-trough and count of separate 50%+ drawdowns, from the
+     purchase month through the live price as the final point */
+  function drawdown(i0){
+    var peak=0,peakI=i0,worst=0,wp=i0,wt=i0,n50=0,inDD=false;
+    for(var i=i0;i<=PRICES.length;i++){
+      var p=i<PRICES.length?PRICES[i]:P.price;
+      if(p>=peak){peak=p;peakI=i;inDD=false;}
+      else{
+        var d=1-p/peak;
+        if(d>worst){worst=d;wp=peakI;wt=i;}
+        if(d>=.5&&!inDD){inDD=true;n50++;}
+      }
+    }
+    return {worst:worst,wp:wp,wt:wt,n50:n50};
+  }
+
+  function multTxt(m){
+    var t=m>=100?fmt(Math.round(m),0):fmt(m,m>=10?1:2);
+    return m>=1?t+"× the purchase, at the live price":t+"× · under water at the live price";
+  }
+
+  function honest(mult,d){
+    var range=labelOf(d.wp)+" to "+labelOf(d.wt),
+        w="-"+Math.round(d.worst*100)+"% peak to trough",s;
+    if(d.worst<.005){
+      s="No meaningful peak-to-trough drawdown in this window yet at the monthly scale. Longer windows in this same series have run 70% or deeper.";
+    }else if(mult<1){
+      s="This purchase would be under water today, down "+Math.round((1-mult)*100)+
+        "% from the purchase price. The deepest drawdown in the window ran from "+range+", "+w+
+        ". This page reports recorded history; it says nothing about what happens next.";
+    }else if(d.n50>0){
+      s="Between "+labelOf(P.idx)+" and today you would have held through "+d.n50+
+        (d.n50===1?" drawdown":" separate drawdowns")+" of 50% or more. The deepest ran from "+range+", "+w+
+        ". The multiple above was only available to someone who did not sell through that.";
+    }else{
+      s="The deepest peak-to-trough drawdown in this window ran from "+range+", "+w+
+        ". Milder than the 70%-class falls of earlier cycles, but it still had to be held through.";
+    }
+    txt("wf-htxt",s);
+  }
+
+  function paint(){
+    var pThen=PRICES[P.idx],btc=P.amt/pThen,val=btc*P.price,mult=P.price/pThen,d=drawdown(P.idx);
+    txt("wf-klab",money(P.amt)+" spent in "+labelOf(P.idx)+" would now be");
+    txt("wf-big",money(val));
+    var mu=document.getElementById("wf-mult");
+    mu.textContent=multTxt(mult);
+    mu.className="wf-mult "+(mult>=1?"up":"dn");
+    txt("wf-btc",fmt(btc,8)+" BTC");
+    txt("wf-sats",fmt(Math.round(btc*1e8),0)+" sats");
+    txt("wf-then","$"+fmt(pThen,0));
+    txt("wf-now","$"+fmt(Math.round(P.price),0));
+    txt("wf-dd","-"+Math.round(d.worst*100)+"%");
+    honest(mult,d);
+    txt("wf-rp","$"+fmt(Math.round(P.price),0));
+    txt("wf-rdd","-"+Math.round((1-P.price/ATH)*100)+"%");
+  }
+
+  function syncSel(){
+    var y=+selY.value,m=+selM.value;
+    for(var i=0;i<12;i++)selM.options[i].disabled=(y===LY&&i>LM)||(y===FY&&i<FM);
+    if(y===LY&&m>LM){m=LM;selM.value=String(LM);}
+    if(y===FY&&m<FM){m=FM;selM.value=String(FM);}
+    P.idx=(y-Y0)*12+m;
+    paint();
+  }
+  selY.addEventListener("change",syncSel);
+  selM.addEventListener("change",syncSel);
+
+  elA.addEventListener("input",function(){
+    var n=parse(elA.value);if(n===null)return;
+    if(n>1e9)n=1e9;P.amt=n;paint();
+  });
+  elA.addEventListener("focus",function(){elA.select();});
+  elA.addEventListener("blur",function(){
+    var n=parse(elA.value);
+    if(n===null||n===0)P.amt=1000;
+    elA.value=fmt(P.amt,2);paint();
+  });
+
+  /* live tick arrives via the chrome hook (~1.5s). USD-only page: the
+     historical series is USD, so the currency switcher does not apply. */
+  window.obPaintFiat=function(S){P.price=S.price;paint();};
+  paint();
+})();
+</script>
+</Base>

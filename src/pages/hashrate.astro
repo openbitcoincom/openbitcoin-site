@@ -1,0 +1,363 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+
+const HW = 640, HHT = 232, HPT = 24, HPB = 32, HPL = 12, HPR = 12;
+const HLO = 6, HHI = 21.6;
+const hy = (v) => HPT + ((HHI - v) / (HHI - HLO)) * (HHT - HPT - HPB);
+const hrGrid = [
+  { v: 9, t: 'GH/s' }, { v: 12, t: 'TH/s' }, { v: 15, t: 'PH/s' },
+  { v: 18, t: 'EH/s' }, { v: 21, t: 'ZH/s' },
+].map((g) => ({ y: hy(g.v).toFixed(1), t: g.t }));
+const hrAria = 'Estimated bitcoin network hashrate on a logarithmic scale, one point per difficulty retarget from the January 2009 genesis block to the present: megahashes per second in the CPU era, gigahashes as GPUs arrive in 2010, terahashes across the FPGA bridge, then the ASIC climb from 2013 through petahash, exahash around 2016, and toward a zettahash per second by the mid 2020s.';
+---
+<Base title="Bitcoin Hashrate, Difficulty, and Hashprice - OpenBitcoin" description="Bitcoin's live network hashrate, current difficulty and next retarget, what hashprice means for miners, and the full mining hardware history charted.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Hashrate</div>
+    <h1>Hashrate, difficulty, and hashprice</h1>
+    <p class="doc-lede">Bitcoin's hashrate is the guessing speed of every miner on earth, estimated from difficulty and block times. Here is where it stands, how the retarget holds blocks near ten minutes, and what a hash earns per day.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="hr-hero">
+      <div class="hr-big" id="hr-ehs">&hellip;</div>
+      <div class="hr-sub">estimated network hashrate, about <b id="hr-zhs">&hellip;</b>, summed across every miner on earth</div>
+      <div class="hr-stats">
+        <div class="hr-stat"><b id="hr-diff">&hellip;</b><i>current difficulty</i></div>
+        <div class="hr-stat"><b id="hr-retleft">&hellip;</b><i>until the retarget at <span id="hr-retat">&hellip;</span></i></div>
+        <div class="hr-stat"><b id="hr-rettime">&hellip;</b><i>at 10 min per block</i></div>
+        <div class="hr-stat"><b id="hr-adj">&hellip;</b><i>estimated next adjustment</i></div>
+      </div>
+      <div class="hr-prog">
+        <div class="hr-plab"><span>Retarget period &middot; block <span id="hr-prevb">&hellip;</span> &rarr; <span id="hr-nextb">&hellip;</span></span><span id="hr-pct">&hellip;</span></div>
+        <div class="hr-bar"><div class="hr-fill" id="hr-fill" style="width:0"></div></div>
+      </div>
+    </div>
+
+    <div class="doc-card hr-mt hr-honest">
+      <div class="doc-sec doc-prose">
+        <h2>Hashrate is an estimate, not a measurement</h2>
+        <p>No one measures the network's hashrate. Miners do not report their machines, and the chain records only two things: the difficulty, which is exact and enforced by consensus, and the timestamps of the blocks found against it. Every hashrate figure ever published, including the one at the top of this page, is inferred from those two inputs: each block at the current difficulty takes about difficulty &times; 2<sup>32</sup> hashes to find on average, so dividing that by the observed seconds per block gives the estimate. Worked through with round numbers, a difficulty of 126 trillion gives 126 &times; 10<sup>12</sup> &times; 2<sup>32</sup> &divide; 600 s &approx; 9.0 &times; 10<sup>20</sup> hashes per second, about 900 EH/s.</p>
+        <p>The catch is the observation window. Finding <a href="/blocks">blocks</a> is a lottery, and lotteries are streaky: a day with 160 blocks instead of 144 prints as an 11% hashrate "surge" and a day with 130 prints as a "crash", with no machine on earth switching on or off. Single-day headlines about hashrate collapsing are usually this noise and nothing more. Over a full retarget period or a month the luck averages out and the estimate tightens, which is why serious charts smooth over days or weeks, and why the honest reading of any hashrate number is "roughly, lately", never "exactly, right now".</p>
+      </div>
+    </div>
+
+    <div class="doc-card hr-mt">
+      <div class="doc-sec doc-prose">
+        <h2>The retarget: bitcoin's thermostat</h2>
+        <p>Every 2,016 blocks, roughly every two weeks, the network checks its own pulse. It compares how long the last 2,016 blocks actually took against the target of 20,160 minutes, then scales the difficulty by that ratio, capped at 4x in either direction per period. If hashrate joined the network and blocks came fast, difficulty rises; if hashrate left and blocks dragged, difficulty falls. The next check is at block <span class="hr-num" id="hr-retat2">&hellip;</span>.</p>
+        <p>This loop is why bitcoin holds a 600-second average block time whether the network is one laptop or a fleet of warehouses drawing gigawatts. Machines can multiply a thousandfold and the settlement rhythm, the confirmation times, and above all the coin issuance stay on schedule. The thermostat controls the tempo; the supply itself runs on the other fixed clock, the <a href="/halving">halving schedule</a>, which no amount of hashrate can speed up.</p>
+      </div>
+    </div>
+
+    <div class="doc-card hr-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Hashprice: what a hash earns</h2>
+        <p>Hashprice is the miner's revenue yardstick: the expected income per unit of hashrate per day, subsidy plus fees, usually quoted in USD per PH/s. It is what every mining decision ultimately prices against. From the current figures on this page:</p>
+        <div class="hr-math">
+          <div class="hr-mrow"><span>Subsidy per day: 3.125 BTC &times; 144 blocks</span><b>450 BTC &middot; <span id="hr-subusd">&hellip;</span></b></div>
+          <div class="hr-mrow"><span>Fees per day, <span id="hr-feelab">not yet measured</span></span><b><span id="hr-feebtc">&hellip;</span> BTC &middot; <span id="hr-feeusd">&hellip;</span></b></div>
+          <div class="hr-mrow"><span>Network revenue per day</span><b><span id="hr-revbtc">&hellip;</span> BTC &middot; <span id="hr-revusd">&hellip;</span></b></div>
+          <div class="hr-mrow"><span>Divided by <span id="hr-divby">&hellip;</span></span><b><span id="hr-hpph">&hellip;</span> per PH/s per day</b></div>
+          <div class="hr-mrow"><span>Per TH/s, the machine-scale unit</span><b><span id="hr-hpth">&hellip;</span> per day</b></div>
+        </div>
+        <p>The subsidy term is fixed by consensus; the USD figures move with the price, and the fee share swings with the block space auction, whose record is on the <a href="/fees/history">fee history page</a>. To run this arithmetic for your own machines, with their hashrate and power draw, use the <a href="/tools/mining">mining calculator</a>.</p>
+      </div>
+    </div>
+
+    <div class="hr-chartcard hr-mt">
+      <div class="hr-clab">Estimated network hashrate, log scale, per retarget</div>
+      <div class="hr-cwrap">
+        <svg class="hr-chart" viewBox={'0 0 ' + HW + ' ' + HHT} role="img" aria-label={hrAria}>
+          <defs>
+            <linearGradient id="hr-fill-g" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="rgba(247,147,26,.20)" />
+              <stop offset="1" stop-color="rgba(247,147,26,0)" />
+            </linearGradient>
+          </defs>
+          {hrGrid.map((g) => <line class="hr-grid" x1={HPL} x2={HW - HPR} y1={g.y} y2={g.y} />)}
+          {hrGrid.map((g) => <text x={HPL + 2} y={g.y - 4} text-anchor="start">1 {g.t}</text>)}
+          <line class="hr-axis" x1={HPL} x2={HW - HPR} y1={HHT - HPB} y2={HHT - HPB} />
+          <g id="hr-dyn"></g>
+        </svg>
+        <div class="hr-cwait" id="hr-cwait">waiting for difficulty history</div>
+      </div>
+      <div class="hr-cfoot">
+        <span class="hr-cap" id="hr-cspan">2009 to now, log scale</span>
+        <span class="hr-cap">CPU &rarr; GPU &rarr; FPGA &rarr; ASIC</span>
+      </div>
+    </div>
+
+    <div class="doc-card hr-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What the number buys</h2>
+        <p>Hashrate is not decoration; it is the cost of rewriting history. To undo a confirmed transaction, an attacker must mine a competing chain from before that block and outpace the entire honest network for as long as it takes to catch up, paying real hardware and energy for every guess while the rest of the network keeps extending its lead. The deeper a transaction is buried, the more of that race must be rerun, which is why more confirmations mean more settlement assurance and why reorganizing even a few recent blocks against today's network is an industrial undertaking rather than a laptop trick. This page puts no dollar figure on such an attack: any specific number depends on hardware nobody can actually rent at that scale. The other what-if people ask about, quantum computing, has <a href="/quantum">its own page</a>.</p>
+      </div>
+    </div>
+
+    <div class="hr-about doc-prose">
+      <p>One number ties this page together: difficulty, the only hashrate fact the chain itself records. Everything else here, the EH/s estimate, the adjustment forecast, the hashprice, is arithmetic on top of it and on the <a href="/price">price</a>. How this site computes and sources its chain data is documented at <a href="/sources">/sources</a>, and the design that makes difficulty self-adjusting is section 4 of <a href="/learn/whitepaper">the whitepaper</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="hr-rs"><b id="hr-height">&hellip;</b><i>current height</i></div>
+      <div class="hr-rs"><b id="hr-rehs">&hellip;</b><i>estimated hashrate</i></div>
+      <div class="hr-rs"><b id="hr-rdiff">&hellip;</b><i>difficulty</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/tools/mining">Mining calculator</a>
+        <a href="/fees/history">Fee history</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hr-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 20px;text-align:center}
+  .hr-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .hr-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .hr-sub b{color:var(--acc);font-weight:700}
+  .hr-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .hr-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .hr-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hr-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .hr-prog{margin-top:20px;text-align:left}
+  .hr-plab{display:flex;justify-content:space-between;gap:10px;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;font-variant-numeric:tabular-nums}
+  .hr-bar{height:8px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:99px;overflow:hidden}
+  .hr-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--acc));border-radius:99px}
+  .hr-mt{margin-top:14px}
+  .hr-honest{border-color:rgba(255,166,60,.32)}
+  .hr-num{font:600 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hr-math{margin-top:12px;border:1px solid var(--line-2);border-radius:10px;padding:4px 14px;background:var(--panel-2)}
+  .hr-mrow{display:flex;justify-content:space-between;align-items:baseline;gap:8px 14px;flex-wrap:wrap;padding:8px 0;border-bottom:1px dotted var(--line-2)}
+  .hr-mrow:last-child{border-bottom:0}
+  .hr-mrow span{font:500 13px/1.5 var(--sans);color:var(--ink-2)}
+  .hr-mrow b{font:700 13px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;text-align:right}
+  .hr-mrow b span{font:inherit;color:inherit}
+  .hr-chartcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px}
+  .hr-clab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .hr-cwrap{position:relative}
+  .hr-cwait{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap;pointer-events:none}
+  .hr-chart{display:block;width:100%;height:auto;margin-top:8px}
+  .hr-grid{stroke:var(--line-2);stroke-width:1;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}
+  .hr-bound{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 4;vector-effect:non-scaling-stroke}
+  .hr-axis{stroke:var(--line-2);stroke-width:1;vector-effect:non-scaling-stroke}
+  .hr-area{fill:url(#hr-fill-g)}
+  .hr-line{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  .hr-dot{fill:var(--acc);stroke:var(--panel);stroke-width:2}
+  .hr-chart text{font:600 10.5px var(--mono);letter-spacing:.05em;fill:var(--ink-3);font-variant-numeric:tabular-nums}
+  .hr-chart .hr-era-t{font-weight:700;fill:var(--ink-2)}
+  .hr-cfoot{display:flex;justify-content:space-between;align-items:center;gap:6px 14px;flex-wrap:wrap;margin-top:8px}
+  .hr-cap{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .hr-about{margin-top:14px}
+  .hr-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hr-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hr-rs:last-child{border-bottom:0}
+  .hr-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hr-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .hr-big{font-size:38px}
+    .hr-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:520px){
+    
+    .hr-chart text{font-size:17px}
+    .hr-dot{r:5}
+    .hr-stats{grid-template-columns:minmax(0,1fr)}
+  }
+</style>
+<script is:inline>
+(function(){
+  var RET=2016,SUB_DAY=450;
+  /* nothing is seeded. FEE_DAY waits for the measured median, price and
+     height for the chrome band, ehs and difficulty for /network. Every leg
+     still missing keeps the ellipsis it shipped as. */
+  var FEE_DAY=null;
+  var st={price:null,height:null,ehs:null,liveH:0};
+  var lastRet=null; /* {t,h}: time and height of the newest retarget point */
+  function fmt(n){return n.toLocaleString("en-US");}
+  function btc(n){return n%1?n.toFixed(2):String(n);}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  /* next-adjustment estimate, real: pace of the current period so far against
+     the 600 s target, from the last retarget point plus a live height. No
+     height ships with the page, so both inputs are always real. Clamped to
+     +-300%. */
+  function paintAdj(){
+    if(!lastRet||!st.liveH)return;
+    var blocks=st.liveH-lastRet.h,secs=Date.now()/1000-lastRet.t;
+    if(blocks<1||secs<=0)return;
+    var p=(blocks*600/secs-1)*100;
+    if(p>300)p=300;if(p<-300)p=-300;
+    txt("hr-adj","≈ "+(p>=0?"+":"")+p.toFixed(1)+"%");
+  }
+  function paint(){
+    /* retarget figures are pure arithmetic on a REAL height; without one they
+       stay ellipses rather than describing a period nobody is in */
+    if(st.height!==null){
+      var next=(Math.floor(st.height/RET)+1)*RET,prev=next-RET,left=next-st.height,
+          mins=left*10,d=Math.floor(mins/1440),h=Math.floor(mins%1440/60),
+          pct=(st.height-prev)/RET*100;
+      txt("hr-retleft",fmt(left)+" blocks");
+      txt("hr-retat",fmt(next));
+      txt("hr-retat2",fmt(next));
+      txt("hr-rettime","~"+d+"d "+h+"h");
+      txt("hr-prevb",fmt(prev));
+      txt("hr-nextb",fmt(next));
+      txt("hr-pct",pct.toFixed(1)+"%");
+      var f=document.getElementById("hr-fill");if(f)f.style.width=pct.toFixed(2)+"%";
+      txt("hr-height",fmt(st.height));
+    }
+    /* hashprice: the subsidy is fixed by consensus, USD repaints with the live
+       price, the divisor with the live hashrate, the fee leg with the measured
+       daily fee total. Each leg waits for its own input. */
+    var p=st.price;
+    if(p!==null)txt("hr-subusd","$"+fmt(Math.round(SUB_DAY*p)));
+    if(FEE_DAY!==null){
+      txt("hr-feebtc",btc(Math.round(FEE_DAY*100)/100));
+      txt("hr-revbtc",btc(Math.round((SUB_DAY+FEE_DAY)*100)/100));
+      if(p!==null){
+        txt("hr-feeusd","$"+fmt(Math.round(FEE_DAY*p)));
+        txt("hr-revusd","$"+fmt(Math.round((SUB_DAY+FEE_DAY)*p)));
+      }
+    }
+    if(FEE_DAY!==null&&p!==null&&st.ehs!==null){
+      var ph=st.ehs*1000,rev=(SUB_DAY+FEE_DAY)*p;
+      txt("hr-hpph","$"+(rev/ph).toFixed(2));
+      txt("hr-hpth","$"+(rev/ph/1000).toFixed(4));
+    }
+    paintAdj();
+  }
+  /* live height + price arrive via the chrome hook (~1.5s and on new blocks).
+     It fires as soon as EITHER is known, so each is taken only when real. */
+  window.obPaintFiat=function(S){
+    if(typeof S.price==="number"&&S.price>0)st.price=S.price;
+    if(typeof S.height==="number"&&S.height>0){st.height=S.height;st.liveH=S.height;}
+    paint();
+  };
+  paint();
+
+  /* live wiring, all off {OB_DATA_API or "/api/v1"}: /network paints the
+     headline figures, /difficulty-history draws the chart and pins the last
+     retarget point, /summary seeds the live height for the adjustment
+     estimate, /fee-history measures the fee leg. Any failure leaves the
+     ellipses and the chart's waiting note exactly as served */
+  function applyNet(d){
+    if(!d)return;
+    if(typeof d.hashrateEhs==="number"&&isFinite(d.hashrateEhs)&&d.hashrateEhs>0){
+      st.ehs=d.hashrateEhs;
+      var big="≈ "+fmt(Math.round(st.ehs))+" EH/s";
+      txt("hr-ehs",big);
+      txt("hr-rehs",big);
+      txt("hr-zhs",(st.ehs/1000).toFixed(1)+" ZH/s");
+      txt("hr-divby",fmt(Math.round(st.ehs*10)/10)+" EH/s ("+fmt(Math.round(st.ehs*1000))+" PH/s)");
+    }
+    if(typeof d.difficulty==="number"&&isFinite(d.difficulty)&&d.difficulty>0){
+      var t=(d.difficulty/1e12).toFixed(2)+" T";
+      txt("hr-diff",t);
+      txt("hr-rdiff",t);
+    }
+    if(typeof d.height==="number"&&d.height>0){st.height=d.height;st.liveH=d.height;}
+    paint();
+  }
+  /* fees per day, measured: /fee-history samples one block every ~144 blocks
+     and each sample's totalFeeSat is that one block's fee total, so the median
+     of the recent samples times 144 blocks per day is the daily fee total.
+     The median keeps a single outlier block out of the hashprice row. Fewer
+     than 7 usable samples leaves the fee row, the revenue row and both
+     hashprice rows as ellipses: no assumed fee share is ever shown. */
+  function applyFeeDay(d){
+    if(!d||!Array.isArray(d.points))return;
+    var v=[],i,s;
+    for(i=Math.max(0,d.points.length-14);i<d.points.length;i++){
+      s=d.points[i];
+      if(!Array.isArray(s)||typeof s[4]!=="number"||!isFinite(s[4])||s[4]<0)continue;
+      v.push(s[4]);
+    }
+    if(v.length<7)return;
+    v.sort(function(a,b){return a-b;});
+    var n=v.length,med=n%2?v[(n-1)/2]:(v[n/2-1]+v[n/2])/2,perDay=med*144/1e8;
+    if(!isFinite(perDay)||!(perDay>0))return;
+    FEE_DAY=perDay;
+    txt("hr-feelab","measured from recent blocks");
+    paint();
+  }
+  /* chart: the real per-retarget series, drawn into #hr-dyn with the same
+     geometry as the build-time skeleton (constants mirrored from the
+     frontmatter). One point per retarget: [unixSeconds, height, difficulty],
+     implied hashrate = difficulty x 2^32 / 600 H/s, y linear in log10. */
+  var HW=640,HHT=232,HPT=24,HPB=32,HPL=12,HPR=12,HLO=6,HHI=21.6;
+  function drawChart(pts){
+    var g=document.getElementById("hr-dyn");if(!g)return;
+    var NS="http://www.w3.org/2000/svg";
+    var t0=pts[0][0],t1=pts[pts.length-1][0];
+    if(!(t1>t0))return;
+    function X(t){return HPL+(t-t0)/(t1-t0)*(HW-HPL-HPR);}
+    function Y(v){if(v<HLO)v=HLO;if(v>HHI)v=HHI;return HPT+(HHI-v)/(HHI-HLO)*(HHT-HPT-HPB);}
+    function el(n,a,s){var e=document.createElementNS(NS,n),k;for(k in a)e.setAttribute(k,a[k]);if(s)e.textContent=s;return e;}
+    var frag=document.createDocumentFragment(),i;
+    /* hardware era boundaries at their dates: GPUs 2010, FPGAs mid 2011,
+       ASICs 2013; labels centered in each span */
+    var bounds=[Date.UTC(2010,0,1)/1000,Date.UTC(2011,6,1)/1000,Date.UTC(2013,0,1)/1000];
+    var edges=[t0].concat(bounds,[t1]),eras=["CPU","GPU","FPGA","ASIC"];
+    for(i=0;i<bounds.length;i++)if(bounds[i]>t0&&bounds[i]<t1)
+      frag.appendChild(el("line",{"class":"hr-bound",x1:X(bounds[i]).toFixed(1),x2:X(bounds[i]).toFixed(1),y1:22,y2:HHT-HPB}));
+    /* line and area from implied hashrate */
+    var d="",v;
+    for(i=0;i<pts.length;i++){
+      v=Math.log10(pts[i][2]*4294967296/600);
+      d+=(i?"L":"M")+X(pts[i][0]).toFixed(1)+","+Y(v).toFixed(1);
+    }
+    frag.appendChild(el("path",{"class":"hr-area",d:d+"L"+X(t1).toFixed(1)+","+(HHT-HPB)+"L"+X(t0).toFixed(1)+","+(HHT-HPB)+"Z"}));
+    frag.appendChild(el("path",{"class":"hr-line",d:d}));
+    var lv=Math.log10(pts[pts.length-1][2]*4294967296/600);
+    frag.appendChild(el("circle",{"class":"hr-dot",cx:X(t1).toFixed(1),cy:Y(lv).toFixed(1),r:"3.5"}));
+    for(i=0;i<eras.length;i++)
+      frag.appendChild(el("text",{"class":"hr-era-t",x:X((edges[i]+edges[i+1])/2).toFixed(1),y:16,"text-anchor":"middle"},eras[i]));
+    /* year ticks read off the timestamps */
+    var yA=new Date(t0*1000).getUTCFullYear(),yB=new Date(t1*1000).getUTCFullYear(),
+        span=yB-yA,step=span>=12?4:span>=6?2:1,yr,tt;
+    for(yr=yA+1;yr<=yB;yr+=step){
+      tt=Date.UTC(yr,0,1)/1000;
+      if(tt<t0||tt>t1)continue;
+      frag.appendChild(el("text",{x:X(tt).toFixed(1),y:HHT-10,"text-anchor":"middle"},String(yr)));
+    }
+    g.appendChild(frag);
+    var w=document.getElementById("hr-cwait");if(w)w.remove();
+    var mo=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],ld=new Date(t1*1000);
+    txt("hr-cspan",yA+" to "+mo[ld.getUTCMonth()]+" "+ld.getUTCFullYear()+", log scale");
+  }
+  /* OB_DATA_API is set by Base.astro after this script parses, so wait for
+     DOMContentLoaded */
+  function boot(){
+    try{
+      var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";
+      fetch(api+"/network").then(function(r){return r.json();}).then(applyNet).catch(function(){});
+      fetch(api+"/difficulty-history").then(function(r){return r.json();}).then(function(d){
+        if(!d||!Array.isArray(d.points))return;
+        var pts=d.points.filter(function(p){
+          return Array.isArray(p)&&p.length>=3&&isFinite(p[0])&&p[0]>0&&isFinite(p[1])&&p[1]>=0&&isFinite(p[2])&&p[2]>0;
+        });
+        if(pts.length<100)return;
+        try{drawChart(pts);}catch(e){}
+        var lp=pts[pts.length-1];
+        lastRet={t:lp[0],h:lp[1]};
+        paintAdj();
+      }).catch(function(){});
+      fetch(api+"/summary").then(function(r){return r.json();}).then(function(d){
+        if(d&&typeof d.height==="number"&&d.height>0){st.height=d.height;st.liveH=d.height;paint();}
+      }).catch(function(){});
+      fetch(api+"/fee-history?days=30").then(function(r){return r.json();}).then(applyFeeDay).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Address Poisoning: How the Look-Alike Address Scam Works - OpenBitcoin" description="Address poisoning plants a look-alike address in your wallet history so you copy it by mistake. How the scam works and how to avoid sending to it.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Address poisoning</h1>
+    <p class="doc-lede">The scam that gets people to paste the attacker's address themselves. What it is, what it looks like character by character, and the habits that make it harmless.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ap-card">
+      <div class="ap-tlab">How the attack works</div>
+      <ol class="ap-steps">
+        <li><b>The attacker watches the chain</b> for addresses that move money, and picks a target address you have paid or been paid on.</li>
+        <li><b>They grind a look-alike:</b> generating addresses over and over until one matches the first and last characters of the target. The middle never matches; that would require breaking the cryptography. The ends are cheap.</li>
+        <li><b>They send you dust from it:</b> a few sats, just enough to plant the look-alike in your wallet's transaction history.</li>
+        <li><b>They wait.</b> One day you need the real address, you copy it from your history instead of from the source, you glance at the first and last characters, and the payment is theirs.</li>
+      </ol>
+    </div>
+
+    <div class="ap-card ap-mt">
+      <div class="ap-tlab">What it looks like</div>
+      <p class="ap-intro">A synthetic example. The real address and the planted look-alike, character by character:</p>
+      <div class="ap-dlab">The real address</div>
+      <div class="ap-addr"><span class="ap-ok">bc1qxy</span><span class="ap-bad">2kgdygjrsqtzq2n0yrf2493p83kk</span><span class="ap-ok">fjhx0w</span></div>
+      <div class="ap-dlab">The look-alike the attacker planted</div>
+      <div class="ap-addr"><span class="ap-ok">bc1qxy</span><span class="ap-bad">7v3mp9dq4l5uw8ce6ta0s5nhr34g</span><span class="ap-ok">fjhx0w</span></div>
+      <div class="ap-legend">
+        <span class="ap-lg ap-lg-ok">matches the other address</span>
+        <span class="ap-lg ap-lg-bad">differs</span>
+      </div>
+      <div class="ap-stats">
+        <div class="ap-stat"><b>6</b><i>leading characters match</i></div>
+        <div class="ap-stat"><b>6</b><i>trailing characters match</i></div>
+        <div class="ap-stat"><b>28</b><i>middle characters differ</i></div>
+        <div class="ap-stat"><b>40 · 40</b><i>same length</i></div>
+      </div>
+      <div class="ap-verdict"><b>The tell</b><span>Matching ends with a different middle. A wallet that shortens addresses shows both of these as <span class="ap-mono">bc1qxy...jhx0w</span>. That is the entire trick.</span></div>
+    </div>
+
+    <div class="ap-card ap-mt">
+      <div class="ap-tlab">How to not fall for it</div>
+      <ul class="ap-steps">
+        <li><b>Never copy an address from your transaction history.</b> This one habit defeats the attack completely. History is where the poison lives.</li>
+        <li><b>Get the address from the source, every time:</b> the invoice, the recipient's message, your own wallet's receive screen, or your saved address book.</li>
+        <li><b>Verify more than the ends.</b> If you check by eye, read a run of characters from the middle too; the middle is what the attacker cannot forge.</li>
+        <li><b>Use your wallet's address book</b> for destinations you pay repeatedly, and label them.</li>
+        <li><b>On a hardware wallet, confirm the full address on the device screen</b> before approving. The device shows what will actually be signed.</li>
+        <li><b>For large payments, send a small test amount first</b> and confirm it arrived with the recipient before sending the rest.</li>
+      </ul>
+    </div>
+
+    <div class="ap-about doc-prose">
+      <p>If dust from a look-alike is already sitting in your history: it cannot take anything by itself, and spending it is not dangerous in the way people fear (though consolidating strangers' dust has privacy costs). The risk is only ever the copy-paste. Leave it alone and take addresses from the source. To check whether an address you typed or received is well formed, use the <a href="/tools/validate">address validator</a>; it verifies the checksum and can point at a mistyped character, entirely in your browser.</p>
+      <p>Documented incidents of this pattern have cost individual victims millions of dollars in a single payment. The pattern works on every address format, on Bitcoin and on other chains, because it attacks the human shortcut, not the cryptography.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="ap-railp">The attacker plants a look-alike address in your history and waits for you to copy it; taking addresses from the source instead makes the attack useless.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/validate">Address validator and typo locator</a>
+        <a href="/">Address lookup</a>
+        <a href="/learn/whitepaper">The Bitcoin whitepaper</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ap-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .ap-mt{margin-top:14px}
+  .ap-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ap-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 4px}
+  .ap-steps{margin:0;padding-left:22px}
+  .ap-steps li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .ap-steps li::marker{color:var(--acc);font-weight:700}
+  .ap-steps b{color:var(--ink);font-weight:600}
+  .ap-dlab{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin:12px 0 6px}
+  .ap-addr{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;
+    font:600 15px/1.7 var(--mono);word-break:break-all;letter-spacing:.4px;color:var(--ink-2)}
+  .ap-ok{color:var(--up)}
+  .ap-bad{color:var(--down);background:rgba(246,70,93,.13);border-radius:3px}
+  .ap-legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+  .ap-lg{font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+  .ap-lg::before{content:"";width:9px;height:9px;border-radius:2px}
+  .ap-lg-ok::before{background:var(--up)}
+  .ap-lg-bad::before{background:var(--down)}
+  .ap-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .ap-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .ap-stat b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ap-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .ap-verdict{margin-top:14px;border-radius:12px;padding:16px 18px;border:1px solid rgba(246,70,93,.45);background:rgba(246,70,93,.07)}
+  .ap-verdict b{display:block;font:700 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--down)}
+  .ap-verdict > span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ap-mono{font:600 12.5px var(--mono);color:var(--ink)}
+  .ap-about{margin-top:14px}
+  .ap-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ap-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:700px){.ap-addr{font-size:13px}}
+</style>
+</Base>

@@ -1,0 +1,35 @@
+{
+  "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
+  "items": [
+    {
+      "title": "Bitcoin's July gain survives hawkish Fed, AI meltdown and Coldcard fallout",
+      "url": "https://www.coindesk.com/markets/2026/07/31/bitcoin-holds-onto-july-gain-as-forced-selling-fuel-was-already-spent-analysts-say",
+      "outlet": "CoinDesk",
+      "date": "2026-07-31"
+    },
+    {
+      "title": "Strategy posts $8.2 billion loss as bitcoin holdings increase 11% during Q2",
+      "url": "https://www.theblock.co/post/410212/strategy-posts-8-2-billion-loss-as-bitcoin-holdings-increase-11-during-q2",
+      "outlet": "The Block",
+      "date": "2026-07-31"
+    },
+    {
+      "title": "'Paid to wait': Bitcoin presses toward $65,000 as Treasuries out-yield the carry trade for only second time on record",
+      "url": "https://www.theblock.co/post/410163/paid-to-wait-bitcoin-presses-toward-65000-as-treasuries-out-yield-carry-trade-for-only-second-time-on-record",
+      "outlet": "The Block",
+      "date": "2026-07-30"
+    },
+    {
+      "title": "Core Scientific adds more bitcoin to balance sheet in Q2 despite selling strategy",
+      "url": "https://bitcoinmagazine.com/news/core-scientific-adds-more-bitcoin",
+      "outlet": "Bitcoin Magazine",
+      "date": "2026-07-30"
+    },
+    {
+      "title": "Bitcoin bounces to $64,300 but the real move waits on the Fed: Crypto Markets Today",
+      "url": "https://www.coindesk.com/markets/2026/07/29/bitcoin-steadies-above-usd64-000-as-crypto-looks-to-fed-interest-rate-decision",
+      "outlet": "CoinDesk",
+      "date": "2026-07-29"
+    }
+  ]
+}

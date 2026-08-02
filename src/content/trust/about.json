@@ -1,0 +1,50 @@
+{
+  "slug": "about",
+  "title": "About - OpenBitcoin",
+  "metaDescription": "OpenBitcoin.com is a Bitcoin-only block explorer and toolset running on its own full node, supported by advertising and operated independently.",
+  "kicker": "The Project",
+  "h1": "About OpenBitcoin.com",
+  "lede": "OpenBitcoin.com is a Bitcoin-only block explorer with live prices, fee estimates, and related tools, run on its own infrastructure by an independent operator.",
+  "sections": [
+    {
+      "id": "what-this-is",
+      "heading": "What this is",
+      "html": "<p>OpenBitcoin.com is a Bitcoin-only block explorer with live prices, fee estimates, and a set of related tools. There are no user accounts and nothing to sign up for. The scope of the site is published in full:</p><blockquote>Bitcoin the monetary network. No tokens, no inscriptions, no presales. No altcoin prices, charts, tools, or recommendations anywhere on this site. One exception, stated plainly: /swap supports cross-asset swaps, because moving value from other coins into bitcoin is something our users actually do. That's its only job.</blockquote>"
+    },
+    {
+      "id": "how-it-runs",
+      "heading": "How it runs",
+      "html": "<p>The site runs its own Bitcoin Core full node and chain index. Block, transaction, and address data is read from that node, not from a third-party API. The displayed bitcoin price is a median of three exchanges, and the price and fee series are recorded and stored on the site's own infrastructure. Where each figure comes from is documented at <a href=\"/sources\">/sources</a>.</p>"
+    },
+    {
+      "id": "how-it-is-supported",
+      "heading": "How it is supported",
+      "html": "<p>The site is supported by advertising, affiliate links, sponsorship, and tips. It may display advertising from third-party ad networks; ad content comes from the networks that serve it and is not an endorsement. Some outbound links are affiliate links that pay the site a commission. Sponsorship inquiries can be made through the <a href=\"/contact\">contact page</a>. Voluntary tips are accepted. Sponsored and affiliate placements are labeled where they appear, as described at <a href=\"/disclosure\">/disclosure</a>.</p>"
+    },
+    {
+      "id": "independent-operation",
+      "heading": "Independent operation",
+      "html": "<p>OpenBitcoin.com is independently operated and is not affiliated with any exchange, wallet vendor, or other company. The operator maintains the site anonymously and is reachable at the contact address below.</p>"
+    },
+    {
+      "id": "contact",
+      "heading": "Contact",
+      "html": "<p>Email: <a href=\"mailto:inbox@openbitcoin.com\">inbox@openbitcoin.com</a>. This inbox is monitored and handles all inquiries, including privacy requests, abuse reports, and legal notices.</p>"
+    }
+  ],
+  "proofLinks": [
+    {
+      "label": "Data sources",
+      "href": "/sources"
+    },
+    {
+      "label": "Advertising and affiliate disclosure",
+      "href": "/disclosure"
+    },
+    {
+      "label": "Privacy policy",
+      "href": "/privacy"
+    }
+  ],
+  "updated": "July 2026"
+}

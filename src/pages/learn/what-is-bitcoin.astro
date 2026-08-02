@@ -1,0 +1,157 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="What Is Bitcoin? A Plain-Language Introduction - OpenBitcoin" description="What bitcoin is, in plain language: a shared ledger kept by a network with no company behind it, what sats are, and why the supply stops at 21 million.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>What is bitcoin?</h1>
+    <p class="doc-lede">Bitcoin is money kept by a network of computers instead of a bank or a company. This page explains the whole idea in plain language, with the network's live numbers woven into the text as you read.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="wb-card">
+      <div class="wb-chead"><span class="wb-num">01</span><h2>Money without an operator</h2></div>
+      <p class="wb-p">Every other kind of digital money is a number in some company's database: a bank, a card network, an app. Bitcoin replaces the company with a network. Thousands of computers around the world each keep a full copy of one shared ledger, and roughly every ten minutes they agree on the next page of it. There is no headquarters, no CEO, no server that can be switched off, and no account that can be closed, because there is no operator to do the closing.</p>
+      <p class="wb-p">The design was published in 2008 by someone writing under the name <a href="/learn/who-is-satoshi">Satoshi Nakamoto</a>, in a nine-page paper you can read <a href="/learn/whitepaper">typeset here</a>. The network itself started on January 3, 2009 and has been adding pages to the ledger ever since. It is on page number <span class="wb-fig" id="wb-height">&#8230;</span> right now; figures like that one are read live from the network while you read.</p>
+    </div>
+
+    <div class="wb-card wb-mt">
+      <div class="wb-chead"><span class="wb-num">02</span><h2>What "a bitcoin" is</h2></div>
+      <p class="wb-p">A bitcoin is not a file or a physical coin; it is a balance recorded on that shared ledger, spendable only by whoever holds its keys. The unit divides into one hundred million pieces called satoshis, or sats, so nobody needs to buy a whole coin. At the current price of <span class="wb-fig" id="wb-price">&#8230;</span>, one US dollar buys about <span class="wb-fig" id="wb-sats">&#8230;</span> sats. The <a href="/sats">sats page</a> explains the unit, <a href="/sats-per-dollar">sats per dollar</a> tracks that number live, and the <a href="/convert">converter</a> moves between bitcoin, sats, and dollars.</p>
+      <div class="wb-units">
+        <div class="wb-unit"><b>100,000,000 sats</b><i>one bitcoin, in satoshis</i></div>
+        <div class="wb-unit"><b>0.00000001 BTC</b><i>one satoshi, in bitcoin</i></div>
+      </div>
+    </div>
+
+    <div class="wb-card wb-mt">
+      <div class="wb-chead"><span class="wb-num">03</span><h2>Why there will only be 21 million</h2></div>
+      <p class="wb-p">New bitcoin enters the world in exactly one way: each new page of the ledger pays its writer a fixed subsidy of brand-new coins, currently 3.125 BTC, about 450 per day. Every 210,000 pages that subsidy is cut in half, an event called the <a href="/halving">halving</a>, until it rounds to zero around the year 2140. Add the schedule up and it stops just short of 21 million coins. As of block <span class="wb-fig" id="wb-height2">&#8230;</span>, about <span class="wb-fig" id="wb-supply">&#8230;</span> of those 21 million already exist.</p>
+      <div class="wb-stats">
+        <div class="wb-stat"><b id="wb-tsupply">&#8230;</b><i>coins in circulation</i></div>
+        <div class="wb-stat"><b id="wb-tpct">&#8230;</b><i>of all bitcoin already mined</i></div>
+        <div class="wb-stat"><b id="wb-tleft">&#8230;</b><i>left to mine, ever</i></div>
+      </div>
+      <p class="wb-p wb-pm">The cap is not a promise from anyone; it is a rule that every computer on the network checks on every page. Changing it would require the people who run those computers to voluntarily adopt new software with a different rule, which is a very different thing from a decision someone can make.</p>
+    </div>
+
+    <div class="wb-card wb-mt">
+      <div class="wb-chead"><span class="wb-num">04</span><h2>Transactions and blocks</h2></div>
+      <p class="wb-p">A transaction is a short signed message: take this much bitcoin from these coins and assign it to that address. Your wallet writes and signs it, the network passes it around, and it waits in a public queue called the <a href="/mempool">mempool</a>. Roughly every ten minutes, one of those ledger pages, called a block, gathers waiting transactions and is appended to the chain by every computer at once; you can <a href="/blocks">watch the blocks arrive</a>. Each later block buries yours deeper, which is what a "confirmation" is. The <a href="/fees">fee</a> you attach is a bid for space in the next block, not a payment to any company.</p>
+    </div>
+
+    <div class="wb-card wb-mt">
+      <div class="wb-chead"><span class="wb-num">05</span><h2>Who runs it</h2></div>
+      <p class="wb-p">Two roles, neither in charge. <a href="/nodes">Nodes</a> are ordinary computers, run by anyone who wants one, that check every rule on every transaction and block and reject anything invalid; the rules are enforced by everyone rather than decreed by anyone. Miners spend electricity racing to publish the next block, and the winner collects the new coins plus the fees. Miners order transactions; they do not make rules. A block that breaks a rule is ignored by every node no matter how much power went into it. Developers publish software, but it only matters once people choose to run it. Nowhere in that arrangement is there a switch a company, a founder, or a government could flip to change the supply or reverse a payment.</p>
+    </div>
+
+    <div class="wb-card wb-mt">
+      <div class="wb-chead"><span class="wb-num">06</span><h2>What bitcoin is not</h2></div>
+      <ul class="wb-not">
+        <li><b>Not a company or a stock.</b> There are no shares, no earnings, and no CEO, and nothing pays dividends. Bitcoin is the asset itself, not a claim on a business.</li>
+        <li><b>Not an app.</b> Wallets and exchanges are separate products built by separate companies, and any of them can disappear without the network noticing.</li>
+        <li><b>Not stored on your phone.</b> The coins live on the ledger; a wallet holds the keys that move them. Lose the keys and the coins remain visible on the chain, permanently out of reach. <a href="/learn/self-custody">Self-custody</a> is the habit of holding those keys well.</li>
+        <li><b>Not supervised by anyone who can undo your mistakes.</b> There is no fraud department and no chargeback; a confirmed payment is final. That finality is precisely why scammers steer victims toward bitcoin, so read <a href="/learn/scams">how the common scams work</a> before your first transaction, not after.</li>
+      </ul>
+    </div>
+
+    <div class="wb-about doc-prose">
+      <p>This page is the starting point; where you go next depends on what you want to do. To see the original design in its author's own words, read the <a href="/learn/whitepaper">whitepaper</a>; to hold coins yourself, start with <a href="/learn/self-custody">self-custody</a>; to follow the countdown to the next supply cut, watch the <a href="/halving">halving page</a>; the rest of the guides live at <a href="/learn">/learn</a>. The live figures woven into this page, block height, price, and supply, come from the sources documented at <a href="/sources">/sources</a>, and everything here is informational rather than advice, per the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The network right now</div>
+      <div class="wb-rs"><b id="wb-rh">&#8230;</b><i>current block height</i></div>
+      <div class="wb-rs"><b id="wb-rp">&#8230;</b><i>bitcoin price</i></div>
+      <div class="wb-rs"><b id="wb-rsupply">&#8230;</b><i>coins in circulation</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Next steps</div>
+      <nav>
+        <a href="/learn/whitepaper">Read the whitepaper</a>
+        <a href="/learn/self-custody">Hold it yourself: self-custody</a>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .wb-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .wb-mt{margin-top:14px}
+  .wb-chead{display:flex;align-items:baseline;gap:10px}
+  .wb-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .wb-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .wb-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .wb-pm{margin-top:12px}
+  .wb-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wb-p a:hover{border-bottom-style:solid}
+  .wb-fig{font:700 13px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .wb-units{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .wb-unit{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;text-align:center}
+  .wb-unit b{display:block;font:700 13.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .wb-unit i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .wb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .wb-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .wb-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .wb-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .wb-not{margin:12px 0 0;padding-left:0;list-style:none}
+  .wb-not li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px;padding-left:22px;position:relative}
+  .wb-not li:first-child{margin-top:0}
+  .wb-not li::before{content:"\00d7";position:absolute;left:0;top:0;font:700 15px/1.55 var(--mono);color:var(--down)}
+  .wb-not b{color:var(--ink);font-weight:600}
+  .wb-not a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wb-not a:hover{border-bottom-style:solid}
+  .wb-about{margin-top:14px}
+  .wb-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .wb-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .wb-rs:last-child{border-bottom:0}
+  .wb-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .wb-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:520px){.wb-units{grid-template-columns:1fr}}
+</style>
+<script is:inline>
+(function(){
+  var EPOCH=210000,MAX=21000000;
+  var st={price:null,height:null};
+  function fmt(n){return n.toLocaleString("en-US");}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function supplyAt(h){
+    var s=0,sub=50;
+    for(var e=0;e<64;e++){
+      var start=e*EPOCH;if(h<=start)break;
+      s+=Math.min(h-start,EPOCH)*sub;sub/=2;
+    }
+    return s;
+  }
+  function paint(){
+    /* each half paints only once its own live value has arrived; until then
+       the ellipsis in the markup stands */
+    if(st.height){
+      var sup=supplyAt(st.height),supTxt=fmt(Math.round(sup));
+      txt("wb-height",fmt(st.height));
+      txt("wb-height2",fmt(st.height));
+      txt("wb-rh",fmt(st.height));
+      txt("wb-supply",supTxt);
+      txt("wb-tsupply",supTxt+" BTC");
+      txt("wb-rsupply",supTxt+" BTC");
+      txt("wb-tpct",(sup/MAX*100).toFixed(2)+"%");
+      txt("wb-tleft",fmt(Math.round(MAX-sup))+" BTC");
+    }
+    if(st.price){
+      var prTxt="$"+fmt(Math.round(st.price));
+      txt("wb-price",prTxt);
+      txt("wb-rp",prTxt);
+      txt("wb-sats",fmt(Math.round(1e8/st.price)));
+    }
+  }
+  /* live height + price arrive via the chrome hook; window.OB_LIVE is only set
+     once a real summary lands, so the ellipses hold until then */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;if(S.price)st.price=S.price;if(S.height)st.height=S.height;paint();};
+})();
+</script>
+</Base>

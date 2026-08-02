@@ -1,0 +1,289 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Fee Calculator: Transaction Size and Cost - OpenBitcoin" description="Bitcoin fee calculator: choose input and output counts by script type, set a sat/vB rate, and get the size in vbytes and fee in sats and USD.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Fees</div>
+    <h1>Transaction fee calculator</h1>
+    <p class="doc-lede">Pick how many coins you spend and how many destinations you pay, set a rate in sat/vB, and get the estimated size in virtual bytes and the fee in sats and dollars. Fees pay for size, not amount.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="fc-card">
+      <div class="fc-cols">
+        <div class="fc-group" aria-label="Inputs: coins being spent">
+          <div class="fc-glab">Inputs <i>coins being spent</i></div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Native segwit</b><span>P2WPKH, bc1q, ~68 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="iw" data-d="-1" aria-label="Fewer native segwit inputs">-</button>
+              <span class="fc-n" id="fc-n-iw">1</span>
+              <button type="button" class="fc-b" data-k="iw" data-d="1" aria-label="More native segwit inputs">+</button>
+            </div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Taproot</b><span>P2TR, bc1p, ~57.5 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="it" data-d="-1" aria-label="Fewer taproot inputs">-</button>
+              <span class="fc-n" id="fc-n-it">0</span>
+              <button type="button" class="fc-b" data-k="it" data-d="1" aria-label="More taproot inputs">+</button>
+            </div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Legacy</b><span>P2PKH, starts with 1, ~148 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="il" data-d="-1" aria-label="Fewer legacy inputs">-</button>
+              <span class="fc-n" id="fc-n-il">0</span>
+              <button type="button" class="fc-b" data-k="il" data-d="1" aria-label="More legacy inputs">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="fc-group" aria-label="Outputs: destinations plus change">
+          <div class="fc-glab">Outputs <i>destinations plus change</i></div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Native segwit</b><span>P2WPKH, bc1q, ~31 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="ow" data-d="-1" aria-label="Fewer native segwit outputs">-</button>
+              <span class="fc-n" id="fc-n-ow">2</span>
+              <button type="button" class="fc-b" data-k="ow" data-d="1" aria-label="More native segwit outputs">+</button>
+            </div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Taproot</b><span>P2TR, bc1p, ~43 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="ot" data-d="-1" aria-label="Fewer taproot outputs">-</button>
+              <span class="fc-n" id="fc-n-ot">0</span>
+              <button type="button" class="fc-b" data-k="ot" data-d="1" aria-label="More taproot outputs">+</button>
+            </div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-meta"><b>Legacy</b><span>P2PKH, starts with 1, ~34 vB each</span></div>
+            <div class="fc-step">
+              <button type="button" class="fc-b" data-k="ol" data-d="-1" aria-label="Fewer legacy outputs">-</button>
+              <span class="fc-n" id="fc-n-ol">0</span>
+              <button type="button" class="fc-b" data-k="ol" data-d="1" aria-label="More legacy outputs">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-rlab">Fee rate</div>
+      <div class="fc-presets" role="group" aria-label="Fee rate presets in sat/vB">
+        <button type="button" class="fc-p" data-r="2"><b>2</b><span>Economy</span></button>
+        <button type="button" class="fc-p" data-r="3"><b>3</b><span>~1 hour</span></button>
+        <button type="button" class="fc-p is-on" data-r="4"><b>4</b><span>~30 min</span></button>
+        <button type="button" class="fc-p" data-r="5"><b>5</b><span>Fastest</span></button>
+        <div class="fc-custom">
+          <input id="fc-cr" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="Custom" aria-label="Custom fee rate in sat/vB">
+          <span>sat/vB</span>
+        </div>
+      </div>
+      <div class="fc-res" aria-live="polite">
+        <div class="fc-rs"><span>Estimated size</span><b id="fc-v">141 vB</b></div>
+        <div class="fc-rs fc-rs-fee"><span>Fee</span><b id="fc-f">564 sats</b></div>
+        <div class="fc-rs"><span>In US dollars</span><b id="fc-u">$0.36</b></div>
+      </div>
+      <div class="fc-bd" id="fc-bd">10.5 vB overhead + 68 vB inputs + 62 vB outputs = 140.5 vB, rounded up to 141</div>
+    </div>
+
+    <div class="doc-card fc-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Size is not amount</h2>
+        <p>A bitcoin fee buys room in a block, measured in virtual bytes, so what you pay depends on the shape of the transaction: how many coins it spends and how many destinations it pays. The amount being sent changes neither. Moving a fortune in one input and two outputs costs the same 141 vB as moving pocket change, which is why fees are quoted as a rate, in satoshis per virtual byte, and multiplied by size. <a href="/fees">Current rates</a> are on the fee page.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why input count dominates</h2>
+        <p>Every coin a transaction spends is an input, and each input carries its own signature, which is the expensive part. A native segwit input adds about 68 vB; an extra output adds only 31. Ten inputs with the same two outputs push the typical 141 vB payment to about 753 vB, more than five times the fee at the same rate. Legacy inputs are worse still at roughly 148 vB each, since their signatures get no witness discount. A wallet full of small coins therefore pays a large fee to spend what looks like one balance.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Batching and consolidation</h2>
+        <p>The overhead and the inputs are paid once per transaction, so paying several people at once is cheap: each extra recipient costs one output, about 31 vB, instead of a whole separate transaction. The same logic runs in reverse for your own coins: merging many small inputs into one while rates are low means the expensive signatures are bought at economy prices, not during a spike. <a href="/fees/consolidate">Consolidating coins</a> walks through it, and <a href="/fees/timing">fee timing</a> covers when rates tend to be lowest.</p>
+      </div>
+    </div>
+
+    <div class="fc-about doc-prose">
+      <p>These are estimates, not quotes. Real signature sizes vary by a byte or two, wallets round differently, and script types beyond the three shown here (multisig, older wrapped segwit) weigh more, so treat the result as a close floor rather than an exact figure. The rate is the part you control at send time: check <a href="/fees">current rates</a> before choosing, and if a transaction is already waiting because its rate was too low, <a href="/tx/stuck">stuck transaction help</a> covers bumping it. Figures are informational under the <a href="/terms">terms</a>; data provenance is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="fc-stat"><b id="fc-px">$64,362</b><i>1 BTC</i></div>
+      <div class="fc-stat"><b id="fc-spd">1,554 sats</b><i>per US dollar</i></div>
+      <div class="fc-stat"><b id="fc-ef">2 / 5 sat/vB</b><i>economy / fastest</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees">Current fee rates</a>
+        <a href="/fees/timing">When fees are cheapest</a>
+        <a href="/fees/consolidate">Consolidating coins</a>
+        <a href="/tx/stuck">Stuck transaction help</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .fc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .fc-mt{margin-top:14px}
+  .fc-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+  .fc-group{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:12px 16px 10px;min-width:0}
+  .fc-glab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc);padding-bottom:4px}
+  .fc-glab i{font-style:normal;color:var(--ink-3);letter-spacing:.09em;margin-left:6px}
+  .fc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dotted var(--line-2)}
+  .fc-row:last-child{border-bottom:0}
+  .fc-meta{min-width:0}
+  .fc-meta b{display:block;font:700 13px var(--sans);color:var(--ink)}
+  .fc-meta span{display:block;font:600 9.5px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin-top:2px}
+  .fc-step{display:flex;align-items:center;gap:7px;flex:none}
+  .fc-b{width:30px;height:30px;border-radius:8px;border:1px solid var(--line-2);background:var(--panel-2);
+    color:var(--ink);font:700 16px/1 var(--mono);cursor:pointer;padding:0}
+  .fc-b:hover{border-color:rgba(255,166,60,.5);color:var(--acc)}
+  .fc-n{min-width:26px;text-align:center;font:700 16px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums}
+  .fc-rlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 8px}
+  .fc-presets{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+  .fc-p{display:flex;flex-direction:column;align-items:center;gap:1px;background:var(--panel-2);border:1px solid var(--line-2);
+    border-radius:10px;padding:8px 15px;cursor:pointer}
+  .fc-p b{font:700 16px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums}
+  .fc-p span{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .fc-p:hover{border-color:rgba(255,166,60,.4)}
+  .fc-p.is-on{border-color:rgba(255,166,60,.55);background:rgba(247,147,26,.08)}
+  .fc-p.is-on b{color:var(--acc)}
+  .fc-custom{display:flex;align-items:center;gap:7px;background:var(--field);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;padding:0 12px}
+  .fc-custom:focus-within{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .fc-custom input{width:72px;background:none;border:0;outline:none;color:var(--price-ink);
+    font:700 16px var(--mono);font-variant-numeric:tabular-nums;padding:8px 0}
+  .fc-custom input::placeholder{color:var(--ink-3);font-weight:600}
+  .fc-custom span{font:700 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .fc-res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .fc-rs{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;min-width:0}
+  .fc-rs span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .fc-rs b{display:block;font:700 20px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .fc-rs-fee{border-color:rgba(255,166,60,.38)}
+  .fc-rs-fee b{color:var(--acc)}
+  .fc-bd{font:600 10.5px/1.6 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:10px}
+  .fc-about{margin-top:14px}
+  .fc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .fc-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .fc-stat:last-child{border-bottom:0}
+  .fc-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fc-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .fc-card{padding:18px 18px 20px}
+    .fc-cols{grid-template-columns:minmax(0,1fr)}
+    .fc-res{grid-template-columns:minmax(0,1fr)}
+    .fc-rs{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .fc-rs span{margin-bottom:0}
+    .fc-p{flex:1 1 auto}
+    .fc-custom{flex:1 1 100%;justify-content:space-between}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* vB per component */
+  var W={iw:68,it:57.5,il:148,ow:31,ot:43,ol:34};
+  var P={price:64362.18,rate:4,lastPreset:4};
+  var C={iw:1,it:0,il:0,ow:2,ot:0,ol:0};
+  var elV=document.getElementById("fc-v"),elF=document.getElementById("fc-f"),
+      elU=document.getElementById("fc-u"),elBd=document.getElementById("fc-bd"),
+      elPx=document.getElementById("fc-px"),elSpd=document.getElementById("fc-spd"),
+      elEf=document.getElementById("fc-ef"),
+      cr=document.getElementById("fc-cr"),
+      presets=document.querySelectorAll(".fc-p");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function calc(){
+    var ins=C.iw*W.iw+C.it*W.it+C.il*W.il,
+        outs=C.ow*W.ow+C.ot*W.ot+C.ol*W.ol,
+        oh=(C.iw+C.it)>0?10.5:10, /* marker and flag only exist when a segwit input is present */
+        raw=oh+ins+outs;
+    return {oh:oh,ins:ins,outs:outs,raw:raw,v:Math.ceil(raw)};
+  }
+  function paint(){
+    var r=calc(),fee=Math.ceil(r.v*P.rate),usd=fee/1e8*P.price;
+    elV.textContent=fmt(r.v,0)+" vB";
+    elF.textContent=fmt(fee,0)+" sats";
+    elU.textContent="$"+fmt(usd,usd>=100?0:2);
+    elBd.textContent=fmt(r.oh,1)+" vB overhead + "+fmt(r.ins,1)+" vB inputs + "+fmt(r.outs,1)+
+      " vB outputs = "+fmt(r.raw,1)+" vB, rounded up to "+fmt(r.v,0);
+    Object.keys(C).forEach(function(k){
+      var el=document.getElementById("fc-n-"+k);if(el)el.textContent=C[k];
+    });
+    elPx.textContent="$"+fmt(P.price,0);
+    elSpd.textContent=fmt(1e8/P.price,0)+" sats";
+  }
+  function setOn(btn){
+    presets.forEach(function(x){x.classList.toggle("is-on",x===btn);});
+  }
+  document.querySelectorAll(".fc-b").forEach(function(b){
+    b.addEventListener("click",function(){
+      var k=b.dataset.k,d=parseInt(b.dataset.d,10),n=C[k]+d;
+      if(n<0||n>99)return;
+      C[k]=n;
+      var group=k.charAt(0)==="i"?C.iw+C.it+C.il:C.ow+C.ot+C.ol;
+      if(group<1){C[k]=n-d;return;} /* a transaction needs at least one input and one output */
+      paint();
+    });
+  });
+  presets.forEach(function(b){
+    b.addEventListener("click",function(){
+      P.rate=parseFloat(b.dataset.r);P.lastPreset=P.rate;
+      cr.value="";setOn(b);paint();
+    });
+  });
+  cr.addEventListener("input",function(){
+    var n=parseFloat((""+cr.value).replace(/[^0-9.]/g,""));
+    if(!isFinite(n)||n<1)return;
+    if(n>9999)n=9999;
+    P.rate=n;setOn(null);paint();
+  });
+  cr.addEventListener("focus",function(){cr.select();});
+  cr.addEventListener("blur",function(){
+    var n=parseFloat((""+cr.value).replace(/[^0-9.]/g,""));
+    if(isFinite(n)&&n>=1)return;
+    cr.value="";P.rate=P.lastPreset;
+    presets.forEach(function(x){x.classList.toggle("is-on",parseFloat(x.dataset.r)===P.lastPreset);});
+    paint();
+  });
+  /* live price arrives via the chrome hook (~1.5s); USD only by design, the
+     footer currency switch intentionally does not change this page */
+  window.obPaintFiat=function(S){P.price=S.price;paint();};
+  paint();
+  /* live fee tiers: one summary fetch on load replaces the fallback preset
+     rates; on any failure the shipped rates stay and the page works as-is.
+     OB_DATA_API is set by Base.astro in a script at the end of body, after
+     this one parses, so read it on DOMContentLoaded or the fetch never fires */
+  function applyFees(d){
+    var f=d&&d.fees;if(!f)return;
+    var tiers=[f.economy,f.hour,f.halfHour,f.fastest],lpDone=false;
+    presets.forEach(function(b,i){
+      var v=tiers[i];
+      if(typeof v!=="number"||!isFinite(v)||v<=0)return;
+      var old=parseFloat(b.dataset.r);
+      b.dataset.r=""+v;
+      var num=b.querySelector("b");if(num)num.textContent=fmt(v,1);
+      if(!lpDone&&P.lastPreset===old){P.lastPreset=v;lpDone=true;}
+      if(b.classList.contains("is-on")&&!cr.value)P.rate=v;
+    });
+    if(elEf&&typeof f.economy==="number"&&isFinite(f.economy)&&f.economy>0&&
+       typeof f.fastest==="number"&&isFinite(f.fastest)&&f.fastest>0)
+      elEf.textContent=fmt(f.economy,1)+" / "+fmt(f.fastest,1)+" sat/vB";
+    paint();
+  }
+  function boot(){
+    try{
+      if(window.OB_LIVE&&window.OB_LIVE.fees){applyFees(window.OB_LIVE);return;}
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/summary").then(function(res){
+        return res.ok?res.json():null;
+      }).then(applyFees).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

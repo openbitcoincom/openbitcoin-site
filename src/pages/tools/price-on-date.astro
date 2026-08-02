@@ -1,0 +1,426 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Price on a Date: Cost Basis Lookup - OpenBitcoin" description="Look up the bitcoin price on any past date for cost basis: the daily open, high, low and close, and which valuation source tax authorities accept.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tools</div>
+    <h1>Bitcoin price on a date</h1>
+    <p class="doc-lede">The price on the day you acquired coins is where a cost basis starts. Pick a date from the first market day in July 2010 onward, and see which figure a tax return wants and why a daily close is a judgment call.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="pd-card">
+      <div class="pd-lab">Acquisition date</div>
+      <div class="pd-pick">
+        <input type="date" id="pd-d" class="pd-date" min="2010-07-17" aria-label="Acquisition date, from July 17 2010 onward">
+        <div class="pd-quick" role="group" aria-label="Date shortcuts">
+          <button type="button" class="pd-q" data-q="y1">1 year ago</button>
+          <button type="button" class="pd-q" data-q="y5">5 years ago</button>
+          <button type="button" class="pd-q" data-q="hv">Last halving</button>
+          <button type="button" class="pd-q" data-q="first">First market day</button>
+        </div>
+      </div>
+
+      <div class="pd-echo" id="pd-echo" aria-live="polite">
+        <b id="pd-title">Pick a date to resolve it</b>
+        <div class="pd-chips">
+          <div class="pd-chip"><span>Day of week</span><b id="pd-c1">--</b></div>
+          <div class="pd-chip"><span>Days ago</span><b id="pd-c2">--</b></div>
+          <div class="pd-chip"><span>Block subsidy</span><b id="pd-c3">--</b></div>
+        </div>
+      </div>
+
+      <div class="pd-outhead">
+        <div class="pd-lab pd-lab-2">Daily figures in US dollars</div>
+        <span class="pd-tag" id="pd-src">Source shown per day, UTC</span>
+      </div>
+      <div class="pd-out" aria-live="polite">
+        <div class="pd-cell"><span>Open</span><b id="pd-o">--</b></div>
+        <div class="pd-cell"><span>High</span><b id="pd-h">--</b></div>
+        <div class="pd-cell"><span>Low</span><b id="pd-l">--</b></div>
+        <div class="pd-cell"><span>Close</span><b id="pd-c">--</b></div>
+      </div>
+      <p class="pd-gate" id="pd-note">Pick a date and the four figures fill from the daily series this site ships, with the source for that particular day named beside them. Days before August 18, 2010 predate the series; those first weeks live on the <a href="/history">timeline</a> instead.</p>
+      <p class="pd-gate" id="pd-monthrow" hidden><a id="pd-monthlink" href="/price/calendar">See every day of that month &#8594;</a></p>
+    </div>
+
+
+    <div class="doc-card pd-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Why cost basis needs the price on the day</h2>
+        <p>A cost basis is what a coin was worth in your own currency at the moment it became yours. Sell it later and the taxable gain is the difference between that figure and what you received. If you bought with dollars on an exchange the basis is easy: it is what you paid, fees included, and the statement proves it. The awkward cases are everything else.</p>
+        <p>Coins that arrived as payment for work, as a gift, as a mining or pool payout, or out of a swap from another asset came with no receipt in your currency. Their basis is the fair market value on the day they arrived, which means you need a price for that day and a note of where the price came from. The same goes for coins bought on an exchange that has since closed, and for anything held long enough that the paperwork is gone. <a href="/tax">Bitcoin taxes</a> covers the principles, and the <a href="/tax/us">United States</a> and <a href="/tax/ca">Canada</a> guides walk through the events one at a time.</p>
+        <p>Basis also survives moving. Sending coins between your own wallets is not a disposal, but it does not reset anything either: the basis and the acquisition date travel with the coins. The date matters as much as the price, because in most systems it decides the rate. Losing the acquisition date is the more expensive mistake of the two.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Which price a tax authority accepts</h2>
+        <p>No agency publishes an official bitcoin price, and none names one exchange you must use. What published guidance asks for instead is a reasonable source, applied consistently, and written down. In the United States the IRS has taken the position in its digital asset guidance that a value from a service analyzing worldwide indices is acceptable, as is the value from the exchange where the transaction actually happened, provided whichever method you pick is applied consistently. Canada's guidance has the same shape: fair market value on the transaction date, established by a reasonable method, such as the rate from the exchange you used or an average across several high volume exchanges, applied the same way every time.</p>
+        <p>The practical reading is that consistency counts for more than which reputable source you chose. Switching sources mid-year to whichever one printed the number you preferred is the thing that looks wrong on inspection. So pick one, record its name next to every figure, and keep the evidence: an export, a saved page, a screenshot with the date visible. Country detail sits in the <a href="/tax/us">United States guide</a> and the <a href="/tax/ca">Canada guide</a>. None of this is tax advice, and agency guidance is revised regularly, so read the current version before you file.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>A daily close is a choice, not a fact</h2>
+        <p>Bitcoin has no closing bell. It trades every second of every day, everywhere, on venues that never shut, so there is no moment at which the day's price is settled the way a stock exchange settles one in the afternoon. A daily close is simply whatever price some venue printed at whatever instant its calendar day ended, and days end at different instants: midnight UTC on most data providers, late afternoon New York on others, local midnight on an exchange that thinks in its own timezone. In a quiet week the gap between those definitions is noise. In a violent one, two versions of the same Tuesday can sit thousands of dollars apart.</p>
+        <p>Open, high and low inherit that problem and the high and low inherit a second one, since they are the extremes inside a window: shift the window and you catch different extremes. Venue matters too. At any given instant different exchanges print slightly different prices, and an index that averages several of them reports a third figure that nobody actually traded at.</p>
+        <p>The fix is not to hunt for the true number, because there is not one. It is to label the number you used: this figure, this source, this timezone, this date. Bitcoin's own history has a clean illustration. The 2024 halving, block 840000, was mined nine minutes past midnight UTC on April 20, which was still the evening of April 19 across the Americas, which is why reference works disagree about the date of an event that happened at a single instant. Daily prices are the same kind of object.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Records you probably already have</h2>
+        <p>Before reconstructing a price from a chart, check whether the number already exists in your own files. Exchange accounts export a full transaction history, usually with the executed price on every fill, and that beats any later lookup because it is the price you actually got rather than an average of prices other people got. Bank and card statements pin the fiat leg. An old trade confirmation email is sometimes the only surviving proof that a defunct exchange existed at all, which is a good reason to keep them.</p>
+        <p>The blockchain will not help with this part. It records amounts, addresses and timestamps and no price of any kind, because it has no idea what a dollar is. A transaction id proves when coins moved and how many, which fixes the moment precisely, but the value in your currency still has to come from a market source you name yourself. <a href="/tools/decode">Decoding a raw transaction</a> shows exactly what is and is not in one.</p>
+        <p>The cheapest habit is writing the basis down as you acquire coins instead of reconstructing it years later: date, amount, price, source, one file. <a href="/dca">Dollar cost averaging</a> punishes skipping that more than most strategies, since a weekly buy over five years is 260 separate basis figures, and <a href="/whatif">what if you had bought</a> is a reminder of why the oldest entries tend to be the ones that matter.</p>
+      </div>
+    </div>
+
+    <div class="pd-about doc-prose">
+      <p>The date arithmetic runs in your browser, checks itself against known calendar and halving dates on every load, and shows a failure state instead of numbers if any check does not match. The prices themselves are fetched from this site and nowhere else: the daily series it ships is pulled once, from the same origin as this page, the first time you pick a date, and days past the end of that file are read from our own daily candles. Nothing here is tax advice; figures are informational under the <a href="/terms">terms</a>, and where the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The four numbers</div>
+      <div class="pd-t"><b>Open</b><i>The first trade printed after the day began, on whichever clock the source uses.</i></div>
+      <div class="pd-t"><b>High and low</b><i>The extremes inside that window. Move the window and the extremes move.</i></div>
+      <div class="pd-t"><b>Close</b><i>The last trade before the day ended. The one most often quoted, and the most arbitrary.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Range</div>
+      <div class="pd-r"><span>Earliest</span><b>July 17, 2010</b></div>
+      <div class="pd-r"><span>Latest</span><b id="pd-max">Yesterday</b></div>
+      <div class="pd-r"><span>Day boundary</span><b>UTC</b></div>
+      <p class="pd-rn">July 17, 2010 is the first day anyone quoted a market price for bitcoin. Before that there were trades, but no exchange rate to look up.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tax">Bitcoin taxes</a>
+        <a href="/tax/us">United States tax guide</a>
+        <a href="/tax/ca">Canada tax guide</a>
+        <a href="/whatif">What if you had bought</a>
+        <a href="/dca">Dollar cost averaging</a>
+        <a href="/price">Bitcoin price now</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .pd-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .pd-lab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .pd-lab-2{margin:0}
+  .pd-pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:9px}
+  .pd-date{color-scheme:light;background:var(--field);border:1px solid var(--line-2);border-radius:10px;
+    color:var(--price-ink);font:700 16px var(--mono);font-variant-numeric:tabular-nums;
+    padding:10px 12px;max-width:100%;min-width:0;outline:none}
+  :root[data-theme="dark"] .pd-date{color-scheme:dark}
+  .pd-date:focus{border-color:rgba(255,166,60,.55)}
+  .pd-date:disabled{opacity:.45}
+  .pd-quick{display:flex;flex-wrap:wrap;gap:7px;min-width:0}
+  .pd-q{background:var(--panel-2);border:1px solid var(--line-2);border-radius:9px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.05em;padding:9px 12px;cursor:pointer;white-space:nowrap}
+  .pd-q:hover{border-color:rgba(255,166,60,.45);color:var(--acc)}
+  .pd-echo{margin-top:16px;padding-top:15px;border-top:1px dotted var(--line-2)}
+  .pd-echo>b{display:block;font:700 17px/1.35 var(--sans);color:var(--ink)}
+  .pd-echo.is-bad>b{color:var(--down)}
+  .pd-echo.is-idle>b{color:var(--ink-3);font-weight:600}
+  .pd-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:11px}
+  .pd-chip{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;min-width:0}
+  .pd-chip span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .pd-chip b{display:block;font:700 15px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:3px}
+  .pd-outhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin:18px 0 9px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .pd-tag{font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    background:var(--field);border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .pd-out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+  .pd-cell{background:var(--field);border:1px dashed var(--line-2);border-radius:10px;padding:12px 14px;min-width:0}
+  .pd-cell span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .pd-cell b{display:block;font:700 20px/1.1 var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .pd-gate{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:11px 0 0;max-width:66ch}
+  .pd-fine{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:11px 2px 0}
+  .pd-mt{margin-top:14px}
+  .pd-about{margin-top:14px}
+  .pd-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pd-t{padding:8px 0;border-bottom:1px dotted var(--line-2)}
+  .pd-t:last-child{border-bottom:0}
+  .pd-t b{display:block;font:700 12.5px var(--mono);color:var(--acc)}
+  .pd-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pd-r{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pd-r:last-of-type{border-bottom:0}
+  .pd-r span{font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .pd-r b{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+  .pd-rn{font:500 11px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  @media(max-width:700px){
+    .pd-card{padding:18px 18px 20px}
+    .pd-date{width:100%;flex:1 1 100%}
+    .pd-q{flex:1 1 auto;text-align:center}
+    .pd-chips{grid-template-columns:minmax(0,1fr)}
+    .pd-chip{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .pd-chip b{margin-top:0}
+    .pd-out{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .pd-echo>b{font-size:15.5px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* ---------------------------------------------------------------------
+     Calendar arithmetic only. There is no price data on this page and no
+     code path that writes a number into the four output fields: a guessed
+     cost basis is worse than a missing one. Everything below is UTC, so
+     nothing shifts under daylight saving.
+     --------------------------------------------------------------------- */
+  var DOW=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var MON=["January","February","March","April","May","June",
+           "July","August","September","October","November","December"];
+
+  /* UTC dates of the halving blocks. Used for the block subsidy chip and the
+     self-test, never for price. Block 840000 landed at 00:09 UTC on April 20,
+     2024, which was still April 19 in the Americas; see the timezone section. */
+  var HALVINGS=[["2009-01-03",50],["2012-11-28",25],["2016-07-09",12.5],
+                ["2020-05-11",6.25],["2024-04-20",3.125]];
+  var FIRST="2010-07-17"; /* first day a market price was quoted */
+
+  function pad(n){return (n<10?"0":"")+n;}
+  function parseISO(s){
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");
+    if(!m)return null;
+    var y=+m[1],mo=+m[2],d=+m[3];
+    var t=Date.UTC(y,mo-1,d),x=new Date(t);
+    /* round trip rejects impossible dates such as 2023-02-29 */
+    if(x.getUTCFullYear()!==y||x.getUTCMonth()!==mo-1||x.getUTCDate()!==d)return null;
+    return t;
+  }
+  function toISO(t){var x=new Date(t);
+    return x.getUTCFullYear()+"-"+pad(x.getUTCMonth()+1)+"-"+pad(x.getUTCDate());}
+  function dayOf(t){return DOW[new Date(t).getUTCDay()];}
+  function daysBetween(a,b){return Math.round((b-a)/864e5);}
+  function longDate(t){var x=new Date(t);
+    return DOW[x.getUTCDay()]+", "+MON[x.getUTCMonth()]+" "+x.getUTCDate()+", "+x.getUTCFullYear();}
+  function shortDate(t){var x=new Date(t);
+    return MON[x.getUTCMonth()]+" "+x.getUTCDate()+", "+x.getUTCFullYear();}
+  function subsidyOn(t){
+    var s=HALVINGS[0][1];
+    for(var i=0;i<HALVINGS.length;i++){if(t>=parseISO(HALVINGS[i][0]))s=HALVINGS[i][1];}
+    return s;
+  }
+  function todayUTC(){var n=new Date();return Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());}
+
+  /* ---------------------------------------------------------------------
+     SELF-TEST. Twelve known values. If any one fails the page shows a
+     failure state and no calendar facts at all, rather than wrong ones.
+       2010-07-17 was a Saturday (first quoted market price)
+       2009-01-03 was a Saturday (genesis block)
+       2020-05-11 was a Monday   (block 630000)
+       2020 leap: Feb 28 to Mar 1 is 2 days; 2021: 1 day
+       subsidy 50 on 2012-11-27 and 25 on 2012-11-28
+       subsidy 6.25 on 2024-04-19 and 3.125 on 2024-04-20
+     --------------------------------------------------------------------- */
+  var T=[
+    ["utc round trip",              toISO(parseISO("2010-07-17"))==="2010-07-17"],
+    ["rejects 2023-02-29",          parseISO("2023-02-29")===null],
+    ["accepts 2024-02-29",          parseISO("2024-02-29")!==null],
+    ["rejects malformed input",     parseISO("2010-7-17")===null],
+    ["2010-07-17 is a Saturday",    dayOf(parseISO("2010-07-17"))==="Saturday"],
+    ["2009-01-03 is a Saturday",    dayOf(parseISO("2009-01-03"))==="Saturday"],
+    ["2020-05-11 is a Monday",      dayOf(parseISO("2020-05-11"))==="Monday"],
+    ["leap span is 2 days",         daysBetween(parseISO("2020-02-28"),parseISO("2020-03-01"))===2],
+    ["common span is 1 day",        daysBetween(parseISO("2021-02-28"),parseISO("2021-03-01"))===1],
+    ["subsidy 50 then 25",          subsidyOn(parseISO("2012-11-27"))===50&&subsidyOn(parseISO("2012-11-28"))===25],
+    ["subsidy 6.25 then 3.125",     subsidyOn(parseISO("2024-04-19"))===6.25&&subsidyOn(parseISO("2024-04-20"))===3.125],
+    ["long date format",            longDate(parseISO("2010-07-17"))==="Saturday, July 17, 2010"]
+  ];
+  var bad=[],i;
+  for(i=0;i<T.length;i++){if(!T[i][1])bad.push(T[i][0]);}
+
+  var inp=document.getElementById("pd-d"),
+      echo=document.getElementById("pd-echo"),
+      ttl=document.getElementById("pd-title"),
+      c1=document.getElementById("pd-c1"),
+      c2=document.getElementById("pd-c2"),
+      c3=document.getElementById("pd-c3"),
+      maxEl=document.getElementById("pd-max");
+  if(!inp||!echo)return;
+
+  if(bad.length){
+    console.error("[/tools/price-on-date] self-test failed ("+bad.length+"/"+T.length+"): "+bad.join(", "));
+    inp.disabled=true;
+    document.querySelectorAll(".pd-q").forEach(function(b){b.disabled=true;b.style.opacity=".45";});
+    echo.className="pd-echo is-bad";
+    ttl.textContent="Self-test failed";
+    c1.textContent="--";c2.textContent="--";c3.textContent="--";
+    document.querySelector(".pd-chips").insertAdjacentHTML("afterend",
+      '<p class="pd-gate">The date arithmetic in this page did not match its own known values, so no date is resolved here. Nothing is shown rather than something wrong.</p>');
+    return;
+  }
+  console.log("[/tools/price-on-date] self-test passed: "+T.length+"/"+T.length+" known calendar and halving values matched.");
+
+  var MIN=parseISO(FIRST),MAX=todayUTC()-864e5; /* yesterday, UTC */
+  inp.max=toISO(MAX);
+  inp.min=FIRST;
+  if(maxEl)maxEl.textContent=shortDate(MAX);
+
+  function setIdle(){
+    echo.className="pd-echo is-idle";
+    ttl.textContent="Pick a date to resolve it";
+    c1.textContent="--";c2.textContent="--";c3.textContent="--";
+  }
+  function setBad(msg){
+    echo.className="pd-echo is-bad";
+    ttl.textContent=msg;
+    c1.textContent="--";c2.textContent="--";c3.textContent="--";
+  }
+  function paint(){
+    var raw=inp.value;
+    if(!raw){setIdle();return;}
+    var t=parseISO(raw);
+    if(t===null){setBad("That is not a date on the calendar");return;}
+    if(t<MIN){setBad("Nothing before "+shortDate(MIN)+" has a market price to look up");return;}
+    if(t>MAX){setBad("That day has not finished yet. Pick a date up to "+shortDate(MAX));return;}
+    echo.className="pd-echo";
+    ttl.textContent=longDate(t);
+    c1.textContent=dayOf(t);
+    c2.textContent=daysBetween(t,todayUTC()).toLocaleString("en-US");
+    c3.textContent=subsidyOn(t)+" BTC";
+  }
+
+  inp.addEventListener("input",paint);
+  inp.addEventListener("change",paint);
+
+  document.querySelectorAll(".pd-q").forEach(function(b){
+    b.addEventListener("click",function(){
+      var k=b.dataset.q,n=new Date(todayUTC()),t;
+      if(k==="first")t=MIN;
+      else if(k==="hv")t=parseISO(HALVINGS[HALVINGS.length-1][0]);
+      else if(k==="y1")t=Date.UTC(n.getUTCFullYear()-1,n.getUTCMonth(),n.getUTCDate());
+      else t=Date.UTC(n.getUTCFullYear()-5,n.getUTCMonth(),n.getUTCDate());
+      if(t>MAX)t=MAX;
+      if(t<MIN)t=MIN;
+      inp.value=toISO(t);
+      paint();
+    });
+  });
+
+  setIdle();
+})();
+</script>
+<script is:inline>
+/* Daily-figure lookup: same-origin fetch of the committed series, cached after
+   the first pick, with our own daily candles covering anything newer than the
+   file. Never estimates: a day no source has is left blank and said so.
+
+   The committed file is two series stitched together and its own meta says
+   which is which, so the source tag is set PER ROW, not once for the page:
+   Blockchain.info market-price daily closes for the Mt. Gox era (close only),
+   Bitstamp OHLC from BITSTAMP_FROM onward. */
+(function(){
+  var FIRST="2010-08-18",        /* first row in the committed file */
+      BITSTAMP_FROM="2011-08-18",/* first Bitstamp row; before this, Blockchain.info */
+      TAG_BS="Bitstamp daily series, UTC",
+      TAG_BI="Blockchain.info daily close, UTC",
+      TAG_LIVE="Our own daily candles, UTC",
+      cache=null,last=null,pending=null,cand=null,candPending=null;
+  var o=document.getElementById("pd-o"),h=document.getElementById("pd-h"),
+      l=document.getElementById("pd-l"),c=document.getElementById("pd-c"),
+      src=document.getElementById("pd-src"),note=document.getElementById("pd-note"),
+      mrow=document.getElementById("pd-monthrow"),mlink=document.getElementById("pd-monthlink"),
+      inp=document.getElementById("pd-d");
+  if(!inp||!o)return;
+  function fmt(v){
+    if(v>=1000)return v.toLocaleString("en-US",{maximumFractionDigits:0});
+    if(v>=1)return v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+    return v.toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4});
+  }
+  function tag(t){if(src)src.textContent=t||"Source shown per day, UTC";}
+  function blank(msg){
+    [o,h,l,c].forEach(function(el){el.textContent="--";});
+    mrow.hidden=true;
+    tag(null);
+    if(msg)note.innerHTML=msg;
+  }
+  function month(date){
+    mlink.href="/price/"+date.slice(0,4)+"/"+date.slice(5,7)+"#d"+parseInt(date.slice(8,10),10);
+    mrow.hidden=false;
+  }
+  function fill(open,high,low,close){
+    var closeOnly=open===null||open===undefined;
+    o.textContent=closeOnly?"--":"$"+fmt(open);
+    h.textContent=closeOnly?"--":"$"+fmt(high);
+    l.textContent=closeOnly?"--":"$"+fmt(low);
+    c.textContent="$"+fmt(close);
+    return closeOnly;
+  }
+  function load(){
+    if(cache)return Promise.resolve(cache);
+    if(pending)return pending;
+    pending=fetch("/data/btc-daily.json").then(function(r){return r.json();}).then(function(d){
+      cache={};
+      d.days.forEach(function(row){cache[row[0]]=row;});
+      last=(d.meta&&d.meta.last)||(d.days.length?d.days[d.days.length-1][0]:null);
+      return cache;
+    });
+    return pending;
+  }
+  /* days newer than the committed file come from our own 1d candles;
+     OB_DATA_API is set by Base.astro at the end of body, so it is read here,
+     inside the handler, and never at parse time */
+  function loadCandles(){
+    if(cand)return Promise.resolve(cand);
+    if(candPending)return candPending;
+    var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";
+    candPending=fetch(api+"/candles?interval=1d&limit=400").then(function(r){return r.json();}).then(function(d){
+      cand={};
+      (d&&d.candles||[]).forEach(function(k){
+        cand[new Date(k[0]*1000).toISOString().slice(0,10)]=k;
+      });
+      return cand;
+    });
+    return candPending;
+  }
+  function showLive(date){
+    loadCandles().then(function(map){
+      var k=map[date];
+      if(!k){
+        blank("That day is past the end of the series this site ships and our own candles do not have it either, so there is no figure to show.");
+        return;
+      }
+      fill(k[1],k[2],k[3],k[4]);
+      tag(TAG_LIVE);
+      note.textContent="UTC day, BTC/USD, from our own daily candles rather than the committed file, which ends earlier. Record the source name beside the figure you use; provenance at /sources.";
+      month(date);
+    })["catch"](function(){
+      blank("That day is past the end of the series this site ships, and our own candles could not be reached; reload the page to try again.");
+    });
+  }
+  function show(date){
+    if(!date)return;
+    if(date<FIRST){
+      blank('That date predates the first quotable daily close, August 18, 2010; bitcoin traded below one cent before it. The era lives on the <a href="/history">timeline</a>.');
+      return;
+    }
+    load().then(function(map){
+      var row=map[date];
+      if(!row){
+        if(last&&date>last){showLive(date);return;}
+        blank("No trading day is recorded for that date in the series.");
+        return;
+      }
+      var closeOnly=fill(row[1],row[2],row[3],row[4]);
+      /* the tag names the series that actually produced this row */
+      tag(date<BITSTAMP_FROM?TAG_BI:TAG_BS);
+      note.textContent=closeOnly
+        ?"Mt. Gox era: a Blockchain.info daily close only; open, high and low were not reliably recorded, and the thin market makes every figure approximate."
+        :"UTC day, BTC/USD. Record the source name beside the figure you use; provenance at /sources.";
+      month(date);
+    })["catch"](function(){
+      blank("The series could not be loaded; reload the page to try again.");
+    });
+  }
+  inp.addEventListener("change",function(){show(inp.value);});
+  inp.addEventListener("input",function(){show(inp.value);});
+})();
+</script>
+</Base>

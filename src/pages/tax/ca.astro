@@ -1,0 +1,285 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Taxes in Canada: CRA Rules, ACB, and What Counts - OpenBitcoin" description="How the CRA taxes bitcoin in Canada: capital gains vs business income, the 50% inclusion rate, adjusted cost base, the superficial loss rule, and Schedule 3.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tax</div>
+    <h1>Bitcoin taxes in Canada</h1>
+    <p class="doc-lede">The CRA treats bitcoin as a commodity: selling, spending, swapping, or gifting it is a disposition, and half of any capital gain is taxable. Here is how the rules work; nothing on this page is tax advice.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="tc-card tc-note">
+      <div class="tc-tlab tc-tlab-acc">Information, not advice</div>
+      <p class="tc-cp">This page explains the rules as published; it does not apply them to you. Tax outcomes turn on facts specific to your situation, and the CRA decides cases on those facts, not on summaries like this one. For anything beyond the basics, use a Canadian tax professional, per the <a href="/terms">terms</a>.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">01</span><h2>How Canada treats bitcoin</h2></div>
+      <p class="tc-how">For income tax purposes the CRA treats bitcoin as a commodity, not as money. Nothing happens while you hold it; tax arises when you dispose of it, and each disposition is either a <b>capital gain or loss</b> or <b>business income</b>, decided on the same tests that have always separated investors from traders. Most people who buy and hold are on capital account. Someone running trading like a commercial operation is earning business income, all of which is taxable, against half for a capital gain.</p>
+      <p class="tc-how">No single factor settles which side you are on. The CRA weighs the pattern:</p>
+      <div class="tc-facts">
+        <div class="tc-fact"><b>Frequency</b><i>Many trades look like a business; occasional ones look like investing</i></div>
+        <div class="tc-fact"><b>Holding period</b><i>Quick flips point to income; long holds point to capital</i></div>
+        <div class="tc-fact"><b>Knowledge</b><i>Market expertise applied professionally weighs toward business</i></div>
+        <div class="tc-fact"><b>Time spent</b><i>Trading as an occupation, or something checked occasionally</i></div>
+        <div class="tc-fact"><b>Financing</b><i>Buying on borrowed money or margin points toward business</i></div>
+        <div class="tc-fact"><b>Promotion</b><i>Advertising a trading or dealing activity points toward business</i></div>
+      </div>
+      <p class="tc-how">Even a single transaction can be taxed as business income if it was an adventure in the nature of trade: bought purely to flip, in a commercial way. The distinction matters more in Canada than almost anywhere else, because it changes both the rate and the paperwork, and it is the first question a professional will ask.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">02</span><h2>What counts as a taxable event</h2></div>
+      <table class="tc-table" aria-label="Bitcoin events and their Canadian tax treatment">
+        <thead>
+          <tr><th>Event</th><th>Treatment</th><th>What happens</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-ev">Buying bitcoin with dollars</td>
+            <td><span class="tc-no">Not taxable</span></td>
+            <td>No tax and no GST/HST on the purchase itself. The price plus fees becomes cost in your ACB pool; record the date and amounts.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Holding it</td>
+            <td><span class="tc-no">Not taxable</span></td>
+            <td>Canada does not tax unrealized gains on a commodity. Nothing happens until a disposition.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Moving coins between your own wallets</td>
+            <td><span class="tc-no">Not taxable</span></td>
+            <td>Not a disposition. Keep the transaction record so a transfer is never mistaken for a sale later.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Selling for dollars</td>
+            <td><span class="tc-yes">Disposition</span></td>
+            <td>Capital gain or loss against the pool's average cost, or business income if the activity is commercial.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Swapping it for another crypto-asset</td>
+            <td><span class="tc-yes">Disposition</span></td>
+            <td>Treated as selling at fair market value on the day of the <a href="/swap">swap</a>, even though no dollars appeared.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Spending it on goods or services</td>
+            <td><span class="tc-yes">Disposition</span></td>
+            <td>A barter: you disposed of the coins at fair market value. The goods carry GST/HST as usual. Applies to <a href="/spend/gift-cards">gift cards</a> and every other purchase.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Gifting it</td>
+            <td><span class="tc-yes">Disposition</span></td>
+            <td>Deemed disposed at fair market value even though no money changed hands; the gain or loss is yours, not the recipient's.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Getting paid in bitcoin</td>
+            <td><span class="tc-inc">Income</span></td>
+            <td>Employment or business income at fair market value when received. That value becomes the ACB of the coins.</td>
+          </tr>
+          <tr>
+            <td class="tc-ev">Mining rewards</td>
+            <td><span class="tc-inc">Depends</span></td>
+            <td>Business income at receipt if the operation is commercial; a hobby is handled differently, covered below.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="tc-fine">Every amount on a Canadian return is in Canadian dollars, converted at the fair market value on the day of each transaction. Note the rate source you used and use it consistently.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">03</span><h2>The inclusion rate, and the proposal that died</h2></div>
+      <p class="tc-how">Current law includes <b>one half</b> of a net capital gain in income: a 10,000 dollar gain adds 5,000 dollars to what you are taxed on, at your marginal rate. Business income has no such discount; all of it is taxable.</p>
+      <p class="tc-how">The April 2024 federal budget proposed raising the inclusion rate to two thirds, for corporations and trusts on all gains and for individuals on gains above 250,000 dollars a year, effective June 25, 2024. The measure was never enacted. In January 2025 its start was deferred to January 1, 2026, and on March 21, 2025 the government announced it was cancelled outright. The rate stands at 50 percent for 2024, 2025, and 2026, and the two-thirds figure still circulating in older articles is a proposal that never became law.</p>
+      <p class="tc-how">Capital losses offset capital gains only, not other income. Unused losses carry back up to three years or forward indefinitely, subject to the superficial loss rule below.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">04</span><h2>Adjusted cost base: one averaged pool</h2></div>
+      <p class="tc-how">Canada does not let you choose which coins you sold. All of your bitcoin is <b>identical property</b>, and the Income Tax Act averages it into a single pool: every purchase re-averages the pool's cost per coin, and every disposition takes its cost out at that average. This is the sharpest contrast with the <a href="/tax/us">United States</a>, where a seller can pick specific lots; in Canada the method is fixed and there is nothing to elect.</p>
+      <p class="tc-how">Worked through, with round example prices rather than live ones, and every figure read as Canadian dollars:</p>
+      <div class="tc-rows">
+        <div class="tc-row"><b>Buy 0.50 BTC</b><span>Price 60,000.00 per coin, exchange fee 150.00. Cost added to the pool: 30,150.00; buy-side fees enter ACB. Pool: 0.50 BTC, ACB 30,150.00, average 60,300.00 per coin.</span></div>
+        <div class="tc-row"><b>Buy 0.25 BTC</b><span>Price 64,362.18 per coin, fee 80.45. Cost added: 16,171.00. Pool: 0.75 BTC, ACB 46,321.00, average 61,761.33 per coin. The old average is gone; there is only the new one.</span></div>
+        <div class="tc-row tc-row-acc"><b>Sell 0.25 BTC</b><span>Price 70,000.00, proceeds 17,500.00. Cost comes out at the average: 0.25 &times; 61,761.33 = 15,440.33. Capital gain 2,059.67, of which the taxable half is 1,029.84. Selling costs would come off the proceeds as outlays.</span></div>
+        <div class="tc-row"><b>What remains</b><span>0.50 BTC with an ACB of 30,880.67, still 61,761.33 per coin. A sale never moves the average; only a new purchase does.</span></div>
+      </div>
+      <p class="tc-fine">The averaging applies per identical property: one pool for bitcoin, separate pools for anything else. Coins earned as income enter the pool at the value already taxed, so the same dollars are not taxed twice.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">05</span><h2>The superficial loss rule</h2></div>
+      <p class="tc-how">Selling at a loss and buying right back does not bank the loss. If you, or an affiliated person such as your spouse or a corporation you control, buy identical property within <b>30 days before or after</b> the sale and still hold it 30 days after, the loss is denied as a superficial loss. It is not destroyed: the denied amount is added to the ACB of the repurchased coins, so it surfaces when you eventually sell for real. The practical reading is simple: a loss you want to claim needs a genuine exit, not a round trip through the weekend.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">06</span><h2>Mining: business or hobby</h2></div>
+      <div class="tc-cols">
+        <div class="tc-col">
+          <div class="tc-clab">Run as a business</div>
+          <p class="tc-cp">Mining with a profit motive and a commercial setup, whether racks of machines or one serious rig, is a business. Rewards are business income at fair market value when received, expenses such as power and hardware are deductible against it, and that received value becomes the coins' cost base for any later gain.</p>
+        </div>
+        <div class="tc-col">
+          <div class="tc-clab">Run as a hobby</div>
+          <p class="tc-cp">Mining as a personal pursuit is generally not income when the coins arrive, but there is a catch: the CRA's position suggests hobby-mined coins can carry a cost base of nil, which means the entire proceeds may be a gain at disposal. The line between the two is commerciality, and it is one of the questions worth paying a professional to answer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">07</span><h2>Reporting: Schedule 3 and the T1135 question</h2></div>
+      <p class="tc-how">Capital dispositions go on <b>Schedule 3</b> of the T1 return, which has named crypto-assets since the 2023 version and gives them a section of their own on the 2025 version: line 7 in Part 3, with proceeds on line 15200 and the gain or loss on line 15301, and the net result flowing to line 12700. Business income from trading or mining goes on form T2125 instead, with expenses against it.</p>
+      <p class="tc-how">Separately, the <b>T1135 Foreign Income Verification Statement</b> is required when the total cost of your specified foreign property tops 100,000 Canadian dollars at any time in the year. The CRA has taken the position that coins held with foreign exchanges or custodians can be specified foreign property; coins in a wallet whose keys you hold are a genuinely unsettled case, since where self-custodied bitcoin is situated has no clean answer. The penalty for a required T1135 not filed runs 25 dollars a day to a 2,500 dollar maximum, so anyone near the threshold with balances on non-Canadian platforms should get a current professional read rather than guess.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">08</span><h2>GST/HST: none on buying bitcoin itself</h2></div>
+      <p class="tc-how">Since an amendment to the Excise Tax Act effective May 18, 2019, bitcoin meets the definition of a <b>virtual payment instrument</b>, and supplying one is an exempt financial service. Buying bitcoin, from an exchange or from a person, therefore carries no GST/HST, the same way exchanging currencies does not. The exemption covers the coins, not what you buy with them: spend bitcoin on taxable goods and the goods carry GST/HST exactly as a cash purchase would, valued in dollars, as in any barter.</p>
+    </div>
+
+    <div class="tc-card tc-mt">
+      <div class="tc-chead"><span class="tc-num">09</span><h2>Records to keep</h2></div>
+      <p class="tc-how">The ACB method fails without records, because today's average depends on every purchase before it. The CRA expects support for the numbers on the return, and expects records kept for six years after the end of the tax year they relate to. For each transaction, keep:</p>
+      <ul class="tc-list">
+        <li><b>The date, and the Canadian dollar value</b> at that moment, with the rate source noted.</li>
+        <li><b>What it was:</b> buy, sell, swap, spend, gift, or income received, and the counterparty or platform.</li>
+        <li><b>Amounts and fees</b> in bitcoin and in dollars, since buy-side fees change your ACB.</li>
+        <li><b>Transaction IDs and addresses</b> involved, so transfers between your own wallets are provably not sales.</li>
+        <li><b>Exchange statements, exported regularly.</b> Platforms shut down and take their history with them; the record-keeping burden stays yours.</li>
+      </ul>
+    </div>
+
+    <div class="tc-card tc-mt tc-pro">
+      <div class="tc-tlab tc-tlab-acc">When to get a professional</div>
+      <p class="tc-cp">A straightforward year, a few buys and a sale on one Canadian platform, is manageable with the rules above. Get a Canadian tax professional involved when the file stops being simple:</p>
+      <ul class="tc-list">
+        <li><b>The capital-versus-business line is arguable</b> for your trading pattern; the answer changes the rate on every gain.</li>
+        <li><b>You mine at any real scale,</b> where commerciality, deductions, and the cost base of rewards all need a position.</li>
+        <li><b>You hold coins on non-Canadian platforms</b> near or past the 100,000 dollar T1135 threshold.</li>
+        <li><b>Past years went unreported.</b> The Voluntary Disclosures Program exists for coming forward before the CRA comes to you, and it works better with counsel.</li>
+        <li><b>You are leaving Canada.</b> Emigration triggers a deemed disposition of property that includes crypto-assets, and the exit bill deserves planning.</li>
+      </ul>
+      <p class="tc-cp">Nothing on this page is tax, legal, or financial advice, per the <a href="/terms">terms</a>. It is a map of the rules, current to the 2025 and 2026 filing years; the application to your facts is the part that needs a professional.</p>
+    </div>
+
+    <div class="tc-about doc-prose">
+      <p>The Canadian shape is strict but consistent: a commodity, one averaged cost pool, half of gains included, and a disposition every time coins leave your hands for any reason. The mechanics reward boring habits, records kept as you go and losses harvested outside the 30-day window, and punish reconstruction after the fact. If you are stacking on a schedule, the <a href="/dca">averaging calculator</a> shows what a steady buy builds, and each of those buys is one more line in the pool; the <a href="/buy">buy guide</a> lists the Canadian services that settle straight to your own wallet. For how the same questions land south of the border, the <a href="/tax/us">US guide</a> is this page's sibling.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="tc-stat"><b id="tc-px">&#8230;</b><i>1 BTC</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The shape of it</div>
+      <ul class="tc-rl">
+        <li>Half of a capital gain is taxable</li>
+        <li>One averaged ACB pool, no lot picking</li>
+        <li>Spending and swapping are disposals</li>
+        <li>30-day window on claiming losses</li>
+        <li>T1135 asks at $100,000 foreign cost</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tax/us">US bitcoin taxes</a>
+        <a href="/buy">Buying bitcoin in Canada</a>
+        <a href="/dca">Dollar cost averaging</a>
+        <a href="/terms">Site terms</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .tc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .tc-mt{margin-top:14px}
+  .tc-note{border-color:rgba(255,166,60,.32)}
+  .tc-chead{display:flex;align-items:baseline;gap:10px}
+  .tc-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .tc-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .tc-how{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .tc-how b{color:var(--ink);font-weight:600}
+  .tc-how a,.tc-cp a,.tc-list a,.tc-table a,.tc-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tc-how a:hover,.tc-cp a:hover,.tc-list a:hover,.tc-table a:hover{border-bottom-style:solid}
+  .tc-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .tc-tlab-acc{color:var(--acc)}
+  .tc-cp{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .tc-cp+.tc-cp{margin-top:8px}
+  .tc-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px}
+  .tc-fact{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px}
+  .tc-fact b{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+  .tc-fact i{display:block;font:500 12px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:4px}
+  .tc-table{width:100%;border-collapse:collapse;margin-top:4px}
+  .tc-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .tc-table td{font:500 13px/1.55 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .tc-table tr:last-child td{border-bottom:0}
+  .tc-ev{font-weight:600;color:var(--ink);min-width:130px}
+  .tc-no,.tc-yes,.tc-inc{display:inline-block;font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .tc-no{color:var(--ink-3);border:1px dotted var(--line-2)}
+  .tc-yes{color:var(--acc);border:1px dashed rgba(247,147,26,.45)}
+  .tc-inc{color:var(--down);border:1px dashed rgba(246,70,93,.42)}
+  .tc-rows{display:grid;gap:8px;margin-top:13px}
+  .tc-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .tc-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2)}
+  .tc-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px;font-variant-numeric:tabular-nums}
+  .tc-row-acc{border-color:rgba(255,166,60,.4)}
+  .tc-row-acc b{color:var(--acc)}
+  .tc-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:12px}
+  .tc-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .tc-clab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:7px}
+  .tc-list{margin:10px 0 0;padding-left:22px}
+  .tc-list li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .tc-list li::marker{color:var(--acc);font-weight:700}
+  .tc-list b{color:var(--ink);font-weight:600}
+  .tc-pro{border-color:rgba(255,166,60,.32)}
+  .tc-pro .tc-cp{margin-top:0}
+  .tc-pro .tc-list+.tc-cp{margin-top:12px}
+  .tc-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .tc-about{margin-top:14px}
+  .tc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .tc-stat{padding:7px 0}
+  .tc-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .tc-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .tc-rl{margin:0;padding-left:16px}
+  .tc-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .tc-rl li:first-child{margin-top:0}
+  .tc-rl li::marker{color:var(--acc)}
+  @media(max-width:700px){
+    .tc-card{padding:18px 18px 20px}
+    .tc-cols{grid-template-columns:minmax(0,1fr)}
+    
+    .tc-table thead{display:none}
+    .tc-table,.tc-table tbody,.tc-table tr,.tc-table td{display:block;width:auto}
+    .tc-table tr{padding:13px 0 12px;border-bottom:1px dotted var(--line-2)}
+    .tc-table tr:last-child{border-bottom:0}
+    .tc-table td{border-bottom:0;padding:0;font-size:13px}
+    .tc-ev{min-width:0;font-size:14px}
+    .tc-table td:nth-child(2){margin-top:6px}
+    .tc-table td:nth-child(3){margin-top:7px}
+    .tc-table td:nth-child(2)::before,.tc-table td:nth-child(3)::before{
+      font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+    .tc-table td:nth-child(2)::before{content:"Treatment: "}
+    .tc-table td:nth-child(3)::before{content:"What happens: "}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  function fmt(n){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});}
+  var px=document.getElementById("tc-px");
+  function paint(){if(!P.price)return;if(px)px.textContent="$"+fmt(P.price);}
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipsis holds until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>
+</output>
+</invoke>

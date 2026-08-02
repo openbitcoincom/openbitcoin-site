@@ -1,0 +1,285 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Bitcoin Price Chart: Live Candles and Full History - OpenBitcoin"
+  description="Full-screen bitcoin price chart with candles from one minute to one month, volume, and daily history back to 2011, drawn from our own node and exchange archive.">
+
+  <div slot="band" class="chartbar">
+    <span class="cpair" id="cpair">BTC/USD</span>
+    <span class="cprice" id="cprice">&hellip;</span>
+    <span class="cchg" id="cchg" hidden></span>
+    <span class="cgroup g-ex"><span class="glab">Exchange</span><span class="seg" id="exbtns"></span></span>
+    <span class="cgroup g-iv"><span class="glab">Candles</span>
+      <button type="button" class="segarr" id="ivL" aria-label="Shorter intervals">&lsaquo;</button>
+      <span class="segscroll" id="ivwrap"><span class="seg" id="ivbtns"></span></span>
+      <button type="button" class="segarr" id="ivR" aria-label="Longer intervals">&rsaquo;</button>
+    </span>
+    <span class="cgroup g-cur"><span class="glab">Currency</span>
+      <select id="csel" class="csel" aria-label="Display currency"></select>
+    </span>
+  </div>
+
+  <div class="cwrap" id="cwrap">
+    <canvas id="cv" aria-label="Bitcoin price candle chart, BTC against the selected currency"></canvas>
+    <div class="clegend" id="legend" hidden></div>
+    <div class="cstate" id="cstate">loading candles</div>
+  </div>
+
+  <div slot="footer">
+    <div class="cnotewrap">
+      <p class="cnote" id="cnote">DAILY CANDLES FROM BITSTAMP SINCE AUGUST 2011 &middot; KRAKEN SINCE 2023 &middot; INTERVALS ABOVE ONE DAY AGGREGATED IN THE BROWSER &middot; <a href="/sources">SOURCES</a></p>
+    </div>
+  </div>
+
+<style is:global>
+  
+  html,body{background:#070C16}
+  
+  @media(min-height:520px){body{overflow:hidden}}
+  .chartbar{padding:10px 18px;display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;
+            background:#24334E;border-bottom:1px solid #22304A}
+  .cpair{font:800 17px var(--mono);color:#C9D6EA}
+  .cprice{font:800 17px var(--mono);color:#C9D6EA;font-variant-numeric:tabular-nums}
+  .cchg{font:700 12px var(--mono);border-radius:5px;padding:3px 8px}
+  .cchg.up{color:#2EBD85;background:rgba(46,189,133,.12)}
+  .cchg.down{color:#F6465D;background:rgba(224,82,82,.12)}
+  .cgroup{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+  .cgroup .glab{font:600 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#8B9DBA;margin-right:3px}
+  .seg{display:inline-flex;flex-wrap:wrap}
+  .cbtn{border:1px solid #2C3A55;background:#121B2B;color:#A9B5C9;
+        font:700 12px var(--mono);padding:6px 11px;cursor:pointer;white-space:nowrap;border-radius:0;margin-left:-1px}
+  .seg .cbtn:first-child{border-radius:7px 0 0 7px;margin-left:0}
+  .seg .cbtn:last-child{border-radius:0 7px 7px 0}
+  .cbtn:hover{color:#F7931A;position:relative;z-index:1}
+  .cbtn.on{background:#F7931A;border-color:#F7931A;color:#101A2C;position:relative;z-index:2}
+  .segarr{display:none;border:1px solid #2C3A55;background:#121B2B;color:#F7931A;
+          border-radius:7px;font:700 15px var(--mono);padding:4px 10px;cursor:pointer;flex:none;align-items:center}
+  .segscroll{min-width:0}
+  .segscroll .seg{flex-wrap:nowrap}
+  .csel{appearance:none;-webkit-appearance:none;border:1px solid #2C3A55;
+        background:#121B2B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23F7931A' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center/10px 6px;
+        color:#A9B5C9;border-radius:7px;font:700 12px var(--mono);padding:6px 27px 6px 11px;cursor:pointer;outline:none}
+  .csel:hover{border-color:#F7931A;color:#F7931A}
+  .csel option{background:#121B2B;color:#A9B5C9}
+  .cwrap{position:relative;background:#0E1929}
+  #cv{display:block;width:100%;cursor:crosshair;touch-action:pan-y}
+  .clegend{position:absolute;left:12px;top:10px;font:600 12px var(--mono);pointer-events:none;border-radius:6px;
+           padding:4px 9px;background:rgba(7,12,22,.85);color:#C9D6EA}
+  .clegend b{color:#C9D6EA}
+  .cstate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+          font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#8B9DBA;pointer-events:none}
+  .cstate[hidden]{display:none}
+  .cnotewrap{background:#0E1929;border-top:1px solid #22304A}
+  .cnote{max-width:1140px;margin:0 auto;padding:9px 18px;font:600 10px var(--mono);letter-spacing:.06em;color:#8B9DBA}
+  .cnote a{color:#F7931A;text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.4)}
+  @media(max-width:720px){
+    .chartbar{gap:8px 10px}
+    .cpair,.cprice{font-size:15px}
+    .g-cur .glab,.g-ex .glab,.g-iv .glab{display:none}
+    .g-iv{flex:1 1 100%;order:2;display:flex;flex-wrap:nowrap;align-items:center;gap:6px;min-width:0;max-width:100%}
+    .segarr{display:inline-flex}
+    .segscroll{overflow-x:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none}
+    .segscroll::-webkit-scrollbar{display:none}
+    .cnote{font-size:9px;padding:8px 12px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  var cv=document.getElementById("cv"),cw=document.getElementById("cwrap"),
+      legend=document.getElementById("legend"),state=document.getElementById("cstate"),
+      elP=document.getElementById("cprice"),elC=document.getElementById("cchg"),
+      elPair=document.getElementById("cpair"),note=document.getElementById("cnote");
+  function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
+
+  /* Thirteen intervals, three of them stored and the rest folded from those.
+     base is what we ask the service for; group is how many of them make one. */
+  var IV=[["1m",60],["5m",300],["15m",900],["30m",1800],["1h",3600],["2h",7200],["4h",14400],["6h",21600],
+          ["12h",43200],["1d",86400],["3d",259200],["1w",604800],["1mo",2592000]];
+  var EX=[["coinbase","Coinbase"],["kraken","Kraken"],["bitstamp","Bitstamp"]];
+  /* static cross-rates, the same table the rest of the site quotes from (2026-07-17) */
+  var FX={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,
+          BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
+      SYM={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",
+           BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
+  var T={bg:"#0E1929",grid:"#22304A",tx:"#8FA1BF",up:"#2EBD85",dn:"#F6465D",
+         volUp:"rgba(46,189,133,.35)",volDn:"rgba(246,70,93,.35)",
+         cross:"#8B9DBA",bub:"#F7931A",bubTx:"#101A2C",legTx:"#C9D6EA"};
+  var S={ex:"bitstamp",iv:86400,cur:"USD",candles:[],hover:-1,busy:0,truncated:false};
+
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function dec(v){return v>=1000?0:v>=10?2:4;}
+  function cvx(v){var x=v*FX[S.cur];return SYM[S.cur]+fmt(x,dec(x));}
+  function cnum(v){var x=v*FX[S.cur];return fmt(x,dec(x));}
+  function want(){return matchMedia("(max-width:720px)").matches?60:170;}
+
+  function baseFor(sec){return sec<3600?["1m",60]:sec<86400?["1h",3600]:["1d",86400];}
+
+  /* Bucket by absolute time, not by position: a hole in the source must not
+     shift every later candle into the wrong bucket. */
+  function fold(rows,sec){
+    var out=[],cur=null,key=null;
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i],k=Math.floor(r[0]/sec);
+      if(k!==key){
+        if(cur)out.push(cur);
+        key=k;cur={t:k*sec,o:r[1],h:r[2],l:r[3],c:r[4],v:r[5]||0};
+      }else{
+        cur.h=Math.max(cur.h,r[2]);cur.l=Math.min(cur.l,r[3]);cur.c=r[4];cur.v+=r[5]||0;
+      }
+    }
+    if(cur)out.push(cur);
+    return out;
+  }
+
+  function load(){
+    var b=baseFor(S.iv),group=Math.max(1,Math.round(S.iv/b[1])),
+        limit=Math.min(5000,want()*group+group),token=++S.busy;
+    state.hidden=false;state.textContent="loading candles";
+    fetch(api()+"/candles?interval="+b[0]+"&limit="+limit+"&exchange="+S.ex)
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(j){
+        if(token!==S.busy)return;                       /* a newer click won */
+        var rows=(j&&Array.isArray(j.candles))?j.candles:null;
+        if(!rows||!rows.length){fail("no candles for this exchange and interval");return;}
+        var c=fold(rows,S.iv);
+        if(c.length>want())c=c.slice(c.length-want());
+        /* the first bucket is usually partial: it starts wherever the fetch
+           window happened to open, so it is not a real candle */
+        if(c.length>2&&group>1)c=c.slice(1);
+        if(!c.length){fail("no candles for this exchange and interval");return;}
+        S.candles=c;S.hover=-1;S.truncated=c.length<Math.min(want(),40);
+        state.hidden=true;legend.hidden=false;draw();
+      })
+      .catch(function(){if(token===S.busy)fail("chart data is unavailable right now");});
+  }
+  function fail(msg){
+    S.candles=[];legend.hidden=true;state.hidden=false;state.textContent=msg;
+    elP.textContent="…";elC.hidden=true;
+    var x=cv.getContext("2d");if(x)x.clearRect(0,0,cv.width,cv.height);
+    sizeCanvas();var y=cv.getContext("2d");y.fillStyle=T.bg;y.fillRect(0,0,cv.width,cv.height);
+  }
+
+  function sizeCanvas(){
+    var dpr=window.devicePixelRatio||1,W=cw.clientWidth,
+        below=document.querySelector(".cnotewrap"),
+        gap=below?below.getBoundingClientRect().height:34,
+        H=Math.max(320,Math.round(innerHeight-cw.getBoundingClientRect().top-gap));
+    cv.style.height=H+"px";cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    return {W:W,H:H,dpr:dpr};
+  }
+
+  function draw(){
+    var g=sizeCanvas(),W=g.W,H=g.H;
+    var x=cv.getContext("2d");x.setTransform(g.dpr,0,0,g.dpr,0,0);
+    x.fillStyle=T.bg;x.fillRect(0,0,W,H);
+    var cd=S.candles,n=cd.length;
+    if(!n)return;
+    var padR=84,padB=26,plotW=W-padR,plotH=H-padB,volH=plotH*.16;
+    var lo=Infinity,hi=-Infinity,vmax=0;
+    cd.forEach(function(k){lo=Math.min(lo,k.l);hi=Math.max(hi,k.h);vmax=Math.max(vmax,k.v||0);});
+    var span=(hi-lo)||1;lo-=span*.04;hi+=span*.04;span=hi-lo;
+    function Y(p){return (hi-p)/span*(plotH-volH-8);}
+    x.font="600 10.5px ui-monospace,Consolas,monospace";
+    for(var i=0;i<=5;i++){
+      var p=hi-span*i/5,y=Y(p);
+      x.strokeStyle=T.grid;x.beginPath();x.moveTo(0,y+.5);x.lineTo(plotW,y+.5);x.stroke();
+      x.fillStyle=T.tx;x.fillText(cvx(p),plotW+8,y+4);
+    }
+    var step=Math.max(1,Math.round(n/8));
+    x.fillStyle=T.tx;x.textAlign="center";
+    for(var t=Math.floor(step/2);t<n;t+=step)x.fillText(tlabel(cd[t].t),(t+.5)/n*plotW,H-8);
+    x.textAlign="left";
+    if(vmax>0)cd.forEach(function(k,j){
+      var cx=j/n*plotW,wq=plotW/n*.7,vh=(k.v||0)/vmax*volH;
+      x.fillStyle=k.c>=k.o?T.volUp:T.volDn;
+      x.fillRect(cx+plotW/n*.15,plotH-vh,wq,vh);
+    });
+    cd.forEach(function(k,j){
+      var cx=j/n*plotW,wq=plotW/n*.7,mid=cx+plotW/n*.5,col=k.c>=k.o?T.up:T.dn;
+      x.strokeStyle=col;x.beginPath();x.moveTo(mid,Y(k.h));x.lineTo(mid,Y(k.l));x.stroke();
+      x.fillStyle=col;
+      var y1=Y(Math.max(k.o,k.c)),y2=Y(Math.min(k.o,k.c));
+      x.fillRect(cx+plotW/n*.15,y1,wq,Math.max(1.4,y2-y1));
+    });
+    if(S.hover>=0&&S.hover<n){
+      var k2=cd[S.hover],mid2=(S.hover+.5)/n*plotW,yy=Y(k2.c);
+      x.strokeStyle=T.cross;x.setLineDash([4,4]);
+      x.beginPath();x.moveTo(mid2+.5,0);x.lineTo(mid2+.5,plotH);x.stroke();
+      x.beginPath();x.moveTo(0,yy+.5);x.lineTo(plotW,yy+.5);x.stroke();
+      x.setLineDash([]);
+      x.fillStyle=T.bub;x.fillRect(plotW,yy-9,padR,18);
+      x.fillStyle=T.bubTx;x.fillText(cvx(k2.c),plotW+8,yy+4);
+      leg(k2,(k2.c-k2.o)/k2.o*100);
+    }else leg(cd[n-1],(cd[n-1].c-cd[0].o)/cd[0].o*100);
+    var last=cd[n-1],chg=(last.c-cd[0].o)/cd[0].o*100;
+    elP.textContent=cvx(last.c);
+    elC.hidden=false;elC.textContent=(chg>=0?"+":"")+chg.toFixed(2)+"%";
+    elC.className="cchg "+(chg>=0?"up":"down");
+    /* say what the percentage measures: sitting beside the price it reads as a
+       24h move, and on the longer intervals it spans years */
+    elC.title="Change across the "+n+" candles shown, "+tlabel(cd[0].t)+" to "+tlabel(last.t);
+    document.title=cvx(last.c)+" BTC - OpenBitcoin: Chart";
+  }
+  function leg(k,pc){
+    legend.innerHTML="O <b>"+cnum(k.o)+"</b> H <b>"+cnum(k.h)+"</b> L <b>"+cnum(k.l)+"</b> C <b>"+cnum(k.c)+"</b> "+
+      "<span style=\"color:"+(pc>=0?T.up:T.dn)+"\">"+(pc>=0?"+":"")+pc.toFixed(2)+"%</span>";
+  }
+  var MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function tlabel(sec){
+    var d=new Date(sec*1000);
+    if(S.iv<3600)return d.getUTCHours()+":"+("0"+d.getUTCMinutes()).slice(-2);
+    if(S.iv<86400)return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+" "+d.getUTCHours()+":00";
+    if(S.iv<2592000)return MO[d.getUTCMonth()]+" "+d.getUTCDate();
+    return MO[d.getUTCMonth()]+" "+String(d.getUTCFullYear()).slice(2);
+  }
+
+  function mkBtns(host,items,cur,set){
+    var el=document.getElementById(host);
+    items.forEach(function(it){
+      var b=document.createElement("button");
+      b.type="button";b.className="cbtn"+(cur===it[0]?" on":"");b.textContent=it[1];
+      b.addEventListener("click",function(){
+        Array.prototype.forEach.call(el.children,function(z){z.classList.remove("on");});
+        b.classList.add("on");set(it[0]);load();
+      });
+      el.appendChild(b);
+    });
+  }
+  mkBtns("exbtns",EX,S.ex,function(v){S.ex=v;});
+  mkBtns("ivbtns",IV.map(function(v){return[String(v[1]),v[0]];}),String(S.iv),
+    function(v){S.iv=parseInt(v,10);});
+
+  var csel=document.getElementById("csel");
+  Object.keys(FX).forEach(function(c){
+    var o=document.createElement("option");o.value=c;o.textContent=c;
+    if(c===S.cur)o.selected=true;csel.appendChild(o);
+  });
+  csel.addEventListener("change",function(){
+    S.cur=csel.value;elPair.textContent="BTC/"+S.cur;S.hover=-1;draw();
+  });
+
+  /* the interval strip scrolls behind arrows on a phone */
+  var wrapIv=document.getElementById("ivwrap");
+  document.getElementById("ivL").addEventListener("click",function(){wrapIv.scrollBy({left:-120,behavior:"smooth"});});
+  document.getElementById("ivR").addEventListener("click",function(){wrapIv.scrollBy({left:120,behavior:"smooth"});});
+
+  function at(e){
+    var r=cv.getBoundingClientRect();
+    var i=Math.floor((e.clientX-r.left)/(r.width-84)*S.candles.length);
+    S.hover=(i>=0&&i<S.candles.length)?i:-1;draw();
+  }
+  cv.addEventListener("mousemove",at);
+  cv.addEventListener("mouseleave",function(){S.hover=-1;draw();});
+  var rt;
+  addEventListener("resize",function(){
+    clearTimeout(rt);
+    rt=setTimeout(function(){
+      if(S.candles.length&&Math.abs(S.candles.length-want())>20)load();else draw();
+    },120);
+  });
+  load();
+})();
+</script>
+</Base>

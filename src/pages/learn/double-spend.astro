@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Double Spending: The Problem Bitcoin Solved - OpenBitcoin" description="What a double spend is, why digital money was impossible without a middleman, how bitcoin prevents it with proof of work, and how many confirmations a payment really needs.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Double spending</h1>
+    <p class="doc-lede">Spending the same money twice is trivial with digital files and impossible with cash. Bitcoin is the answer to that gap, and understanding it is understanding why any of the rest of the machinery exists.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ds-card">
+      <div class="ds-tlab">The problem</div>
+      <p class="ds-p">A digital coin is data, and data copies perfectly. If money were just a file, you could pay the same file to two people in the same afternoon, and both would believe they had been paid. Nothing about the file would look wrong to either of them.</p>
+      <p class="ds-p">Physical cash does not have this problem: handing over a note means you no longer hold it. Every digital system before bitcoin solved it the same way instead, by appointing someone to keep the only list that counts. Your bank knows your balance, subtracts when you spend, and refuses the second spend. It works, and it means the list belongs to whoever keeps it, along with the power to freeze it, reverse it or lose it.</p>
+      <div class="ds-quote">
+        <p>"We need a way for the payee to know that the previous owners did not sign any earlier transactions."</p>
+        <span>Bitcoin whitepaper, 2008</span>
+      </div>
+    </div>
+
+    <div class="ds-card ds-mt">
+      <div class="ds-tlab">How bitcoin prevents it</div>
+      <p class="ds-p">Two mechanisms do the work, and they are easier to hold separately.</p>
+      <ol class="ds-steps">
+        <li><b>Every node tracks what is unspent.</b> Coins exist as discrete outputs, and each node keeps the set of those not yet consumed. A transaction spending an output that is not in that set is not a controversial transaction, it is an invalid one, and every node drops it on the floor. That alone stops the second spend from ever being accepted anywhere.</li>
+        <li><b>Proof of work decides the order.</b> The hard part is not detecting conflict but agreeing which of two conflicting transactions came first, when there is no clock everyone shares and no one is in charge. Bitcoin settles it by making blocks expensive: miners burn real electricity searching for one, and nodes follow the chain with the most work in it. Reordering history means redoing that work, faster than everyone else is adding to it.</li>
+      </ol>
+      <p class="ds-p">The result is not a mathematical impossibility. It is a price. Rewriting the last block means outspending the whole network for the time it takes; rewriting six means doing it six times over while the honest chain keeps moving away from you.</p>
+    </div>
+
+    <div class="ds-card ds-mt">
+      <div class="ds-tlab">What an attack would look like</div>
+      <p class="ds-intro">The attacker pays you, waits for you to release the goods, then publishes a longer chain in which that payment never happened.</p>
+      <div class="ds-diagram">
+        <svg viewBox="0 0 620 200" role="img" aria-label="Diagram of an honest chain of blocks and a longer attacker chain that replaces it">
+          <g font-family="'Cascadia Mono',Consolas,monospace" font-size="10.5" font-weight="700">
+            <text x="0" y="24" fill="#7C8CA8" letter-spacing="1.4">HONEST CHAIN</text>
+            <g>
+              <rect x="0" y="36" width="66" height="40" rx="7" fill="rgba(46,189,133,.14)" stroke="#2EBD85"/>
+              <text x="33" y="61" fill="#2EBD85" text-anchor="middle">100</text>
+              <rect x="92" y="36" width="66" height="40" rx="7" fill="rgba(46,189,133,.14)" stroke="#2EBD85"/>
+              <text x="125" y="61" fill="#2EBD85" text-anchor="middle">101</text>
+              <rect x="184" y="36" width="66" height="40" rx="7" fill="rgba(247,147,26,.16)" stroke="#F7931A"/>
+              <text x="217" y="61" fill="#F7931A" text-anchor="middle">102</text>
+              <rect x="276" y="36" width="66" height="40" rx="7" fill="rgba(46,189,133,.14)" stroke="#2EBD85"/>
+              <text x="309" y="61" fill="#2EBD85" text-anchor="middle">103</text>
+              <path d="M70 56 H88 M162 56 H180 M254 56 H272" stroke="#7C8CA8" stroke-width="1.6"/>
+            </g>
+            <text x="352" y="61" fill="#F7931A" font-size="9.5">YOUR PAYMENT IS IN 102</text>
+
+            <text x="0" y="120" fill="#7C8CA8" letter-spacing="1.4">ATTACKER CHAIN, BUILT IN SECRET</text>
+            <g>
+              <rect x="184" y="132" width="66" height="40" rx="7" fill="rgba(246,70,93,.13)" stroke="#F6465D"/>
+              <text x="217" y="157" fill="#F6465D" text-anchor="middle">102'</text>
+              <rect x="276" y="132" width="66" height="40" rx="7" fill="rgba(246,70,93,.13)" stroke="#F6465D"/>
+              <text x="309" y="157" fill="#F6465D" text-anchor="middle">103'</text>
+              <rect x="368" y="132" width="66" height="40" rx="7" fill="rgba(246,70,93,.13)" stroke="#F6465D"/>
+              <text x="401" y="157" fill="#F6465D" text-anchor="middle">104'</text>
+              <path d="M158 76 Q158 152 180 152 M254 152 H272 M346 152 H364" stroke="#F6465D" stroke-width="1.6" fill="none" stroke-dasharray="4 3"/>
+            </g>
+            <text x="446" y="157" fill="#F6465D" font-size="9.5">NO PAYMENT TO YOU</text>
+          </g>
+        </svg>
+      </div>
+      <p class="ds-p">While the honest chain went 102, 103, the attacker was privately building an alternative from 101 onward that omits the payment. When their chain is longer, they publish it, nodes switch to the chain with more work, and the block containing your payment is discarded. Your money was never spent; you simply gave away whatever you were selling.</p>
+      <p class="ds-p">To do it they must out-mine everyone else for the whole span. That is the meaning of the phrase 51 percent attack: not a vote won by a majority, but sustained control of more hashing power than the rest of the network combined.</p>
+    </div>
+
+    <div class="ds-card ds-mt">
+      <div class="ds-tlab">How much protection each confirmation buys</div>
+      <p class="ds-intro">Confirmations are the practical measure. There is no line where a payment becomes absolutely final, only depths where reversing it stops being worth anyone's while.</p>
+      <div class="ds-conf">
+        <div class="ds-row"><b>0</b><span><i>Unconfirmed.</i> Broadcast, sitting in mempools, replaceable by the sender. Reasonable for a coffee, where the merchant accepts a rare small loss for speed.</span></div>
+        <div class="ds-row"><b>1</b><span><i>In a block.</i> An attacker must now redo a block and beat the network to the next one. Fine for everyday amounts.</span></div>
+        <div class="ds-row"><b>3</b><span><i>Comfortable.</i> Common for moderate payments. Roughly half an hour on average.</span></div>
+        <div class="ds-row"><b>6</b><span><i>The old convention.</i> Around an hour, and the depth most exchanges settled on for large deposits. The number is a rule of thumb from the whitepaper era, not a threshold in the code.</span></div>
+        <div class="ds-row"><b>100</b><span><i>Coinbase maturity.</i> Newly mined coins cannot be spent until 100 blocks have passed, precisely because a reorg would otherwise unspend them.</span></div>
+      </div>
+      <p class="ds-p">The right depth scales with what is at stake. A payment worth less than the electricity needed to reverse it is safe at one confirmation; a payment worth more than a day of the network's entire mining revenue deserves more patience.</p>
+    </div>
+
+    <div class="ds-card ds-mt">
+      <div class="ds-tlab">Has it ever happened</div>
+      <p class="ds-p">On bitcoin, no attacker has ever taken money this way. The closest event was a software split in March 2013, when two versions of Bitcoin Core disagreed about a valid block and the network briefly ran two chains. One payment processor reported a double spend against it during the confusion. The split was resolved within hours by miners downgrading to the chain the older software accepted, and the incident is remembered as a bug rather than an attack.</p>
+      <p class="ds-p">On smaller chains it happens regularly, because the defence is proportional to hashing power and a small chain is cheap to out-mine. Bitcoin Gold was attacked in 2018 and again in 2020. Ethereum Classic was reorganised repeatedly in 2020, in one case by several thousand blocks. In each case the attacker deposited coins at an exchange, traded them, withdrew something else, then rewrote the chain to unspend the deposit.</p>
+      <div class="ds-verdict">
+        <b>Why bitcoin is different in degree, not in kind</b>
+        <span>The same attack applies to bitcoin. It has not happened because the hardware and electricity required to out-mine the entire network for even an hour costs more than any single reversal has been worth, and because that hardware is useless for anything else afterwards. Security here is economic, and it is why hashrate is worth watching.</span>
+      </div>
+    </div>
+
+    <div class="ds-about doc-prose">
+      <p>If you accept bitcoin payments, the practical advice is short: wait for confirmations in proportion to the amount, and be aware that an unconfirmed transaction can be replaced by its sender at any time using <a href="/learn/glossary#rbf">replace by fee</a>. If you send them, the same mechanism is your friend when a transaction is stuck at too low a fee.</p>
+      <p>The whitepaper works through the probability of an attacker catching up from a given depth, and it is the most approachable part of the paper for a non-technical reader. It is nine pages, and it is <a href="/learn/whitepaper">here</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="ds-railp">Bitcoin stops the same coins being spent twice by making every node check what is unspent, and by making the order of events expensive to rewrite.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/confirmations">How many confirmations</a>
+        <a href="/learn/mining">How mining works</a>
+        <a href="/learn/utxo">What a UTXO is</a>
+        <a href="/hashrate">Network hashrate</a>
+        <a href="/learn/glossary">Glossary</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ds-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .ds-mt{margin-top:14px}
+  .ds-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ds-p{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .ds-p:last-child{margin-bottom:0}
+  .ds-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 10px}
+  .ds-steps{margin:0;padding-left:22px}
+  .ds-steps + .ds-p{margin-top:13px}
+  .ds-steps li{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin-top:11px}
+  .ds-steps li::marker{color:var(--acc);font-weight:700}
+  .ds-steps b{color:var(--ink);font-weight:600}
+  .ds-quote{margin-top:14px;border-left:3px solid rgba(247,147,26,.5);padding:2px 0 2px 14px}
+  .ds-quote p{font:500 14.5px/1.65 var(--sans);color:var(--ink);margin:0;font-style:italic}
+  .ds-quote span{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-top:7px}
+  .ds-diagram{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:4px 0 12px;overflow-x:auto}
+  .ds-diagram svg{width:100%;min-width:520px;height:auto;display:block}
+  .ds-conf{display:flex;flex-direction:column;margin:2px 0 12px}
+  .ds-row{display:flex;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .ds-row:last-child{border-bottom:0}
+  .ds-row b{flex:0 0 42px;text-align:right;font:700 17px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .ds-row span{font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .ds-row i{color:var(--ink);font-style:normal;font-weight:600}
+  .ds-verdict{margin-top:14px;border-radius:12px;padding:16px 18px;border:1px solid rgba(255,166,60,.45);background:rgba(247,147,26,.07)}
+  .ds-verdict b{display:block;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .ds-verdict > span{display:block;font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ds-about{margin-top:14px}
+  .ds-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ds-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:700px){.ds-row b{flex-basis:34px;font-size:15px}}
+</style>
+</Base>

@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="How Bitcoin Is Taxed: Country Guides - OpenBitcoin" description="How bitcoin is taxed, in plain terms: the principles that hold everywhere, plus detailed guides for the United States and Canada.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tax guides</div>
+    <h1>Bitcoin taxes</h1>
+    <p class="doc-lede">Nearly everywhere, disposing of bitcoin is a taxable event and the paperwork is yours to keep. Pick your country for the rules in plain terms.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="th-card">
+      <div class="th-tlab">Country guides</div>
+      <div class="th-countries">
+        <a class="th-country" href="/tax/us">
+          <b>United States</b>
+          <p>Property treatment, short and long term gains, per-wallet cost basis, Form 8949, and the 1099-DA reporting rollout.</p>
+          <span class="th-go">Read the US guide &#8594;</span>
+        </a>
+        <a class="th-country" href="/tax/ca">
+          <b>Canada</b>
+          <p>Capital gains versus business income, the 50 percent inclusion rate, adjusted cost base averaging, and Schedule 3.</p>
+          <span class="th-go">Read the Canada guide &#8594;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="th-card th-mt">
+      <div class="th-tlab">What holds almost everywhere</div>
+      <div class="th-rows">
+        <div class="th-row"><b>Disposals are the taxable moment</b><span>Selling for cash, spending on goods, swapping for another asset: most systems treat these as disposals and tax the gain since you acquired the coins. Buying and holding is generally not taxed, and moving coins between your own wallets is not a disposal.</span></div>
+        <div class="th-row"><b>Nobody files for you</b><span>Exchanges may report to authorities, but the obligation to declare gains sits with you, and it does not disappear because a purchase was private or a service asked no questions; the <a href="/no-kyc">no-KYC directory</a> says the same thing.</span></div>
+        <div class="th-row"><b>Records are the whole game</b><span>Date, amount, price, and fees for every acquisition and disposal. Kept as you go, tax season is arithmetic; reconstructed years later, it is archaeology. Both country guides end with the same records list because it is the same list.</span></div>
+      </div>
+      <p class="th-fine">Informational only, not tax, legal, or accounting advice, per the <a href="/terms">terms</a>. Rules change; the country guides carry the details and the dates they were checked.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The guides</div>
+      <nav>
+        <a href="/tax/us">United States</a>
+        <a href="/tax/ca">Canada</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Useful with these</div>
+      <nav>
+        <a href="/whatif">What-if calculator</a>
+        <a href="/dca">DCA backtester</a>
+        <a href="/convert">BTC to fiat converter</a>
+        <a href="/terms">Terms</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .th-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .th-mt{margin-top:14px}
+  .th-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .th-countries{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .th-country{display:flex;flex-direction:column;background:var(--field);border:1px solid var(--line-2);border-radius:10px;
+    padding:16px 18px;text-decoration:none;min-width:0}
+  .th-country:hover{border-color:rgba(255,166,60,.45)}
+  .th-country b{font:700 15px var(--sans);color:var(--ink)}
+  .th-country p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:7px 0 10px;flex:1}
+  .th-go{font:700 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--acc)}
+  .th-rows{display:grid;gap:8px}
+  .th-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .th-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .th-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .th-row a,.th-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .th-row a:hover,.th-fine a:hover{border-bottom-style:solid}
+  .th-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  @media(max-width:700px){
+    .th-card{padding:18px 16px}
+    .th-countries{grid-template-columns:minmax(0,1fr)}
+  }
+</style>
+</Base>

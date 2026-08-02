@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<!-- This policy is the machine-readable version of the promise on the page:
+     the document may run its own inline script and style and nothing else.
+     default-src 'none' plus connect-src 'none' means fetch, XMLHttpRequest,
+     WebSocket, beacons, remote images, fonts and frames are all refused by
+     the browser itself (img-src data: allows only the embedded logo), whether or not the code below ever tries. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; media-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Offline Authenticator: TOTP codes with no network</title>
+<style>
+:root{
+  /* Midnight Navy, matching openbitcoin.com */
+  --bg:#0B1626;--panel:#101D33;--panel2:#0D1830;--line:#1E2C47;--line2:#2A3B5C;
+  --ink:#E8EDF7;--ink2:#C7D3E8;--ink3:#7C8CA8;--acc:#F7931A;
+  --up:#0ECB81;--down:#F6465D;--field:#16233C;--ph:#5F7191;
+  --mono:ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,Menlo,monospace;
+  --sans:system-ui,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.oa-wrap{max-width:740px;margin:0 auto;padding:0 16px 60px}
+a{color:var(--acc)}
+button,input,textarea{font-family:inherit}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(247,147,26,.55);outline-offset:2px}
+
+/* ---- network banner ---- */
+.oa-net{max-width:772px;margin:0 auto 18px;padding:13px 16px;border-radius:0 0 12px 12px;
+  border:1px solid var(--line2);border-top:0;font:700 12.5px/1.55 var(--sans)}
+.oa-net b{display:block;font:800 14px var(--sans);margin-bottom:3px}
+.oa-net span{display:block;font:500 12px/1.55 var(--sans);opacity:.85;margin-top:4px}
+.oa-net.is-on{background:rgba(124,140,168,.10);border-color:var(--line2);color:var(--ink2)}
+.oa-net.is-off{background:rgba(14,203,129,.10);border-color:rgba(14,203,129,.45);color:#BFEBD9}
+
+/* ---- brand ---- */
+.oa-brand{display:flex;align-items:flex-end;gap:1px;margin:26px 0 18px}
+.oa-logo{display:inline-block;width:187px;height:34px;flex:none;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%230A0F1B%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat left center/contain;
+  filter:drop-shadow(0 2px 6px rgba(122,58,0,.30))}
+.oa-com{font:800 italic 21px var(--sans);color:var(--acc);letter-spacing:-.5px;padding-bottom:4px}
+
+/* ---- saved entries ---- */
+.oa-saved-list{display:grid;gap:8px;margin-top:4px}
+.oa-entry{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel2);
+  border:1px solid var(--line2);border-radius:10px;padding:10px 14px}
+.oa-entry b{font:700 13.5px var(--sans);color:var(--ink);flex:1 1 120px;min-width:0;word-break:break-word}
+.oa-entry .oa-ecode{font:700 22px var(--mono);letter-spacing:.05em;color:#FFF;font-variant-numeric:tabular-nums}
+.oa-entry .oa-esec{font:700 11px var(--mono);color:var(--ink3);font-variant-numeric:tabular-nums;min-width:34px}
+.oa-entry .oa-esec.is-low{color:var(--down)}
+.oa-entry .oa-ebtns{display:flex;gap:6px}
+.oa-saverow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:13px;padding-top:12px;
+  border-top:1px dotted var(--line2)}
+.oa-saverow input{flex:1 1 150px;background:var(--field);border:1px solid var(--line2);border-radius:8px;
+  color:#FFF;font:700 13px var(--sans);padding:8px 11px;outline:none}
+.oa-saverow input:focus{border-color:rgba(255,166,60,.55)}
+.oa-saverow input::placeholder{color:var(--ph);font-weight:600}
+.oa-keep{font:700 12px/1.6 var(--sans);color:#FFD9A6;background:rgba(247,147,26,.09);
+  border:1px dashed rgba(247,147,26,.45);border-radius:9px;padding:10px 13px;margin-top:12px}
+
+/* ---- head ---- */
+.oa-kick{font:700 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+h1{font:800 27px/1.15 var(--sans);letter-spacing:-.4px;margin:8px 0 0}
+.oa-lede{font:500 14.5px/1.6 var(--sans);color:var(--ink2);margin:9px 0 0;max-width:64ch}
+
+/* ---- self-test strip ---- */
+.oa-st{display:flex;align-items:center;gap:10px;margin:16px 0 0;padding:10px 14px;border-radius:10px;
+  background:var(--panel2);border:1px solid var(--line2)}
+.oa-dot{width:9px;height:9px;border-radius:50%;background:var(--ink3);flex:none}
+.oa-st b{font:700 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink2)}
+.oa-st i{font:600 11px var(--mono);letter-spacing:.04em;color:var(--ink3);font-style:normal}
+.oa-st.is-ok .oa-dot{background:var(--up)}
+.oa-st.is-ok b{color:var(--up)}
+.oa-st.is-bad{background:rgba(246,70,93,.12);border-color:rgba(246,70,93,.55)}
+.oa-st.is-bad .oa-dot{background:var(--down)}
+.oa-st.is-bad b{color:var(--down)}
+
+/* ---- cards ---- */
+.oa-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px 20px;margin-top:14px}
+.oa-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.oa-ta{width:100%;min-height:76px;resize:vertical;background:var(--field);border:1px dashed rgba(255,166,60,.32);
+  border-radius:10px;color:#FFF;font:700 15px/1.6 var(--mono);padding:12px 14px;outline:none;word-break:break-all}
+.oa-ta:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+.oa-ta::placeholder{color:var(--ph);font-weight:600}
+.oa-hint{font:500 12px/1.55 var(--sans);color:var(--ink3);margin:9px 0 0}
+.oa-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.oa-b{background:transparent;border:1px solid var(--line2);border-radius:8px;color:var(--ink2);
+  font:700 10.5px var(--mono);letter-spacing:.08em;padding:8px 12px;cursor:pointer}
+.oa-b:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.oa-b.is-acc{border-color:rgba(255,166,60,.5);color:var(--acc)}
+
+/* ---- result ---- */
+.oa-msg{font:700 14px var(--mono);color:var(--ink3)}
+.oa-msg.is-bad{color:var(--down)}
+.oa-code{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.oa-now{min-width:0}
+.oa-now .oa-lab{margin-bottom:5px}
+.oa-digits{font:700 clamp(34px,9vw,46px)/1 var(--mono);letter-spacing:.06em;color:#FFF;font-variant-numeric:tabular-nums;
+  word-break:break-all}
+.oa-next{font:700 20px var(--mono);letter-spacing:.05em;color:var(--ink3);font-variant-numeric:tabular-nums}
+.oa-ring{position:relative;width:74px;height:74px;flex:none}
+.oa-ring svg{width:74px;height:74px;transform:rotate(-90deg);display:block}
+.oa-ring circle{fill:none;stroke-width:5}
+.oa-ring .rbg{stroke:var(--line2)}
+.oa-ring .rfg{stroke:var(--acc);stroke-linecap:round}
+.oa-ring.is-low .rfg{stroke:var(--down)}
+.oa-ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.oa-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.oa-meta span{background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:5px 10px;
+  font:700 10px var(--mono);letter-spacing:.07em;color:var(--ink2);word-break:break-all}
+.oa-meta span b{color:var(--acc);font-weight:700}
+.oa-clock{margin-top:15px;padding-top:13px;border-top:1px dotted var(--line2);display:flex;flex-wrap:wrap;
+  align-items:center;gap:9px}
+.oa-clock .oa-lab{margin:0}
+.oa-clock input{width:82px;background:var(--field);border:1px solid var(--line2);border-radius:8px;color:#FFF;
+  font:700 13px var(--mono);padding:7px 9px;outline:none;text-align:center}
+.oa-utc{font:600 11px var(--mono);letter-spacing:.03em;color:var(--ink3);flex:1 1 100%}
+
+/* ---- prose ---- */
+.oa-sec{padding-top:18px;margin-top:18px;border-top:1px dotted var(--line2)}
+.oa-sec:first-child{border-top:0;margin-top:0;padding-top:0}
+h2{font:700 16px/1.3 var(--sans);margin:0 0 8px}
+.oa-p{font:500 14px/1.7 var(--sans);color:var(--ink2);margin:9px 0 0}
+ol.oa-steps{margin:10px 0 0;padding-left:20px}
+ol.oa-steps li{font:500 14px/1.6 var(--sans);color:var(--ink2);margin-top:7px}
+ol.oa-steps li::marker{color:var(--acc);font-weight:700}
+.oa-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink3);margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+code{font:600 12.5px var(--mono);background:var(--field);border-radius:5px;padding:2px 6px;color:var(--ink)}
+@media(max-width:700px){
+  h1{font-size:23px}
+  .oa-card{padding:16px 15px 18px}
+  .oa-ta{font-size:13.5px}
+  .oa-code{gap:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="oa-net" id="oa-net" role="status">
+  <b>Checking the network</b>
+  <span>One moment.</span>
+</div>
+
+<div class="oa-wrap">
+
+  <div class="oa-brand"><span class="oa-logo" role="img" aria-label="OpenBitcoin"></span><span class="oa-com">.com</span></div>
+  <div class="oa-kick">Authenticator</div>
+  <h1>Offline authenticator</h1>
+  <p class="oa-lede">Type or paste a TOTP secret and this file produces the same six digit codes your authenticator app would, using only your browser and your clock. Nothing is ever sent anywhere. Use it once and close the tab, or save entries with a nickname so they are waiting next time you open the file. Online works; offline is the safer habit for high value secrets.</p>
+
+  <div class="oa-card" id="oa-saved" hidden>
+    <div class="oa-lab">Saved entries</div>
+    <div class="oa-saved-list" id="oa-saved-list"></div>
+    <p class="oa-keep">Saved entries live only in this browser on this computer. Clearing browser data erases them without warning, so always keep the original secret written down somewhere safe. This list is a convenience, never the backup.</p>
+  </div>
+
+  <div class="oa-st" id="oa-st">
+    <span class="oa-dot"></span>
+    <b id="oa-st-b">Self-test running</b>
+    <i id="oa-st-i">Checking the code against published test vectors.</i>
+  </div>
+
+  <div class="oa-card">
+    <div class="oa-lab">Secret or otpauth link</div>
+    <textarea id="oa-in" class="oa-ta" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"
+      placeholder="JBSWY3DPEHPK3PXP&#10;or otpauth://totp/Exchange:you@example.com?secret=..." aria-label="Base32 TOTP secret or otpauth link"></textarea>
+    <p class="oa-hint">Base32 uses the letters A to Z and the digits 2 to 7 only; the digits 0, 1 and 8 never appear in a secret. Spaces and hyphens are ignored. An <code>otpauth://totp/</code> link sets the digits, period and algorithm for you.</p>
+    <div class="oa-btns">
+      <button type="button" class="oa-b" id="oa-hide">Hide secret, keep codes</button>
+      <button type="button" class="oa-b" id="oa-clear">Clear everything</button>
+    </div>
+  </div>
+
+  <!-- no aria-live here on purpose: the countdown inside this card repaints
+       several times a second and would flood a screen reader -->
+  <div class="oa-card" id="oa-out">
+    <div class="oa-msg" role="status">Waiting for a secret.</div>
+  </div>
+
+  <div class="oa-card">
+    <div class="oa-sec">
+      <h2>Use this file offline</h2>
+      <ol class="oa-steps">
+        <li>Save this file to disk. It is one HTML file with no companions: no scripts to fetch, no fonts, no images.</li>
+        <li>For an exchange or email secret, copy it by USB stick to a computer that does not go back online. A spare laptop with the radio off is enough.</li>
+        <li>Turn the wifi off or unplug the cable. The banner at the top of this page turns green when the browser reports no network.</li>
+        <li>Open the file by double clicking it. The address bar should read <code>file://</code> and nothing should load from anywhere.</li>
+        <li>Type or paste the secret. Codes appear immediately and keep rolling every 30 seconds.</li>
+        <li>Close the tab when you are done, then reconnect. Unless you chose to save an entry, nothing is written anywhere: no cookies, no storage, no history of what you typed. Saved entries stay in this browser's local storage until you remove them or the browser's data is cleared.</li>
+      </ol>
+      <p class="oa-p">The banner reads <code>navigator.onLine</code>, which only tells you whether the browser can see a network interface. It is a reminder, not proof of isolation. Pulling the cable or switching the radio off is the proof.</p>
+    </div>
+    <div class="oa-sec">
+      <h2>What this file is honestly good for</h2>
+      <p class="oa-p">A time based code is a shared secret plus a clock. Whoever holds the secret can make codes forever, so a secret sitting on the same computer you log in from is no longer a second factor: it is a second copy of the first one. Treat this as a recovery aid. The everyday code should still come from a phone or a hardware key you keep separate from the machine you type your password into.</p>
+      <p class="oa-p">The good use is the one nobody plans for. Your phone is lost, wiped or dead, the exchange wants a code, and the only thing you still have is the backup of the setup secret you wrote down when you enrolled. This file turns that backup into codes without asking any website for help, and without installing anything.</p>
+      <p class="oa-p">No legitimate service ever asks for your TOTP setup secret. They ask for a six digit code. A page asking you to paste the secret itself, or to scan your enrollment QR code into their site, is stealing the second factor outright.</p>
+    </div>
+    <div class="oa-sec">
+      <h2>If the codes are rejected</h2>
+      <p class="oa-p">Nine times out of ten it is the clock. TOTP divides real time into 30 second windows, so a machine whose clock has drifted by a minute produces codes for the wrong window. An offline computer drifts faster than a connected one because nothing corrects it. Set the clock offset in the code card until the device time shown there matches real UTC, and try again. Most servers accept the window either side of their own, so being within 30 seconds is usually enough.</p>
+      <p class="oa-p">The other cause is a mistyped secret. Base32 has no 0, 1 or 8, so a handwritten O is the letter O, a written l is probably the letter I or the digit 7, and a B is never an 8. If the secret is the wrong length the tool says so.</p>
+    </div>
+  </div>
+
+  <p class="oa-fine">This file computes codes with the browser's own WebCrypto (HMAC per RFC 2104, SHA-1, SHA-256 or SHA-512, truncated per RFC 4226 and clocked per RFC 6238). It carries the published RFC 6238 test vectors and RFC 4648 base32 vectors and checks itself on every load; if any vector fails it refuses to display a code. It declares a content security policy that forbids the browser from making any network request at all. From OpenBitcoin.com, page openbitcoin.com/tools/2fa. Never type a seed phrase, a private key or an xprv into anything, including this file: it has no use for one and no field for one.</p>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   Offline TOTP authenticator. Zero network by construction: there is no
+   fetch, XMLHttpRequest, WebSocket, Image, EventSource or beacon call in
+   this file, and the meta CSP in the head refuses all of them anyway.
+   Persistence is OPT-IN only: entries the user explicitly saves with a
+   nickname go to localStorage under one key; nothing else is ever stored.
+
+   TEST VECTORS EMBEDDED BELOW (self-test runs on load, refuses to show
+   codes on any failure):
+     RFC 6238 Appendix B, all 18 rows (SHA-1, SHA-256, SHA-512 at
+       t = 59, 1111111109, 1111111111, 1234567890, 2000000000,
+       20000000000), plus the 6 digit form of two SHA-1 rows.
+       Seeds are the RFC's ASCII seeds, base32 encoded per RFC 4648:
+         SHA-1   "12345678901234567890"
+         SHA-256 "12345678901234567890123456789012"
+         SHA-512 "1234567890...1234" (64 bytes)
+     RFC 4648 section 10 base32 vectors: f, fo, foo, foob, fooba, foobar.
+   All were checked against an independent implementation before this
+   file was written; the in-page self-test re-checks them in the user's
+   own browser, which is the only check that matters here.
+   ===================================================================== */
+
+var A32="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+
+/* ---------- RFC 4648 base32 decode ---------- */
+function b32decode(str){
+  var s=String(str).toUpperCase().replace(/[\s\-]/g,"");
+  while(s.length&&s.charAt(s.length-1)==="=")s=s.slice(0,-1);
+  if(!s.length)return null;
+  var bits=0,val=0,out=[],i,c;
+  for(i=0;i<s.length;i++){
+    c=A32.indexOf(s.charAt(i));
+    if(c<0)return null;                 /* invalid character, not a base32 secret */
+    val=(val<<5)|c;bits+=5;             /* val stays under 2^12: drained every 8 bits */
+    if(bits>=8){bits-=8;out.push((val>>>bits)&255);}
+  }
+  return new Uint8Array(out);
+}
+function bytesToAscii(b){
+  var s="",i;
+  for(i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);
+  return s;
+}
+
+/* ---------- HMAC and RFC 6238 TOTP ---------- */
+function hasCrypto(){
+  return !!(window.crypto&&window.crypto.subtle&&window.crypto.subtle.importKey);
+}
+function ctrBytes(c){
+  /* 8 byte big-endian counter, built by division so counters above 2^32
+     stay correct (bitwise operators would truncate to 32 bits) */
+  var b=new Uint8Array(8),i;
+  for(i=7;i>=0;i--){b[i]=c%256;c=Math.floor(c/256);}
+  return b;
+}
+function hmac(algo,key,msg){
+  return crypto.subtle.importKey("raw",key,{name:"HMAC",hash:{name:algo}},false,["sign"])
+    .then(function(k){return crypto.subtle.sign("HMAC",k,msg);})
+    .then(function(sig){return new Uint8Array(sig);});
+}
+function totpFromCounter(key,counter,digits,algo){
+  return hmac(algo,key,ctrBytes(counter)).then(function(h){
+    var o=h[h.length-1]&15;                       /* dynamic truncation, RFC 4226 */
+    var bin=(h[o]&127)*16777216+h[o+1]*65536+h[o+2]*256+h[o+3];
+    var s=String(bin%Math.pow(10,digits));
+    while(s.length<digits)s="0"+s;
+    return s;
+  });
+}
+
+/* ---------- embedded test vectors ---------- */
+var SEED1  ="GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ";
+var SEED256="GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====";
+var SEED512="GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=";
+var TOTP_VECTORS=[
+  [SEED1,  "SHA-1",         59,8,"94287082"],
+  [SEED256,"SHA-256",       59,8,"46119246"],
+  [SEED512,"SHA-512",       59,8,"90693936"],
+  [SEED1,  "SHA-1",  1111111109,8,"07081804"],
+  [SEED256,"SHA-256",1111111109,8,"68084774"],
+  [SEED512,"SHA-512",1111111109,8,"25091201"],
+  [SEED1,  "SHA-1",  1111111111,8,"14050471"],
+  [SEED256,"SHA-256",1111111111,8,"67062674"],
+  [SEED512,"SHA-512",1111111111,8,"99943326"],
+  [SEED1,  "SHA-1",  1234567890,8,"89005924"],
+  [SEED256,"SHA-256",1234567890,8,"91819424"],
+  [SEED512,"SHA-512",1234567890,8,"93441116"],
+  [SEED1,  "SHA-1",  2000000000,8,"69279037"],
+  [SEED256,"SHA-256",2000000000,8,"90698825"],
+  [SEED512,"SHA-512",2000000000,8,"38618901"],
+  [SEED1,  "SHA-1", 20000000000,8,"65353130"],
+  [SEED256,"SHA-256",20000000000,8,"77737706"],
+  [SEED512,"SHA-512",20000000000,8,"47863826"],
+  [SEED1,  "SHA-1",         59,6,"287082"],      /* the 6 digit path this tool uses by default */
+  [SEED1,  "SHA-1",  1111111109,6,"081804"]
+];
+var B32_VECTORS=[
+  ["MY======","f"],["MZXQ====","fo"],["MZXW6===","foo"],
+  ["MZXW6YQ=","foob"],["MZXW6YTB","fooba"],["MZXW6YTBOI======","foobar"],
+  ["mzxw6ytb oi","foobar"]   /* lowercase and spaces must decode identically */
+];
+
+var READY=false;
+var stEl=document.getElementById("oa-st"),
+    stB=document.getElementById("oa-st-b"),
+    stI=document.getElementById("oa-st-i");
+
+function selftest(){
+  var pass=0,fail=0,i,got;
+  for(i=0;i<B32_VECTORS.length;i++){
+    got=b32decode(B32_VECTORS[i][0]);
+    if(got&&bytesToAscii(got)===B32_VECTORS[i][1]){pass++;}
+    else{fail++;console.error("[self-test] base32 vector failed:",B32_VECTORS[i][0]);}
+  }
+  if(b32decode("A0B")!==null){fail++;console.error("[self-test] base32 accepted an invalid character");}
+  else pass++;
+  if(!hasCrypto()){
+    console.error("[self-test] WebCrypto (crypto.subtle) is not available in this browser context");
+    return Promise.resolve({pass:pass,fail:fail+TOTP_VECTORS.length,nocrypto:true});
+  }
+  return TOTP_VECTORS.reduce(function(chain,v){
+    return chain.then(function(){
+      var key=b32decode(v[0]);
+      return totpFromCounter(key,Math.floor(v[2]/30),v[3],v[1]).then(function(code){
+        if(code===v[4]){pass++;}
+        else{fail++;console.error("[self-test] RFC 6238 vector failed:",v[1],"t="+v[2],"expected",v[4],"got",code);}
+      });
+    });
+  },Promise.resolve()).then(function(){return {pass:pass,fail:fail,nocrypto:false};});
+}
+
+/* ---------- otpauth:// parsing ---------- */
+function dec(s){
+  try{return decodeURIComponent(String(s).replace(/\+/g," "));}
+  catch(e){return String(s);}
+}
+var ALGOS={"SHA1":"SHA-1","SHA-1":"SHA-1","SHA256":"SHA-256","SHA-256":"SHA-256","SHA512":"SHA-512","SHA-512":"SHA-512"};
+function parseUri(raw){
+  var s=String(raw).trim();
+  if(/^otpauth-migration:/i.test(s))
+    return {err:"That is a Google Authenticator export link. It packs several accounts into one blob and is not a plain secret. Export or read one account at a time instead."};
+  if(!/^otpauth:/i.test(s))return null;
+  var m=/^otpauth:\/\/([a-z]+)\/([^?]*)(?:\?([\s\S]*))?$/i.exec(s);
+  if(!m)return {err:"That looks like an otpauth link but it is not shaped like one. Expected otpauth://totp/Label?secret=..."};
+  var type=m[1].toLowerCase();
+  if(type==="hotp")return {err:"That is an HOTP link. HOTP counts events instead of time and needs a saved counter, which this file deliberately does not keep. Only time based codes are supported."};
+  if(type!=="totp")return {err:"Unknown otpauth type: "+type+". Only totp is supported."};
+  var label=dec(m[2]||""),q={},parts=(m[3]||"").split("&"),i,kv,k;
+  for(i=0;i<parts.length;i++){
+    if(!parts[i])continue;
+    kv=parts[i].split("=");
+    k=dec(kv[0]).toLowerCase();
+    q[k]=dec(kv.slice(1).join("="));
+  }
+  if(!q.secret)return {err:"That otpauth link carries no secret= parameter, so there is nothing to compute from."};
+  var issuer=q.issuer||"",account=label;
+  if(label.indexOf(":")>-1){
+    if(!issuer)issuer=label.slice(0,label.indexOf(":")).trim();
+    account=label.slice(label.indexOf(":")+1).trim();
+  }
+  var digits=parseInt(q.digits,10);if(!(digits>=6&&digits<=10))digits=6;
+  var period=parseInt(q.period,10);if(!(period>=5&&period<=300))period=30;
+  var algo=ALGOS[String(q.algorithm||"SHA1").toUpperCase()];
+  if(!algo)return {err:"Unsupported algorithm in the link: "+q.algorithm+". SHA1, SHA256 and SHA512 are supported."};
+  return {secret:q.secret,digits:digits,period:period,algo:algo,issuer:issuer,account:account};
+}
+
+/* ---------- state ---------- */
+var S={key:null,digits:6,period:30,algo:"SHA-1",issuer:"",account:"",offset:0,
+       ctr:-1,cur:"",next:"",err:"",job:0};
+
+var inEl=document.getElementById("oa-in"),
+    outEl=document.getElementById("oa-out");
+
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function group(code){
+  if(code.length===6)return code.slice(0,3)+" "+code.slice(3);
+  if(code.length===8)return code.slice(0,4)+" "+code.slice(4);
+  return code;
+}
+function showMsg(text,bad){
+  outEl.innerHTML='<div class="oa-msg'+(bad?" is-bad":"")+'" role="status">'+esc(text)+"</div>";
+}
+
+function readInput(){
+  S.job++;S.key=null;S.ctr=-1;S.cur="";S.next="";
+  var raw=inEl.value.trim();
+  if(!raw){S.err="";showMsg("Waiting for a secret.",false);return;}
+  var uri=parseUri(raw),secret=raw;
+  if(uri&&uri.err){S.err=uri.err;showMsg(uri.err,true);return;}
+  if(uri){
+    secret=uri.secret;S.digits=uri.digits;S.period=uri.period;S.algo=uri.algo;
+    S.issuer=uri.issuer;S.account=uri.account;
+  }else{
+    S.digits=6;S.period=30;S.algo="SHA-1";S.issuer="";S.account="";
+  }
+  var key=b32decode(secret);
+  if(!key){
+    S.err="That is not valid base32. Base32 secrets use A to Z and 2 to 7 only, so a 0, 1, 8 or 9 in there is a transcription slip.";
+    showMsg(S.err,true);return;
+  }
+  if(key.length<10){
+    S.err="That secret decodes to only "+key.length+" byte"+(key.length===1?"":"s")+". Real TOTP secrets are at least 10 bytes, which is 16 base32 characters. Check for missing characters.";
+    showMsg(S.err,true);return;
+  }
+  S.err="";S.key=key;
+  buildResult();
+  tick(true);
+}
+
+/* ---------- saved entries (optional, localStorage, owner feature) ----------
+   Stored as [{n:nickname,u:raw secret or otpauth uri}] under one key. The
+   stored string is exactly what the user typed; it is re-parsed on load so
+   digits/period/algo survive. Browser storage is wipeable: the page tells the
+   user, twice, to keep the original secret backed up. */
+var LS_KEY="ob-authenticator-entries";
+function lsOk(){
+  try{var t="__t";localStorage.setItem(t,t);localStorage.removeItem(t);return true;}
+  catch(e){return false;}
+}
+function loadEntries(){
+  try{var v=JSON.parse(localStorage.getItem(LS_KEY)||"[]");return Array.isArray(v)?v:[];}
+  catch(e){return [];}
+}
+function saveEntries(list){
+  try{localStorage.setItem(LS_KEY,JSON.stringify(list));}catch(e){}
+}
+var ENTRIES=[],ESTATE=[]; /* ESTATE[i]={key,digits,period,algo,ctr,code} */
+function entryParams(raw){
+  var uri=parseUri(raw);
+  if(uri&&uri.err)return null;
+  var p=uri?{secret:uri.secret,digits:uri.digits,period:uri.period,algo:uri.algo}
+           :{secret:raw,digits:6,period:30,algo:"SHA-1"};
+  var key=b32decode(p.secret);
+  if(!key||key.length<10)return null;
+  return {key:key,digits:p.digits,period:p.period,algo:p.algo};
+}
+function renderEntries(){
+  var card=document.getElementById("oa-saved"),
+      list=document.getElementById("oa-saved-list");
+  if(!card)return;
+  if(!ENTRIES.length){card.hidden=true;return;}
+  card.hidden=false;
+  var html="",i;
+  for(i=0;i<ENTRIES.length;i++){
+    html+='<div class="oa-entry" data-i="'+i+'">'
+      +"<b>"+esc(ENTRIES[i].n)+"</b>"
+      +'<span class="oa-ecode" id="oa-ec'+i+'">------</span>'
+      +'<span class="oa-esec" id="oa-es'+i+'">--</span>'
+      +'<span class="oa-ebtns">'
+        +'<button type="button" class="oa-b" data-act="copy" data-i="'+i+'">Copy</button>'
+        +'<button type="button" class="oa-b" data-act="load" data-i="'+i+'">Open</button>'
+        +'<button type="button" class="oa-b" data-act="del" data-i="'+i+'">Remove</button>'
+      +"</span></div>";
+  }
+  list.innerHTML=html;
+  ESTATE=ENTRIES.map(function(e){
+    var p=entryParams(e.u);
+    return p?{key:p.key,digits:p.digits,period:p.period,algo:p.algo,ctr:-1,code:""}:null;
+  });
+}
+function tickEntries(){
+  if(!READY)return;
+  var i;
+  for(i=0;i<ESTATE.length;i++){
+    (function(i){
+      var st=ESTATE[i];
+      var ec=document.getElementById("oa-ec"+i),es=document.getElementById("oa-es"+i);
+      if(!st){if(ec)ec.textContent="bad entry";return;}
+      var secs=(Date.now()+S.offset*1000)/1000,
+          ctr=Math.floor(secs/st.period),
+          left=st.period-(secs-ctr*st.period);
+      if(es){es.textContent=String(Math.ceil(left));es.className="oa-esec"+(left<=5?" is-low":"");}
+      if(ctr!==st.ctr){
+        st.ctr=ctr;
+        totpFromCounter(st.key,ctr,st.digits,st.algo).then(function(code){
+          st.code=code;
+          var el=document.getElementById("oa-ec"+i);
+          if(el)el.textContent=group(code);
+        });
+      }
+    })(i);
+  }
+}
+document.getElementById("oa-saved-list") && document.getElementById("oa-saved-list").addEventListener("click",function(ev){
+  var b=ev.target.closest("button");if(!b)return;
+  var i=parseInt(b.getAttribute("data-i"),10),act=b.getAttribute("data-act");
+  if(act==="del"){
+    ENTRIES.splice(i,1);saveEntries(ENTRIES);renderEntries();return;
+  }
+  if(act==="load"){
+    inEl.value=ENTRIES[i].u;readInput();
+    window.scrollTo({top:document.getElementById("oa-out").offsetTop-90,behavior:"smooth"});
+    return;
+  }
+  if(act==="copy"&&ESTATE[i]&&ESTATE[i].code){
+    var code=ESTATE[i].code;
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(code);
+        b.textContent="Copied";setTimeout(function(){b.textContent="Copy";},1400);
+        return;
+      }
+    }catch(e){}
+    b.textContent=code;setTimeout(function(){b.textContent="Copy";},2500);
+  }
+});
+
+function buildResult(){
+  var meta=[];
+  if(S.issuer)meta.push("<span><b>Issuer</b> "+esc(S.issuer)+"</span>");
+  if(S.account)meta.push("<span><b>Account</b> "+esc(S.account)+"</span>");
+  meta.push("<span><b>Algorithm</b> "+esc(S.algo)+"</span>");
+  meta.push("<span><b>Digits</b> "+S.digits+"</span>");
+  meta.push("<span><b>Period</b> "+S.period+"s</span>");
+  meta.push("<span><b>Key</b> "+S.key.length+" bytes</span>");
+  meta.push('<span><b>Counter</b> <i id="oa-ctr" style="font-style:normal">0</i></span>');
+  outEl.innerHTML=
+    '<div class="oa-code">'
+     +'<div class="oa-ring" id="oa-ring">'
+       +'<svg viewBox="0 0 74 74" aria-hidden="true">'
+         +'<circle class="rbg" cx="37" cy="37" r="31"></circle>'
+         +'<circle class="rfg" id="oa-arc" cx="37" cy="37" r="31" stroke-dasharray="194.78" stroke-dashoffset="0"></circle>'
+       +"</svg><span id=\"oa-secs\" aria-hidden=\"true\">--</span></div>"
+     +'<div class="oa-now">'
+       +'<div class="oa-lab">Code now</div>'
+       +'<div class="oa-digits" id="oa-cur">------</div>'
+       +'<div class="oa-lab" style="margin:11px 0 3px">Next window</div>'
+       +'<div class="oa-next" id="oa-next">------</div>'
+     +"</div>"
+    +"</div>"
+    +'<div class="oa-btns"><button type="button" class="oa-b is-acc" id="oa-copy">Copy the current code</button></div>'
+    +'<div class="oa-saverow"><input id="oa-nick" maxlength="40" autocomplete="off" placeholder="Nickname, e.g. Exchange main account" aria-label="Nickname for this entry">'
+    +'<button type="button" class="oa-b is-acc" id="oa-save">Save entry in this browser</button></div>'
+    +'<div class="oa-meta">'+meta.join("")+"</div>"
+    +'<div class="oa-clock">'
+      +'<div class="oa-lab">Clock offset</div>'
+      +'<input id="oa-off" inputmode="numeric" autocomplete="off" value="'+S.offset+'" aria-label="Clock offset in seconds">'
+      +'<div class="oa-lab" style="letter-spacing:.06em">seconds, negative allowed</div>'
+      +'<div class="oa-utc" id="oa-utc">&nbsp;</div>'
+    +"</div>";
+  document.getElementById("oa-copy").addEventListener("click",copyCode);
+  var saveBtn=document.getElementById("oa-save"),nickEl=document.getElementById("oa-nick");
+  if(saveBtn){
+    if(!lsOk()){
+      saveBtn.disabled=true;nickEl.disabled=true;
+      nickEl.placeholder="This browser blocks storage for local files, so entries cannot be saved here.";
+    }else saveBtn.addEventListener("click",function(){
+      if(!S.key)return;
+      var name=(nickEl.value||"").replace(/\s+/g," ").trim();
+      if(!name){nickEl.focus();nickEl.placeholder="Give it a nickname first, e.g. Exchange main account";return;}
+      ENTRIES.push({n:name,u:inEl.value.trim()});
+      saveEntries(ENTRIES);renderEntries();
+      saveBtn.textContent="Saved";nickEl.value="";
+      setTimeout(function(){saveBtn.textContent="Save entry in this browser";},1600);
+    });
+  }
+  document.getElementById("oa-off").addEventListener("input",function(){
+    var n=parseInt(String(this.value).replace(/[^0-9\-]/g,""),10);
+    S.offset=isFinite(n)?Math.max(-86400,Math.min(86400,n)):0;
+    S.ctr=-1;tick(true);
+  });
+}
+
+function copyCode(){
+  if(!S.cur)return;
+  var btn=document.getElementById("oa-copy");
+  function done(ok){
+    btn.textContent=ok?"Copied":"Select the digits and copy by hand";
+    setTimeout(function(){btn.textContent="Copy the current code";},1600);
+  }
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(S.cur).then(function(){done(true);},function(){done(false);});
+      return;
+    }
+  }catch(e){}
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=S.cur;ta.setAttribute("readonly","");
+    ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    var ok=document.execCommand("copy");
+    document.body.removeChild(ta);done(ok);
+  }catch(e2){done(false);}
+}
+
+/* ---------- the clock ---------- */
+function pad2(n){return (n<10?"0":"")+n;}
+function utcString(ms){
+  var d=new Date(ms);
+  return d.getUTCFullYear()+"-"+pad2(d.getUTCMonth()+1)+"-"+pad2(d.getUTCDate())+" "
+        +pad2(d.getUTCHours())+":"+pad2(d.getUTCMinutes())+":"+pad2(d.getUTCSeconds())+" UTC";
+}
+var CIRC=194.78; /* 2 * pi * 31, matched to the stroke-dasharray in the svg above */
+
+function tick(force){
+  if(!READY||!S.key)return;
+  var ms=Date.now()+S.offset*1000,
+      secs=ms/1000,
+      ctr=Math.floor(secs/S.period),
+      into=secs-ctr*S.period,
+      left=S.period-into;
+  var secsEl=document.getElementById("oa-secs"),
+      arcEl=document.getElementById("oa-arc"),
+      ringEl=document.getElementById("oa-ring"),
+      utcEl=document.getElementById("oa-utc"),
+      ctrEl=document.getElementById("oa-ctr");
+  if(!secsEl)return;
+  secsEl.textContent=Math.ceil(left);
+  arcEl.setAttribute("stroke-dashoffset",(CIRC*(into/S.period)).toFixed(2));
+  ringEl.className="oa-ring"+(left<=5?" is-low":"");
+  if(utcEl)utcEl.textContent="Device time "+utcString(ms)+(S.offset?" (offset applied)":"");
+  if(ctrEl)ctrEl.textContent=String(ctr);
+  if(force||ctr!==S.ctr){
+    S.ctr=ctr;
+    var job=++S.job,key=S.key,d=S.digits,a=S.algo;
+    Promise.all([
+      totpFromCounter(key,ctr,d,a),
+      totpFromCounter(key,ctr+1,d,a)
+    ]).then(function(r){
+      if(job!==S.job)return;
+      S.cur=r[0];S.next=r[1];
+      var c=document.getElementById("oa-cur"),n=document.getElementById("oa-next");
+      if(c)c.textContent=group(r[0]);
+      if(n)n.textContent=group(r[1]);
+    },function(e){
+      if(job!==S.job)return;
+      console.error("[authenticator] code generation failed:",e);
+      showMsg("This browser refused to run HMAC on that key, so no code can be shown.",true);
+    });
+  }
+}
+
+/* ---------- network banner ---------- */
+function paintNet(){
+  var el=document.getElementById("oa-net"),on=(navigator.onLine!==false);
+  el.className="oa-net "+(on?"is-on":"is-off");
+  el.innerHTML=on
+    ? "<b>You are online, and that is fine.</b>This file sends nothing anywhere and cannot: it has no network code and the browser is told to refuse every request. Using it online is your choice; for a high value secret, switching the network off first is the safer habit."
+      +"<span>Turn off wifi or unplug the cable and this banner turns green.</span>"
+    : "<b>No network detected.</b>The browser reports no connection: the safest state for typing a secret."
+      +"<span>This reads navigator.onLine, which sees network interfaces, not isolation. Your unplugged cable is the real proof.</span>";
+}
+
+/* ---------- wiring ---------- */
+document.getElementById("oa-hide").addEventListener("click",function(){
+  /* the parsed key stays in memory, so codes keep rolling with the box empty */
+  inEl.value="";
+  if(!S.key)showMsg("Waiting for a secret.",false);
+});
+document.getElementById("oa-clear").addEventListener("click",function(){
+  inEl.value="";S.job++;S.key=null;S.cur="";S.next="";S.ctr=-1;
+  showMsg("Cleared. Closing the tab is what really removes it from memory.",false);
+  inEl.focus();
+});
+inEl.addEventListener("input",function(){if(READY)readInput();});
+
+paintNet();
+window.addEventListener("online",paintNet);
+window.addEventListener("offline",paintNet);
+if(lsOk()){ENTRIES=loadEntries();renderEntries();}
+
+selftest().then(function(r){
+  if(r.fail===0){
+    READY=true;
+    stEl.className="oa-st is-ok";
+    stB.textContent="Self-test passed";
+    stI.textContent=r.pass+" vectors: RFC 6238 Appendix B and RFC 4648 base32, checked in this browser.";
+    console.log("[self-test] PASS: "+r.pass+" vectors, 0 failures.");
+    readInput();
+  }else{
+    READY=false;
+    stEl.className="oa-st is-bad";
+    stB.textContent="Self-test failed";
+    stI.textContent=r.nocrypto
+      ? "WebCrypto is unavailable here. Open this file directly from disk in Firefox, Chrome or Edge."
+      : r.fail+" of "+(r.pass+r.fail)+" vectors did not match. No codes will be shown.";
+    showMsg(r.nocrypto
+      ? "This browser did not expose WebCrypto to a local file, so no code can be computed. Open the file directly from disk in Firefox, Chrome or Edge."
+      : "Self-test failed, so this file will not show a code. A wrong code is worse than no code. See the browser console for which vector failed.",true);
+    inEl.setAttribute("disabled","disabled");
+    console.error("[self-test] FAIL: "+r.fail+" of "+(r.pass+r.fail)+" vectors. Codes suppressed.");
+  }
+  setInterval(function(){tick(false);tickEntries();},80);
+});
+})();
+</script>
+</body>
+</html>

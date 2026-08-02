@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Confirmations: What They Are and How Many You Need - OpenBitcoin" description="What a confirmation is, why a bitcoin payment is not instant, how long confirmations take, how many you need for different amounts, and what to do when a transaction is stuck.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Confirmations</h1>
+    <p class="doc-lede">Your transaction says pending and nothing is happening. Here is what the network is doing, why it takes the time it takes, and how many confirmations an amount actually needs.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="cf-card">
+      <div class="cf-tlab">What a confirmation is</div>
+      <p class="cf-p">A confirmation means your transaction has been included in a block. Zero confirmations means it has been broadcast and is waiting; one confirmation means a miner picked it up and put it in the block they found; two means another block was built on top of that one.</p>
+      <p class="cf-p">Nothing about the transaction changes as the count rises. What changes is how much work an attacker would have to redo to erase it, which is the only sense in which a bitcoin payment becomes final. Each new block makes reversal more expensive than the last.</p>
+    </div>
+
+    <div class="cf-card cf-mt">
+      <div class="cf-tlab">The three stages of a payment</div>
+      <ol class="cf-steps">
+        <li><b>Signed.</b> Your wallet builds the transaction and signs it with your key. It has a transaction ID at this point, and the network has never heard of it.</li>
+        <li><b>Broadcast, unconfirmed.</b> It reaches nodes across the network within seconds and waits in their mempools. It is visible in any explorer and it can still be replaced by the sender or dropped if the queue clears above it.</li>
+        <li><b>Confirmed.</b> A miner includes it in a block. Now it is in the ledger, and each further block deepens it.</li>
+      </ol>
+      <p class="cf-p">If your wallet shows a payment as pending, it is at stage two, and the network has already done everything it is going to do without a miner. The wait is for a block, not for processing.</p>
+    </div>
+
+    <div class="cf-card cf-mt">
+      <div class="cf-tlab">How long it takes</div>
+      <p class="cf-intro">Blocks average ten minutes, but that average hides a lot. Mining is a random search, so gaps of one minute and gaps of an hour both happen without anything being wrong.</p>
+      <div class="cf-facts">
+        <div class="cf-fact"><b>~10 min</b><i>average gap between blocks</i></div>
+        <div class="cf-fact"><b>~63%</b><i>of blocks arrive within 10 minutes</i></div>
+        <div class="cf-fact"><b>~2%</b><i>of gaps run beyond 40 minutes</i></div>
+        <div class="cf-fact"><b>2,016</b><i>blocks between difficulty resets</i></div>
+      </div>
+      <p class="cf-p">The other half of the answer is your fee. Miners take transactions in order of fee rate, so a transaction paying below the going rate waits for the queue to clear rather than for the next block. When the mempool is busy, that can mean hours or days; when it is empty, almost anything confirms in the next block or two.</p>
+      <p class="cf-p">You can see the current queue and what it is charging on the <a href="/fees">fees page</a>, and the live <a href="/mempool">mempool</a> shows what is waiting right now.</p>
+    </div>
+
+    <div class="cf-card cf-mt">
+      <div class="cf-tlab">How many you need</div>
+      <p class="cf-intro">There is no rule in the software. These are the conventions that developed, and they scale with what is at stake rather than with any threshold.</p>
+      <div class="cf-tbl">
+        <div class="cf-r"><b>0</b><span>Coffee, a bar tab, anything where the seller would rather have the sale than the certainty. The risk is real but small and the loss is capped at the price of a coffee.</span></div>
+        <div class="cf-r"><b>1</b><span>Ordinary payments between people. Reversing one block means beating the entire network in a race you started behind.</span></div>
+        <div class="cf-r"><b>3</b><span>Larger consumer payments, roughly half an hour. Most exchanges credit small deposits here.</span></div>
+        <div class="cf-r"><b>6</b><span>The old convention for large amounts, roughly an hour. It comes from the whitepaper's probability table, not from any limit in the code.</span></div>
+        <div class="cf-r"><b>100</b><span>Enforced by the rules, not by convention: freshly mined coins cannot be spent until 100 blocks have passed.</span></div>
+      </div>
+      <p class="cf-p">A useful way to think about it: how much would it cost to rewrite this many blocks, and is the payment worth more than that? For almost every payment an ordinary person makes, one confirmation clears that bar comfortably.</p>
+    </div>
+
+    <div class="cf-card cf-mt">
+      <div class="cf-tlab">When it is taking too long</div>
+      <ul class="cf-steps cf-ul">
+        <li><b>Check the fee rate you paid</b> against what the mempool is currently clearing. If yours is below it, you are not stuck, you are queued.</li>
+        <li><b>Use replace by fee</b> if your wallet supports it, which rebroadcasts the same payment at a higher fee. This is the normal fix.</li>
+        <li><b>Or have the recipient use child pays for parent,</b> where they spend the incoming output at a high fee, making it worth a miner's while to mine both together.</li>
+        <li><b>Wait, if you can.</b> Fees fall on weekends and overnight far more often than people expect, and a transaction that looks abandoned on Friday often confirms by Sunday.</li>
+        <li><b>Do not send it again from a different wallet.</b> If both versions are valid, you have created exactly the confusion you are trying to avoid.</li>
+      </ul>
+      <p class="cf-p">There is a walkthrough with the actual steps at <a href="/tx/stuck">stuck transaction help</a>, and you can estimate what a bump should cost with the <a href="/fees/calculator">fee calculator</a>.</p>
+    </div>
+
+    <div class="cf-about doc-prose">
+      <p>One thing that surprises people: a transaction can drop out of the mempool entirely. Nodes only hold unconfirmed transactions for so long, typically about two weeks, and they evict the cheapest first when memory runs short. If that happens the money never moved and the coins are still yours. It has not been lost, it simply never happened.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="cf-railp">A confirmation is your transaction being in a block, and each additional one multiplies what an attacker would have to spend to undo it.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/double-spend">Double spending explained</a>
+        <a href="/tx/stuck">Stuck transaction help</a>
+        <a href="/fees">Fees right now</a>
+        <a href="/mempool">Live mempool</a>
+        <a href="/learn/glossary">Glossary</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .cf-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .cf-mt{margin-top:14px}
+  .cf-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .cf-p{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .cf-p:last-child{margin-bottom:0}
+  .cf-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 10px}
+  .cf-steps{margin:0 0 11px;padding-left:22px}
+  .cf-steps li{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin-top:10px}
+  .cf-steps li::marker{color:var(--acc);font-weight:700}
+  .cf-steps b{color:var(--ink);font-weight:600}
+  .cf-ul{list-style:disc}
+  .cf-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 12px}
+  .cf-fact{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .cf-fact b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cf-fact i{display:block;font:600 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px;line-height:1.5}
+  .cf-tbl{display:flex;flex-direction:column;margin:0 0 12px}
+  .cf-r{display:flex;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .cf-r:last-child{border-bottom:0}
+  .cf-r b{flex:0 0 42px;text-align:right;font:700 17px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .cf-r span{font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .cf-about{margin-top:14px}
+  .cf-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .cf-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:700px){.cf-r b{flex-basis:34px;font-size:15px}}
+</style>
+</Base>

@@ -1,0 +1,131 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="What Is a UTXO: How Bitcoin Balances Really Work - OpenBitcoin" description="Bitcoin has no account balances. It has unspent outputs, spent whole and returned as change. What a UTXO is, why it decides your fee, and what consolidation and coin control mean.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>What is a UTXO</h1>
+    <p class="doc-lede">Bitcoin has no accounts and stores no balances. It has chunks of coin sitting at addresses, each spendable only in full. Once that clicks, change addresses, fee estimates and half the odd behaviour of wallets stop being odd.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ux-card">
+      <div class="ux-tlab">The idea</div>
+      <p class="ux-p">UTXO stands for unspent transaction output. An output is a chunk of bitcoin with conditions attached saying who may spend it. Once it has been spent it is gone from the set, replaced by whatever new outputs the spending transaction created.</p>
+      <p class="ux-p">So there is no row anywhere saying you own 0.42 BTC. There are outputs, scattered across the chain, that your keys can unlock. Your wallet finds them, adds them up, and shows you a balance. The balance is a calculation your wallet performs, not a fact the network records.</p>
+      <div class="ux-note">
+        <b>The useful analogy</b>
+        <span>Notes and coins, not a bank balance. If you hold a 50 and a 20 and something costs 55, you cannot tear the 50 in half. You hand over both notes and take change back. Bitcoin works exactly this way, and the change comes back to an address your own wallet controls.</span>
+      </div>
+    </div>
+
+    <div class="ux-card ux-mt">
+      <div class="ux-tlab">A payment, in full</div>
+      <p class="ux-intro">An example with round numbers. You hold two outputs and want to send 0.6 BTC.</p>
+      <div class="ux-flow">
+        <div class="ux-side">
+          <div class="ux-slab">Inputs, spent whole</div>
+          <div class="ux-chip ux-in"><b>0.50000000</b><i>received in March</i></div>
+          <div class="ux-chip ux-in"><b>0.25000000</b><i>received in June</i></div>
+          <div class="ux-sum">0.75000000 in</div>
+        </div>
+        <div class="ux-arrow" aria-hidden="true">
+          <svg viewBox="0 0 40 24"><path d="M2 12H34M27 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="ux-side">
+          <div class="ux-slab">Outputs, newly created</div>
+          <div class="ux-chip ux-out"><b>0.60000000</b><i>to the person you are paying</i></div>
+          <div class="ux-chip ux-chg"><b>0.14998000</b><i>change, back to your wallet</i></div>
+          <div class="ux-sum">0.00002000 to the miner as fee</div>
+        </div>
+      </div>
+      <p class="ux-p">Both of your old outputs are destroyed by this transaction. Two new ones exist: one the recipient controls, one you do. The fee is not a field anywhere in the transaction; it is simply the amount the inputs exceed the outputs by, which is why a wallet bug that miscalculates change can burn an enormous fee.</p>
+    </div>
+
+    <div class="ux-card ux-mt">
+      <div class="ux-tlab">Why it decides your fee</div>
+      <p class="ux-p">Fees are charged by transaction size, and size is driven mostly by how many inputs you spend. Each input carries a signature. Paying 0.6 BTC from one large output is a small transaction; paying the same 0.6 BTC by gathering thirty small ones is a large transaction that can cost ten times as much to send.</p>
+      <p class="ux-p">This is why two people sending the same amount can be quoted very different fees, and why a wallet that has received many small payments gets expensive to spend from. The history of how you received your coins is still with you.</p>
+      <div class="ux-cmp">
+        <div class="ux-cc"><b>1 input</b><i>roughly 140 vbytes</i></div>
+        <div class="ux-cc"><b>5 inputs</b><i>roughly 420 vbytes</i></div>
+        <div class="ux-cc"><b>30 inputs</b><i>roughly 2,200 vbytes</i></div>
+      </div>
+      <p class="ux-p ux-fine">Approximate, for single signature SegWit inputs with two outputs. Exact sizes depend on the address types involved. The <a href="/fees/calculator">fee calculator</a> works it out for a given shape.</p>
+    </div>
+
+    <div class="ux-card ux-mt">
+      <div class="ux-tlab">Dust and consolidation</div>
+      <p class="ux-p">An output can be so small that spending it costs more in fees than it is worth. That is dust, and below a threshold wallets refuse to create it at all. Dust already in your wallet is not lost, it is just waiting for a cheap moment.</p>
+      <p class="ux-p">Consolidation is that cheap moment: a transaction that spends many small outputs and produces one large one, sent when fees are low. It costs a fee now to make future payments cheaper. The trade-off is privacy, because combining outputs publicly declares that one person controls all of them.</p>
+      <p class="ux-p">The <a href="/fees/consolidate">consolidation calculator</a> shows whether it is currently worth doing for a given set of outputs.</p>
+    </div>
+
+    <div class="ux-card ux-mt">
+      <div class="ux-tlab">Coin control</div>
+      <p class="ux-p">Most wallets pick which outputs to spend for you. Coin control is the setting that lets you choose. It matters for two reasons: cost, because you can avoid dragging in tiny inputs, and privacy, because you can keep outputs from different sources out of the same transaction.</p>
+      <p class="ux-p">The default assumption of anyone analysing the chain is that every input of a transaction belongs to the same person. That assumption is usually correct, and it is the single most productive tool chain surveillance has. Coin control is how you avoid handing it to them.</p>
+    </div>
+
+    <div class="ux-about doc-prose">
+      <p>Every full node keeps the entire set of unspent outputs in memory, because that set is what a new transaction has to be checked against. It is currently a few gigabytes covering well over a hundred million outputs, and keeping it small is one reason the protocol discourages dust. When you look up an address on this site, its balance is computed the same way your wallet does it: by finding the outputs that are still unspent and adding them up.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="ux-railp">Your balance is the sum of chunks of bitcoin you can unlock, each spendable only in full, with the remainder returned to you as change.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/fees/consolidate">Consolidation calculator</a>
+        <a href="/fees/calculator">Fee calculator</a>
+        <a href="/learn/privacy">Privacy basics</a>
+        <a href="/tools/decode">Decode a transaction</a>
+        <a href="/learn/glossary">Glossary</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ux-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .ux-mt{margin-top:14px}
+  .ux-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ux-p{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .ux-p:last-child{margin-bottom:0}
+  .ux-fine{font-size:12.5px;color:var(--ink-3)}
+  .ux-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 12px}
+  .ux-note{margin-top:14px;border-radius:12px;padding:15px 17px;border:1px solid rgba(255,166,60,.4);background:rgba(247,147,26,.06)}
+  .ux-note b{display:block;font:700 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+  .ux-note > span{display:block;font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ux-flow{display:flex;align-items:center;gap:14px;margin:0 0 14px}
+  .ux-side{flex:1;min-width:0}
+  .ux-arrow{flex:0 0 34px;color:var(--ink-3)}
+  .ux-arrow svg{width:34px;height:22px;display:block}
+  .ux-slab{font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .ux-chip{border-radius:10px;padding:9px 12px;margin-bottom:7px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .ux-chip b{display:block;font:700 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .ux-chip i{display:block;font:500 11px var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  .ux-in{border-color:rgba(124,140,168,.5)}
+  .ux-out{border-color:rgba(46,189,133,.5);background:rgba(46,189,133,.08)}
+  .ux-out b{color:var(--up)}
+  .ux-chg{border-color:rgba(255,166,60,.5);background:rgba(247,147,26,.07)}
+  .ux-chg b{color:var(--acc)}
+  .ux-sum{font:600 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+  .ux-cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 11px}
+  .ux-cc{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .ux-cc b{display:block;font:700 15px var(--mono);color:var(--ink)}
+  .ux-cc i{display:block;font:600 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px}
+  .ux-about{margin-top:14px}
+  .ux-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ux-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:640px){
+    .ux-flow{flex-direction:column;align-items:stretch;gap:8px}
+    .ux-arrow{align-self:center;transform:rotate(90deg)}
+  }
+</style>
+</Base>

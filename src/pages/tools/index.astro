@@ -1,0 +1,108 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+const groups = [
+  { name: 'Money and price', tools: [
+    { href: '/convert', t: 'BTC to fiat converter', d: 'Bitcoin to any currency and back, live rate.' },
+    { href: '/sats', t: 'Sats calculator', d: 'Fiat amounts into satoshis and back.' },
+    { href: '/usd-to-sats', t: 'USD to sats', d: 'What a dollar buys, updated live.' },
+    { href: '/sats-per-dollar', t: 'Sats per dollar', d: 'The inverse price, tracked over time.' },
+    { href: '/tools/price-on-date', t: 'Price on a date', d: 'The cost-basis lookup for any day.' },
+    { href: '/price/calendar', t: 'Price calendar', d: 'Every day since 2010, browsable by month.' },
+    { href: '/dca', t: 'DCA backtester', d: 'What steady buying did historically.' },
+    { href: '/whatif', t: 'What-if calculator', d: 'Any past purchase, valued today.' },
+  ]},
+  { name: 'Fees and timing', tools: [
+    { href: '/fees', t: 'Fee estimator', d: 'What to pay right now, by urgency.' },
+    { href: '/fees/calculator', t: 'Fee calculator', d: 'Transaction size and cost by input type.' },
+    { href: '/fees/timing', t: 'When fees are cheap', d: 'The weekly rhythm, hour by hour.' },
+    { href: '/fees/history', t: 'Fee history', d: 'What sending cost across the eras.' },
+    { href: '/fees/consolidate', t: 'UTXO consolidation', d: 'When merging small coins saves money.' },
+  ]},
+  { name: 'Transactions', tools: [
+    { href: '/tools/decode', t: 'Transaction decoder', d: 'Raw hex into inputs, outputs, and fees.' },
+    { href: '/tools/broadcast', t: 'Broadcast', d: 'Relay a signed transaction to the network.' },
+    { href: '/tx/stuck', t: 'Stuck transaction help', d: 'RBF, CPFP, and what actually works.' },
+    { href: '/tools/qr', t: 'Payment QR generator', d: 'A scannable request for any address.' },
+    { href: '/tools/lightning', t: 'Lightning invoice decoder', d: 'What a BOLT11 invoice really says.' },
+  ]},
+  { name: 'Keys and verification', tools: [
+    { href: '/tools/validate', t: 'Address validator', d: 'Checksum-check any bitcoin address.' },
+    { href: '/tools/verify-message', t: 'Verify a signed message', d: 'Prove an address signed a message.' },
+    { href: '/tools/bip39', t: 'BIP39 word check', d: 'Is that word on the seed wordlist?' },
+    { href: '/tools/seed-recovery', t: 'Seed recovery toolkit', d: 'Offline help for a mis-copied phrase.' },
+    { href: '/tools/2fa', t: 'Offline authenticator', d: 'A 2FA backup that runs with wifi off.' },
+    { href: '/verify', t: 'Verify a download', d: 'Check our offline tools by checksum.' },
+    { href: '/tools/hash', t: 'Hash playground', d: 'SHA-256, HASH160, base58, bech32.' },
+  ]},
+] as const;
+---
+<Base title="Bitcoin Tools: Calculators, Decoders, and Verifiers - OpenBitcoin" description="Every Bitcoin tool in one place: price and fee calculators, a transaction decoder and broadcaster, address and signature checks, all in your browser.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tools</div>
+    <h1>Bitcoin tools</h1>
+    <p class="doc-lede">Twenty-five utilities, all running in your browser against our own data. Nothing you type here leaves the page, and the key-shaped tools run offline by design.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    {groups.map((g) => (
+      <div class="tl-card tl-mt">
+        <div class="tl-tlab">{g.name}</div>
+        <div class="tl-grid">
+          {g.tools.map((tool) => (
+            <a class="tl-tool" href={tool.href}>
+              <b>{tool.t}</b>
+              <span>{tool.d}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div class="tl-card tl-mt tl-note">
+      <div class="tl-tlab">One rule across all of them</div>
+      <p class="tl-p">No tool on this site ever asks for a seed phrase, a private key, or a 2FA secret. The tools that need that kind of input exist as downloadable files you run with the connection off, and any page that asks otherwise is not us; see <a href="/learn/scams">common scams</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Offline files</div>
+      <nav>
+        <a href="/tools/seed-recovery">Seed toolkit, downloadable</a>
+        <a href="/tools/2fa">Authenticator, downloadable</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn">Learn</a>
+        <a href="/wallets">Wallets</a>
+        <a href="/learn/seed-backup">Seed backup guide</a>
+        <a href="/api">The API</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .tl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .tl-mt{margin-top:14px}
+  .tl-card:first-child{margin-top:0}
+  .tl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .tl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+  .tl-tool{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;
+    padding:12px 14px;text-decoration:none;min-width:0}
+  .tl-tool:hover{border-color:rgba(255,166,60,.45)}
+  .tl-tool b{display:block;font:700 13.5px var(--sans);color:var(--ink)}
+  .tl-tool span{display:block;font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin-top:4px}
+  .tl-note{border-color:rgba(255,166,60,.32)}
+  .tl-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .tl-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tl-p a:hover{border-bottom-style:solid}
+  @media(max-width:700px){
+    .tl-card{padding:18px 16px}
+    .tl-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  }
+</style>
+</Base>

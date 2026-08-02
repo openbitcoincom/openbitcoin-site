@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+import content from '../../content/whitepaper.html?raw';
+const toc = [...content.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)]
+  .map((m) => ({ id: m[1], title: m[2].replace(/<[^>]+>/g, '').trim() }));
+---
+<Base title="Bitcoin Whitepaper: A Peer-to-Peer Electronic Cash System - OpenBitcoin" description="The Bitcoin whitepaper by Satoshi Nakamoto, published October 31, 2008, typeset for reading: all twelve sections, the calculations, and the references.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Whitepaper</div>
+    <h1>Bitcoin: A Peer-to-Peer Electronic Cash System</h1>
+    <p class="doc-lede">Satoshi Nakamoto, October 31, 2008. The nine pages that started it. Typeset here for reading; the canonical PDF lives at bitcoin.org/bitcoin.pdf.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <article class="doc-card doc-prose wp-paper">
+      <Fragment set:html={content} />
+    </article>
+    <div class="wp-fine doc-prose">
+      <p>The text above follows the original paper. Bitcoin.org distributes the whitepaper under the MIT license. For how this site relates to the network the paper describes, see <a href="/about">/about</a>; for where the site's live data comes from, see <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Contents</div>
+      <nav>
+        {toc.map((t) => <a href={'#' + t.id}>{t.title}</a>)}
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">The paper</div>
+      <div class="wp-meta"><b>October 31, 2008</b><i>announced on the cryptography mailing list</i></div>
+      <div class="wp-meta"><b>9 pages</b><i>twelve sections and eight references</i></div>
+      <div class="wp-meta"><b><a href="/bitcoin.pdf">Download the PDF</a></b><i>self-hosted copy of the original</i></div>
+      <div class="wp-meta"><b>bitcoin.org/bitcoin.pdf</b><i>canonical source</i></div>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .wp-paper h2{font:700 19px/1.3 var(--sans);color:var(--ink);margin:26px 0 0;padding-top:22px;border-top:1px dotted var(--line-2);scroll-margin-top:18px}
+  .wp-paper h2:first-child{border-top:0;margin-top:0;padding-top:0}
+  .wp-paper p{font:500 14.5px/1.75 var(--sans);color:var(--ink-2);margin:12px 0 0}
+  .wp-paper ol,.wp-paper ul{margin:12px 0 0;padding-left:24px}
+  .wp-paper li{font:500 14.5px/1.7 var(--sans);color:var(--ink-2);margin-top:6px}
+  .wp-paper li::marker{color:var(--acc)}
+  .wp-paper pre{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    overflow-x:auto;margin:12px 0 0;font:500 12.5px/1.6 var(--mono);color:var(--ink)}
+  .wp-paper p,.wp-paper li{overflow-wrap:break-word}
+  .wp-paper svg{max-width:100%;height:auto}
+  .wp-paper sup{font-size:10px;color:var(--acc)}
+  .wp-paper a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wp-fig{background:var(--panel-2);border:1px dashed var(--line-2);border-radius:10px;padding:14px 16px;margin:14px 0 0;
+    font:600 12px var(--mono);color:var(--ink-3);text-align:center}
+  .wp-fig span{display:block;font:500 10.5px var(--mono);letter-spacing:.05em;margin-top:4px;opacity:.75}
+  .wp-fine{margin-top:14px}
+  .wp-fine p{font:500 12.5px/1.6 var(--sans);color:var(--ink-3)}
+  .wp-meta{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .wp-meta:last-child{border-bottom:0}
+  .wp-meta b{display:block;font:700 13px var(--mono);color:var(--ink)}
+  .wp-meta b a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .wp-meta b a:hover{border-bottom-style:solid}
+  .wp-meta i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+</style>
+</Base>

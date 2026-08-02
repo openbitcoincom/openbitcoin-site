@@ -1,0 +1,294 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="US Bitcoin Taxes: What Is Taxable, Rates, and Forms - OpenBitcoin" description="How the IRS taxes bitcoin: taxable vs non-taxable events, short and long-term capital gains rates, cost basis, Form 8949, and the new 1099-DA.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Tax guides</div>
+    <h1>Bitcoin taxes in the United States</h1>
+    <p class="doc-lede">The IRS treats bitcoin as property. Selling, spending, or swapping it is a taxable event; buying, holding, and moving it between your own wallets is not. The rules for the 2025 and 2026 filing seasons, in plain terms.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="tu-note">
+      <b>Informational only.</b> This page describes federal rules in general terms and simplifies where the law does not. It is not tax, legal, or accounting advice, per the <a href="/terms">terms</a>. State taxes are separate and vary.
+    </div>
+
+    <div class="doc-card tu-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Property, not currency</h2>
+        <p>Since Notice 2014-21, the IRS has treated bitcoin as property for federal tax purposes, the same broad framework that covers stocks or real estate. Every unit you acquire has a <strong>cost basis</strong>: what you paid for it in dollars, including fees. When you dispose of it, the difference between the dollar value you received and that basis is a capital gain or loss. Dispose is the load-bearing word: it covers more than selling, and the table below is the fastest way to see where the line sits.</p>
+      </div>
+    </div>
+
+    <div class="tu-card tu-mt">
+      <div class="tu-tlab">What counts as a taxable event</div>
+      <table class="tu-table" aria-label="Bitcoin events, whether each is taxable, and why">
+        <thead>
+          <tr><th>Event</th><th>Taxable</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tu-ev">Buying bitcoin with dollars</td>
+            <td class="tu-tx"><span class="tu-chip tu-no">No</span></td>
+            <td class="tu-why">A purchase sets your cost basis; nothing is realized. Per IRS guidance, buying with real currency alone does not even require a Yes on the Form 1040 question.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Holding while the price moves</td>
+            <td class="tu-tx"><span class="tu-chip tu-no">No</span></td>
+            <td class="tu-why">Unrealized gains are not taxed. A coin that has doubled owes nothing until you dispose of it.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Moving between your own wallets</td>
+            <td class="tu-tx"><span class="tu-chip tu-no">No</span></td>
+            <td class="tu-why">A transfer to yourself is not a disposal. Keep records, so an exchange withdrawal to your own <a href="/learn/self-custody">cold storage</a> is never mistaken for a sale.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Selling for dollars</td>
+            <td class="tu-tx"><span class="tu-chip tu-yes">Yes</span></td>
+            <td class="tu-why">The classic disposal. Proceeds minus basis is a capital gain or loss, reported on Form 8949.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Spending it, including gift cards</td>
+            <td class="tu-tx"><span class="tu-chip tu-yes">Yes</span></td>
+            <td class="tu-why">Spending is a disposal at fair market value. Buying a $500 gift card with appreciated bitcoin realizes the gain on the coins spent, exactly as if you had sold them first.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Swapping for another crypto</td>
+            <td class="tu-tx"><span class="tu-chip tu-yes">Yes</span></td>
+            <td class="tu-why">A crypto-to-crypto trade is a disposal of the coin you gave up, at fair market value. There is no like-kind deferral for digital assets.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Getting paid, mining, rewards</td>
+            <td class="tu-tx"><span class="tu-chip tu-inc">Yes, income</span></td>
+            <td class="tu-why">Wages, mining rewards, and interest or yield paid in bitcoin are ordinary income at the dollar value on the day received. That value becomes the basis of the new coins.</td>
+          </tr>
+          <tr>
+            <td class="tu-ev">Receiving a bona fide gift</td>
+            <td class="tu-tx"><span class="tu-chip tu-no">Not at receipt</span></td>
+            <td class="tu-why">Gifts are not income when received. You generally inherit the giver's basis and holding period, and tax arrives when you dispose of the coins.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-card tu-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Short term versus long term</h2>
+        <p>Hold a unit for one year or less before disposing of it and the gain is <strong>short term</strong>, taxed at your ordinary income rate, 10% to 37% for the 2025 tax year. Hold it for more than one year and the gain is <strong>long term</strong>, taxed at 0%, 15%, or 20% depending on taxable income. The clock runs per unit, from the day after acquisition to the day of disposal.</p>
+        <table class="tu-rates" aria-label="2025 long term capital gains rate bands by filing status">
+          <thead>
+            <tr><th>Rate</th><th>Single</th><th>Married filing jointly</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="tu-rr">0%</td><td>Up to $48,350</td><td>Up to $96,700</td></tr>
+            <tr><td class="tu-rr">15%</td><td>$48,351 to $533,400</td><td>$96,701 to $600,050</td></tr>
+            <tr><td class="tu-rr">20%</td><td>Above $533,400</td><td>Above $600,050</td></tr>
+          </tbody>
+        </table>
+        <p class="tu-fine">Long term bands for the 2025 tax year, filed in 2026, based on taxable income; head of household and separate filers use different thresholds. High earners can owe an additional 3.8% net investment income tax above $200,000 single or $250,000 joint. Figures adjust annually for inflation; confirm the current year's numbers with the IRS tables before filing.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Cost basis is now tracked per wallet</h2>
+        <p>Through 2024, many filers pooled every coin they owned into one universal basis ledger. That ended. From January 1, 2025, basis must be tracked <strong>per wallet or account</strong> under Rev. Proc. 2024-28, which also offered a one-time safe harbor to allocate leftover pre-2025 basis across wallets; that allocation locked in at the first sale, disposal, or transfer of that asset on or after January 1, 2025, or the 2025 return's due date with extensions, whichever came first.</p>
+        <ul>
+          <li><strong>Default ordering is FIFO</strong> within each wallet or account: the oldest units there are treated as sold first, unless you adequately identify specific units at or before the sale.</li>
+          <li><strong>Specific identification</strong> lets you choose which units you dispose of, which controls both the gain and the holding period. For 2025 and 2026, Notice 2025-7 and its extension in Notice 2026-20 allow taxpayers to keep making that identification in their own records when a custodial broker cannot record it.</li>
+          <li><strong>Transfers carry their basis with them.</strong> Moving coins between your own wallets is not taxable, but the receiving wallet inherits the basis and acquisition dates of the units that arrived, so your records must follow the coins.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tu-card tu-mt">
+      <div class="tu-tlab">Worked example, at the current price</div>
+      <div class="tu-ex">
+        <div class="tu-exr"><span>Bought two years ago</span><b>0.25 BTC at $30,000, basis $7,500</b></div>
+        <div class="tu-exr"><span>Spent on a gift card today</span><b>0.1 BTC</b></div>
+        <div class="tu-exr"><span>Proceeds at <i id="tu-expx">&#8230;</i></span><b id="tu-proc">&#8230;</b></div>
+        <div class="tu-exr"><span>Basis of the coins spent</span><b>$3,000.00</b></div>
+        <div class="tu-exr tu-exg"><span>Long term capital gain</span><b id="tu-gain">&#8230;</b></div>
+        <div class="tu-exr"><span>Federal tax in the 15% band</span><b id="tu-tax">&#8230;</b></div>
+      </div>
+      <p class="tu-fine">The gift card cost nothing extra at the register, but the disposal realized a <span id="tu-gainp">&#8230;</span> gain, and it belongs on Form 8949. The remaining 0.15 BTC keeps its $4,500 basis and its original acquisition date. Example ignores state tax and the net investment income tax; the <a href="/whatif">what-if calculator</a> runs the same arithmetic on your own numbers.</p>
+    </div>
+
+    <div class="doc-card tu-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Forms, and the question everyone answers</h2>
+        <p>Near the top of Form 1040 sits the digital asset question. For 2025 it reads: <em>"At any time during 2025, did you: (a) receive (as a reward, award, or payment for property or services); or (b) sell, exchange, or otherwise dispose of a digital asset (or a financial interest in a digital asset)?"</em> Every filer answers it, whether or not they own bitcoin, and answering falsely is its own problem regardless of any tax owed.</p>
+        <ul>
+          <li><strong>Capital gains and losses</strong> go on <strong>Form 8949</strong>, one line per disposal, with totals flowing to <strong>Schedule D</strong>.</li>
+          <li><strong>Income in bitcoin</strong> goes where that kind of income normally goes: wages on the W-2 and Form 1040, other income on <strong>Schedule 1</strong>, and mining or trading run as a business on <strong>Schedule C</strong>, where self-employment tax can apply.</li>
+        </ul>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The 1099-DA rollout</h2>
+        <p>Brokers, meaning custodial exchanges and payment apps, now file <strong>Form 1099-DA</strong> with the IRS. For 2025-tax-year sales the form reports gross proceeds only, and the first ones went out in early 2026 with the cost basis box typically blank. Basis reporting begins with covered assets bought and sold at the same broker on or after January 1, 2026, appearing on forms sent in early 2027. A separate rule that would have extended reporting to non-custodial software was repealed by Congress in 2025.</p>
+        <p>The practical point: the IRS now sees your proceeds, but for coins you transferred in, it does not see your basis. A 1099-DA with an empty basis box can make an entire sale look like profit. Your own records close that gap, which is what the record-keeping card below is for.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Losses, and the wash sale nuance</h2>
+        <p>Capital losses offset capital gains in full, and up to $3,000 of any remaining net loss offsets ordinary income each year, with the rest carrying forward. The wash sale rule, which disallows a loss when you rebuy a <strong>security</strong> within 30 days, does not currently reach spot bitcoin, because the IRS classifies it as property rather than a security. As of the 2025 and 2026 filing seasons that remains the law; proposals to extend the rule to digital assets have been introduced but not enacted, so check its status in the year you harvest. One caution: spot bitcoin ETF shares are securities, and wash sale rules do apply to them.</p>
+      </div>
+    </div>
+
+    <div class="tu-cols tu-mt">
+      <div class="tu-card">
+        <div class="tu-tlab">Record keeping</div>
+        <p class="tu-cp">Every disposal needs four numbers: the date acquired, the basis, the date disposed, and the proceeds. Record them at the time, because reconstructing dollar values years later is the hard way.</p>
+        <ul class="tu-list">
+          <li>Date, amount in BTC, and the dollar value at the time, for every buy, sale, spend, and receipt</li>
+          <li>Fees paid, which adjust basis and proceeds</li>
+          <li>Which wallet or account each unit sits in, now that basis is per wallet</li>
+          <li>Transfers between your own wallets, labeled as transfers</li>
+          <li>Exchange history exports, taken regularly; accounts close and data disappears</li>
+        </ul>
+        
+        <p class="tu-cp tu-cpm">Tax software built for digital assets can assemble Form 8949 from exchange exports and wallet addresses; whichever you use, check its output against your own records before filing.</p>
+      </div>
+      <div class="tu-card tu-pro">
+        <div class="tu-tlab tu-tlab-acc">When to get a professional</div>
+        <p class="tu-cp">This page covers the common cases. If you mined at scale, ran a business taking bitcoin, moved coins across many wallets before the 2025 basis transition, missed reporting in past years, or are staring at six figures of gains, a CPA or enrolled agent who actually handles digital assets is worth the fee. Bring complete records; the professional's job gets cheaper and better the more of the trail you kept. Nothing here substitutes for that advice, per the <a href="/terms">terms</a>.</p>
+      </div>
+    </div>
+
+    <div class="tu-about doc-prose">
+      <p>The mechanics reduce to one habit: know the basis and date of every unit you hold, and write down the dollar value every time coins move in or out. Buying and holding creates no tax; disposing does, whether the disposal is a sale, a swap, or a coffee. If you accumulate on a schedule, the <a href="/dca">averaging calculator</a> shows how basis builds across purchases, the <a href="/whatif">what-if calculator</a> puts numbers on a hypothetical sale, and Canadian readers have their own rules covered in the <a href="/tax/ca">Canada guide</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="tu-stat"><b id="tu-px">&#8230;</b><i>1 BTC</i></div>
+      <div class="tu-stat"><b id="tu-spd">&#8230;</b><i>per dollar</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Quick facts</div>
+      <ul class="tu-rl">
+        <li>Long term begins after one year</li>
+        <li>Disposals go on Form 8949</li>
+        <li>Every 1040 answers the question</li>
+        <li>Basis is tracked per wallet</li>
+        <li>Own transfers are not sales</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tax/ca">Canada bitcoin taxes</a>
+        <a href="/whatif">What-if calculator</a>
+        <a href="/dca">Dollar cost averaging</a>
+        <a href="/terms">Terms</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .tu-mt{margin-top:14px}
+  .tu-note{background:var(--panel);border:1px solid rgba(255,166,60,.32);border-radius:12px;padding:14px 18px;
+    font:500 13.5px/1.6 var(--sans);color:var(--ink-2)}
+  .tu-note b{color:var(--ink);font-weight:700}
+  .tu-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tu-note a:hover{border-bottom-style:solid}
+  .tu-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .tu-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .tu-tlab-acc{color:var(--acc)}
+  .tu-table{width:100%;border-collapse:collapse}
+  .tu-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2)}
+  .tu-table td{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .tu-table tr:last-child td{border-bottom:0}
+  .tu-ev{font-weight:600;color:var(--ink);min-width:150px}
+  .tu-tx{white-space:nowrap}
+  .tu-why{min-width:220px}
+  .tu-why a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tu-why a:hover{border-bottom-style:solid}
+  .tu-chip{display:inline-block;font:700 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .tu-no{color:var(--up);border:1px solid rgba(46,189,133,.4)}
+  .tu-yes{color:var(--down);border:1px solid rgba(246,70,93,.42)}
+  .tu-inc{color:var(--acc);border:1px solid rgba(247,147,26,.45)}
+  .tu-rates{width:100%;border-collapse:collapse;margin:12px 0 0}
+  .tu-rates th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .tu-rates td{font:500 13.5px var(--sans);color:var(--ink-2);padding:9px 10px 9px 0;
+    border-bottom:1px dotted var(--line-2);font-variant-numeric:tabular-nums}
+  .tu-rates tr:last-child td{border-bottom:0}
+  .tu-rr{font:700 14px var(--mono);color:var(--ink)}
+  .tu-fine{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:10px 0 0}
+  .tu-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tu-fine a:hover{border-bottom-style:solid}
+  .tu-ex{display:grid;gap:0}
+  .tu-exr{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;
+    border-bottom:1px dotted var(--line-2)}
+  .tu-exr:last-child{border-bottom:0}
+  .tu-exr span{font:500 13px/1.5 var(--sans);color:var(--ink-3)}
+  .tu-exr span i{font-style:normal;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .tu-exr b{font:700 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+  .tu-exg b{color:var(--acc)}
+  .tu-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+  .tu-pro{border-color:rgba(255,166,60,.32)}
+  .tu-cp{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .tu-cp a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .tu-cp a:hover{border-bottom-style:solid}
+  .tu-cpm{margin-top:10px}
+  .tu-list{margin:10px 0 0;padding-left:20px}
+  .tu-list li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .tu-list li::marker{color:var(--acc)}
+  .tu-about{margin-top:14px}
+  .tu-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .tu-rl{margin:0;padding-left:16px}
+  .tu-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .tu-rl li:first-child{margin-top:0}
+  .tu-rl li::marker{color:var(--acc)}
+  .tu-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .tu-stat:last-child{border-bottom:0}
+  .tu-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .tu-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .tu-card{padding:18px 18px 20px}
+    .tu-cols{grid-template-columns:minmax(0,1fr)}
+    
+    .tu-table thead{display:none}
+    .tu-table,.tu-table tbody,.tu-table tr,.tu-table td{display:block;width:auto}
+    .tu-table tr{position:relative;padding:13px 0 12px;border-bottom:1px dotted var(--line-2)}
+    .tu-table tr:last-child{border-bottom:0}
+    .tu-table td{border-bottom:0;padding:0}
+    .tu-ev{min-width:0;padding-right:110px;font-size:14px}
+    .tu-tx{position:absolute;top:13px;right:0}
+    .tu-why{min-width:0;margin-top:6px;font-size:13px}
+    .tu-why::before{content:"Why: ";font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+    .tu-rates td,.tu-rates th{font-size:12px;padding-right:8px}
+    .tu-rr{font-size:13px}
+    .tu-exr{flex-wrap:wrap}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  var SPEND=0.1,BASIS=3000;
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  var px=document.getElementById("tu-px"),spd=document.getElementById("tu-spd"),
+      expx=document.getElementById("tu-expx"),proc=document.getElementById("tu-proc"),
+      gain=document.getElementById("tu-gain"),tax=document.getElementById("tu-tax"),
+      gainp=document.getElementById("tu-gainp");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipses in place */
+    var p=SPEND*P.price,g=p-BASIS;
+    if(px)px.textContent="$"+fmt(P.price,0);
+    if(spd)spd.textContent=fmt(1e8/P.price,0)+" sats";
+    if(expx)expx.textContent="$"+fmt(P.price,2);
+    if(proc)proc.textContent="$"+fmt(p,2);
+    if(gain)gain.textContent="$"+fmt(g,2);
+    if(gainp)gainp.textContent="$"+fmt(g,2);
+    if(tax)tax.textContent="$"+fmt(Math.max(g,0)*.15,2);
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipses hold until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

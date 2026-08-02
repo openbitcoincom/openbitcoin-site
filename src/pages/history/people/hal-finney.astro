@@ -1,0 +1,164 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/doc.css';
+---
+<Base title="Hal Finney: The Man Who Was Running Bitcoin - OpenBitcoin" description="Hal Finney worked on PGP, built RPOW, was the first besides Satoshi to run bitcoin, and got the first transaction in block 170. His life and legacy.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History / People</div>
+    <h1>Hal Finney</h1>
+    <p class="doc-lede">PGP developer, RPOW inventor, first to run bitcoin besides Satoshi, and recipient of its first transaction. He kept writing code through ALS, and his own account of bitcoin's first days is still the best there is.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pf-hero">
+      <div class="pf-hmain">
+        <div class="pf-big">"Running bitcoin"</div>
+        <div class="pf-bsub">Two words posted to Twitter on January 11, 2009. The next day, the first bitcoin transaction ever sent arrived in his wallet.</div>
+        <div class="pf-stats">
+          <div class="pf-stat"><b>1956</b><i>born in Coalinga, California</i></div>
+          <div class="pf-stat"><b>Block 170</b><i>holds the first transaction</i></div>
+          <div class="pf-stat"><b>10 BTC</b><i>sent to him by Satoshi as a test</i></div>
+          <div class="pf-stat"><b>Aug 28, 2014</b><i>died of ALS, age 58</i></div>
+        </div>
+      </div>
+      <figure class="pf-photo">
+        <img src="/img/people/hal-finney-1972.jpg" alt="Hal Finney as a teenager in 1972, working at a blackboard" loading="lazy" width="960" height="966">
+        <figcaption>Finney in 1972, the only freely licensed photograph of him. <a href="https://commons.wikimedia.org/wiki/File:Hal_Finney_doing_math.jpg" target="_blank" rel="noopener noreferrer">Daily News-Post, public domain</a></figcaption>
+      </figure>
+    </div>
+    <!-- art-slot: stylized illustration pass, build-time generated, never photoreal for real people -->
+
+    <div class="doc-card pf-mt">
+      <div class="doc-sec">
+        <h2>Before bitcoin: PGP and the cypherpunks</h2>
+        <div class="doc-prose">
+          <p>Harold Thomas Finney II was born on May 4, 1956, in Coalinga, California, and graduated from Caltech in 1979 with an engineering degree. His first career was video games: he is credited on early console titles including Adventures of Tron and Armor Ambush, low-level work on tiny machines that made him the kind of programmer who wastes nothing.</p>
+          <p>In the early 1990s he found the cypherpunks, the mailing list where cryptographers and hobbyists argued that privacy in a digital age would have to be built rather than granted. Finney did more building than arguing. He ran two early anonymous remailers with his own time and hardware, and he put serious volunteer years into PGP, the encryption program that brought strong cryptography to ordinary people. "I got my start in crypto working on an early version of PGP, working closely with Phil Zimmermann," he later wrote. "When Phil decided to start PGP Corporation, I was one of the first hires." He stayed until he retired in 2011.</p>
+          <p>Two threads run through all of it: a belief that cryptography could protect people at scale, and a habit of shipping working code while others drafted manifestos. Both threads led straight to what happened in January 2009.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The first days</h2>
+        <div class="doc-prose">
+          <p>When Satoshi Nakamoto posted <a href="/learn/whitepaper">the whitepaper</a> to a cryptography mailing list on October 31, 2008, the general reaction was polite skepticism; the list had seen many digital cash schemes come and go, several of them Finney's own reading material for a decade. Finney was among the very few who responded with interest instead. He had personally built enough of the missing pieces to recognize that this design might not be missing any.</p>
+          <blockquote>"When Satoshi announced the first release of the software, I grabbed it right away. I think I was the first person besides Satoshi to run bitcoin. I mined block 70-something, and I was the recipient of the first bitcoin transaction, when Satoshi sent ten coins to me as a test."</blockquote>
+          <p class="pf-qsrc">From "Bitcoin and me," posted to the bitcointalk forum, March 19, 2013.</p>
+          <p>On January 11, 2009, the evening of January 10 in California by most accounts, he posted two words to Twitter: Running bitcoin. No explanation, no link. It has become the most quoted status update in bitcoin's history, the moment the network stopped being one person's process and became a network. The next day Satoshi sent him those ten coins:</p>
+          <div class="pf-tx">
+            <div class="pf-txrow"><b>Block</b><span>170, mined January 12, 2009</span></div>
+            <div class="pf-txrow"><b>Moved</b><span>10 BTC, from Satoshi Nakamoto to Hal Finney, sent as a test</span></div>
+            <div class="pf-txrow"><b>Why it matters</b><span>The first transaction on the chain that moves coins from one person to another. Every payment since has the same anatomy.</span></div>
+            <div class="pf-txrow"><b>Txid</b><span class="pf-mono">f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16</span></div>
+          </div>
+          <p>For the next stretch of days Finney did what he had always done: he used the thing, broke the thing, and emailed the author about the thing, a correspondence of bug reports and fixes while the software hardened. He mined with an ordinary CPU, as everyone did then, and by his own account eventually switched the miner off because the computer ran hot and the fan noise bothered him. The economics of that decision improved considerably, and he wrote about it later without a trace of bitterness.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The reusable proof of work bridge</h2>
+        <div class="doc-prose">
+          <p>Finney's importance is not only that he showed up first. He had already built the closest thing to bitcoin that existed before bitcoin. In 2004 he created RPOW, reusable proofs of work. It started from hashcash, <a href="/history/people/adam-back">Adam Back's</a> 1997 scheme in which a computer proves it burned real effort by solving a puzzle. Hashcash proofs were single use: good as a postage stamp, useless as a coin. RPOW's server accepted a hashcash proof and issued a signed token in exchange, and that token could be passed from person to person, the server making sure each one was spent only once. Proof of work had become something you could hand to somebody else. That is most of the way to money.</p>
+          <p>The unsolved part was trust. RPOW still depended on one server, and Finney attacked that honestly with the best tool of the era: the server ran on an IBM 4758 secure cryptographic coprocessor, and anyone could remotely verify that the code running inside was exactly the published code. It was a central server that could prove it was not cheating. It still could not prove it would always be there. One machine, one operator, one point that could be switched off; every centralized digital cash system before it had died at that same point.</p>
+          <p>Bitcoin's answer, four years later, was to remove the server entirely and let a public chain of proofs, verified by every participant, do the job the trusted hardware had done. Finney could evaluate that claim faster than nearly anyone alive because he had personally run into the wall it knocked down. When he said he grabbed the software right away, it was not enthusiasm for novelty. It was an engineer recognizing the missing piece of his own machine.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Bitcoin and me</h2>
+        <div class="doc-prose">
+          <p>"In August, 2009, I was given the diagnosis of ALS, also called Lou Gehrig's disease, after the famous baseball player who got it," Finney wrote. He made the diagnosis public that October. ALS progressively takes the body and leaves the mind; over the following years he lost movement, then speech, then breath, while remaining entirely himself.</p>
+          <p>On March 19, 2013, he posted "Bitcoin and me" to the bitcointalk forum, written with software that tracked his eyes because his hands no longer worked. It is a short autobiography, a first-person record of bitcoin's first days, and a status report, all in a register of complete calm:</p>
+          <blockquote>"Today, I am essentially paralyzed. I am fed through a tube, and my breathing is assisted through another tube." And then, a few paragraphs on: "I recently discovered that I can even write code."</blockquote>
+          <p>He was still programming, an eye movement at a time, on wallet security ideas he hoped would outlast him. The post ends with his affairs in order and no request for sympathy: "My bitcoins are stored in our safe deposit box, and my son and daughter are tech savvy. I think they're safe enough. I'm comfortable with my legacy." He never said how many coins, and this site will not guess.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The legacy</h2>
+        <div class="doc-prose">
+          <p>Hal Finney died on August 28, 2014, in Arizona, of complications of ALS. He was 58. The same day, following arrangements he had made publicly more than two decades earlier, he was cryopreserved at the Alcor Life Extension Foundation as its 128th patient. Alcor documented the case openly, as he wanted. He regarded it as a long-odds engineering bet worth making, which is a fair description of most things he spent his life on, including the one that worked.</p>
+          <p>Because he was brilliant, early, and nearby, people have speculated for years that Finney was Satoshi Nakamoto. He denied it plainly, the writing and the record support the denial, and no evidence has ever connected him to the keys. The full state of that question lives at <a href="/learn/who-is-satoshi">who is Satoshi</a>; this page's position is that being Hal Finney requires no upgrade.</p>
+          <p>What remains is unusually concrete. The cryptography he shipped in PGP still protects people. RPOW remains the clearest stepping stone in the record between an idea and a working system. His ten coins sit in block 170 of a chain that has not stopped since, one block roughly every ten minutes on its long climb toward <a href="/block-1m">block 1,000,000</a>. An annual charity run named for his tweet raises money to fight the disease that took him. And every January, people post two words in his memory, which is the rare kind of monument that fits in a sentence and needs no maintenance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pf-about doc-prose">
+      <p>Dates and quotations above come from Finney's own "Bitcoin and me" post, the public record of block 170, Alcor's published case summary, and standard biographical reporting, documented at <a href="/sources">/sources</a>. More of the early record is on the <a href="/history">history index</a>, and the rest of the cast is at <a href="/history/people">people of bitcoin's first days</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The record</div>
+      <div class="pf-tl">
+        <div class="pf-trow"><b>1956</b><span>Born in Coalinga, California</span></div>
+        <div class="pf-trow"><b>1990s</b><span>Cypherpunk remailers, PGP with Phil Zimmermann</span></div>
+        <div class="pf-trow"><b>2004</b><span>RPOW, reusable proofs of work</span></div>
+        <div class="pf-trow"><b>2009</b><span>First to run bitcoin besides Satoshi; receives the first transaction; ALS diagnosis</span></div>
+        <div class="pf-trow"><b>2013</b><span>"Bitcoin and me," written by eye tracker</span></div>
+        <div class="pf-trow"><b>2014</b><span>Dies August 28; cryopreserved at Alcor</span></div>
+      </div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">People</div>
+      <nav>
+        <a href="/history/people">All the early people</a>
+        <a href="/history/people/gavin-andresen">Gavin Andresen</a>
+        <a href="/history/people/laszlo-hanyecz">Laszlo Hanyecz</a>
+        <a href="/history/people/adam-back">Adam Back</a>
+        <a href="/history/people/nick-szabo">Nick Szabo</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/who-is-satoshi">Who is Satoshi Nakamoto</a>
+        <a href="/history">Bitcoin history index</a>
+        <a href="/history/faucets">The faucet era</a>
+        <a href="/block-1m">The road to block 1,000,000</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pf-hero{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:22px;align-items:start;
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 24px 22px}
+  .pf-hmain{min-width:0}
+  .pf-big{font:800 38px/1.05 var(--mono);color:var(--price-ink);letter-spacing:-1.5px}
+  .pf-bsub{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:11px;max-width:52ch}
+  .pf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+  .pf-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .pf-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pf-stat i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pf-photo{margin:0;background:var(--panel-2);border:1px solid var(--line-2);border-radius:12px;padding:10px;min-width:0}
+  .pf-photo img{width:100%;height:auto;border-radius:8px;display:block;max-width:100%}
+  .pf-photo figcaption{font:500 10.5px/1.5 var(--sans);color:var(--ink-3);margin-top:7px;padding:0 2px}
+  .pf-photo figcaption a{color:var(--ink-3);text-decoration:none;border-bottom:1px dotted var(--line-2)}
+  .pf-photo figcaption a:hover{color:var(--acc)}
+  .pf-mt{margin-top:14px}
+  .pf-qsrc{font:600 10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+  .pf-tx{display:grid;gap:8px;margin-top:14px;background:var(--field);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:14px 16px}
+  .pf-txrow{display:grid;grid-template-columns:104px minmax(0,1fr);gap:14px}
+  .pf-txrow b{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);padding-top:2px}
+  .pf-txrow span{font:500 13px/1.55 var(--sans);color:var(--ink-2);min-width:0}
+  .pf-mono{font:600 11px/1.6 var(--mono);color:var(--ink);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .pf-about{margin-top:14px}
+  .pf-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .pf-tl{display:grid;gap:0}
+  .pf-trow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pf-trow:last-child{border-bottom:0}
+  .pf-trow b{font:700 12px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+  .pf-trow span{font:500 11.5px/1.5 var(--sans);color:var(--ink-2)}
+  @media(max-width:700px){
+    .pf-hero{grid-template-columns:minmax(0,1fr);padding:22px 16px 18px}
+    .pf-photo{max-width:340px}
+    .pf-big{font-size:29px}
+    .pf-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .pf-stat b{white-space:normal}
+    .pf-txrow{grid-template-columns:minmax(0,1fr);gap:3px}
+  }
+</style>
+</Base>

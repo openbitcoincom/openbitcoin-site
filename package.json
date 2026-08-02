@@ -1,0 +1,22 @@
+{
+  "name": "openbitcoin",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/postbuild-sitemap.mjs",
+    "launch-check": "node scripts/launch-check.mjs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.0.3",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.1.4"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="VPNs That Accept Bitcoin: 5 Providers Compared - OpenBitcoin" description="Five VPNs that accept bitcoin, compared: how each takes payment, email required or not, pricing, jurisdiction, and audit history.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">VPN</div>
+    <h1>VPNs you can pay for with bitcoin</h1>
+    <p class="doc-lede">Every provider below accepts bitcoin, so a subscription never has to touch a card or a bank. And your wallet talks to servers that see an IP address. The <a href="/learn/privacy">privacy guide</a> covers where a VPN fits.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="vp-card">
+      <div class="vp-tlab">Five providers that accept bitcoin</div>
+      <p class="vp-affline">Every link on this page goes to the provider's official site; when an affiliate program is signed, the link becomes a labeled affiliate link per the <a href="/disclosure">disclosure policy</a>, and affiliate status never changes what a row says. Rows are ordered by account model, then alphabetically; nothing here is a ranking.</p>
+      <div class="vp-scroll">
+      <table class="vp-table" aria-label="VPN providers that accept bitcoin, compared">
+        <thead>
+          <tr><th>Provider</th><th>Accepts bitcoin</th><th>Account model</th><th>Price, approx. monthly</th><th>Jurisdiction</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="vp-prov"><b>IVPN</b><span class="vp-chip">Affiliate</span></td>
+            <td>On-chain and Lightning</td>
+            <td>Numbered account, no email</td>
+            <td>~$5 to $10</td>
+            <td>Gibraltar</td>
+            <td class="vp-notes">Annual independent audits; open-source apps</td>
+            
+            <td class="vp-act"><a class="vp-visit" href="https://ivpn.net" rel="noopener nofollow" target="_blank">Visit</a></td>
+          </tr>
+          <tr>
+            <td class="vp-prov"><b>Mullvad</b><span class="vp-noaff">no affiliate program</span></td>
+            <td>On-chain and Lightning</td>
+            <td>Numbered account, no email</td>
+            <td>~$5, flat</td>
+            <td>Sweden</td>
+            <td class="vp-notes">Independent audits; one price at every term length</td>
+            
+            <td class="vp-act"><a class="vp-visit" href="https://mullvad.net" rel="noopener nofollow" target="_blank">Visit</a></td>
+          </tr>
+          <tr>
+            <td class="vp-prov"><b>ExpressVPN</b><span class="vp-chip">Affiliate</span></td>
+            <td>On-chain, via a payment processor</td>
+            <td>Email account</td>
+            <td>~$5 to $13</td>
+            <td>British Virgin Islands</td>
+            <td class="vp-notes">Commissioned no-logs and security audits</td>
+            
+            <td class="vp-act"><a class="vp-visit" href="https://expressvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+          </tr>
+          <tr>
+            <td class="vp-prov"><b>NordVPN</b><span class="vp-chip">Affiliate</span></td>
+            <td>On-chain, via a payment processor</td>
+            <td>Email account</td>
+            <td>~$3 to $13</td>
+            <td>Panama</td>
+            <td class="vp-notes">Commissioned no-logs audits</td>
+            
+            <td class="vp-act"><a class="vp-visit" href="https://nordvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+          </tr>
+          <tr>
+            <td class="vp-prov"><b>Proton VPN</b><span class="vp-chip">Affiliate</span></td>
+            <td>On-chain, through its own checkout</td>
+            <td>Email account</td>
+            <td>~$4 to $10</td>
+            <td>Switzerland</td>
+            <td class="vp-notes">Open-source apps; published audits; free tier exists</td>
+            
+            <td class="vp-act"><a class="vp-visit" href="https://protonvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="vp-fine">Prices are approximate monthly bands across plan lengths and change often; check the provider's own site for current figures. Payment methods, audit status, and jurisdictions are as published by each provider and can also change.</p>
+    </div>
+
+    <div class="vp-card vp-mt">
+      <div class="vp-tlab">What a VPN does for a bitcoin user</div>
+      <p class="vp-p">A VPN moves your internet traffic through the provider's server, so the sites and servers you reach see the VPN's IP address instead of your home connection, and your internet provider sees only that you connected to a VPN. For a bitcoin user that matters in one specific place: your wallet is not a sealed box. It talks to servers, whether a public Electrum server, a block explorer, or one of the network's <a href="/nodes">reachable nodes</a>, and whoever runs that server can log the IP address asking about your addresses.</p>
+      <div class="vp-cols">
+        <div class="vp-col">
+          <div class="vp-clab vp-clab-yes">What it changes</div>
+          <ul class="vp-clist">
+            <li>Hides your home IP from websites, network observers, and public Wi-Fi.</li>
+            <li>Your wallet's server connections show the VPN's IP, not the one registered to your house.</li>
+            <li>Your internet provider no longer sees which bitcoin services you touch.</li>
+          </ul>
+        </div>
+        <div class="vp-col">
+          <div class="vp-clab vp-clab-no">What it does not change</div>
+          <ul class="vp-clist">
+            <li>Nothing on-chain. Addresses and transactions are public forever regardless of how you connected; the <a href="/learn/privacy">privacy guide</a> covers that side.</li>
+            <li>An exchange that verified your identity still knows exactly which withdrawals are yours.</li>
+            <li>Trust does not disappear, it moves: from your internet provider to the VPN operator. That is why the criteria below exist.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vp-choose">
+        <div class="vp-tlab">Choosing criteria</div>
+        <ul class="vp-crit">
+          <li><b>No-logs claims backed by published audits.</b> Anyone can write "no logs" on a landing page; an independent audit with a public report is the only version that costs something to fake.</li>
+          <li><b>An anonymous account model.</b> Two providers above issue a random account number instead of taking an email. No inbox, no password reset, nothing to subpoena a name from.</li>
+          <li><b>Bitcoin payment closes the billing-identity loop.</b> A no-logs VPN paid by credit card still has your name in its billing records. Paid in bitcoin, on an account that is only a number, the subscription carries no identity at all.</li>
+          <li><b>Open-source clients</b> let outsiders check that the app does what the marketing says.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="vp-about doc-prose">
+      <p>A VPN is one layer of network privacy, not an anonymity system, and it does nothing to the public ledger itself; how on-chain privacy actually works is covered in the <a href="/learn/privacy">bitcoin privacy guide</a>, and buying coins without attaching your identity in the first place is covered in <a href="/learn/no-kyc">no-KYC bitcoin</a>. The servers a wallet leans on are visible on the <a href="/nodes">node map</a>, and running your own removes that dependency entirely. Affiliate relationships on this page, once live, are labeled where they appear and documented in the <a href="/disclosure">disclosure</a>; everything here is informational, not advice, per the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Choosing criteria</div>
+      <ul class="vp-rl">
+        <li>No-logs claim with a published independent audit</li>
+        <li>Account number instead of an email address</li>
+        <li>Takes bitcoin, so billing carries no identity</li>
+        <li>Open-source client apps</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/privacy">Bitcoin privacy guide</a>
+        <a href="/nodes">Reachable nodes</a>
+        <a href="/disclosure">Affiliate disclosure</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .vp-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .vp-mt{margin-top:14px}
+  .vp-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .vp-affline{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0 0 12px}
+  .vp-affline a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .vp-affline a:hover{border-bottom-style:solid}
+  .vp-scroll{overflow-x:auto}
+  .vp-table{width:100%;border-collapse:collapse}
+  .vp-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .vp-table td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .vp-table tr:last-child td{border-bottom:0}
+  .vp-prov{white-space:nowrap}
+  .vp-prov b{display:block;font:700 14px var(--sans);color:var(--ink)}
+  .vp-chip{display:inline-block;margin-top:5px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--acc);border:1px dashed rgba(247,147,26,.45);border-radius:5px;padding:2px 6px}
+  .vp-noaff{display:inline-block;margin-top:5px;font:600 10px var(--mono);letter-spacing:.04em;color:var(--ink-3)}
+  .vp-notes{min-width:180px}
+  .vp-act{text-align:right}
+  .vp-visit{display:inline-block;font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);border:1px solid var(--line-2);border-radius:7px;padding:6px 12px;
+    text-decoration:none}
+  .vp-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .vp-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .vp-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .vp-p a:hover{border-bottom-style:solid}
+  .vp-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .vp-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}
+  .vp-clab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;
+    display:flex;align-items:center;gap:7px}
+  .vp-clab::before{content:"";width:9px;height:9px;border-radius:2px}
+  .vp-clab-yes{color:var(--up)}
+  .vp-clab-yes::before{background:var(--up)}
+  .vp-clab-no{color:var(--down)}
+  .vp-clab-no::before{background:var(--down)}
+  .vp-clist{margin:0;padding-left:18px}
+  .vp-clist li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .vp-clist li::marker{color:var(--ink-3)}
+  .vp-clist a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .vp-clist a:hover{border-bottom-style:solid}
+  .vp-choose{margin-top:16px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .vp-crit{margin:0;padding-left:22px}
+  .vp-crit li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .vp-crit li::marker{color:var(--acc);font-weight:700}
+  .vp-crit b{color:var(--ink);font-weight:600}
+  .vp-about{margin-top:14px}
+  .vp-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .vp-rl{margin:0;padding-left:16px}
+  .vp-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .vp-rl li:first-child{margin-top:0}
+  .vp-rl li::marker{color:var(--acc)}
+  @media(max-width:700px){
+    .vp-cols{grid-template-columns:1fr}
+    .vp-table td{font-size:12.5px}
+  }
+</style>
+</Base>

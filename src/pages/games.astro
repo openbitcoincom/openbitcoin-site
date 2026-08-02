@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Games - OpenBitcoin" description="Free games about bitcoin are being built for this page: no wagering, no prizes, nothing to buy, just play that builds intuition for big numbers and volatility.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Games</div>
+    <h1>Games are in the workshop</h1>
+    <p class="doc-lede">Free games about bitcoin are being built for this page. No wagering, no prizes, nothing to buy: just play.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="gm-card">
+      <div class="gm-tlab">What is planned</div>
+      <div class="gm-teasers">
+        <div class="gm-teaser">
+          <b>The Impossible Lottery</b>
+          <p>Generate a real bitcoin private key and see why the address space is so large that guessing a funded one is not a thing that happens in this universe. A game about the number 2<sup>160</sup>.</p>
+        </div>
+        <div class="gm-teaser">
+          <b>Beat the HODLER</b>
+          <p>Trade your way through a hidden price path against an opponent who never sells, and find out which of you ends up ahead. A game about why timing is harder than it looks.</p>
+        </div>
+      </div>
+      <p class="gm-note">This section opens when the games are ready. Play here stays free forever; real-money wagering is a different thing entirely and lives behind the 18+ <a href="/casinos">casino section</a>.</p>
+    </div>
+
+    <div class="gm-card gm-mt">
+      <div class="gm-tlab">Meanwhile</div>
+      <p class="gm-p">The instincts these games are built to teach already have working tools behind them: the <a href="/dca">averaging backtester</a> shows what steady buying did historically, the <a href="/whatif">what-if calculator</a> shows what any past purchase became, and <a href="/learn/what-is-bitcoin">what bitcoin is</a> covers the ideas underneath both.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/dca">DCA backtester</a>
+        <a href="/whatif">What-if calculator</a>
+        <a href="/learn/what-is-bitcoin">What bitcoin is</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .gm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .gm-mt{margin-top:14px}
+  .gm-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .gm-teasers{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .gm-teaser{background:var(--field);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:16px 18px}
+  .gm-teaser b{display:block;font:700 15px var(--sans);color:var(--ink)}
+  .gm-teaser p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:7px 0 0}
+  .gm-teaser sup{font-size:10px}
+  .gm-note{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:14px 0 0}
+  .gm-note a,.gm-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .gm-note a:hover,.gm-p a:hover{border-bottom-style:solid}
+  .gm-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  @media(max-width:700px){
+    .gm-card{padding:18px 16px}
+    .gm-teasers{grid-template-columns:minmax(0,1fr)}
+  }
+</style>
+</Base>

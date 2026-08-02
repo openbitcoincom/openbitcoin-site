@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+const { copy, indexable = true } = Astro.props;
+const toc = copy.sections.map((s) => ({ id: s.id, heading: s.heading }));
+---
+<Base title={copy.title} description={copy.metaDescription} indexable={indexable}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">{copy.kicker}</div>
+    <h1>{copy.h1}</h1>
+    <p class="doc-lede">{copy.lede}</p>
+    {copy.updated && <div class="doc-updated">Last updated: {copy.updated}</div>}
+  </div>
+  <div class="doc-grid">
+    <article class="doc-card doc-prose">
+      {copy.sections.map((s) => (
+        <section id={s.id} class="doc-sec">
+          <h2>{s.heading}</h2>
+          <Fragment set:html={s.html} />
+        </section>
+      ))}
+    </article>
+    <aside class="doc-rail">
+      {toc.length > 3 && (
+        <div class="doc-tile">
+          <div class="doc-tlab">On this page</div>
+          <nav>{toc.map((t) => <a href={'#' + t.id}>{t.heading}</a>)}</nav>
+        </div>
+      )}
+      {copy.proofLinks && copy.proofLinks.length > 0 && (
+        <div class="doc-tile">
+          <div class="doc-tlab">Related</div>
+          <nav>{copy.proofLinks.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+        </div>
+      )}
+    </aside>
+  </div>
+</main>
+</Base>

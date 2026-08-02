@@ -1,0 +1,84 @@
+---
+import '../styles/site.css';
+import Topbar from '../components/Topbar.astro';
+import BandSlim from '../components/BandSlim.astro';
+import Footer from '../components/Footer.astro';
+import Consent from '../components/Consent.astro';
+import { DATA_API } from '../lib/config.js';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+let chromeV = 'v1';
+for (const c of [resolve(process.cwd(), 'public/js/chrome.js'), resolve(process.cwd(), 'site/public/js/chrome.js')]) {
+  try { chromeV = createHash('sha1').update(readFileSync(c)).digest('hex').slice(0, 8); break; } catch {}
+}
+const {
+  title = 'OpenBitcoin: Explorer, Tools and Knowledgebase',
+  description = '',
+  chromeJs = true,
+  indexable = true,
+  analytics = true,
+  canonicalPath = null,
+} = Astro.props;
+const canonical = new URL(canonicalPath || Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og/default.png', Astro.site).href;
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+
+<link rel="preload" href="/fonts/cascadia-mono-400.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/cascadia-mono-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/selawik-400.woff2" as="font" type="font/woff2" crossorigin />
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+{!indexable && <meta name="robots" content="noindex" />}
+<link rel="canonical" href={canonical} />
+<meta property="og:site_name" content="OpenBitcoin" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+<meta name="twitter:image" content={ogImage} />
+{Astro.url.pathname === '/' && (
+  <script type="application/ld+json" set:html={JSON.stringify([
+    // The domain spent years redirecting into reddit.com, and Google's learned
+    // site-name for it still says "Reddit" on our own results (owner report,
+    // 2026-08-03). WebSite markup on the homepage is the documented signal for
+    // the site name; Organization supplies the logo. Homepage only, per
+    // Google's guidance that site names are read from the root.
+    { '@context': 'https://schema.org', '@type': 'WebSite',
+      name: 'OpenBitcoin', alternateName: 'OpenBitcoin.com',
+      url: 'https://openbitcoin.com/' },
+    { '@context': 'https://schema.org', '@type': 'Organization',
+      name: 'OpenBitcoin', url: 'https://openbitcoin.com/',
+      logo: 'https://openbitcoin.com/logo-512.png' },
+  ])} />
+)}
+</head>
+<body>
+<header>
+<Topbar />
+<slot name="band"><BandSlim /></slot>
+</header>
+<slot />
+{/* /chart is a full-screen page: it fills the viewport with the chart and ends
+    in a single thin bar, so it supplies its own footer rather than the tall
+    directory one, which would put a scrollbar under a chart sized not to have
+    one. Every other page gets the standard footer. */}
+<slot name="footer"><Footer /></slot>
+<Consent analytics={analytics} />
+{chromeJs && DATA_API && <script is:inline set:html={`window.OB_DATA_API=${JSON.stringify(DATA_API)};`}></script>}
+{chromeJs && <script is:inline src={`/js/chrome.js?v=${chromeV}`}></script>}
+</body>
+</html>

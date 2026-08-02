@@ -1,0 +1,247 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin Halving Countdown: Block 1,050,000 - OpenBitcoin" description="Live countdown to the next bitcoin halving at block 1,050,000: blocks remaining, estimated date, and the full block subsidy schedule.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Halving</div>
+    <h1>Bitcoin halving countdown</h1>
+    <p class="doc-lede">The fifth halving cuts the block subsidy from 3.125 to 1.5625 BTC at block 1,050,000. The countdown tracks the live block height; the date assumes one block every 10 minutes.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="hv-hero">
+      <div class="hv-big" id="hv-blocks">&hellip;</div>
+      <div class="hv-sub">blocks remaining until block <b>1,050,000</b>, the fifth halving</div>
+      <div class="hv-stats">
+        <div class="hv-stat"><b id="hv-time">&hellip;</b><i>estimated, at 10 min per block</i></div>
+        <div class="hv-stat"><b id="hv-date">&hellip;</b><i>estimated date</i></div>
+        <div class="hv-stat"><b>3.125 → 1.5625 BTC</b><i>subsidy per block</i></div>
+        <div class="hv-stat"><b>450 → 225 BTC</b><i>new supply per day</i></div>
+      </div>
+      <div class="hv-prog">
+        <div class="hv-plab"><span>Epoch progress · block 840,000 → 1,050,000</span><span id="hv-pct">&hellip;</span></div>
+        <div class="hv-bar"><div class="hv-fill" id="hv-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="hv-card">
+      <div class="hv-tlab">Halving statistics</div>
+      <table class="hv-table hv-stats-table" aria-label="Supply, issuance and network statistics">
+        <tbody>
+          <tr class="hv-group"><td colspan="2">Supply</td></tr>
+          <tr><td>Bitcoin in circulation</td><td><b id="hs-supply">&hellip;</b></td></tr>
+          <tr><td>Maximum supply</td><td><b>21,000,000 BTC</b></td></tr>
+          <tr><td>Percentage of all bitcoin mined</td><td><b id="hs-pct">&hellip;</b></td></tr>
+          <tr><td>Left to mine, total</td><td><b id="hs-left">&hellip;</b></td></tr>
+          <tr><td>Left to mine before the halving</td><td><b id="hs-lefth">&hellip;</b></td></tr>
+          <tr class="hv-group"><td colspan="2">Issuance and inflation</td></tr>
+          <tr><td>New bitcoin per day</td><td><b>450 BTC (144 blocks × 3.125)</b></td></tr>
+          <tr><td>New bitcoin per day after the halving</td><td><b>225 BTC</b></td></tr>
+          <tr><td>Annual inflation rate</td><td><b id="hs-infl">&hellip;</b></td></tr>
+          <tr><td>Annual inflation rate after the halving</td><td><b id="hs-infl2">0.40%</b></td></tr>
+          <tr><td>New supply per day, in USD</td><td><b id="hs-influsd">&hellip;</b></td></tr>
+          <tr><td>New supply per day after the halving, in USD</td><td><b id="hs-influsd2">&hellip;</b></td></tr>
+          <tr><td>New supply before the halving, in USD</td><td><b id="hs-inflh">&hellip;</b></td></tr>
+          <tr class="hv-group"><td colspan="2">Market</td></tr>
+          <tr><td>Bitcoin price</td><td><b id="hs-price">&hellip;</b></td></tr>
+          <tr><td>Market capitalization</td><td><b id="hs-mcap">&hellip;</b></td></tr>
+          <tr><td>Block subsidy value</td><td><b id="hs-reward">&hellip;</b></td></tr>
+          <tr class="hv-group"><td colspan="2">Blocks and difficulty</td></tr>
+          <tr><td>Current block height</td><td><b id="hs-height">&hellip;</b></td></tr>
+          <tr><td>Blocks until the halving</td><td><b id="hs-blocksleft">&hellip;</b></td></tr>
+          <tr><td>Halvings so far</td><td><b>4 (the fifth is next)</b></td></tr>
+          <tr><td>Target block time</td><td><b>10 minutes (~144 blocks per day)</b></td></tr>
+          <tr><td>Difficulty</td><td><b id="hs-diff">&hellip;</b></td></tr>
+          <tr><td>Hash rate</td><td><b id="hs-hash">&hellip;</b></td></tr>
+          <tr><td>Next difficulty retarget at block</td><td><b id="hs-ret">&hellip;</b></td></tr>
+          <tr><td>Blocks until the retarget</td><td><b id="hs-retleft">&hellip;</b></td></tr>
+        </tbody>
+      </table>
+      <p class="hv-fine">Supply, inflation, and retarget figures are computed from the live block height and price on this page. Difficulty and hash rate are read from the node.</p>
+    </div>
+    <div class="hv-card">
+      <div class="hv-tlab">Subsidy schedule</div>
+      <table class="hv-table" aria-label="Halving schedule with block heights, dates and subsidies">
+        <thead><tr><th>Event</th><th>Block</th><th>Date</th><th>Subsidy</th></tr></thead>
+        <tbody>
+          <tr><td>Genesis</td><td>0</td><td>January 3, 2009</td><td><b>50 BTC</b></td></tr>
+          <tr><td>First halving</td><td>210,000</td><td>November 28, 2012</td><td><b>25 BTC</b></td></tr>
+          <tr><td>Second halving</td><td>420,000</td><td>July 9, 2016</td><td><b>12.5 BTC</b></td></tr>
+          <tr><td>Third halving</td><td>630,000</td><td>May 11, 2020</td><td><b>6.25 BTC</b></td></tr>
+          <tr><td>Fourth halving</td><td>840,000</td><td>April 20, 2024</td><td><b>3.125 BTC</b></td></tr>
+          <tr class="hv-next"><td>Fifth halving</td><td>1,050,000</td><td id="hv-est">&hellip;</td><td><b>1.5625 BTC</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="hv-about doc-prose">
+      <p>Every 210,000 blocks, roughly once every four years, the Bitcoin network cuts the block subsidy in half. The subsidy is the only source of new bitcoin, so each halving halves the rate at which new coins enter circulation, on a schedule fixed in the consensus rules since 2009. This continues until the subsidy rounds to zero around 2140, capping supply at just under 21 million.</p>
+      <p>The countdown is computed from the current block height reported by our node, assuming the long-run average of one block every 10 minutes, so the estimated date drifts as actual block times vary. Past heights and dates are consensus facts and do not change. Where our chain data comes from is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="hv-rs"><b id="hv-height">&hellip;</b><i>current height</i></div>
+      <div class="hv-rs"><b id="hv-left">&hellip;</b><i>blocks to the halving</i></div>
+      <div class="hv-rs"><b id="hv-val">&hellip;</b><i>3.125 BTC subsidy per block</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/block-1m">Block 1,000,000 countdown</a>
+        <a href="/chart">Full price chart</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hv-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .hv-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .hv-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .hv-sub b{color:var(--acc);font-weight:700}
+  .hv-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
+  .hv-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .hv-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hv-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .hv-prog{margin-top:20px;text-align:left}
+  .hv-plab{display:flex;justify-content:space-between;gap:10px;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;font-variant-numeric:tabular-nums}
+  .hv-bar{height:8px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:99px;overflow:hidden}
+  .hv-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--acc));border-radius:99px}
+  .hv-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:14px}
+  .hv-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .hv-table{width:100%;border-collapse:collapse}
+  .hv-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .hv-table td{font:600 14px var(--mono);color:var(--ink-2);padding:10px 10px 10px 0;border-bottom:1px dotted var(--line-2);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hv-table tr:last-child td{border-bottom:0}
+  .hv-table td:first-child{color:var(--ink);font-weight:700}
+  .hv-table td b{color:var(--price-ink);font-weight:700}
+  .hv-table tr.hv-next td{background:rgba(247,147,26,.07)}
+  .hv-table tr.hv-next td:first-child{color:var(--acc)}
+  .hv-stats-table td:first-child{font-weight:600;color:var(--ink-2);font-family:var(--sans);font-size:13.5px}
+  .hv-stats-table td:last-child{text-align:right}
+  .hv-stats-table tr.hv-group td{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--acc);padding-top:16px;border-bottom:1px solid var(--line-2);background:transparent;text-align:left}
+  .hv-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .hv-about{margin-top:14px}
+  .hv-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hv-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hv-rs:last-child{border-bottom:0}
+  .hv-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hv-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .hv-big{font-size:40px}
+    .hv-table{display:block;overflow-x:auto}
+  }
+</style>
+<script is:inline>
+(function(){
+  var TARGET=1050000,EPOCH=210000,SUB=3.125,RET=2016,MAX=21000000;
+  /* nothing is baked: 0 means "no real figure yet" and the cells stay at the
+     ellipsis they were served with */
+  var st={price:0,height:0};
+  function fmt(n){return n.toLocaleString("en-US");}
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function supplyAt(h){
+    var s=0,sub=50;
+    for(var e=0;e<64;e++){
+      var start=e*EPOCH;if(h<=start)break;
+      s+=Math.min(h-start,EPOCH)*sub;sub/=2;
+    }
+    return s;
+  }
+  function paint(){
+    var H=st.height,P=st.price;
+    if(H>0){
+      var left=Math.max(0,TARGET-H),mins=left*10,
+          days=Math.floor(mins/1440),hrs=Math.floor(mins%1440/60),
+          eta=new Date(Date.now()+mins*60000),
+          sup=supplyAt(H),leftH=left*SUB,
+          nextRt=(Math.floor(H/RET)+1)*RET,rtLeft=nextRt-H,
+          rtMin=rtLeft*10,rtD=Math.floor(rtMin/1440),rtH=Math.floor(rtMin%1440/60),
+          p=Math.max(0,Math.min(100,(H-(TARGET-EPOCH))/EPOCH*100));
+      txt("hv-blocks",fmt(left));
+      txt("hv-time",fmt(days)+"d "+hrs+"h");
+      txt("hv-date",eta.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}));
+      txt("hv-est",eta.toLocaleDateString("en-US",{month:"long",year:"numeric"})+" (est.)");
+      txt("hv-pct",p.toFixed(1)+"%");
+      var f=document.getElementById("hv-fill");if(f)f.style.width=p.toFixed(2)+"%";
+      txt("hv-height",fmt(H));
+      txt("hv-left",fmt(left));
+      txt("hs-supply",fmt(Math.round(sup))+" BTC");
+      txt("hs-pct",(sup/MAX*100).toFixed(2)+"%");
+      txt("hs-left",fmt(Math.round(MAX-sup))+" BTC");
+      txt("hs-lefth",fmt(Math.round(leftH))+" BTC");
+      txt("hs-infl",(450*365/sup*100).toFixed(2)+"%");
+      txt("hs-height",fmt(H));
+      txt("hs-blocksleft",fmt(left));
+      txt("hs-ret",fmt(nextRt));
+      txt("hs-retleft",fmt(rtLeft)+" (~"+rtD+"d "+rtH+"h)");
+      if(P>0){
+        txt("hs-mcap","$"+fmt(Math.round(sup*P)));
+        txt("hs-inflh","$"+fmt(Math.round(leftH*P)));
+      }
+    }
+    /* the post-halving inflation rate divides two consensus constants, so it
+       needs neither a height nor a price */
+    txt("hs-infl2",(225*365/supplyAt(TARGET)*100).toFixed(2)+"%");
+    if(P>0){
+      txt("hs-influsd","$"+fmt(Math.round(450*P)));
+      txt("hs-influsd2","$"+fmt(Math.round(225*P)));
+      txt("hs-price","$"+fmt(Math.round(P)));
+      txt("hs-reward","$"+fmt(Math.round(SUB*P))+" (3.125 BTC)");
+      txt("hv-val","$"+fmt(Math.round(SUB*P)));
+    }
+  }
+  function setHeight(h){
+    if(typeof h!=="number"||!(h>st.height))return false;
+    st.height=h;return true;
+  }
+  /* live height + price arrive via the chrome hook (~1.5s and on new blocks).
+     chrome.js also calls the hook once with its own pre-fetch baseline, before
+     any summary has landed; window.OB_LIVE is only set once a real summary
+     has, so that first call is ignored. */
+  window.obPaintFiat=function(S){
+    if(!window.OB_LIVE)return;
+    if(typeof S.price==="number"&&S.price>0)st.price=S.price;
+    setHeight(S.height);
+    paint();
+  };
+  paint();
+  /* on load: seed from the newest summary if the chrome already has one, and
+     read difficulty and hash rate off /network, which also carries a height;
+     /height is the fallback when /network gives none. OB_DATA_API is set by
+     Base.astro after this script parses, so wait for DOMContentLoaded. */
+  function boot(){
+    try{
+      var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1",
+          L=window.OB_LIVE;
+      if(L){
+        if(L.price&&typeof L.price.usd==="number"&&L.price.usd>0)st.price=L.price.usd;
+        setHeight(L.height);
+        paint();
+      }
+      function height(){
+        fetch(api+"/height").then(function(r){return r.json();}).then(function(d){
+          if(d&&setHeight(d.height))paint();
+        }).catch(function(){});
+      }
+      fetch(api+"/network").then(function(r){return r.json();}).then(function(d){
+        if(!d)return height();
+        if(typeof d.difficulty==="number"&&isFinite(d.difficulty)&&d.difficulty>0)
+          txt("hs-diff",fmt(Math.round(d.difficulty)));
+        if(typeof d.hashrateEhs==="number"&&isFinite(d.hashrateEhs)&&d.hashrateEhs>0)
+          txt("hs-hash","~"+fmt(Math.round(d.hashrateEhs))+" EH/s");
+        if(setHeight(d.height))paint();
+        else if(!st.height)height();
+      }).catch(height);
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>

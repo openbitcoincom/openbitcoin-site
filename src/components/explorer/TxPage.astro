@@ -1,0 +1,391 @@
+---
+import { fmtInt, fmtBtc, utcStamp, agoText } from '../../lib/explorer.js';
+const { t, usdNow } = Astro.props;
+
+const outTotalSat = t.vout.reduce((a, o) => a + o.valueSat, 0);
+const inTotalSat = t.vin.reduce((a, i) => a + (i.valueSat || 0), 0);
+const feerate = t.feeSat != null && t.vsize ? Math.round((t.feeSat / t.vsize) * 10) / 10 : null;
+const btcAmt = outTotalSat / 1e8;
+const valThen = t.usdThen != null ? btcAmt * t.usdThen : null;
+const valNow = usdNow != null ? btcAmt * usdNow : null;
+const feeUsd = t.feeSat != null && usdNow != null ? (t.feeSat / 1e8) * usdNow : null;
+const fmtUsd = (v) => '$' + Math.round(v).toLocaleString('en-US');
+const fmtFeeUsd = (v) => v >= 100 ? '$' + Math.round(v).toLocaleString('en-US')
+  : v >= 0.01 ? '$' + v.toFixed(2)
+  : '< $0.01';
+const confirmed = t.confirmations > 0;
+const TYPE_NOTES = {
+  witness_v0_keyhash: ['P2WPKH', 'witness v0 keyhash'],
+  witness_v0_scripthash: ['P2WSH', 'witness v0 scripthash'],
+  witness_v1_taproot: ['P2TR', 'taproot'],
+  pubkeyhash: ['P2PKH', 'legacy keyhash'],
+  scripthash: ['P2SH', 'script hash'],
+  pubkey: ['P2PK', 'raw pubkey'],
+  nulldata: ['OP_RETURN', 'data output'],
+  multisig: ['BARE MULTISIG', 'bare multisig'],
+};
+const typeTag = (ty) => (TYPE_NOTES[ty] || [ty ? ty.toUpperCase() : 'UNKNOWN'])[0];
+const typeNote = (ty) => (TYPE_NOTES[ty] || [null, ty])[1];
+const short = (h) => h ? h.slice(0, 8) + '…' : '';
+const witKind = (w, idx, n, ty) => {
+  const bytes = w.length / 2;
+  const taproot = ty === 'witness_v1_taproot';
+  if (taproot && (bytes === 64 || bytes === 65)) return `Schnorr signature, ${bytes} B`;
+  if (!taproot && n === 2) return idx === 0 ? `signature, ${bytes} B` : `pubkey, ${bytes} B`;
+  return `${bytes} B`;
+};
+const dataPayload = (o) => {
+  if (o.type !== 'nulldata' || !o.asm) return null;
+  const hex = o.asm.trim().split(/\s+/).slice(1)
+    .filter((p) => /^(?:[0-9a-f]{2})+$/i.test(p)).join('');
+  if (!hex) return null;
+  const bytes = hex.length / 2;
+  let text = '', printable = 0;
+  for (let k = 0; k < hex.length; k += 2) {
+    const byte = parseInt(hex.slice(k, k + 2), 16);
+    const ok = byte >= 32 && byte < 127;
+    if (ok) printable++;
+    text += ok ? String.fromCharCode(byte) : '·';
+  }
+  return {
+    bytes,
+    hex: hex.length > 240 ? hex.slice(0, 240) + '…' : hex,
+    text: printable / bytes >= 0.8 ? (text.length > 240 ? text.slice(0, 240) + '…' : text) : null,
+    clean: printable === bytes,
+  };
+};
+const pubkeyOf = (o) => {
+  if (o.type !== 'pubkey' || !o.asm) return null;
+  const first = o.asm.trim().split(/\s+/)[0];
+  return /^(?:[0-9a-f]{66}|[0-9a-f]{130})$/i.test(first) ? first : null;
+};
+
+const CAP = 25;
+const allVin = Astro.url.searchParams.get('vin') === 'all';
+const allVout = Astro.url.searchParams.get('vout') === 'all';
+const vinRows = allVin ? t.vin : t.vin.slice(0, CAP);
+const voutRows = allVout ? t.vout : t.vout.slice(0, CAP);
+const paramHref = (key, val) => {
+  const p = new URLSearchParams(Astro.url.search);
+  if (val === null) p.delete(key); else p.set(key, val);
+  const q = p.toString();
+  return q ? `?${q}` : Astro.url.pathname;
+};
+---
+<main class="wrap apage">
+  <section class="card ahero">
+    <div class="rmain">
+      <div class="txh-top">
+        <div style="min-width:0;flex:1 1 380px">
+          <span class="micro">Transaction</span>
+          <div class="hashline"><code id="txid">{t.txid}</code>
+            <button class="cico" id="copybtn" type="button" title="Copy transaction ID" aria-label="Copy transaction ID">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            </button></div>
+          <div class="abadges">
+            {confirmed
+              ? <i class="ok">CONFIRMED · {fmtInt(t.confirmations)} CONFIRMATION{t.confirmations === 1 ? '' : 'S'}</i>
+              : <i>IN MEMPOOL · UNCONFIRMED</i>}
+            {t.coinbase && <i class="ok">COINBASE</i>}
+            <i>{t.segwit ? 'SEGWIT' : 'LEGACY'}</i>
+            <i>RBF: {t.rbf ? 'YES' : 'NO'}</i>
+            <i>VERSION {t.version}</i>
+          </div>
+        </div>
+        <div style="flex:0 1 auto;min-width:0">
+          <span class="micro">Total output</span>
+          <div class="amt">{fmtBtc(outTotalSat)}<em>BTC</em></div>
+          {(valThen != null || valNow != null) && (
+            <div class="bfiat">
+              {valThen != null && <span>&#8776; {fmtUsd(valThen)} then</span>}
+              {valThen != null && valNow != null && ' · '}
+              {valNow != null && <span class="now" style="color:var(--acc)">{fmtUsd(valNow)} now</span>}
+            </div>
+          )}
+          
+          {t.movedSat != null && t.changeBackSat > 0 && (
+            <div class="movedline"><b>{fmtBtc(t.movedSat)} BTC</b> moved · {fmtBtc(t.changeBackSat)} BTC returned to a sending address</div>
+          )}
+          {t.likely && (
+            <div class="movedline">reads as {t.likely.batch ? 'payments totalling' : 'a payment of'} <b>{fmtBtc(t.likely.paymentSat)} BTC</b> with {fmtBtc(t.likely.changeSat)} BTC in change, heuristic.</div>
+          )}
+          {confirmed && t.height != null && (
+            <div class="blkline">In block <a href={`/${t.height}`}>{fmtInt(t.height)}</a> · <b>{agoText(t.time)}</b> · {utcStamp(t.time)}</div>
+          )}
+        </div>
+      </div>
+      <div class="ah-stats">
+        {t.feeSat != null && (
+          <span class="ast"><b>{fmtInt(t.feeSat)}<em>sats</em></b><i>Fee</i>
+            <span class="fsub">{fmtBtc(t.feeSat)} BTC{feeUsd != null && <em> · {fmtFeeUsd(feeUsd)}</em>}</span></span>
+        )}
+        {feerate != null && <span class="ast"><b>{feerate}<em>sat/vB</em></b><i>Fee rate</i></span>}
+        <span class="ast"><b>{fmtInt(t.vsize)}<em>vB</em></b><i>Virtual size</i></span>
+        <span class="ast"><b>{fmtInt(t.size)}<em>B</em></b><i>Size</i></span>
+        <span class="ast"><b>{fmtInt(t.weight)}<em>WU</em></b><i>Weight</i></span>
+        <span class="ast"><b>{fmtInt(t.locktime)}</b><i>Locktime</i></span>
+      </div>
+    </div>
+    <div class="cstrip">
+      <div class="tgl" id="secttabs">
+        <button type="button" class="on" data-t="io">INPUTS &amp; OUTPUTS</button>
+        <button type="button" data-t="tech">SCRIPTS &amp; DETAILS</button>
+      </div>
+      {confirmed && t.height != null && (
+        <a class="cbtn" href={`/${t.height}`}>MINED IN BLOCK {fmtInt(t.height)} <span class="extm">&#8599;</span></a>
+      )}
+    </div>
+  </section>
+
+  <section class="card acard">
+    <div id="iowrap">
+      <div class="txc-io">
+        <div class="txd-col"><h4>{fmtInt(t.vin.length)} input{t.vin.length === 1 ? '' : 's'} {inTotalSat > 0 && <b>{fmtBtc(inTotalSat)} BTC</b>}</h4>
+          {vinRows.map((i) => i.coinbase ? (
+            <div class="iorow me">
+              <span class="io-l"><span class="a" style="cursor:default">Coinbase (newly created coins)</span>
+                <span class="iotag mine">BLOCK REWARD</span></span>
+            </div>
+          ) : (
+            <div class="iorow">
+              <span class="io-l">
+                {i.address
+                  ? <a class="a" href={`/${i.address}`}>{i.address}</a>
+                  : i.type
+                    ? <span class="a" style="cursor:default">{typeTag(i.type)} input</span>
+                    : <span class="a" style="cursor:default;color:var(--ink-3)">Input details arrive with confirmation</span>}
+                {i.type && <span class="iotag">{typeTag(i.type)}</span>}
+                {i.txid && <span class="iotag">OUTPOINT <a href={`/${i.txid}`}>{short(i.txid)}</a>:{i.vout}</span>}
+              </span>
+              {i.valueSat != null && <span class="v">{fmtBtc(i.valueSat)} BTC</span>}
+            </div>
+          ))}
+          {t.vin.length > CAP && (
+            <div class="iomore">
+              {allVin
+                ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null)}>show first {CAP}</a></>
+                : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all')}>show all</a></>}
+            </div>
+          )}
+        </div>
+        <div class="txd-arrow">&rarr;</div>
+        <div class="txd-col"><h4>{fmtInt(t.vout.length)} output{t.vout.length === 1 ? '' : 's'} <b>{fmtBtc(outTotalSat)} BTC</b></h4>
+          {voutRows.map((o) => {
+            const od = dataPayload(o);
+            const pk = pubkeyOf(o);
+            return (
+            <div class="iorow">
+              <span class="io-l">
+                {o.address
+                  ? <a class="a" href={`/${o.address}`}>{o.address}</a>
+                  : pk
+                    ? <span class="a" style="cursor:default">Pubkey {pk.slice(0, 16)}…</span>
+                    : <span class="a" style="cursor:default">{typeTag(o.type)}</span>}
+                <span class="iotag">{typeTag(o.type)}</span>
+                {o.type === 'nulldata'
+                  ? <span class="iotag">DATA</span>
+                  : o.spent === false
+                    ? <span class="iotag ok">UNSPENT</span>
+                    : o.spent === true
+                      ? <span class="iotag spent">SPENT</span>
+                      : null}
+                {od && (
+                  <span class="iodata">
+                    {od.text && <b>{od.text}</b>}
+                    {od.text && ' · '}
+                    {od.hex} <i>({od.bytes} B)</i>
+                  </span>
+                )}
+              </span>
+              <span class="v">{fmtBtc(o.valueSat)} BTC</span>
+            </div>
+            );
+          })}
+          {t.vout.length > CAP && (
+            <div class="iomore">
+              {allVout
+                ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null)}>show first {CAP}</a></>
+                : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all')}>show all</a></>}
+            </div>
+          )}
+        </div>
+      </div>
+      <div class="txc-meta">
+        {t.feeSat != null && <span>Fee <b>{fmtInt(t.feeSat)} sats</b> · <b>{fmtBtc(t.feeSat)} BTC</b>{feeUsd != null && <> · <b class="now">{fmtFeeUsd(feeUsd)}</b></>}</span>}
+        {feerate != null && <span><b>{feerate} sat/vB</b></span>}
+        {t.height != null && <span>Block <b>{fmtInt(t.height)}</b></span>}
+        {confirmed && <span><b>{fmtInt(t.confirmations)}</b> conf</span>}
+        {(valThen != null || valNow != null) && (
+          <span class="txc-vals">value {valThen != null && <b>{fmtUsd(valThen)} then</b>}{valThen != null && valNow != null && ' · '}{valNow != null && <b class="now">{fmtUsd(valNow)} now</b>}</span>
+        )}
+      </div>
+    </div>
+    <div id="techwrap">
+      {vinRows.map((i, idx) => (
+        <>
+        <div class="tsec">Input {idx}{i.address ? ` · ${i.address}` : i.coinbase ? ' · coinbase' : ''}</div>
+        {i.coinbase
+          ? <div class="trow"><span class="k">Coinbase</span><span class="val">Newly created coins; this input has no previous outpoint.</span></div>
+          : <div class="trow"><span class="k">Outpoint</span><span class="val">{i.txid ? <a href={`/${i.txid}`}>{i.txid}</a> : '…'}<i>:{i.vout}</i></span></div>}
+        {i.type === 'pubkey' && i.address && (
+          <div class="trow"><span class="k">Address</span><span class="val">{i.address} <i>(derived from the pubkey; a P2PK script carries none)</i></span></div>
+        )}
+        {i.scriptSigHex && <div class="trow"><span class="k">scriptSig (hex)</span><span class="val">{i.scriptSigHex.length > 200 ? i.scriptSigHex.slice(0, 200) + '…' : i.scriptSigHex} <i>({i.scriptSigHex.length / 2} B)</i></span></div>}
+        {i.witness && i.witness.map((w, wi) => (
+          <div class="trow"><span class="k">Witness [{wi}]</span><span class="val">{w.length > 200 ? w.slice(0, 200) + '…' : w || '(empty)'} <i>({witKind(w, wi, i.witness.length, i.type)})</i></span></div>
+        ))}
+        {i.sequence != null && <div class="trow"><span class="k">nSequence</span><span class="val">0x{(i.sequence >>> 0).toString(16)} <i>({i.sequence < 0xfffffffe ? 'RBF signaled' : 'RBF not signaled'})</i></span></div>}
+        </>
+      ))}
+      {t.vin.length > CAP && (
+        <div class="iomore">
+          {allVin
+            ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null) + '#scripts'}>show first {CAP}</a></>
+            : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all') + '#scripts'}>show all</a></>}
+        </div>
+      )}
+      {voutRows.map((o) => {
+        const od = dataPayload(o);
+        return (
+        <>
+        <div class="tsec">Output {o.n}{o.address ? ` · ${o.address}` : ''}</div>
+        <div class="trow"><span class="k">scriptPubKey (asm)</span><span class="val">{o.asm.length > 300 ? o.asm.slice(0, 300) + '…' : o.asm}</span></div>
+        <div class="trow"><span class="k">scriptPubKey (hex)</span><span class="val">{o.hex.length > 300 ? o.hex.slice(0, 300) + '…' : o.hex}</span></div>
+        <div class="trow"><span class="k">Type</span><span class="val">{typeTag(o.type)} {typeNote(o.type) && <i>({typeNote(o.type)})</i>}</span></div>
+        {o.type === 'pubkey' && o.address && (
+          <div class="trow"><span class="k">Address</span><span class="val">{o.address} <i>(derived from the pubkey; a P2PK script carries none)</i></span></div>
+        )}
+        {od && <div class="trow"><span class="k">Data (hex)</span><span class="val">{od.hex} <i>({od.bytes} B)</i></span></div>}
+        {od && od.text && (
+          <div class="trow"><span class="k">Data (text)</span><span class="val">{od.text}{!od.clean && <i> (unprintable bytes shown as &middot;)</i>}</span></div>
+        )}
+        {od && !od.text && (
+          <div class="trow"><span class="k">Data (text)</span><span class="val"><i>Not text: the payload is mostly unprintable bytes.</i></span></div>
+        )}
+        {o.type === 'nulldata'
+          ? <div class="trow"><span class="k">Status</span><span class="val">Not applicable <i>(a data output never enters the UTXO set)</i></span></div>
+          : o.spent != null && <div class="trow"><span class="k">Status</span><span class="val">{o.spent ? 'Spent' : 'Unspent'}</span></div>}
+        </>
+        );
+      })}
+      {t.vout.length > CAP && (
+        <div class="iomore">
+          {allVout
+            ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null) + '#scripts'}>show first {CAP}</a></>
+            : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all') + '#scripts'}>show all</a></>}
+        </div>
+      )}
+      <div class="tsec">Transaction</div>
+      <div class="trow"><span class="k">Version</span><span class="val">{t.version}</span></div>
+      <div class="trow"><span class="k">Locktime</span><span class="val">{fmtInt(t.locktime)}</span></div>
+      {t.hex && <div class="trow"><span class="k">Raw hex</span><span class="val" id="rawhex" data-hex={t.hex}>{t.hex.slice(0, 60)}…{t.hex.slice(-12)} <i>({t.hex.length / 2} B)</i> <a href="#" id="copyhex" style="color:var(--acc)">copy</a></span></div>}
+    </div>
+  </section>
+</main>
+
+<script is:inline>
+(function(){
+  var tabs=document.querySelectorAll("#secttabs button");
+  function pick(b){
+    tabs.forEach(function(z){z.classList.remove("on");});
+    b.classList.add("on");
+    var t=b.getAttribute("data-t");
+    document.getElementById("techwrap").style.display=t==="tech"?"block":"none";
+    document.getElementById("iowrap").style.display=t==="tech"?"none":"block";
+  }
+  tabs.forEach(function(b){b.addEventListener("click",function(){pick(b);});});
+  /* the scripts-tab "show all" links carry #scripts so the reload lands back
+     on the tab the reader was in */
+  if(location.hash==="#scripts"&&tabs.length>1)pick(tabs[1]);
+  var cb=document.getElementById("copybtn");
+  if(cb)cb.addEventListener("click",function(){
+    try{navigator.clipboard.writeText(document.getElementById("txid").textContent).then(function(){
+      cb.classList.add("ok");setTimeout(function(){cb.classList.remove("ok");},1200);
+    });}catch(e){}
+  });
+  var ch=document.getElementById("copyhex");
+  if(ch)ch.addEventListener("click",function(e){
+    e.preventDefault();
+    try{navigator.clipboard.writeText(document.getElementById("rawhex").getAttribute("data-hex")).then(function(){
+      ch.textContent="copied";setTimeout(function(){ch.textContent="copy";},1200);
+    });}catch(err){}
+  });
+})();
+</script>
+
+<style is:global>
+  .txh-top{display:flex;justify-content:space-between;gap:20px 40px;align-items:flex-start;flex-wrap:wrap}
+  .txh-top .hashline code{font-size:14.5px}
+  .amt{font:700 44px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px;margin-top:9px;white-space:nowrap}
+  .amt em{font-style:normal;font-size:19px;color:var(--ink-3);margin-left:7px}
+  .bfiat{font:600 14px var(--mono);color:var(--acc);margin-top:9px}
+  .blkline{font:600 12px var(--mono);color:var(--ink-3);margin-top:8px}
+  
+  .movedline{font:600 12px/1.6 var(--mono);color:var(--ink-2);margin-top:8px;max-width:46ch}
+  .movedline b{color:var(--acc)}
+  .blkline a{color:var(--acc);text-decoration:none}
+  .blkline a:hover{text-decoration:underline}
+  .blkline b{color:var(--ink-2)}
+  .ast .fsub{display:block;font:600 10px var(--mono);color:var(--ink-3);margin-top:4px;
+             font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ast .fsub em{font-style:normal;color:var(--acc)}
+  .cbtn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--line);
+        border-radius:8px;color:var(--ink-3);font:700 10.5px var(--mono);letter-spacing:.09em;padding:6px 12px;min-height:30px;
+        box-sizing:border-box;cursor:pointer;text-decoration:none;white-space:nowrap}
+  .cbtn .extm{color:var(--orange);font-size:11px;opacity:1}
+  .cbtn:hover{border-color:rgba(247,147,26,.4);color:var(--ink)}
+  .txc-io{display:flex;gap:14px;align-items:stretch;margin-top:4px}
+  .txd-col{flex:1;min-width:0;background:rgba(16,24,43,.45);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .txd-col h4{margin:0 0 6px;font:600 9px var(--mono);letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+  .txd-col h4 b{color:var(--ink-2);margin-left:6px;letter-spacing:0}
+  .iorow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:7px 8px;border-radius:6px}
+  .iorow+.iorow{margin-top:3px}
+  .iorow .io-l{flex:1;min-width:0}
+  .iorow .a{display:block;font:600 12.5px var(--mono);color:var(--acc);word-break:break-all;line-height:1.45;text-decoration:none}
+  .iorow a.a:hover{text-decoration:underline;cursor:pointer}
+  .iorow .v{color:var(--ink);white-space:nowrap;font:700 12.5px var(--mono);font-variant-numeric:tabular-nums;padding-top:1px}
+  
+  .iorow.me{background:rgba(247,147,26,.07);box-shadow:inset 2px 0 0 var(--orange)}
+  .iorow.me .a{color:var(--orange)}
+  .iotag{display:inline-block;font:600 8.5px var(--mono);color:var(--ink-3);letter-spacing:.08em;
+         background:var(--field);border-radius:4px;padding:2px 7px;margin:5px 6px 0 0}
+  .iotag.ok{color:var(--up)}
+  .iotag.spent{color:var(--down-soft)}
+  .iotag.mine{color:var(--orange);background:rgba(247,147,26,.12)}
+  .iotag a{color:var(--acc);text-decoration:none}
+  .iotag a:hover{text-decoration:underline}
+  .iodata{display:block;font:600 10.5px var(--mono);color:var(--ink-3);word-break:break-all;line-height:1.55;margin-top:6px}
+  .iodata b{color:var(--ink-2);font-weight:700}
+  .iodata i{font-style:normal;color:var(--ink-3)}
+  .iomore{font:600 10.5px var(--mono);color:var(--ink-3);margin-top:7px;padding:8px 8px 1px;border-top:1px dashed var(--line)}
+  .iomore a{color:var(--acc);text-decoration:none}
+  .iomore a:hover{text-decoration:underline}
+  #techwrap .iomore{padding:9px 0 1px;margin-top:2px}
+  .txd-arrow{align-self:center;color:var(--ink-3);font:700 16px var(--mono)}
+  .txc-meta{margin-top:13px;padding-top:10px;border-top:1px dashed var(--line);
+            font:600 10.5px var(--mono);color:var(--ink-3);display:flex;gap:6px 16px;flex-wrap:wrap;align-items:baseline}
+  .txc-meta b{color:var(--ink-2)}
+  .txc-meta b.now{color:var(--acc)}
+  .txc-vals{margin-left:auto;white-space:nowrap}
+  .txc-vals b{color:var(--ink-2)}
+  .txc-vals .now{color:var(--acc)}
+  
+  .tsec{font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin:14px 0 4px;overflow-wrap:anywhere}
+  .tsec:first-child{margin-top:2px}
+  
+  #techwrap .trow{padding:8px 0}
+  #techwrap .trow .k{width:150px}
+  #techwrap .trow .val{font-size:12px;flex:1}
+  #techwrap .trow .val i{font-style:normal;color:var(--ink-3)}
+  #techwrap .trow .val a{color:var(--acc);text-decoration:none}
+  #techwrap .trow .val a:hover{text-decoration:underline}
+  @media(max-width:860px){
+    .amt{font-size:34px;white-space:normal}
+    .txc-io{flex-direction:column}
+    .txd-arrow{transform:rotate(90deg);align-self:flex-start;margin-left:8px}
+    .txc-vals{margin-left:0;flex-basis:100%}
+  }
+  @media(max-width:520px){
+    #secttabs button{padding:8px 9px}
+  }
+</style>

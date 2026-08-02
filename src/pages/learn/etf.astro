@@ -1,0 +1,151 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin ETFs Explained: What a Spot ETF Is and What You Own - OpenBitcoin" description="What a spot bitcoin ETF is, what an ETF share actually gives you, and how it differs from holding your own keys. A properties comparison, not advice.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Bitcoin ETFs</h1>
+    <p class="doc-lede">A spot bitcoin ETF puts bitcoin exposure inside an ordinary brokerage account. What the fund actually holds, what an ETF share gives you and what it does not, and how the arrangement compares, property by property, with holding your own keys.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="et-card">
+      <div class="et-tlab">What a spot bitcoin ETF is</div>
+      <p class="et-p">A spot bitcoin ETF is a fund that holds bitcoin and issues shares that trade on a stock exchange. You buy and sell the shares through a brokerage account during market hours, the same way you would a stock. "Spot" means the fund holds the asset itself rather than futures contracts, so the share price tracks the price of the bitcoin in the fund. In the United States, spot bitcoin ETFs were approved and began trading in January 2024.</p>
+      <div class="et-chain" aria-label="Who holds what, from your shares to the coins on the chain">
+        <div class="et-node"><b>You</b><span>hold ETF shares in a brokerage account</span></div>
+        <div class="et-arrow" aria-hidden="true">&#8594;</div>
+        <div class="et-node"><b>The fund</b><span>issues the shares and owns the bitcoin</span></div>
+        <div class="et-arrow" aria-hidden="true">&#8594;</div>
+        <div class="et-node"><b>The custodian</b><span>holds the keys on the fund's behalf</span></div>
+        <div class="et-arrow" aria-hidden="true">&#8594;</div>
+        <div class="et-node"><b>The chain</b><span>records the coins like any others</span></div>
+      </div>
+      <p class="et-fine">The Bitcoin network does not know an ETF exists. The fund's coins sit at addresses controlled by its custodian, subject to the same rules as everyone else's.</p>
+    </div>
+
+    <div class="et-card et-mt">
+      <div class="et-tlab">What you own</div>
+      <p class="et-p">An ETF share is a security: a claim on a slice of the fund's assets, held for you by your broker. It gives you the price of bitcoin without ever touching bitcoin itself.</p>
+      <div class="et-rows">
+        <div class="et-row"><b>You hold</b><span>Shares in a regulated fund, sitting in your brokerage account next to your stocks. Their value rises and falls with the bitcoin the fund holds, minus the management fee that accrues over time.</span></div>
+        <div class="et-row"><b>The fund holds</b><span>The coins, through a custodian that keeps the keys. Shares are created and redeemed only by authorized participants in large blocks; ordinary investors buy and sell existing shares for cash.</span></div>
+        <div class="et-row et-cant"><b>You cannot</b><span>Withdraw the bitcoin. There is no button that converts a share into coins in your wallet; you can only sell the share for cash. No seed phrase, no addresses, nothing to send or receive.</span></div>
+      </div>
+    </div>
+
+    <div class="et-card et-mt">
+      <div class="et-tlab">ETF shares and self-custody, side by side</div>
+      <p class="et-p">These are different instruments, not a right answer and a wrong one. Each column lists what the arrangement gives you and what it asks in return.</p>
+      <div class="et-compare">
+        <div class="et-col">
+          <div class="et-clab">ETF share</div>
+          <div class="et-sub">What you get</div>
+          <ul class="et-clist">
+            <li>Buys and sells in the brokerage account you already have, alongside stocks and funds.</li>
+            <li>Familiar account statements and standard tax paperwork at year end.</li>
+            <li>Nothing to secure yourself: no seed phrase to store, lose, or have stolen.</li>
+            <li>Fits accounts that cannot hold bitcoin directly, including many retirement accounts.</li>
+          </ul>
+          <div class="et-sub et-subt">The trade</div>
+          <ul class="et-clist">
+            <li>A management fee is taken from the fund's assets continuously, whether or not you trade.</li>
+            <li>What you hold is a claim: the issuer, the custodian, and your broker all sit between you and the coins.</li>
+            <li>Shares move only during market hours, and never as bitcoin; you cannot withdraw, send, or receive coins.</li>
+          </ul>
+        </div>
+        <div class="et-col">
+          <div class="et-clab">Self-custody</div>
+          <div class="et-sub">What you get</div>
+          <ul class="et-clist">
+            <li>The coins themselves, recorded on the chain under keys only you hold.</li>
+            <li>No counterparty: no issuer, custodian, or broker whose fate is attached to yours.</li>
+            <li>No ongoing fee; you pay a network fee only when you actually transact.</li>
+            <li>Send and receive any hour of any day; the network does not close.</li>
+          </ul>
+          <div class="et-sub et-subt">The trade</div>
+          <ul class="et-clist">
+            <li>Security is your job: backups, storage, and a seed phrase nobody can reset.</li>
+            <li>No familiar wrapper; record keeping and tax reporting are on you.</li>
+            <li>Mistakes are final. There is no support desk, and a confirmed transaction cannot be reversed.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="et-note">Neither column is a recommendation. One is price exposure inside the brokerage system; the other is the asset itself, with everything that implies. The <a href="/learn/self-custody">self-custody guide</a> covers the right-hand column in depth, including the habits that make it safe.</p>
+    </div>
+
+    <div class="et-card et-mt">
+      <div class="et-tlab">Why the funds matter structurally</div>
+      <ul class="et-why">
+        <li><b>Regulated access.</b> Retirement accounts, advisors, and institutions that can only hold exchange-listed securities could not hold bitcoin before. Through the funds, they can hold its price. That widens who participates without changing how the network works.</li>
+        <li><b>Large aggregate holdings.</b> The spot funds collectively hold a large amount of bitcoin on behalf of their shareholders, and those coins are concentrated with a small number of custodians. Bitcoin held this way is custodial at scale: the shareholders own claims, the custodians hold keys.</li>
+        <li><b>The same fixed supply.</b> Fund purchases and redemptions settle against the same open market and the same cap of 21 million coins as everyone else's transactions. The wrapper is new; the asset underneath is not.</li>
+      </ul>
+    </div>
+
+    <div class="et-about doc-prose">
+      <p>A spot bitcoin ETF and a wallet answer different questions: one puts the price of bitcoin into a brokerage account, the other puts the asset itself under your own keys. This page compares their properties and is not advice to buy either instrument; see the <a href="/terms">terms</a>. For the asset underneath the wrapper, start with <a href="/learn/what-is-bitcoin">what bitcoin is</a> and the <a href="/learn/self-custody">self-custody guide</a>. The fixed supply every fund trades against is laid out on the <a href="/m2">M2 page</a>, and the full price history is on the <a href="/chart">chart</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="et-railp">A spot bitcoin ETF wraps bitcoin in a stock market share: convenient exposure to the price inside a brokerage account, with the coins held by the fund's custodian rather than by you.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/self-custody">Self-custody basics</a>
+        <a href="/m2">Bitcoin's supply vs M2</a>
+        <a href="/chart">Full price chart</a>
+        <a href="/learn">All learn guides</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .et-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .et-mt{margin-top:14px}
+  .et-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .et-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .et-chain{display:flex;align-items:stretch;gap:8px;margin-top:14px}
+  .et-node{flex:1;min-width:0;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+  .et-node b{display:block;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .et-node span{display:block;font:500 12px/1.5 var(--sans);color:var(--ink-2);margin-top:4px}
+  .et-arrow{align-self:center;font:700 15px var(--mono);color:var(--acc);flex:0 0 auto}
+  .et-fine{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin:10px 0 0}
+  .et-rows{display:grid;gap:8px;margin-top:13px}
+  .et-row{border:1px solid var(--line-2);background:var(--panel-2);border-radius:10px;padding:12px 15px}
+  .et-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .et-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .et-cant{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .et-cant b{color:var(--down)}
+  .et-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .et-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px;min-width:0}
+  .et-clab{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);padding-bottom:8px;border-bottom:1px solid var(--line-2)}
+  .et-sub{font:700 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-top:11px}
+  .et-subt{padding-top:10px;border-top:1px dotted var(--line-2)}
+  .et-clist{margin:6px 0 0;padding-left:18px}
+  .et-clist li{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .et-clist li::marker{color:var(--ink-3)}
+  .et-note{font:500 13px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .et-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .et-note a:hover{border-bottom-style:solid}
+  .et-why{margin:0;padding-left:22px}
+  .et-why li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .et-why li:first-child{margin-top:0}
+  .et-why li::marker{color:var(--acc);font-weight:700}
+  .et-why b{color:var(--ink);font-weight:600}
+  .et-about{margin-top:14px}
+  .et-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .et-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:700px){
+    .et-compare{grid-template-columns:1fr}
+    .et-chain{flex-direction:column}
+    .et-arrow{transform:rotate(90deg);align-self:flex-start;margin-left:18px}
+  }
+</style>
+</Base>

@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Bitcoin ATM Fees, Limits, and How the Machines Work - OpenBitcoin" description="How a bitcoin ATM works, what the fees really cost against the live price, the ID checks at each limit, and the coached-payment scam to avoid.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Buy bitcoin</div>
+    <h1>Bitcoin ATMs</h1>
+    <p class="doc-lede">A machine in a shop takes your cash and sends bitcoin to a wallet you control. It is the fastest physical route, works without a bank, and costs the most by far. Other routes are on the <a href="/buy">buy page</a>.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="am-steps">
+      <div class="am-step"><span class="am-sn">01</span><b>Wallet first</b><i>The address the machine pays must be yours</i></div>
+      <div class="am-step"><span class="am-sn">02</span><b>Scan</b><i>The machine reads your wallet's QR code</i></div>
+      <div class="am-step"><span class="am-sn">03</span><b>Feed cash</b><i>Bills in, counted on screen</i></div>
+      <div class="am-step"><span class="am-sn">04</span><b>Sent on-chain</b><i>Coins arrive after confirmation</i></div>
+    </div>
+
+    <div class="am-card am-mt">
+      <div class="am-chead"><span class="am-num">01</span><h2>How a machine works, step by step</h2></div>
+      <p class="am-how">The whole transaction takes a few minutes, and the only preparation that matters happens before you leave the house: have a <a href="/wallets">wallet you control</a> installed on your phone. The machine's job is to send bitcoin to whatever address it scans. If that address is yours, you just bought bitcoin. If someone else supplied it, you just gave them cash.</p>
+      <ol class="am-ol">
+        <li><b>Set up a wallet before you go.</b> Any of the phone wallets on the <a href="/wallets">wallet page</a> works. Write down the seed phrase; the machine cannot help you if you lose the phone.</li>
+        <li><b>Verify what the machine asks.</b> Small purchases usually take a phone number and a text-message code. Larger ones ask for more; the tiers are below.</li>
+        <li><b>Show your receive address.</b> Open the wallet, tap receive, and hold the QR code up to the machine's camera. Check the first and last characters of the address on the machine's screen against your wallet.</li>
+        <li><b>Feed in cash.</b> Bills only on most machines. The screen counts the total and shows the rate you are getting; read that rate before the last bill goes in, and compare it against the <a href="/price">market price</a>.</li>
+        <li><b>Confirm and keep the receipt.</b> The machine broadcasts an ordinary on-chain transaction to your address. It shows in your wallet within moments and settles after confirmation, usually inside the hour. The receipt carries the transaction ID; keep it until the coins arrive.</li>
+      </ol>
+      <p class="am-linknote">One genuine advantage over exchanges: there is no withdrawal step to forget. The coins land straight in your own wallet, which is where the <a href="/buy">buy page</a> says every purchase should end anyway. Most machines only sell bitcoin for cash; two-way machines that also buy it from you exist but are the minority.</p>
+    </div>
+
+    <div class="am-card am-mt">
+      <div class="am-chead"><span class="am-num">02</span><h2>The fee math, honestly</h2></div>
+      <p class="am-how">Machines charge in two places at once. There is a service fee, quoted as a percentage on the screen, and there is the exchange rate itself, which is set above the market price. The two stack. Published averages for machine fees commonly land between 10 and 20 percent, and some machines run higher; against an exchange charging one or two percent all-in, the same cash buys noticeably fewer coins. Here is a worked example, using a 15 percent service fee and a 5 percent rate markup, against the live market rate.</p>
+      <div class="am-rcpt" aria-label="Worked fee example for a 200 dollar bitcoin ATM purchase">
+        <div class="am-rrow"><span>Market rate right now</span><b>$<span id="am-mkt">&#8230;</span> per BTC</b></div>
+        <div class="am-rrow"><span>Machine rate, marked up 5 percent</span><b>$<span id="am-rate">&#8230;</span> per BTC</b></div>
+        <div class="am-rrow"><span>Cash you feed in</span><b>$200.00</b></div>
+        <div class="am-rrow"><span>Service fee, 15 percent</span><b>&minus; $30.00</b></div>
+        <div class="am-rrow"><span>Left to convert at the machine rate</span><b>$170.00</b></div>
+        <div class="am-rrow am-rget"><span>You receive</span><b><span id="am-recv">&#8230;</span> sats</b></div>
+        <div class="am-rrow"><span>The same $200 on a 1.5 percent exchange</span><b><span id="am-ex">&#8230;</span> sats</b></div>
+        <div class="am-rrow am-rlost"><span>Difference</span><b><span id="am-lost">&#8230;</span> sats, about $<span id="am-lostusd">&#8230;</span></b></div>
+      </div>
+      <p class="am-linknote">Work the premium through and the price cancels out: $200 for coins worth $170 at a rate 5 percent above market is an all-in cost about 23.5 percent over the market rate, whatever the day's price is. The exchange route in the same example costs about 1.5 percent. That is why the honest summary is that machines cost several times what an exchange does, and in this example the multiple is over fifteen. The on-chain network fee is usually folded into the machine's pricing, but it is one more reason small purchases hurt most; current levels are on the <a href="/fees">fee page</a>.</p>
+    </div>
+
+    <div class="am-card am-mt">
+      <div class="am-chead"><span class="am-num">03</span><h2>Identity checks rise with the amount</h2></div>
+      <p class="am-how">People assume the machine is the anonymous way to buy. It is not. Operators in most jurisdictions are regulated money services businesses, the machines carry cameras, and the checks scale with the amount. Exact thresholds vary by operator and country, but the shape is consistent:</p>
+      <div class="am-rows">
+        <div class="am-row"><b>Small amounts</b><span>A phone number and a text-message code. Typically covers purchases up to a few hundred dollars, and it already ties the buy to a number registered in your name.</span></div>
+        <div class="am-row"><b>Mid amounts</b><span>A government ID scanned at the machine, often with a selfie matched against it. The record is kept by the operator, like an exchange account.</span></div>
+        <div class="am-row"><b>Large amounts</b><span>Full registration with the operator, and sometimes questions about where the money came from. Some machines refuse large amounts entirely.</span></div>
+      </div>
+      <p class="am-linknote">So a machine offers less privacy than its reputation suggests, at a far higher price than an exchange. If reducing identity exposure is the actual goal, <a href="/learn/no-kyc">no-KYC bitcoin</a> covers what genuinely does that and what it costs; the answer is not usually a machine.</p>
+    </div>
+
+    <div class="am-card am-mt am-scam">
+      <div class="am-slab">Scam warning</div>
+      <h2 class="am-sh">If someone told you to use a bitcoin ATM, stop</h2>
+      <p class="am-how">Bitcoin ATMs are the favorite venue for coached payments. The pattern is always the same: a caller claiming to be the tax office, the police, your bank's fraud department, a utility about to cut your power, or an online romantic partner creates an emergency, keeps you on the phone, and walks you to a machine with a QR code they supplied. The moment cash goes in against their address, it is gone; on-chain transactions cannot be reversed and the operator cannot claw them back.</p>
+      <ul class="am-slist">
+        <li>No government agency, police force, utility, or bank takes payment through a bitcoin ATM. None. Ever.</li>
+        <li>If you are on the phone with someone right now while reading this at a machine, hang up and walk away. Legitimate callers do not mind.</li>
+        <li>Never deposit to a QR code from a message, an email, or another person's screen. The only address a machine should ever pay is the one in your own wallet.</li>
+      </ul>
+      <p class="am-linknote"><a href="/learn/scams">Common scams</a> covers this pattern and the others in full, including what to do if money has already been sent.</p>
+    </div>
+
+    <div class="am-card am-mt">
+      <div class="am-tlab">Find a machine</div>
+      <p class="am-how">One directory has mapped the machines for years: which operator runs each one, what it charges, and where it sits. Fees differ machine to machine even on the same street, so compare before you visit.</p>
+      
+      <div class="am-svcs">
+        <div class="am-svc">
+          <div class="am-svcm">
+            <div class="am-svct"><b><a href="https://coinatmradar.com" target="_blank" rel="noopener noreferrer">CoinATMRadar</a></b><span class="am-since">Since 2014</span></div>
+            <p class="am-svcp">The machine locator: tens of thousands of machines listed worldwide, with the operator and the fee shown for each one before you leave the house.</p>
+          </div>
+          <a class="am-open" href="https://coinatmradar.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+      </div>
+      <p class="am-linknote">Check the listed fee against the worked example above, and the quoted rate against the <a href="/price">current price</a>, before you feed the first bill.</p>
+    </div>
+
+    <div class="am-about doc-prose">
+      <p>A bitcoin ATM trades money for convenience: cash in hand becomes coins in your own wallet inside a few minutes, with no bank account and no withdrawal step, at a premium that stacks a service fee on a marked-up rate. That trade is fine to make as long as you make it knowingly. Have the <a href="/wallets">wallet</a> ready, read the machine's rate against the <a href="/price">market price</a>, and never let anyone else supply the address. If the premium is not worth it, the <a href="/buy">buy page</a> covers the cheaper routes, and <a href="/learn/no-kyc">no-KYC bitcoin</a> covers the private ones.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="am-stat"><b id="am-px">&#8230;</b><i>1 BTC</i></div>
+      <div class="am-stat"><b id="am-sats100">&#8230;</b><i>what $100 buys at market</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you feed a bill</div>
+      <ul class="am-rl">
+        <li>Have your own wallet's address ready</li>
+        <li>Read the machine's rate against the market</li>
+        <li>Add the service fee to the markup</li>
+        <li>Nobody on the phone, no supplied QR codes</li>
+        <li>Keep the printed receipt</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/buy">How to buy bitcoin</a>
+        <a href="/learn/scams">Common scams</a>
+        <a href="/fees">Current network fees</a>
+        <a href="/price">Bitcoin price</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .am-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .am-step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .am-sn{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
+  .am-step b{display:block;font:700 14px var(--sans);color:var(--ink);margin-top:5px}
+  .am-step i{display:block;font:500 11.5px/1.45 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .am-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .am-mt{margin-top:14px}
+  .am-chead{display:flex;align-items:baseline;gap:10px}
+  .am-num{font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em}
+  .am-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0}
+  .am-how{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:9px 0 0}
+  .am-how a,.am-linknote a,.am-ol a,.am-row a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .am-how a:hover,.am-linknote a:hover,.am-ol a:hover,.am-row a:hover{border-bottom-style:solid}
+  .am-ol{margin:12px 0 0;padding-left:24px}
+  .am-ol li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:9px}
+  .am-ol li::marker{color:var(--acc);font:700 12px var(--mono)}
+  .am-ol b{color:var(--ink);font-weight:600}
+  .am-linknote{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .am-rcpt{margin-top:14px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:6px 16px}
+  .am-rrow{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;border-bottom:1px dotted var(--line-2)}
+  .am-rrow:last-child{border-bottom:0}
+  .am-rrow span{font:500 13px/1.5 var(--sans);color:var(--ink-3)}
+  .am-rrow b{font:700 13.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .am-rget b{color:var(--acc)}
+  .am-rlost b{color:var(--down)}
+  .am-rows{display:grid;gap:8px;margin-top:13px}
+  .am-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .am-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .am-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .am-scam{border-color:rgba(246,70,93,.5);background:rgba(246,70,93,.05)}
+  .am-slab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--down)}
+  .am-sh{font:700 17px/1.3 var(--sans);color:var(--ink);margin:8px 0 0}
+  .am-slist{margin:11px 0 0;padding-left:22px}
+  .am-slist li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .am-slist li::marker{color:var(--down);font-weight:700}
+  .am-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .am-svcs{margin-top:6px}
+  .am-svc{display:flex;align-items:center;gap:16px;padding:13px 0 4px}
+  .am-svcm{flex:1;min-width:0}
+  .am-svct{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .am-svct b{font:700 14px var(--sans);color:var(--ink)}
+  .am-svct b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
+  .am-svct b a:hover{color:var(--acc);border-bottom-color:rgba(247,147,26,.45)}
+  .am-since{font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
+  .am-svcp{font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  .am-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    padding:10px 18px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .am-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+  .am-about{margin-top:14px}
+  .am-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .am-rl{margin:0;padding-left:16px}
+  .am-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .am-rl li:first-child{margin-top:0}
+  .am-rl li::marker{color:var(--acc)}
+  .am-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .am-stat:last-child{border-bottom:0}
+  .am-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .am-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .am-card{padding:18px 18px 20px}
+    .am-rrow{flex-wrap:wrap;gap:2px 14px}
+    .am-rrow span{flex:1 1 100%}
+    .am-svc{gap:12px}
+    .am-open{font-size:11.5px;padding:9px 13px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  var CASH=200,SVC=0.15,MARKUP=0.05,EXFEE=0.015;
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
+  function el(id){return document.getElementById(id);}
+  var px=el("am-px"),s100=el("am-sats100"),mkt=el("am-mkt"),rate=el("am-rate"),
+      recv=el("am-recv"),ex=el("am-ex"),lost=el("am-lost"),lostUsd=el("am-lostusd");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipses in place */
+    var machine=P.price*(1+MARKUP);
+    var net=CASH*(1-SVC);
+    var sats=Math.round(net/machine*1e8);
+    var exSats=Math.round(CASH*(1-EXFEE)/P.price*1e8);
+    var diff=exSats-sats;
+    if(px)px.textContent="$"+fmt(P.price,0);
+    if(s100)s100.textContent=fmt(100/P.price*1e8,0)+" sats";
+    if(mkt)mkt.textContent=fmt(P.price,0);
+    if(rate)rate.textContent=fmt(machine,0);
+    if(recv)recv.textContent=fmt(sats,0);
+    if(ex)ex.textContent=fmt(exSats,0);
+    if(lost)lost.textContent=fmt(diff,0);
+    if(lostUsd)lostUsd.textContent=fmt(diff/1e8*P.price,0);
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipses hold until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

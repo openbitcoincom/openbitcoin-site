@@ -1,0 +1,1018 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Bitcoin Payment QR Code Generator - OpenBitcoin" description="Make a scannable bitcoin payment QR code in your browser: the address checksum is verified, and amount and label are optional. Nothing is sent.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Payment QR</div>
+    <h1>Bitcoin payment QR code</h1>
+    <p class="doc-lede">Turn an address into a scannable payment code. The checksum is verified first, the amount is optional and in BTC, and the code is drawn in your browser. Nothing you type is sent anywhere.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="tq-card">
+      <div class="tq-lab">Receiving address</div>
+      <input id="tq-addr" class="tq-input" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="bc1q... / bc1p... / 3... / 1..." aria-label="Receiving bitcoin address">
+      <div class="tq-ex" aria-label="Example addresses">
+        <span>Try:</span>
+        <button type="button" data-ex="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4">segwit</button>
+        <button type="button" data-ex="bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0">taproot</button>
+        <button type="button" data-ex="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa">legacy</button>
+      </div>
+
+      <div class="tq-two">
+        <div class="tq-field">
+          <div class="tq-lab">Amount <i>optional, in BTC</i></div>
+          <div class="tq-wrap">
+            <input id="tq-amt" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0.00000000" aria-label="Amount in bitcoin">
+            <span>BTC</span>
+          </div>
+          <div class="tq-hint" id="tq-amthint">Leave it blank to let the payer choose the amount.</div>
+        </div>
+        <div class="tq-field">
+          <div class="tq-lab">Label <i>optional</i></div>
+          <div class="tq-wrap">
+            <input id="tq-label" maxlength="50" autocomplete="off" spellcheck="false" placeholder="Invoice 104" aria-label="Label shown by the payer's wallet">
+          </div>
+          <div class="tq-hint" id="tq-lhint">Some wallets show this next to the payment. Keep it short and public.</div>
+        </div>
+      </div>
+
+      <label class="tq-bare-row">
+        <input type="checkbox" id="tq-bare">
+        <span>Encode the address only, without the <code>bitcoin:</code> prefix</span>
+      </label>
+      <div class="tq-hint tq-bare-hint tq-hide" id="tq-barehint">Address-only mode: the amount and label ride in the bitcoin: format, so they are ignored while this is on.</div>
+
+      <div class="tq-stage" role="status" aria-live="polite">
+        <div class="tq-status tq-mut" id="tq-status">Waiting for an address</div>
+        <div class="tq-badges tq-hide" id="tq-badges"></div>
+        <div class="tq-plate tq-hide" id="tq-plate">
+          <canvas id="tq-cv" role="img" aria-label="Payment QR code"></canvas>
+        </div>
+        <div class="tq-echowrap tq-hide" id="tq-echowrap">
+          <div class="tq-echolab">Encoded address</div>
+          <div class="tq-echo" id="tq-echo"></div>
+          <div class="tq-echonote">Read this against the address you were given, character for character, before anyone scans it.</div>
+        </div>
+        <div class="tq-note" id="tq-note">Paste the address you want paid. Legacy (1...), script hash (3...), native segwit (bc1q...) and taproot (bc1p...) are all supported.</div>
+      </div>
+
+      <div class="tq-uriwrap tq-hide" id="tq-uriwrap">
+        <div class="tq-lab" id="tq-urilab">BIP-21 URI in the code</div>
+        <div class="tq-uri" id="tq-uri"></div>
+        <div class="tq-acts">
+          <button type="button" id="tq-copy">Copy URI</button>
+          <button type="button" id="tq-png">Download PNG</button>
+        </div>
+      </div>
+
+      <p class="tq-priv">The code is drawn by arithmetic in this page; the address, amount and label are never sent anywhere. This page makes no network requests with what you type.</p>
+    </div>
+
+    <div class="doc-card tq-mt">
+      <div class="doc-sec doc-prose">
+        <h2>A QR code is unreadable to you, so check the text</h2>
+        <p>Nobody can look at a grid of squares and tell whose address is inside it. That gap is exactly where address swapping lives: clipboard malware that rewrites an address between copy and paste, a compromised page that renders someone else's code, a screenshot passed along and quietly edited. The defence is boringly effective. Compare the address echoed under the code against the address from its original source, character by character, paying attention to the middle and not only the ends, since a swapped address is usually chosen to match the first and last few characters. Then have the payer check the address their wallet displays after scanning, before they confirm. Two independent looks at the same string beat any amount of trust in the image. To check an address on its own first, use the <a href="/tools/validate">address validator</a>.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The amount is optional, and it is in bitcoin</h2>
+        <p>The amount field writes a BIP-21 <code>amount=</code> parameter into the URI, and that parameter is defined in BTC, never in dollars, pounds or any other currency. A code carrying <code>amount=0.001</code> asks for one hundred thousand satoshis whatever the exchange rate does between now and the moment it is scanned. That is a feature for an invoice you expect paid in minutes and a trap for a code printed on a sign and left up for a month, because the bitcoin figure will not move with the price. Leaving the amount blank is the honest choice for a tip jar or a donation page: the payer types what they mean to send. The dollar figure this page shows beside the amount is a sanity check against a misplaced decimal point and is not encoded; to work in the other direction, <a href="/convert">convert between BTC and fiat</a> first, then enter the bitcoin amount here.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>One address, one payment</h2>
+        <p>Every address you hand out is a public label, and the chain remembers every payment made to it forever. Reuse the same address across a dozen invoices and anyone can total them, watch the balance, and tie the lot to whoever learns the address once. Reuse it in public, on a website or a printed sign, and you have published a running account statement to the world. Take a fresh receiving address from your wallet for every payment instead; wallets generate them endlessly and for free, which is the entire point of the design. If a code has to stay up permanently, understand you are trading privacy for convenience and keep the amounts small. <a href="/learn/privacy">Bitcoin privacy</a> covers what an observer can piece together from a reused address, and what it costs you.</p>
+      </div>
+    </div>
+
+    <div class="tq-about doc-prose">
+      <p>The URI format is BIP-21: the scheme <code>bitcoin:</code>, the address, then optional <code>amount</code> and <code>label</code> parameters. Wallets that do not understand the parameters fall back to reading the address alone, so a code built here still works in older software. The address is checked before anything is drawn, using the same arithmetic as the <a href="/tools/validate">validator</a>: the BCH checksum from BIP-173 and BIP-350 for bech32 and bech32m, and the double SHA-256 checksum for base58. A valid checksum proves an address is well formed, never that it belongs to who you think it does, which is why the address is echoed in full under the code. Figures and tools here are informational under the <a href="/terms">terms</a>; data provenance for the rest of the site is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">This code</div>
+      <div class="tq-stat"><b id="tq-sv">none yet</b><i>QR version</i></div>
+      <div class="tq-stat"><b id="tq-ss">none yet</b><i>modules</i></div>
+      <div class="tq-stat"><b id="tq-sb">none yet</b><i>bytes encoded</i></div>
+      <div class="tq-stat"><b>M</b><i>error correction, about 15% recoverable</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">In the URI</div>
+      <div class="tq-t"><b>address</b><i>The only required part. Everything else is a hint the wallet may ignore.</i></div>
+      <div class="tq-t"><b>amount</b><i>Decimal BTC, up to eight places. Not a fiat figure.</i></div>
+      <div class="tq-t"><b>label</b><i>Free text shown to the payer. Assume it is public.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/validate">Check an address</a>
+        <a href="/convert">Convert BTC and fiat</a>
+        <a href="/learn/privacy">Bitcoin privacy</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .tq-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .tq-mt{margin-top:14px}
+  .tq-hide{display:none !important}
+  .tq-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .tq-lab i{font-style:normal;color:var(--ink-3);opacity:.75;letter-spacing:.1em;margin-left:6px}
+  .tq-input{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 16.5px var(--mono);padding:13px 15px;outline:none}
+  .tq-input:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .tq-input::placeholder{color:var(--ph);font-weight:600}
+  .tq-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .tq-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .tq-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .tq-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink)}
+  .tq-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:18px}
+  .tq-field{min-width:0}
+  .tq-wrap{display:flex;align-items:center;gap:8px;background:var(--field);border:1px solid var(--line-2);
+    border-radius:10px;padding:0 13px}
+  .tq-wrap:focus-within{border-color:rgba(255,166,60,.55)}
+  .tq-wrap.is-bad{border-color:var(--down)}
+  .tq-wrap input{width:100%;min-width:0;background:none;border:0;outline:none;color:var(--price-ink);
+    font:700 15px var(--mono);font-variant-numeric:tabular-nums;padding:11px 0}
+  .tq-wrap input::placeholder{color:var(--ph);font-weight:600}
+  .tq-wrap span{font:700 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);flex:none}
+  .tq-hint{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin-top:7px}
+  .tq-bare-row{display:flex;align-items:center;gap:9px;margin-top:14px;cursor:pointer;
+    font:600 12.5px/1.5 var(--sans);color:var(--ink-2)}
+  .tq-bare-row input{width:15px;height:15px;accent-color:var(--orange);cursor:pointer}
+  .tq-bare-row code{font:700 12px var(--mono);color:var(--acc)}
+  .tq-bare-hint{margin-top:5px;padding-left:24px}
+  .tq-field input:disabled{opacity:.45;cursor:not-allowed}
+  .tq-hint.is-bad{color:var(--down)}
+  .tq-stage{margin-top:18px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .tq-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .tq-status.tq-ok{color:var(--up)}
+  .tq-status.tq-bad{color:var(--down)}
+  .tq-status.tq-mut{color:var(--ink-3)}
+  .tq-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .tq-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .tq-badges span.tq-warn{border:1px solid var(--down);color:var(--down);background:rgba(246,70,93,.1)}
+  .tq-plate{margin-top:14px;display:flex;justify-content:center;background:#FFFFFF;border:1px solid var(--line-2);
+    border-radius:12px;padding:10px}
+  .tq-plate canvas{display:block;max-width:100%;height:auto}
+  .tq-echowrap{margin-top:14px}
+  .tq-echolab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  .tq-echo{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;
+    font:700 17px/1.6 var(--mono);color:var(--ink);word-break:break-all;letter-spacing:.4px}
+  .tq-echo b{color:var(--acc)}
+  .tq-echonote{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin-top:7px}
+  .tq-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:10px}
+  .tq-uriwrap{margin-top:18px;padding-top:16px;border-top:1px dotted var(--line-2)}
+  .tq-uri{background:var(--field);border:1px solid var(--line-2);border-radius:8px;padding:11px 13px;
+    font:600 13px/1.65 var(--mono);color:var(--ink-2);word-break:break-all}
+  .tq-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .tq-acts button{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;cursor:pointer}
+  .tq-acts button:hover{color:var(--acc);border-color:rgba(255,166,60,.5)}
+  .tq-priv{font:600 11px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:16px 0 0}
+  .tq-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:7px 0 0}
+  .tq-about{margin-top:14px}
+  .tq-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .tq-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .tq-stat:last-child{border-bottom:0}
+  .tq-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .tq-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .tq-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .tq-t:last-child{border-bottom:0}
+  .tq-t b{display:block;font:700 13px var(--mono);color:var(--acc)}
+  .tq-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .tq-card{padding:18px 18px 20px}
+    .tq-two{grid-template-columns:minmax(0,1fr)}
+    .tq-input{font-size:13.5px}
+    .tq-echo{font-size:15px}
+    .tq-acts button{flex:1 1 auto;text-align:center}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* =====================================================================
+     /tools/qr
+
+     Everything here is local arithmetic. There is no fetch, no XHR, no
+     beacon and no image load anywhere in this file: the zero-network
+     claim printed on the page depends on that staying true. crypto.subtle
+     .digest is local math, not a request.
+
+     ---------------------------------------------------------------------
+     TEST VECTORS. selftest() runs all of these on load, logs a pass/fail
+     line to the console, and if anything fails the tool refuses to draw a
+     code and shows a "self-test failed" state instead of a wrong one.
+
+     QR tables (a wrong entry in TOTAL, ECPB or NBLK shows up here)
+       Byte-mode capacity, EC level M, versions 1..10, published table:
+         14 26 42 62 84 106 122 152 180 213
+       Data codewords, EC level M, versions 1..10, published table:
+         16 28 44 64 86 108 124 154 182 216
+       Both are recomputed from TOTAL/ECPB/NBLK and compared.
+
+     Reed-Solomon over GF(256), primitive polynomial 0x11D
+       gfMul(0x80, 0x02) = 0x1D          x^8 reduces to x^4+x^3+x^2+1
+       ISO/IEC 18004 annex I worked example, version 1-M, "01234567":
+         data 10 20 0C 56 61 80 EC 11 EC 11 EC 11 EC 11 EC 11
+         ecc  A5 24 D4 C1 ED 36 C7 87 2C 55
+
+     Format information, BCH(15,5) generator 0x537, masked with 0x5412
+       level M, mask 0 -> 101010000010010
+       level M, mask 4 -> 100010111111001
+
+     Version information, BCH(18,6) generator 0x1F25
+       version 7 -> 000111110010010100
+
+     Placement round trip
+       A sample URI is encoded, then the finished matrix is read back
+       through the inverse of the mask and the inverse of the zigzag scan
+       and compared with the codewords that were placed. This catches
+       reserved-area, mask and scan-order mistakes that the table vectors
+       above cannot see.
+
+     bech32 / bech32m, BIP-173 and BIP-350
+       bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4                     valid P2WPKH
+       bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0 valid P2TR
+       bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5                     invalid, v0 with the bech32m constant
+
+     base58check, double SHA-256 via crypto.subtle
+       1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa   valid P2PKH, the genesis address
+       3P14159f73E4gFr7JterCCQh9QjiTjiZrG   valid P2SH
+       1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb   invalid checksum
+     ===================================================================== */
+
+  /* ---------------- bech32 / bech32m (BIP-173 / BIP-350) ---------------- */
+  var CS="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+  var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+  function polymod(v){
+    var chk=1,i,j,top;
+    for(i=0;i<v.length;i++){
+      top=chk>>>25;chk=((chk&0x1ffffff)<<5)^v[i];
+      for(j=0;j<5;j++)if((top>>>j)&1)chk^=GEN[j];
+    }
+    return chk>>>0;
+  }
+  function hrpExpand(h){
+    var r=[],i;
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)>>5);
+    r.push(0);
+    for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)&31);
+    return r;
+  }
+  function convert5to8(d){
+    var acc=0,bits=0,out=[],i;
+    for(i=0;i<d.length;i++){
+      acc=(acc<<5)|d[i];bits+=5;
+      while(bits>=8){bits-=8;out.push((acc>>bits)&255);}
+    }
+    if(bits>=5||((acc<<(8-bits))&255))return null;
+    return out;
+  }
+  function bech32Check(a){
+    if(a.length>90)return null;
+    var pos=a.lastIndexOf("1");
+    if(pos<1||pos+7>a.length)return null;
+    var hrp=a.slice(0,pos);
+    if(hrp!=="bc"&&hrp!=="tb"&&hrp!=="bcrt")return null;
+    var data=[],i,d;
+    for(i=pos+1;i<a.length;i++){
+      d=CS.indexOf(a[i]);
+      if(d<0)return null;
+      data.push(d);
+    }
+    var pm=polymod(hrpExpand(hrp).concat(data));
+    var enc=pm===1?"bech32":(pm===0x2bc830a3?"bech32m":null);
+    if(!enc)return null;
+    var ver=data[0];
+    if(ver>16)return null;
+    if(ver===0&&enc!=="bech32")return null;
+    if(ver>0&&enc!=="bech32m")return null;
+    var prog=convert5to8(data.slice(1,data.length-6));
+    if(!prog||prog.length<2||prog.length>40)return null;
+    if(ver===0&&prog.length!==20&&prog.length!==32)return null;
+    var type=ver===0?(prog.length===20?"P2WPKH":"P2WSH")
+            :(ver===1&&prog.length===32)?"P2TR"
+            :"witness v"+ver;
+    return {enc:enc,type:type,net:hrp==="bc"?"mainnet":(hrp==="tb"?"testnet":"regtest")};
+  }
+
+  /* ---------------------------- base58check ---------------------------- */
+  var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  function b58decode(s){
+    if(!s.length||s.length>40)return null;
+    var bytes=[0],i,j,v,carry,x;
+    for(i=0;i<s.length;i++){
+      v=B58.indexOf(s[i]);
+      if(v<0)return null;
+      carry=v;
+      for(j=0;j<bytes.length;j++){
+        x=bytes[j]*58+carry;
+        bytes[j]=x&255;carry=x>>8;
+      }
+      while(carry){bytes.push(carry&255);carry>>=8;}
+    }
+    for(i=0;i<s.length&&s[i]==="1";i++)bytes.push(0);
+    return bytes.reverse();
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",new Uint8Array(bytes)).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+  var B58VER={0:["P2PKH","mainnet"],5:["P2SH","mainnet"],111:["P2PKH","testnet"],196:["P2SH","testnet"]};
+  function b58Check(s){
+    var bytes=b58decode(s);
+    if(!bytes||bytes.length!==25||!B58VER[bytes[0]])return Promise.resolve(null);
+    return sha256d(bytes.slice(0,21)).then(function(h){
+      for(var i=0;i<4;i++)if(h[i]!==bytes[21+i])return null;
+      return {enc:"base58check",type:B58VER[bytes[0]][0],net:B58VER[bytes[0]][1]};
+    });
+  }
+
+  /* ====================== QR ENCODER: byte mode, EC level M ============= */
+  /* Versions 1 to 10 only, which is far more than a BIP-21 URI ever needs.
+     Total codewords per version, EC codewords per block at level M, and the
+     block count per version at level M. All three are cross-checked on load
+     against the two published capacity tables quoted at the top of this
+     file, so none of them can drift silently. */
+  var TOTAL=[0,26,44,70,100,134,172,196,242,292,346];
+  var ECPB =[0,10,16,26, 18, 24, 16, 18, 22, 22, 26];
+  var NBLK =[0, 1, 1, 1,  2,  2,  4,  4,  4,  5,  5];
+  var ALIGN=[[],[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50]];
+  var MAXV=10;
+
+  function dataCodewords(v){return TOTAL[v]-ECPB[v]*NBLK[v];}
+  function cciBits(v){return v<10?8:16;}                 /* character count indicator */
+  function capacity(v){return Math.floor((dataCodewords(v)*8-4-cciBits(v))/8);}
+
+  /* GF(256) multiply, primitive polynomial 0x11D. Russian peasant, bit by
+     bit, so there is no log table to get wrong. z never leaves eight bits:
+     the shift only sets bit 8 when z was at least 0x80, and 0x11D also has
+     bit 8 set, so the exclusive or clears it again. */
+  function gfMul(x,y){
+    var z=0,i;
+    for(i=7;i>=0;i--){
+      z=(z<<1)^((z>>>7)*0x11D);
+      z^=((y>>>i)&1)*x;
+    }
+    return z;
+  }
+  /* Reed-Solomon divisor polynomial of the given degree: the product of
+     (x - 2^i) for i in 0..degree-1, coefficients from second-highest term
+     down to the constant term. */
+  function rsDivisor(degree){
+    var r=[],i,j;
+    for(i=0;i<degree-1;i++)r.push(0);
+    r.push(1);
+    var root=1;
+    for(i=0;i<degree;i++){
+      for(j=0;j<r.length;j++){
+        r[j]=gfMul(r[j],root);
+        if(j+1<r.length)r[j]^=r[j+1];
+      }
+      root=gfMul(root,2);
+    }
+    return r;
+  }
+  function rsRemainder(data,div){
+    var r=[],i,j;
+    for(i=0;i<div.length;i++)r.push(0);
+    for(i=0;i<data.length;i++){
+      var factor=data[i]^r.shift();
+      r.push(0);
+      for(j=0;j<div.length;j++)r[j]^=gfMul(div[j],factor);
+    }
+    return r;
+  }
+
+  /* Data codewords for a byte-mode message at the smallest version that
+     fits. Returns null when the message is too long for version 10. */
+  function makeDataCodewords(bytes){
+    var v=0,i;
+    for(i=1;i<=MAXV;i++){if(bytes.length<=capacity(i)){v=i;break;}}
+    if(!v)return null;
+    var cap=dataCodewords(v)*8,bb=[];
+    function put(val,len){var k;for(k=len-1;k>=0;k--)bb.push((val>>>k)&1);}
+    put(4,4);                       /* mode indicator 0100 = byte mode */
+    put(bytes.length,cciBits(v));
+    for(i=0;i<bytes.length;i++)put(bytes[i],8);
+    for(i=0;i<4&&bb.length<cap;i++)bb.push(0);   /* terminator */
+    while(bb.length%8!==0)bb.push(0);            /* to a byte boundary */
+    var pad=[0xEC,0x11],p=0;
+    while(bb.length<cap){put(pad[p&1],8);p++;}   /* pad codewords */
+    var out=[],j,b;
+    for(i=0;i<bb.length;i+=8){
+      b=0;
+      for(j=0;j<8;j++)b=(b<<1)|bb[i+j];
+      out.push(b);
+    }
+    return {v:v,data:out};
+  }
+
+  /* Split into blocks, append the EC codewords to each block, then
+     interleave block by block. Short blocks carry a padding byte during the
+     interleave that is skipped on the way out. */
+  function interleave(v,data){
+    var nb=NBLK[v],ecLen=ECPB[v],raw=TOTAL[v];
+    var shortLen=Math.floor(raw/nb),nShort=nb-(raw%nb);
+    var div=rsDivisor(ecLen),blocks=[],i,k=0;
+    for(i=0;i<nb;i++){
+      var take=shortLen-ecLen+(i<nShort?0:1);
+      var dat=data.slice(k,k+take);k+=take;
+      var ecc=rsRemainder(dat,div);
+      var blk=dat.slice();
+      if(i<nShort)blk.push(0);
+      blocks.push(blk.concat(ecc));
+    }
+    var out=[],j;
+    for(i=0;i<blocks[0].length;i++){
+      for(j=0;j<nb;j++){
+        if(i!==shortLen-ecLen||j>=nShort)out.push(blocks[j][i]);
+      }
+    }
+    return out;
+  }
+
+  function gb(x,i){return ((x>>>i)&1)!==0;}
+  function formatBits(mask){                  /* EC level M is 00 */
+    var d=(0<<3)|mask,rem=d,i;
+    for(i=0;i<10;i++)rem=(rem<<1)^((rem>>>9)*0x537);
+    return (((d<<10)|rem)^0x5412)&0x7FFF;
+  }
+  function versionBits(v){
+    var rem=v,i;
+    for(i=0;i<12;i++)rem=(rem<<1)^((rem>>>11)*0x1F25);
+    return ((v<<12)|rem)&0x3FFFF;
+  }
+  function maskBit(m,x,y){
+    switch(m){
+      case 0: return ((x+y)%2)===0;
+      case 1: return (y%2)===0;
+      case 2: return (x%3)===0;
+      case 3: return ((x+y)%3)===0;
+      case 4: return ((Math.floor(x/3)+Math.floor(y/2))%2)===0;
+      case 5: return (((x*y)%2)+((x*y)%3))===0;
+      case 6: return ((((x*y)%2)+((x*y)%3))%2)===0;
+      default:return (((((x+y)%2))+((x*y)%3))%2)===0;
+    }
+  }
+
+  function buildMatrix(v,inter){
+    var size=v*4+17,mods=[],fn=[],y,x,i,j;
+    for(y=0;y<size;y++){
+      mods.push([]);fn.push([]);
+      for(x=0;x<size;x++){mods[y].push(0);fn[y].push(0);}
+    }
+    function setF(x,y,d){
+      if(x<0||y<0||x>=size||y>=size)return;
+      mods[y][x]=d?1:0;fn[y][x]=1;
+    }
+    /* Timing patterns first, across the whole row 6 and column 6. The finder
+       patterns are drawn second and deliberately overwrite the stretch of
+       timing that runs through them: inside a finder, row 6 and column 6
+       belong to the finder, not to the timing line. Drawing these two the
+       other way round leaves three malformed finders and a code that most
+       scanners refuse. */
+    for(i=0;i<size;i++){setF(6,i,i%2===0);setF(i,6,i%2===0);}
+    /* finder patterns, with their separators drawn by the same loop */
+    function finder(cx,cy){
+      var dx,dy,d;
+      for(dy=-4;dy<=4;dy++)for(dx=-4;dx<=4;dx++){
+        d=Math.max(Math.abs(dx),Math.abs(dy));
+        setF(cx+dx,cy+dy,d!==2&&d!==4);
+      }
+    }
+    finder(3,3);finder(size-4,3);finder(3,size-4);
+    /* alignment patterns, skipping the three finder corners */
+    var ap=ALIGN[v],n=ap.length,a,b,dx,dy;
+    for(a=0;a<n;a++)for(b=0;b<n;b++){
+      if((a===0&&b===0)||(a===0&&b===n-1)||(a===n-1&&b===0))continue;
+      for(dy=-2;dy<=2;dy++)for(dx=-2;dx<=2;dx++)
+        setF(ap[a]+dx,ap[b]+dy,Math.max(Math.abs(dx),Math.abs(dy))!==1);
+    }
+    function drawFormat(mask){
+      var bits=formatBits(mask),k;
+      for(k=0;k<=5;k++)setF(8,k,gb(bits,k));
+      setF(8,7,gb(bits,6));
+      setF(8,8,gb(bits,7));
+      setF(7,8,gb(bits,8));
+      for(k=9;k<15;k++)setF(14-k,8,gb(bits,k));
+      for(k=0;k<8;k++)setF(size-1-k,8,gb(bits,k));
+      for(k=8;k<15;k++)setF(8,size-15+k,gb(bits,k));
+      setF(8,size-8,1);            /* the always dark module */
+    }
+    function drawVersion(){
+      if(v<7)return;
+      var bits=versionBits(v),k,bit,aa,bbv;
+      for(k=0;k<18;k++){
+        bit=gb(bits,k);aa=size-11+(k%3);bbv=Math.floor(k/3);
+        setF(aa,bbv,bit);setF(bbv,aa,bit);
+      }
+    }
+    drawFormat(0);                 /* reserve the format areas */
+    drawVersion();
+
+    /* zigzag data placement, two columns at a time, skipping column 6 */
+    var idx=0,total=inter.length*8,right,vert,xx,yy,up;
+    for(right=size-1;right>=1;right-=2){
+      if(right===6)right=5;
+      for(vert=0;vert<size;vert++){
+        for(j=0;j<2;j++){
+          xx=right-j;up=((right+1)&2)===0;yy=up?size-1-vert:vert;
+          if(!fn[yy][xx]&&idx<total){
+            mods[yy][xx]=(inter[idx>>>3]>>>(7-(idx&7)))&1;
+            idx++;
+          }
+        }
+      }
+    }
+    /* Any module left over is a remainder bit and stays light, which is what
+       the specification asks for. */
+
+    function applyMask(m){
+      for(y=0;y<size;y++)for(x=0;x<size;x++)
+        if(!fn[y][x]&&maskBit(m,x,y))mods[y][x]^=1;
+    }
+    function penalty(){
+      var p=0,run,c,dark=0,s,k,seg;
+      for(y=0;y<size;y++){
+        run=1;
+        for(x=1;x<size;x++){
+          if(mods[y][x]===mods[y][x-1]){run++;if(run===5)p+=3;else if(run>5)p+=1;}
+          else run=1;
+        }
+      }
+      for(x=0;x<size;x++){
+        run=1;
+        for(y=1;y<size;y++){
+          if(mods[y][x]===mods[y-1][x]){run++;if(run===5)p+=3;else if(run>5)p+=1;}
+          else run=1;
+        }
+      }
+      for(y=0;y<size-1;y++)for(x=0;x<size-1;x++){
+        c=mods[y][x];
+        if(c===mods[y][x+1]&&c===mods[y+1][x]&&c===mods[y+1][x+1])p+=3;
+      }
+      function scan(line){
+        var t=0,q;
+        for(q=0;q+11<=line.length;q++){
+          seg=line.substr(q,11);
+          if(seg==="10111010000"||seg==="00001011101")t+=40;
+        }
+        return t;
+      }
+      for(y=0;y<size;y++){s="";for(x=0;x<size;x++)s+=mods[y][x];p+=scan(s);}
+      for(x=0;x<size;x++){s="";for(y=0;y<size;y++)s+=mods[y][x];p+=scan(s);}
+      for(y=0;y<size;y++)for(x=0;x<size;x++)if(mods[y][x])dark++;
+      k=Math.floor(Math.abs((dark*100/(size*size))-50)/5);
+      return p+k*10;
+    }
+    /* Mask choice is a readability heuristic: any of the eight produces a
+       valid code, the scored one just prints and scans best. */
+    var best=0,bestScore=Infinity,m,sc;
+    for(m=0;m<8;m++){
+      applyMask(m);drawFormat(m);
+      sc=penalty();
+      if(sc<bestScore){bestScore=sc;best=m;}
+      applyMask(m);                /* mask is its own inverse */
+    }
+    applyMask(best);drawFormat(best);
+    return {size:size,mods:mods,fn:fn,mask:best,v:v};
+  }
+
+  /* Inverse of placement plus mask: used only by the self-test. */
+  function readBack(m){
+    var size=m.size,g=[],y,x,j,bits=[],out=[],i,k;
+    for(y=0;y<size;y++){
+      g.push([]);
+      for(x=0;x<size;x++)
+        g[y].push(m.fn[y][x]?m.mods[y][x]:(m.mods[y][x]^(maskBit(m.mask,x,y)?1:0)));
+    }
+    var right,vert,xx,yy,up;
+    for(right=size-1;right>=1;right-=2){
+      if(right===6)right=5;
+      for(vert=0;vert<size;vert++){
+        for(j=0;j<2;j++){
+          xx=right-j;up=((right+1)&2)===0;yy=up?size-1-vert:vert;
+          if(!m.fn[yy][xx])bits.push(g[yy][xx]);
+        }
+      }
+    }
+    for(i=0;i+8<=bits.length;i+=8){
+      var b=0;
+      for(k=0;k<8;k++)b=(b<<1)|bits[i+k];
+      out.push(b);
+    }
+    return out;
+  }
+
+  /* ASCII only: a BIP-21 URI is percent-encoded before it gets here. */
+  function asciiBytes(s){
+    var out=[],i,c;
+    for(i=0;i<s.length;i++){
+      c=s.charCodeAt(i);
+      if(c>127)return null;
+      out.push(c);
+    }
+    return out;
+  }
+  function qrEncode(text){
+    var bytes=asciiBytes(text);
+    if(!bytes)return null;
+    var d=makeDataCodewords(bytes);
+    if(!d)return null;
+    var inter=interleave(d.v,d.data);
+    var m=buildMatrix(d.v,inter);
+    m.bytes=bytes.length;m.inter=inter;
+    return m;
+  }
+
+  /* ============================== SELF-TEST ============================= */
+  var CAP_M=[14,26,42,62,84,106,122,152,180,213];
+  var DCW_M=[16,28,44,64,86,108,124,154,182,216];
+  function hexList(a){
+    return a.map(function(x){return (x<16?"0":"")+x.toString(16);}).join(" ").toUpperCase();
+  }
+  /* a structural check inside a nested loop can report the same fault many
+     times over; the console line only needs it once */
+  function dedupe(a){
+    var seen={},out=[],i;
+    for(i=0;i<a.length;i++)if(!seen[a[i]]){seen[a[i]]=1;out.push(a[i]);}
+    return out;
+  }
+  function selftest(){
+    var fails=[],i;
+    /* 1. tables against the two published capacity tables */
+    for(i=1;i<=MAXV;i++){
+      if(dataCodewords(i)!==DCW_M[i-1])fails.push("data codewords v"+i);
+      if(capacity(i)!==CAP_M[i-1])fails.push("byte capacity v"+i);
+    }
+    /* 2. GF(256) multiply */
+    if(gfMul(0x80,0x02)!==0x1D)fails.push("gfMul 0x80*2");
+    if(gfMul(0,0x5A)!==0||gfMul(1,0x5A)!==0x5A)fails.push("gfMul identities");
+    /* 3. Reed-Solomon, ISO/IEC 18004 annex I */
+    var annexData=[0x10,0x20,0x0C,0x56,0x61,0x80,0xEC,0x11,0xEC,0x11,0xEC,0x11,0xEC,0x11,0xEC,0x11];
+    var annexEcc="A5 24 D4 C1 ED 36 C7 87 2C 55";
+    if(hexList(rsRemainder(annexData,rsDivisor(10)))!==annexEcc)fails.push("reed-solomon annex I");
+    /* 4. format information */
+    if(formatBits(0)!==parseInt("101010000010010",2))fails.push("format bits M mask 0");
+    if(formatBits(4)!==parseInt("100010111111001",2))fails.push("format bits M mask 4");
+    /* 5. version information */
+    if(versionBits(7)!==parseInt("000111110010010100",2))fails.push("version bits v7");
+    /* 6. placement round trip and function patterns, on a small code and on
+       one past version 7 so the version information blocks are exercised */
+    ["bitcoin:bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4?amount=0.001",
+     new Array(123).join("x")].forEach(function(probeText,pi){
+      var probe=qrEncode(probeText),tag=" (probe "+pi+")";
+      if(!probe){fails.push("probe encode"+tag);return;}
+      var size=probe.size,k,r,c;
+      if(size!==probe.v*4+17){fails.push("matrix size"+tag);return;}
+      if(probe.inter.length!==TOTAL[probe.v])fails.push("interleaved length"+tag);
+      /* the placed codewords must come back out of the finished matrix */
+      var back=readBack(probe),ok=back.length>=probe.inter.length;
+      for(k=0;ok&&k<probe.inter.length;k++)if(back[k]!==probe.inter[k])ok=false;
+      if(!ok)fails.push("placement round trip"+tag);
+      /* all three finders, in full, including the row and column that the
+         timing patterns run through */
+      var FIND=[[1,1,1,1,1,1,1],[1,0,0,0,0,0,1],[1,0,1,1,1,0,1],
+                [1,0,1,1,1,0,1],[1,0,1,1,1,0,1],[1,0,0,0,0,0,1],[1,1,1,1,1,1,1]];
+      [[0,0],[size-7,0],[0,size-7]].forEach(function(o){
+        for(r=0;r<7;r++)for(c=0;c<7;c++)
+          if(probe.mods[o[1]+r][o[0]+c]!==FIND[r][c])fails.push("finder pattern"+tag);
+      });
+      /* separators, then the timing patterns between them */
+      for(k=0;k<8;k++){
+        if(probe.mods[7][k]||probe.mods[k][7]||probe.mods[7][size-1-k]||
+           probe.mods[k][size-8]||probe.mods[size-8][k]||probe.mods[size-1-k][7])
+          fails.push("finder separator"+tag);
+      }
+      for(k=8;k<size-8;k++){
+        if(probe.mods[6][k]!==(k%2===0?1:0)||probe.mods[k][6]!==(k%2===0?1:0))
+          fails.push("timing pattern"+tag);
+      }
+      /* alignment patterns, and the version blocks once past version 7 */
+      var ap=ALIGN[probe.v],n=ap.length,a,b;
+      var AL=[[1,1,1,1,1],[1,0,0,0,1],[1,0,1,0,1],[1,0,0,0,1],[1,1,1,1,1]];
+      for(a=0;a<n;a++)for(b=0;b<n;b++){
+        if((a===0&&b===0)||(a===0&&b===n-1)||(a===n-1&&b===0))continue;
+        for(r=0;r<5;r++)for(c=0;c<5;c++)
+          if(probe.mods[ap[b]-2+r][ap[a]-2+c]!==AL[r][c])fails.push("alignment pattern"+tag);
+      }
+      if(probe.v>=7){
+        var want=versionBits(probe.v),g1=0,g2=0;
+        for(k=0;k<18;k++){
+          g1|=probe.mods[Math.floor(k/3)][size-11+(k%3)]<<k;
+          g2|=probe.mods[size-11+(k%3)][Math.floor(k/3)]<<k;
+        }
+        if(g1!==want||g2!==want)fails.push("version blocks"+tag);
+      }
+      /* both copies of the format information, and the always dark module */
+      var wf=formatBits(probe.mask),f1=0,f2=0;
+      for(k=0;k<=5;k++)f1|=probe.mods[k][8]<<k;
+      f1|=probe.mods[7][8]<<6;f1|=probe.mods[8][8]<<7;f1|=probe.mods[8][7]<<8;
+      for(k=9;k<15;k++)f1|=probe.mods[8][14-k]<<k;
+      for(k=0;k<8;k++)f2|=probe.mods[8][size-1-k]<<k;
+      for(k=8;k<15;k++)f2|=probe.mods[size-15+k][8]<<k;
+      if(f1!==wf||f2!==wf)fails.push("format blocks"+tag);
+      if(!probe.mods[size-8][8])fails.push("dark module"+tag);
+    });
+    /* 7. bech32 and bech32m */
+    if(!bech32Check("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"))fails.push("bech32 valid vector");
+    if(!bech32Check("bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0"))fails.push("bech32m valid vector");
+    if(bech32Check("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5"))fails.push("bech32 invalid vector accepted");
+    /* 8. base58check, asynchronous because it uses crypto.subtle */
+    return Promise.all([
+      b58Check("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"),
+      b58Check("3P14159f73E4gFr7JterCCQh9QjiTjiZrG"),
+      b58Check("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb")
+    ]).then(function(r){
+      if(!r[0]||r[0].type!=="P2PKH")fails.push("base58 genesis vector");
+      if(!r[1]||r[1].type!=="P2SH")fails.push("base58 P2SH vector");
+      if(r[2])fails.push("base58 invalid vector accepted");
+      return dedupe(fails);
+    }).catch(function(){
+      fails.push("crypto.subtle unavailable");
+      return dedupe(fails);
+    });
+  }
+
+  /* ================================= UI ================================ */
+  var elAddr=document.getElementById("tq-addr"),
+      elAmt=document.getElementById("tq-amt"),
+      elLabel=document.getElementById("tq-label"),
+      elStatus=document.getElementById("tq-status"),
+      elBadges=document.getElementById("tq-badges"),
+      elPlate=document.getElementById("tq-plate"),
+      elCv=document.getElementById("tq-cv"),
+      elEchoWrap=document.getElementById("tq-echowrap"),
+      elEcho=document.getElementById("tq-echo"),
+      elNote=document.getElementById("tq-note"),
+      elUriWrap=document.getElementById("tq-uriwrap"),
+      elUri=document.getElementById("tq-uri"),
+      elCopy=document.getElementById("tq-copy"),
+      elPng=document.getElementById("tq-png"),
+      elAmtHint=document.getElementById("tq-amthint"),
+      elAmtWrap=elAmt.parentNode,
+      elSv=document.getElementById("tq-sv"),
+      elSs=document.getElementById("tq-ss"),
+      elSb=document.getElementById("tq-sb"),
+      elBare=document.getElementById("tq-bare"),
+      elUriLab=document.getElementById("tq-urilab");
+  var READY=false,run=0,deb=null,cur=null;
+  var P={price:64362.18};
+
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function show(el,on){el.classList.toggle("tq-hide",!on);}
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
+
+  /* Amount parsing is done on the string, not on a float, so eight decimal
+     places survive intact and the satoshi figure is exact. */
+  function canonAmount(raw){
+    var s=String(raw).replace(/\s|,/g,"");
+    if(!s)return {empty:true};
+    if(!/^[0-9]*\.?[0-9]*$/.test(s)||s===".")return {bad:true};
+    var parts=s.split("."),ip=parts[0]||"0",fp=parts[1]||"";
+    if(fp.length>8)return {bad:true,why:"Bitcoin has eight decimal places, no more."};
+    ip=ip.replace(/^0+(?=[0-9])/,"");
+    var trimmed=fp.replace(/0+$/,"");
+    var sats=parseInt(ip,10)*1e8+parseInt((fp+"00000000").slice(0,8),10);
+    /* zero is "still typing", not an error: no code is drawn, no red state */
+    if(!isFinite(sats)||sats<=0)return {pending:true};
+    if(sats>21000000*1e8)return {bad:true,why:"That is more bitcoin than will ever exist."};
+    return {str:trimmed?ip+"."+trimmed:ip,sats:sats};
+  }
+
+  function validateAddr(s){
+    var lower=s.toLowerCase();
+    if(/^(bc1|tb1|bcrt1)/.test(lower)){
+      if(s!==lower&&s!==s.toUpperCase())
+        return Promise.resolve({err:"Bech32 addresses are all lowercase or all uppercase, never mixed."});
+      var r=bech32Check(lower);
+      if(r){r.addr=lower;return Promise.resolve(r);}
+      return Promise.resolve({err:"Checksum fails. Re-copy the address from its source; the validator will point at a single wrong character."});
+    }
+    if(/^[13mn2]/.test(s)){
+      return b58Check(s).then(function(r){
+        if(r){r.addr=s;return r;}
+        return {err:"Checksum fails. Re-copy the address from its source; the validator will point at a single wrong character."};
+      });
+    }
+    return Promise.resolve({err:"Not recognised as a bitcoin address. Extended public keys, payment codes and Lightning invoices are not addresses."});
+  }
+
+  function echoHtml(a){
+    if(a.length<16)return esc(a);
+    return "<b>"+esc(a.slice(0,6))+"</b>"+esc(a.slice(6,a.length-6))+"<b>"+esc(a.slice(a.length-6))+"</b>";
+  }
+
+  function drawQR(m,cv,target,quiet){
+    var q=quiet,units=m.size+q*2;
+    var scale=Math.max(2,Math.floor(target/units)),px=units*scale;
+    var dpr=Math.min(3,window.devicePixelRatio||1);
+    cv.width=Math.round(px*dpr);cv.height=Math.round(px*dpr);
+    cv.style.width=px+"px";cv.style.height=px+"px";
+    var g=cv.getContext("2d");
+    g.setTransform(dpr,0,0,dpr,0,0);
+    g.fillStyle="#FFFFFF";g.fillRect(0,0,px,px);
+    g.fillStyle="#0B0B0B";
+    var x,y;
+    for(y=0;y<m.size;y++)for(x=0;x<m.size;x++)
+      if(m.mods[y][x])g.fillRect((x+q)*scale,(y+q)*scale,scale,scale);
+  }
+
+  /* The drawn size is chosen to fit the plate at a whole number of pixels per
+     module, so the browser never has to resample a QR code down and drop
+     modules out of it. Capped at 288px, which keeps it well inside a phone. */
+  function stageTarget(){
+    var w=elPlate.clientWidth||300;
+    return Math.max(140,Math.min(288,w-22));
+  }
+  function clearOut(msg,cls){
+    cur=null;
+    elStatus.className="tq-status "+cls;
+    elStatus.textContent=msg;
+    show(elBadges,false);show(elPlate,false);show(elEchoWrap,false);show(elUriWrap,false);
+    elSv.textContent="none yet";elSs.textContent="none yet";elSb.textContent="none yet";
+  }
+
+  function paintAmountHint(a){
+    elAmtWrap.classList.remove("is-bad");
+    elAmtHint.classList.remove("is-bad");
+    if(a.empty){
+      elAmtHint.textContent="Leave it blank to let the payer choose the amount.";
+      return;
+    }
+    if(a.pending){
+      elAmtHint.textContent="Enter an amount above zero, or clear the field to let the payer choose.";
+      return;
+    }
+    if(a.bad){
+      elAmtWrap.classList.add("is-bad");
+      elAmtHint.classList.add("is-bad");
+      elAmtHint.textContent=a.why||"That is not a number of bitcoin.";
+      return;
+    }
+    var usd=a.sats/1e8*P.price;
+    elAmtHint.textContent=fmt(a.sats)+" sats, about $"+fmt(usd,usd>=100?0:2)+
+      " today. The dollar figure is a check for you and is not in the code.";
+  }
+
+  function refresh(){
+    if(!READY)return;
+    var token=++run;
+    var raw=elAddr.value.replace(/\s+/g,"");
+    var amount=canonAmount(elAmt.value);
+    paintAmountHint(amount);
+    if(!raw){
+      clearOut("Waiting for an address","tq-mut");
+      elNote.textContent="Paste the address you want paid. Legacy (1...), script hash (3...), native segwit (bc1q...) and taproot (bc1p...) are all supported.";
+      return;
+    }
+    if(raw.length>110){
+      clearOut("✗ Not recognised as a bitcoin address","tq-bad");
+      elNote.textContent="That is longer than any bitcoin address.";
+      return;
+    }
+    if(amount.bad){
+      clearOut("✗ Fix the amount first","tq-bad");
+      elNote.textContent="No code is drawn while the amount is unreadable, so a wrong figure cannot end up encoded.";
+      return;
+    }
+    if(amount.pending){
+      clearOut("Waiting for the amount","tq-mut");
+      elNote.textContent="The amount field is part way through a number. Finish it, or clear the field to let the payer choose what to send.";
+      return;
+    }
+    validateAddr(raw).then(function(r){
+      if(token!==run)return;
+      if(r.err){
+        clearOut("✗ Address rejected","tq-bad");
+        elNote.innerHTML=esc(r.err)+' Use the <a href="/tools/validate">address validator</a> to find the mistake.';
+        return;
+      }
+      var bare=elBare&&elBare.checked;
+      var uri,q=[];
+      if(bare){
+        uri=r.addr;
+      }else{
+        uri="bitcoin:"+r.addr;
+        if(!amount.empty&&amount.str)q.push("amount="+amount.str);
+        var label=elLabel.value.replace(/\s+/g," ").replace(/^ | $/g,"");
+        if(label)q.push("label="+encodeURIComponent(label));
+        if(q.length)uri+="?"+q.join("&");
+      }
+      elUriLab.textContent=bare?"Text in the code":"BIP-21 URI in the code";
+
+      var m=qrEncode(uri);
+      if(!m){
+        clearOut("✗ Too much to encode","tq-bad");
+        elNote.textContent="Shorten the label. This encoder covers QR versions 1 to 10, which is well past what an address and an amount need.";
+        return;
+      }
+      cur={m:m,uri:uri};
+      elStatus.className="tq-status tq-ok";
+      elStatus.textContent="✓ Code ready";
+      var badges=[r.type,r.net,r.enc,"QR v"+m.v+", level M"];
+      var html=badges.map(function(b){return "<span>"+esc(b)+"</span>";}).join("");
+      if(r.net!=="mainnet")html+='<span class="tq-warn">'+esc(r.net)+" only</span>";
+      elBadges.innerHTML=html;
+      show(elBadges,true);
+      show(elPlate,true);
+      drawQR(m,elCv,stageTarget(),4);
+      elCv.setAttribute("aria-label","QR code for "+uri);
+      elEcho.innerHTML=echoHtml(r.addr);
+      show(elEchoWrap,true);
+      elUri.textContent=uri;
+      show(elUriWrap,true);
+      elNote.textContent=r.net==="mainnet"
+        ?"A valid checksum proves the address is well formed, not that it belongs to who you think it does. Check the text below the code against its source."
+        :"This is a "+r.net+" address. Coins on the main network cannot be sent to it.";
+      elSv.textContent=String(m.v);
+      elSs.textContent=m.size+" × "+m.size;
+      elSb.textContent=String(m.bytes);
+    });
+  }
+
+  elCopy.addEventListener("click",function(){
+    if(!cur)return;
+    var done=function(){
+      elCopy.textContent="Copied";
+      setTimeout(function(){elCopy.textContent="Copy URI";},1400);
+    };
+    if(navigator.clipboard&&navigator.clipboard.writeText)
+      navigator.clipboard.writeText(cur.uri).then(done,function(){});
+    else{
+      var t=document.createElement("textarea");
+      t.value=cur.uri;document.body.appendChild(t);t.select();
+      try{document.execCommand("copy");done();}catch(e){}
+      document.body.removeChild(t);
+    }
+  });
+  /* Local canvas export, drawn larger than the on-screen copy so the file is
+     usable in print. toDataURL touches no network. */
+  elPng.addEventListener("click",function(){
+    if(!cur)return;
+    var off=document.createElement("canvas");
+    drawQR(cur.m,off,(cur.m.size+8)*10,4);
+    var a=document.createElement("a");
+    a.href=off.toDataURL("image/png");
+    a.download="bitcoin-payment-qr.png";
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  });
+
+  var rz=null;
+  window.addEventListener("resize",function(){
+    clearTimeout(rz);
+    rz=setTimeout(function(){if(cur)drawQR(cur.m,elCv,stageTarget(),4);},180);
+  });
+
+  function bump(){clearTimeout(deb);deb=setTimeout(refresh,140);}
+  elAddr.addEventListener("input",bump);
+  elAmt.addEventListener("input",bump);
+  elLabel.addEventListener("input",bump);
+  if(elBare)elBare.addEventListener("change",function(){
+    var on=elBare.checked;
+    elAmt.disabled=on;elLabel.disabled=on;
+    var bh=document.getElementById("tq-barehint");
+    if(bh)bh.classList.toggle("tq-hide",!on);
+    bump();
+  });
+  document.querySelectorAll(".tq-ex button").forEach(function(b){
+    b.addEventListener("click",function(){
+      elAddr.value=b.dataset.ex;
+      refresh();
+      elAddr.focus();
+    });
+  });
+
+  /* Live price arrives via the chrome hook. It only moves the sanity-check
+     line beside the amount; nothing in the encoded URI depends on it. */
+  window.obPaintFiat=function(S){
+    if(S&&isFinite(S.price)&&S.price>0){P.price=S.price;paintAmountHint(canonAmount(elAmt.value));}
+  };
+
+  /* Nothing is drawn until the self-test has passed. */
+  selftest().then(function(fails){
+    if(fails.length){
+      READY=false;
+      console.error("[/tools/qr] self-test FAILED: "+fails.join(", "));
+      elStatus.className="tq-status tq-bad";
+      elStatus.textContent="✗ Self-test failed";
+      elNote.textContent="The encoder in this page did not reproduce its own known test vectors, so it will not draw a code that could be wrong. Nothing here is safe to scan; use another tool and report this page.";
+      show(elBadges,false);show(elPlate,false);show(elEchoWrap,false);show(elUriWrap,false);
+      elAddr.disabled=true;elAmt.disabled=true;elLabel.disabled=true;
+      return;
+    }
+    READY=true;
+    console.log("[/tools/qr] self-test passed: QR tables, GF(256), Reed-Solomon (ISO 18004 annex I), format and version bits, placement round trip, bech32, bech32m, base58check.");
+    refresh();
+  });
+})();
+</script>
+</Base>

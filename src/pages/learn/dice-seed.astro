@@ -1,0 +1,339 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+const log2 = (x) => Math.log(x) / Math.LN2;
+const throwsFor = (faces, bits) => Math.ceil(bits / log2(faces));
+const bitsFrom = (faces, n) => (n * log2(faces)).toFixed(1);
+
+const KIT = [
+  { name: 'Six-sided die', sub: 'the ordinary cube', faces: 6, unit: 'throws' },
+  { name: 'Twenty-sided die', sub: 'the d20 from a game set', faces: 20, unit: 'throws' },
+  { name: 'Coin', sub: 'heads or tails', faces: 2, unit: 'flips' },
+];
+
+const shape = (n) => {
+  const cs = (n * 11) / 33;
+  return { n, ent: n * 11 - cs, cs, cand: 2048 / Math.pow(2, cs), free: 11 - cs };
+};
+const PHRASES = [shape(12), shape(24)];
+---
+<Base title="Dice Seed Phrase: The Math, the Tools, the Case Against - OpenBitcoin" description="How to make a bitcoin seed phrase from dice: why 50 throws give 128 bits and 99 give 256, what Coldcard, SeedSigner and Krux do, and why most should not.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Rolling a seed with dice</h1>
+    <p class="doc-lede">Dice replace the one part of a wallet nobody can audit: its random number generator. The arithmetic, what the devices really do with your throws, and the honest case for not bothering.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <div class="ds-card">
+      <div class="ds-lab">Where this lands</div>
+      <ul class="ds-stance">
+        <li><b>Almost nobody needs this.</b> A signing device from a serious maker does not have one generator to fail, and the things that actually take people's coins are untested backups, photographs of the words, phishing pages and heirs who never knew the backup existed. Fix those first and you will probably never get to this page's subject.</li>
+        <li><b>It is not superstition either.</b> Random number generators have failed in public, once in a way that emptied real bitcoin wallets, and the awkward part is structural: a rigged generator and a good one produce output that looks identical. Dice are the one way to stop taking that on trust.</li>
+        <li><b>If you do it, do it on the device.</b> Dice mode on a signing device does the hashing and the checksum inside the device. Throwing onto paper and then typing anything into a computer to convert it is how a dice seed becomes somebody else's seed.</li>
+      </ul>
+    </div>
+
+
+    <div class="ds-card ds-mt">
+      <div class="ds-lab">The arithmetic</div>
+      <p class="ds-p">A fair six-sided die has six equally likely outcomes, so one throw carries log2(6) bits, which is 2.585 and not 3. Bits add across throws, so n throws carry n times 2.585, and the only question is how many throws clear the 128 or 256 bits a seed is built from. Twelve words need 128 bits of entropy, twenty-four need 256.</p>
+      <div class="ds-tw">
+        <table class="ds-tbl" id="ds-t1">
+          <thead>
+            <tr><th>Randomiser</th><th>Bits per throw</th><th>For 128 bits (12 words)</th><th>For 256 bits (24 words)</th></tr>
+          </thead>
+          <tbody>
+            {KIT.map((k) => (
+            <tr>
+              <td data-l="Randomiser" class="ds-name"><b>{k.name}</b><i>{k.sub}</i></td>
+              <td data-l="Bits per throw" data-p={k.faces} class="ds-num">{log2(k.faces).toFixed(3)}</td>
+              <td data-l="For 128 bits" data-f={k.faces} data-c="128"><b>{throwsFor(k.faces, 128)}</b><span>{k.unit}</span><i>{bitsFrom(k.faces, throwsFor(k.faces, 128))} bits</i></td>
+              <td data-l="For 256 bits" data-f={k.faces} data-c="256"><b>{throwsFor(k.faces, 256)}</b><span>{k.unit}</span><i>{bitsFrom(k.faces, throwsFor(k.faces, 256))} bits</i></td>
+            </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="ds-note">Every published dice tool asks for 99 throws rather than 100 for a twenty-four word seed. Ninety-nine lands at <b id="ds-b99">255.9</b> bits, about a tenth of a bit under a full 256, which leaves a search space 94 percent the size of the one you were aiming at. Nothing whatsoever turns on that, and it is quoted here only because rounding it up to "256 bits" is the kind of small dishonesty that teaches people to stop checking. Coldcard describes 99 as a minimum rather than a target.</p>
+      <p class="ds-note">The throws get hashed to produce the seed, and the hash adds nothing. SHA-256 turns any input into 256 tidy bits, including a sequence somebody invented in a hurry because the tray was on the other side of the room. The entropy is the number of honest throws you actually made. Nothing downstream can improve it, and stopping at forty-nine throws leaves <b id="ds-b49">126.7</b> bits, not 128.</p>
+    </div>
+
+    <div class="ds-fail" id="ds-fail">
+      <b>Self-test failed</b>
+      <span>The tables on this page are hidden and no roll counts are shown. The page recomputes every figure it prints and compares it against the published values on each load; a wrong roll count would understate the entropy you need, which is worse than showing nothing. Reload the page. If it persists, take the counts from your device's own documentation instead.</span>
+    </div>
+
+    <div class="doc-card ds-mt">
+      <div class="doc-sec doc-prose">
+        <h2>Why anyone distrusts the generator</h2>
+        <p>Randomness is the only part of a wallet you cannot check by looking at the result. A signature can be verified, an address can be re-derived, a transaction can be decoded, but the output of a backdoored generator and the output of a perfect one are indistinguishable to anybody who does not hold the backdoor. Statistical tests catch generators that are broken; they do not catch generators that are rigged, because a rigged one is designed to pass them. That asymmetry is the whole argument, and it does not depend on believing anyone in particular is dishonest.</p>
+        <p>It is also not hypothetical. A Debian patch between 2006 and 2008 removed most of the entropy feeding OpenSSL, leaving keys drawn from roughly thirty-two thousand possibilities, and every key generated on those systems for two years had to be thrown away. In August 2013 a flaw in Android's SecureRandom made bitcoin wallets on the platform repeat the one-time number inside a signature, which lets anybody recover the private key straight from the public chain; the advisory named the popular Android wallets of the day and around fifty-five coins were drained within hours. Dual_EC_DRBG, a standardised generator whose constants admit a backdoor by construction, shipped as a default in a commercial crypto library and was withdrawn from the standard in 2014.</p>
+        <p>Underneath all three is the same discomfort about the hardware. A true random generator on a signing device is a block of silicon you did not fabricate, driven by firmware you did not write, and its failure mode is silence: it keeps producing plausible numbers. Dice are the answer to exactly that one worry, and to nothing else about the device.</p>
+      </div>
+
+      <div class="doc-sec doc-prose">
+        <h2>The honest counterpoint</h2>
+        <p>Modern devices are not a single generator any more. Trezor's published design asks the connected computer for 256 bits of randomness and mixes them with 256 bits of its own through SHA-256, so a broken internal source cannot decide the seed alone and a compromised computer cannot either; the command line tool will show you both halves afterwards so you can reproduce the result yourself. Coldcard draws on more than one hardware source and will fold dice throws into a seed it generated, which is a sensible middle position rather than an all-or-nothing choice. The single-point-of-failure story that dice were invented to answer is a fair description of 2013 and a poor description of a current device.</p>
+        <p>Meanwhile the losses keep arriving from the same handful of places, and none of them is entropy. Backups that were never restore-tested. Words photographed and quietly synced to a cloud account protected by a support queue. A page that asks you to "validate" or "migrate" a wallet. A device bought secondhand with the phrase already written on the card. A family that knew there was bitcoin and never knew where the paper was. <a href="/learn/seed-backup">Backing up a seed</a>, <a href="/learn/scams">common scams</a> and <a href="/learn/inheritance">inheritance planning</a> each protect more coins than dice ever will.</p>
+        <p>Dice also add failure modes of their own. Miscounting the throws, misreading a die, transcribing a digit wrongly, doing one step of the conversion on a general purpose computer, and above all the human urge to re-throw one that "felt wrong", which quietly deletes bits from the total you were so careful to reach. Anyone who will not sit down and restore-test a backup should not be hand-building entropy, because the discipline dice require is the same discipline, only longer.</p>
+      </div>
+
+      <div class="doc-sec doc-prose">
+        <h2>What the tools do with your throws</h2>
+        <p>Dice support is not a gimmick bolted onto a menu; in the tools that have it, the throws are the seed. Three implementations are worth knowing about, named here as fact and not as recommendation.</p>
+        <h3>Coldcard</h3>
+        <p>Dice mode appears when you create a seed, and it takes a minimum of fifty throws for twelve words or ninety-nine for twenty-four. The entropy is SHA-256 over your throws written out as an ASCII string, so throwing 3, 1, 4, 1 hashes the four characters 3141 and nothing more elaborate. The device shows the running hash as you go, and before the first throw it shows the SHA-256 of the empty string:</p>
+        <p class="ds-hash"><code>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code></p>
+        <p>That is a free correctness check you can perform anywhere in a second, and it is the visible edge of the property that matters: the derivation is reproducible. The vendor publishes small scripts, rolls.py and rolls12.py, that take the same digits and print the same hash and the same words on a machine of your own, run offline. A dice mode you cannot reproduce is theatre, because a hostile device could take your throws politely and use whatever seed it liked. The same device will also fold dice throws into a seed its own hardware produced, if you would rather add to the generator than replace it.</p>
+        <h3>SeedSigner</h3>
+        <p>A stateless signer assembled from commodity parts, with the same counts: fifty throws for twelve words, ninety-nine for twenty-four. It keeps nothing between sessions, so the seed exists only while it is powered, and it can take entropy from a photograph as well as from dice. Its documentation walks through checking a generated seed against independent implementations, which is the same reproducibility habit in a different shape.</p>
+        <h3>Krux</h3>
+        <p>Accepts a six-sided die or a twenty-sided one: fifty or ninety-nine throws for the d6, thirty or sixty for the d20, matching the arithmetic in the table above. It hashes the accumulated string with SHA-256 and shows you the hash so the result can be checked.</p>
+        <p class="ds-por"><strong>One warning that cuts across all three.</strong> The exact string being hashed is a convention, not a standard, and the tools do not all build it the same way: some run the digits together, at least one separates them. A different string is a different hash and therefore a different seed, so the same physical throws entered on two different devices can produce two entirely different wallets. Do not treat a list of throws as a portable backup, and do not assume a future version of the same firmware will reproduce today's result. Which leads to the thing people miss: <strong>a written list of your throws is a written copy of your seed.</strong> It looks like harmless arithmetic homework and it opens the wallet. Destroy it, or guard it exactly as you would guard the words.</p>
+      </div>
+
+      <div class="doc-sec doc-prose">
+        <h2>The final word is computed, never chosen</h2>
+        <p>A BIP39 phrase is not twelve or twenty-four independent words. The words encode the entropy eleven bits at a time, and the tail of the last word is a checksum over everything before it: four bits in a twelve word phrase, eight bits in a twenty-four word one. That checksum is the first few bits of SHA-256 over the entropy, which is why a phrase can be checked without touching the internet, and why one mistyped word usually fails loudly instead of opening a silently empty wallet.</p>
+        <div class="ds-tw">
+          <table class="ds-tbl ds-tbl-2" id="ds-t2">
+            <thead>
+              <tr><th>Phrase</th><th>Dice entropy</th><th>Checksum</th><th>Final words that fit</th><th>Free bits in the final word</th></tr>
+            </thead>
+            <tbody>
+              {PHRASES.map((p) => (
+              <tr>
+                <td data-l="Phrase" class="ds-name"><b>{p.n} words</b></td>
+                <td data-l="Dice entropy" data-n={p.n} data-k="ent" class="ds-num">{p.ent} bits</td>
+                <td data-l="Checksum" data-n={p.n} data-k="cs" class="ds-num">{p.cs} bits</td>
+                <td data-l="Final words that fit" data-n={p.n} data-k="cand" class="ds-num">{p.cand} of 2048</td>
+                <td data-l="Free bits in the final word" data-n={p.n} data-k="free" class="ds-num">{p.free} bits</td>
+              </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p>Two consequences follow, and both catch people out. The first is that a guessed final word passes by luck one time in sixteen for a twelve word phrase and one time in two hundred and fifty-six for a twenty-four word one, so guessing is not a strategy, it is a slow way to be wrong. The second is subtler: the final word still carries some of your own entropy, three bits in a twenty-four word phrase and seven in a twelve word one. The candidates are not interchangeable. Always taking the first one on the list turns a 256 bit phrase into a 253 bit phrase, and a 128 bit phrase into a 121 bit one. Pick among them at random, with a die, since you already have one out.</p>
+        <p>Computing the word needs SHA-256, which nobody does by hand. In dice mode on a device this happens inside the device and there is nothing for you to arrange, which is the strongest practical argument for using dice mode rather than paper. If you have already thrown onto paper and are holding twenty-three words with a gap at the end, do the conversion offline: the toolkit behind <a href="/tools/seed-recovery">seed recovery</a> downloads as a single file, runs from disk with the network switched off, and lists every final word that completes a valid phrase. What you must never do is search for a final word calculator and type twenty-three words into whatever appears. That page sees your entire seed, and the missing word is the only part it does not need.</p>
+      </div>
+
+      <div class="doc-sec doc-prose">
+        <h2>Casino dice, bias, and how you throw</h2>
+        <p>The die from the board game in the cupboard is not fair, and the reason is visible. Its pips are drilled out and left as hollows, so the six face carries the most missing material and is the lightest, and the lightest face lands upward slightly more often than a sixth of the time. Its corners and edges are rounded, which shortens the tumble and lets a heavy face settle early. Casino dice are cut as cubes to a tight tolerance with sharp edges, and the pips are drilled and then backfilled with material of the same density so the centre of mass stays in the middle. They are usually translucent and serialised, which is about catching cheats rather than about you, and a set costs very little.</p>
+        <p>The honest question is how much a biased die actually costs, and it can be priced. What matters is the most likely face, not the average: if one face comes up 20 percent of the time instead of 16.7, each throw is worth log2(1 / 0.2), which is 2.32 bits rather than 2.585, and ninety-nine throws deliver about 230 bits instead of 256. If a face somehow reached 25 percent, each throw is worth 2 bits and ninety-nine throws deliver 198. Both totals remain far outside anything anybody can search. A biased die is a real defect and a survivable one, and the fix is more throws, never a cleverer hash.</p>
+        <p>Technique costs more bits than the die does. Throw against a backstop or into a tray, ideally from a cup, and read the die where it stops. Do not slide it, do not nudge it, do not re-throw one you did not like, do not stop early because the sequence already looks random enough, and do not let anybody watch or film the session. Every one of those interventions removes entropy, and your intuition about randomness is the least reliable instrument in the room.</p>
+      </div>
+    </div>
+
+    <div class="ds-card ds-mt">
+      <div class="ds-lab">If you are going to do it</div>
+      <ol class="ds-steps">
+        <li><b>Choose the device before you choose the dice.</b> Use dice mode on a signing device that has one. The device consumes each throw as you enter it, does the hashing and the checksum internally, and the words never pass through a general purpose computer. Paper-and-pencil dice seeds exist and are almost always a worse trade.</li>
+        <li><b>Buy new precision dice yourself.</b> Not the one from a game, not one somebody handed you, and not a set that arrived with a wallet. The die is cheap; the assumption is not.</li>
+        <li><b>Throw one die at a time and enter each result immediately.</b> Reading a whole tray at once invites miscounts, and transcribing a list afterwards means the list exists at all. One throw, one keypress.</li>
+        <li><b>Do not stop short of the count.</b> Fifty for twelve words, ninety-nine for twenty-four, with no negotiating with yourself at throw eighty about how random it already looks.</li>
+        <li><b>Check the hash if the device shows one.</b> Coldcard displays the running SHA-256 and publishes scripts that reproduce the same hash and the same words from the same digits on your own offline machine. A device whose output you cannot reproduce is a device to stop trusting.</li>
+        <li><b>Destroy the digits.</b> Any sheet with the throws on it is a copy of the seed. Burn it, shred it, or store it as carefully as the phrase itself, and treat any photograph of it as a total loss.</li>
+        <li><b>Write the words down by hand and restore-test before any money moves.</b> The dice were the easy part. <a href="/learn/seed-backup">Backing up a seed</a> covers the part that actually decides whether the coins survive, and <a href="/learn/self-custody">self custody</a> covers what the backup is protecting.</li>
+      </ol>
+      <p class="ds-note">Do the whole thing in one sitting, alone, away from cameras and phones, and do not narrate it to anybody afterwards. An entropy source everyone has heard about is not an entropy source.</p>
+    </div>
+
+    <div class="ds-about doc-prose">
+      <p>This page holds no data, has no input field of any kind and makes no requests. Every roll count, bit total and checksum figure printed on it is computed in your browser from the published formulas and compared against known values on load; if a single comparison fails, both tables are withheld and a failure notice is shown instead of numbers. Device behaviour is described from vendor documentation and no product is recommended. Guides here are informational under the <a href="/terms">terms</a>, and where the rest of the site's data comes from is set out at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The short answer</div>
+      <p class="ds-railp">For nearly everybody the device's generator is fine and the backup is the weak point. Dice are for people who have already done everything else properly and want the last assumption removed.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">What the tools ask for</div>
+      <div class="ds-t"><b>Coldcard</b><i>d6, 50 throws for 12 words, 99 for 24. Shows the hash.</i></div>
+      <div class="ds-t"><b>SeedSigner</b><i>d6, the same 50 and 99. Also takes a photograph.</i></div>
+      <div class="ds-t"><b>Krux</b><i>d6 at 50 or 99, d20 at 30 or 60. Shows the hash.</i></div>
+      <div class="ds-t"><b>Never</b><i>A website, a phone app, or anything that wants your words.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/seed-backup">Backing up a seed</a>
+        <a href="/learn/self-custody">Self custody, explained</a>
+        <a href="/wallets">Wallets worth using</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .ds-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ds-mt{margin-top:14px}
+  .ds-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ds-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .ds-stance{margin:0;padding:0;list-style:none}
+  .ds-stance li{position:relative;padding-left:20px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .ds-stance li:first-child{margin-top:0}
+  .ds-stance li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;
+    background:var(--acc);opacity:.75}
+  .ds-stance b{color:var(--ink);font-weight:600}
+  .ds-steps{counter-reset:ds;list-style:none;margin:0;padding:0}
+  .ds-steps li{position:relative;padding-left:34px;margin-top:11px;font:500 14px/1.6 var(--sans);color:var(--ink-2)}
+  .ds-steps li:first-child{margin-top:0}
+  .ds-steps li::before{counter-increment:ds;content:counter(ds);position:absolute;left:0;top:1px;width:22px;height:22px;
+    border-radius:50%;background:var(--panel-2);border:1px solid var(--line-2);color:var(--acc);
+    font:700 11px/21px var(--mono);text-align:center}
+  .ds-steps b{color:var(--ink);font-weight:600}
+  .ds-card a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ds-card a:hover{border-bottom-style:solid}
+  .ds-note{font:500 12.5px/1.65 var(--sans);color:var(--ink-3);margin:15px 0 0;padding-top:13px;border-top:1px dotted var(--line-2)}
+  .ds-note b{font:700 12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .ds-warn{font:600 11px/1.65 var(--mono);letter-spacing:.045em;color:var(--ink-3);margin:13px 2px 0}
+  .ds-about{margin-top:14px}
+  .ds-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ds-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .ds-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ds-t:last-child{border-bottom:0}
+  .ds-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .ds-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .doc-prose .ds-hash{margin:10px 0 0}
+  .doc-prose .ds-hash code{display:block;font:600 11.5px/1.6 var(--mono);letter-spacing:.02em;
+    background:var(--field);color:var(--ink-2);border:1px solid var(--line-2);border-radius:8px;
+    padding:10px 12px;word-break:break-all}
+  .doc-prose .ds-por{border-top:1px dotted var(--line-2);padding-top:13px;margin-top:16px}
+
+  
+  .ds-tw{margin-top:14px}
+  .ds-tw.is-off{display:none}
+  .ds-tw .ds-tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin:0}
+  .ds-tw .ds-tbl th{font:700 8.5px/1.45 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2);vertical-align:bottom}
+  .ds-tw .ds-tbl td{padding:11px 10px 11px 0;border-bottom:1px dotted var(--line-2);vertical-align:top;min-width:0}
+  .ds-tw .ds-tbl tr:last-child td{border-bottom:0}
+  .ds-tw .ds-tbl td b{display:block;font:700 17px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+  .ds-tw .ds-tbl td span{display:inline-block;font:700 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+  .ds-tw .ds-tbl td i{display:block;font:500 11px/1.45 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px;
+    font-variant-numeric:tabular-nums}
+  .ds-tw .ds-name b{font:700 14px/1.35 var(--sans)!important;color:var(--ink)!important;letter-spacing:0!important}
+  .ds-tw .ds-num{font:700 15px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .ds-tw .ds-tbl-2 .ds-num{font-size:14px}
+
+  .ds-fail{display:none;margin-top:14px;border-radius:12px;padding:15px 18px;
+    border:1px solid rgba(246,70,93,.45);background:rgba(246,70,93,.07)}
+  .ds-fail.is-on{display:block}
+  .ds-fail b{display:block;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--down)}
+  .ds-fail > span{display:block;font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+
+  @media(max-width:700px){
+    .ds-card{padding:18px 18px 20px}
+    
+    .ds-tw .ds-tbl,.ds-tw .ds-tbl thead,.ds-tw .ds-tbl tbody,
+    .ds-tw .ds-tbl tr,.ds-tw .ds-tbl td{display:block;width:auto}
+    .ds-tw .ds-tbl{table-layout:auto}
+    .ds-tw .ds-tbl thead{display:none}
+    .ds-tw .ds-tbl tr{padding:13px 0;border-bottom:1px solid var(--line-2)}
+    .ds-tw .ds-tbl tr:last-child{border-bottom:0}
+    .ds-tw .ds-tbl td{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+      padding:5px 0;border-bottom:0}
+    .ds-tw .ds-tbl td::before{content:attr(data-l);flex:none;max-width:52%;
+      font:700 8.5px/1.5 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+    .ds-tw .ds-tbl td.ds-name{display:block;padding:0 0 7px}
+    .ds-tw .ds-tbl td.ds-name::before{display:none}
+    .ds-tw .ds-tbl td b{display:inline;font-size:15px}
+    .ds-tw .ds-tbl td span{margin:0 0 0 5px}
+    .ds-tw .ds-tbl td i{display:inline;margin-left:8px}
+    .ds-tw .ds-tbl td.ds-name i{display:block;margin:2px 0 0}
+    .ds-tw .ds-name b{font-size:15px!important}
+  }
+</style>
+
+<script is:inline>
+(function(){
+  /* No cryptography runs on this page and no secret is handled: there is no
+     input of any kind. The one thing that can be wrong is the arithmetic that
+     tells a reader how many throws they need, and understating that would
+     understate their entropy, so every printed figure is recomputed and
+     compared before the tables are allowed to show.
+
+     TEST VECTORS (published values, all re-derived here):
+       throws needed = ceil(bits / log2(faces))
+         d6   -> 50 for 128 bits, 100 for 256      (2.585 bits per throw)
+         d20  -> 30 for 128 bits,  60 for 256      (4.322 bits per throw)
+         coin -> 128 for 128 bits, 256 for 256     (1.000 bit per flip)
+       bit totals: 50 d6 throws = 129.2 bits, 99 d6 throws = 255.9 bits,
+                   49 d6 throws = 126.7 bits
+       BIP39 shape (both rows confirmed by brute force against the real
+       wordlist and SHA-256 while the offline toolkit was written):
+         12 words -> 128 entropy bits, 4 checksum bits, 128 final words, 7 free
+         24 words -> 256 entropy bits, 8 checksum bits,   8 final words, 3 free
+     plus structural vectors: every figure rendered into either table is read
+     back out of the DOM and compared with the recomputed value. Any mismatch
+     hides both tables and shows a visible failure state. */
+  function log2(x){return Math.log(x)/Math.LN2;}
+  function throwsFor(f,b){return Math.ceil(b/log2(f));}
+  function bitsFrom(f,n){return (n*log2(f)).toFixed(1);}
+  function shape(n){var cs=(n*11)/33;return {ent:n*11-cs,cs:cs,cand:2048/Math.pow(2,cs),free:11-cs};}
+
+  var pass=true,detail=[];
+  function want(cond,label){if(!cond){pass=false;detail.push(label);}}
+
+  var VEC=[[6,128,50],[6,256,100],[20,128,30],[20,256,60],[2,128,128],[2,256,256]];
+  for(var i=0;i<VEC.length;i++){
+    want(throwsFor(VEC[i][0],VEC[i][1])===VEC[i][2],"throws d"+VEC[i][0]+" for "+VEC[i][1]);
+  }
+  want(bitsFrom(6,50)==="129.2","50 d6 bit total");
+  want(bitsFrom(6,99)==="255.9","99 d6 bit total");
+  want(bitsFrom(6,49)==="126.7","49 d6 bit total");
+  want(log2(6).toFixed(3)==="2.585","d6 bits per throw");
+  want(log2(20).toFixed(3)==="4.322","d20 bits per throw");
+
+  var a=shape(12),b=shape(24);
+  want(a.ent===128&&a.cs===4&&a.cand===128&&a.free===7,"12 word phrase row");
+  want(b.ent===256&&b.cs===8&&b.cand===8&&b.free===3,"24 word phrase row");
+
+  /* structural: compare every rendered figure with the recomputed one */
+  var t1=document.getElementById("ds-t1"),t2=document.getElementById("ds-t2"),
+      fail=document.getElementById("ds-fail"),
+      b99=document.getElementById("ds-b99"),b49=document.getElementById("ds-b49"),
+      wraps=document.querySelectorAll(".ds-tw");
+  if(!t1||!t2||!fail)return;
+
+  Array.prototype.forEach.call(t1.querySelectorAll("td[data-p]"),function(td){
+    want(td.textContent.trim()===log2(parseInt(td.getAttribute("data-p"),10)).toFixed(3),
+      "printed bits per throw d"+td.getAttribute("data-p"));
+  });
+  Array.prototype.forEach.call(t1.querySelectorAll("td[data-c]"),function(td){
+    var f=parseInt(td.getAttribute("data-f"),10),c=parseInt(td.getAttribute("data-c"),10),
+        n=throwsFor(f,c),num=td.querySelector("b"),bit=td.querySelector("i");
+    want(!!num&&num.textContent.trim()===String(n),"printed throws d"+f+"/"+c);
+    want(!!bit&&bit.textContent.trim()===bitsFrom(f,n)+" bits","printed bit total d"+f+"/"+c);
+  });
+  Array.prototype.forEach.call(t2.querySelectorAll("td[data-k]"),function(td){
+    var s=shape(parseInt(td.getAttribute("data-n"),10)),k=td.getAttribute("data-k"),
+        txt=td.textContent.trim(),
+        exp=k==="cand"?(s.cand+" of 2048"):(s[k]+" bits");
+    want(txt===exp,"printed "+k+" for "+td.getAttribute("data-n")+" words");
+  });
+  want(!!b99&&b99.textContent.trim()===bitsFrom(6,99),"inline 99 throw figure");
+  want(!!b49&&b49.textContent.trim()===bitsFrom(6,49),"inline 49 throw figure");
+
+  if(!pass){
+    console.error("[/learn/dice-seed] self-test failed: "+detail.join(", ")+
+      ". Both tables are withheld rather than shown with wrong roll counts.");
+    Array.prototype.forEach.call(wraps,function(w){w.className="ds-tw is-off";});
+    if(b99)b99.textContent="--";
+    if(b49)b49.textContent="--";
+    fail.className="ds-fail is-on";
+    return;
+  }
+  console.log("[/learn/dice-seed] self-test passed: 6 roll-count vectors, 5 bit totals, "+
+    "2 BIP39 phrase rows and every printed figure in both tables verified.");
+})();
+</script>
+</Base>

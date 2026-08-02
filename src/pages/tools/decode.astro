@@ -1,0 +1,699 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Raw Bitcoin Transaction Decoder - OpenBitcoin" description="Paste raw transaction hex and decode it in your browser: version, inputs, outputs, script types, witness, locktime, txid, size and weight.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Decoder</div>
+    <h1>Raw transaction decoder</h1>
+    <p class="doc-lede">Paste a signed transaction in hex and it is taken apart in your browser: inputs, outputs, witness, txid and wtxid, size and weight. The hex never leaves this page.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="td-card">
+      <div class="td-lab">Raw transaction hex</div>
+      <textarea id="td-in" class="td-ta" rows="5" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="0100000001... paste a signed transaction here" aria-label="Raw transaction hex to decode"></textarea>
+      <div class="td-bar">
+        <div class="td-ex" aria-label="Example transactions">
+          <span>Try:</span>
+          <button type="button" data-ex="legacy">legacy, block 170</button>
+          <button type="button" data-ex="segwit">segwit, BIP-143</button>
+          <button type="button" data-ex="coinbase">coinbase, genesis</button>
+          <button type="button" id="td-clear">clear</button>
+        </div>
+        <div class="td-count" id="td-count">0 bytes</div>
+      </div>
+    </div>
+    <p class="td-priv">Parsing and hashing run entirely in your browser. This page makes no network requests with what you paste, so the hex never leaves the tab.</p>
+
+    <div class="td-res" id="td-res" role="status" aria-live="polite">
+      <div class="td-status td-mut">Waiting for hex</div>
+      <div class="td-note">Legacy and segwit serializations are both understood. Paste the output of a wallet's raw or signed transaction, or press one of the examples above.</div>
+    </div>
+
+    <div class="td-card td-mt td-cta-card">
+      <div class="td-tlab">Next step</div>
+      <p>Decoding tells you what a signed transaction says. It does not put it on the network: nothing here talks to a node. When the bytes read the way you expect, push them to the peer-to-peer network from the broadcast page, and watch the result in the <a href="/mempool">mempool</a>.</p>
+      <a class="td-cta" href="/tools/broadcast">Broadcast a signed transaction</a>
+    </div>
+
+    <div class="doc-card td-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What the bytes actually hold</h2>
+        <p>A raw transaction is one flat byte string with no labels in it. It opens with a four-byte version, then a count of inputs, then each input in turn: the 32-byte hash of the transaction being spent, the index of which output, the unlocking script, and a four-byte sequence number. Then the outputs: an eight-byte amount in satoshis and the locking script that says who can spend it. A segwit transaction slips two extra bytes after the version, a zero marker and a one flag, which is how software tells the two formats apart, and parks the signatures in a witness section after the outputs. Four bytes of locktime close it out. That is the whole grammar, and it is what this page walks through.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Two identifiers, txid and wtxid</h2>
+        <p>The txid is the double SHA-256 of the transaction with the marker, flag and witness stripped out, printed in reverse byte order because that is what Bitcoin's early code did and everyone kept doing it. The wtxid hashes the complete serialization, witness included. For a legacy transaction the two are identical. For a segwit transaction they differ, and that gap is the whole point of segregated witness: because signatures sit outside the txid, a third party can no longer reshape a signature in flight and change the identifier of a transaction that has already been sent. Blocks commit to txids in the usual merkle root and to wtxids in a separate commitment inside the coinbase.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Size, virtual size and weight</h2>
+        <p>Since segwit, block space is measured in weight units: every byte outside the witness counts as four, every witness byte counts as one, and a block holds four million units. Virtual size is weight divided by four and rounded up, which is the number fee rates are quoted against in satoshis per virtual byte. A legacy transaction has no witness, so its vsize equals its byte size exactly. A segwit transaction is smaller in vsize than in bytes, and that discount is why the same payment costs less from a bc1 address. To turn the vsize on this page into a fee at a rate you choose, use the <a href="/fees/calculator">fee calculator</a>.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why no fee appears</h2>
+        <p>A transaction states every amount it creates and no amount it spends. Inputs are pointers: a previous transaction id and an output index, nothing more. The value sitting at that pointer lives in an earlier transaction, or in a node's unspent output set, and it is simply not in the bytes you pasted. So the honest answer is that the fee cannot be computed here, and any page that shows one from hex alone is either fetching the previous outputs from a server or making something up. Total output value is shown, because that part is real. Subtract it from the total input value, once you have looked those up, and the difference is the fee.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Reading the sequence field</h2>
+        <p>Each input carries a four-byte sequence number that does more work than its name suggests. A value of 0xffffffff marks the input final and switches locktime off. One below that, 0xfffffffe, keeps locktime working while declining replacement. Anything lower signals opt-in replace-by-fee under BIP-125, which is the flag a wallet reads before offering to bump a stuck payment, and on version 2 transactions the low bits also encode a relative timelock under BIP-68, counted either in blocks or in units of 512 seconds. The decoder spells out which of these applies to every input. If a payment of yours is sitting unconfirmed, <a href="/tx/stuck">stuck transaction help</a> covers what the flag lets you do about it.</p>
+      </div>
+    </div>
+
+    <div class="td-about doc-prose">
+      <p>Decoding is a read, not a verification: the page confirms the bytes parse and computes their identifiers, but it does not check signatures, does not know whether the inputs are still unspent, and cannot see whether the transaction was ever mined. A well-formed transaction can still be invalid. To check an address before you pay it, use the <a href="/tools/validate">address validator</a>; to look up a transaction that already exists on the chain, start from <a href="/blocks">blocks</a>. Nothing here is financial advice and everything is informational under the <a href="/terms">terms</a>; data provenance for the rest of the site is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">What is read</div>
+      <div class="td-t"><b>Header</b><i>Version, segwit marker and flag, locktime with its meaning as height or time.</i></div>
+      <div class="td-t"><b>Inputs</b><i>Previous txid and index, scriptSig, sequence with RBF and relative timelock.</i></div>
+      <div class="td-t"><b>Outputs</b><i>Amount in BTC and sats, script type, hash or program, OP_RETURN text.</i></div>
+      <div class="td-t"><b>Identity</b><i>txid and wtxid by double SHA-256, plus size, vsize and weight.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/broadcast">Broadcast a signed transaction</a>
+        <a href="/tx/stuck">Stuck transaction help</a>
+        <a href="/fees/calculator">Fee calculator</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .td-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .td-mt{margin-top:14px}
+  .td-lab,.td-tlab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .td-ta{width:100%;box-sizing:border-box;display:block;background:rgba(124,140,168,.13);
+    border:1px dashed rgba(255,166,60,.32);border-radius:10px;color:var(--price-ink);
+    font:600 12.5px/1.65 var(--mono);padding:12px 14px;outline:none;resize:vertical;
+    word-break:break-all;min-height:118px}
+  .td-ta:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .td-ta::placeholder{color:var(--ph);font-weight:600}
+  .td-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .td-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+  .td-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .td-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .td-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink);border-color:var(--line-2)}
+  .td-count{font:600 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;flex:none}
+  .td-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:11px 0 0}
+  .td-priv{font:600 11px var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0;line-height:1.6}
+
+  .td-res{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px;margin-top:14px}
+  .td-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .td-status.td-ok{color:var(--up)}
+  .td-status.td-bad{color:var(--down)}
+  .td-status.td-mut{color:var(--ink-3)}
+  .td-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:9px}
+  .td-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .td-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .td-badges span.td-b-acc{border-style:solid;border-color:rgba(255,166,60,.55);color:var(--acc)}
+
+  .td-ids{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+  .td-id{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 13px}
+  .td-id i{display:block;font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-bottom:4px}
+  .td-id b{display:block;font:700 13px/1.6 var(--mono);color:var(--acc);word-break:break-all}
+  .td-id.td-id-2 b{color:var(--ink)}
+
+  .td-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+  .td-s{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;min-width:0}
+  .td-s span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .td-s b{display:block;font:700 17px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;
+    letter-spacing:-.3px;word-break:break-word}
+  .td-s b em{font:700 10px var(--mono);font-style:normal;color:var(--ink-3);letter-spacing:.06em;margin-left:5px}
+
+  .td-fee{margin-top:12px;background:var(--panel-2);border:1px solid var(--line-2);border-left:2px solid var(--acc);
+    border-radius:0 10px 10px 0;padding:11px 15px}
+  .td-fee b{display:block;font:700 12.5px var(--mono);letter-spacing:.03em;color:var(--acc)}
+  .td-fee span{display:block;font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin-top:5px}
+  .td-fee a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+
+  .td-sec{margin-top:18px;padding-top:15px;border-top:1px dotted var(--line-2)}
+  .td-sh{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .td-sh em{font-style:normal;color:var(--acc);margin-left:6px}
+  .td-item{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;margin-top:9px}
+  .td-item:first-of-type{margin-top:0}
+  .td-ih{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:8px;border-bottom:1px dotted var(--line-2)}
+  .td-ih b{font:700 12px var(--mono);letter-spacing:.05em;color:var(--ink)}
+  .td-tag{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+    border:1px solid var(--line-2);border-radius:6px;padding:3px 7px;white-space:nowrap}
+  .td-tag.td-tg{color:var(--acc);border-color:rgba(255,166,60,.5)}
+  .td-tag.td-tw{color:var(--up);border-color:rgba(46,190,124,.45)}
+  .td-amt{margin-left:auto;font:700 13.5px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .td-amt i{font-style:normal;font-size:9.5px;color:var(--ink-3);margin-left:5px;letter-spacing:.06em}
+  .td-kv{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .td-kv:last-child{border-bottom:0;padding-bottom:0}
+  .td-kv i{font:700 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;padding-top:3px}
+  .td-kv u{font:600 11.5px/1.7 var(--mono);color:var(--ink-2);text-decoration:none;word-break:break-all;display:block}
+  .td-kv u b{color:var(--ink);font-weight:700}
+  .td-kv u q{quotes:none;display:block;color:var(--price-ink);margin-top:3px;white-space:pre-wrap;word-break:break-word}
+  .td-el{color:var(--ink-3);font-style:normal}
+  .td-mute{color:var(--ink-3)}
+
+  .td-cta-card p{font:500 13.5px/1.7 var(--sans);color:var(--ink-2);margin:0}
+  .td-cta-card a:not(.td-cta){color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .td-cta{display:inline-block;margin-top:12px;background:rgba(247,147,26,.08);border:1px solid rgba(255,166,60,.55);
+    border-radius:10px;color:var(--acc);font:700 11.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+    padding:10px 16px;text-decoration:none}
+  .td-cta:hover{background:rgba(247,147,26,.14)}
+
+  .td-about{margin-top:14px}
+  .td-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .td-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .td-t:last-child{border-bottom:0}
+  .td-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .td-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .td-card{padding:18px}
+    .td-res{padding:16px 18px 18px}
+    .td-ta{font-size:11.5px;min-height:132px}
+    .td-stats{grid-template-columns:minmax(0,1fr)}
+    .td-s{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .td-s span{margin-bottom:0}
+    .td-s b{font-size:15px;text-align:right}
+    .td-kv{grid-template-columns:minmax(0,1fr);gap:3px}
+    .td-kv i{padding-top:0}
+    .td-amt{margin-left:0;width:100%}
+    .td-id b{font-size:11.5px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* ================================================================
+     No fetch, no XHR, no beacons, no images: the "hex never leaves the
+     browser" claim on the page depends on this script staying local.
+     crypto.subtle.digest is local math, not a request.
+
+     TEST VECTORS (see the frontmatter note for provenance):
+       legacy  block 170, 12 Jan 2009, first person to person payment
+               txid f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
+       segwit  BIP-143 signed P2WPKH example
+               txid  e8151a2af31c368a35053ddd4bdb285a8595c769a3ad83e0fa02314a602d4609
+               wtxid c36c38370907df2324d9ce9d149d191192f338b37665a82e78e76a12c909b762
+       genesis the coinbase transaction of block 0, 3 Jan 2009
+               txid 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b
+       scripts P2WPKH program from BIP-173, P2TR program from BIP-350,
+               and an OP_RETURN carrying "Hello World"
+     If any assertion fails the decoder refuses to run and says so.
+     ================================================================ */
+
+  var EX={
+    legacy:"0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000",
+    segwit:"01000000000102fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f00000000494830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac000247304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee0121025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee635711000000",
+    coinbase:"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff4d04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73ffffffff0100f2052a01000000434104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac00000000"
+  };
+  var MAXHEX=1000000; /* 500 kB of transaction is far past any relay policy */
+
+  /* ---------- bytes and hex ---------- */
+  var HEXC="0123456789abcdef";
+  function toHex(b){
+    var s="",i;
+    for(i=0;i<b.length;i++)s+=HEXC[b[i]>>4]+HEXC[b[i]&15];
+    return s;
+  }
+  function fromHex(s){
+    var n=s.length/2,out=new Uint8Array(n),i;
+    for(i=0;i<n;i++)out[i]=parseInt(s.substr(i*2,2),16);
+    return out;
+  }
+  function revHex(b){
+    var s="",i;
+    for(i=b.length-1;i>=0;i--)s+=HEXC[b[i]>>4]+HEXC[b[i]&15];
+    return s;
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",bytes).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+
+  /* ---------- number formatting ---------- */
+  function grp(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function btcStr(sats){
+    var s=sats.toString();
+    while(s.length<9)s="0"+s;
+    return grp(s.slice(0,s.length-8))+"."+s.slice(s.length-8);
+  }
+
+  /* ---------- parser ---------- */
+  function cleanHex(raw){
+    var s=(""+raw).replace(/\s+/g,"").replace(/^0x/i,"");
+    if(!s)return "";
+    if(/[^0-9a-fA-F]/.test(s))throw new Error("That is not hexadecimal. A raw transaction uses only the characters 0 to 9 and a to f.");
+    if(s.length%2)throw new Error("Odd number of hex characters. Every byte is two characters, so at least one is missing.");
+    if(s.length===64)throw new Error("That looks like a transaction id, not a raw transaction. A txid is 32 bytes; the transaction itself is hundreds of bytes and starts with a version, usually 01000000 or 02000000.");
+    if(s.length<20)throw new Error("Too short to be a transaction. The header alone takes ten bytes.");
+    if(s.length>MAXHEX)throw new Error("Too long to decode here: that is over 500 kB, which no node would relay.");
+    return s.toLowerCase();
+  }
+
+  function parse(hexStr){
+    var b=fromHex(hexStr),len=b.length,p=0;
+    var dv=new DataView(b.buffer,b.byteOffset,b.byteLength);
+    function need(n){
+      if(p+n>len)throw new Error("The hex ends in the middle of the transaction: "+grp(String(len))+" bytes were supplied and more were needed after byte "+grp(String(p))+", so it was probably copied short.");
+    }
+    function u8(){need(1);return b[p++];}
+    function u32(){need(4);var v=dv.getUint32(p,true);p+=4;return v;}
+    function i32(){need(4);var v=dv.getInt32(p,true);p+=4;return v;}
+    function u64(){need(8);var v=dv.getBigUint64(p,true);p+=8;return v;}
+    function varint(){
+      var t=u8();
+      if(t<0xfd)return t;
+      if(t===0xfd){need(2);var a=dv.getUint16(p,true);p+=2;return a;}
+      if(t===0xfe){need(4);var c=dv.getUint32(p,true);p+=4;return c;}
+      need(8);var d=dv.getBigUint64(p,true);p+=8;
+      if(d>BigInt(4000000))throw new Error("A count in the transaction is absurdly large, so these bytes are not a transaction.");
+      return Number(d);
+    }
+    function take(n){
+      if(n>len)throw new Error("A length field claims "+n+" bytes but only "+len+" exist in total. These bytes are not a valid transaction.");
+      need(n);var v=b.subarray(p,p+n);p+=n;return v;
+    }
+
+    var version=i32();
+    var segwit=false,mark=p;
+    if(len>p+1&&b[p]===0x00&&b[p+1]===0x01){segwit=true;p+=2;}
+    var nIn=varint();
+    if(nIn===0){
+      if(!segwit)throw new Error("This transaction claims zero inputs, which is not valid.");
+      p=mark;segwit=false;nIn=varint();
+      if(nIn===0)throw new Error("This transaction claims zero inputs, which is not valid.");
+    }
+    var bodyStart=segwit?6:4;
+    var ins=[],i,j;
+    for(i=0;i<nIn;i++){
+      var prev=take(32),vout=u32(),sl=varint(),script=take(sl),seq=u32();
+      ins.push({txid:revHex(prev),vout:vout,script:script,seq:seq,
+                coinbase:vout===0xffffffff&&isZero(prev),wit:null});
+    }
+    var nOut=varint();
+    if(nOut===0)throw new Error("This transaction claims zero outputs, which is not valid.");
+    var outs=[],total=BigInt(0);
+    for(i=0;i<nOut;i++){
+      var val=u64(),ol=varint(),oscript=take(ol);
+      total+=val;
+      outs.push({value:val,script:oscript});
+    }
+    var witStart=p,witItems=0;
+    if(segwit){
+      for(i=0;i<nIn;i++){
+        var cnt=varint(),items=[];
+        for(j=0;j<cnt;j++){var il=varint();items.push(take(il));}
+        witItems+=cnt;
+        ins[i].wit=items;
+      }
+      if(witItems===0)throw new Error("The segwit marker is set but no witness data follows, so this serialization is malformed.");
+    }
+    var ltStart=p,locktime=u32();
+    if(p!==len)throw new Error((len-p)+" byte"+(len-p===1?"":"s")+" left over after the locktime. Extra characters were probably copied along with the transaction.");
+
+    /* stripped serialization: header without marker and flag, body, locktime */
+    var stripped;
+    if(segwit){
+      var slen=4+(witStart-bodyStart)+4;
+      stripped=new Uint8Array(slen);
+      stripped.set(b.subarray(0,4),0);
+      stripped.set(b.subarray(bodyStart,witStart),4);
+      stripped.set(b.subarray(ltStart,ltStart+4),4+(witStart-bodyStart));
+    }else{
+      stripped=b;
+    }
+    var weight=stripped.length*3+len;
+    return {bytes:b,stripped:stripped,version:version,segwit:segwit,locktime:locktime,
+            ins:ins,outs:outs,total:total,size:len,strippedSize:stripped.length,
+            weight:weight,vsize:Math.ceil(weight/4)};
+  }
+  function isZero(b){
+    for(var i=0;i<b.length;i++)if(b[i]!==0)return false;
+    return true;
+  }
+
+  /* ---------- script classification ---------- */
+  function pushes(b,from){
+    var p=from,out=[],op,l;
+    while(p<b.length){
+      op=b[p++];
+      if(op>=1&&op<=75){l=op;}
+      else if(op===0x4c){if(p>=b.length)break;l=b[p++];}
+      else if(op===0x4d){if(p+1>=b.length)break;l=b[p]|(b[p+1]<<8);p+=2;}
+      else if(op===0x4e){if(p+3>=b.length)break;l=(b[p]|(b[p+1]<<8)|(b[p+2]<<16))+b[p+3]*16777216;p+=4;}
+      else{continue;}
+      if(p+l>b.length)break;
+      out.push(b.subarray(p,p+l));p+=l;
+    }
+    return out;
+  }
+  /* strict UTF-8 first; failing that, pull printable ASCII runs out of the
+     binary, which is how a coinbase message shows through its push opcodes */
+  function textOf(bytes){
+    var s=null,out="",i,c,bad=0;
+    try{s=new TextDecoder("utf-8",{fatal:true}).decode(bytes);}catch(e){s=null;}
+    if(s!==null){
+      for(i=0;i<s.length;i++){
+        c=s.charCodeAt(i);
+        if(c===9||c===10||c===13){out+=" ";}
+        else if(c<32||(c>=127&&c<160)){out+="·";bad++;}
+        else out+=s[i];
+      }
+      if(!s.length||bad/s.length<=0.3)return {t:out,full:true};
+    }
+    var runs=[],cur="",v;
+    for(i=0;i<bytes.length;i++){
+      v=bytes[i];
+      if(v>=32&&v<127){cur+=String.fromCharCode(v);}
+      else{if(cur.length>=4)runs.push(cur);cur="";}
+    }
+    if(cur.length>=4)runs.push(cur);
+    if(!runs.length)return null;
+    return {t:runs.join("  ...  "),full:false};
+  }
+  function classify(b){
+    var n=b.length;
+    if(n===0)return {t:"Empty",d:"An empty script: anyone can spend this output."};
+    if(n===25&&b[0]===0x76&&b[1]===0xa9&&b[2]===0x14&&b[23]===0x88&&b[24]===0xac)
+      return {t:"P2PKH",d:"Pay to public key hash, the legacy format spent from addresses starting with 1.",
+              k:"Public key hash",h:toHex(b.subarray(3,23))};
+    if(n===23&&b[0]===0xa9&&b[1]===0x14&&b[22]===0x87)
+      return {t:"P2SH",d:"Pay to script hash: the spending conditions stay hidden until it is spent. Addresses start with 3.",
+              k:"Script hash",h:toHex(b.subarray(2,22))};
+    if(n===22&&b[0]===0x00&&b[1]===0x14)
+      return {t:"P2WPKH",d:"Native segwit v0, a single key. Addresses start with bc1q.",
+              k:"Witness program",h:toHex(b.subarray(2))};
+    if(n===34&&b[0]===0x00&&b[1]===0x20)
+      return {t:"P2WSH",d:"Native segwit v0, a script hash such as multisig. Addresses start with bc1q and are longer.",
+              k:"Witness program",h:toHex(b.subarray(2))};
+    if(n===34&&b[0]===0x51&&b[1]===0x20)
+      return {t:"P2TR",d:"Taproot, witness version 1, a 32-byte output key. Addresses start with bc1p.",
+              k:"Output key",h:toHex(b.subarray(2))};
+    if(b[0]===0x6a){
+      var data=pushes(b,1),joined=[],i,k,tot=0;
+      for(i=0;i<data.length;i++)tot+=data[i].length;
+      var flat=new Uint8Array(tot),off=0;
+      for(i=0;i<data.length;i++){flat.set(data[i],off);off+=data[i].length;}
+      joined=flat;
+      return {t:"OP_RETURN",d:"A provably unspendable output carrying data. It burns nothing beyond the fee and creates no coin to spend.",
+              k:"Data",h:toHex(joined),text:textOf(joined),op:true};
+    }
+    if(((n===35&&b[0]===0x21)||(n===67&&b[0]===0x41))&&b[n-1]===0xac)
+      return {t:"P2PK",d:"Pay to public key: the raw key sits in the output, no hash. Used in 2009 and by coinbase outputs of the era.",
+              k:"Public key",h:toHex(b.subarray(1,n-1))};
+    /* generic witness program is tested before bare multisig: both can start
+       with OP_1 to OP_16, and the program shape is the stricter match */
+    if(n>=4&&n<=42&&b[1]===n-2&&(b[0]===0x00||(b[0]>=0x51&&b[0]<=0x60))){
+      var ver=b[0]===0x00?0:b[0]-0x50;
+      return {t:"Witness v"+ver,d:"A witness program of version "+ver+" with a "+(n-2)+"-byte payload. Valid to pay to, with no standard spending rules defined for this shape yet.",
+              k:"Witness program",h:toHex(b.subarray(2))};
+    }
+    if(n>=4&&b[0]>=0x51&&b[0]<=0x60&&b[n-1]===0xae&&b[n-2]>=0x51&&b[n-2]<=0x60)
+      return {t:"Bare multisig",d:(b[0]-0x50)+" of "+(b[n-2]-0x50)+" signatures required, written directly into the output rather than behind a script hash."};
+    return {t:"Nonstandard",d:"This script matches no common template. It may still be spendable, but most nodes will not relay a transaction that creates it."};
+  }
+
+  /* ---------- field notes ---------- */
+  function seqNote(seq,version){
+    if(seq===0xffffffff)return "final: no replace-by-fee signal, and locktime is ignored for this input";
+    if(seq===0xfffffffe)return "locktime enabled, replace-by-fee not signalled";
+    var s="signals opt-in replace-by-fee (BIP-125)";
+    if(version>=2&&(seq&0x80000000)===0){
+      var v=seq&0xffff;
+      if(seq&0x400000){
+        var secs=v*512,human;
+        if(secs<7200)human=(Math.round(secs/6)/10)+" minutes";
+        else if(secs<172800)human=(Math.round(secs/360)/10)+" hours";
+        else human=(Math.round(secs/8640)/10)+" days";
+        s+=", plus a relative timelock of "+grp(String(v))+" units of 512 seconds ("+human+
+           ") after the input it spends was mined";
+      }else{
+        s+=", plus a relative timelock of "+grp(String(v))+" block"+(v===1?"":"s")+" after the input it spends was mined";
+      }
+    }
+    return s;
+  }
+  function lockNote(lt,anyNonFinal){
+    if(lt===0)return {v:"0",n:"no locktime: valid from the moment it is signed"};
+    var meaning;
+    if(lt<500000000){
+      meaning="block height "+grp(String(lt))+": not valid until that block";
+    }else{
+      var d=new Date(lt*1000);
+      meaning="unix time "+grp(String(lt))+", which is "+d.toISOString().slice(0,16).replace("T"," ")+" UTC";
+    }
+    if(!anyNonFinal)meaning+=". Every input is final, so this locktime has no effect";
+    return {v:grp(String(lt)),n:meaning};
+  }
+
+  /* ---------- rendering ---------- */
+  var res=document.getElementById("td-res"),
+      inp=document.getElementById("td-in"),
+      cnt=document.getElementById("td-count");
+  function esc(s){return (""+s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function hexBlock(b){
+    if(b.length===0)return '<span class="td-mute">empty</span>';
+    if(b.length<=256)return esc(toHex(b));
+    return esc(toHex(b.subarray(0,128)))+
+      '<span class="td-el"> ... '+grp(String(b.length-256))+' bytes not shown ... </span>'+
+      esc(toHex(b.subarray(b.length-128)));
+  }
+  function kv(label,html){return '<div class="td-kv"><i>'+esc(label)+'</i><u>'+html+"</u></div>";}
+  function paint(html){res.innerHTML=html;}
+  function paintIdle(){
+    paint('<div class="td-status td-mut">Waiting for hex</div>'
+      +'<div class="td-note">Legacy and segwit serializations are both understood. Paste the output of a wallet\'s raw or signed transaction, or press one of the examples above.</div>');
+  }
+  function paintErr(msg){
+    paint('<div class="td-status td-bad">&#10007; Cannot decode</div>'
+      +'<div class="td-note">'+esc(msg)+"</div>"
+      +'<div class="td-note td-mute">Raw transaction hex is one unbroken string of hex characters with no 0x prefix and no line labels. A wallet usually offers it as "raw transaction", "signed hex" or "transaction hex".</div>');
+  }
+
+  function renderInputs(tx){
+    var h="",i,k,w,items;
+    for(i=0;i<tx.ins.length;i++){
+      var n=tx.ins[i],tags="";
+      if(n.coinbase)tags+='<span class="td-tag td-tg">coinbase</span>';
+      if(n.seq<0xfffffffe)tags+='<span class="td-tag td-tg">RBF</span>';
+      if(n.wit&&n.wit.length)tags+='<span class="td-tag td-tw">witness</span>';
+      h+='<div class="td-item"><div class="td-ih"><b>Input '+i+"</b>"+tags+"</div>";
+      if(n.coinbase){
+        h+=kv("Spends","<b>newly created coins</b>: the input points at no previous output, which is what makes this a coinbase transaction");
+      }else{
+        h+=kv("Previous tx","<b>"+esc(n.txid)+"</b>");
+        h+=kv("Output index",String(n.vout));
+      }
+      var txt=n.coinbase?textOf(n.script):null;
+      h+=kv(n.coinbase?"Coinbase field":"scriptSig",
+            "<b>"+grp(String(n.script.length))+" byte"+(n.script.length===1?"":"s")+"</b>"+
+            (n.script.length?" "+hexBlock(n.script):"")+
+            (txt?"<q>"+esc(txt.t)+"</q>"+(txt.full?"":'<span class="td-mute">printable runs pulled out of binary data, so a push opcode can leave a stray character at either edge</span>'):"")+
+            (!n.coinbase&&n.script.length===0?'<span class="td-mute"> empty, so the unlocking data is in the witness</span>':""));
+      h+=kv("Sequence","<b>0x"+("0000000"+n.seq.toString(16)).slice(-8)+"</b> "+esc(seqNote(n.seq,tx.version)));
+      if(n.wit){
+        if(!n.wit.length){
+          h+=kv("Witness",'<span class="td-mute">no items: this input is not spending a segwit output</span>');
+        }else{
+          w="<b>"+n.wit.length+" item"+(n.wit.length===1?"":"s")+"</b>";
+          for(k=0;k<n.wit.length;k++)w+="<q>"+grp(String(n.wit[k].length))+" B: "+hexBlock(n.wit[k])+"</q>";
+          h+=kv("Witness",w);
+        }
+      }
+      h+="</div>";
+    }
+    return h;
+  }
+  function renderOutputs(tx){
+    var h="",i;
+    for(i=0;i<tx.outs.length;i++){
+      var o=tx.outs[i],c=classify(o.script);
+      h+='<div class="td-item"><div class="td-ih"><b>Output '+i+'</b><span class="td-tag td-tg">'+esc(c.t)+"</span>"
+        +'<span class="td-amt">'+btcStr(o.value)+' BTC<i>'+grp(o.value.toString())+" sats</i></span></div>";
+      h+=kv("Meaning",esc(c.d));
+      h+=kv("scriptPubKey","<b>"+grp(String(o.script.length))+" byte"+(o.script.length===1?"":"s")+"</b> "+hexBlock(o.script));
+      if(c.k)h+=kv(c.k,c.h?esc(c.h):'<span class="td-mute">none</span>');
+      if(c.op)h+=kv("As text",c.text
+        ?"<q>"+esc(c.text.t)+"</q>"+(c.text.full?"":'<span class="td-mute">printable runs pulled out of binary data</span>')
+        :'<span class="td-mute">no readable text: these bytes are binary data rather than a message</span>');
+      h+="</div>";
+    }
+    return h;
+  }
+
+  function paintTx(tx,ids){
+    var anyNonFinal=false,rbf=false,coinbase=false,i;
+    for(i=0;i<tx.ins.length;i++){
+      if(tx.ins[i].seq!==0xffffffff)anyNonFinal=true;
+      if(tx.ins[i].seq<0xfffffffe)rbf=true;
+      if(tx.ins[i].coinbase)coinbase=true;
+    }
+    var lock=lockNote(tx.locktime,anyNonFinal);
+    var badges='<div class="td-badges">'
+      +'<span class="td-b-acc">'+(tx.segwit?"segwit":"legacy")+"</span>"
+      +"<span>"+tx.ins.length+" input"+(tx.ins.length===1?"":"s")+"</span>"
+      +"<span>"+tx.outs.length+" output"+(tx.outs.length===1?"":"s")+"</span>"
+      +(rbf?'<span class="td-b-acc">opt-in RBF</span>':"<span>no RBF signal</span>")
+      +(coinbase?'<span class="td-b-acc">coinbase</span>':"")
+      +"</div>";
+    var ids_html='<div class="td-ids">'
+      +'<div class="td-id"><i>txid</i><b>'+esc(ids.txid)+"</b></div>"
+      +'<div class="td-id td-id-2"><i>wtxid'+(tx.segwit?"":", identical: a legacy transaction has no witness")+"</i><b>"+esc(ids.wtxid)+"</b></div>"
+      +"</div>";
+    var stats='<div class="td-stats">'
+      +'<div class="td-s"><span>Version</span><b>'+tx.version+"</b></div>"
+      +'<div class="td-s"><span>Size</span><b>'+grp(String(tx.size))+"<em>bytes</em></b></div>"
+      +'<div class="td-s"><span>Virtual size</span><b>'+grp(String(tx.vsize))+"<em>vB</em></b></div>"
+      +'<div class="td-s"><span>Weight</span><b>'+grp(String(tx.weight))+"<em>WU</em></b></div>"
+      +'<div class="td-s"><span>Total out</span><b>'+btcStr(tx.total)+"<em>BTC</em></b></div>"
+      +'<div class="td-s"><span>Locktime</span><b>'+esc(lock.v)+"</b></div>"
+      +"</div>";
+    var fee='<div class="td-fee"><b>Fee: not computable from this hex</b><span>'
+      +"Inputs are pointers, not amounts, so the value being spent is not in these bytes. Look the previous outputs up and subtract "
+      +btcStr(tx.total)+" BTC from their total to get the fee. At this size, one satoshi per virtual byte would cost "
+      +grp(String(tx.vsize))+' sats; the <a href="/fees/calculator">fee calculator</a> does the rest.</span></div>';
+
+    paint('<div class="td-status td-ok">&#10003; Decoded, '+grp(String(tx.size))+" bytes</div>"
+      +badges+ids_html+stats+fee
+      +'<div class="td-sec"><div class="td-sh">Locktime<em>'+esc(lock.v)+"</em></div>"
+      +'<div class="td-item">'+kv("Meaning",esc(lock.n))+"</div></div>"
+      +'<div class="td-sec"><div class="td-sh">Inputs<em>'+tx.ins.length+"</em></div>"+renderInputs(tx)+"</div>"
+      +'<div class="td-sec"><div class="td-sh">Outputs<em>'+tx.outs.length+"</em></div>"+renderOutputs(tx)+"</div>"
+      +'<div class="td-note td-mute">Decoding proves the bytes parse and computes their identifiers. It does not verify signatures, does not know whether the inputs are still unspent, and cannot tell you whether this transaction was ever mined.</div>');
+  }
+
+  function ids(tx){
+    return sha256d(tx.stripped).then(function(a){
+      return sha256d(tx.bytes).then(function(b){
+        return {txid:revHex(a),wtxid:revHex(b)};
+      });
+    });
+  }
+
+  /* ---------- self-test ---------- */
+  var ready=false,failed=false,queued=null;
+  function fail(why){
+    failed=true;
+    console.error("[/tools/decode] self-test FAILED: "+why);
+    paint('<div class="td-status td-bad">&#10007; Self-test failed</div>'
+      +'<div class="td-note">This decoder checks itself against known transactions every time the page loads, and one of those checks did not match ('+esc(why)+'). Rather than show a txid that might be wrong, decoding is switched off. Please <a href="/contact">tell us</a> so it can be fixed.</div>');
+    inp.setAttribute("disabled","disabled");
+  }
+  function selfTest(){
+    var checks=[],passed=0;
+    function eq(name,got,want){
+      checks.push(name);
+      if(String(got)!==String(want))throw new Error(name+": got "+got+", expected "+want);
+      passed++;
+    }
+    if(!window.crypto||!crypto.subtle||!crypto.subtle.digest){
+      fail("crypto.subtle is unavailable in this browser");
+      return;
+    }
+    var a,b,g;
+    try{
+      a=parse(cleanHex(EX.legacy));
+      b=parse(cleanHex(EX.segwit));
+      g=parse(cleanHex(EX.coinbase));
+    }catch(e){fail("a test vector did not parse: "+e.message);return;}
+    Promise.all([ids(a),ids(b),ids(g)]).then(function(r){
+      var ia=r[0],ib=r[1],ig=r[2],c;
+      /* legacy: block 170, the first person to person bitcoin payment */
+      eq("legacy txid",ia.txid,"f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16");
+      eq("legacy wtxid",ia.wtxid,"f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16");
+      eq("legacy size",a.size,275);
+      eq("legacy vsize",a.vsize,275);
+      eq("legacy weight",a.weight,1100);
+      eq("legacy segwit flag",a.segwit,false);
+      eq("legacy inputs",a.ins.length,1);
+      eq("legacy outputs",a.outs.length,2);
+      eq("legacy prevout",a.ins[0].txid,"0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9");
+      eq("legacy out0 value",a.outs[0].value.toString(),"1000000000");
+      eq("legacy out0 type",classify(a.outs[0].script).t,"P2PK");
+      /* segwit: the signed P2WPKH example from BIP-143 */
+      eq("segwit txid",ib.txid,"e8151a2af31c368a35053ddd4bdb285a8595c769a3ad83e0fa02314a602d4609");
+      eq("segwit wtxid",ib.wtxid,"c36c38370907df2324d9ce9d149d191192f338b37665a82e78e76a12c909b762");
+      eq("segwit size",b.size,343);
+      eq("segwit stripped size",b.strippedSize,233);
+      eq("segwit weight",b.weight,1042);
+      eq("segwit vsize",b.vsize,261);
+      eq("segwit flag",b.segwit,true);
+      eq("segwit locktime",b.locktime,17);
+      eq("segwit inputs",b.ins.length,2);
+      eq("segwit in0 sequence",b.ins[0].seq,0xffffffee);
+      eq("segwit in0 witness items",b.ins[0].wit.length,0);
+      eq("segwit in1 witness items",b.ins[1].wit.length,2);
+      eq("segwit out0 type",classify(b.outs[0].script).t,"P2PKH");
+      eq("segwit out0 value",b.outs[0].value.toString(),"112340000");
+      eq("segwit total out",b.total.toString(),"335790000");
+      /* coinbase: the genesis block transaction of 3 Jan 2009 */
+      eq("genesis txid",ig.txid,"4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
+      eq("genesis size",g.size,204);
+      eq("genesis weight",g.weight,816);
+      eq("genesis coinbase flag",g.ins[0].coinbase,true);
+      eq("genesis out value",g.outs[0].value.toString(),"5000000000");
+      var gt=textOf(g.ins[0].script);
+      eq("genesis headline",gt&&gt.t.indexOf("Chancellor on brink of second bailout for banks")>=0,true);
+      /* script templates from BIP-173, BIP-350 and a plain OP_RETURN */
+      c=classify(fromHex("0014751e76e8199196d454941c45d1b3a323f1433bd6"));
+      eq("BIP-173 program type",c.t,"P2WPKH");
+      eq("BIP-173 program",c.h,"751e76e8199196d454941c45d1b3a323f1433bd6");
+      c=classify(fromHex("512079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"));
+      eq("BIP-350 program type",c.t,"P2TR");
+      eq("BIP-350 program",c.h,"79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
+      c=classify(fromHex("6a0b48656c6c6f20576f726c64"));
+      eq("OP_RETURN type",c.t,"OP_RETURN");
+      eq("OP_RETURN text",c.text&&c.text.t,"Hello World");
+      ready=true;
+      console.log("[/tools/decode] self-test "+passed+"/"+checks.length+" passed (block 170 legacy tx, BIP-143 segwit tx, genesis coinbase, BIP-173 and BIP-350 script templates)");
+      if(queued!==null){var q=queued;queued=null;go(q);}
+    })["catch"](function(e){fail(e&&e.message?e.message:"unknown assertion failure");});
+  }
+
+  /* ---------- wiring ---------- */
+  var run=0,deb=null;
+  function go(raw){
+    if(failed)return;
+    if(!ready){queued=raw;return;}
+    var token=++run,s;
+    try{s=cleanHex(raw);}catch(e){paintErr(e.message);return;}
+    if(!s){paintIdle();return;}
+    var tx;
+    try{tx=parse(s);}catch(e2){paintErr(e2.message);return;}
+    ids(tx).then(function(r){
+      if(token!==run)return;
+      paintTx(tx,r);
+    })["catch"](function(){
+      if(token!==run)return;
+      paintErr("Hashing failed in this browser, so no txid can be shown.");
+    });
+  }
+  function count(){
+    var s=(""+inp.value).replace(/\s+/g,"").replace(/^0x/i,"");
+    var n=Math.floor(s.length/2);
+    cnt.textContent=grp(String(n))+" byte"+(n===1?"":"s");
+  }
+  inp.addEventListener("input",function(){
+    count();
+    clearTimeout(deb);
+    deb=setTimeout(function(){go(inp.value);},150);
+  });
+  document.querySelectorAll(".td-ex button[data-ex]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      inp.value=EX[btn.dataset.ex];
+      count();go(inp.value);
+    });
+  });
+  document.getElementById("td-clear").addEventListener("click",function(){
+    inp.value="";count();go("");inp.focus();
+  });
+  selfTest();
+})();
+</script>
+</Base>

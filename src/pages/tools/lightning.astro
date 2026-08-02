@@ -1,0 +1,839 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Lightning Invoice Decoder: Read a BOLT11 Invoice - OpenBitcoin" description="Paste a BOLT11 Lightning invoice and decode it in your browser: amount, payment hash, description, timestamp, expiry and routing hints. Nothing is sent.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Lightning</div>
+    <h1>Lightning invoice decoder</h1>
+    <p class="doc-lede">Paste a BOLT11 invoice and it is taken apart in your browser: amount, payment hash, description, expiry and routing hints. The invoice never leaves this page.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ld-card">
+      <div class="ld-lab">BOLT11 invoice</div>
+      <textarea id="ld-in" class="ld-ta" rows="5" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="lnbc... paste a Lightning payment request here" aria-label="BOLT11 Lightning invoice to decode"></textarea>
+      <div class="ld-bar">
+        <div class="ld-ex" aria-label="Example invoices from the BOLT11 specification">
+          <span>Try:</span>
+          <button type="button" data-ex="ex1">donation, any amount</button>
+          <button type="button" data-ex="ex2">coffee, one minute</button>
+          <button type="button" data-ex="ex11">store, routing hint</button>
+          <button type="button" id="ld-clear">clear</button>
+        </div>
+        <div class="ld-count" id="ld-count">0 characters</div>
+      </div>
+    </div>
+    <p class="ld-priv">Parsing runs entirely in your browser. This page makes no network requests with what you paste, which matters here: an invoice names an amount, a payee and often what is being bought.</p>
+
+    <div class="ld-res" id="ld-res" role="status" aria-live="polite">
+      <div class="ld-status ld-mut">Waiting for an invoice</div>
+      <div class="ld-note">Mainnet, testnet, signet and regtest invoices are all understood, at any length. Paste a payment request or press one of the examples above, which are the specification's own test vectors.</div>
+    </div>
+
+    <div class="ld-card ld-mt ld-scope">
+      <div class="ld-tlab">Why this lives here</div>
+      <p>This site is built around the base chain: blocks, fees, addresses and raw transactions. Lightning tools sit here for one practical reason, which is that the wallets people actually use speak both, and a payment request pasted into a chat window deserves the same careful reading as a raw transaction before you act on it. This page reads the request and nothing more. It opens no channels, routes no payments and touches no funds.</p>
+      <a class="ld-cta" href="/wallets">Wallets that handle both</a>
+    </div>
+
+    <div class="doc-card ld-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What a BOLT11 invoice actually is</h2>
+        <p>An invoice is one bech32 string in two halves. The human readable part is everything before the last <code>1</code>: <code>ln</code>, then the chain (<code>bc</code> for mainnet, <code>tb</code> for testnet, <code>tbs</code> for signet, <code>bcrt</code> for regtest), then an optional amount. Everything after that separator is data packed five bits to a character: a timestamp, a run of tagged fields, and a 65 byte signature. The last six characters are a checksum, so a single mistyped character is caught rather than sending money somewhere unintended. Addresses use the same encoding capped at 90 characters; BOLT11 lifts that cap, which is why invoices run to several hundred characters and why a decoder written only for addresses chokes on them.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Reading the amount</h2>
+        <p>The amount is optional. When it is missing, as in the donation example, the payer picks the figure. When it is present it is a number followed by a multiplier: <code>m</code> for a thousandth of a bitcoin, <code>u</code> for a millionth, <code>n</code> for a billionth, <code>p</code> for a trillionth. So <code>lnbc2500u</code> is 0.0025 BTC, or 250,000 satoshis. Lightning counts in millisatoshis, a thousandth of a satoshi, which is why the smallest multiplier exists and why an amount in <code>p</code> has to be a multiple of ten: anything finer than a millisatoshi cannot be paid.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>The tagged fields</h2>
+        <p>After the timestamp the invoice is a list of tagged fields, each one a type character, a two character length, then the data. A reader is meant to skip quietly over any tag it does not recognise, which is how the format has grown without breaking old wallets. These are the ones that carry weight:</p>
+        <table>
+          <tr><th>Tag</th><th>Meaning</th></tr>
+          <tr><td><code>p</code></td><td>Payment hash. The payee knows the preimage; revealing it is what proves the payment landed.</td></tr>
+          <tr><td><code>s</code></td><td>Payment secret, which stops an intermediate node from claiming a part-paid payment it did not fully forward.</td></tr>
+          <tr><td><code>d</code></td><td>Description, plain text, what you are paying for.</td></tr>
+          <tr><td><code>h</code></td><td>Hash of a longer description, used when the text is too long to fit. The text itself arrives out of band.</td></tr>
+          <tr><td><code>x</code></td><td>Expiry in seconds from the timestamp. Absent means one hour.</td></tr>
+          <tr><td><code>c</code></td><td>Minimum final CLTV expiry delta: how many blocks of safety margin the last hop demands. Absent means 18.</td></tr>
+          <tr><td><code>f</code></td><td>Fallback on-chain address, an optional escape hatch if the payment cannot be routed.</td></tr>
+          <tr><td><code>r</code></td><td>Routing hints, one or more hops through private channels the public graph cannot see.</td></tr>
+          <tr><td><code>n</code></td><td>Payee node id, stated outright. When it is absent it is recoverable from the signature instead.</td></tr>
+          <tr><td><code>9</code></td><td>Feature bits. Even numbered bits are mandatory, odd numbered ones optional.</td></tr>
+        </table>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why the signature is not checked here</h2>
+        <p>Every invoice ends with a 64 byte signature over the whole thing plus a recovery byte, and that pair is what lets a wallet work out the payee's node id without being told it. Checking it means secp256k1 public key recovery, which browsers do not offer: WebCrypto covers SHA-256 and the NIST curves, not the curve bitcoin uses. Shipping a curve implementation to do it here would mean asking you to trust several hundred lines of hand-rolled arithmetic, so this page does not pretend. It confirms the signature is present and correctly sized, reports the recovery flag, and stops there. Your wallet does the real check before it pays, which is the place it belongs. A well-formed invoice that decodes cleanly here can still be signed by nobody you meant to pay.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>An invoice is a statement of intent</h2>
+        <p>Unlike an on-chain address, an invoice is generally single use: it pins one payment hash, one amount and one expiry, and once paid it is spent. That is good for privacy in one direction and revealing in another. The string itself says how much is being asked, roughly when, often what for, and which node wants it, so pasting one into a random website hands over a small dossier on a payment you were about to make. That is the reason the parsing here happens in your browser rather than on a server, and the reason the field is never sent anywhere. More on the general shape of the problem is on <a href="/learn/privacy">bitcoin privacy</a>.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Expiry, and the clock you are reading it on</h2>
+        <p>The timestamp plus the expiry gives the moment the invoice stops being payable, and most wallets refuse an expired one outright. Default expiry is an hour, which is why a payment request forwarded to you the next morning usually needs a fresh one rather than a retry. The status shown above is worked out against your own device clock, so a machine with the wrong time will report the wrong verdict. The specification's example invoices are dated 2017 and 2019 and are long expired, which is exactly what they should look like.</p>
+      </div>
+    </div>
+
+    <div class="ld-about doc-prose">
+      <p>Decoding is a read, not a verification. This page confirms an invoice is well-formed and shows you what it claims, but it does not check the signature, does not know whether the payee node exists or is reachable, cannot tell whether a route to it can be built, and has no way of seeing whether the invoice has already been paid. Treat the description as something the payee wrote about themselves. To check an on-chain address before paying it use the <a href="/tools/validate">address validator</a>, and for the on-chain side of a transaction the <a href="/tools/decode">raw transaction decoder</a> does the same job. Nothing here is financial advice and everything is informational under the <a href="/terms">terms</a>; data provenance is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">What is read</div>
+      <div class="ld-t"><b>Header</b><i>Chain, amount and multiplier, converted to sats, BTC and dollars.</i></div>
+      <div class="ld-t"><b>Timing</b><i>Timestamp, expiry, whether it is still payable, min final CLTV.</i></div>
+      <div class="ld-t"><b>Tags</b><i>Payment hash, secret, description or its hash, payee node, features.</i></div>
+      <div class="ld-t"><b>Routing</b><i>Fallback on-chain address and every private channel hint, hop by hop.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Not checked here</div>
+      <div class="ld-t"><b>The signature</b><i>Public key recovery on secp256k1 is not something a browser can do without shipping a curve. Your wallet checks it.</i></div>
+      <div class="ld-t"><b>Whether it is payable</b><i>No node is contacted, so route availability and prior payment are both unknown.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/decode">Raw transaction decoder</a>
+        <a href="/wallets">Wallet comparison</a>
+        <a href="/fees">On-chain fee rates</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ld-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .ld-mt{margin-top:14px}
+  .ld-lab,.ld-tlab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .ld-ta{width:100%;box-sizing:border-box;display:block;background:rgba(124,140,168,.13);
+    border:1px dashed rgba(255,166,60,.32);border-radius:10px;color:var(--price-ink);
+    font:600 12.5px/1.65 var(--mono);padding:12px 14px;outline:none;resize:vertical;
+    word-break:break-all;min-height:118px}
+  .ld-ta:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .ld-ta::placeholder{color:var(--ph);font-weight:600}
+  .ld-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .ld-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+  .ld-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .ld-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .ld-ex button:hover{background:rgba(36,51,78,.55);color:var(--ink);border-color:var(--line-2)}
+  .ld-count{font:600 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;flex:none}
+  .ld-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:11px 0 0}
+  .ld-priv{font:600 11px/1.6 var(--mono);letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0}
+
+  .ld-res{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px;margin-top:14px}
+  .ld-status{font:700 15px var(--mono);letter-spacing:.02em}
+  .ld-status.ld-ok{color:var(--up)}
+  .ld-status.ld-bad{color:var(--down)}
+  .ld-status.ld-mut{color:var(--ink-3)}
+  .ld-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:9px}
+  .ld-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
+  .ld-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .ld-badges span{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px;white-space:nowrap}
+  .ld-badges span.ld-b-acc{border-style:solid;border-color:rgba(255,166,60,.55);color:var(--acc)}
+  .ld-badges span.ld-b-bad{border-style:solid;border-color:rgba(232,86,86,.5);color:var(--down)}
+  .ld-badges span.ld-b-ok{border-style:solid;border-color:rgba(46,190,124,.45);color:var(--up)}
+
+  .ld-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+  .ld-s{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;min-width:0}
+  .ld-s span{display:block;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .ld-s b{display:block;font:700 17px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;
+    letter-spacing:-.3px;word-break:break-word}
+  .ld-s b em{font:700 10px var(--mono);font-style:normal;color:var(--ink-3);letter-spacing:.06em;margin-left:5px}
+  .ld-s.ld-s-acc{border-color:rgba(255,166,60,.38)}
+  .ld-s.ld-s-acc b{color:var(--acc)}
+
+  .ld-ids{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+  .ld-id{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 13px}
+  .ld-id i{display:block;font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-bottom:4px}
+  .ld-id b{display:block;font:700 13px/1.6 var(--mono);color:var(--acc);word-break:break-all}
+  .ld-id.ld-id-2 b{color:var(--ink)}
+  .ld-id q{quotes:none;display:block;font:600 13.5px/1.65 var(--sans);color:var(--price-ink);white-space:pre-wrap;word-break:break-word}
+
+  .ld-sec{margin-top:18px;padding-top:15px;border-top:1px dotted var(--line-2)}
+  .ld-sh{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .ld-sh em{font-style:normal;color:var(--acc);margin-left:6px}
+  .ld-item{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;margin-top:9px}
+  .ld-item:first-of-type{margin-top:0}
+  .ld-ih{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:8px;border-bottom:1px dotted var(--line-2)}
+  .ld-ih b{font:700 12px var(--mono);letter-spacing:.05em;color:var(--ink)}
+  .ld-tag{font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+    border:1px solid var(--line-2);border-radius:6px;padding:3px 7px;white-space:nowrap}
+  .ld-tag.ld-tg{color:var(--acc);border-color:rgba(255,166,60,.5)}
+  .ld-kv{display:grid;grid-template-columns:124px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ld-kv:last-child{border-bottom:0;padding-bottom:0}
+  .ld-kv i{font:700 8.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+    font-style:normal;padding-top:3px}
+  .ld-kv u{font:600 11.5px/1.7 var(--mono);color:var(--ink-2);text-decoration:none;word-break:break-all;display:block}
+  .ld-kv u b{color:var(--ink);font-weight:700}
+  .ld-mute{color:var(--ink-3)}
+
+  .ld-call{margin-top:12px;background:var(--panel-2);border:1px solid var(--line-2);border-left:2px solid var(--acc);
+    border-radius:0 10px 10px 0;padding:11px 15px}
+  .ld-call b{display:block;font:700 12.5px var(--mono);letter-spacing:.03em;color:var(--acc)}
+  .ld-call span{display:block;font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin-top:5px}
+
+  .ld-scope p{font:500 13.5px/1.7 var(--sans);color:var(--ink-2);margin:0}
+  .ld-cta{display:inline-block;margin-top:12px;background:rgba(247,147,26,.08);border:1px solid rgba(255,166,60,.55);
+    border-radius:10px;color:var(--acc);font:700 11.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+    padding:10px 16px;text-decoration:none}
+  .ld-cta:hover{background:rgba(247,147,26,.14)}
+
+  .ld-about{margin-top:14px}
+  .ld-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ld-t{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .ld-t:last-child{border-bottom:0}
+  .ld-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .ld-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .ld-card{padding:18px}
+    .ld-res{padding:16px 18px 18px}
+    .ld-ta{font-size:11.5px;min-height:132px}
+    .ld-stats{grid-template-columns:minmax(0,1fr)}
+    .ld-s{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .ld-s span{margin-bottom:0}
+    .ld-s b{font-size:15px;text-align:right}
+    .ld-kv{grid-template-columns:minmax(0,1fr);gap:3px}
+    .ld-kv i{padding-top:0}
+    .ld-id b{font-size:11.5px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* ================================================================
+     No fetch, no XHR, no beacons, no images: the claim that the
+     invoice never leaves the browser depends on this script staying
+     local. crypto.subtle.digest is local math, not a request, and is
+     used only for the base58check checksum on fallback addresses.
+
+     TEST VECTORS (see the frontmatter note for provenance): the
+     BOLT #11 specification's own examples. Amounts, payment hashes,
+     descriptions, expiries, routing hops, feature bits and all four
+     fallback address forms are asserted on load, plus two negative
+     cases. If any assertion fails the decoder refuses to run.
+     ================================================================ */
+
+  var EX={
+    ex1:"lnbc1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq9qrsgq357wnc5r2ueh7ck6q93dj32dlqnls087fxdwk8qakdyafkq3yap9us6v52vjjsrvywa6rt52cm9r9zqt8r2t7mlcwspyetp5h2tztugp9lfyql",
+    ex2:"lnbc2500u1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdq5xysxxatsyp3k7enxv4jsxqzpu9qrsgquk0rl77nj30yxdy8j9vdx85fkpmdla2087ne0xh8nhedh8w27kyke0lp53ut353s06fv3qfegext0eh0ymjpf39tuven09sam30g4vgpfna3rh",
+    ex11:"lnbc9678785340p1pwmna7lpp5gc3xfm08u9qy06djf8dfflhugl6p7lgza6dsjxq454gxhj9t7a0sd8dgfkx7cmtwd68yetpd5s9xar0wfjn5gpc8qhrsdfq24f5ggrxdaezqsnvda3kkum5wfjkzmfqf3jkgem9wgsyuctwdus9xgrcyqcjcgpzgfskx6eqf9hzqnteypzxz7fzypfhg6trddjhygrcyqezcgpzfysywmm5ypxxjemgw3hxjmn8yptk7untd9hxwg3q2d6xjcmtv4ezq7pqxgsxzmnyyqcjqmt0wfjjq6t5v4khxsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsxqyjw5qcqp2rzjq0gxwkzc8w6323m55m4jyxcjwmy7stt9hwkwe2qxmy8zpsgg7jcuwz87fcqqeuqqqyqqqqlgqqqqn3qq9q9qrsgqrvgkpnmps664wgkp43l22qsgdw4ve24aca4nymnxddlnp8vh9v2sdxlu5ywdxefsfvm0fq3sesf08uf6q9a2ke0hc9j6z6wlxg5z5kqpu2v9wz"
+  };
+  /* test-only vectors: the fallback address and case folding examples */
+  var TV={
+    ex6:"lnbc20m1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqhp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqsfpp3qjmp7lwpagxun9pygexvgpjdc4jdj85fr9yq20q82gphp2nflc7jtzrcazrra7wwgzxqc8u7754cdlpfrmccae92qgzqvzq2ps8pqqqqqqpqqqqq9qqqvpeuqafqxu92d8lr6fvg0r5gv0heeeqgcrqlnm6jhphu9y00rrhy4grqszsvpcgpy9qqqqqqgqqqqq7qqzq9qrsgqdfjcdk6w3ak5pca9hwfwfh63zrrz06wwfya0ydlzpgzxkn5xagsqz7x9j4jwe7yj7vaf2k9lqsdk45kts2fd0fkr28am0u4w95tt2nsq76cqw0",
+    ex7:"lnbc20m1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygshp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqfppj3a24vwu6r8ejrss3axul8rxldph2q7z99qrsgqz6qsgww34xlatfj6e3sngrwfy3ytkt29d2qttr8qz2mnedfqysuqypgqex4haa2h8fx3wnypranf3pdwyluftwe680jjcfp438u82xqphf75ym",
+    ex8:"lnbc20m1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygshp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqfppqw508d6qejxtdg4y5r3zarvary0c5xw7k9qrsgqt29a0wturnys2hhxpner2e3plp6jyj8qx7548zr2z7ptgjjc7hljm98xhjym0dg52sdrvqamxdezkmqg4gdrvwwnf0kv2jdfnl4xatsqmrnsse",
+    ex10:"lnbc20m1pvjluezsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygspp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqhp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqsfp4pptdvg0d2nj99568qn6ssdy4cygnwuxgw2ukmnwgwz7jpqjz2kszs9qrsgqy606dznq28exnydt2r4c29y56xjtn3sk4mhgjtl4pg2y4ar3249rq4ajlmj9jy8zvlzw7cr8mggqzm842xfr0v72rswzq9xvr4hknfsqwmn6xd",
+    ex13:"LNBC25M1PVJLUEZPP5QQQSYQCYQ5RQWZQFQQQSYQCYQ5RQWZQFQQQSYQCYQ5RQWZQFQYPQDQ5VDHKVEN9V5SXYETPDEESSP5ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYG3ZYGS9Q5SQQQQQQQQQQQQQQQQSGQ2A25DXL5HRNTDTN6ZVYDT7D66HYZSYHQS4WDYNAVYS42XGL6SGX9C4G7ME86A27T07MDTFRY458RTJR0V92CNMSWPSJSCGT2VCSE3SGPZ3UAPA"
+  };
+  var MAXLEN=20000; /* far past any invoice a wallet would ever produce */
+  var P={price:64362.18};
+
+  /* ---------- bech32, with no length cap: BOLT11 lifts the one BIP-173
+     puts on addresses, so the 90 character rule must not be applied ---------- */
+  var CH="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+  var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+  function polymod(v){
+    var chk=1,i,j,b;
+    for(i=0;i<v.length;i++){
+      b=chk>>>25;
+      chk=(((chk&0x1ffffff)<<5)^v[i])>>>0;
+      for(j=0;j<5;j++)if((b>>>j)&1)chk=(chk^GEN[j])>>>0;
+    }
+    return chk>>>0;
+  }
+  function hrpExp(h){
+    var a=[],b=[],i;
+    for(i=0;i<h.length;i++){a.push(h.charCodeAt(i)>>>5);b.push(h.charCodeAt(i)&31);}
+    return a.concat([0]).concat(b);
+  }
+  function bech32Encode(hrp,data,konst){
+    var pm=(polymod(hrpExp(hrp).concat(data).concat([0,0,0,0,0,0]))^konst)>>>0,
+        out=hrp+"1",i;
+    for(i=0;i<data.length;i++)out+=CH[data[i]];
+    for(i=0;i<6;i++)out+=CH[(pm>>>(5*(5-i)))&31];
+    return out;
+  }
+  /* base conversion; pad only when encoding outward to five bit groups */
+  function conv(data,from,to,pad){
+    var acc=0,bits=0,out=[],max=(1<<to)-1,i;
+    for(i=0;i<data.length;i++){
+      acc=((acc<<from)|data[i])>>>0;bits+=from;
+      while(bits>=to){bits-=to;out.push((acc>>>bits)&max);}
+    }
+    if(pad&&bits)out.push((acc<<(to-bits))&max);
+    return out;
+  }
+  function bytesOf(five){return Uint8Array.from(conv(five,5,8,false));}
+  /* tag payloads are big-endian base32 integers; BigInt keeps a long
+     expiry field exact rather than drifting through a float */
+  function intOf(five){
+    var n=BigInt(0),i;
+    for(i=0;i<five.length;i++)n=n*BigInt(32)+BigInt(five[i]);
+    return n;
+  }
+  var HEXC="0123456789abcdef";
+  function toHex(b){
+    var s="",i;
+    for(i=0;i<b.length;i++)s+=HEXC[b[i]>>4]+HEXC[b[i]&15];
+    return s;
+  }
+
+  /* ---------- base58check, for the two legacy fallback forms ---------- */
+  var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  function b58enc(bytes){
+    var digits=[0],i,j,carry,s="";
+    for(i=0;i<bytes.length;i++){
+      carry=bytes[i];
+      for(j=0;j<digits.length;j++){carry+=digits[j]<<8;digits[j]=carry%58;carry=(carry/58)|0;}
+      while(carry){digits.push(carry%58);carry=(carry/58)|0;}
+    }
+    for(i=0;i<bytes.length&&bytes[i]===0;i++)s+="1";
+    for(i=digits.length-1;i>=0;i--)s+=B58[digits[i]];
+    return s;
+  }
+  function sha256d(bytes){
+    return crypto.subtle.digest("SHA-256",bytes).then(function(a){
+      return crypto.subtle.digest("SHA-256",a);
+    }).then(function(b){return new Uint8Array(b);});
+  }
+  function b58check(ver,payload){
+    var full=new Uint8Array(1+payload.length);
+    full[0]=ver;full.set(payload,1);
+    return sha256d(full).then(function(h){
+      var out=new Uint8Array(full.length+4);
+      out.set(full,0);out.set(h.subarray(0,4),full.length);
+      return b58enc(out);
+    });
+  }
+
+  /* ---------- chains, multipliers, tag names ---------- */
+  var NETS={
+    bc:{name:"Bitcoin mainnet",real:true,p:0x00,s:0x05,hrp:"bc"},
+    tb:{name:"Bitcoin testnet",real:false,p:0x6f,s:0xc4,hrp:"tb"},
+    tbs:{name:"Bitcoin signet",real:false,p:0x6f,s:0xc4,hrp:"tbs"},
+    bcrt:{name:"Bitcoin regtest",real:false,p:0x6f,s:0xc4,hrp:"bcrt"},
+    sb:{name:"Bitcoin simnet",real:false,p:0x3f,s:0x7b,hrp:"sb"}
+  };
+  var MULT={m:BigInt(1000),u:BigInt(1000000),n:BigInt(1000000000),p:BigInt(1000000000000)};
+  var MULTNAME={m:"milli, a thousandth of a bitcoin",u:"micro, a millionth of a bitcoin",
+                n:"nano, a billionth of a bitcoin",p:"pico, a trillionth of a bitcoin"};
+  var TAGNAME={p:"Payment hash",s:"Payment secret",d:"Description",n:"Payee node id",
+               h:"Description hash",x:"Expiry",c:"Min final CLTV expiry delta",
+               f:"Fallback address",r:"Routing hint","9":"Feature bits",m:"Payment metadata"};
+  /* pairs: the even bit is the compulsory form, the odd bit optional */
+  var FEAT={0:"data loss protection",6:"gossip queries",8:"variable length onion",
+            12:"static remote key",14:"payment secret",16:"basic multi-part payments",
+            18:"large channels",30:"route blinding",48:"payment metadata"};
+
+  /* ---------- parser ---------- */
+  function clean(raw){
+    var s=(""+raw).replace(/\s+/g,"");
+    s=s.replace(/^lightning:/i,"");
+    /* a BIP-21 URI can carry an invoice in a lightning= parameter */
+    var q=/[?&]lightning=([^&]+)/i.exec(s);
+    if(q)s=q[1];
+    return s;
+  }
+  function decode(raw){
+    var s=clean(raw),i,c,o,lower=false,upper=false;
+    if(!s)return null;
+    if(s.length>MAXLEN)throw new Error("Too long to be an invoice: over "+MAXLEN+" characters were pasted.");
+    if(/^lnurl/i.test(s))throw new Error("That is an LNURL, not a BOLT11 invoice. LNURL is a link a wallet fetches to get an invoice; this page reads the invoice itself, the string starting lnbc.");
+    if(/^lno1/i.test(s))throw new Error("That is a BOLT12 offer, not a BOLT11 invoice. Offers are a newer, reusable format with a different encoding, and this page does not read them yet.");
+    for(i=0;i<s.length;i++){
+      o=s.charCodeAt(i);
+      if(o<33||o>126)throw new Error("There is a character in there that cannot appear in an invoice. Copy the string again, without any surrounding punctuation.");
+      if(o>=97&&o<=122)lower=true;
+      if(o>=65&&o<=90)upper=true;
+    }
+    if(lower&&upper)throw new Error("Mixed upper and lower case. An invoice is either all lower case or all upper case, never both, because the checksum is defined over one case only. Something has mangled it in transit.");
+    var wasUpper=upper&&!lower;
+    s=s.toLowerCase();
+    if(s.slice(0,2)!=="ln")throw new Error("An invoice starts with ln, then the chain: lnbc for mainnet, lntb for testnet. This does not.");
+    var pos=s.lastIndexOf("1");
+    if(pos<1)throw new Error("No separator found. Everything before the last 1 is the header and everything after it is the data, so an invoice always contains one.");
+    var hrp=s.slice(0,pos),dat=[],d;
+    for(i=pos+1;i<s.length;i++){
+      d=CH.indexOf(s[i]);
+      if(d===-1)throw new Error("The character "+s[i]+" cannot appear in the data part. Bech32 leaves out 1, b, i and o so they cannot be confused with l, 8, 1 and 0, which means one of those four has been substituted for the right character.");
+      dat.push(d);
+    }
+    if(dat.length<6)throw new Error("The string ends before the checksum does, so it has been truncated. Invoices are usually several hundred characters long.");
+    if(polymod(hrpExp(hrp).concat(dat))!==1)
+      throw new Error("The checksum does not match, so at least one character is wrong or missing. This is the check doing its job: do not pay anything based on a partial read of it. Copy the invoice again from the source.");
+    var data=dat.slice(0,dat.length-6);
+
+    var m=/^ln(bcrt|bc|tbs|tb|sb)(\d+)?([munp])?$/.exec(hrp);
+    if(!m)throw new Error("The header "+hrp+" is not one this page knows. Expected lnbc, lntb, lntbs or lnbcrt, optionally followed by an amount.");
+    var net=NETS[m[1]],msat=null,mult=m[3]||null,num=m[2];
+    if(num!==undefined&&num!==null&&num!==""){
+      var big=BigInt(num),t=big*BigInt(100000000000);
+      if(mult){
+        if(t%MULT[mult]!==BigInt(0))
+          throw new Error("The amount is finer than a millisatoshi, which cannot be paid. An amount in pico-bitcoin has to be a multiple of ten.");
+        msat=t/MULT[mult];
+      }else{
+        msat=t;
+      }
+    }
+    if(data.length<111)
+      throw new Error("Too short to hold a timestamp and a signature, so this is a fragment rather than a whole invoice.");
+    var ts=Number(intOf(data.slice(0,7)));
+    var sig=bytesOf(data.slice(data.length-104));
+    var body=data.slice(7,data.length-104);
+
+    var tags=[],seen={},p=0,t,len,v,trunc=false;
+    while(p<body.length){
+      if(p+3>body.length){trunc=true;break;}
+      t=CH[body[p]];len=body[p+1]*32+body[p+2];p+=3;
+      if(p+len>body.length){trunc=true;break;}
+      v=body.slice(p,p+len);p+=len;
+      seen[t]=(seen[t]||0)+1;
+      tags.push({t:t,len:len,v:v,dup:seen[t]>1});
+    }
+    return {hrp:hrp,net:net,msat:msat,mult:mult,ts:ts,sig:sig,tags:tags,
+            wasUpper:wasUpper,trunc:trunc,chars:s.length};
+  }
+
+  /* ---------- field readers ---------- */
+  function fallbackAddr(net,five){
+    var ver=five[0],prog=bytesOf(five.slice(1));
+    if(ver===17)return prog.length===20
+      ?b58check(net.p,prog).then(function(a){return {a:a,k:"P2PKH, a legacy address"};})
+      :Promise.resolve(null);
+    if(ver===18)return prog.length===20
+      ?b58check(net.s,prog).then(function(a){return {a:a,k:"P2SH, a script hash address"};})
+      :Promise.resolve(null);
+    if(ver<=16){
+      if(prog.length<2||prog.length>40)return Promise.resolve(null);
+      /* witness v0 keeps the original bech32 constant; v1 and up use bech32m */
+      var addr=bech32Encode(net.hrp,[ver].concat(conv(prog,8,5,true)),ver===0?1:0x2bc830a3);
+      var kind=ver===0?(prog.length===20?"P2WPKH, native segwit":(prog.length===32?"P2WSH, native segwit":"witness v0"))
+                      :(ver===1&&prog.length===32?"P2TR, taproot":"witness v"+ver);
+      return Promise.resolve({a:addr,k:kind});
+    }
+    return Promise.resolve(null);
+  }
+  function be16(b,o){return (b[o]<<8)|b[o+1];}
+  function be24(b,o){return (b[o]<<16)|(b[o+1]<<8)|b[o+2];}
+  function be32(b,o){return b[o]*16777216+(b[o+1]<<16)+(b[o+2]<<8)+b[o+3];}
+  function hops(five){
+    var b=bytesOf(five),out=[],i,o;
+    if(b.length%51!==0)return null;
+    for(i=0;i<b.length/51;i++){
+      o=i*51;
+      out.push({node:toHex(b.subarray(o,o+33)),
+                scid:be24(b,o+33)+"x"+be24(b,o+36)+"x"+be16(b,o+39),
+                base:be32(b,o+41),prop:be32(b,o+45),cltv:be16(b,o+49)});
+    }
+    return out;
+  }
+  function featureBits(five){
+    var out=[],i,j;
+    for(i=0;i<five.length;i++)
+      for(j=4;j>=0;j--)
+        if((five[i]>>j)&1)out.push((five.length-1-i)*5+j);
+    return out;
+  }
+  function featureName(b){
+    var base=b-(b%2),n=FEAT[base];
+    return (n?n:"unrecognised feature")+(b%2?" (optional)":" (required)");
+  }
+  function utf8(bytes){
+    try{return new TextDecoder("utf-8",{fatal:true}).decode(bytes);}
+    catch(e){return null;}
+  }
+
+  /* ---------- formatting ---------- */
+  function grp(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function satStr(msat){
+    var whole=(msat/BigInt(1000)).toString(),rem=Number(msat%BigInt(1000)),f;
+    if(!rem)return grp(whole);
+    f=("00"+rem).slice(-3).replace(/0+$/,"");
+    return grp(whole)+"."+f;
+  }
+  function btcStr(msat){
+    var s=msat.toString(),ip,fp;
+    while(s.length<12)s="0"+s;
+    ip=s.slice(0,s.length-11);fp=s.slice(s.length-11).replace(/0+$/,"");
+    while(fp.length<8)fp+="0";
+    return grp(ip)+"."+fp;
+  }
+  function usdStr(msat){
+    var v=Number(msat)/1e11*P.price;
+    if(v>0&&v<0.01)return "under $0.01";
+    return "$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function utc(sec){
+    var d=new Date(sec*1000);
+    if(!isFinite(d.getTime()))return "out of range";
+    return d.toISOString().slice(0,19).replace("T"," ")+" UTC";
+  }
+  function span(sec){
+    var s=Math.abs(sec),u,n;
+    if(s<90){n=Math.round(s);u="second";}
+    else if(s<5400){n=Math.round(s/60);u="minute";}
+    else if(s<172800){n=Math.round(s/3600);u="hour";}
+    else if(s<63072000){n=Math.round(s/86400);u="day";}
+    else{n=Math.round(s/31557600);u="year";}
+    return grp(String(n))+" "+u+(n===1?"":"s");
+  }
+
+  /* ---------- rendering ---------- */
+  var res=document.getElementById("ld-res"),
+      inp=document.getElementById("ld-in"),
+      cnt=document.getElementById("ld-count");
+  function esc(s){return (""+s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function kv(label,html){return '<div class="ld-kv"><i>'+esc(label)+'</i><u>'+html+"</u></div>";}
+  function paint(html){res.innerHTML=html;}
+  function paintIdle(){
+    paint('<div class="ld-status ld-mut">Waiting for an invoice</div>'
+      +'<div class="ld-note">Mainnet, testnet, signet and regtest invoices are all understood, at any length. Paste a payment request or press one of the examples above, which are the specification’s own test vectors.</div>');
+  }
+  function paintErr(msg){
+    paint('<div class="ld-status ld-bad">&#10007; Cannot decode</div>'
+      +'<div class="ld-note">'+esc(msg)+"</div>"
+      +'<div class="ld-note ld-mute">A BOLT11 invoice is one unbroken string beginning lnbc, with no spaces and no line breaks. Wallets offer it as a payment request, an invoice, or behind the text of a QR code.</div>');
+  }
+
+  function paintInvoice(inv,fb){
+    var i,k,h="",tag,byTag={},usedTags=[];
+    for(i=0;i<inv.tags.length;i++){
+      tag=inv.tags[i];
+      /* first field of a kind wins; the specification says later ones are ignored */
+      if(!tag.dup&&byTag[tag.t]===undefined)byTag[tag.t]=tag;
+      usedTags.push(tag);
+    }
+    var pay=byTag.p&&byTag.p.len===52?toHex(bytesOf(byTag.p.v)):null,
+        sec=byTag.s&&byTag.s.len===52?toHex(bytesOf(byTag.s.v)):null,
+        dhash=byTag.h&&byTag.h.len===52?toHex(bytesOf(byTag.h.v)):null,
+        payee=byTag.n&&byTag.n.len===53?toHex(bytesOf(byTag.n.v)):null,
+        desc=byTag.d?utf8(bytesOf(byTag.d.v)):null,
+        expiry=byTag.x?Number(intOf(byTag.x.v)):3600,
+        expiryGiven=!!byTag.x,
+        cltv=byTag.c?Number(intOf(byTag.c.v)):18,
+        cltvGiven=!!byTag.c,
+        hints=byTag.r?hops(byTag.r.v):null,
+        feats=byTag["9"]?featureBits(byTag["9"].v):[],
+        meta=byTag.m?toHex(bytesOf(byTag.m.v)):null;
+
+    var now=Math.floor(Date.now()/1000),ends=inv.ts+expiry,left=ends-now,expired=left<=0;
+
+    /* headline */
+    var head=inv.msat===null?"any amount":satStr(inv.msat)+" sats";
+    var badges='<div class="ld-badges">'
+      +'<span class="'+(inv.net.real?"ld-b-acc":"ld-b-bad")+'">'+esc(inv.net.name)+"</span>"
+      +'<span class="'+(expired?"ld-b-bad":"ld-b-ok")+'">'+(expired?"expired":"payable for "+span(left))+"</span>"
+      +"<span>"+(inv.msat===null?"no amount set":"amount fixed")+"</span>"
+      +"<span>"+usedTags.length+" tagged field"+(usedTags.length===1?"":"s")+"</span>"
+      +(hints&&hints.length?'<span class="ld-b-acc">'+hints.length+" routing hop"+(hints.length===1?"":"s")+"</span>":"")
+      +(fb?'<span class="ld-b-acc">on-chain fallback</span>':"")
+      +(inv.wasUpper?"<span>upper case</span>":"")
+      +"</div>";
+
+    /* amount */
+    var stats;
+    if(inv.msat===null){
+      stats='<div class="ld-stats"><div class="ld-s ld-s-acc"><span>Amount</span><b>Any</b></div>'
+        +'<div class="ld-s"><span>Chosen by</span><b>the payer</b></div>'
+        +'<div class="ld-s"><span>Multiplier</span><b>none</b></div></div>';
+    }else{
+      stats='<div class="ld-stats">'
+        +'<div class="ld-s ld-s-acc"><span>Amount</span><b>'+satStr(inv.msat)+"<em>sats</em></b></div>"
+        +'<div class="ld-s"><span>In bitcoin</span><b>'+btcStr(inv.msat)+"<em>BTC</em></b></div>"
+        +'<div class="ld-s"><span>In US dollars</span><b>'+usdStr(inv.msat)+"</b></div>"
+        +"</div>";
+    }
+
+    /* identity block */
+    var ids='<div class="ld-ids">';
+    ids+='<div class="ld-id"><i>Payment hash</i><b>'+(pay?esc(pay):'<span class="ld-mute">missing, which makes this invoice unpayable</span>')+"</b></div>";
+    if(desc!==null&&desc!=="")
+      ids+='<div class="ld-id ld-id-2"><i>Description</i><q>'+esc(desc)+"</q></div>";
+    else if(desc==="")
+      ids+='<div class="ld-id ld-id-2"><i>Description</i><b class="ld-mute">present but empty</b></div>';
+    else if(dhash)
+      ids+='<div class="ld-id ld-id-2"><i>Description hash, the text is not in the invoice</i><b>'+esc(dhash)+"</b></div>";
+    else
+      ids+='<div class="ld-id ld-id-2"><i>Description</i><b class="ld-mute">none: the invoice does not say what it is for</b></div>';
+    ids+='<div class="ld-id ld-id-2"><i>Payee node id</i><b>'+(payee?esc(payee)
+      :'<span class="ld-mute">not stated, so a wallet recovers it from the signature instead</span>')+"</b></div>";
+    ids+="</div>";
+
+    /* timing */
+    var timing='<div class="ld-sec"><div class="ld-sh">Timing</div><div class="ld-item">'
+      +kv("Created","<b>"+esc(utc(inv.ts))+"</b> "+span(now-inv.ts)+" ago, timestamp "+grp(String(inv.ts)))
+      +kv("Expiry","<b>"+grp(String(expiry))+" second"+(expiry===1?"":"s")+"</b>"
+          +(expiry>=90?" ("+span(expiry)+")":"")
+          +(expiryGiven?"":' <span class="ld-mute">by default: no x tag is present, and one hour is the specified default</span>'))
+      +kv("Expires at","<b>"+esc(utc(ends))+"</b>")
+      +kv("Status",expired
+          ?'<b class="ld-mute">expired '+span(-left)+" ago</b>, so a wallet will refuse it and the payee needs to issue a fresh one"
+          :"<b>still payable</b>, for another "+span(left))
+      +kv("Min final CLTV","<b>"+grp(String(cltv))+" block"+(cltv===1?"":"s")+"</b> of safety margin demanded by the last hop"
+          +(cltvGiven?"":' <span class="ld-mute">by default: no c tag is present, and 18 is the specified default</span>'))
+      +"</div></div>";
+
+    /* payment secret and metadata */
+    var extra="";
+    if(sec||meta){
+      extra='<div class="ld-sec"><div class="ld-sh">Payment secret</div><div class="ld-item">';
+      extra+=kv("Secret",sec?"<b>"+esc(sec)+"</b>"
+        :'<span class="ld-mute">absent, which is unusual on a modern invoice: without it a node partway along the route could claim a payment it only partly forwarded</span>');
+      if(meta)extra+=kv("Metadata","<b>"+esc(meta)+"</b> handed back to the payee with the payment");
+      extra+="</div></div>";
+    }
+
+    /* fallback */
+    var fall="";
+    if(byTag.f){
+      fall='<div class="ld-sec"><div class="ld-sh">On-chain fallback</div><div class="ld-item">';
+      if(fb){
+        fall+=kv("Address","<b>"+esc(fb.a)+"</b>")
+          +kv("Type",esc(fb.k)+", "+(byTag.f.v[0]<=16?"witness":"address")+" version "+byTag.f.v[0])
+          +kv("Meaning","an address the payee will also accept, if the payment cannot be routed over Lightning. Paying it is an ordinary on-chain transaction with ordinary fees and confirmation times");
+      }else{
+        fall+=kv("Address",'<span class="ld-mute">a fallback field is present but its version and length do not form an address this page can render</span>');
+      }
+      fall+="</div></div>";
+    }
+
+    /* routing hints */
+    var route="";
+    if(byTag.r){
+      route='<div class="ld-sec"><div class="ld-sh">Routing hints<em>'+(hints?hints.length:"?")+"</em></div>";
+      if(!hints){
+        route+='<div class="ld-item">'+kv("Hops",'<span class="ld-mute">the routing field is not a whole number of 51 byte hops, so it cannot be read</span>')+"</div>";
+      }else{
+        for(i=0;i<hints.length;i++){
+          route+='<div class="ld-item"><div class="ld-ih"><b>Hop '+(i+1)+'</b><span class="ld-tag ld-tg">'+esc(hints[i].scid)+"</span></div>"
+            +kv("Node","<b>"+esc(hints[i].node)+"</b>")
+            +kv("Channel",esc(hints[i].scid)+", read as block height, transaction index, output index")
+            +kv("Fee","<b>"+grp(String(hints[i].base))+" msat</b> base plus "+grp(String(hints[i].prop))+" per million forwarded")
+            +kv("CLTV delta",grp(String(hints[i].cltv))+" block"+(hints[i].cltv===1?"":"s"))
+            +"</div>";
+        }
+        route+='<div class="ld-note ld-mute">A hint is a private channel the public gossip graph cannot see, given so a payer can still build a route to the payee.</div>';
+      }
+      route+="</div>";
+    }
+
+    /* features */
+    var feat="";
+    if(byTag["9"]){
+      feat='<div class="ld-sec"><div class="ld-sh">Feature bits<em>'+feats.length+'</em></div><div class="ld-item">';
+      if(!feats.length){
+        feat+=kv("Bits",'<span class="ld-mute">none set</span>');
+      }else{
+        for(i=0;i<feats.length;i++)
+          feat+=kv("Bit "+feats[i],esc(featureName(feats[i])));
+      }
+      feat+="</div></div>";
+    }
+
+    /* leftover and malformed tags */
+    var other="",oth=[];
+    for(i=0;i<usedTags.length;i++){
+      tag=usedTags[i];
+      if(tag.dup){oth.push({t:tag.t,why:"a repeat of an earlier "+tag.t+" field, ignored by every reader"});continue;}
+      if(TAGNAME[tag.t]===undefined)oth.push({t:tag.t,why:"a tag type this page does not know, "+tag.len+" characters long. A reader is meant to skip these quietly"});
+      else if((tag.t==="p"||tag.t==="s"||tag.t==="h")&&tag.len!==52)
+        oth.push({t:tag.t,why:"the wrong length for a 256 bit field ("+tag.len+" instead of 52), so the specification says to skip it"});
+      else if(tag.t==="n"&&tag.len!==53)
+        oth.push({t:tag.t,why:"the wrong length for a node id ("+tag.len+" instead of 53), so the specification says to skip it"});
+      else if(tag.t==="d"&&desc===null)
+        oth.push({t:tag.t,why:"a description that is not valid UTF-8, so it is not shown"});
+    }
+    if(oth.length||inv.trunc){
+      other='<div class="ld-sec"><div class="ld-sh">Skipped or unreadable</div><div class="ld-item">';
+      for(i=0;i<oth.length;i++)other+=kv("Tag "+oth[i].t,esc(oth[i].why));
+      if(inv.trunc)other+=kv("End of data",'<span class="ld-mute">the tagged fields do not divide evenly into the space before the signature, so the tail was not read</span>');
+      other+="</div></div>";
+    }
+
+    /* signature */
+    var sigsec='<div class="ld-sec"><div class="ld-sh">Signature</div><div class="ld-item">'
+      +kv("Present","<b>yes</b>, 64 bytes plus a recovery flag, the right shape for BOLT11")
+      +kv("r","<b>"+esc(toHex(inv.sig.subarray(0,32)))+"</b>")
+      +kv("s","<b>"+esc(toHex(inv.sig.subarray(32,64)))+"</b>")
+      +kv("Recovery flag",String(inv.sig[64])+", which tells a wallet which of the candidate public keys is the payee")
+      +"</div>"
+      +'<div class="ld-call"><b>Not verified here, and that is deliberate</b><span>'
+      +"Checking this signature needs secp256k1 public key recovery, which browsers do not provide: WebCrypto covers SHA-256 and the NIST curves, not the curve bitcoin uses. Rather than ship hand-rolled curve arithmetic and ask you to trust it, this page reports only that a correctly sized signature is present. Your wallet performs the real check before it pays, and "
+      +(payee?"the node id above is what the signature must resolve to.":"the payee node id is recovered from this signature rather than stated in the invoice.")
+      +"</span></div></div>";
+
+    var netnote=inv.net.real?"":'<div class="ld-note ld-mute">This is a '+esc(inv.net.name)+" invoice. The coins involved are test coins with no value, so nothing here is a real payment request.</div>";
+
+    paint('<div class="ld-status ld-ok">&#10003; Decoded, '+esc(head)+"</div>"
+      +badges+stats+netnote+ids+timing+extra+fall+route+feat+other+sigsec
+      +'<div class="ld-note ld-mute">Decoding proves the invoice is well-formed and shows what it claims. It does not check the signature, does not know whether the payee is reachable, and cannot tell whether this invoice has already been paid.</div>');
+  }
+
+  /* ---------- self-test ---------- */
+  var ready=false,failed=false,queued=null,last=null;
+  function fail(why){
+    failed=true;last=null;
+    console.error("[/tools/lightning] self-test FAILED: "+why);
+    paint('<div class="ld-status ld-bad">&#10007; Self-test failed</div>'
+      +'<div class="ld-note">This decoder checks itself against the BOLT11 specification’s own example invoices every time the page loads, and one of those checks did not match ('+esc(why)+'). Rather than show an amount or a payee that might be wrong, decoding is switched off. Please <a href="/contact">tell us</a> so it can be fixed.</div>');
+    if(inp)inp.setAttribute("disabled","disabled");
+  }
+  function selfTest(){
+    var checks=[],passed=0;
+    function eq(name,got,want){
+      checks.push(name);
+      if(String(got)!==String(want))throw new Error(name+": got "+got+", expected "+want);
+      passed++;
+    }
+    if(!window.crypto||!crypto.subtle||!crypto.subtle.digest){
+      fail("crypto.subtle is unavailable in this browser, so fallback addresses cannot be checksummed");
+      return;
+    }
+    var a,b,c,d6,d7,d8,d10,d13;
+    try{
+      a=decode(EX.ex1);b=decode(EX.ex2);c=decode(EX.ex11);
+      d6=decode(TV.ex6);d7=decode(TV.ex7);d8=decode(TV.ex8);
+      d10=decode(TV.ex10);d13=decode(TV.ex13);
+    }catch(e){fail("a test vector did not decode: "+e.message);return;}
+    function tag(inv,t){
+      for(var i=0;i<inv.tags.length;i++)if(inv.tags[i].t===t&&!inv.tags[i].dup)return inv.tags[i];
+      return null;
+    }
+    Promise.all([fallbackAddr(d6.net,tag(d6,"f").v),fallbackAddr(d7.net,tag(d7,"f").v),
+                 fallbackAddr(d8.net,tag(d8,"f").v),fallbackAddr(d10.net,tag(d10,"f").v)])
+    .then(function(fbs){
+      var PH="0001020304050607080900010203040506070809000102030405060708090102",
+          DH="3925b6f67e2c340036ed12093dd44e0368df1b6ea26c53dbe4811f58fd5db8c1";
+      /* ex1: donation, no amount */
+      eq("ex1 network",a.net.name,"Bitcoin mainnet");
+      eq("ex1 amount",a.msat,null);
+      eq("ex1 timestamp",a.ts,1496314658);
+      eq("ex1 payment hash",toHex(bytesOf(tag(a,"p").v)),PH);
+      eq("ex1 payment secret",toHex(bytesOf(tag(a,"s").v)),
+         "1111111111111111111111111111111111111111111111111111111111111111");
+      eq("ex1 description",utf8(bytesOf(tag(a,"d").v)),"Please consider supporting this project");
+      eq("ex1 no expiry tag",tag(a,"x"),null);
+      eq("ex1 features",featureBits(tag(a,"9").v).join(","),"14,8");
+      eq("ex1 signature length",a.sig.length,65);
+      eq("ex1 recovery flag",a.sig[64],1);
+      /* ex2: 2500 micro-bitcoin, one minute */
+      eq("ex2 header",b.hrp,"lnbc2500u");
+      eq("ex2 msat",b.msat.toString(),"250000000");
+      eq("ex2 sats",satStr(b.msat),"250,000");
+      eq("ex2 btc",btcStr(b.msat),"0.00250000");
+      eq("ex2 expiry",intOf(tag(b,"x").v).toString(),"60");
+      eq("ex2 description",utf8(bytesOf(tag(b,"d").v)),"1 cup coffee");
+      /* ex11: pico amount, expiry, min final CLTV, one routing hop */
+      eq("ex11 msat",c.msat.toString(),"967878534");
+      eq("ex11 sats",satStr(c.msat),"967,878.534");
+      eq("ex11 btc",btcStr(c.msat),"0.00967878534");
+      eq("ex11 timestamp",c.ts,1572468703);
+      eq("ex11 payment hash",toHex(bytesOf(tag(c,"p").v)),
+         "462264ede7e14047e9b249da94fefc47f41f7d02ee9b091815a5506bc8abf75f");
+      eq("ex11 expiry",intOf(tag(c,"x").v).toString(),"604800");
+      eq("ex11 min final cltv",intOf(tag(c,"c").v).toString(),"10");
+      var h11=hops(tag(c,"r").v);
+      eq("ex11 hop count",h11.length,1);
+      eq("ex11 hop node",h11[0].node,"03d06758583bb5154774a6eb221b1276c9e82d65bbaceca806d90e20c108f4b1c7");
+      eq("ex11 hop channel",h11[0].scid,"589390x3312x1");
+      eq("ex11 hop base fee",h11[0].base,1000);
+      eq("ex11 hop proportional",h11[0].prop,2500);
+      eq("ex11 hop cltv",h11[0].cltv,40);
+      eq("ex11 description start",utf8(bytesOf(tag(c,"d").v)).slice(0,28),"Blockstream Store: 88.85 USD");
+      /* ex6: mainnet P2PKH fallback, two hops, recovery flag 0 */
+      eq("ex6 msat",d6.msat.toString(),"2000000000");
+      eq("ex6 description hash",toHex(bytesOf(tag(d6,"h").v)),DH);
+      eq("ex6 fallback",fbs[0]&&fbs[0].a,"1RustyRX2oai4EYYDpQGWvEL62BBGqN9T");
+      var h6=hops(tag(d6,"r").v);
+      eq("ex6 hop count",h6.length,2);
+      eq("ex6 hop 1 node",h6[0].node,"029e03a901b85534ff1e92c43c74431f7ce72046060fcf7a95c37e148f78c77255");
+      eq("ex6 hop 1 channel",h6[0].scid,"66051x263430x1800");
+      eq("ex6 recovery flag",d6.sig[64],0);
+      /* ex7: P2SH fallback, the other base58 version byte */
+      eq("ex7 fallback",fbs[1]&&fbs[1].a,"3EktnHQD7RiAE6uzMj2ZifT9YgRrkSgzQX");
+      /* ex8: P2WPKH fallback, bech32 with the original checksum constant */
+      eq("ex8 fallback",fbs[2]&&fbs[2].a,"bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4");
+      /* ex10: P2TR fallback, bech32m with the taproot checksum constant */
+      eq("ex10 fallback",fbs[3]&&fbs[3].a,"bc1pptdvg0d2nj99568qn6ssdy4cygnwuxgw2ukmnwgwz7jpqjz2kszse2s3lm");
+      /* ex13: the same invoice in upper case, plus a feature bit past the list */
+      eq("ex13 case folded",d13.wasUpper,true);
+      eq("ex13 msat",d13.msat.toString(),"2500000000");
+      eq("ex13 description",utf8(bytesOf(tag(d13,"d").v)),"coffee beans");
+      eq("ex13 features",featureBits(tag(d13,"9").v).join(","),"99,14,8");
+      eq("ex13 feature 99 name",featureName(99),"unrecognised feature (optional)");
+      eq("ex13 feature 14 name",featureName(14),"payment secret (required)");
+      /* negative: a single substituted character must fail the checksum */
+      var bad=EX.ex1.slice(0,EX.ex1.length-1)+(EX.ex1.slice(-1)==="l"?"q":"l"),threw="";
+      try{decode(bad);}catch(e2){threw=e2.message;}
+      eq("corrupt invoice rejected",threw.indexOf("checksum")>=0,true);
+      /* negative: mixed case must be refused outright */
+      threw="";
+      try{decode("lnbc1PVJLUEZ");}catch(e3){threw=e3.message;}
+      eq("mixed case rejected",threw.indexOf("Mixed")>=0,true);
+      ready=true;
+      console.log("[/tools/lightning] self-test "+passed+"/"+checks.length+
+        " passed (BOLT11 examples: donation, coffee, store with routing hint, P2PKH, P2SH, P2WPKH and P2TR fallbacks, upper case, plus two negative cases)");
+      if(queued!==null){var q=queued;queued=null;go(q);}
+    })["catch"](function(e){fail(e&&e.message?e.message:"unknown assertion failure");});
+  }
+
+  /* ---------- wiring ---------- */
+  var run=0,deb=null;
+  function go(raw){
+    if(failed)return;
+    if(!ready){queued=raw;return;}
+    var token=++run,inv;
+    last=null;
+    try{inv=decode(raw);}catch(e){paintErr(e.message);return;}
+    if(!inv){paintIdle();return;}
+    var f=null,i;
+    for(i=0;i<inv.tags.length;i++)if(inv.tags[i].t==="f"&&!inv.tags[i].dup){f=inv.tags[i];break;}
+    (f?fallbackAddr(inv.net,f.v):Promise.resolve(null)).then(function(fb){
+      if(token!==run)return;
+      last={inv:inv,fb:fb};
+      paintInvoice(inv,fb);
+    })["catch"](function(){
+      if(token!==run)return;
+      last={inv:inv,fb:null};
+      paintInvoice(inv,null);
+    });
+  }
+  function count(){
+    var s=clean(inp.value);
+    cnt.textContent=grp(String(s.length))+" character"+(s.length===1?"":"s");
+  }
+  inp.addEventListener("input",function(){
+    count();
+    clearTimeout(deb);
+    deb=setTimeout(function(){go(inp.value);},150);
+  });
+  document.querySelectorAll(".ld-ex button[data-ex]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      inp.value=EX[btn.dataset.ex];
+      count();go(inp.value);
+    });
+  });
+  document.getElementById("ld-clear").addEventListener("click",function(){
+    inp.value="";count();go("");inp.focus();
+  });
+  /* live price arrives via the chrome hook (~1.5s); repaint in place so a
+     decoded amount picks up the new figure. USD only by design, the footer
+     currency switch intentionally does not change this page */
+  window.obPaintFiat=function(S){
+    P.price=S.price;
+    if(last&&!failed)paintInvoice(last.inv,last.fb);
+  };
+  selfTest();
+})();
+</script>
+</Base>

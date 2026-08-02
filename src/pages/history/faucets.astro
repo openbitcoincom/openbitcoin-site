@@ -1,0 +1,184 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="The Bitcoin Faucet Era: When 5 BTC Was Free - OpenBitcoin" description="The story of the bitcoin faucet: in 2010 one site gave 5 BTC per captcha, some 19,700 BTC in all, why the model died, and why free-bitcoin offers are bait.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">History</div>
+    <h1>The bitcoin faucet era</h1>
+    <p class="doc-lede">In 2010 a plain webpage handed five bitcoin to anyone who could solve a captcha. It was the most effective onboarding tool bitcoin ever had, and the economics behind it are gone for good.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="hf-hero">
+      <div class="hf-big">5 BTC</div>
+      <div class="hf-sub">handed to every visitor of the first faucet, 2010</div>
+      <div class="hf-line">One visit, one captcha, one address. Those five coins are worth <b id="hf-now5" class="hf-up">&#8230;</b> at today's price.</div>
+      <div class="hf-stats">
+        <div class="hf-stat"><b>June 11, 2010</b><i>faucet announced on the forum</i></div>
+        <div class="hf-stat"><b>1,100 BTC</b><i>seeded from the builder's own coins</i></div>
+        <div class="hf-stat"><b>&#8776;19,700 BTC</b><i>dispensed in total, by the common count</i></div>
+        <div class="hf-stat"><b id="hf-tot">&#8230;</b><i>what that total is worth today</i></div>
+      </div>
+    </div>
+
+    <div class="doc-card hf-mt">
+      <div class="doc-sec">
+        <h2>One page, one captcha, five coins</h2>
+        <div class="doc-prose">
+          <p>On June 11, 2010, Gavin Andresen, then a newly arrived contributor to the bitcoin project, posted his first bitcoin coding project to the forum: a website at freebitcoins.appspot.com that gave bitcoin away. "Five &#3647; per customer, first come first served," he wrote. Visit the page, solve a captcha, paste an address from your wallet, and five bitcoin arrived. He stocked it with 1,100 BTC of his own.</p>
+          <p>His reason was on the record from the first post:</p>
+          <blockquote>"I want the Bitcoin project to succeed, and I think it is more likely to be a success if people can get a handful of coins to try it out."</blockquote>
+          <p>Satoshi Nakamoto replied in the thread a week later: "Excellent choice of a first project, nice work." Satoshi had considered building the same thing, and suggested showing a donation address that rotated with each contribution so others could refill the pool. That is how it went: when the first 1,100 coins ran out, early miners topped the faucet back up with coins of their own.</p>
+        </div>
+        <figure class="hf-fig">
+          <img src="/img/history/faucet-2010-july.png" alt="The Bitcoin Faucet website in July 2010, offering five bitcoins per visitor with 750 BTC available" loading="lazy" width="900" height="700">
+          <figcaption>The faucet three weeks after launch, July 2010: five coins per visitor, &#3647;750 in the tank, and Gavin's answer to "What's the catch?": no catch. Page capture via the Internet Archive.</figcaption>
+        </figure>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Why anyone would give bitcoin away</h2>
+        <div class="doc-prose">
+          <p>Because in 2010 there was almost no other way in. Buying bitcoin meant finding one tiny exchange or a stranger on a forum. Mining already meant leaving software running for days. If you just wanted to try the thing, to receive a transaction and send one back and watch it confirm, there was no on-ramp at all. The faucet was that on-ramp: proof, in thirty seconds, that money could move over the internet with no company in the middle.</p>
+          <p>The generosity was real but it was also cheap. Bitcoin traded for fractions of a cent when it traded at all. Three weeks before the faucet opened, 10,000 BTC had famously bought two pizzas; the faucet's entire opening balance was about a tenth of a pizza order. Nobody was giving away wealth. They were giving away samples of something they believed would matter, to people who could not otherwise get any.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>What it dispensed</h2>
+        <div class="doc-prose">
+          <p>Over roughly two years the original faucet paid out about 19,700 BTC, by the count that has been repeated ever since; no exact ledger tally survives, which is why this page says roughly. At today's price that is <b id="hf-p2">&#8230;</b>, handed out five coins at a time to anyone who asked. The <a href="/whatif">what-if calculator</a> can make you feel worse about this at any denomination you like.</p>
+          <p>It could not last, and it did not. Bitcoin crossed a dollar in early 2011 and touched about thirty dollars by that summer, which turned a five-coin drop from a friendly sample into real money. The payout shrank step by step as the price rose, and around 2012 the original faucet wound down. The problem was not that people stopped wanting free bitcoin. It was that free bitcoin had stopped being possible at that size.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>The drip era: faucets as ad arbitrage</h2>
+        <div class="doc-prose">
+          <p>The faucets that came after were a different animal. The giveaway became a business model: load a page covered in ads, solve a captcha, wait out a timer, and collect a drip measured in satoshis, worth a fraction of a cent. The operator earned more from showing you the ads than the drip cost, and the difference was the margin. At the peak of this era there were hundreds of these sites, plus rotators to cycle through them and microwallet services to pool payouts too small to send on-chain.</p>
+          <p>It was honest in its way; the sites mostly did pay. But the arithmetic only worked while ad rates stayed up, the drips stayed tiny, and the visitors stayed human. None of that held.</p>
+          <div class="hf-tl">
+            <div class="hf-tli"><span class="hf-tly">2010</span><span class="hf-tlt">The first faucet opens at 5 BTC per visitor, seeded with 1,100 BTC</span></div>
+            <div class="hf-tli"><span class="hf-tly">2011</span><span class="hf-tlt">Price passes $1, then about $30; whole-coin giveaways stop making sense</span></div>
+            <div class="hf-tli"><span class="hf-tly">2012</span><span class="hf-tlt">The original faucet winds down after dispensing roughly 19,700 BTC</span></div>
+            <div class="hf-tli"><span class="hf-tly">2013+</span><span class="hf-tlt">The ad-funded drip era: hundreds of sites paying satoshis against ad revenue</span></div>
+            <div class="hf-tli"><span class="hf-tly">2017+</span><span class="hf-tlt">Fee floors, bot farms, and shrinking drips kill the honest version of the model</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>Why faucets died</h2>
+        <div class="doc-prose">
+          <p>Three forces, all pushing the same direction.</p>
+          <ul>
+            <li><b>Price growth.</b> Every rise in the exchange rate shrank what a faucet could afford to drip. The same ad revenue that once funded a visible payout eventually funded dust. A payout too small to feel is a payout too small to onboard anyone, which was the entire point.</li>
+            <li><b>Abuse.</b> A machine that dispenses money for solving a captcha is a machine that gets farmed. Bots, proxy networks, and captcha-solving sweatshops drained pools that were meant for the curious. Operators responded with logins, withdrawal minimums, and friction, which drove away the humans and left the bots.</li>
+            <li><b>Fee floors.</b> An on-chain transaction costs a fee regardless of size, and once fees rose, sending someone thirty satoshis cost hundreds of times more than the payment itself. Payouts retreated into custodial microwallet balances with minimums that many users never reached, which is a polite way of saying many drips were never really paid at all. <a href="/fees">Current fee levels</a> show why sub-cent on-chain payouts stay dead.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>What the faucets actually seeded</h2>
+        <div class="doc-prose">
+          <p>It is easy to file the faucet era under charming waste. The record says otherwise. Faucet coins were the first bitcoin thousands of people ever held, at a time when there was no other realistic way to hold any. First wallets, first sends, first confirmations: the mechanics of the system spread person by person through five-coin samples. Some of the era's developers, node operators, and businesses trace their start to a free handful from that one page. The faucet also pushed coins outward, away from the tiny circle of early miners, at a moment when distribution mattered and almost nothing else was doing it.</p>
+          <p>That is the honest ledger of the era: a fortune given away at prices that made it rational, in exchange for the early user base bitcoin needed and got.</p>
+        </div>
+      </div>
+
+      <div class="doc-sec">
+        <h2>"Free bitcoin" today</h2>
+        <div class="doc-prose">
+          <p class="hf-warnp"><b>The era this page describes is over, and offers that pretend otherwise are the single most reliable scam signal in bitcoin.</b> A stranger, a site, or an ad promising free bitcoin, doubled bitcoin, or giveaway bitcoin in any meaningful amount is bait; the business model behind the honest version stopped working years ago, and everyone running one knows it. The common shapes, from fake giveaways to send-to-receive doublers, are catalogued in the <a href="/learn/scams">scams guide</a>.</p>
+          <p>The few honest remnants pay fractions of a cent for your attention, which is a wage, not a giveaway, and a very poor one. If the goal is to hold bitcoin, the working routes are the boring ones: <a href="/buy">buy it</a>, earn it, or accumulate it on a schedule, which the <a href="/dca">averaging calculator</a> lays out with real numbers.</p>
+          <p>This site runs no faucet, and that is a standing decision rather than an oversight. A faucet in 2026 is either an ad mill paying dust or a costume a scam wears. OpenBitcoin would rather tell you the story of the real ones, which were better than anything wearing the name today.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hf-about doc-prose">
+      <p>The faucet era ran from a single generous webpage in 2010 to an industry of ad-funded drip sites, and ended when price growth, abuse, and fee floors closed the arithmetic from every side. The coins it scattered helped seed bitcoin's first user base. Dates and totals above are from the archived forum record and later reporting, documented at <a href="/sources">/sources</a>; the live dollar figures are arithmetic against the current price and describe the past, not the future. More chapters of the record are on the <a href="/history">history index</a>, and the adjacent tradition of premature goodbyes lives at <a href="/obituaries">/obituaries</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The arithmetic today</div>
+      <div class="hf-rs"><b>5 BTC</b><i>one visit paid, 2010</i></div>
+      <div class="hf-rs"><b id="hf-r5">&#8230;</b><i>those five coins now</i></div>
+      <div class="hf-rs"><b id="hf-rtot">&#8230;</b><i>all &#8776;19,700 BTC now</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/history">Bitcoin history index</a>
+        <a href="/obituaries">Bitcoin obituaries</a>
+        <a href="/learn/scams">Common scams</a>
+        <a href="/dca">Dollar cost averaging</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hf-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .hf-big{font:800 56px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-2px}
+  .hf-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .hf-line{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:12px}
+  .hf-line b{font:700 13.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hf-line b.hf-up{color:var(--up)}
+  .hf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px;text-align:left}
+  .hf-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .hf-fig{margin:14px 0 0;background:var(--panel-2);border:1px solid var(--line-2);border-radius:12px;padding:10px}
+  .hf-fig img{width:100%;height:auto;border-radius:8px;display:block;max-width:100%}
+  .hf-fig figcaption{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin-top:8px;padding:0 4px}
+  .hf-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hf-stat i{display:block;font:600 9px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .hf-mt{margin-top:14px}
+  .hf-tl{margin-top:14px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel-2);padding:4px 16px}
+  .hf-tli{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .hf-tli:last-child{border-bottom:0}
+  .hf-tly{flex:none;width:44px;font:700 11px var(--mono);letter-spacing:.06em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .hf-tlt{font:500 13px/1.55 var(--sans);color:var(--ink-2);min-width:0}
+  .hf-warnp{border:1px solid rgba(246,70,93,.42);background:rgba(246,70,93,.06);border-radius:10px;padding:12px 15px}
+  .hf-warnp b{color:var(--down)}
+  .hf-about{margin-top:14px}
+  .hf-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hf-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hf-rs:last-child{border-bottom:0}
+  .hf-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hf-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:700px){
+    .hf-big{font-size:42px}
+    .hf-hero{padding:22px 16px 18px}
+    .hf-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .hf-stat b{white-space:normal}
+    .hf-tl{padding:2px 13px}
+    .hf-tli{gap:11px}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:null};
+  function usd(n){return "$"+n.toLocaleString("en-US",{maximumFractionDigits:0});}
+  function bn(n){return "$"+(n/1e9).toFixed(2)+"B";}
+  var n5=document.getElementById("hf-now5"),r5=document.getElementById("hf-r5"),
+      t1=document.getElementById("hf-tot"),rt=document.getElementById("hf-rtot"),
+      p2=document.getElementById("hf-p2");
+  function paint(){
+    if(!P.price)return; /* no price yet: leave the ellipses in place */
+    var five=usd(5*P.price),total=19700*P.price;
+    if(n5)n5.textContent=five;
+    if(r5)r5.textContent=five;
+    if(t1)t1.textContent=bn(total);
+    if(rt)rt.textContent=bn(total);
+    if(p2)p2.textContent="$"+(total/1e9).toFixed(2)+" billion";
+  }
+  /* live price arrives via the chrome hook; window.OB_LIVE is only set once a
+     real summary lands, so the ellipses hold until the first real tick */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE)return;P.price=S.price;paint();};
+})();
+</script>
+</Base>

@@ -1,0 +1,353 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+export const prerender = false;
+
+const seg = Astro.params.seg || '';
+let anchor = null;
+if (seg !== '') {
+  const m = seg.match(/^from\/(\d{1,9})$/);
+  if (!m) return new Response(null, { status: 404, statusText: 'Not Found' });
+  anchor = Number(m[1]);
+}
+---
+<Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, size, and fee span, updating live as blocks are found."
+  indexable={anchor == null} canonicalPath={anchor != null ? '/blocks' : null}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Blocks</div>
+    <h1>Latest Bitcoin blocks</h1>
+    <p class="doc-lede">Every block, newest first: height, age, mining pool, transaction count, size, and fee span. New blocks appear at the top as our node sees them.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    {anchor == null && (
+      <div class="bl-card mp-card">
+        <div class="bl-cap"><span class="bl-tlab">Blocks by pool, last 24 hours</span></div>
+        <div class="mp-wrap">
+          <div class="mp-hold">
+            <svg id="mp-svg" viewBox="0 0 240 240" role="img" aria-label="Share of blocks found in the last 24 hours by mining pool"></svg>
+            <div class="mp-center" aria-hidden="true"><b id="mp-total">&hellip;</b><i>blocks &middot; 24h</i></div>
+          </div>
+          <div id="mp-legend" class="mp-legend" aria-label="Blocks per pool in the last 24 hours"></div>
+        </div>
+        <div class="mp-tip" id="mp-tip" hidden></div>
+        <p class="mp-desc">Every block found in the last 24 hours, grouped by the pool tag each miner writes into its coinbase transaction. Blocks with no recognizable tag count as Unknown.</p>
+      </div>
+    )}
+    <div class="bl-card">
+      <div class="bl-cap">
+        <span class="bl-tlab">Latest blocks</span>
+        <span class="bl-live">updates as blocks are found</span>
+      </div>
+      <div class="bl-hrow" aria-hidden="true">
+        <span>Height</span><span>Age</span><span>Miner</span><span class="r">Txs</span><span class="r">Size</span><span class="r">Fee span</span>
+      </div>
+      <div id="bl-rows" aria-label="Latest blocks, newest first"><div class="bl-wait">Loading the latest blocks&hellip;</div></div>
+    </div>
+    <div class="bl-pager" id="bl-pager">
+      <button class="bl-pbtn" type="button" disabled>&lsaquo; OLDER</button>
+      <span class="bl-pnote">Loading&hellip;</span>
+      <button class="bl-pbtn" type="button" disabled>NEWER &rsaquo;</button>
+    </div>
+    <div class="bl-foot">Pool attribution reads the tag miners write into the coinbase transaction; blocks without a recognizable tag show as Unknown. Fee span is the lowest and highest fee rate paid inside the block, in sat/vB.</div>
+    <div class="bl-about doc-prose">
+      <p>The Bitcoin network adds a block roughly every ten minutes, though the actual gap swings from under a minute to more than an hour because mining is a lottery. Each row shows what a block carried: its transaction count, its size, and the span of fee rates inside, from its lowest to its highest, in sat/vB. Heights link to the full block view with every transaction and the coinbase message. Chain data comes from our own node, documented at <a href="/sources">/sources</a>, and fee figures are informational under the <a href="/terms">terms</a>. For current rates before you send, see <a href="/fees">/fees</a>; for why the subsidy inside each block shrinks on a fixed schedule, see <a href="/halving">/halving</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="bl-stat"><b id="bl-rh">&hellip;</b><i>current height</i></div>
+      <div class="bl-stat"><b id="bl-rm">&hellip;</b><i>transactions in the mempool</i></div>
+      <div class="bl-stat"><b id="bl-ri">&hellip;</b><i>avg interval, shown rows</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/">Look up any block</a>
+        <a href="/mempool">Mempool right now</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/block-1m">Block 1,000,000 countdown</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .bl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px 8px}
+  .bl-cap{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .bl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .bl-live{display:inline-flex;align-items:center;gap:6px;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  
+  
+  .mp-card{margin-bottom:14px}
+  :root{--mp1:#2a78d6;--mp2:#eb6834;--mp3:#1baf7a;--mp4:#eda100;--mp5:#e87ba4;--mp6:#008300;--mp7:#4a3aa7;--mpo:#898781}
+  :root[data-theme="dark"]{--mp1:#3987e5;--mp2:#d95926;--mp3:#199e70;--mp4:#c98500;--mp5:#d55181;--mp6:#008300;--mp7:#9085e9;--mpo:#898781}
+  .mp-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 2px}
+  .mp-hold{position:relative;width:240px;height:240px}
+  .mp-hold svg{display:block;width:100%;height:100%}
+  .mp-hold path{stroke:var(--panel);stroke-width:2;cursor:pointer}
+  .mp-hold path:hover{opacity:.85}
+  .mp-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+  .mp-center b{font:700 26px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .mp-center i{font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .mp-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;max-width:560px}
+  .mp-lrow{display:inline-flex;align-items:center;gap:7px;font:600 11px var(--mono);color:var(--ink-2)}
+  .mp-lrow s{width:9px;height:9px;border-radius:2.5px;flex:none;text-decoration:none}
+  .mp-lrow em{font-style:normal;color:var(--ink-3)}
+  .mp-tip{position:absolute;z-index:30;pointer-events:none;background:var(--panel-2);border:1px solid var(--line-2);
+    border-radius:8px;padding:7px 11px;font:600 11.5px var(--mono);color:var(--ink);box-shadow:0 8px 22px rgba(0,0,0,.35);white-space:nowrap}
+  .mp-tip em{font-style:normal;color:var(--ink-3);display:block;margin-top:2px}
+  .mp-desc{font:600 10.5px/1.6 var(--mono);letter-spacing:.03em;color:var(--ink-3);text-align:center;margin:12px auto 2px;max-width:60ch}
+  .bl-hrow,.bl-row{display:grid;grid-template-columns:92px 78px minmax(0,1fr) 62px 76px 112px;gap:12px;align-items:center}
+  .bl-hrow{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    padding:0 12px 8px;border-bottom:1px solid var(--line-2)}
+  .bl-hrow .r,.bl-tx,.bl-mb,.bl-fee{text-align:right}
+  .bl-row{padding:10px 12px;border-bottom:1px dashed var(--line-2)}
+  .bl-row:last-child{border-bottom:0}
+  .bl-h{font:700 13px var(--mono);color:var(--acc);text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-h:hover{text-decoration:underline}
+  .bl-age{font:600 11px var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-miner{justify-self:start;font:700 9.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
+    background:var(--field);border-radius:5px;padding:3px 8px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  .bl-miner.unk{color:var(--ink-3)}
+  .bl-tx{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-mb{font:600 11.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-fee{font:600 11px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-wait{font:600 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--ink-3);padding:16px 12px 18px}
+  .bl-new{animation:blflash .9s ease-out 3}
+  @keyframes blflash{0%,45%{background:rgba(247,147,26,.18)}100%{background:transparent}}
+  .bl-pager{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}
+  .bl-pbtn{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:7px;
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:8px 14px;min-height:34px;cursor:pointer;white-space:nowrap;
+    display:inline-flex;align-items:center}
+  .bl-pbtn:hover{background:var(--btn-hov)}
+  .bl-pbtn[disabled],.bl-pbtn.off{opacity:.35;cursor:default;pointer-events:none}
+  .bl-pnote{font:600 10px/1.5 var(--mono);letter-spacing:.03em;color:var(--ink-3);text-align:center}
+  .bl-foot{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:10px}
+  .bl-about{margin-top:14px}
+  .bl-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .bl-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .bl-stat:last-child{border-bottom:0}
+  .bl-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .bl-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:860px){
+    .bl-hrow,.bl-row{grid-template-columns:88px 72px minmax(0,1fr) 58px 72px;gap:10px}
+    .bl-hrow>:nth-child(6),.bl-row>:nth-child(6){display:none}
+  }
+  @media(max-width:560px){
+    .bl-hrow,.bl-row{grid-template-columns:82px 62px minmax(0,1fr) 54px;gap:8px}
+    .bl-hrow>:nth-child(5),.bl-row>:nth-child(5){display:none}
+    .bl-pager{flex-wrap:wrap;justify-content:center}
+    .bl-pnote{order:3;flex:1 1 100%}
+  }
+</style>
+<script is:inline define:vars={{ ANCHOR: anchor }}>
+(function(){
+  var ROWS=15;
+  /* API is read on DOMContentLoaded (see boot below), not here: Base.astro
+     sets window.OB_DATA_API in a script at the end of body, so at parse time
+     it is still undefined */
+  var API=null;
+  var liveMode=false,fetching=false,lastTry=0,tip=null;
+  /* heights and timestamps of the rows currently on screen, filled only from
+     the API response; empty until the first successful fetch */
+  var T={},heights=[];
+  var WAIT="The block list is not loading right now. This page keeps retrying.";
+  function fmt(n){return n.toLocaleString("en-US");}
+  function ago(h){
+    var t=T[h];if(!t)return "";
+    var s=Math.max(0,Math.floor((Date.now()-t)/1000));
+    if(s<60)return s+"s";
+    if(s<3600)return Math.floor(s/60)+"m";
+    return Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m";
+  }
+  /* size unit follows the magnitude, so an empty block at the tip reads
+     "412 B" rather than "0.00 MB" */
+  function sizeTxt(n){
+    if(typeof n!=="number"||!isFinite(n))return "";
+    if(n<1000)return Math.round(n)+" B";
+    if(n<1e6)return (n/1e3).toFixed(2)+" KB";
+    return (n/1e6).toFixed(2)+" MB";
+  }
+  function rowHtml(d,fresh){
+    return "<div class='bl-row"+(fresh?" bl-new":"")+"' data-h='"+d.h+"'>"+
+      "<a class='bl-h' href='/"+d.h+"'>"+fmt(d.h)+"</a>"+
+      "<span class='bl-age'>"+ago(d.h)+"</span>"+
+      "<span class='bl-miner"+(d.miner==="Unknown"?" unk":"")+"'>"+d.miner+"</span>"+
+      "<span class='bl-tx'>"+fmt(d.txs)+"</span>"+
+      "<span class='bl-mb'>"+sizeTxt(d.size)+"</span>"+
+      "<span class='bl-fee'>"+(d.lo!=null&&d.hi!=null?d.lo+"-"+d.hi+" sat/vB":"")+"</span></div>";
+  }
+  var wrap=document.getElementById("bl-rows");
+  /* honest placeholder: only ever replaces the waiting line, never real rows */
+  function showWait(msg){
+    if(!wrap||wrap.querySelector(".bl-row"))return;
+    wrap.innerHTML="<div class='bl-wait'></div>";
+    wrap.firstChild.textContent=msg;
+  }
+  function ivTxt(ms){var s=Math.round(ms/1000);return Math.floor(s/60)+"m "+("0"+s%60).slice(-2)+"s";}
+  function paintRail(){
+    var el=document.getElementById("bl-rh");
+    if(el&&typeof tip==="number")el.textContent=fmt(tip);
+    var ri=document.getElementById("bl-ri");
+    if(ri&&heights.length>1){
+      var top=heights[0],bot=heights[heights.length-1];
+      if(T[top]&&T[bot])ri.textContent=ivTxt((T[top]-T[bot])/(heights.length-1));
+    }
+  }
+  /* rail mempool count: the chrome hook summary carries fees.mempoolCount and
+     window.OB_LIVE holds the newest one. Until a summary lands the served
+     ellipsis stands; nothing is invented. */
+  function paintMem(S){
+    var el=document.getElementById("bl-rm");if(!el)return;
+    var f=(S&&S.fees)||(window.OB_LIVE&&window.OB_LIVE.fees),n=f&&f.mempoolCount;
+    if(typeof n==="number"&&isFinite(n)&&n>=0)el.textContent=fmt(Math.round(n));
+  }
+  function paintAges(){
+    wrap.querySelectorAll(".bl-row").forEach(function(row){
+      var h=+row.getAttribute("data-h"),el=row.querySelector(".bl-age");
+      if(el&&T[h])el.textContent=ago(h);
+    });
+  }
+  setInterval(paintAges,1000);
+  /* while the list is still empty, keep trying on our own clock: the chrome
+     hook only fires once the summary carries a figure, so it cannot be the
+     retry timer when the data service is down */
+  setInterval(function(){if(!liveMode&&API&&Date.now()-lastTry>15000)fetchLive(null);},5000);
+  /* the only source of rows: GET /api/v1/blocks?limit=15. Fee spans use the
+     endpoint's minFeerate/maxFeerate (either null blanks the cell, and so
+     does a block with no fee-paying transactions, which reports 0/0). A
+     failure leaves the waiting line up; nothing is drawn without data. */
+  function liveRow(b){
+    var noFees=b.nTx<=1||(b.totalFeeSat!=null&&!b.totalFeeSat&&!b.maxFeerate),
+        lo=(b.minFeerate==null||noFees?null:Math.round(b.minFeerate)),
+        hi=(b.maxFeerate==null||noFees?null:Math.round(b.maxFeerate));
+    return{h:b.height,miner:b.miner||"Unknown",txs:b.nTx,size:b.size,lo:lo,hi:hi};
+  }
+  /* the pager: OLDER walks down the chain, NEWER back up, /blocks is the
+     live top. Links, not buttons: every page is a real URL. */
+  function renderPager(hs){
+    var pg=document.getElementById("bl-pager");if(!pg||!hs.length)return;
+    var top=hs[0],low=hs[hs.length-1],h="";
+    h+=low>0?'<a class="bl-pbtn" href="/blocks/from/'+(low-1)+'">&lsaquo; OLDER</a>'
+            :'<button class="bl-pbtn" type="button" disabled>&lsaquo; OLDER</button>';
+    h+='<span class="bl-pnote">'+(ANCHOR==null?"Showing the latest "+hs.length+" blocks."
+            :"Blocks "+fmt(top,0)+" down to "+fmt(low,0))+'</span>';
+    if(ANCHOR==null)h+='<button class="bl-pbtn" type="button" disabled>NEWER &rsaquo;</button>';
+    else{
+      var up=ANCHOR+ROWS;
+      h+='<a class="bl-pbtn" href="'+(tip!=null&&up>=tip?"/blocks":"/blocks/from/"+up)+'">NEWER &rsaquo;</a>';
+    }
+    pg.innerHTML=h;
+  }
+  function applyLive(data,prevTop){
+    try{
+      if(!data||!data.blocks||!data.blocks.length){showWait(WAIT);return;}
+      var hs=[],TT={};
+      data.blocks.forEach(function(b){hs.push(b.height);TT[b.height]=b.time*1000;});
+      heights=hs;T=TT;
+      var out="";
+      data.blocks.forEach(function(b){out+=rowHtml(liveRow(b),prevTop!==null&&b.height>prevTop);});
+      tip=(typeof data.tip==="number"&&data.tip>hs[0])?data.tip:hs[0];
+      wrap.innerHTML=out;
+      paintRail();
+      renderPager(hs);
+      liveMode=true;
+    }catch(e){showWait(WAIT);}
+  }
+  function fetchLive(prevTop){
+    if(!API||fetching)return;
+    fetching=true;lastTry=Date.now();
+    try{
+      fetch(API+"/blocks?limit="+ROWS+(ANCHOR==null?"":"&before="+ANCHOR))
+        .then(function(r){return r.ok?r.json():null;})
+        .then(function(d){fetching=false;if(d)applyLive(d,prevTop);else showWait(WAIT);})
+        .catch(function(){fetching=false;showWait(WAIT);});
+    }catch(e){fetching=false;showWait(WAIT);}
+  }
+  /* OB_DATA_API is set by Base.astro in a script at the end of body, after
+     this one parses, so read it and fire the first fetch on DOMContentLoaded.
+     With no API base there is nothing honest to show, so say so. */
+  function boot(){
+    try{
+      API=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
+      paintMem(null);
+      if(!API)showWait(WAIT);else fetchLive(null);
+    }catch(e){showWait(WAIT);}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+  /* live tick + new blocks arrive via the chrome hook (~1.5s); the hook also
+     carries the tip height, which is the one rail figure that can be painted
+     before the list itself loads */
+  window.obPaintFiat=function(S){
+    if(S&&typeof S.height==="number"&&(tip==null||S.height>tip)){tip=S.height;paintRail();}
+    /* an anchored page is frozen history: new blocks never rewrite it */
+    if(ANCHOR==null&&liveMode&&S&&typeof S.height==="number"&&S.height>heights[0])fetchLive(heights[0]);
+    paintMem(S);
+    paintAges();
+  };
+  if(ANCHOR!=null){
+    var lv=document.querySelector(".bl-live");
+    if(lv)lv.textContent="a fixed page of history";
+  }
+  /* ---- the 24h pool donut (live page only). Slices sorted by size, top 7
+     plus a gray Other; per-slice hover tooltip with pool, blocks and share;
+     the legend carries the same figures as text. ---- */
+  if(ANCHOR==null)(function(){
+    var COLS=["--mp1","--mp2","--mp3","--mp4","--mp5","--mp6","--mp7"];
+    function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+    function arc(cx,cy,r1,r2,a0,a1){
+      var L=a1-a0>Math.PI?1:0;
+      function pt(r,a){return (cx+r*Math.cos(a)).toFixed(2)+" "+(cy+r*Math.sin(a)).toFixed(2);}
+      return "M"+pt(r2,a0)+" A"+r2+" "+r2+" 0 "+L+" 1 "+pt(r2,a1)+
+             " L"+pt(r1,a1)+" A"+r1+" "+r1+" 0 "+L+" 0 "+pt(r1,a0)+" Z";
+    }
+    function draw(d){
+      var svg=document.getElementById("mp-svg"),tip=document.getElementById("mp-tip"),
+          leg=document.getElementById("mp-legend"),card=svg.closest(".mp-card");
+      if(!d||!d.miners||!d.miners.length)return;
+      document.getElementById("mp-total").textContent=fmt(d.total,0);
+      var rows=d.miners.slice(0,7),rest=d.miners.slice(7);
+      if(rest.length){
+        var rb=rest.reduce(function(a,m){return a+m.blocks;},0);
+        rows.push({name:"Other ("+rest.length+" pools)",blocks:rb,pct:Math.round(rb/d.total*1000)/10,other:true});
+      }
+      var a=-Math.PI/2,out="";
+      rows.forEach(function(m,i){
+        var span=m.blocks/d.total*Math.PI*2,a1=a+span;
+        out+='<path d="'+arc(120,120,64,112,a,Math.max(a1-0.004,a+0.004))+'" fill="'+
+          (m.other?css("--mpo"):css(COLS[i]))+'" data-i="'+i+'"></path>';
+        a=a1;
+      });
+      svg.innerHTML=out;
+      leg.innerHTML=rows.map(function(m,i){
+        return '<span class="mp-lrow"><s style="background:'+(m.other?css("--mpo"):css(COLS[i]))+
+          '"></s>'+m.name.replace(/&/g,"&amp;").replace(/</g,"&lt;")+' <em>'+m.blocks+" · "+m.pct+"%</em></span>";
+      }).join("");
+      svg.addEventListener("pointermove",function(e){
+        var p=e.target.closest("path");if(!p){tip.hidden=true;return;}
+        var m=rows[Number(p.getAttribute("data-i"))];if(!m){tip.hidden=true;return;}
+        tip.innerHTML=m.name.replace(/&/g,"&amp;").replace(/</g,"&lt;")+
+          "<em>"+m.blocks+" block"+(m.blocks===1?"":"s")+" · "+m.pct+"% of 24h</em>";
+        tip.hidden=false;
+        var cr=card.getBoundingClientRect();
+        tip.style.left=Math.min(e.clientX-cr.left+14,cr.width-tip.offsetWidth-8)+"px";
+        tip.style.top=(e.clientY-cr.top+14)+"px";
+      });
+      svg.addEventListener("pointerleave",function(){tip.hidden=true;});
+      card.style.position="relative";
+    }
+    function load(){
+      if(!API)return;
+      fetch(API+"/miners-24h").then(function(r){return r.ok?r.json():null;}).then(draw).catch(function(){});
+    }
+    if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",load);
+    else load();
+  })();
+})();
+</script>
+</Base>

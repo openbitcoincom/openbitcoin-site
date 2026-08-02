@@ -1,0 +1,286 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Swap Bitcoin Without an Account: Rates, Fees, Risks - OpenBitcoin" description="Swap bitcoin for other assets without an account: how the non-custodial flow works, fixed vs floating rates, and why the spread is the real fee.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Swap</div>
+    <h1>Swap between bitcoin and other assets</h1>
+    <p class="doc-lede">The one page here that touches other assets. Swaps run through ChangeNOW: no account, one deposit, delivery to a wallet you control.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="sw-hero">
+      <div class="sw-form">
+        <div class="sw-field">
+          <label class="sw-lab" for="sw-amt">You send</label>
+          <div class="sw-inrow">
+            <input id="sw-amt" class="sw-amt" type="text" inputmode="decimal" value="0.1" autocomplete="off" spellcheck="false" disabled />
+            <select id="sw-from" class="sw-sel" aria-label="Asset to send" disabled>
+              <option value="BTC" selected>BTC</option>
+              <option value="ETH">ETH</option>
+              <option value="USDT">USDT</option>
+              <option value="USDC">USDC</option>
+              <option value="XMR">XMR</option>
+              <option value="LTC">LTC</option>
+            </select>
+          </div>
+        </div>
+        <button class="sw-flip" id="sw-flip" type="button" aria-label="Reverse the swap direction" disabled>&#8645;</button>
+        <div class="sw-field">
+          <label class="sw-lab" for="sw-to">You receive, estimated</label>
+          <div class="sw-inrow">
+            <output id="sw-out" class="sw-outv" for="sw-amt sw-from sw-to">&#8230;</output>
+            <select id="sw-to" class="sw-sel" aria-label="Asset to receive" disabled>
+              <option value="BTC">BTC</option>
+              <option value="ETH" selected>ETH</option>
+              <option value="USDT">USDT</option>
+              <option value="USDC">USDC</option>
+              <option value="XMR">XMR</option>
+              <option value="LTC">LTC</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="sw-mode" role="group" aria-label="Rate mode">
+        <button type="button" class="sw-mbtn is-on" id="sw-mfloat" disabled>Floating rate</button>
+        <button type="button" class="sw-mbtn" id="sw-mfixed" disabled>Fixed rate</button>
+        <span class="sw-mnote" id="sw-mnote">Floating: the final rate is set when your deposit confirms, so the amount received can differ from the amount you were quoted.</span>
+      </div>
+      <div class="sw-quote">
+        <div class="sw-qrate" id="sw-rate">1 BTC = &#8230;</div>
+        <span class="sw-qsub">bitcoin price, not a swap quote</span>
+        <p class="sw-qnote">This form is not connected to a quote engine, so no swap rate is shown here. It opens when the swap partner integration is signed and switched on; the ChangeNOW link further down is the working route today.</p>
+      </div>
+      <div class="sw-ctarow">
+        <button type="button" class="sw-cta" disabled>Start swap</button>
+        <span class="sw-ctan">Execution runs through ChangeNOW, a third party. Send only from a wallet you control, never straight from an exchange; the risk card below explains why.</span>
+      </div>
+    </div>
+
+    <div class="sw-card sw-mt">
+      <div class="sw-tlab">How a cross-asset swap works</div>
+      <p class="sw-p">A swap service is not an exchange account. You never deposit funds to hold; you hand over one asset for the minutes it takes to trade it, and the result lands at an address you supplied. The whole flow is four steps.</p>
+      <div class="sw-steps">
+        <div class="sw-step"><span class="sw-sn">01</span><b>Get a quote</b><i>Pick the pair and the amount; choose fixed or floating rate</i></div>
+        <div class="sw-step"><span class="sw-sn">02</span><b>Set your addresses</b><i>A receive address in a wallet you control, and a refund address</i></div>
+        <div class="sw-step"><span class="sw-sn">03</span><b>Send the deposit</b><i>One payment for the exact amount, from your own wallet</i></div>
+        <div class="sw-step"><span class="sw-sn">04</span><b>Wait for delivery</b><i>The service trades and sends; most swaps finish in minutes once the deposit confirms</i></div>
+      </div>
+      <div class="sw-rows">
+        <div class="sw-row"><b>Fixed rate</b><span>You lock the quoted rate for a short window, usually well under an hour. If your deposit arrives inside the window, you get exactly the quoted amount; the service carries the market risk, and the quote is slightly worse to pay for that. If the deposit arrives late, the swap falls back to a refund or a re-quote.</span></div>
+        <div class="sw-row"><b>Floating rate</b><span>The rate is set when your deposit confirms, not when you saw the quote. The headline number is better than the fixed quote, but the market can move against you between clicking and confirming, and a slow chain makes that gap wider.</span></div>
+        <div class="sw-row"><b>Timing</b><span>The clock is mostly confirmation time on the deposit chain, not the trade itself. A bitcoin deposit needs on-chain confirmation, so the <a href="/fees">current fee level</a> decides how fast your leg moves; the trade and the outbound send are usually minutes after that.</span></div>
+      </div>
+    </div>
+
+    <div class="sw-card sw-mt">
+      <div class="sw-tlab">The execution partner</div>
+      
+      <div class="sw-svc">
+        <div class="sw-svcm">
+          <div class="sw-svct"><b><a href="https://changenow.io" target="_blank" rel="noopener noreferrer">ChangeNOW</a></b><span class="sw-since">Since 2017</span></div>
+          <p class="sw-svcp">An account-free swap service: no registration, no balance to leave behind. Each swap is its own transaction with its own deposit address, and the service holds your coins only for the minutes the trade takes. That is still custody during those minutes, which is why amounts should stay sane and the refund address should always be set.</p>
+        </div>
+        <a class="sw-open" href="https://changenow.io" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+      </div>
+      <p class="sw-fine">Account-free does not mean consequence-free. Swap services screen deposits, and a flagged swap can be held pending identity checks under the service's own policy. If that trade-off matters to you, <a href="/learn/no-kyc">no-KYC bitcoin</a> covers the wider landscape honestly. When affiliate terms are signed, this link becomes a labeled affiliate link per the <a href="/disclosure">disclosure</a>; affiliate status never changes what this page says.</p>
+    </div>
+
+    <div class="sw-card sw-mt">
+      <div class="sw-tlab">Fees: the spread is the fee</div>
+      <p class="sw-p">Most swap services advertise low or zero fees, and the claim is technically true and practically meaningless. The cost sits inside the rate: the quote you accept is a little worse than the open market rate for the pair, and that gap, the spread, is where the service earns. Nothing appears as a fee line, which is exactly why you should check.</p>
+      <ul class="sw-list">
+        <li><b>Measure it once and you know the service.</b> Take the amount you would receive, divide by the amount you send, and compare that rate against the market cross rate. For any pair through bitcoin, the <a href="/price">price page</a> and the <a href="/convert">converter</a> give you the reference leg.</li>
+        <li><b>Fixed rates cost more than floating.</b> The lock is insurance, and the premium is baked into the quote. That can be worth paying on a volatile day; it is still a cost.</li>
+        <li><b>Network fees stack on both legs.</b> Your deposit pays the sending chain's fee, and the service's outbound payment effectively comes out of your proceeds. Small swaps carry the worst percentage cost for the same reason small on-chain payments do; see <a href="/fees">fees</a>.</li>
+      </ul>
+    </div>
+
+    <div class="sw-card sw-mt">
+      <div class="sw-tlab">Where swaps go wrong</div>
+      <div class="sw-rows">
+        <div class="sw-row sw-warn"><b>Sending from an exchange</b><span>Never point a swap deposit at an exchange withdrawal. Exchanges batch withdrawals, split them across outputs, and send from addresses you do not control, any of which can break the service's deposit matching. Worse: if the swap fails, the refund goes back toward the sending address, which belongs to the exchange, not to you. Withdraw to <a href="/wallets">your own wallet</a> first, then swap from there.</span></div>
+        <div class="sw-row sw-warn"><b>No refund address</b><span>If a swap fails, the deposit comes back minus a network fee, but only to a refund address you set before sending. Skipping that field turns a routine failure into a support ticket. Set it every time, from the same wallet you sent from.</span></div>
+        <div class="sw-row"><b>Rate movement on floating</b><span>Between your click and your deposit confirming, the market moves. Usually the difference is small; on a fast day it is not. If receiving a precise amount matters, pay for the fixed rate.</span></div>
+        <div class="sw-row"><b>Amount limits and dust</b><span>Every pair has a minimum below which the swap is rejected or eaten by network fees, and large amounts can exceed the service's liquidity for a quote. Check both bounds before sending; a deposit below the minimum is the hardest money to get back.</span></div>
+        <div class="sw-row"><b>The custody window</b><span>For the minutes a swap runs, the service holds your coins, and a held or flagged swap means waiting on support rather than querying a chain. This is a reason to keep single swaps modest, not a reason to panic; it is the same logic as not parking a balance on an exchange, compressed into minutes. <a href="/learn/frozen-deposits">Frozen deposits</a> covers the long version.</span></div>
+      </div>
+    </div>
+
+    <div class="sw-card sw-mt sw-note">
+      <div class="sw-tlab">Why this page exists on a bitcoin site</div>
+      <p class="sw-p">Everything else on OpenBitcoin is bitcoin-only, on purpose. This page is the single exception, and it is scoped tightly: a handful of major assets, one execution partner, and no coverage of any other asset beyond what a swap requires. If you are here to get into bitcoin from another asset, welcome; <a href="/learn/self-custody">self-custody</a> is the next page that matters. If you are swapping out of bitcoin, nothing here judges that; the mechanics deserve the same honesty either way. Nothing on this page is financial advice, per the <a href="/terms">terms</a>.</p>
+    </div>
+
+    <div class="sw-about doc-prose">
+      <p>A swap is a purchase and a sale glued together, so the habits from <a href="/buy">buying bitcoin</a> carry over directly: know the real cost by measuring the spread, send from and receive to wallets whose keys you hold, and treat any balance in someone else's custody, even a five-minute one, as a claim rather than coins. If your goal is spending rather than swapping, <a href="/spend/gift-cards">gift cards</a> cover most of the everyday cases without leaving bitcoin at all.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="sw-stat"><b id="sw-px">&#8230;</b><i>1 BTC</i></div>
+      <div class="sw-stat"><b id="sw-ht">&#8230;</b><i>block height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you swap</div>
+      <ul class="sw-rl">
+        <li>Send from a wallet you control</li>
+        <li>Set the refund address first</li>
+        <li>Check the spread against the market rate</li>
+        <li>Mind the pair's minimum amount</li>
+        <li>Fixed rate if the amount must be exact</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/buy">How to buy bitcoin</a>
+        <a href="/spend/gift-cards">Spending bitcoin</a>
+        <a href="/learn/no-kyc">No-KYC bitcoin</a>
+        <a href="/fees">Current fees</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .sw-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .sw-form{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:end}
+  .sw-field{min-width:0}
+  .sw-lab{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .sw-inrow{display:flex;gap:8px;min-width:0}
+  .sw-amt{flex:1;min-width:0;width:100%;background:var(--field);border:1px solid var(--line-2);border-radius:9px;
+    color:var(--ink);font:700 17px var(--mono);padding:11px 12px;font-variant-numeric:tabular-nums}
+  .sw-amt:focus{outline:none;border-color:var(--acc)}
+  .sw-outv{flex:1;min-width:0;display:block;background:var(--panel-2);border:1px dashed var(--line-2);border-radius:9px;
+    color:var(--ink);font:700 17px var(--mono);padding:11px 12px;font-variant-numeric:tabular-nums;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sw-sel{flex:none;background:var(--field);border:1px solid var(--line-2);border-radius:9px;color:var(--ink);
+    font:700 13px var(--mono);letter-spacing:.04em;padding:11px 9px;cursor:pointer}
+  .sw-sel:focus{outline:none;border-color:var(--acc)}
+  .sw-flip{align-self:end;background:var(--field);border:1px solid var(--line-2);border-radius:9px;color:var(--acc);
+    font:700 17px var(--mono);width:42px;height:42px;cursor:pointer;line-height:1}
+  .sw-flip:hover{border-color:var(--acc)}
+  
+  .sw-amt:disabled,.sw-sel:disabled,.sw-flip:disabled,.sw-mbtn:disabled{opacity:.55;cursor:not-allowed}
+  .sw-flip:disabled:hover{border-color:var(--line-2)}
+  .sw-mode{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:15px}
+  .sw-mbtn{background:var(--field);border:1px solid var(--line-2);border-radius:999px;color:var(--ink-3);
+    font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;cursor:pointer}
+  .sw-mbtn.is-on{color:var(--acc);border-color:rgba(247,147,26,.55)}
+  .sw-mnote{flex:1 1 240px;min-width:0;font:500 11.5px/1.5 var(--sans);color:var(--ink-3)}
+  .sw-quote{margin-top:15px;padding-top:15px;border-top:1px dotted var(--line-2)}
+  .sw-qrate{display:inline-block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .sw-qsub{font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-left:9px}
+  .sw-qnote{font:600 12.5px/1.55 var(--sans);color:var(--acc);margin:7px 0 0}
+  .sw-ctarow{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .sw-cta{flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    padding:11px 20px;white-space:nowrap;opacity:.55;cursor:not-allowed;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .sw-ctan{flex:1 1 240px;min-width:0;font:500 11.5px/1.5 var(--sans);color:var(--ink-3)}
+  .sw-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .sw-mt{margin-top:14px}
+  .sw-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .sw-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .sw-p a,.sw-row a,.sw-list a,.sw-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .sw-p a:hover,.sw-row a:hover,.sw-list a:hover,.sw-fine a:hover{border-bottom-style:solid}
+  .sw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:13px}
+  .sw-step{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+  .sw-sn{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
+  .sw-step b{display:block;font:700 13.5px var(--sans);color:var(--ink);margin-top:5px}
+  .sw-step i{display:block;font:500 11.5px/1.45 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .sw-rows{display:grid;gap:8px;margin-top:13px}
+  .sw-rows:first-child{margin-top:0}
+  .sw-tlab+.sw-rows{margin-top:0}
+  .sw-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .sw-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2)}
+  .sw-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .sw-warn{border-color:rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .sw-warn b{color:var(--down)}
+  .sw-list{margin:10px 0 0;padding-left:22px}
+  .sw-list li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
+  .sw-list li::marker{color:var(--acc)}
+  .sw-list b{color:var(--ink);font-weight:600}
+  .sw-svc{display:flex;align-items:center;gap:16px;padding:2px 0 13px;border-bottom:1px dotted var(--line-2)}
+  .sw-svcm{flex:1;min-width:0}
+  .sw-svct{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .sw-svct b{font:700 14px var(--sans);color:var(--ink)}
+  .sw-svct b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
+  .sw-svct b a:hover{color:var(--acc);border-bottom-color:rgba(247,147,26,.45)}
+  .sw-since{font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
+  .sw-svcp{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  .sw-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    padding:10px 18px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .sw-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+  .sw-fine{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .sw-note{border-color:rgba(255,166,60,.32)}
+  .sw-about{margin-top:14px}
+  .sw-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .sw-stat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .sw-stat:last-child{border-bottom:0}
+  .sw-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .sw-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .sw-rl{margin:0;padding-left:16px}
+  .sw-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .sw-rl li:first-child{margin-top:0}
+  .sw-rl li::marker{color:var(--acc)}
+  @media(max-width:700px){
+    .sw-hero,.sw-card{padding:18px 18px 20px}
+    .sw-form{grid-template-columns:minmax(0,1fr)}
+    .sw-flip{justify-self:center;align-self:center;transform:rotate(90deg)}
+    .sw-ctarow{align-items:flex-start;flex-direction:column;gap:10px}
+    .sw-svc{flex-direction:column;align-items:flex-start;gap:10px}
+  }
+</style>
+<script is:inline>
+(function(){
+  /* No quote engine and no rate arithmetic: the site has no swap rates, so the
+     page states none. The only figure painted here is the live bitcoin price,
+     shown in the quote line and the rail, and labelled in the markup as the
+     bitcoin price rather than a swap quote. Both hold an ellipsis until a real
+     tick lands. The direction and mode controls stay wired (they move no
+     figures) so the integration pass only has to add real quotes. */
+  var LIVE={price:null,height:null};
+  var from=document.getElementById("sw-from"),to=document.getElementById("sw-to"),
+      rate=document.getElementById("sw-rate"),flip=document.getElementById("sw-flip"),
+      mf=document.getElementById("sw-mfloat"),mx=document.getElementById("sw-mfixed"),
+      mn=document.getElementById("sw-mnote"),
+      px=document.getElementById("sw-px"),ht=document.getElementById("sw-ht");
+  function paint(){
+    if(LIVE.price!==null){
+      var p="$"+LIVE.price.toLocaleString("en-US",{maximumFractionDigits:0});
+      if(rate)rate.textContent="1 BTC = "+p;
+      if(px)px.textContent=p;
+    }
+    if(ht&&LIVE.height!==null)ht.textContent=LIVE.height.toLocaleString("en-US");
+  }
+  flip.addEventListener("click",function(){
+    var f=from.value;from.value=to.value;to.value=f;
+  });
+  function mode(on,off,txt){
+    on.classList.add("is-on");off.classList.remove("is-on");mn.textContent=txt;
+  }
+  mf.addEventListener("click",function(){
+    mode(mf,mx,"Floating: the final rate is set when your deposit confirms, so the amount received can differ from the amount you were quoted.");
+  });
+  mx.addEventListener("click",function(){
+    mode(mx,mf,"Fixed: the quoted rate is locked for a short window; the quote is slightly worse in exchange for the certainty.");
+  });
+  /* live price and height arrive via the chrome hook; window.OB_LIVE is only
+     set once a real summary lands, so the ellipses hold until then */
+  window.obPaintFiat=function(S){
+    if(!window.OB_LIVE)return;
+    if(S&&typeof S.price==="number"&&S.price>0)LIVE.price=S.price;
+    if(S&&typeof S.height==="number"&&S.height>0)LIVE.height=S.height;
+    paint();
+  };
+})();
+</script>
+</Base>

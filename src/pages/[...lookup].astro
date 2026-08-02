@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+
+import Base from '../layouts/Base.astro';
+import BlockPage from '../components/explorer/BlockPage.astro';
+import TxPage from '../components/explorer/TxPage.astro';
+import AddressPage from '../components/explorer/AddressPage.astro';
+import '../styles/explorer.css';
+import { classify, getBlock, getTx, getAddress, getAddressTxs, getSummary, fmtInt, fmtBtc } from '../lib/explorer.js';
+
+const rawSegs = (Astro.params.lookup || '').split('/').filter(Boolean);
+if (rawSegs.length === 0 || rawSegs.length > 4) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+let seg = rawSegs[0];
+let pathDir = null;      // 'in' | 'out'
+let pathCompact = false;
+let page = 1;
+{
+  let i = 1;
+  if (i < rawSegs.length && (rawSegs[i] === 'received' || rawSegs[i] === 'sent')) {
+    pathDir = rawSegs[i] === 'received' ? 'in' : 'out';
+    i += 1;
+  }
+  if (i < rawSegs.length && rawSegs[i] === 'compact') {
+    pathCompact = true;
+    i += 1;
+  }
+  if (i < rawSegs.length && /^[0-9]{1,5}$/.test(rawSegs[i])) {
+    page = Number(rawSegs[i]);
+    i += 1;
+  }
+  if (i !== rawSegs.length) {
+    return new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+}
+const pathTail = (p) =>
+  (pathDir ? (pathDir === 'in' ? '/received' : '/sent') : '') +
+  (pathCompact ? '/compact' : '') + (p > 1 ? `/${p}` : '');
+if (rawSegs.length > 1 && page <= 1 && /^[0-9]+$/.test(rawSegs[rawSegs.length - 1])) {
+  return Astro.redirect(`/${seg}${pathTail(1)}`, 301);
+}
+if (/^(BC1|bc1)/i.test(seg) && seg === seg.toUpperCase()) {
+  return Astro.redirect(`/${seg.toLowerCase()}${pathTail(page)}`, 301);
+}
+const q = Astro.url.searchParams;
+if (q.has('page') || q.has('dir') || q.has('view')) {
+  const qDir = q.get('dir');
+  const dir2 = pathDir || (qDir === 'in' ? 'in' : qDir === 'out' ? 'out' : null);
+  const compact2 = pathCompact || q.get('view') === 'compact';
+  const page2 = Math.max(page, Number(q.get('page') || 1) || 1);
+  const tail = (dir2 ? (dir2 === 'in' ? '/received' : '/sent') : '') +
+    (compact2 ? '/compact' : '') + (page2 > 1 ? `/${page2}` : '');
+  return Astro.redirect(`/${seg}${tail}`, 301);
+}
+const kind = classify(seg);
+if ((pathDir || pathCompact) && kind !== 'address') {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+let block = null;
+let tx = null;
+let addr = null;
+let addrTxs = null;
+if (kind === 'height') {
+  block = await getBlock(seg, page);
+} else if (kind === 'blockhash') {
+  block = await getBlock(seg, page);
+  if (!block) tx = await getTx(seg.toLowerCase());
+} else if (kind === 'txid') {
+  tx = await getTx(seg.toLowerCase());
+  if (!tx) block = await getBlock(seg, page);
+} else if (kind === 'address') {
+  addr = await getAddress(seg);
+  if (addr && !addr.valid) addr = null;
+  if (addr) {
+    addrTxs = await getAddressTxs(seg, page, pathDir);
+  }
+}
+
+if (!block && !tx && !addr) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+let usdNow = null;
+if (tx || addr) {
+  usdNow = (await getSummary().catch(() => null))?.price?.usd ?? null;
+}
+
+const indexable = Boolean(block) || Boolean(tx) || Boolean(addr && addr.txCount > 0);
+
+let title, description;
+if (block) {
+  title = `${fmtInt(block.height)} Bitcoin Block - OpenBitcoin`;
+  description = `Bitcoin block ${fmtInt(block.height)}: ${fmtInt(block.nTx)} transactions, mined ${new Date(block.time * 1000).toISOString().slice(0, 10)}. Hash, size, fees, and the full transaction list.`;
+} else if (tx) {
+  title = `${tx.txid} Bitcoin Transaction - OpenBitcoin`;
+  description = `Bitcoin transaction ${tx.txid.slice(0, 16)}…: ${tx.vin.length} input${tx.vin.length === 1 ? '' : 's'}, ${tx.vout.length} output${tx.vout.length === 1 ? '' : 's'}${tx.confirmations > 0 ? `, ${fmtInt(tx.confirmations)} confirmations` : ', unconfirmed'}. Amounts, fee, and scripts.`;
+} else {
+  title = `${seg} Bitcoin Address - OpenBitcoin`;
+  description = `Bitcoin address ${seg.slice(0, 12)}…: balance ${fmtBtc(addr.confirmedSat)} BTC across ${fmtInt(addr.txCount)} transactions. Full history, unspent outputs, and a scannable QR.`;
+}
+---
+<Base title={title} description={description}
+  indexable={indexable && !pathDir && !pathCompact}
+  canonicalPath={page > 1 || pathDir || pathCompact ? `/${seg}` : null}>
+  {block && <BlockPage b={block} />}
+  {tx && <TxPage t={tx} usdNow={usdNow} />}
+  {addr && <AddressPage a={addr} txPage={addrTxs} usdNow={usdNow} dir={pathDir} compact={pathCompact} />}
+</Base>

@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<!-- This policy is the machine-readable version of the promise on the page:
+     the document may run its own inline script and style and nothing else.
+     default-src 'none' plus connect-src 'none' means fetch, XMLHttpRequest,
+     WebSocket, beacons, remote images, fonts and frames are all refused by
+     the browser itself (img-src data: allows only the embedded logo), whether or not the code below ever tries. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; media-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Offline BIP39 Toolkit: checksum and missing last word</title>
+<style>
+:root{
+  /* Midnight Navy, matching openbitcoin.com */
+  --bg:#0B1626;--panel:#101D33;--panel2:#0D1830;--line:#1E2C47;--line2:#2A3B5C;
+  --ink:#E8EDF7;--ink2:#C7D3E8;--ink3:#7C8CA8;--acc:#F7931A;
+  --up:#0ECB81;--down:#F6465D;--field:#16233C;--ph:#5F7191;
+  --mono:ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,Menlo,monospace;
+  --sans:system-ui,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.bt-wrap{max-width:760px;margin:0 auto;padding:0 16px 60px}
+button,input,textarea{font-family:inherit}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(247,147,26,.55);outline-offset:2px}
+
+/* ---- network banner ---- */
+.bt-net{max-width:792px;margin:0 auto 18px;padding:13px 16px;border-radius:0 0 12px 12px;
+  border:1px solid var(--line2);border-top:0;font:700 12.5px/1.55 var(--sans)}
+.bt-net b{display:block;font:800 14px var(--sans);margin-bottom:3px}
+.bt-net span{display:block;font:500 12px/1.55 var(--sans);opacity:.85;margin-top:4px}
+.bt-net.is-on{background:rgba(246,70,93,.14);border-color:rgba(246,70,93,.55);color:#FFD9DE}
+.bt-net.is-off{background:rgba(46,189,133,.10);border-color:rgba(46,189,133,.45);color:#BFEBD9}
+
+/* ---- head ---- */
+.bt-brand{display:flex;align-items:flex-end;gap:1px;margin:26px 0 18px}
+.bt-logo{display:inline-block;width:187px;height:34px;flex:none;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%230A0F1B%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat left center/contain;
+  filter:drop-shadow(0 2px 6px rgba(122,58,0,.30))}
+.bt-com{font:800 italic 21px var(--sans);color:var(--acc);letter-spacing:-.5px;padding-bottom:4px}
+.bt-kick{font:700 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+h1{font:800 27px/1.15 var(--sans);letter-spacing:-.4px;margin:8px 0 0}
+.bt-lede{font:500 14.5px/1.6 var(--sans);color:var(--ink2);margin:9px 0 0;max-width:64ch}
+
+/* ---- self-test strip ---- */
+.bt-st{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0 0;padding:10px 14px;border-radius:10px;
+  background:var(--panel2);border:1px solid var(--line2)}
+.bt-dot{width:9px;height:9px;border-radius:50%;background:var(--ink3);flex:none}
+.bt-st b{font:700 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink2)}
+.bt-st i{font:600 11px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink3);font-style:normal;min-width:0}
+.bt-st.is-ok .bt-dot{background:var(--up)}
+.bt-st.is-ok b{color:var(--up)}
+.bt-st.is-bad{background:rgba(246,70,93,.12);border-color:rgba(246,70,93,.55)}
+.bt-st.is-bad .bt-dot{background:var(--down)}
+.bt-st.is-bad b{color:var(--down)}
+
+/* ---- cards ---- */
+.bt-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px 20px;margin-top:14px}
+.bt-lab{font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.bt-ta{width:100%;min-height:104px;resize:vertical;background:var(--field);border:1px dashed rgba(255,166,60,.32);
+  border-radius:10px;color:#FFF;font:700 15px/1.7 var(--mono);padding:12px 14px;outline:none;word-break:break-word}
+.bt-ta:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+.bt-ta::placeholder{color:var(--ph);font-weight:600}
+.bt-ta:disabled{opacity:.5;cursor:not-allowed}
+.bt-ta.is-blur{color:transparent;text-shadow:0 0 9px rgba(255,255,255,.75)}
+.bt-hint{font:500 12px/1.55 var(--sans);color:var(--ink3);margin:9px 0 0}
+.bt-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.bt-b{background:transparent;border:1px solid var(--line2);border-radius:8px;color:var(--ink2);
+  font:700 10.5px var(--mono);letter-spacing:.08em;padding:8px 12px;cursor:pointer}
+.bt-b:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.bt-b.is-acc{border-color:rgba(255,166,60,.5);color:var(--acc)}
+
+/* ---- lock panel over the input ---- */
+.bt-lock{border-radius:10px;padding:14px 16px;margin-bottom:12px;
+  background:rgba(246,70,93,.12);border:1px solid rgba(246,70,93,.55)}
+.bt-lock b{display:block;font:800 14px var(--sans);color:#FFD9DE;margin-bottom:4px}
+.bt-lock p{font:500 12.5px/1.6 var(--sans);color:#FFD9DE;opacity:.9;margin:0}
+.bt-lock .bt-b{margin-top:11px;border-color:rgba(246,70,93,.6);color:#FFD9DE}
+
+/* ---- results ---- */
+.bt-msg{font:700 14px/1.55 var(--mono);color:var(--ink3)}
+.bt-msg.is-bad{color:var(--down)}
+.bt-msg.is-ok{color:var(--up)}
+.bt-verdict{font:800 clamp(19px,4.4vw,24px)/1.25 var(--sans);letter-spacing:-.3px;margin:0}
+.bt-verdict.is-ok{color:var(--up)}
+.bt-verdict.is-bad{color:var(--down)}
+.bt-verdict.is-mut{color:var(--ink2)}
+.bt-p{font:500 14px/1.7 var(--sans);color:var(--ink2);margin:9px 0 0}
+.bt-words{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.bt-w{display:flex;align-items:baseline;gap:6px;background:var(--panel2);border:1px solid var(--line2);
+  border-radius:8px;padding:5px 9px;font:700 12.5px var(--mono);color:var(--ink);min-width:0}
+.bt-w u{font:700 9px var(--mono);color:var(--ink3);text-decoration:none;font-variant-numeric:tabular-nums}
+.bt-w.is-bad{border-color:rgba(246,70,93,.6);background:rgba(246,70,93,.12);color:#FFD9DE}
+.bt-w.is-bad u{color:#FFB3BE}
+.bt-sug{margin-top:13px;padding-top:12px;border-top:1px dotted var(--line2)}
+.bt-sugrow{font:500 12.5px/1.7 var(--sans);color:var(--ink2);margin-top:6px;word-break:break-word}
+.bt-sugrow b{font:700 12.5px var(--mono);color:var(--down)}
+.bt-sugrow i{font:700 12.5px var(--mono);color:var(--acc);font-style:normal}
+.bt-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.bt-meta span{background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:5px 10px;
+  font:700 10px var(--mono);letter-spacing:.07em;color:var(--ink2);word-break:break-all}
+.bt-meta span b{color:var(--acc);font-weight:700}
+.bt-cands{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.bt-cands span{background:var(--field);border:1px dashed rgba(255,166,60,.32);border-radius:8px;padding:5px 9px;
+  font:700 12.5px var(--mono);color:var(--acc)}
+.bt-note{font:500 12.5px/1.65 var(--sans);color:var(--ink3);margin:14px 0 0;padding-top:12px;
+  border-top:1px dotted var(--line2)}
+
+/* ---- prose ---- */
+.bt-sec{padding-top:18px;margin-top:18px;border-top:1px dotted var(--line2)}
+.bt-sec:first-child{border-top:0;margin-top:0;padding-top:0}
+h2{font:700 16px/1.3 var(--sans);margin:0 0 8px}
+ol.bt-steps,ul.bt-list{margin:10px 0 0;padding-left:20px}
+ol.bt-steps li,ul.bt-list li{font:500 14px/1.6 var(--sans);color:var(--ink2);margin-top:7px}
+ol.bt-steps li::marker,ul.bt-list li::marker{color:var(--acc);font-weight:700}
+.bt-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink3);margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+code{font:600 12.5px var(--mono);background:var(--field);border-radius:5px;padding:2px 6px;color:var(--ink)}
+@media(max-width:700px){
+  h1{font-size:23px}
+  .bt-card{padding:16px 15px 18px}
+  .bt-ta{font-size:13.5px}
+}
+</style>
+</head>
+<body>
+
+<div class="bt-net" id="bt-net" role="status">
+  <b>Checking the network</b>
+  <span>One moment.</span>
+</div>
+
+<div class="bt-wrap">
+
+  <div class="bt-brand"><span class="bt-logo" role="img" aria-label="OpenBitcoin"></span><span class="bt-com">.com</span></div>
+  <div class="bt-kick">Offline tool</div>
+  <h1>Offline BIP39 toolkit</h1>
+  <p class="bt-lede">Checks a seed phrase against its own checksum, and works out which final words fit when the last one is missing. It runs entirely inside this file, on a machine that should have no network. Nothing is sent, nothing is stored.</p>
+
+  <div class="bt-st" id="bt-st">
+    <span class="bt-dot"></span>
+    <b id="bt-st-b">Self-test running</b>
+    <i id="bt-st-i">Checking the code against known test vectors.</i>
+  </div>
+
+  <div class="bt-card">
+    <div id="bt-lockwrap"></div>
+    <div class="bt-lab">Your words</div>
+    <textarea id="bt-in" class="bt-ta" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"
+      placeholder="abandon abandon abandon abandon abandon abandon&#10;abandon abandon abandon abandon abandon about"
+      aria-label="Seed phrase words" disabled></textarea>
+    <p class="bt-hint">Twelve, fifteen, eighteen, twenty-one or twenty-four words for a checksum test. Eleven or twenty-three words and this file lists every final word that would fit. Numbering, commas and capitals are ignored.</p>
+    <div class="bt-btns">
+      <button type="button" class="bt-b" id="bt-blur">Blur the words</button>
+      <button type="button" class="bt-b" id="bt-clear">Clear everything</button>
+    </div>
+  </div>
+
+  <div class="bt-card" id="bt-out" aria-live="polite">
+    <div class="bt-msg">Waiting for words.</div>
+  </div>
+
+  <div class="bt-card">
+    <div class="bt-sec">
+      <h2>Use this file offline</h2>
+      <ol class="bt-steps">
+        <li>Save this file to disk while you are still connected. It is one HTML file with no companions: no scripts to fetch, no fonts, no images.</li>
+        <li>Copy it by USB stick to a computer that will not go back online. An old laptop with the radio switched off is enough.</li>
+        <li>Turn the wifi off or unplug the cable. The banner at the top of this page turns green when the browser reports no network, and the box for your words stays locked until it does.</li>
+        <li>Open the file by double clicking it. The address bar must read <code>file://</code>. This tool refuses to accept words from any other address, because a copy served by a website is a copy a website controls.</li>
+        <li>Type the words. Everything happens in the page as you type.</li>
+        <li>Close the tab when you are done, then wipe the machine or keep it offline for good. Nothing was written to disk, no cookies, no storage, no clipboard.</li>
+      </ol>
+      <p class="bt-p">The banner reads <code>navigator.onLine</code>, which only tells you whether the browser can see a network interface. It is a reminder, not proof of isolation. Pulling the cable or switching the radio off is the proof.</p>
+    </div>
+    <div class="bt-sec">
+      <h2>What the checksum can and cannot tell you</h2>
+      <p class="bt-p">The last word of a BIP39 phrase is not free. Part of it is a checksum over everything before it: four bits for a twelve word phrase, eight bits for twenty-four. So a phrase either agrees with itself or it does not, and that catches a mistyped word, a swapped pair, or a word written in the wrong row.</p>
+      <p class="bt-p">What it cannot do is tell you which word is wrong. A twelve word phrase with one unknown word has 2048 possibilities and roughly 128 of them pass the checksum, so the test narrows a haystack rather than finding the needle. That is why the missing word case here is the last word only: with the other eleven or twenty-three known good, the answer is a short list you can try one at a time.</p>
+      <p class="bt-p">A passing checksum also does not mean the phrase is yours. Any valid phrase is a valid wallet, just an empty one if it is not the phrase you wrote down. Only restoring it in a wallet and seeing the right addresses proves anything, and that check belongs in wallet software, not here.</p>
+    </div>
+    <div class="bt-sec">
+      <h2>If the checksum fails</h2>
+      <ul class="bt-list">
+        <li>Check the first four letters of every word. No two words on the list share them, so the start of a word identifies it and a smudged ending usually does not matter.</li>
+        <li>Look for handwriting collisions: a written a and o, u and v, n and r, i and l, and a 1 that is really an l.</li>
+        <li>Check the order. Reading a two column backup down instead of across is the most common way a correct set of words fails.</li>
+        <li>Count again. A phrase with a word missing in the middle looks like an eleven word phrase, and eleven words with a gap somewhere other than the end cannot be repaired by arithmetic alone.</li>
+        <li>Try dropping the last word and using the missing word mode, in case the last word is the one that was copied wrong.</li>
+      </ul>
+    </div>
+    <div class="bt-sec">
+      <h2>What this file does not do</h2>
+      <p class="bt-p">It does not derive keys or addresses, it does not know about passphrases, and it has no idea whether a phrase holds any coins. It is arithmetic on the words: are they on the list, do the bits agree, and which last words would fit. That keeps it small enough to read in one sitting, which matters more for a tool that sees a seed phrase than any feature would.</p>
+      <p class="bt-p">Nothing legitimate ever asks for these words. Not a wallet update, not a support agent, not a page that appeared in a search result. This file exists so the one job that genuinely needs a full phrase can be done on a machine with nothing listening.</p>
+    </div>
+  </div>
+
+  <p class="bt-fine">This file implements SHA-256 in plain JavaScript and carries the published test vectors for it, the official 2048 word English BIP39 list checked against its own SHA-256 checksum, and the BIP39 specification phrase vectors. It runs all of them on load and refuses to answer anything if one fails, because a wrong answer about a seed phrase is worse than no answer. There is no network code in it, and the policy in its head tells the browser to refuse every request anyway. It writes no cookies, no local storage, and never touches the clipboard. From OpenBitcoin.com, page openbitcoin.com/tools/seed-recovery. Never type these words into a website, an app store download, a support chat, or any page you did not save to disk yourself.</p>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   Offline BIP39 toolkit. Two jobs: validate the checksum of a full
+   phrase, and list the final words that fit an 11 or 23 word phrase.
+
+   Zero network by construction: there is no fetch, XMLHttpRequest,
+   WebSocket, Image, EventSource or beacon call in this file, and the
+   meta CSP in the head refuses all of them anyway. Nothing is
+   persisted: no cookies, no localStorage, no sessionStorage, no
+   clipboard access.
+
+   TEST VECTORS EMBEDDED BELOW. The self-test runs on load and every
+   answer is suppressed if any vector fails:
+     SHA-256 (FIPS 180-4 examples and the long-message case):
+       ""      -> e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+       "abc"   -> ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+       "abcdbcde...nopq" (56 bytes, spans the padding boundary)
+               -> 248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1
+       the wordlist joined by newlines with a trailing newline, 13 KB,
+       many blocks
+               -> 2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda
+         which is the published checksum of bip-0039/english.txt, so
+         this one vector checks the hash and the wordlist at once.
+     Wordlist shape: 2048 entries, first "abandon", last "zoo",
+       sorted, lowercase a-z, 3 to 8 letters, first four letters unique.
+     BIP39 phrase vectors (from the specification's English test set),
+       entropy recovered from the words and compared:
+       12 words: 00..00 -> abandon x11 about
+                 7f..7f -> legal winner thank year wave sausage worth
+                           useful legal winner thank yellow
+                 80..80 -> letter advice cage absurd amount doctor
+                           acoustic avoid letter advice cage above
+                 ff..ff -> zoo x11 wrong
+       24 words: 00..00 -> abandon x23 art
+                 ff..ff -> zoo x23 vote
+     Must be rejected: twelve "abandon", twenty-four "abandon", and a
+       correct phrase with two words swapped.
+     Missing last word: 23 "abandon" must yield exactly the 8 words
+       art diesel false kite organ ready surface trouble; 11 "abandon"
+       must yield exactly 128 words, the first being "about".
+   Every vector above was checked against an independent implementation
+   before this file was written; the self-test re-checks them in your
+   own browser, which is the only check that matters here.
+   ===================================================================== */
+
+/* ---------- SHA-256, plain JavaScript, no WebCrypto ---------- */
+var K256=[
+0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+
+function sha256(msg){
+  var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  var l=msg.length,k=(56-(l+1)%64+64)%64,total=l+1+k+8,i;
+  var m=new Uint8Array(total);
+  m.set(msg,0);m[l]=0x80;
+  /* message length in bits, 64 bit big-endian; built by division so an
+     input over 512 MB would still land in the right words */
+  var bitsHi=Math.floor(l/536870912),bitsLo=(l*8)%4294967296;
+  m[total-8]=(bitsHi>>>24)&255;m[total-7]=(bitsHi>>>16)&255;m[total-6]=(bitsHi>>>8)&255;m[total-5]=bitsHi&255;
+  m[total-4]=(bitsLo>>>24)&255;m[total-3]=(bitsLo>>>16)&255;m[total-2]=(bitsLo>>>8)&255;m[total-1]=bitsLo&255;
+  var W=new Array(64),off,a,b,c,d,e,f,g,h,t,s0,s1,ch,maj,T1,T2;
+  for(off=0;off<total;off+=64){
+    for(i=0;i<16;i++)W[i]=((m[off+i*4]<<24)|(m[off+i*4+1]<<16)|(m[off+i*4+2]<<8)|m[off+i*4+3])>>>0;
+    for(i=16;i<64;i++){
+      t=W[i-15];s0=(((t>>>7)|(t<<25))^((t>>>18)|(t<<14))^(t>>>3))>>>0;
+      t=W[i-2];s1=(((t>>>17)|(t<<15))^((t>>>19)|(t<<13))^(t>>>10))>>>0;
+      W[i]=(W[i-16]+s0+W[i-7]+s1)>>>0;
+    }
+    a=H[0];b=H[1];c=H[2];d=H[3];e=H[4];f=H[5];g=H[6];h=H[7];
+    for(i=0;i<64;i++){
+      s1=(((e>>>6)|(e<<26))^((e>>>11)|(e<<21))^((e>>>25)|(e<<7)))>>>0;
+      ch=((e&f)^((~e)&g))>>>0;
+      T1=(h+s1+ch+K256[i]+W[i])>>>0;
+      s0=(((a>>>2)|(a<<30))^((a>>>13)|(a<<19))^((a>>>22)|(a<<10)))>>>0;
+      maj=((a&b)^(a&c)^(b&c))>>>0;
+      T2=(s0+maj)>>>0;
+      h=g;g=f;f=e;e=(d+T1)>>>0;d=c;c=b;b=a;a=(T1+T2)>>>0;
+    }
+    H[0]=(H[0]+a)>>>0;H[1]=(H[1]+b)>>>0;H[2]=(H[2]+c)>>>0;H[3]=(H[3]+d)>>>0;
+    H[4]=(H[4]+e)>>>0;H[5]=(H[5]+f)>>>0;H[6]=(H[6]+g)>>>0;H[7]=(H[7]+h)>>>0;
+  }
+  var out=new Uint8Array(32);
+  for(i=0;i<8;i++){
+    out[i*4]=(H[i]>>>24)&255;out[i*4+1]=(H[i]>>>16)&255;
+    out[i*4+2]=(H[i]>>>8)&255;out[i*4+3]=H[i]&255;
+  }
+  return out;
+}
+function hex(b){
+  var s="",i;
+  for(i=0;i<b.length;i++)s+=(b[i]<16?"0":"")+b[i].toString(16);
+  return s;
+}
+function ascii(str){
+  /* the only strings hashed here are ASCII: the wordlist and the test
+     vectors, so a byte per character is exact */
+  var b=new Uint8Array(str.length),i;
+  for(i=0;i<str.length;i++)b[i]=str.charCodeAt(i)&255;
+  return b;
+}
+function sha256hex(str){return hex(sha256(ascii(str)));}
+
+/* ---------- the official BIP39 English wordlist, 2048 entries ---------- */
+var WL=(
+   "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid"
+  +" acoustic acquire across act action actor actress actual adapt add addict address adjust admit adult advance"
+  +" advice aerobic affair afford afraid again age agent agree ahead aim air airport aisle alarm album"
+  +" alcohol alert alien all alley allow almost alone alpha already also alter always amateur amazing among"
+  +" amount amused analyst anchor ancient anger angle angry animal ankle announce annual another answer antenna antique"
+  +" anxiety any apart apology appear apple approve april arch arctic area arena argue arm armed armor"
+  +" army around arrange arrest arrive arrow art artefact artist artwork ask aspect assault asset assist assume"
+  +" asthma athlete atom attack attend attitude attract auction audit august aunt author auto autumn average avocado"
+  +" avoid awake aware away awesome awful awkward axis baby bachelor bacon badge bag balance balcony ball"
+  +" bamboo banana banner bar barely bargain barrel base basic basket battle beach bean beauty because become"
+  +" beef before begin behave behind believe below belt bench benefit best betray better between beyond bicycle"
+  +" bid bike bind biology bird birth bitter black blade blame blanket blast bleak bless blind blood"
+  +" blossom blouse blue blur blush board boat body boil bomb bone bonus book boost border boring"
+  +" borrow boss bottom bounce box boy bracket brain brand brass brave bread breeze brick bridge brief"
+  +" bright bring brisk broccoli broken bronze broom brother brown brush bubble buddy budget buffalo build bulb"
+  +" bulk bullet bundle bunker burden burger burst bus business busy butter buyer buzz cabbage cabin cable"
+  +" cactus cage cake call calm camera camp can canal cancel candy cannon canoe canvas canyon capable"
+  +" capital captain car carbon card cargo carpet carry cart case cash casino castle casual cat catalog"
+  +" catch category cattle caught cause caution cave ceiling celery cement census century cereal certain chair chalk"
+  +" champion change chaos chapter charge chase chat cheap check cheese chef cherry chest chicken chief child"
+  +" chimney choice choose chronic chuckle chunk churn cigar cinnamon circle citizen city civil claim clap clarify"
+  +" claw clay clean clerk clever click client cliff climb clinic clip clock clog close cloth cloud"
+  +" clown club clump cluster clutch coach coast coconut code coffee coil coin collect color column combine"
+  +" come comfort comic common company concert conduct confirm congress connect consider control convince cook cool copper"
+  +" copy coral core corn correct cost cotton couch country couple course cousin cover coyote crack cradle"
+  +" craft cram crane crash crater crawl crazy cream credit creek crew cricket crime crisp critic crop"
+  +" cross crouch crowd crucial cruel cruise crumble crunch crush cry crystal cube culture cup cupboard curious"
+  +" current curtain curve cushion custom cute cycle dad damage damp dance danger daring dash daughter dawn"
+  +" day deal debate debris decade december decide decline decorate decrease deer defense define defy degree delay"
+  +" deliver demand demise denial dentist deny depart depend deposit depth deputy derive describe desert design desk"
+  +" despair destroy detail detect develop device devote diagram dial diamond diary dice diesel diet differ digital"
+  +" dignity dilemma dinner dinosaur direct dirt disagree discover disease dish dismiss disorder display distance divert divide"
+  +" divorce dizzy doctor document dog doll dolphin domain donate donkey donor door dose double dove draft"
+  +" dragon drama drastic draw dream dress drift drill drink drip drive drop drum dry duck dumb"
+  +" dune during dust dutch duty dwarf dynamic eager eagle early earn earth easily east easy echo"
+  +" ecology economy edge edit educate effort egg eight either elbow elder electric elegant element elephant elevator"
+  +" elite else embark embody embrace emerge emotion employ empower empty enable enact end endless endorse enemy"
+  +" energy enforce engage engine enhance enjoy enlist enough enrich enroll ensure enter entire entry envelope episode"
+  +" equal equip era erase erode erosion error erupt escape essay essence estate eternal ethics evidence evil"
+  +" evoke evolve exact example excess exchange excite exclude excuse execute exercise exhaust exhibit exile exist exit"
+  +" exotic expand expect expire explain expose express extend extra eye eyebrow fabric face faculty fade faint"
+  +" faith fall false fame family famous fan fancy fantasy farm fashion fat fatal father fatigue fault"
+  +" favorite feature february federal fee feed feel female fence festival fetch fever few fiber fiction field"
+  +" figure file film filter final find fine finger finish fire firm first fiscal fish fit fitness"
+  +" fix flag flame flash flat flavor flee flight flip float flock floor flower fluid flush fly"
+  +" foam focus fog foil fold follow food foot force forest forget fork fortune forum forward fossil"
+  +" foster found fox fragile frame frequent fresh friend fringe frog front frost frown frozen fruit fuel"
+  +" fun funny furnace fury future gadget gain galaxy gallery game gap garage garbage garden garlic garment"
+  +" gas gasp gate gather gauge gaze general genius genre gentle genuine gesture ghost giant gift giggle"
+  +" ginger giraffe girl give glad glance glare glass glide glimpse globe gloom glory glove glow glue"
+  +" goat goddess gold good goose gorilla gospel gossip govern gown grab grace grain grant grape grass"
+  +" gravity great green grid grief grit grocery group grow grunt guard guess guide guilt guitar gun"
+  +" gym habit hair half hammer hamster hand happy harbor hard harsh harvest hat have hawk hazard"
+  +" head health heart heavy hedgehog height hello helmet help hen hero hidden high hill hint hip"
+  +" hire history hobby hockey hold hole holiday hollow home honey hood hope horn horror horse hospital"
+  +" host hotel hour hover hub huge human humble humor hundred hungry hunt hurdle hurry hurt husband"
+  +" hybrid ice icon idea identify idle ignore ill illegal illness image imitate immense immune impact impose"
+  +" improve impulse inch include income increase index indicate indoor industry infant inflict inform inhale inherit initial"
+  +" inject injury inmate inner innocent input inquiry insane insect inside inspire install intact interest into invest"
+  +" invite involve iron island isolate issue item ivory jacket jaguar jar jazz jealous jeans jelly jewel"
+  +" job join joke journey joy judge juice jump jungle junior junk just kangaroo keen keep ketchup"
+  +" key kick kid kidney kind kingdom kiss kit kitchen kite kitten kiwi knee knife knock know"
+  +" lab label labor ladder lady lake lamp language laptop large later latin laugh laundry lava law"
+  +" lawn lawsuit layer lazy leader leaf learn leave lecture left leg legal legend leisure lemon lend"
+  +" length lens leopard lesson letter level liar liberty library license life lift light like limb limit"
+  +" link lion liquid list little live lizard load loan lobster local lock logic lonely long loop"
+  +" lottery loud lounge love loyal lucky luggage lumber lunar lunch luxury lyrics machine mad magic magnet"
+  +" maid mail main major make mammal man manage mandate mango mansion manual maple marble march margin"
+  +" marine market marriage mask mass master match material math matrix matter maximum maze meadow mean measure"
+  +" meat mechanic medal media melody melt member memory mention menu mercy merge merit merry mesh message"
+  +" metal method middle midnight milk million mimic mind minimum minor minute miracle mirror misery miss mistake"
+  +" mix mixed mixture mobile model modify mom moment monitor monkey monster month moon moral more morning"
+  +" mosquito mother motion motor mountain mouse move movie much muffin mule multiply muscle museum mushroom music"
+  +" must mutual myself mystery myth naive name napkin narrow nasty nation nature near neck need negative"
+  +" neglect neither nephew nerve nest net network neutral never news next nice night noble noise nominee"
+  +" noodle normal north nose notable note nothing notice novel now nuclear number nurse nut oak obey"
+  +" object oblige obscure observe obtain obvious occur ocean october odor off offer office often oil okay"
+  +" old olive olympic omit once one onion online only open opera opinion oppose option orange orbit"
+  +" orchard order ordinary organ orient original orphan ostrich other outdoor outer output outside oval oven over"
+  +" own owner oxygen oyster ozone pact paddle page pair palace palm panda panel panic panther paper"
+  +" parade parent park parrot party pass patch path patient patrol pattern pause pave payment peace peanut"
+  +" pear peasant pelican pen penalty pencil people pepper perfect permit person pet phone photo phrase physical"
+  +" piano picnic picture piece pig pigeon pill pilot pink pioneer pipe pistol pitch pizza place planet"
+  +" plastic plate play please pledge pluck plug plunge poem poet point polar pole police pond pony"
+  +" pool popular portion position possible post potato pottery poverty powder power practice praise predict prefer prepare"
+  +" present pretty prevent price pride primary print priority prison private prize problem process produce profit program"
+  +" project promote proof property prosper protect proud provide public pudding pull pulp pulse pumpkin punch pupil"
+  +" puppy purchase purity purpose purse push put puzzle pyramid quality quantum quarter question quick quit quiz"
+  +" quote rabbit raccoon race rack radar radio rail rain raise rally ramp ranch random range rapid"
+  +" rare rate rather raven raw razor ready real reason rebel rebuild recall receive recipe record recycle"
+  +" reduce reflect reform refuse region regret regular reject relax release relief rely remain remember remind remove"
+  +" render renew rent reopen repair repeat replace report require rescue resemble resist resource response result retire"
+  +" retreat return reunion reveal review reward rhythm rib ribbon rice rich ride ridge rifle right rigid"
+  +" ring riot ripple risk ritual rival river road roast robot robust rocket romance roof rookie room"
+  +" rose rotate rough round route royal rubber rude rug rule run runway rural sad saddle sadness"
+  +" safe sail salad salmon salon salt salute same sample sand satisfy satoshi sauce sausage save say"
+  +" scale scan scare scatter scene scheme school science scissors scorpion scout scrap screen script scrub sea"
+  +" search season seat second secret section security seed seek segment select sell seminar senior sense sentence"
+  +" series service session settle setup seven shadow shaft shallow share shed shell sheriff shield shift shine"
+  +" ship shiver shock shoe shoot shop short shoulder shove shrimp shrug shuffle shy sibling sick side"
+  +" siege sight sign silent silk silly silver similar simple since sing siren sister situate six size"
+  +" skate sketch ski skill skin skirt skull slab slam sleep slender slice slide slight slim slogan"
+  +" slot slow slush small smart smile smoke smooth snack snake snap sniff snow soap soccer social"
+  +" sock soda soft solar soldier solid solution solve someone song soon sorry sort soul sound soup"
+  +" source south space spare spatial spawn speak special speed spell spend sphere spice spider spike spin"
+  +" spirit split spoil sponsor spoon sport spot spray spread spring spy square squeeze squirrel stable stadium"
+  +" staff stage stairs stamp stand start state stay steak steel stem step stereo stick still sting"
+  +" stock stomach stone stool story stove strategy street strike strong struggle student stuff stumble style subject"
+  +" submit subway success such sudden suffer sugar suggest suit summer sun sunny sunset super supply supreme"
+  +" sure surface surge surprise surround survey suspect sustain swallow swamp swap swarm swear sweet swift swim"
+  +" swing switch sword symbol symptom syrup system table tackle tag tail talent talk tank tape target"
+  +" task taste tattoo taxi teach team tell ten tenant tennis tent term test text thank that"
+  +" theme then theory there they thing this thought three thrive throw thumb thunder ticket tide tiger"
+  +" tilt timber time tiny tip tired tissue title toast tobacco today toddler toe together toilet token"
+  +" tomato tomorrow tone tongue tonight tool tooth top topic topple torch tornado tortoise toss total tourist"
+  +" toward tower town toy track trade traffic tragic train transfer trap trash travel tray treat tree"
+  +" trend trial tribe trick trigger trim trip trophy trouble truck true truly trumpet trust truth try"
+  +" tube tuition tumble tuna tunnel turkey turn turtle twelve twenty twice twin twist two type typical"
+  +" ugly umbrella unable unaware uncle uncover under undo unfair unfold unhappy uniform unique unit universe unknown"
+  +" unlock until unusual unveil update upgrade uphold upon upper upset urban urge usage use used useful"
+  +" useless usual utility vacant vacuum vague valid valley valve van vanish vapor various vast vault vehicle"
+  +" velvet vendor venture venue verb verify version very vessel veteran viable vibrant vicious victory video view"
+  +" village vintage violin virtual virus visa visit visual vital vivid vocal voice void volcano volume vote"
+  +" voyage wage wagon wait walk wall walnut want warfare warm warrior wash wasp waste water wave"
+  +" way wealth weapon wear weasel weather web wedding weekend weird welcome west wet whale what wheat"
+  +" wheel when where whip whisper wide width wife wild will win window wine wing wink winner"
+  +" winter wire wisdom wise wish witness wolf woman wonder wood wool word work world worry worth"
+  +" wrap wreck wrestle wrist write wrong yard year yellow you young youth zebra zero zone zoo"
+  ).split(" ");
+var LIST_SHA="2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda";
+var IDX={},wi;
+for(wi=0;wi<WL.length;wi++)IDX[WL[wi]]=wi;
+
+/* ---------- BIP39 checksum arithmetic ----------
+   n words carry 11n bits. The last 11n/33 of them are the checksum:
+   the leading bits of SHA-256 over the entropy that precedes them. */
+function phraseBits(idxs){
+  var bits=new Uint8Array(idxs.length*11),i,j;
+  for(i=0;i<idxs.length;i++)for(j=0;j<11;j++)bits[i*11+j]=(idxs[i]>>>(10-j))&1;
+  return bits;
+}
+function bitsToBytes(bits,n){
+  var out=new Uint8Array(n/8),i;
+  for(i=0;i<n;i++)if(bits[i])out[i>>3]|=128>>>(i&7);
+  return out;
+}
+function validLength(n){return n>=12&&n<=24&&n%3===0;}
+function checkPhrase(idxs){
+  var n=idxs.length;
+  if(!validLength(n))return null;
+  var cs=(n*11)/33,ent=n*11-cs,bits=phraseBits(idxs),
+      entBytes=bitsToBytes(bits,ent),h=sha256(entBytes),i,bit,ok=true;
+  for(i=0;i<cs;i++){
+    bit=(h[i>>3]>>>(7-(i&7)))&1;
+    if(bit!==bits[ent+i]){ok=false;break;}
+  }
+  return {ok:ok,entBits:ent,csBits:cs,entHex:hex(entBytes)};
+}
+function lastWordCandidates(idxs){
+  var out=[],i,r;
+  for(i=0;i<2048;i++){
+    r=checkPhrase(idxs.concat([i]));
+    if(r&&r.ok)out.push(WL[i]);
+  }
+  return out;
+}
+
+/* ---------- self-test ---------- */
+var SHA_VECTORS=[
+  ["","e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"],
+  ["abc","ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"],
+  ["abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+   "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"]
+];
+var A11="abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon";
+var A23=A11+" abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon";
+var Z11="zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo";
+var Z23=Z11+" zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo";
+var LEGAL="legal winner thank year wave sausage worth useful legal winner thank";
+var PHRASE_VECTORS=[
+  [A11+" about","00000000000000000000000000000000"],
+  [LEGAL+" yellow","7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"],
+  ["letter advice cage absurd amount doctor acoustic avoid letter advice cage above",
+   "80808080808080808080808080808080"],
+  [Z11+" wrong","ffffffffffffffffffffffffffffffff"],
+  [A23+" art","0000000000000000000000000000000000000000000000000000000000000000"],
+  [Z23+" vote","ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"]
+];
+var BAD_VECTORS=[
+  A11+" abandon",
+  A23+" abandon",
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about abandon"
+];
+var CAND23="art diesel false kite organ ready surface trouble";
+
+function toIdx(phrase){
+  var w=phrase.split(" "),out=[],i;
+  for(i=0;i<w.length;i++)out.push(IDX[w[i]]);
+  return out;
+}
+function selftest(){
+  var pass=0,fail=0,i,got,r,c;
+  function check(name,cond){
+    if(cond)pass++;
+    else{fail++;console.error("[self-test] failed: "+name);}
+  }
+  for(i=0;i<SHA_VECTORS.length;i++){
+    got=sha256hex(SHA_VECTORS[i][0]);
+    check("SHA-256 of \""+SHA_VECTORS[i][0].slice(0,12)+"\" (got "+got.slice(0,8)+")",got===SHA_VECTORS[i][1]);
+  }
+  check("wordlist has 2048 entries",WL.length===2048);
+  check("wordlist runs abandon to zoo",WL[0]==="abandon"&&WL[2047]==="zoo");
+  var shape=true,uniq=true,seen={},p;
+  for(i=0;i<WL.length;i++){
+    if(!/^[a-z]{3,8}$/.test(WL[i])){shape=false;break;}
+    if(i>0&&!(WL[i-1]<WL[i])){shape=false;break;}
+  }
+  check("wordlist sorted, lowercase, 3 to 8 letters",shape);
+  for(i=0;i<WL.length;i++){
+    p=WL[i].length>=4?WL[i].slice(0,4):WL[i];
+    if(seen[p]){uniq=false;break;}
+    seen[p]=1;
+  }
+  check("first four letters unique across the list",uniq);
+  got=sha256hex(WL.join("\n")+"\n");
+  check("wordlist SHA-256 matches the published checksum (got "+got.slice(0,8)+")",got===LIST_SHA);
+  for(i=0;i<PHRASE_VECTORS.length;i++){
+    r=checkPhrase(toIdx(PHRASE_VECTORS[i][0]));
+    check("BIP39 vector "+(i+1)+" checksum",!!r&&r.ok);
+    check("BIP39 vector "+(i+1)+" entropy",!!r&&r.entHex===PHRASE_VECTORS[i][1]);
+  }
+  for(i=0;i<BAD_VECTORS.length;i++){
+    r=checkPhrase(toIdx(BAD_VECTORS[i]));
+    check("bad phrase "+(i+1)+" is rejected",!!r&&!r.ok);
+  }
+  c=lastWordCandidates(toIdx(A23));
+  check("23 abandon gives 8 final words",c.length===8&&c.join(" ")===CAND23);
+  c=lastWordCandidates(toIdx(A11));
+  check("11 abandon gives 128 final words",c.length===128&&c[0]==="about");
+  return {pass:pass,fail:fail};
+}
+
+/* ---------- word input handling ---------- */
+var READY=false,UNLOCKED=false,
+    FILE=(location.protocol==="file:"),
+    inEl=document.getElementById("bt-in"),
+    outEl=document.getElementById("bt-out"),
+    lockWrap=document.getElementById("bt-lockwrap");
+
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function readWords(text){
+  var s=String(text).toLowerCase().replace(/[^a-z]+/g," ").replace(/^\s+|\s+$/g,"");
+  if(!s)return [];
+  return s.split(/\s+/);
+}
+function distance(a,b){
+  /* Levenshtein, small strings only */
+  var m=a.length,n=b.length,prev=[],cur=[],i,j,cost;
+  if(Math.abs(m-n)>2)return 9;
+  for(j=0;j<=n;j++)prev[j]=j;
+  for(i=1;i<=m;i++){
+    cur[0]=i;
+    for(j=1;j<=n;j++){
+      cost=a.charAt(i-1)===b.charAt(j-1)?0:1;
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+cost);
+    }
+    for(j=0;j<=n;j++)prev[j]=cur[j];
+  }
+  return prev[n];
+}
+function suggest(word){
+  var pre=[],near=[],i,d;
+  for(i=0;i<WL.length;i++){
+    if(WL[i].indexOf(word)===0){pre.push(WL[i]);if(pre.length>7)break;}
+  }
+  if(pre.length)return pre.slice(0,7);
+  for(i=0;i<WL.length&&near.length<7;i++){
+    d=distance(word,WL[i]);
+    if(d<=1)near.push(WL[i]);
+  }
+  if(near.length)return near;
+  for(i=0;i<WL.length&&near.length<7;i++){
+    d=distance(word,WL[i]);
+    if(d===2)near.push(WL[i]);
+  }
+  return near;
+}
+function wordChips(words){
+  var h="",i,bad;
+  for(i=0;i<words.length;i++){
+    bad=!(words[i] in IDX);
+    h+='<span class="bt-w'+(bad?" is-bad":"")+'"><u>'+(i+1)+'</u>'+esc(words[i])+"</span>";
+  }
+  return '<div class="bt-words">'+h+"</div>";
+}
+function show(html){outEl.innerHTML=html;}
+function msg(text,cls){show('<div class="bt-msg'+(cls?" "+cls:"")+'">'+esc(text)+"</div>");}
+
+function analyze(){
+  if(!READY)return;
+  var words=readWords(inEl.value),n=words.length,i,unknown=[],idxs=[];
+  if(!n){msg("Waiting for words.");return;}
+  for(i=0;i<n;i++){
+    if(words[i] in IDX)idxs.push(IDX[words[i]]);
+    else{unknown.push(words[i]);idxs.push(-1);}
+  }
+  var head='<div class="bt-verdict is-mut">'+n+" word"+(n===1?"":"s")+" read</div>"+wordChips(words);
+
+  if(unknown.length){
+    var sug="",seen={},j,list;
+    for(i=0;i<n;i++){
+      if(words[i] in IDX||seen[words[i]])continue;
+      seen[words[i]]=1;
+      list=suggest(words[i]);
+      sug+='<div class="bt-sugrow"><b>'+esc(words[i])+"</b> is not on the list."
+         +(list.length?" Closest entries: "+list.map(function(w){return '<i>'+esc(w)+"</i>";}).join(", ")+".":" Nothing on the list is close to it.")
+         +"</div>";
+    }
+    show('<div class="bt-verdict is-bad">'+unknown.length+" word"+(unknown.length===1?"":"s")+" not on the list</div>"
+      +'<p class="bt-p">Fix these before the checksum can mean anything. Compare the first four letters against your backup: no two words on the list share them, so the start of a word decides it.</p>'
+      +wordChips(words)+'<div class="bt-sug">'+sug+"</div>");
+    return;
+  }
+
+  if(n===11||n===23){
+    var cands=lastWordCandidates(idxs),total=n===11?12:24;
+    show('<div class="bt-verdict is-mut">'+cands.length+" final word"+(cands.length===1?"":"s")+" fit</div>"
+      +'<p class="bt-p">With '+n+" correct words in front of it, these are every word that completes a valid "+total
+      +" word phrase. Each one is a different wallet. Restore them one at a time in wallet software and look for the addresses you expect."
+      +(n===11?" Twelve word phrases have only four checksum bits, so the list is long. Twenty-four word phrases narrow to eight.":"")
+      +"</p>"
+      +wordChips(words)
+      +'<div class="bt-cands">'+cands.map(function(w){return "<span>"+esc(w)+"</span>";}).join("")+"</div>"
+      +'<p class="bt-note">This only works when the missing word is the last one. If the gap is anywhere else, the arithmetic returns thousands of possibilities and cannot rank them, because the checksum sits at the end of the phrase.</p>');
+    return;
+  }
+
+  if(!validLength(n)){
+    show(head+'<p class="bt-p">A BIP39 phrase is 12, 15, 18, 21 or 24 words, and 12 or 24 in almost every wallet. '
+      +(n<12?"Count again against your backup: a word missing from the middle looks exactly like a shorter phrase. ":"")
+      +"With 11 or 23 words this file lists every final word that would fit, so if the last word is the one you are missing, remove nothing else and try that.</p>");
+    return;
+  }
+
+  var r=checkPhrase(idxs);
+  if(r.ok){
+    show('<div class="bt-verdict is-ok">Checksum passes</div>'
+      +'<p class="bt-p">All '+n+" words are on the list and the phrase agrees with its own checksum, so it is a well formed BIP39 phrase. That does not prove it is your phrase. Any valid phrase is a valid wallet, and the wrong one is simply an empty wallet, so restore it and check the addresses.</p>"
+      +wordChips(words)
+      +'<div class="bt-meta">'
+        +"<span><b>Words</b> "+n+"</span>"
+        +"<span><b>Entropy</b> "+r.entBits+" bits</span>"
+        +"<span><b>Checksum</b> "+r.csBits+" bits</span>"
+        +"<span><b>Entropy hex</b> "+esc(r.entHex)+"</span>"
+      +"</div>"
+      +'<p class="bt-note">The entropy is shown because some wallets and paper backups record it instead of words. It is exactly as secret as the phrase: it is the phrase, in another alphabet.</p>');
+  }else{
+    show('<div class="bt-verdict is-bad">Checksum fails</div>'
+      +'<p class="bt-p">All '+n+" words are on the list, but they do not agree with the checksum carried in the last word. Something is transposed or mistyped, and the arithmetic cannot say which word: with "
+      +r.csBits+" checksum bits, roughly one in "+Math.pow(2,r.csBits)+" wrong guesses passes anyway, so guessing here is not a plan.</p>"
+      +wordChips(words)
+      +'<p class="bt-p">Work through it by hand instead. Re-read the order from your backup, top to bottom rather than across columns. Check the first four letters of each word against the list. Then, if the last word is the one you doubt, delete it and let this file show every final word that fits.</p>');
+  }
+}
+
+/* ---------- the lock over the input ---------- */
+function paintLock(){
+  var online=(navigator.onLine!==false);
+  if(!FILE){
+    lockWrap.innerHTML='<div class="bt-lock"><b>This copy is being served over a network.</b>'
+      +"<p>The address bar does not say <code>file://</code>, so this page came from a server that could change it at any time. It will not accept words in this state, and no override exists for it. Save the file to disk, carry it to a machine that stays offline, and open it from there.</p></div>";
+    inEl.setAttribute("disabled","disabled");
+    return;
+  }
+  if(online&&!UNLOCKED){
+    lockWrap.innerHTML='<div class="bt-lock"><b>The browser still reports a network connection.</b>'
+      +"<p>Turn off wifi or unplug the cable, and this unlocks by itself. Only override this if you know the machine is isolated and the browser is reporting a network interface that goes nowhere.</p>"
+      +'<button type="button" class="bt-b" id="bt-ovr">This machine is isolated, unlock the field</button></div>';
+    inEl.setAttribute("disabled","disabled");
+    document.getElementById("bt-ovr").addEventListener("click",function(){
+      UNLOCKED=true;paintLock();paintNet();
+      if(READY)inEl.focus();
+    });
+    return;
+  }
+  lockWrap.innerHTML="";
+  if(READY)inEl.removeAttribute("disabled");
+}
+function paintNet(){
+  var el=document.getElementById("bt-net"),online=(navigator.onLine!==false);
+  el.className="bt-net "+(online?"is-on":"is-off");
+  el.innerHTML=online
+    ? "<b>You appear to be online. Do not type a seed phrase yet.</b>"
+      +"Switch the wifi off or unplug the cable first. This file sends nothing anywhere and cannot, but a phrase typed on a connected machine can be read by anything else running on it."
+      +"<span>This banner turns green when the browser reports no network. It reads navigator.onLine, which sees network interfaces, not isolation. Your unplugged cable is the real proof.</span>"
+    : "<b>No network detected.</b>The browser reports no connection. That is the right state for typing a seed phrase."
+      +"<span>Close the tab when you are finished. Nothing here is written to disk, and nothing is kept once the page is gone.</span>";
+}
+
+/* ---------- wiring ---------- */
+document.getElementById("bt-blur").addEventListener("click",function(){
+  var on=inEl.className.indexOf("is-blur")>-1;
+  inEl.className="bt-ta"+(on?"":" is-blur");
+  this.textContent=on?"Blur the words":"Show the words";
+});
+document.getElementById("bt-clear").addEventListener("click",function(){
+  inEl.value="";
+  msg("Cleared. Closing the tab is what really removes it from memory.");
+  if(!inEl.disabled)inEl.focus();
+});
+inEl.addEventListener("input",analyze);
+window.addEventListener("online",function(){paintNet();paintLock();});
+window.addEventListener("offline",function(){paintNet();paintLock();});
+paintNet();
+
+var stEl=document.getElementById("bt-st"),
+    stB=document.getElementById("bt-st-b"),
+    stI=document.getElementById("bt-st-i");
+var r=selftest();
+if(r.fail===0){
+  READY=true;
+  stEl.className="bt-st is-ok";
+  stB.textContent="Self-test passed";
+  stI.textContent=r.pass+" checks: SHA-256 vectors, the wordlist checksum, BIP39 phrase vectors, rejected phrases and final word counts.";
+  console.log("[self-test] PASS: "+r.pass+" checks, 0 failures.");
+}else{
+  READY=false;
+  stEl.className="bt-st is-bad";
+  stB.textContent="Self-test failed";
+  stI.textContent=r.fail+" of "+(r.pass+r.fail)+" checks did not match. Nothing will be answered here.";
+  msg("Self-test failed, so this file will not answer anything. A wrong answer about a seed phrase is worse than no answer. The browser console lists which check failed.","is-bad");
+  console.error("[self-test] FAIL: "+r.fail+" of "+(r.pass+r.fail)+" checks. Answers suppressed.");
+}
+paintLock();
+if(READY&&!inEl.disabled)analyze();
+})();
+</script>
+</body>
+</html>

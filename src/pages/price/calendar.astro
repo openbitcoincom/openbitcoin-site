@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+import { years, yearSummary, fmtUsd, fmtPct } from '../../lib/prices.js';
+const ys = years();
+---
+<Base title="Bitcoin Price History: Every Day by Year and Month - OpenBitcoin" description="Browse the full bitcoin price history by date: pick a year, then a month, and see every day's open, high, low, and close since August 2011.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Price calendar</div>
+    <h1>Bitcoin price calendar</h1>
+    <p class="doc-lede">The price of bitcoin on any date since 2010: pick a year, then a month, and every day is there with its open, high, low and close.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ca-card">
+      <div class="ca-tlab">Every year on record</div>
+      <div class="ca-years">
+        {ys.map((y) => { const s = yearSummary(y); return (
+          <a class="ca-year" href={`/price/${y}`}>
+            <b>{y}</b>
+            <span class="ca-close">${fmtUsd(s.close)}</span>
+            <span class={'ca-chg ' + (s.changePct >= 0 ? 'up' : 'down')}>{fmtPct(s.changePct)}</span>
+            <span class="ca-hl">H ${fmtUsd(s.high)} · L ${fmtUsd(s.low)}</span>
+          </a>
+        ); })}
+      </div>
+      <p class="ca-fine">Yearly close, change over the year, and the year's high and low. UTC days, BTC/USD. Daily closes begin August 18, 2010, the Mt. Gox era; full open, high and low begin August 18, 2011. Sources at <a href="/sources">/sources</a>.</p>
+    </div>
+
+    <div class="ca-card ca-mt">
+      <div class="ca-tlab">Before the data begins</div>
+      <p class="ca-p">Bitcoin existed for a year and a half before its price could fill a table: the first published exchange rate valued a dollar at 1,309 BTC in October 2009, and the famous pizzas went for 10,000 BTC in May 2010, months before the first quotable close in this series. Those days live as stories rather than candles; the <a href="/history">timeline</a> covers them event by event, and the <a href="/history/faucets">faucet era</a> explains why coins were once given away.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Jump to a date</div>
+      <nav>
+        <a href="/tools/price-on-date">Price on a date lookup</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/price">Bitcoin price now</a>
+        <a href="/ath">All-time high</a>
+        <a href="/dca">DCA backtester</a>
+        <a href="/whatif">What-if calculator</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ca-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .ca-mt{margin-top:14px}
+  .ca-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ca-years{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .ca-year{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;
+    text-decoration:none;min-width:0}
+  .ca-year:hover{border-color:rgba(255,166,60,.45)}
+  .ca-year b{display:block;font:700 17px var(--mono);color:var(--ink)}
+  .ca-close{display:block;font:700 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:5px}
+  .ca-chg{display:inline-block;font:700 11px var(--mono);font-variant-numeric:tabular-nums;margin-top:3px}
+  .ca-chg.up{color:var(--up)}
+  .ca-chg.down{color:var(--down)}
+  .ca-hl{display:block;font:600 10px var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:4px;letter-spacing:.02em}
+  .ca-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .ca-fine a,.ca-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ca-fine a:hover,.ca-p a:hover{border-bottom-style:solid}
+  .ca-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  @media(max-width:700px){
+    .ca-card{padding:18px 16px}
+    .ca-years{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+</style>
+</Base>

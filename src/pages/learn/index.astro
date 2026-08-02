@@ -1,0 +1,206 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+import { TERMS } from '../../lib/glossary.js';
+---
+<Base title="Learn Bitcoin: Plain-Language Guides - OpenBitcoin" description="Bitcoin guides in plain language: what bitcoin is, double spending, confirmations, mining, Lightning, self-custody, scams and privacy, plus a glossary of every term.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>Learn Bitcoin</h1>
+    <p class="doc-lede">Guides in plain language: what the system is, how to hold your own keys, and how people lose coins. If you are new, the numbered path below takes the basics in order.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="lh-card" id="lh-start">
+      <div class="lh-tlab">Start here</div>
+      <p class="lh-intro">Five stops, in order, all ready to read.</p>
+      <ol class="lh-path">
+        <li>
+          <div class="lh-ptitle"><a href="/learn/what-is-bitcoin">What is Bitcoin</a></div>
+          <p>The plain-language starting point: what the network does, what the asset is, and why anyone bothers.</p>
+        </li>
+        <li>
+          <div class="lh-ptitle"><a href="/learn/whitepaper">Read the whitepaper</a></div>
+          <p>Nine pages from 2008 that lay out the entire design. Shorter and clearer than its reputation suggests, and typeset here for comfortable reading.</p>
+        </li>
+        <li>
+          <div class="lh-ptitle"><a href="/learn/self-custody">Take custody of your keys</a></div>
+          <p>What holding your own keys means, what it protects you from, and how to start without expensive mistakes.</p>
+        </li>
+        <li>
+          <div class="lh-ptitle"><a href="/learn/scams">Know the common scams</a></div>
+          <p>A handful of patterns sits behind nearly every theft. Learning to recognize them takes minutes and defeats most of them outright.</p>
+        </li>
+        <li>
+          <div class="lh-ptitle"><a href="/nodes">Run your own node</a></div>
+          <p>Further along the path: verify the chain yourself instead of trusting someone else's server.</p>
+        </li>
+      </ol>
+    </div>
+
+    <a class="lh-gloss lh-mt" href="/learn/glossary">
+      <div>
+        <div class="lh-tlab">Reference</div>
+        <b>The bitcoin glossary</b>
+        <span>Every term you will run into, from address and UTXO to halving, Lightning and rug pull, each explained in a sentence or two. Searchable, and linkable term by term.</span>
+      </div>
+      <span class="lh-glossn">{TERMS.length}<i>terms</i></span>
+    </a>
+
+    <div class="lh-card lh-mt">
+      <div class="lh-tlab">How it works</div>
+      <p class="lh-intro">The mechanics, for readers who want to know why any of it holds together.</p>
+      <div class="lh-guides">
+        <a class="lh-guide" href="/learn/double-spend">
+          <b>Double spending</b>
+          <span>The problem bitcoin exists to solve, and why rewriting history costs money.</span>
+        </a>
+        <a class="lh-guide" href="/learn/confirmations">
+          <b>Confirmations</b>
+          <span>Why a payment is not instant, how long it takes, and how many you need.</span>
+        </a>
+        <a class="lh-guide" href="/learn/utxo">
+          <b>What is a UTXO</b>
+          <span>Bitcoin has no balances, only chunks spent whole. It explains most wallet behaviour.</span>
+        </a>
+        <a class="lh-guide" href="/learn/mining">
+          <b>How mining works</b>
+          <span>Not complex maths puzzles: guessing, billions of times a second, and why that matters.</span>
+        </a>
+        <a class="lh-guide" href="/learn/lightning">
+          <b>The Lightning Network</b>
+          <span>Instant payments on top of the chain, and the trade-offs nobody advertises.</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lh-card lh-mt">
+      <div class="lh-tlab">Guides</div>
+      <p class="lh-intro">What exists today. Each guide stands alone; read them in any order.</p>
+      <div class="lh-guides">
+        <a class="lh-guide" href="/learn/whitepaper">
+          <b>The Bitcoin whitepaper</b>
+          <span>Satoshi's original paper as a readable web page, every figure redrawn.</span>
+        </a>
+        <a class="lh-guide" href="/learn/self-custody">
+          <b>Self-custody</b>
+          <span>Your keys, your coins: what that means in practice and how to do it.</span>
+        </a>
+        <a class="lh-guide" href="/learn/scams">
+          <b>Common scams</b>
+          <span>Fake support, giveaway doubling, seed phishing: the recurring patterns.</span>
+        </a>
+        <a class="lh-guide" href="/learn/address-poisoning">
+          <b>Address poisoning</b>
+          <span>The look-alike address planted in your history, shown character by character.</span>
+        </a>
+        <a class="lh-guide" href="/learn/what-is-bitcoin">
+          <b>What is Bitcoin</b>
+          <span>The money and the network, from zero, with live figures in the prose.</span>
+        </a>
+        <a class="lh-guide" href="/learn/who-is-satoshi">
+          <b>Who is Satoshi</b>
+          <span>What is known, what is claimed, and why it stays unresolved.</span>
+        </a>
+        <a class="lh-guide" href="/learn/privacy">
+          <b>Privacy basics</b>
+          <span>What the public chain reveals about you, and habits that reveal less.</span>
+        </a>
+        <a class="lh-guide" href="/learn/frozen-deposits">
+          <b>Frozen deposits explained</b>
+          <span>Why custodians freeze funds, and what self-custody changes.</span>
+        </a>
+        <a class="lh-guide" href="/learn/no-kyc">
+          <b>No-KYC bitcoin</b>
+          <span>Acquiring bitcoin without identity documents, and the trade-offs.</span>
+        </a>
+        <a class="lh-guide" href="/learn/etf">
+          <b>ETFs explained</b>
+          <span>What a bitcoin ETF holds, and how it differs from holding bitcoin.</span>
+        </a>
+        <a class="lh-guide" href="/quantum">
+          <b>Quantum computers</b>
+          <span>Whether quantum computing threatens bitcoin, which coins are exposed, and on what timeline.</span>
+        </a>
+        <a class="lh-guide" href="/history">
+          <b>The bitcoin timeline</b>
+          <span>Twenty-two moments that mattered, each with the price of bitcoin that day.</span>
+        </a>
+        <a class="lh-guide" href="/history/people">
+          <b>The people of early bitcoin</b>
+          <span>Six figures whose work the network still runs on, and what each of them actually did.</span>
+        </a>
+        <a class="lh-guide" href="/tax">
+          <b>Bitcoin taxes</b>
+          <span>The principles that hold everywhere, then the US and Canada guides in detail.</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lh-about doc-prose">
+      <p>This section grows a few guides at a time, in the same register as the rest of the site: plain statements, no urgency, and no advice about what to buy or when. Everything here is informational, as the <a href="/terms">terms</a> spell out, and where the guides lean on live data, the tools they link to document their methods at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">New to bitcoin?</div>
+      <p class="lh-railp">Take the numbered path at the top of this page. It runs from what the system is to running your own node, one stop at a time.</p>
+      <a class="lh-railbtn" href="#lh-start">Go to the path</a>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/convert">BTC to fiat converter</a>
+        <a href="/fees">Bitcoin fees right now</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .lh-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;scroll-margin-top:18px}
+  .lh-mt{margin-top:14px}
+  .lh-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .lh-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 6px}
+  .lh-path{list-style:none;margin:0;padding:0;counter-reset:lhstep}
+  .lh-path li{counter-increment:lhstep;position:relative;padding:13px 0 13px 44px;border-bottom:1px dotted var(--line-2)}
+  .lh-path li:last-child{border-bottom:0;padding-bottom:4px}
+  .lh-path li::before{content:counter(lhstep);position:absolute;left:0;top:14px;width:27px;height:27px;border-radius:50%;
+    border:1px solid rgba(255,166,60,.38);background:rgba(247,147,26,.08);color:var(--acc);
+    font:700 12.5px/25px var(--mono);text-align:center}
+  .lh-ptitle{font:700 14.5px/1.4 var(--sans);color:var(--ink)}
+  .lh-ptitle a{color:var(--ink);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .lh-ptitle a:hover{color:var(--acc);border-bottom-style:solid}
+  .lh-path p{font:500 13px/1.6 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  .lh-soon{font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    border:1px dashed var(--line-2);border-radius:99px;padding:2px 8px 3px;margin-left:7px;white-space:nowrap;vertical-align:2px}
+  .lh-guides{display:flex;flex-direction:column}
+  .lh-guide{display:block;padding:11px 0 12px;border-bottom:1px dotted var(--line-2);text-decoration:none}
+  .lh-guide:last-child{border-bottom:0;padding-bottom:2px}
+  .lh-guide b{display:block;font:700 14px var(--sans);color:var(--ink)}
+  .lh-guide:hover b{color:var(--acc)}
+  .lh-guide span{display:block;font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin-top:2px}
+  .lh-plan{list-style:none;margin:4px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}
+  .lh-plan li{border:1px dashed var(--line-2);border-radius:10px;padding:10px 12px}
+  .lh-plan b{display:block;font:600 13px/1.5 var(--sans);color:var(--ink-2)}
+  .lh-plan i{display:block;font:500 11.5px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:2px}
+  .lh-gloss{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid rgba(255,166,60,.42);
+    border-radius:12px;padding:18px 22px;text-decoration:none}
+  .lh-gloss:hover{border-color:rgba(255,166,60,.75);background:rgba(247,147,26,.04)}
+  .lh-gloss b{display:block;font:700 16px var(--sans);color:var(--ink)}
+  .lh-gloss:hover b{color:var(--acc)}
+  .lh-gloss > div > span{display:block;font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin-top:3px}
+  .lh-glossn{flex:0 0 auto;text-align:center;font:700 26px var(--mono);color:var(--acc);line-height:1}
+  .lh-glossn i{display:block;font:700 8.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-top:5px}
+  @media(max-width:520px){.lh-gloss{gap:12px;padding:16px 18px}.lh-glossn{font-size:21px}}
+  .lh-about{margin-top:14px}
+  .lh-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .lh-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .lh-railbtn{display:inline-block;font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--acc);
+    text-decoration:none;border:1px solid rgba(255,166,60,.38);border-radius:8px;padding:7px 12px;margin-top:10px}
+  .lh-railbtn:hover{background:rgba(247,147,26,.08)}
+  @media(max-width:640px){.lh-plan{grid-template-columns:1fr}}
+</style>
+</Base>

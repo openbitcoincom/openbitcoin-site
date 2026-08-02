@@ -1,0 +1,986 @@
+---
+import Base from '../layouts/Base.astro';
+import newsFile from '../content/news.json';
+
+const NEWS = newsFile.items.map((n) => ({ t: n.title, s: n.outlet, at: n.date, u: n.url }));
+const NSRC = {
+  'Reuters': ['REUTERS', '#FA6400'],
+  'The Block': ['THE BLOCK', '#1A1A1A'],
+  'CoinDesk': ['COINDESK', '#E9A400'],
+  'Bitcoin Magazine': ['BITCOIN MAG', '#C8352C'],
+  'GitHub': ['GITHUB', '#24292E'],
+  'BITCOIN MAG': ['BITCOIN MAG', '#C8352C'],
+  'COINDESK': ['COINDESK', '#E9A400'],
+  'COINTELEGRAPH': ['COINTELEGRAPH', '#FABF2D'],
+  'DECRYPT': ['DECRYPT', '#0F1013'],
+  'BLOCKWORKS': ['BLOCKWORKS', '#5637CD'],
+};
+const inkFor = (hex) => {
+  const v = parseInt(hex.slice(1), 16);
+  const lum = (0.299 * ((v >> 16) & 255) + 0.587 * ((v >> 8) & 255) + 0.114 * (v & 255)) / 255;
+  return lum > 0.45 ? '#161310' : '#FFFFFF';
+};
+const NSRC_INK = Object.fromEntries(Object.entries(NSRC).map(([k, [label, bg]]) => [k, [label, bg, inkFor(bg)]]));
+const newsItems = NEWS.map((n) => {
+  const b = NSRC_INK[n.s] || [n.s.toUpperCase(), '#9C8B75', '#161310'];
+  return { ...n, logoTxt: b[0], logoBg: b[1], logoInk: b[2] };
+});
+---
+<Base
+  title="Bitcoin Explorer, Tools and Knowledgebase - OpenBitcoin"
+  description="A bitcoin-only block explorer with live price, mempool, and network tools, plus plain-English guides. Look up any address, block, or transaction.">
+
+<div class="band" slot="band">
+  <div class="band-clip" aria-hidden="true"><svg class="band-deco" viewBox="0 0 64 64"><g transform="translate(0.006,-0.003)"><path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/><path fill="#FFF" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></g></svg></div>
+
+  <div class="wrap">
+    <p class="tagline">Everything bitcoin: <b>block explorer, prices and tools</b>.</p>
+
+    <!-- 1 · LOOKUP -->
+    <form class="lookup" id="sform" aria-label="Search the chain">
+      <input id="sin" maxlength="90" autocomplete="off" spellcheck="false" aria-label="Search">
+      <button type="submit">LOOKUP</button>
+    </form>
+
+    <!-- 2 · PRICE + CONVERTER -->
+    <div class="bandgrid">
+      <div>
+        <div class="price-line">
+          <div class="price" id="price">&hellip;</div>
+          <div class="dwrap"><span class="delta up" id="delta" style="visibility:hidden">+$0</span><span class="ccode" id="curlab">USD</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip" id="chg">&hellip;</span>
+          <span class="chip" id="mcap">&hellip;</span>
+          <span class="chip" id="athc">&hellip;</span>
+        </div>
+      </div>
+      <div>
+        <div class="cv2">
+          <div class="pv">
+            <input id="ib" value="1" inputmode="decimal" aria-label="Amount in bitcoin units">
+            <span class="tag2" id="dd-unit"></span>
+          </div>
+          <div class="eq" aria-hidden="true">=</div>
+          <div class="pv">
+            <input id="if" inputmode="decimal" aria-label="Amount in fiat">
+            <span class="tag2" id="dd-fiat"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 3 · NETWORK NOW: strip riding the band seam ============ -->
+<section class="stripzone wrap" aria-label="Network status">
+  <div class="strip">
+    <svg class="bpop" id="bpop" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F9A93F" d="M12 1.8 21.8 6.9 12 12 2.2 6.9z"/><path fill="#E07E06" d="M2.2 6.9 12 12v10.2L2.2 17.1z"/><path fill="#C46A00" d="M21.8 6.9 12 12v10.2l9.8-5.1z"/></svg>
+    <div class="nets">
+      
+      <div class="nst"><div class="nv" id="since">&hellip;</div><div class="nk">Last block</div></div>
+      <a class="nst" href="/mempool"><div class="nv" id="memp">&hellip;</div><div class="nk">In mempool</div></a>
+      <a class="nst hot" href="/mempool"><div class="nv" id="eco">&hellip;</div><div class="nk">Economy<span class="nklg"> fee</span> &middot; fast <span id="fastv">&hellip;</span></div></a>
+      <a class="nst" href="/blocks"><div class="nv" id="height">&hellip;</div><div class="nk">Block height</div></a>
+      <a class="nst" href="/halving"><div class="nv" id="halv">&hellip;</div><div class="nk">Bitcoin Halving</div></a>
+      <div class="nst fgmini"><div class="nv"><span id="fg-val">&hellip;</span><span class="segs" id="fg-segs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="nk">Fear &amp; Greed<span class="nklg" id="fg-label"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <!-- live mempool + news -->
+  <div class="rowA">
+    <section class="card" aria-label="Live network activity">
+      <div class="live-head">
+        <span class="micro lhead" id="lhead"><svg class="hico bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11L9.5 22 18.5 10H12z"/></svg><i class="hbar" aria-hidden="true"></i><b id="lht"><span class="l-long">Live blockchain data</span><span class="l-short">Live</span></b></span>
+        <div class="live-toggle" role="group" aria-label="View mode">
+          <button id="lt-table" class="on" type="button"><span class="t-long">Transactions</span><span class="t-short">Latest</span></button>
+          <button id="lt-blocks" type="button">Blocks</button>
+          <button id="lt-nodes" type="button">Nodes</button>
+          <button id="lt-balls" type="button">Visual</button>
+        </div>
+      </div>
+      <div class="lbody" id="lbody">
+      <table class="ltx" id="ltx">
+        <thead><tr><th>txid</th><th class="r">amount</th><th class="r">value</th><th class="r">vsize</th></tr></thead>
+        <tbody id="ltx-wait"><tr><td class="waitcell" colspan="4">waiting for live transactions</td></tr></tbody>
+      </table>
+      <table class="ltx" id="lbx" style="display:none">
+        <thead><tr><th>height</th><th>miner</th><th>age</th><th class="r">transactions</th><th class="r hidem">size</th><th class="r">median fee</th></tr></thead>
+        <tbody id="lbx-body"></tbody>
+      </table>
+      <div class="lwait" id="lnx-wait">The reachable-node census is not live yet.<br>Real node counts arrive when our crawler ships; nothing simulated in the meantime.</div>
+      <canvas id="balls"></canvas>
+      <div class="lfoot" id="lbx-foot" style="display:none">
+        <span class="ntotal"><b id="b24">&hellip;</b> average block interval, last 15 blocks</span>
+        <a class="lbtn" href="/blocks">VIEW ALL BLOCKS</a>
+      </div>
+      <div class="lfoot" id="lnx-foot" style="display:none">
+        <a class="lbtn" href="/nodes">VIEW ALL NODES</a>
+      </div>
+      </div>
+    </section>
+
+    <section class="card newscard" aria-label="News">
+      <div class="live-head">
+        <span class="micro nhead"><svg class="hico paper" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="14" height="14" rx="1.8"/><path d="M17.5 8.5H19a1.5 1.5 0 0 1 1.5 1.5v7a2 2 0 0 1-2 2"/><path d="M6.5 8.5h8M6.5 11.5h8M6.5 14.5h5"/></svg>Latest bitcoin news</span>
+        <a class="morenews" href="/news">More News</a>
+      </div>
+      <ul class="news-list" id="news-list">
+        {newsItems.length === 0 && (
+          <li><a href="/news"><span class="nt">Bitcoin headlines continue on the news page</span><span class="ns2">/news</span></a></li>
+        )}
+        {newsItems.map((n) => (
+          <li data-ts={n.at}><a href={n.u} target="_blank" rel="noopener noreferrer nofollow">
+            <span class="nt">{n.t}<svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8"/><path d="M19 13.5v5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5H10"/></svg></span>
+            <span class="ns2"><i class="nlogo" style={`background:${n.logoBg};color:${n.logoInk}`}>{n.logoTxt}</i><span class="nage"></span></span>
+          </a></li>
+        ))}
+      </ul>
+      <script type="application/json" id="nsrc-data" is:inline set:html={JSON.stringify(NSRC_INK)} />
+    </section>
+  </div>
+
+  <!-- 7-day sparkline -->
+  <div class="rowB">
+    <section class="card" aria-label="7 day chart">
+      <div class="spark-h">
+        <span class="spark-l"><span class="micro">Last 7 days</span><span class="rng" id="rng">&hellip;</span></span>
+        <a class="morenews" href="/chart">OPEN CHART</a>
+      </div>
+      <canvas id="spark"></canvas>
+    </section>
+  </div>
+
+  <!-- categories -->
+  <section class="explore" aria-label="All tools">
+    <h2>Our Key Pages</h2>
+    <div class="grid">
+      <a class="ex" href="/price"><span class="et">Price &amp; Convert</span><span class="ed">Sats, history, ATH, what-if</span><span class="em">9 tools</span></a>
+      <a class="ex" href="/fees"><span class="et">Fees &amp; Transactions</span><span class="ed">Estimator, lookup, stuck-tx help</span><span class="em">10 tools</span></a>
+      <a class="ex" href="/dca"><span class="et">Stacking &amp; Calculators</span><span class="ed">DCA, tax, portfolio, retire</span><span class="em">9 tools</span></a>
+      <a class="ex" href="/hashrate"><span class="et">Network &amp; Mining</span><span class="ed">Halving, hashprice, difficulty</span><span class="em">16 tools</span></a>
+      <a class="ex" href="/wallets"><span class="et">Keys &amp; Wallets</span><span class="ed">Validator, seed recovery, PSBT</span><span class="em">17 tools &middot; offline</span></a>
+      <a class="ex" href="/buy"><span class="et">Buy, Sell &amp; Swap</span><span class="ed">On-ramps, swap, perps, ATMs</span><span class="em">7 tools</span></a>
+      <a class="ex" href="/spend"><span class="et">Spend</span><span class="ed">Gift cards, merchant map, travel</span><span class="em">5 tools</span></a>
+      <a class="ex" href="/learn"><span class="et">Learn</span><span class="ed">Guides that own one question each, plus the glossary</span><span class="em">19 guides</span></a>
+      <a class="ex" href="/games"><span class="et">Games</span><span class="ed">Impossible Lottery, Beat the HODLER</span><span class="em">fun only</span></a>
+      <a class="ex" href="/casinos"><span class="et">Casino</span><span class="ed">Reviews, fact sheets, graveyard</span><span class="em">18+ &middot; geo-aware</span></a>
+      <a class="ex" href="/chart"><span class="et">Charts</span><span class="ed">Hashrate, tweets since 2009, Wikipedia views</span><span class="em">12 charts</span></a>
+      <a class="ex" href="/news"><span class="et">News</span><span class="ed">Headlines from five outlets, linked to the source</span><span class="em">live</span></a>
+    </div>
+  </section>
+</main>
+
+<style is:global>
+  /* homepage-only additions; everything else lives in site.css (ported chrome) */
+  /* pre-lock card height so the waiting states do not collapse the live card;
+     once the tx list fills, JS locks the measured height exactly like the proto */
+  #lbody{min-height:296px}
+  /* phone shows TXN=10 single-line rows at ~27px, so the card fills at ~271px;
+     the old 380px floor left a 109px dead band under the last row that
+     lockBody() then froze into every view */
+  @media(max-width:720px){#lbody{min-height:272px}}
+  .lwait{flex:1;display:none;align-items:center;justify-content:center;text-align:center;
+         font:600 10.5px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+         color:var(--ink-3);padding:20px 12px}
+  #ltx td.waitcell,#lbx td.waitcell{text-align:center;color:var(--ink-3);font:600 10.5px var(--mono);
+                   letter-spacing:.08em;text-transform:uppercase;padding:26px 8px;border-bottom:0;
+                   white-space:normal;word-break:normal}
+</style>
+
+<script is:inline>
+(function(){
+  var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var root=document.documentElement;
+  function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
+  /* static fiat cross-rates, same table chrome.js uses (rates 2026-07-17) */
+  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
+      sym={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
+  var ATH=126272;              /* ATH canon: $126,272 on 2025-10-06 (verified 2026-07-31, /ath) */
+  var HALVE=1050000;           /* fifth halving block (matches /halving) */
+  /* price/height/fees start null: nothing renders until real data arrives */
+  var S={price:null,change24h:null,cur:"USD",fiat:"USD",unit:"btc",
+         mul:{btc:1,mbtc:1e3,bits:1e6,sats:1e8},height:null,lastMs:null,fees:null,memp:null};
+  var elP=document.getElementById("price"),elD=document.getElementById("delta"),
+      elChg=document.getElementById("chg"),elS=document.getElementById("mcap"),elAth=document.getElementById("athc"),
+      elCurLab=document.getElementById("curlab"),
+      elB=document.getElementById("ib"),elF=document.getElementById("if"),
+      elH=document.getElementById("height"),elSince=document.getElementById("since"),
+      elM=document.getElementById("memp"),elEco=document.getElementById("eco"),
+      elHalv=document.getElementById("halv"),bpop=document.getElementById("bpop");
+  function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function feeTxt(v){return v%1?v.toFixed(1):fmt(v,0);}
+  function popBlock(){if(reduced||!bpop)return;bpop.classList.remove("go");void bpop.getBoundingClientRect();bpop.classList.add("go");}
+  function fmtSince(s){
+    var h=Math.floor(s/3600),m=Math.floor(s%3600/60),o="";
+    if(h)o+=h+"<em>h</em>";
+    if(h||m)o+=m+"<em>m</em>";
+    return o+s%60+"<em>s</em>";
+  }
+  /* protocol supply ceiling at a height (sums the subsidy schedule in sats);
+     the honest denominator for MCAP, ignoring only unclaimed rewards */
+  function supplyBtc(h){
+    var s=0,r=50e8,blocks=h+1;
+    while(blocks>0&&r>0){var n=Math.min(blocks,210000);s+=n*r;blocks-=n;r=Math.floor(r/2);}
+    return s/1e8;
+  }
+
+  /* ---- #2 price: whole number, flashes, feeds the tab title ---- */
+  function renderPrice(dir){
+    if(S.price==null)return;
+    var d=S.cur,p=S.price*fx[d],s=sym[d],w=Math.round(p);
+    elP.textContent=s+fmt(w,0);
+    var L=elP.textContent.length;
+    elP.classList.toggle("sm",L>9&&L<=12);elP.classList.toggle("xs",L>12);
+    elCurLab.textContent=d;
+    if(!reduced&&dir){elP.classList.remove("fu","fd");void elP.offsetWidth;elP.classList.add(dir==="up"?"fu":"fd");}
+    if(S.change24h!=null){
+      var c=S.change24h;
+      elChg.textContent=(c>=0?"▲ +":"▼ ")+c.toFixed(2)+"% 24h";
+      elChg.classList.toggle("up",c>=0);
+    }
+    if(S.height!=null){
+      var mc=p*supplyBtc(S.height),u=mc>=1e12?[mc/1e12,"T"]:[mc/1e9,"B"];
+      elS.textContent=(s||"")+(u[0]<10?u[0].toFixed(2):u[0]<100?u[0].toFixed(1):fmt(Math.round(u[0]),0))+u[1]+" MCAP";
+    }
+    var ap=(S.price/ATH-1)*100;
+    elAth.textContent=ap<0?"−"+Math.round(Math.abs(ap))+"% from ATH":"+"+Math.round(ap)+"% above ATH";
+    document.title=s+fmt(w,0)+" BTC - OpenBitcoin: Explorer, Tools and Knowledgebase";
+  }
+  function paintDelta(d){
+    var dd=d*fx[S.cur],av=Math.abs(dd),s=sym[S.cur];
+    elD.textContent=(d>=0?"+":"−")+s+(av>=1?fmt(Math.round(av),0):av.toFixed(2));
+    elD.classList.toggle("up",d>=0);elD.classList.toggle("down",d<0);
+    elD.style.visibility="";
+    if(!reduced){elD.classList.remove("tick");void elD.offsetWidth;elD.classList.add("tick");}
+  }
+
+  /* ---- preev converter: both directions, A23 behaviors ---- */
+  var lastEdited="btc";
+  var CAP_BTC=21e6;   /* there will only ever be 21,000,000 */
+  function fitW(el){el.style.width=(Math.max(1,el.value.length)+0.4)+"ch";}
+  function fmtT(n,d){var s=fmt(n,d);return s.indexOf(".")<0?s:s.replace(/0+$/,"").replace(/\.$/,"");}
+  /* live thousands-separators while typing, caret kept in place; maxDec caps fractional digits */
+  function liveFmt(el,maxDec){
+    var raw=el.value,caret=el.selectionStart||0,right=0,i;
+    for(i=caret;i<raw.length;i++)if(/[\d.]/.test(raw[i]))right++;
+    var clean=raw.replace(/[^\d.]/g,""),parts=clean.split("."),intPart=parts.shift()||"";
+    var frac=parts.length?"."+parts.join(""):"";
+    if(maxDec!=null&&frac){
+      frac=maxDec>0?"."+frac.slice(1).slice(0,maxDec):"";   /* sub-sat precision doesn't exist */
+    }
+    intPart=intPart.replace(/^0+(?=\d)/,"");
+    var out=(intPart?intPart.replace(/\B(?=(\d{3})+(?!\d))/g,","):intPart)+frac;
+    if(out!==raw){
+      el.value=out;
+      var pos=out.length,cnt=0;
+      for(var j=out.length-1;j>=0;j--){if(cnt>=right)break;if(/[\d.]/.test(out[j]))cnt++;pos=j;}
+      if(cnt<right)pos=0;
+      try{el.setSelectionRange(pos,pos);}catch(e){}
+    }
+  }
+  function convB(){
+    var v=parseFloat(elB.value.replace(/,/g,""));
+    if(isNaN(v)||S.price==null){if(isNaN(v))elF.value="";fitW(elB);fitW(elF);return;}
+    var btc=v/S.mul[S.unit];
+    if(btc>CAP_BTC){btc=CAP_BTC;elB.value=fmt(btc*S.mul[S.unit],0);}   /* hard cap: total supply */
+    var out=btc*S.price*fx[S.fiat];
+    if(document.activeElement!==elF){             /* never rewrite the box the user is in */
+      elF.value=fmt(out,out>=1000?0:(out<1?4:2)); /* no pennies at/above 1,000 */
+    }
+    fitW(elB);fitW(elF);
+  }
+  function convF(){
+    var v=parseFloat(elF.value.replace(/,/g,""));
+    if(isNaN(v)||S.price==null){if(isNaN(v))elB.value="";fitW(elB);fitW(elF);return;}
+    var btc=(v/fx[S.fiat])/S.price;
+    if(btc>CAP_BTC){btc=CAP_BTC;var capF=btc*S.price*fx[S.fiat];
+      elF.value=fmt(capF,capF>=1000?0:2);}                             /* hard cap: total supply */
+    var units=btc*S.mul[S.unit];
+    if(document.activeElement!==elB){
+      elB.value=S.unit==="sats"?fmt(Math.round(units),0):fmtT(units,units>=1000?2:6);
+    }
+    fitW(elB);fitW(elF);
+  }
+  var UNIT_DEC={btc:8,mbtc:5,bits:2,sats:0};   /* one satoshi is the floor in every unit */
+  elB.addEventListener("input",function(){lastEdited="btc";liveFmt(elB,UNIT_DEC[S.unit]);convB();});
+  elF.addEventListener("input",function(){lastEdited="fiat";liveFmt(elF);convF();});
+  /* clicking into a box selects the whole number; leaving both empty resets to 1 BTC */
+  [elB,elF].forEach(function(el){
+    el.addEventListener("focus",function(){el.select();el._selArm=1;});
+    el.addEventListener("mouseup",function(e){if(el._selArm){e.preventDefault();el._selArm=0;}});
+    el.addEventListener("blur",function(){
+      var bv=parseFloat(elB.value.replace(/,/g,"")),fv=parseFloat(elF.value.replace(/,/g,""));
+      if(isNaN(bv)||isNaN(fv)){
+        var units=S.mul[S.unit];
+        elB.value=S.unit==="sats"?fmt(units,0):fmtT(units,units>=1000?2:6);
+        lastEdited="btc";convB();
+      }
+    });
+  });
+
+  /* ---- converter pop-ups (unit + fiat), ported from the proto ---- */
+  function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+  function closeAllDD(){qa(".dd.open, .tag2.open").forEach(function(n){n.classList.remove("open");});
+    qa(".bandgrid.popopen").forEach(function(n){n.classList.remove("popopen");});}
+  function mkPop(host,items,get,set){
+    function lab(v){var l=v;items.forEach(function(x){if(x[0]===v)l=x[1];});return l+'<span class="dda">▾</span>';}
+    var b=document.createElement("button");b.type="button";b.className="tagbtn";b.innerHTML=lab(get());
+    var p=document.createElement("div");p.className="pop";
+    var g=document.createElement("div");g.className="grid4";
+    items.forEach(function(x){
+      var o=document.createElement("button");o.type="button";o.textContent=x[1];
+      if(x[0]===get())o.className="cur";
+      o.addEventListener("click",function(){
+        set(x[0]);b.innerHTML=lab(x[0]);
+        Array.prototype.forEach.call(g.children,function(z){z.classList.toggle("cur",z===o);});
+        closeAllDD();
+      });
+      g.appendChild(o);
+    });
+    p.appendChild(g);
+    b.addEventListener("click",function(e){e.stopPropagation();var was=host.classList.contains("open");closeAllDD();
+      if(!was){host.classList.add("open");
+        var bg=host.closest(".bandgrid");if(bg)bg.classList.add("popopen");
+        p.classList.remove("below");
+        /* the panel is 247px wide and anchored to the right of its button. On a
+           360px screen the left-hand unit button sits at x=146, which put the
+           panel's left edge at -107 and the currently selected BTC column
+           entirely off-screen, with no scrollbar to reveal it. Measure, and
+           only if it misses the viewport, re-anchor from the left and point the
+           arrow back at the button. Desktop never enters the branch. */
+        p.style.left="";p.style.right="";p.style.removeProperty("--arrow");
+        p.style.maxWidth=Math.min(340,innerWidth-24)+"px";
+        var r=p.getBoundingClientRect();
+        if(r.left<12||r.right>innerWidth-12){
+          p.style.right="auto";
+          var h=host.getBoundingClientRect(),w=Math.min(r.width,innerWidth-24);
+          p.style.left=(Math.max(12,Math.min(h.left,innerWidth-12-w))-h.left)+"px";
+          var pr=p.getBoundingClientRect();
+          p.style.setProperty("--arrow",Math.max(10,Math.min(pr.width-26,pr.right-(h.left+h.width/2)-8))+"px");
+        }
+        if(p.getBoundingClientRect().top<4)p.classList.add("below");
+      }});
+    host.appendChild(b);host.appendChild(p);
+    host._sync=function(){b.innerHTML=lab(get());
+      Array.prototype.forEach.call(g.children,function(z,i){z.classList.toggle("cur",items[i][0]===get());});};
+  }
+  var CURS=["USD","EUR","GBP","CAD","AUD","SEK","JPY","CNY","RUB","BRL","MXN","INR","TRY","KRW","CHF"];
+  var UNITS=[["btc","BTC"],["mbtc","mBTC"],["bits","bits"],["sats","sats"]];
+  var ddUnit=document.getElementById("dd-unit"),ddFiat=document.getElementById("dd-fiat");
+  mkPop(ddUnit,UNITS,function(){return S.unit;},function(v){
+    var btc=(parseFloat(elB.value.replace(/,/g,""))||0)/S.mul[S.unit];
+    S.unit=v;var units=btc*S.mul[S.unit];
+    elB.value=S.unit==="sats"?fmt(Math.round(units),0):fmtT(units,units>=1000?2:6);
+    convB();
+  });
+  /* converter currency drives the footer currency too (and vice versa):
+     the footer selector built by chrome.js stays the single source of truth,
+     so this clicks its matching option and lets obCurrencyChange call back */
+  function applyCur(v){
+    S.fiat=v;S.cur=v;
+    lastEdited==="btc"?convB():convF();
+    renderPrice();
+  }
+  mkPop(ddFiat,CURS.map(function(c){return[c,c];}),function(){return S.fiat;},function(v){
+    var idx=CURS.indexOf(v),opts=document.querySelectorAll("#dd-cur .ddp button");
+    if(idx>=0&&opts.length>idx)opts[idx].click();
+    else applyCur(v);
+  });
+  window.obCurrencyChange=function(cs){
+    if(!cs||!fx[cs.cur])return;
+    applyCur(cs.cur);
+    if(ddFiat._sync)ddFiat._sync();
+  };
+  fitW(elB);fitW(elF);
+
+  /* ---- #1 lookup: routing lives in chrome.js (single handler for every
+     page's band); duplicating it here raced two navigations and aborted. ---- */
+
+  /* ---- network strip ---- */
+  function paintStrip(){
+    if(S.fees){
+      if(typeof S.fees.mempoolCount==="number")elM.innerHTML=fmt(S.fees.mempoolCount,0)+"<em>tx</em>";
+      if(typeof S.fees.economy==="number")elEco.innerHTML=feeTxt(S.fees.economy)+"<em>sat/vB</em>";
+      if(typeof S.fees.fastest==="number"){var fv=document.getElementById("fastv");if(fv)fv.textContent=feeTxt(S.fees.fastest);}
+    }else if(S.memp!=null){
+      elM.innerHTML=fmt(S.memp,0)+"<em>tx</em>";
+    }
+    if(S.height!=null){
+      elH.textContent=fmt(S.height,0);
+      var left=HALVE-S.height;
+      if(left>0)elHalv.innerHTML=fmt(Math.round(left*600/86400),0)+"<em>days</em>";
+    }
+  }
+  function tickSince(){
+    if(S.lastMs==null)return;
+    var s=Math.max(0,Math.floor((Date.now()-S.lastMs)/1000));
+    elSince.innerHTML=fmtSince(s);
+  }
+  setInterval(function(){
+    tickSince();
+    if(mode==="blocks"&&blocksData.length)renderBlocks(false);   /* ages tick live */
+  },1000);
+
+  /* ---- live: transactions / blocks / nodes / visual ---- */
+  var ltxTable=document.getElementById("ltx"),
+      lbxBody=document.getElementById("lbx-body"),lbxTable=document.getElementById("lbx"),
+      lnxWait=document.getElementById("lnx-wait"),
+      ballsCv=document.getElementById("balls"),btnT=document.getElementById("lt-table"),
+      btnBl=document.getElementById("lt-blocks"),btnN=document.getElementById("lt-nodes"),btnB=document.getElementById("lt-balls"),
+      lbodyEl=document.getElementById("lbody"),
+      PHONE=matchMedia("(max-width:720px)").matches,
+      TXN=PHONE?10:6,
+      mode="table",ballList=[],ballsRunning=false,holdUntil=0,txSeen=false,
+      lheadEl=document.getElementById("lhead"),lhtEl=document.getElementById("lht"),hodlT;
+  /* header flips to a flashing HODL fuse for the 10 s freeze, then returns to normal */
+  var HPAUSE='<svg class="hstop" viewBox="0 0 24 24" aria-hidden="true"><g fill="#F7931A"><rect x="6.6" y="5" width="4" height="14" rx="1.7"/><rect x="13.4" y="5" width="4" height="14" rx="1.7"/></g></svg>';
+  /* both labels ship in the markup and CSS picks one, so restoring after HODL
+     must put both back rather than flattening the element to one string */
+  var LHT='<span class="l-long">Live blockchain data</span><span class="l-short">Live</span>';
+  function hodl(){
+    lheadEl.classList.remove("hodl");void lheadEl.offsetWidth;lheadEl.classList.add("hodl");
+    lhtEl.innerHTML=HPAUSE+"HODL";
+    clearTimeout(hodlT);
+    hodlT=setTimeout(function(){lheadEl.classList.remove("hodl");lhtEl.innerHTML=LHT;},10000);
+  }
+  /* lock the card body to the full tx-list height once it fills, so all views match */
+  var lockedH=0;
+  function lockBody(){
+    if(lockedH||mode!=="table")return;
+    if(ltxTable.tBodies.length>=TXN){
+      lockedH=lbodyEl.offsetHeight;
+      lbodyEl.style.minHeight=lockedH+"px";
+      ballsCv.style.height=(lockedH-8)+"px";
+    }
+  }
+  function vsTxt(v){return v>=1e4?fmt(v/1e3,1)+"k vB":fmt(v,0)+" vB";}
+  function addRow(tx,seed){
+    if(tx.amt<0.017)return;                             /* dust filter — keep in step with DISPLAY_MIN_SAT in txfeed.mjs */
+    if(!seed){
+      /* whale hold: a >=100 BTC entry freezes the list for 10 s;
+         only another >=100 BTC tx may interrupt */
+      if(tx.amt>=100){holdUntil=Date.now()+10000;hodl();}
+      else if(Date.now()<holdUntil)return;
+    }
+    var w=document.getElementById("ltx-wait");if(w)w.parentNode.removeChild(w);
+    var d=S.cur,val=S.price==null?null:tx.amt*S.price*fx[d],
+        vs=val==null?"…":val>=1e9?fmt(val/1e9,2)+"B":val>=1e6?fmt(val/1e6,1)+"M":val>=1e3?fmt(val/1e3,0)+"k":fmt(val,0);
+    var tb=document.createElement("tbody");
+    tb.className=(seed?"":"new")+(tx.amt>=10000?" fire":tx.amt>=1000?" whale mega":tx.amt>=100?" whale":tx.amt>=10?" big":"");
+    var amtTxt=fmt(tx.amt,8)+" BTC";
+    tb.innerHTML="<tr><td class='txid'><a href='/"+tx.id+"'>"+tx.id.slice(0,32)+"<br>"+tx.id.slice(32)+"</a></td><td class='r amt'>"+
+      (tx.amt>=10000?"<span class='fpill'>🔥 "+amtTxt+"</span>":amtTxt)+
+      "</td><td class='r'>"+(val==null?vs:sym[d]+vs)+"</td><td class='r'>"+vsTxt(tx.vsize)+"</td></tr>";
+    ltxTable.insertBefore(tb,ltxTable.tBodies[0]||null);
+    while(ltxTable.tBodies.length>TXN)ltxTable.removeChild(ltxTable.tBodies[ltxTable.tBodies.length-1]);
+    lockBody();
+  }
+  /* blocks view: real blocks from /blocks, top 7 shown, ages tick live */
+  var blocksData=[],fetchingBlocks=false;
+  function ago(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60);
+    return h?h+"h "+m+"m":m?m+"m "+s%60+"s":s%60+"s";}
+  function renderBlocks(isNew){
+    if(!blocksData.length){
+      lbxBody.innerHTML="<tr><td class='waitcell' colspan='6'>waiting for block data</td></tr>";
+      return;
+    }
+    var out="",n=Math.min(7,blocksData.length),now=Date.now()/1000;
+    for(var i=0;i<n;i++){var b=blocksData[i],secs=Math.max(0,Math.floor(now-b.time));
+      out+="<tr"+(isNew&&i===0?" class='new'":"")+"><td class='txid'><a href='/"+b.height+"'>"+fmt(b.height,0)+"</a></td>"+
+        "<td><span class='mico' aria-hidden='true'>?</span>"+esc(b.miner||"Unknown")+"</td><td>"+ago(secs)+
+        "</td><td class='r'>"+fmt(b.nTx,0)+" tx</td><td class='r hidem'>"+(b.size/1e6).toFixed(2)+" MB</td>"+
+        "<td class='r'>"+(b.medianFeerate==null?(b.weight/1e6).toFixed(2)+" MWU":Math.round(b.medianFeerate)+" sat/vB")+"</td></tr>";}
+    lbxBody.innerHTML=out;
+  }
+  function paintB24(){
+    var el=document.getElementById("b24");
+    if(!el||blocksData.length<2)return;
+    var iv=(blocksData[0].time-blocksData[blocksData.length-1].time)/(blocksData.length-1),
+        m=Math.floor(iv/60),s2=Math.round(iv%60);
+    el.textContent=m+"m "+("0"+s2).slice(-2)+"s";
+  }
+  function fetchBlocks(flash){
+    if(fetchingBlocks)return;
+    fetchingBlocks=true;
+    try{
+      fetch(api()+"/blocks?limit=15")
+        .then(function(r){if(!r.ok)throw new Error("blocks "+r.status);return r.json();})
+        .then(function(j){
+          fetchingBlocks=false;
+          if(!j||!j.blocks||!j.blocks.length)return;
+          var prevTop=blocksData.length?blocksData[0].height:null;
+          blocksData=j.blocks;
+          paintB24();
+          if(typeof j.tip==="number"&&S.height==null){S.height=j.tip;paintStrip();}
+          if(mode==="blocks")renderBlocks(flash&&prevTop!=null&&blocksData[0].height>prevTop);
+        })
+        .catch(function(){fetchingBlocks=false;if(mode==="blocks")renderBlocks(false);});
+    }catch(e){fetchingBlocks=false;}
+  }
+  /* visual: coin-face physics balls fed by real tx events */
+  var fxRings=[],fxSparks=[],sweepUntil=0;
+  function addBall(tx){
+    var w=ballsCv.clientWidth||600;
+    /* proportional sizing: small balls chunkier (~8-10px), 100 ~ 24px, giants capped at 60px */
+    var r=Math.max(7,Math.min(60,7+3.2*Math.pow(tx.amt,.36)));
+    ballList.push({x:w/2+(Math.random()-.5)*2,y:-r,vx:0,vy:.4+Math.random(),
+                   r:r,a:1,ang:0,angV:0,amt:tx.amt,vsz:tx.vsize,id:tx.id});
+    /* pile holds 50: the 51st arrival sends the oldest off */
+    var alive=0,i;
+    for(i=0;i<ballList.length;i++)if(!ballList[i].dying)alive++;
+    for(i=0;alive>50&&i<ballList.length;i++)if(!ballList[i].dying){ballList[i].dying=true;alive--;}
+  }
+  /* sphere colours per tier: [highlight, base] */
+  function ballCol(amt){
+    return amt>=10000?["#FFD84D","#D64545"]:amt>=1000?["#B98CF0","#8A4FD3"]:
+           amt>=100?["#F08376","#D64545"]:amt>=10?["#FFB84D","#E07E06"]:["#FFC46B","#F7931A"];
+  }
+  /* heavy ball ploughs in: shove everything nearby, scaled by BTC-weight ratio */
+  function blastFrom(b,impact){
+    for(var k=0;k<ballList.length;k++){
+      var o=ballList[k];if(o===b)continue;
+      var odx=o.x-b.x,ody=o.y-b.y,od=Math.sqrt(odx*odx+ody*ody)||.001,rng=b.r*5.5;
+      if(od<rng){
+        var ratio=Math.min(40,b.amt/Math.max(.05,o.amt)),
+            f=Math.min(12,(1-od/rng)*impact*.3*Math.sqrt(ratio));
+        o.vx+=odx/od*f;o.vy+=ody/od*f*.9;
+      }
+    }
+  }
+  function blastFx(b){
+    fxRings.push({x:b.x,y:b.y+b.r,r:b.r*.6,a:.5});
+    if(b.amt>=1000){var cc=ballCol(b.amt)[0];
+      for(var k=0;k<10;k++)fxSparks.push({x:b.x,y:b.y,vx:(Math.random()-.5)*4.5,
+                                          vy:-(1.5+Math.random()*2.8),a:1,col:cc});}
+  }
+  function ballsLoop(){
+    if(!ballsRunning)return;
+    var dpr=window.devicePixelRatio||1,w=ballsCv.clientWidth,h=ballsCv.clientHeight||246;
+    if(ballsCv.width!==w*dpr){ballsCv.width=w*dpr;ballsCv.height=h*dpr;}
+    var x=ballsCv.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+    var cs=getComputedStyle(root),line=cs.getPropertyValue("--line-2").trim(),
+        ink3=cs.getPropertyValue("--ink-3").trim();
+    var floor=h-14,i,j,b;
+    /* block sweep: the floor splits open from the centre and the mined pile drains away */
+    var openF=Date.now()<sweepUntil,gapHalf=0;
+    if(openF)gapHalf=(1-(sweepUntil-Date.now())/2600)*(w/2);
+    x.strokeStyle=line;x.lineWidth=3;
+    if(openF){
+      x.beginPath();x.moveTo(8,floor+8);x.lineTo(Math.max(8,w/2-gapHalf),floor+8);x.stroke();
+      x.beginPath();x.moveTo(Math.min(w-8,w/2+gapHalf),floor+8);x.lineTo(w-8,floor+8);x.stroke();
+    }else{x.beginPath();x.moveTo(8,floor+8);x.lineTo(w-8,floor+8);x.stroke();}
+    /* quiet waiting state: no fake balls, ever */
+    if(!ballList.length&&!txSeen){
+      x.fillStyle=ink3;x.textAlign="center";x.textBaseline="middle";
+      x.font='600 10.5px ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,Menlo,monospace';
+      x.fillText("WAITING FOR LIVE TRANSACTIONS",w/2,h/2);
+    }
+    /* physics: gravity, walls, floor; bouncy, with rolling */
+    for(i=0;i<ballList.length;i++){
+      b=ballList[i];b.cn=0;
+      b.vy+=.22;b.x+=b.vx;b.y+=b.vy;b.vx*=.996;
+      b.vx=Math.max(-13,Math.min(13,b.vx));b.vy=Math.max(-13,Math.min(13,b.vy));
+      if(b.x-b.r<8){b.x=8+b.r;b.vx*=-.8;}
+      if(b.x+b.r>w-8){b.x=w-8-b.r;b.vx*=-.8;}
+      var overGap=openF&&b.x>w/2-gapHalf&&b.x<w/2+gapHalf;
+      if(!overGap&&b.y+b.r>floor){
+        if(b.vy>2.4&&!b.dying){                        /* hard landing: shockwave ring (+ sparks for 1,000+) */
+          fxRings.push({x:b.x,y:floor+2,r:b.r*.6,a:.5});
+          if(b.amt>=1000){var cc=ballCol(b.amt)[0];
+            for(var k=0;k<10;k++)fxSparks.push({x:b.x,y:floor-b.r*.4,vx:(Math.random()-.5)*4.5,
+                                                vy:-(1.5+Math.random()*2.8),a:1,col:cc});}
+          if(b.amt>=100)blastFrom(b,b.vy);             /* heavyweight floor impact: blast the pile aside */
+        }
+        b.y=floor-b.r;b.vy*=-.68;b.vx*=.985;
+        if(Math.abs(b.vy)<.4)b.vy=0;
+        b.onF=true;b.cn++;
+      }
+      if(b.vy===0&&Math.abs(b.vx)<.12)b.vx=0;          /* rest state: no micro-shaking */
+      /* spin follows real floor rolling only; resting on the pile winds down */
+      if(b.onF){b.angV=b.vx/b.r;b.onF=false;}else b.angV*=.96;
+      b.ang+=b.angV;
+    }
+    /* ball-vs-ball collisions, mass ~ amount; heavy balls shove the pile around */
+    for(i=0;i<ballList.length;i++)for(j=i+1;j<ballList.length;j++){
+      var p=ballList[i],q=ballList[j],dx=q.x-p.x,dy=q.y-p.y,
+          d=Math.sqrt(dx*dx+dy*dy)||.001,min=p.r+q.r;
+      if(d<min){
+        p.cn++;q.cn++;
+        /* resting contacts tolerate a little overlap and get no impulse: a settled pile is DEAD still */
+        var slow=(p.vx*p.vx+p.vy*p.vy<.05)&&(q.vx*q.vx+q.vy*q.vy<.05);
+        var nx=dx/d,ny=dy/d,ov=Math.max(0,min-d-(slow?2.5:.5))*(slow?.15:.35);
+        /* mass-weighted separation: small balls can't vibrate a giant, giants displace small */
+        var mp=Math.max(.05,p.amt),mq=Math.max(.05,q.amt),tw=mp+mq;
+        p.x-=nx*ov*(mq/tw)*2;p.y-=ny*ov*(mq/tw)*2;q.x+=nx*ov*(mp/tw)*2;q.y+=ny*ov*(mp/tw)*2;
+        var rv=(q.vx-p.vx)*nx+(q.vy-p.vy)*ny;
+        if(rv<-.35){
+          /* bouncy only for real impacts, inelastic for resting contact (kills jitter) */
+          var e=rv<-1?1.85:1,imp=-e*rv/(1/mp+1/mq);
+          p.vx-=nx*imp/mp;p.vy-=ny*imp/mp;q.vx+=nx*imp/mq;q.vy+=ny*imp/mq;
+          /* a heavy fast mover blasts on first contact with a much lighter pile */
+          var sP=p.vx*p.vx+p.vy*p.vy,sQ=q.vx*q.vx+q.vy*q.vy;
+          if(!p.blasted&&p.amt>=100&&mp>6*mq&&sP>6.8){p.blasted=true;blastFrom(p,Math.sqrt(sP));blastFx(p);}
+          if(!q.blasted&&q.amt>=100&&mq>6*mp&&sQ>6.8){q.blasted=true;blastFrom(q,Math.sqrt(sQ));blastFx(q);}
+        }
+      }
+    }
+    /* crowd damping: a ball pinned by 3+ contacts sheds its energy instead of buzzing */
+    for(i=0;i<ballList.length;i++){b=ballList[i];
+      if(b.cn>=3){b.vx*=.78;b.vy*=.78;}}
+    /* draw: shaded spheres, fire glow, amount labels */
+    for(i=ballList.length-1;i>=0;i--){
+      b=ballList[i];
+      if(b.dying)b.a-=.04;
+      if(b.a<=0||b.y-b.r>h+40){ballList.splice(i,1);continue;}
+      x.globalAlpha=b.a;
+      if(b.amt>=10000){x.shadowColor="rgba(247,147,26,.85)";x.shadowBlur=16;}
+      var c=ballCol(b.amt),
+          g=x.createRadialGradient(b.x-b.r*.35,b.y-b.r*.45,b.r*.12,b.x,b.y,b.r);
+      g.addColorStop(0,c[0]);g.addColorStop(1,c[1]);
+      x.fillStyle=g;x.beginPath();x.arc(b.x,b.y,b.r,0,7);x.fill();
+      x.shadowBlur=0;
+      /* bitcoin-coin face: a faint B-coin glyph spins with the ball, thin rim ring */
+      x.save();x.translate(b.x,b.y);x.rotate(b.ang);
+      x.fillStyle="rgba(255,255,255,.25)";x.textAlign="center";x.textBaseline="middle";
+      x.font="700 "+(b.r*1.35|0)+"px system-ui";x.fillText("₿",0,b.r*.05);
+      x.restore();
+      x.strokeStyle="rgba(255,255,255,.28)";x.lineWidth=Math.max(1.2,b.r*.07);
+      x.beginPath();x.arc(b.x,b.y,b.r*.86,0,7);x.stroke();
+      if(b.r>=12){
+        x.fillStyle="#fff";x.textAlign="center";x.textBaseline="middle";
+        x.font="700 "+Math.max(9,Math.min(22,b.r*.42)|0)+"px ui-monospace,Consolas,monospace";
+        x.fillText(b.amt>=1000?fmt(b.amt,0):b.amt>=10?fmt(b.amt,1):b.amt.toFixed(2),b.x,b.y+.5);
+      }
+    }
+    /* impact shockwaves + landing sparks */
+    for(i=fxRings.length-1;i>=0;i--){var R=fxRings[i];R.r+=1.9;R.a-=.028;
+      if(R.a<=0){fxRings.splice(i,1);continue;}
+      x.globalAlpha=R.a;x.strokeStyle="#D3B183";x.lineWidth=2;
+      x.beginPath();x.arc(R.x,R.y,R.r,Math.PI,2*Math.PI);x.stroke();}
+    for(i=fxSparks.length-1;i>=0;i--){var sp=fxSparks[i];
+      sp.vy+=.15;sp.x+=sp.vx;sp.y+=sp.vy;sp.a-=.022;
+      if(sp.a<=0){fxSparks.splice(i,1);continue;}
+      x.globalAlpha=sp.a;x.fillStyle=sp.col;
+      x.beginPath();x.arc(sp.x,sp.y,2,0,7);x.fill();}
+    x.globalAlpha=1;
+    /* hover card: amount, fiat, vsize, txid for the ball under the cursor */
+    if(hoverB&&ballList.indexOf(hoverB)>=0){
+      var hb=hoverB,d2=S.cur,hv=S.price==null?null:hb.amt*S.price*fx[d2],
+          hvs=hv==null?"":hv>=1e9?fmt(hv/1e9,2)+"B":hv>=1e6?fmt(hv/1e6,1)+"M":hv>=1e3?fmt(hv/1e3,0)+"k":fmt(hv,0),
+          l1=fmt(hb.amt,8)+" BTC",
+          l2=(hv==null?"":sym[d2]+hvs+" · ")+vsTxt(hb.vsz),
+          l3=hb.id.slice(0,10)+"…"+hb.id.slice(-6);
+      x.font="700 11px ui-monospace,Consolas,monospace";
+      var cw=Math.max(x.measureText(l1).width,x.measureText(l2).width,x.measureText(l3).width)+20,
+          ch=52,cx2=Math.max(6,Math.min(w-cw-6,hb.x-cw/2)),
+          cy2=hb.y-hb.r-ch-8;if(cy2<4)cy2=hb.y+hb.r+8;
+      x.fillStyle="#F8EDD6";x.strokeStyle="#C6A170";x.lineWidth=1;
+      x.beginPath();x.roundRect(cx2,cy2,cw,ch,7);x.fill();x.stroke();
+      x.textAlign="left";x.textBaseline="alphabetic";
+      x.fillStyle="#2B2017";x.fillText(l1,cx2+10,cy2+16);
+      x.fillStyle="#6B5B48";x.font="600 10.5px ui-monospace,Consolas,monospace";
+      x.fillText(l2,cx2+10,cy2+31);
+      x.fillStyle="#C46A00";x.fillText(l3,cx2+10,cy2+45);
+    }
+    requestAnimationFrame(ballsLoop);
+  }
+  /* balls are clickable, straight to their transaction page */
+  function ballAt(e){
+    var rc=ballsCv.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top;
+    for(var i=ballList.length-1;i>=0;i--){var b=ballList[i],dx=mx-b.x,dy=my-b.y;
+      if(dx*dx+dy*dy<=b.r*b.r)return b;}
+    return null;
+  }
+  var hoverB=null;
+  ballsCv.addEventListener("click",function(e){var b=ballAt(e);if(b)location.href="/"+b.id;});
+  ballsCv.addEventListener("mousemove",function(e){hoverB=ballAt(e);ballsCv.style.cursor=hoverB?"pointer":"default";});
+  ballsCv.addEventListener("mouseleave",function(){hoverB=null;});
+  function setMode(m){
+    mode=m;
+    ltxTable.style.display=m==="table"?"table":"none";
+    lbxTable.style.display=m==="blocks"?"table":"none";
+    lnxWait.style.display=m==="nodes"?"flex":"none";
+    ballsCv.style.display=m==="balls"?"block":"none";
+    document.getElementById("lbx-foot").style.display=m==="blocks"?"flex":"none";
+    document.getElementById("lnx-foot").style.display=m==="nodes"?"flex":"none";
+    btnT.classList.toggle("on",m==="table");btnBl.classList.toggle("on",m==="blocks");
+    btnN.classList.toggle("on",m==="nodes");btnB.classList.toggle("on",m==="balls");
+    if(m==="blocks"){renderBlocks(false);if(!blocksData.length)fetchBlocks(false);}
+    ballsRunning=m==="balls";
+    if(ballsRunning)requestAnimationFrame(ballsLoop);
+  }
+  btnT.addEventListener("click",function(){setMode("table");});
+  btnBl.addEventListener("click",function(){setMode("blocks");});
+  btnN.addEventListener("click",function(){setMode("nodes");});
+  btnB.addEventListener("click",function(){setMode("balls");});
+  /* live tx feed: SSE rows into whichever view is active (same dust filter) */
+  function onTx(d){
+    if(!d||typeof d.valueSat!=="number"||typeof d.txid!=="string"||!/^[0-9a-f]{64}$/i.test(d.txid))return;
+    var t={amt:d.valueSat/1e8,vsize:(typeof d.vsize==="number"&&d.vsize>0)?d.vsize:0,id:d.txid.toLowerCase()};
+    txSeen=true;
+    if(mode==="table")addRow(t,false);
+    else if(mode==="balls"&&t.amt>=0.017)addBall(t);
+  }
+  function seedTxs(){
+    try{
+      fetch(api()+"/txfeed")
+        .then(function(r){if(!r.ok)throw new Error("txfeed "+r.status);return r.json();})
+        .then(function(j){
+          var txs=(j&&j.txs)||[];
+          for(var i=txs.length-1;i>=0;i--){var t=txs[i];   /* newest-first payload, oldest seeded first */
+            if(t&&typeof t.valueSat==="number"&&typeof t.txid==="string"&&/^[0-9a-f]{64}$/i.test(t.txid)){
+              txSeen=true;
+              addRow({amt:t.valueSat/1e8,vsize:(typeof t.vsize==="number"&&t.vsize>0)?t.vsize:0,id:t.txid.toLowerCase()},true);
+            }}
+        })
+        .catch(function(){});
+    }catch(e){}
+  }
+
+  /* ---- news: static list, newest first, ages tick; refreshed only when
+     The SSR seed (news.json) shows first; {api}/news replaces the rows on
+     load and every 10 min, and the seed stays whenever the fetch fails. ---- */
+  (function(){
+    var ul=document.getElementById("news-list");
+    if(!ul)return;
+    function newsAgo(ms){var s=ms/1e3;
+      return s<90?"now":s<3600?(s/60|0)+"m":s<86400?(s/3600|0)+"h":(s/86400|0)+"d";}
+    function paintAges(){
+      Array.prototype.forEach.call(ul.querySelectorAll("li[data-ts]"),function(li){
+        var ts=Date.parse(li.getAttribute("data-ts"));
+        if(!isFinite(ts))return;
+        var el=li.querySelector(".nage");
+        if(el)el.textContent="· "+newsAgo(Math.max(0,Date.now()-ts));
+      });
+    }
+    paintAges();
+    setInterval(paintAges,60000);
+    /* no idle rotation: the list changes only when the refetch brings new
+       items; a genuinely new top article gets the fresh flash */
+    /* live feed: same NSRC wordmark treatment as the SSR path (map serialized
+       in #nsrc-data); unknown outlet tags get the generic pill */
+    var NSRC={};
+    try{NSRC=JSON.parse(document.getElementById("nsrc-data").textContent)||{};}catch(e){}
+    function newsRow(n){
+      var b=NSRC[n.s]||[String(n.s).toUpperCase(),"#9C8B75","#161310"];
+      return '<li data-ts="'+esc(n.at)+'"><a href="'+esc(n.u)+'" target="_blank" rel="noopener noreferrer nofollow">'
+        +'<span class="nt">'+esc(n.t)
+        +'<svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8"/><path d="M19 13.5v5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5H10"/></svg></span>'
+        +'<span class="ns2"><i class="nlogo" style="background:'+esc(b[1])+';color:'+esc(b[2]||"#FFFFFF")+'">'+esc(b[0])+'</i><span class="nage"></span></span>'
+        +'</a></li>';
+    }
+    function loadNews(){
+      try{
+        fetch(api()+"/news?limit=10")
+          .then(function(r){return r.ok?r.json():null})
+          .then(function(j){
+            var raw=(j&&j.items)||[],rows=[];
+            for(var i=0;i<raw.length&&rows.length<5;i++){var n=raw[i];
+              if(n&&typeof n.title==="string"&&n.title
+                 &&typeof n.url==="string"&&/^https?:\/\//i.test(n.url)
+                 &&typeof n.outlet==="string"&&typeof n.date==="string")
+                rows.push(newsRow({t:n.title,s:n.outlet,at:n.date,u:n.url}));
+            }
+            if(rows.length){
+              var prevTop=(ul.querySelector("li a")||{}).getAttribute?ul.querySelector("li a").getAttribute("href"):null;
+              ul.innerHTML=rows.join("");paintAges();
+              var top=ul.querySelector("li a");
+              if(!reduced&&top&&prevTop&&top.getAttribute("href")!==prevTop){
+                var li=top.closest("li");li.classList.remove("fresh");void li.offsetHeight;li.classList.add("fresh");
+              }
+            }
+          })
+          .catch(function(){});
+      }catch(e){}
+    }
+    /* defer the first fetch until DOMContentLoaded so Base's OB_DATA_API is set */
+    if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadNews);
+    else loadNews();
+    setInterval(loadNews,600000);
+  })();
+
+  /* ---- Fear & Greed: house index, hourly refresh ---- */
+  (function(){
+    var vEl=document.getElementById("fg-val"),sEl=document.getElementById("fg-segs"),lEl=document.getElementById("fg-label");
+    if(!vEl||!sEl)return;
+    function paintFG(d){
+      if(!d||typeof d.value!=="number")return;
+      vEl.textContent=d.value;
+      if(lEl)lEl.textContent=" · "+d.label;
+      var lit=Math.max(1,Math.round(d.value/10)),segs=sEl.children;
+      for(var i=0;i<segs.length;i++){segs[i].className=i<lit?("on"+(i+1)):"";}
+      var host=vEl.closest(".fgmini");
+      if(host)host.title="House index from our own data: "+(d.method||"");
+    }
+    function loadFG(){
+      try{fetch(api()+"/fear-greed").then(function(r){return r.ok?r.json():null}).then(paintFG).catch(function(){});}catch(e){}
+    }
+    if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadFG);
+    else loadFG();
+    setInterval(loadFG,3600000);
+  })();
+
+  /* ---- 7-day sparkline: real hourly candles from /candles ---- */
+  var cvS=document.getElementById("spark"),SD=[],STm=[],hoverI=null,
+      DOW=["SUN","MON","TUE","WED","THU","FRI","SAT"];
+  function drawSpark(){
+    if(!SD.length||!cvS)return;
+    var cs=getComputedStyle(root),acc=cs.getPropertyValue("--orange").trim(),
+        rgb=cs.getPropertyValue("--acc-rgb").trim(),grid=cs.getPropertyValue("--line").trim(),
+        ink3=cs.getPropertyValue("--ink-3").trim(),ink=cs.getPropertyValue("--ink").trim(),
+        panel=cs.getPropertyValue("--panel").trim(),line2=cs.getPropertyValue("--line-2").trim();
+    var dpr=window.devicePixelRatio||1,w=cvS.clientWidth,h=cvS.clientHeight;
+    if(!w||!h)return;
+    cvS.width=w*dpr;cvS.height=h*dpr;
+    var x=cvS.getContext("2d");x.scale(dpr,dpr);
+    var N=SD.length,lo=Math.min.apply(null,SD),hi=Math.max.apply(null,SD);
+    var axis=18,ph=h-axis,pad=5,span=hi-lo||1,i;
+    function px(v){return v/(N-1)*w;}
+    function py(val){return pad+(1-(val-lo)/span)*(ph-pad*2);}
+    /* horizontal grid */
+    x.strokeStyle=grid;x.globalAlpha=.55;x.lineWidth=1;
+    [.25,.5,.75].forEach(function(f){x.beginPath();x.moveTo(0,ph*f);x.lineTo(w,ph*f);x.stroke();});
+    /* timeline: one label per UTC day, faint separators at day starts */
+    x.font='600 9.5px ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,Menlo,monospace';
+    x.textAlign="center";x.textBaseline="alphabetic";
+    var segs=[],start=0,curDay=new Date(STm[0]*1000).getUTCDay();
+    for(i=1;i<N;i++){
+      var dd=new Date(STm[i]*1000).getUTCDay();
+      if(dd!==curDay){segs.push([start,i-1,curDay]);start=i;curDay=dd;}
+    }
+    segs.push([start,N-1,curDay]);
+    segs.forEach(function(sg,k){
+      if(sg[0]>0){x.globalAlpha=.3;x.strokeStyle=grid;
+        x.beginPath();x.moveTo(px(sg[0]),0);x.lineTo(px(sg[0]),ph);x.stroke();}
+      if(sg[1]-sg[0]>=5){x.globalAlpha=1;x.fillStyle=ink3;
+        x.fillText(k===segs.length-1?"TODAY":DOW[sg[2]],px((sg[0]+sg[1])/2),h-5);}
+    });
+    x.globalAlpha=1;
+    /* area + line + endpoint */
+    var g=x.createLinearGradient(0,0,0,ph);g.addColorStop(0,"rgba("+rgb+",.20)");g.addColorStop(1,"rgba("+rgb+",0)");
+    x.beginPath();x.moveTo(0,py(SD[0]));for(i=1;i<N;i++)x.lineTo(px(i),py(SD[i]));x.lineTo(w,ph);x.lineTo(0,ph);x.closePath();x.fillStyle=g;x.fill();
+    x.beginPath();x.moveTo(0,py(SD[0]));for(i=1;i<N;i++)x.lineTo(px(i),py(SD[i]));x.strokeStyle=acc;x.lineWidth=2;x.lineJoin="round";x.stroke();
+    x.beginPath();x.arc(w,py(SD[N-1]),3.2,0,7);x.fillStyle=acc;x.fill();
+    /* hover crosshair + readout */
+    if(hoverI!=null){
+      var hx=px(hoverI),hv=SD[hoverI];
+      x.strokeStyle=line2;x.lineWidth=1;
+      x.beginPath();x.moveTo(hx,0);x.lineTo(hx,ph);x.stroke();
+      x.beginPath();x.arc(hx,py(hv),4.2,0,7);x.fillStyle=acc;x.fill();
+      x.lineWidth=2;x.strokeStyle=panel;x.beginPath();x.arc(hx,py(hv),4.2,0,7);x.stroke();
+      var dt2=new Date(STm[hoverI]*1000),
+          lab="$"+fmt(Math.round(hv),0)+" · "+DOW[dt2.getUTCDay()]+" "+("0"+dt2.getUTCHours()).slice(-2)+":00";
+      x.font="700 11px ui-monospace,Consolas,monospace";
+      var tw=x.measureText(lab).width+16,tx2=Math.max(4,Math.min(w-tw-4,hx-tw/2));
+      x.fillStyle=panel;x.strokeStyle=line2;x.lineWidth=1;
+      x.beginPath();x.roundRect(tx2,4,tw,20,5);x.fill();x.stroke();
+      x.fillStyle=ink;x.textAlign="left";x.fillText(lab,tx2+8,18);
+    }
+  }
+  cvS.addEventListener("mousemove",function(e){
+    if(!SD.length)return;
+    var rc=cvS.getBoundingClientRect();
+    hoverI=Math.max(0,Math.min(SD.length-1,Math.round((e.clientX-rc.left)/rc.width*(SD.length-1))));
+    drawSpark();
+  });
+  cvS.addEventListener("mouseleave",function(){hoverI=null;drawSpark();});
+  window.addEventListener("resize",function(){drawSpark();});
+  function loadSpark(){
+    try{
+      fetch(api()+"/candles?interval=1h&limit=168")
+        .then(function(r){if(!r.ok)throw new Error("candles "+r.status);return r.json();})
+        .then(function(j){
+          var rows=(j&&Array.isArray(j.candles))?j.candles:[];
+          SD=[];STm=[];
+          rows.forEach(function(k){
+            if(Array.isArray(k)&&k.length>=5&&isFinite(+k[0])&&isFinite(+k[4])&&+k[4]>0){STm.push(+k[0]);SD.push(+k[4]);}
+          });
+          if(SD.length<2){SD=[];STm=[];sparkWait();return;}
+          var lo=Math.min.apply(null,SD),hi=Math.max.apply(null,SD);
+          document.getElementById("rng").textContent="$"+fmt(Math.round(lo),0)+" - $"+fmt(Math.round(hi),0);
+          requestAnimationFrame(drawSpark);
+        })
+        .catch(sparkWait);
+    }catch(e){sparkWait();}
+  }
+  function sparkWait(){document.getElementById("rng").textContent="waiting for price history";}
+
+  /* ---- live wiring: /summary now, then the SSE stream ---- */
+  function applySummary(d){
+    if(!d)return;
+    var prev=S.price;
+    if(d.price&&typeof d.price.usd==="number"&&d.price.usd>0){
+      S.price=d.price.usd;
+      if(typeof d.price.change24h==="number")S.change24h=d.price.change24h;
+    }
+    if(d.fees)S.fees=d.fees;
+    if(typeof d.height==="number")S.height=d.height;
+    if(d.lastBlockAt){var t=Date.parse(d.lastBlockAt);if(isFinite(t))S.lastMs=t;}
+    if(S.price!=null){
+      var dir=(prev!=null&&S.price!==prev)?(S.price>prev?"up":"down"):null;
+      renderPrice(dir);
+      /* The pill only ever shows movement the viewer actually watched: it
+         stays hidden until the price changes during THIS visit. It used to
+         seed with the 24h move in dollars on first paint, which read as the
+         price jumping $600 in the seconds after load, refresh after refresh,
+         while the chip below already says the same thing as a percent
+         (owner report 2026-08-03). */
+      if(prev!=null&&S.price!==prev)paintDelta(S.price-prev);
+      lastEdited==="btc"?convB():convF();
+    }
+    paintStrip();
+    tickSince();
+  }
+  function onBlockEv(d){
+    if(!d)return;
+    if(typeof d.height==="number")S.height=d.height;
+    if(d.lastBlockAt){var t=Date.parse(d.lastBlockAt);if(isFinite(t))S.lastMs=t;}
+    else S.lastMs=Date.now();
+    paintStrip();
+    tickSince();
+    renderPrice();                 /* MCAP tracks the new supply */
+    popBlock();
+    sweepUntil=Date.now()+2600;    /* the pile just got mined: open the floor and drain it */
+    fetchBlocks(true);
+  }
+  function init(){
+    try{
+      fetch(api()+"/summary")
+        .then(function(r){if(!r.ok)throw new Error("summary "+r.status);return r.json();})
+        .then(applySummary)
+        .catch(function(){
+          /* summary down: /network and /mempool still light the strip */
+          try{
+            fetch(api()+"/network").then(function(r){return r.ok?r.json():null;}).then(function(j){
+              if(j&&typeof j.height==="number"){S.height=j.height;paintStrip();}
+            }).catch(function(){});
+          }catch(e){}
+        });
+    }catch(e){}
+    try{
+      fetch(api()+"/mempool").then(function(r){return r.ok?r.json():null;}).then(function(j){
+        if(j&&typeof j.count==="number"&&!S.fees){S.memp=j.count;paintStrip();}
+      }).catch(function(){});
+    }catch(e){}
+    seedTxs();
+    fetchBlocks(false);
+    loadSpark();
+    if(typeof EventSource==="function"){
+      try{
+        var es=new EventSource(api()+"/stream");
+        es.addEventListener("summary",function(ev){try{applySummary(JSON.parse(ev.data));}catch(e){}});
+        es.addEventListener("block",function(ev){try{onBlockEv(JSON.parse(ev.data));}catch(e){}});
+        es.addEventListener("tx",function(ev){try{onTx(JSON.parse(ev.data));}catch(e){}});
+      }catch(e){}
+    }
+  }
+  /* defer network work until DOMContentLoaded so Base's OB_DATA_API is set */
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);
+  else init();
+})();
+</script>
+</Base>

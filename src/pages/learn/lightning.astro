@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="The Lightning Network Explained - OpenBitcoin" description="How Lightning makes bitcoin payments instant and nearly free, what a payment channel is, what it gives up compared to an on-chain payment, and when to use which.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Learn</div>
+    <h1>The Lightning Network</h1>
+    <p class="doc-lede">Instant bitcoin payments for a fraction of a cent, built on top of the chain rather than in it. What a channel really is, what it costs you, and where it is the wrong tool.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ln-card">
+      <div class="ln-tlab">The problem it solves</div>
+      <p class="ln-p">Every on-chain transaction is verified and stored by every node, forever. That is what makes it trustworthy, and it is also why it cannot be cheap enough for buying coffee at any real scale. Blockspace is limited on purpose, because a chain that only a data centre can verify is not one ordinary people can check.</p>
+      <p class="ln-p">Lightning takes the other route. Instead of making the chain bigger, it moves most payments off it, and uses the chain only to open and close the arrangement. The chain becomes the court rather than the cashier.</p>
+    </div>
+
+    <div class="ln-card ln-mt">
+      <div class="ln-tlab">What a channel is</div>
+      <ol class="ln-steps">
+        <li><b>Two people lock funds in a shared address.</b> This is one ordinary on-chain transaction, requiring both signatures to spend. Say you put in 0.01 BTC and a shop puts in nothing.</li>
+        <li><b>They pay each other by re-signing the split.</b> Buy something for 0.001 and you both sign a new version saying 0.009 to you, 0.001 to them. Nothing is broadcast. This takes milliseconds and can be repeated thousands of times.</li>
+        <li><b>Either side can close at any moment</b> by publishing the latest signed split to the chain. The other party cannot stop them, and cannot publish an older, more favourable version without losing everything in the channel to a penalty.</li>
+      </ol>
+      <p class="ln-p">That penalty is what makes it work without trust. Cheating is possible in the sense that you can broadcast an old state, and it is irrational, because your counterparty can then take the entire channel balance.</p>
+    </div>
+
+    <div class="ln-card ln-mt">
+      <div class="ln-tlab">Why you do not need a channel to everyone</div>
+      <p class="ln-p">You do not open a channel with every shop you use. Payments route across other people's channels: if you have a channel to A, and A has one to B, and B has one to the shop, your payment can travel that path. Each hop takes a tiny fee.</p>
+      <p class="ln-p">The routing is arranged so no intermediary can steal it. Each hop is locked to the same secret, and only the final recipient can unlock the payment, which releases the funds back along the chain of hops. If any hop fails, the whole payment fails and nothing moves. There is no half-paid state.</p>
+    </div>
+
+    <div class="ln-card ln-mt">
+      <div class="ln-tlab">What you give up</div>
+      <p class="ln-intro">Lightning is not a strictly better bitcoin. The comparison is honest in both directions.</p>
+      <div class="ln-cmp">
+        <div class="ln-col">
+          <div class="ln-clab ln-good">Lightning is better at</div>
+          <ul>
+            <li>Speed: payments settle in under a second.</li>
+            <li>Cost: fees are typically a fraction of a cent, and do not scale with the amount.</li>
+            <li>Small amounts: paying a few cents is practical, which it is not on-chain.</li>
+            <li>Privacy from the public chain: individual payments are not recorded anywhere permanent.</li>
+          </ul>
+        </div>
+        <div class="ln-col">
+          <div class="ln-clab ln-bad">On-chain is better at</div>
+          <ul>
+            <li>Large amounts: channel capacity limits what can move in one payment.</li>
+            <li>Receiving without preparation: you need inbound capacity before anyone can pay you.</li>
+            <li>Being offline: a node that is down cannot receive, and cannot watch for an old state being published.</li>
+            <li>Finality you can point at: there is no public record of a Lightning payment.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="ln-p">The liquidity constraint is the one that surprises people. Money in a channel sits on one side or the other. You can only receive as much as your counterparty holds on their side, so a brand new channel you funded yourself can send but cannot receive until you have spent something.</p>
+    </div>
+
+    <div class="ln-card ln-mt">
+      <div class="ln-tlab">Custodial versus your own node</div>
+      <p class="ln-p">Most people meet Lightning through an app that runs the node for someone else and holds the funds. That works, it is genuinely easy, and it is custody: the provider can freeze the balance, require identity documents, or fail. For small spending money, many people accept this knowingly.</p>
+      <p class="ln-p">Running your own node removes that, at the cost of managing channels, keeping the node online and thinking about liquidity. Middle options exist where the keys are yours but a service handles the routing. The trade-off is the same one as everywhere else in bitcoin, and it is worth making deliberately rather than by default.</p>
+    </div>
+
+    <div class="ln-about doc-prose">
+      <p>A Lightning invoice starts with lnbc and encodes the amount, a description, an expiry and the payment hash. Unlike a bitcoin address, an invoice is normally single use and expires, often within an hour, which is why a stale invoice fails rather than sending money somewhere unexpected. You can pull one apart field by field, entirely in your browser, with the <a href="/tools/lightning">invoice decoder</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">In one sentence</div>
+      <p class="ln-railp">Two people lock funds on-chain once, then pay each other instantly by re-signing how that pot is split, and only return to the chain to settle up.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/lightning">Decode a Lightning invoice</a>
+        <a href="/learn/self-custody">Self-custody</a>
+        <a href="/fees">On-chain fees right now</a>
+        <a href="/learn/glossary">Glossary</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ln-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .ln-mt{margin-top:14px}
+  .ln-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .ln-p{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin:0 0 11px}
+  .ln-p:last-child{margin-bottom:0}
+  .ln-intro{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin:0 0 12px}
+  .ln-steps{margin:0 0 11px;padding-left:22px}
+  .ln-steps li{font:500 14px/1.7 var(--sans);color:var(--ink-2);margin-top:10px}
+  .ln-steps li::marker{color:var(--acc);font-weight:700}
+  .ln-steps b{color:var(--ink);font-weight:600}
+  .ln-cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 12px}
+  .ln-col{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .ln-clab{font:700 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;margin-bottom:8px}
+  .ln-good{color:var(--up)}
+  .ln-bad{color:var(--ink-3)}
+  .ln-col ul{margin:0;padding-left:17px}
+  .ln-col li{font:500 12.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ln-col li::marker{color:var(--ink-3)}
+  .ln-about{margin-top:14px}
+  .ln-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ln-railp{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  @media(max-width:640px){.ln-cmp{grid-template-columns:1fr}}
+</style>
+</Base>

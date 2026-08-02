@@ -1,0 +1,324 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+
+export const prerender = false;
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+
+function supplyAt(h) {
+  let s = 0, sub = 50, b = h + 1;
+  while (b > 210000) { s += 210000 * sub; sub /= 2; b -= 210000; }
+  return s + b * sub;
+}
+const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtI = (n) => Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+const balFmt = (b) => b >= 1000 ? b.toLocaleString('en-US', { maximumFractionDigits: 0 })
+  : b.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+let rl = null;
+try {
+  const r = await fetch(`${BACKEND}/rich-list?limit=1000`, { signal: AbortSignal.timeout(6000) });
+  if (r.ok) rl = await r.json();
+} catch { /* client fetch takes over */ }
+
+let ssrRows = '', ssrCount = '', ssrSnap = '';
+if (rl && Array.isArray(rl.entries) && rl.entries.length) {
+  const supply = supplyAt(rl.snapshotHeight || 960000);
+  ssrRows = rl.entries.slice(0, 100).map((w) => {
+    const bal = w.balanceSat / 1e8, share = bal / supply * 100;
+    return `<tr><td class="rl-rank">${w.rank}</td><td class="rl-addr"><a href="/${esc(w.address)}">${esc(w.address)}</a></td>` +
+      `<td class="rl-bal">${balFmt(bal)} BTC</td><td class="rl-share">${share >= 0.01 ? share.toFixed(3) : share.toFixed(4)}%</td>` +
+      `<td class="rl-ins">${w.utxoCount == null ? '&#8212;' : fmtI(w.utxoCount)}</td>` +
+      `<td class="rl-seen">${w.firstSeen || '&#8212;'}</td><td class="rl-last">&#8212;</td></tr>`;
+  }).join('');
+  ssrCount = `Ranks 1 to 100 of ${fmtI(rl.entries.length)}`;
+  if (rl.snapshotHeight) {
+    ssrSnap = rl.source === 'live'
+      ? `Ranked live from our own address index at block ${fmtI(rl.snapshotHeight)}, refreshed as blocks arrive.`
+      : `Ranked from our own node's UTXO set at block ${fmtI(rl.snapshotHeight)}, refreshed daily.`;
+  }
+}
+---
+<Base title="Bitcoin Rich List: The Largest Addresses, Explained - OpenBitcoin" description="The bitcoin rich list ranks addresses, not people. Why exchange cold wallets top it, how one owner spans many addresses, and what a big move means.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Rich list</div>
+    <h1>The bitcoin rich list</h1>
+    <p class="doc-lede">Sort every address on the ledger by balance and you get the rich list. It looks like a roster of the biggest fortunes, but it ranks rows in a public database that tell less than people assume.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="rl-card">
+      <div class="rl-tlab">The largest addresses, ranks 1 to 10,000</div>
+      <p class="rl-gate" id="rl-snap">{ssrSnap || "Ranked from our own node's UTXO set, refreshed daily."}</p>
+      <div class="rl-ctl">
+        <span class="rl-count" id="rl-count">{ssrCount || 'Loading the ranks…'}</span>
+        <label class="rl-jump" for="rl-jumpin">Jump to rank
+          <input id="rl-jumpin" type="text" inputmode="numeric" maxlength="5" placeholder="5000" autocomplete="off">
+        </label>
+      </div>
+      <table class="rl-table" aria-label="The largest bitcoin addresses by balance" id="rl-table">
+        <thead>
+          <tr><th>Rank</th><th>Address</th><th>Balance</th><th>Share of supply</th><th>Unspent outputs</th><th>First seen</th><th>Last activity</th></tr>
+        </thead>
+        <tbody id="rl-body" set:html={ssrRows}></tbody>
+      </table>
+      <nav class="rl-pager" id="rl-pager" aria-label="Rich list pages"></nav>
+      {rl && rl.entries && rl.entries.length > 0 && (
+        <script type="application/json" id="rl-data" set:html={JSON.stringify({
+          entries: rl.entries, snapshotHeight: rl.snapshotHeight,
+          snapshotTime: rl.snapshotTime, source: rl.source || null,
+        })} />
+      )}
+      <p class="rl-fine">The top 1,000 addresses, 100 per page. Share of supply divides each balance by the coins issued so far, shown in the denominator card below. Address formats differ because they were created in different eras: 1 for the original format, 3 for script addresses, bc1q for segwit.</p>
+    </div>
+
+    <div class="rl-card rl-mt">
+      <div class="rl-chead"><h2>What a rich list actually shows</h2></div>
+      <div class="rl-rows">
+        <div class="rl-row"><b>Addresses, not people</b><span>The ledger records addresses and the coins assigned to them, and nothing else. No name, no company, no country. Attaching an identity to an address takes off-chain information and inference, and the inference is often wrong. The <a href="/learn/privacy">privacy guide</a> covers how address clustering works and where it breaks.</span></div>
+        <div class="rl-row"><b>The top is mostly custodial cold storage</b><span>The largest balances on any real rich list belong overwhelmingly to exchange cold wallets. A single such address can hold coins that belong to millions of customers, so a top-ranked balance usually measures the size of a company's customer base, not one person's fortune.</span></div>
+        <div class="rl-row"><b>Entities and addresses do not map one to one</b><span>One holder can spread coins across thousands of addresses, and modern wallets hand out a fresh address for every payment. So the table understates concentration in one direction, because a single entity spans many rows, and overstates it in the other, because a single row can contain a crowd. Both errors are always present at once.</span></div>
+        <div class="rl-row rl-warn"><b>Balance changes are not signals</b><span>A large address emptying looks dramatic and usually means housekeeping: a wallet migration, cold storage being rotated, small outputs being consolidated while fees are cheap. Custodial wallets reshuffle constantly for operational reasons that have nothing to do with anyone's view of the market. Reading intent into these moves is a reliable way to be wrong, and nothing on this page is trading advice.</span></div>
+        <div class="rl-row"><b>Anyone can compute it</b><span>A rich list is not published by an authority; it falls out of the ledger itself. Anyone <a href="/nodes">running a node</a> can index every address and reproduce the same table independently, which is exactly how the live version of this page is built.</span></div>
+      </div>
+    </div>
+
+    <div class="rl-card rl-mt">
+      <div class="rl-tlab">The denominator: known supply</div>
+      <div class="rl-stats">
+        <div class="rl-stat"><b id="rl-sup">20,057,319</b><i>BTC issued so far</i></div>
+        <div class="rl-stat"><b id="rl-ht2">958,341</b><i>Block height</i></div>
+        <div class="rl-stat"><b id="rl-pct">95.5%</b><i>Of the 21 million cap</i></div>
+        <div class="rl-stat"><b>21,000,000</b><i>Cap, fixed</i></div>
+      </div>
+      <p class="rl-cp">Every share figure on this page divides a balance by the coins the issuance schedule has produced so far: about <span id="rl-psup">20,057,319</span> BTC at height <span id="rl-pht">958,341</span>, with 3.125 new BTC added per block. The spendable total is slightly lower than the scheduled one, because the genesis reward and a handful of early rewards can never be spent, and coins whose keys are lost stay on the ledger forever. The denominator grows on a schedule anyone can check and stops just short of 21 million; for how a fixed supply compares against money that grows, see <a href="/m2">bitcoin versus M2</a>.</p>
+    </div>
+
+    <div class="rl-about doc-prose">
+      <p>A rich list is a lens on distribution, not a leaderboard of owners. Read one well and it tells you how coins pool at custodians, how old the deepest balances are, and how issuance thins out over time. Read one badly and it turns wallet housekeeping into headlines. The raw material is public either way: new coins arrive in every block on the <a href="/blocks">blocks page</a>, the clustering techniques and their limits are in the <a href="/learn/privacy">privacy guide</a>, and <a href="/nodes">a node of your own</a> lets you rebuild this entire table without trusting ours.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="rl-rstat"><b id="rl-px">$64,362</b><i>1 BTC</i></div>
+      <div class="rl-rstat"><b id="rl-ht">958,341</b><i>Block height</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Reading the list</div>
+      <ul class="rl-rl">
+        <li>An address is a row, not a person</li>
+        <li>The top is exchange cold storage</li>
+        <li>One entity spans many addresses</li>
+        <li>One address can hold a crowd</li>
+        <li>Big moves are usually housekeeping</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/privacy">Privacy and address clustering</a>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/nodes">Run a node</a>
+        <a href="/m2">Bitcoin vs M2</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .rl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .rl-mt{margin-top:14px}
+  .rl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .rl-chead h2{font:700 16.5px/1.3 var(--sans);color:var(--ink);margin:0 0 4px}
+  .rl-gate{border:1px dashed rgba(247,147,26,.5);background:rgba(247,147,26,.06);border-radius:10px;
+    padding:11px 15px;font:600 13px/1.6 var(--sans);color:var(--ink-2);margin:0 0 14px}
+  .rl-table{width:100%;border-collapse:collapse}
+  .rl-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .rl-table td{padding:9px 14px 9px 0;border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .rl-table tr:last-child td{border-bottom:0}
+  .rl-rank{font:700 12px var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .rl-addr{font:600 12.5px/1.5 var(--mono);color:var(--ink-2);word-break:break-all}
+  .rl-bal{font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-share{font:600 13px var(--mono);color:var(--acc);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-seen{font:500 13px var(--sans);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-fine{font:500 11.5px/1.55 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .rl-ctl{display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:0 0 10px}
+  .rl-count{font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .rl-jump{display:inline-flex;align-items:center;gap:8px;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .rl-jump input{width:74px;background:var(--field);border:1px solid var(--line-2);border-radius:8px;color:var(--ink);
+    font:600 13px var(--mono);padding:7px 10px}
+  .rl-jump input:focus{outline:none;border-color:var(--acc)}
+  .rl-ins{font:600 12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap;padding-right:14px}
+  .rl-last{font:500 13px var(--sans);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-pager{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
+  .rl-pgbtn{font:700 11.5px var(--mono);background:var(--field);border:1px solid var(--line-2);border-radius:8px;
+    color:var(--ink-2);padding:7px 11px;cursor:pointer;min-width:36px;text-align:center}
+  .rl-pgbtn:hover{border-color:rgba(255,166,60,.45);color:var(--acc)}
+  .rl-pgbtn.on{background:var(--cta);color:var(--cta-ink);border-color:rgba(255,166,60,.65)}
+  .rl-pgbtn:disabled{opacity:.4;cursor:not-allowed}
+  .rl-pgell{font:700 11px var(--mono);color:var(--ink-3);padding:0 2px}
+  .rl-rows{display:grid;gap:8px;margin-top:10px}
+  .rl-row{border-radius:10px;padding:12px 15px;border:1px solid var(--line-2);background:var(--panel-2)}
+  .rl-row b{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+  .rl-row span{display:block;font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:5px}
+  .rl-warn{border-color:rgba(246,70,93,.42);background:rgba(246,70,93,.06)}
+  .rl-warn b{color:var(--down)}
+  .rl-row a,.rl-cp a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .rl-row a:hover,.rl-cp a:hover{border-bottom-style:solid}
+  .rl-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .rl-stat{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;min-width:0}
+  .rl-stat b{display:block;font:700 17px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .rl-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .rl-cp{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:13px 0 0}
+  .rl-about{margin-top:14px}
+  .rl-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .rl-rstat{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .rl-rstat:last-child{border-bottom:0}
+  .rl-rstat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .rl-rstat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .rl-rl{margin:0;padding-left:16px}
+  .rl-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .rl-rl li:first-child{margin-top:0}
+  .rl-rl li::marker{color:var(--acc)}
+  @media(max-width:700px){
+    .rl-card{padding:18px 18px 20px}
+    /* Rich list table becomes stacked cards: no horizontal scroll, nothing hidden */
+    .rl-table thead{display:none}
+    .rl-table,.rl-table tbody,.rl-table tr,.rl-table td{display:block;width:auto}
+    .rl-table tr{padding:12px 0 11px;border-bottom:1px dotted var(--line-2)}
+    .rl-table tr:last-child{border-bottom:0}
+    .rl-table td{border-bottom:0;padding:0;white-space:normal}
+    .rl-rank{display:inline-block;color:var(--acc)}
+    .rl-rank::before{content:"#"}
+    .rl-addr{display:inline-block;margin-left:6px}
+    .rl-bal,.rl-share,.rl-seen,.rl-ins,.rl-last{margin-top:5px}
+    .rl-bal::before,.rl-share::before,.rl-seen::before,.rl-ins::before,.rl-last::before{
+      font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+    .rl-bal::before{content:"Balance: "}
+    .rl-share::before{content:"Share: "}
+    .rl-seen::before{content:"First seen: "}
+    .rl-ins::before{content:"Unspent outputs: "}
+    .rl-last::before{content:"Last activity: "}
+    .rl-ctl{justify-content:flex-start}
+  }
+</style>
+<script is:inline>
+(function(){
+  var P={price:64362.18,height:958341};
+  var PAGE=100,TOTAL=0,page=1;
+  function fmt(n){return n.toLocaleString("en-US",{maximumFractionDigits:0});}
+  /* coins issued over blocks 0..height, from the subsidy schedule */
+  function supplyAt(h){
+    var s=0,sub=50,b=h+1;
+    while(b>210000){s+=210000*sub;sub/=2;b-=210000;}
+    return s+b*sub;
+  }
+  /* real ranks from our own UTXO snapshot, served by /v1/rich-list */
+  var ROWS=[],SNAP={height:null,time:null};
+  function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
+  function balFmt(b){
+    return b>=1000?b.toLocaleString("en-US",{maximumFractionDigits:0})
+                  :b.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+  function renderTable(){
+    var body=document.getElementById("rl-body");
+    if(!ROWS.length){
+      body.innerHTML='<tr><td colspan="7" class="rl-wait">Loading the ranks from our own index&#8230;</td></tr>';
+      document.getElementById("rl-count").textContent="";
+      return;
+    }
+    var s=supplyAt(SNAP.height||P.height),start=(page-1)*PAGE,out=[];
+    var slice=ROWS.slice(start,start+PAGE);
+    slice.forEach(function(w){
+      var bal=w.balanceSat/1e8,share=bal/s*100;
+      out.push('<tr><td class="rl-rank">'+w.rank+'</td><td class="rl-addr"><a href="/'+esc(w.address)+'">'+esc(w.address)+
+        '</a></td><td class="rl-bal">'+balFmt(bal)+' BTC</td><td class="rl-share">'+
+        (share>=0.01?share.toFixed(3):share.toFixed(4))+'%</td><td class="rl-ins">'+
+        fmt(w.utxoCount)+'</td><td class="rl-seen">'+(w.firstSeen||"&#8212;")+
+        '</td><td class="rl-last">&#8212;</td></tr>');
+    });
+    body.innerHTML=out.join("");
+    document.getElementById("rl-count").textContent="Ranks "+fmt(start+1)+" to "+fmt(start+slice.length)+" of "+fmt(TOTAL);
+    renderPager();
+  }
+  function takeRanks(j){
+    if(!j||!Array.isArray(j.entries)||!j.entries.length)return;
+    ROWS=j.entries;TOTAL=ROWS.length;
+    SNAP.height=j.snapshotHeight||null;SNAP.time=j.snapshotTime||null;
+    var note=document.getElementById("rl-snap");
+    if(note&&SNAP.height)note.textContent=(j.source==="live")
+      ?"Ranked live from our own address index at block "+fmt(SNAP.height)+", refreshed as blocks arrive."
+      :"Ranked from our own node's UTXO set at block "+fmt(SNAP.height)+", refreshed daily.";
+    renderTable();
+  }
+  function loadRanks(){
+    /* the server rendered page one and embedded the full thousand: seed the
+       pager from that block so it works with no fetch at all */
+    try{
+      var seed=document.getElementById("rl-data");
+      if(seed)takeRanks(JSON.parse(seed.textContent));
+    }catch(e){}
+    /* still refetch: a long-lived tab tracks the ten-minute index */
+    try{
+      fetch(api()+"/rich-list?limit=1000")
+        .then(function(r){return r.ok?r.json():null})
+        .then(takeRanks).catch(function(){});
+    }catch(e){}
+  }
+  function renderPager(){
+    var pages=Math.max(1,Math.ceil(TOTAL/PAGE)),h=[];
+    function btn(p,label,dis,on){h.push('<button type="button" class="rl-pgbtn'+(on?" on":"")+
+      '" data-p="'+p+'"'+(dis?" disabled":"")+'>'+label+'</button>');}
+    btn(1,"First",page===1);btn(page-1,"Prev",page===1);
+    var lo=Math.max(1,page-2),hi=Math.min(pages,page+2);
+    if(lo>1){btn(1,"1",false,false);if(lo>2)h.push('<span class="rl-pgell">&#8230;</span>');}
+    for(var p=lo;p<=hi;p++)btn(p,String(p),false,p===page);
+    if(hi<pages){if(hi<pages-1)h.push('<span class="rl-pgell">&#8230;</span>');btn(pages,String(pages),false,false);}
+    btn(page+1,"Next",page===pages);btn(pages,"Last",page===pages);
+    document.getElementById("rl-pager").innerHTML=h.join("");
+  }
+  function goto(p){
+    page=Math.min(Math.max(1,Math.ceil(TOTAL/PAGE)),Math.max(1,p));renderTable();
+    document.getElementById("rl-table").scrollIntoView({block:"start"});
+  }
+  document.getElementById("rl-pager").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b||b.disabled)return;
+    var p=parseInt(b.getAttribute("data-p"),10);if(p&&p!==page)goto(p);
+  });
+  document.getElementById("rl-jumpin").addEventListener("keydown",function(e){
+    if(e.key!=="Enter")return;
+    var r=parseInt(this.value.replace(/[^0-9]/g,""),10);
+    if(r)goto(Math.ceil(Math.min(TOTAL,Math.max(1,r))/PAGE));
+  });
+  function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  /* the denominator tiles and the two figures the prose quotes below them are
+     the same supply and height, so they repaint together */
+  function paint(){
+    var s=supplyAt(P.height),h=fmt(P.height),b=fmt(s);
+    txt("rl-px","$"+fmt(P.price));
+    txt("rl-ht",h);
+    txt("rl-ht2",h);
+    txt("rl-pht",h);
+    txt("rl-sup",b);
+    txt("rl-psup",b);
+    txt("rl-pct",(s/21e6*100).toFixed(1)+"%");
+  }
+  /* live price and height arrive via the chrome hook (~1.5s and on new blocks);
+     share cells recompute only when the height moves */
+  window.obPaintFiat=function(S){
+    var hMoved=S.height&&S.height!==P.height;
+    if(S.price)P.price=S.price;if(S.height)P.height=S.height;
+    paint();if(hMoved)renderTable();
+  };
+  paint();renderTable();
+  /* the ranks come from the API; Base sets OB_DATA_API at the end of body */
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadRanks);
+  else loadRanks();
+})();
+</script>
+</Base>

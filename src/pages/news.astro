@@ -1,0 +1,152 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import newsFile from '../content/news.json';
+
+const items = newsFile.items;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function fmtDate(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${MONTHS[m - 1]} ${d}, ${y}`;
+}
+---
+<Base title="Bitcoin News: Live Headlines, Linked to the Source - OpenBitcoin" description="Latest bitcoin news: headlines collected from Bitcoin Magazine, CoinDesk, Cointelegraph, Decrypt, and Blockworks every 15 minutes, each linked to the outlet that did the reporting. Nothing rewritten or republished.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">News</div>
+    <h1>Latest bitcoin news</h1>
+    <p class="doc-lede">Bitcoin headlines collected automatically from five outlets, newest first. Every headline links to the outlet that did the reporting; we rewrite nothing and host no articles.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="nw-card">
+      <div class="nw-tlab">Latest headlines</div>
+      <div id="nw-rows">
+        {items.length === 0 && (
+          <p class="nw-empty">Nothing collected right now. The homepage card and this list refill together.</p>
+        )}
+        {items.map((n) => (
+          <a class="nw-row" href={n.url} target="_blank" rel="noopener noreferrer nofollow">
+            <span class="nw-src">{n.outlet}</span>
+            <span class="nw-t">{n.title}</span>
+            <span class="nw-age">{fmtDate(n.date)}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="nw-note nw-mt">
+      <div class="nw-tlab">How this page works</div>
+      <ul class="nw-how">
+        <li><b>Collected automatically.</b> A scanner checks the public feeds of five outlets every 15 minutes: Bitcoin Magazine, CoinDesk, Cointelegraph, Decrypt, and Blockworks. It filters for bitcoin coverage and keeps the list newest first. Nobody pays for placement.</li>
+        <li><b>Inclusion is not endorsement.</b> A headline appearing here says nothing about its accuracy; the reporting belongs to the outlet, and the filter is mechanical, not editorial. A broken or misplaced link can be reported via the <a href="/contact">contact page</a>.</li>
+        <li><b>Links go to the source.</b> Every headline is an outbound link to the outlet that did the reporting. Clicking one leaves this site.</li>
+        <li><b>Nothing is rewritten.</b> Titles appear exactly as the outlets published them. We publish no articles of our own here and take no credit for anyone's work; the headline, the source name, and the date are the whole entry.</li>
+      </ul>
+    </div>
+
+    <div class="nw-about doc-prose">
+      <p>This page is a reading list, not a publication. Bitcoin coverage is scattered across the trade press, and the job here is deliberately small: collect headlines from a handful of named feeds, keep the bitcoin ones, and link the original reporting at the source, newest first. How the list is kept sits alongside everything else the site discloses at <a href="/sources">/sources</a>, and for the record the site keeps of coverage declaring bitcoin dead, see the <a href="/obituaries">obituaries page</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Outlets scanned</div>
+      <ul class="nw-wl">
+        <li>Bitcoin Magazine</li>
+        <li>CoinDesk</li>
+        <li>Cointelegraph</li>
+        <li>Decrypt</li>
+        <li>Blockworks</li>
+      </ul>
+      <p class="nw-railp">The five feeds the scanner checks every 15 minutes. Appearing here endorses neither the outlet nor the story.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/obituaries">Bitcoin obituaries</a>
+        <a href="/chart">Full price chart</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .nw-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 8px}
+  .nw-mt{margin-top:14px}
+  .nw-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+  .nw-row{display:grid;grid-template-columns:126px minmax(0,1fr) auto;gap:12px;align-items:baseline;
+    padding:11px 0;border-bottom:1px dotted var(--line-2);text-decoration:none}
+  .nw-row:last-of-type{border-bottom:0}
+  .nw-src{justify-self:start;white-space:nowrap;background:var(--field);border:1px solid var(--line-2);border-radius:99px;
+    padding:3px 9px;font:700 8.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .nw-t{font:500 14px/1.5 var(--sans);color:var(--ink-2)}
+  .nw-row:hover .nw-t{color:var(--ink)}
+  .nw-age{font:600 10.5px var(--mono);color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .nw-age::after{content:"\2197";margin-left:5px;font-weight:700}
+  .nw-row:hover .nw-age::after{color:var(--acc)}
+  .nw-empty{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+    text-align:center;padding:26px 8px 32px;margin:0}
+  .nw-note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 18px}
+  .nw-how{margin:0;padding-left:22px}
+  .nw-how li{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:8px}
+  .nw-how li:first-child{margin-top:0}
+  .nw-how li::marker{color:var(--acc)}
+  .nw-how b{color:var(--ink);font-weight:600}
+  .nw-about{margin-top:14px}
+  .nw-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .nw-wl{list-style:none;margin:0;padding:0}
+  .nw-wl li{font:600 11px var(--mono);letter-spacing:.04em;color:var(--ink-2);padding:6px 0;border-bottom:1px dotted var(--line-2)}
+  .nw-wl li:last-child{border-bottom:0}
+  .nw-railp{font:500 11px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  @media(max-width:640px){
+    .nw-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}
+    .nw-src{grid-row:1}
+    .nw-age{grid-row:1;justify-self:end}
+    .nw-t{grid-column:1/-1;grid-row:2}
+  }
+</style>
+<script is:inline>
+/* live list: fetch {api}/news once and swap the seed rows for live ones in
+   identical markup; any failure leaves the SSR seed exactly as rendered */
+(function(){
+  var box=document.getElementById("nw-rows");
+  if(!box)return;
+  var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function fmtDate(iso){
+    var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso));
+    if(!m)return "";
+    return MONTHS[Number(m[2])-1]+" "+Number(m[3])+", "+m[1];
+  }
+  function row(n){
+    return '<a class="nw-row" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer nofollow">'
+      +'<span class="nw-src">'+esc(n.outlet)+'</span>'
+      +'<span class="nw-t">'+esc(n.title)+'</span>'
+      +'<span class="nw-age">'+esc(fmtDate(n.date))+'</span>'
+      +'</a>';
+  }
+  function load(){
+    try{
+      fetch(api()+"/news?limit=30")
+        .then(function(r){return r.ok?r.json():null})
+        .then(function(j){
+          var items=(j&&j.items)||[],rows=[];
+          for(var i=0;i<items.length;i++){var n=items[i];
+            if(n&&typeof n.title==="string"&&n.title
+               &&typeof n.url==="string"&&/^https?:\/\//i.test(n.url)
+               &&typeof n.outlet==="string"&&typeof n.date==="string"&&fmtDate(n.date))
+              rows.push(row(n));
+          }
+          if(rows.length)box.innerHTML=rows.join("");
+        })
+        .catch(function(){});
+    }catch(e){}
+  }
+  /* wait for DOMContentLoaded so Base's OB_DATA_API is set before the fetch */
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",load);
+  else load();
+})();
+</script>
+</Base>

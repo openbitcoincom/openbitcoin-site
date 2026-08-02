@@ -1,0 +1,239 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+---
+<Base title="Contact - OpenBitcoin" description="Contact OpenBitcoin: corrections, bug reports, partnership and sponsorship inquiries. No account needed.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Contact</div>
+    <h1>Contact</h1>
+    <p class="doc-lede">Found a bug, have an idea, or just want to say hi? Drop us a line. We read everything, and your message goes nowhere except our inbox.</p>
+  </div>
+  <div class="doc-grid">
+  <div class="ct-card">
+    <form id="cform">
+      <div class="ct-field">
+        <label for="f-email">Your email, so we can reply</label>
+        <input type="email" id="f-email" autocomplete="email" maxlength="254" required>
+      </div>
+      <div class="ct-field">
+        <label for="f-topic">Topic</label>
+        <div class="ct-selwrap"><select id="f-topic">
+          <option>Feedback</option>
+          <option>Bug Report</option>
+          <option>Advertising</option>
+          <option>Something Else</option>
+        </select></div>
+      </div>
+      <div class="ct-field">
+        <label for="f-msg">Message</label>
+        <textarea id="f-msg" rows="7" minlength="5" maxlength="5000" required></textarea>
+      </div>
+      <div style="position:absolute;left:-9999px;top:auto" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="ct-captcha" id="captcha" role="checkbox" aria-checked="false" tabindex="0">
+        <span class="ct-cbox" aria-hidden="true"></span>
+        <span class="ct-label">I'm not a robot</span>
+        <span class="ct-mark">SPAM WALL<br>self-hosted</span>
+      </div>
+      <button class="ct-send" id="send" type="submit" disabled>SEND MESSAGE</button>
+      <div class="ct-sent" id="sent">Sent. Thank you; we reply when a reply is needed.</div>
+    </form>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Response time</div>
+      <p class="ct-note">Inquiries are typically answered within a few business days.</p>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Before you write</div>
+      <nav>
+        <a href="/sources">Report a data error</a>
+        <a href="/disclosure">How the site earns</a>
+        <a href="/privacy">Privacy questions</a>
+        <a href="/terms">Terms of service</a>
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Advertising</div>
+      <p class="ct-note">Interested in advertising on the site? Pick "Advertising" as the topic and include the placement you have in mind.</p>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ct-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-top:0}
+  .ct-note{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin:9px 0 0}
+  .ct-field{margin-bottom:16px}
+  .ct-field label{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .ct-field input,.ct-field select,.ct-field textarea{width:100%;box-sizing:border-box;background:rgba(124,140,168,.13);
+    border:1px dashed rgba(255,166,60,.32);border-radius:10px;color:var(--field-ink);font:600 14px var(--sans);
+    padding:11px 13px;outline:none}
+  .ct-field input:focus,.ct-field select:focus,.ct-field textarea:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .ct-field textarea{resize:vertical;min-height:140px;line-height:1.55}
+  .ct-selwrap{position:relative}
+  .ct-selwrap::after{content:"▾";position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none;font-size:12px}
+  .ct-selwrap select{appearance:none;-webkit-appearance:none;cursor:pointer}
+  .ct-selwrap select option{background:var(--panel);color:var(--ink)}
+  .ct-captcha{display:flex;align-items:center;gap:11px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;cursor:pointer;user-select:none;margin-bottom:16px;max-width:340px}
+  .ct-captcha:hover{border-color:var(--line-2)}
+  .ct-cbox{position:relative;width:20px;height:20px;flex:none;border:2px solid var(--line-2);border-radius:5px;background:var(--panel);box-sizing:border-box}
+  .ct-captcha.ok .ct-cbox{border-color:var(--up);background:var(--up)}
+  .ct-captcha.ok .ct-cbox::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font:700 13px var(--mono);color:#0E1524}
+  .ct-label{font:600 13.5px var(--sans);color:var(--ink-2)}
+  .ct-mark{margin-left:auto;font:700 8px var(--mono);letter-spacing:.1em;color:var(--ink-3);text-align:right;line-height:1.5}
+  .ct-send{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:var(--cta);color:var(--cta-ink);
+    font:700 14.5px var(--sans);letter-spacing:.04em;padding:0 22px;min-height:42px;cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
+  .ct-send:hover{background:var(--cta-hov)}
+  .ct-send:disabled{opacity:.45;cursor:not-allowed}
+  .ct-sent{display:none;margin-top:12px;font:600 13.5px var(--sans);color:var(--up)}
+  .ct-sent.show{display:block}
+  @media(max-width:520px){.ct-card{padding:18px 16px}}
+</style>
+<script is:inline>
+(function(){
+  var t0=Date.now();
+  var cap=document.getElementById("captcha"),send=document.getElementById("send"),
+      form=document.getElementById("cform"),sent=document.getElementById("sent"),
+      capLabel=cap.querySelector(".ct-label");
+  var IDLE_LABEL=capLabel.textContent;
+  var pow=null,solving=false;
+
+  // Proof-of-work solver: brute-force n in 0..maxnumber until
+  // sha256hex(salt+n) equals the challenge. Runs in a Blob Web Worker so the
+  // page never blocks; drops to a main-thread loop only if the worker
+  // cannot start (crypto.subtle awaits still yield, so the UI survives).
+  var workerSrc="onmessage=async function(e){var d=e.data,enc=new TextEncoder();"+
+    "function hex(b){var a=new Uint8Array(b),s='';for(var i=0;i<a.length;i++)s+=a[i].toString(16).padStart(2,'0');return s}"+
+    "for(var n=0;n<=d.max;n++){var h=hex(await crypto.subtle.digest('SHA-256',enc.encode(d.salt+n)));"+
+    "if(h===d.challenge){postMessage(n);return}}postMessage(-1)}";
+
+  function hexOf(buf){var a=new Uint8Array(buf),s="";for(var i=0;i<a.length;i++)s+=a[i].toString(16).padStart(2,"0");return s;}
+
+  async function solveInline(job,deadline){
+    var enc=new TextEncoder();
+    for(var n=0;n<=job.max;n++){
+      if(Date.now()>deadline)throw new Error("timeout");
+      if(hexOf(await crypto.subtle.digest("SHA-256",enc.encode(job.salt+n)))===job.challenge)return n;
+    }
+    throw new Error("no solution");
+  }
+
+  function solveChallenge(ch){
+    var job={salt:ch.salt,challenge:ch.challenge,max:ch.maxnumber||100000};
+    return new Promise(function(resolve,reject){
+      var w=null;
+      try{w=new Worker(URL.createObjectURL(new Blob([workerSrc],{type:"text/javascript"})));}
+      catch(err){w=null;}
+      if(!w){solveInline(job,Date.now()+20000).then(resolve,reject);return;}
+      var timer=setTimeout(function(){w.terminate();reject(new Error("timeout"));},20000);
+      w.onmessage=function(ev){
+        clearTimeout(timer);w.terminate();
+        if(typeof ev.data==="number"&&ev.data>=0)resolve(ev.data);
+        else reject(new Error("no solution"));
+      };
+      w.onerror=function(){clearTimeout(timer);w.terminate();reject(new Error("worker error"));};
+      w.postMessage(job);
+    });
+  }
+
+  function setChecked(on){
+    cap.classList.toggle("ok",on);
+    cap.setAttribute("aria-checked",on?"true":"false");
+    send.disabled=!on;
+  }
+
+  async function verify(){
+    solving=true;
+    capLabel.textContent="verifying...";
+    var ch=null;
+    try{
+      var res=await fetch("/api/v1/contact/challenge");
+      if(res.ok)ch=await res.json();
+    }catch(err){}
+    if(!ch||!ch.salt||!ch.challenge){
+      // spam wall disabled server-side (or unreachable): plain checkbox gate
+      pow=null;
+      capLabel.textContent=IDLE_LABEL;
+      setChecked(true);
+      solving=false;
+      return;
+    }
+    try{
+      var n=await solveChallenge(ch);
+      pow={salt:ch.salt,number:n,challenge:ch.challenge,signature:ch.signature};
+      capLabel.textContent=IDLE_LABEL;
+      setChecked(true);
+    }catch(err){
+      pow=null;
+      capLabel.textContent="verification failed, try again";
+      setChecked(false);
+    }
+    solving=false;
+  }
+
+  function toggle(){
+    if(solving)return;
+    if(cap.classList.contains("ok")){setChecked(false);return;}
+    if(pow){capLabel.textContent=IDLE_LABEL;setChecked(true);return;}
+    verify();
+  }
+  cap.addEventListener("click",toggle);
+  cap.addEventListener("keydown",function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();toggle();}});
+
+  function note(msg){sent.textContent=msg;sent.classList.add("show");}
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();
+    var topicEl=document.getElementById("f-topic"),
+        emailEl=document.getElementById("f-email"),
+        msgEl=document.getElementById("f-msg"),
+        potEl=document.getElementById("website");
+    var message=msgEl?msgEl.value:"";
+    if(message.trim().length<5){note("Please write a message of at least 5 characters.");return;}
+    var payload={
+      topic:topicEl?topicEl.value:"",
+      email:emailEl?emailEl.value:"",
+      message:message,
+      elapsedMs:Date.now()-t0,
+      website:potEl?potEl.value:""
+    };
+    if(pow)payload.pow=pow;
+    send.disabled=true;
+    try{
+      var res=await fetch("/api/v1/contact",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+      if(res.status===200){
+        note("Sent. Thank you; we reply when a reply is needed.");
+        /* the message is delivered: clear the fields so a fresh form is the
+           confirmation, and a double click cannot send it twice (owner call
+           2026-08-03). Failure branches deliberately keep the text. */
+        emailEl.value="";msgEl.value="";
+        document.getElementById("f-topic").selectedIndex=0;
+        // each solved challenge is single use; another send re-verifies
+        pow=null;
+        setChecked(false);
+      }else if(res.status===429){
+        note("Too many messages from this connection. Try again in a few minutes.");
+      }else if(res.status===400&&payload.pow){
+        note("Verification expired. Tick the box again, then resend.");
+        pow=null;
+        setChecked(false);
+      }else{
+        note("Something went wrong sending this. Please try again in a moment.");
+      }
+    }catch(err){
+      note("Something went wrong sending this. Please try again in a moment.");
+    }
+    send.disabled=!cap.classList.contains("ok");
+  });
+})();
+</script>
+</Base>

@@ -1,0 +1,703 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Verify a Bitcoin Signed Message - OpenBitcoin" description="Verify a bitcoin signed message in your browser: paste the address, message and base64 signature to confirm the signer. Legacy and segwit supported.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Verify</div>
+    <h1>Verify a signed message</h1>
+    <p class="doc-lede">Paste an address, the exact message and the base64 signature. Your browser recovers the public key and matches it against the address. Legacy, wrapped segwit and native segwit.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="vm-card">
+      <div class="vm-field">
+        <label class="vm-lab" for="vm-addr">Address</label>
+        <input id="vm-addr" class="vm-in" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="1... / 3... / bc1q..." aria-describedby="vm-addr-help">
+        <div class="vm-help" id="vm-addr-help">The address the signer claims to control.</div>
+      </div>
+      <div class="vm-field">
+        <label class="vm-lab" for="vm-msg">Message</label>
+        <textarea id="vm-msg" class="vm-in vm-ta" rows="3" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="The exact text that was signed" aria-describedby="vm-msg-help"></textarea>
+        <div class="vm-help" id="vm-msg-help">Byte for byte, including capitals, spaces, punctuation and line breaks.</div>
+      </div>
+      <div class="vm-field">
+        <label class="vm-lab" for="vm-sig">Signature</label>
+        <textarea id="vm-sig" class="vm-in vm-ta vm-sigta" rows="2" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="65 bytes, base64, usually ends with =" aria-describedby="vm-sig-help"></textarea>
+        <div class="vm-help" id="vm-sig-help">Base64 as the wallet produced it. Line breaks and spaces are ignored.</div>
+      </div>
+      <div class="vm-ex" aria-label="Example signed messages">
+        <span>Try:</span>
+        <button type="button" data-ex="0">legacy</button>
+        <button type="button" data-ex="1">wrapped segwit</button>
+        <button type="button" data-ex="2">native segwit</button>
+        <button type="button" data-ex="3">wrong message</button>
+      </div>
+      <div class="vm-actions">
+        <button type="button" id="vm-go" class="vm-go" disabled>Check signature</button>
+        <button type="button" id="vm-clear" class="vm-sec">Clear</button>
+        <span class="vm-boot" id="vm-boot">Running self-test</span>
+      </div>
+      <div class="vm-res" id="vm-res" role="status" aria-live="polite">
+        <div class="vm-status vm-mut">Waiting for an address, a message and a signature</div>
+        <div class="vm-note">All three parts are checked together. Nothing you paste leaves your browser.</div>
+      </div>
+    </div>
+
+    <div class="doc-card vm-mt">
+      <div class="doc-sec doc-prose">
+        <h2>What a valid result proves</h2>
+        <p>A valid result proves one narrow thing: whoever produced that signature held the private key for that address at the moment of signing, and the message is exactly the text that was signed. Change a capital letter, a trailing space or a line break and the result flips to invalid, because the signature commits to the bytes and not to the meaning. That narrowness is the point. It is the closest thing Bitcoin has to a letterhead, and it costs nothing, touches no coins and leaves no trace on the chain.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>What it does not prove</h2>
+        <p>It does not prove the signer still controls that key, because keys get copied, sold and stolen, and a signature made last year still verifies today. It does not prove who the signer is, only that a key was used; a name in the message is a claim, not evidence. It does not prove any balance, any payment or any date, since nothing here is timestamped or checked against the chain. And a screenshot of a green result proves nothing at all: anyone can paint a screenshot, so verify the three parts yourself, on a page you chose. If someone sends you a signature as proof they are a specific exchange, custodian or person, that inference is yours to make and it is usually wrong.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Why this page will never sign</h2>
+        <p>Signing needs the private key. Verifying needs only public information: an address, a message and a signature, all of which are safe to hand to a stranger. So a verifier can live on a website, and a signer cannot. Any page that asks for your seed phrase or private key so it can "sign" something is either careless or hostile, and by the time you can tell the difference the key is already copied. Sign inside your own wallet, on your own device, where the key already lives. <a href="/learn/scams">Common bitcoin scams</a> covers the pattern, and <a href="/learn/self-custody">self custody</a> covers where keys should actually sit.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h2>Formats this page checks</h2>
+        <table aria-label="Signature header bytes and the address formats they declare">
+          <thead><tr><th>Header</th><th>Declares</th><th>Address</th></tr></thead>
+          <tbody>
+            <tr><td>27 to 30</td><td>Legacy, uncompressed key</td><td>starts with 1</td></tr>
+            <tr><td>31 to 34</td><td>Legacy, compressed key</td><td>starts with 1</td></tr>
+            <tr><td>35 to 38</td><td>Wrapped segwit, P2SH-P2WPKH</td><td>starts with 3</td></tr>
+            <tr><td>39 to 42</td><td>Native segwit, P2WPKH</td><td>starts with bc1q</td></tr>
+          </tbody>
+        </table>
+        <p>The first byte of the signature declares both the address shape and which of the four candidate public keys to recover. Electrum and several other wallets write the legacy compressed header even when the address is segwit, so a recovered key is compared against every encoding of that same key and any disagreement between the header and the address is reported rather than hidden. The recovery number itself is always taken from the header and never guessed. Taproot addresses (bc1p) and P2WSH are not accepted here: those use BIP-322, a different scheme with different rules.</p>
+      </div>
+    </div>
+
+    <div class="vm-about doc-prose">
+      <p>Everything runs in your browser: the message hashing, the public key recovery on the secp256k1 curve, and the address derivation. Nothing you paste is sent anywhere, and this page makes no network request with your input. On load it runs its own arithmetic against published test vectors, including RIPEMD-160 known answers and real signed messages covering all four header ranges; if any check fails it refuses to verify rather than show a result it cannot stand behind. To check that an address is well formed in the first place, use the <a href="/tools/validate">address validator</a>. Figures and results are informational under the <a href="/terms">terms</a>, and where the rest of the site gets its data is documented at <a href="/sources">/sources</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Result states</div>
+      <div class="vm-t"><b>Valid</b><i>The key behind that address signed that exact message. Nothing more.</i></div>
+      <div class="vm-t"><b>Invalid</b><i>Readable signature, wrong key. The message, the address or the signature does not belong with the other two.</i></div>
+      <div class="vm-t"><b>Cannot be checked</b><i>Something is malformed: the address, the base64, or the header byte. Never reported as a pass or a fail.</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/tools/validate">Address validator</a>
+        <a href="/verify">Verify what we publish</a>
+        <a href="/learn/self-custody">Self custody</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .vm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .vm-mt{margin-top:14px}
+  .vm-field{margin-bottom:14px}
+  .vm-lab{display:block;font:700 9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .vm-in{width:100%;box-sizing:border-box;background:var(--field);border:1px dashed rgba(255,166,60,.32);
+    border-radius:10px;color:var(--price-ink);font:700 14.5px var(--mono);padding:12px 14px;outline:none}
+  .vm-in:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
+  .vm-in::placeholder{color:var(--ph);font-weight:600}
+  .vm-ta{display:block;resize:vertical;line-height:1.6;font-weight:600;min-height:62px}
+  .vm-sigta{font-size:13px;word-break:break-all}
+  .vm-help{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin-top:6px}
+  .vm-ex{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:2px}
+  .vm-ex span{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .vm-ex button{background:transparent;border:1px solid var(--line-2);border-radius:8px;color:var(--ink-2);
+    font:700 10.5px var(--mono);letter-spacing:.08em;padding:6px 11px;cursor:pointer}
+  .vm-ex button:hover{background:var(--panel-2);color:var(--ink)}
+  .vm-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .vm-go{background:var(--cta);border:1px solid var(--cta);border-radius:10px;color:var(--cta-ink);
+    font:700 12px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:11px 20px;cursor:pointer}
+  .vm-go:hover{background:var(--cta-hov);border-color:var(--cta-hov)}
+  .vm-go[disabled]{opacity:.45;cursor:default}
+  .vm-sec{background:transparent;border:1px solid var(--line-2);border-radius:10px;color:var(--ink-2);
+    font:700 12px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:11px 16px;cursor:pointer}
+  .vm-sec:hover{color:var(--ink)}
+  .vm-boot{font:600 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .vm-boot.vm-boot-bad{color:var(--down)}
+  .vm-res{margin-top:16px;padding-top:14px;border-top:1px dotted var(--line-2)}
+  .vm-status{font:700 15px var(--mono);letter-spacing:.02em;line-height:1.4}
+  .vm-status.vm-ok{color:var(--up)}
+  .vm-status.vm-bad{color:var(--down)}
+  .vm-status.vm-mut{color:var(--ink-3)}
+  .vm-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .vm-badges span{background:var(--panel-2);border:1px dashed rgba(255,166,60,.32);border-radius:8px;
+    font:700 10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);padding:5px 10px}
+  .vm-rows{margin-top:12px;border-top:1px dotted var(--line-2)}
+  .vm-r{display:flex;flex-wrap:wrap;gap:4px 14px;padding:9px 0;border-bottom:1px dotted var(--line-2)}
+  .vm-r span{flex:0 0 116px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:3px}
+  .vm-r b{flex:1 1 200px;min-width:0;font:600 12.5px/1.6 var(--mono);color:var(--ink-2);word-break:break-all;font-weight:600}
+  .vm-r b.vm-hi{color:var(--ink)}
+  .vm-note{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin-top:10px}
+  .vm-note b{color:var(--ink);font-weight:600}
+  .vm-flag{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin-top:8px;padding-left:11px;border-left:2px solid var(--line-2)}
+  .vm-fine{font:600 11px/1.55 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin:10px 2px 0}
+  .vm-about{margin-top:14px}
+  .vm-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .vm-t{padding:8px 0;border-bottom:1px dotted var(--line-2)}
+  .vm-t:last-child{border-bottom:0}
+  .vm-t b{display:block;font:700 12px var(--mono);color:var(--acc)}
+  .vm-t i{display:block;font:500 11px/1.5 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  @media(max-width:700px){
+    .vm-card{padding:18px 18px 20px}
+    .vm-in{font-size:13px}
+    .vm-sigta{font-size:12px}
+    .vm-r span{flex:1 1 100%}
+    .vm-r b{flex:1 1 100%}
+    .vm-go,.vm-sec{flex:1 1 auto;text-align:center}
+  }
+</style>
+<script is:inline type="module">
+import { Signature } from "/js/vendor/noble-secp256k1.mjs";
+/* No fetch, no XHR, no beacon anywhere below: the "nothing leaves your browser"
+   claim on the page depends on it. crypto.subtle.digest is local arithmetic, and
+   the one import above is a same-origin static file served with this site. */
+
+/* ---------------- RIPEMD-160 (no WebCrypto support for it) ---------------- */
+var RL=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+        7,4,13,1,10,6,15,3,12,0,9,5,2,14,11,8,
+        3,10,14,4,9,15,8,1,2,7,0,6,13,11,5,12,
+        1,9,11,10,0,8,12,4,13,3,7,15,14,5,6,2,
+        4,0,5,9,7,12,2,10,14,1,3,8,11,6,15,13];
+var RR=[5,14,7,0,9,2,11,4,13,6,15,8,1,10,3,12,
+        6,11,3,7,0,13,5,10,14,15,8,12,4,9,1,2,
+        15,5,1,3,7,14,6,9,11,8,12,2,10,0,4,13,
+        8,6,4,1,3,11,15,0,5,12,2,13,9,7,10,14,
+        12,15,10,4,1,5,8,7,6,2,13,14,0,3,9,11];
+var SL=[11,14,15,12,5,8,7,9,11,13,14,15,6,7,9,8,
+        7,6,8,13,11,9,7,15,7,12,15,9,11,7,13,12,
+        11,13,6,7,14,9,13,15,14,8,13,6,5,12,7,5,
+        11,12,14,15,14,15,9,8,9,14,5,6,8,6,5,12,
+        9,15,5,11,6,8,13,12,5,12,13,14,11,8,5,6];
+var SR=[8,9,9,11,13,15,15,5,7,7,8,11,14,14,12,6,
+        9,13,15,7,12,8,9,11,7,7,12,7,6,15,13,11,
+        9,7,15,11,8,6,6,14,12,13,5,14,13,13,7,5,
+        15,5,8,11,14,14,6,14,6,9,12,9,12,5,15,8,
+        8,5,12,9,12,5,14,6,8,13,6,5,15,13,11,11];
+var KL=[0x00000000,0x5a827999,0x6ed9eba1,0x8f1bbcdc,0xa953fd4e];
+var KR=[0x50a28be6,0x5c4dd124,0x6d703ef3,0x7a6d76e9,0x00000000];
+function rol(x,n){return ((x<<n)|(x>>>(32-n)))>>>0;}
+function rf(j,x,y,z){
+  if(j<16)return (x^y^z)>>>0;
+  if(j<32)return ((x&y)|((~x)&z))>>>0;
+  if(j<48)return ((x|(~y))^z)>>>0;
+  if(j<64)return ((x&z)|(y&(~z)))>>>0;
+  return (x^(y|(~z)))>>>0;
+}
+function ripemd160(msg){
+  var len=msg.length,padded=new Uint8Array((((len+8)>>6)+1)<<6),i;
+  padded.set(msg);padded[len]=0x80;
+  var dv=new DataView(padded.buffer);
+  dv.setUint32(padded.length-8,(len<<3)>>>0,true);              /* low 32 bits of the bit length */
+  dv.setUint32(padded.length-4,Math.floor(len/536870912)>>>0,true); /* high 32 bits */
+  var h=[0x67452301,0xefcdab89,0x98badcfe,0x10325476,0xc3d2e1f0],X=new Array(16);
+  for(var off=0;off<padded.length;off+=64){
+    for(i=0;i<16;i++)X[i]=dv.getUint32(off+i*4,true);
+    var al=h[0],bl=h[1],cl=h[2],dl=h[3],el=h[4],
+        ar=h[0],br=h[1],cr=h[2],dr=h[3],er=h[4],t;
+    for(var j=0;j<80;j++){
+      var r=(j/16)|0;
+      t=(rol((al+rf(j,bl,cl,dl)+X[RL[j]]+KL[r])>>>0,SL[j])+el)>>>0;
+      al=el;el=dl;dl=rol(cl,10);cl=bl;bl=t;
+      t=(rol((ar+rf(79-j,br,cr,dr)+X[RR[j]]+KR[r])>>>0,SR[j])+er)>>>0;
+      ar=er;er=dr;dr=rol(cr,10);cr=br;br=t;
+    }
+    t=(h[1]+cl+dr)>>>0;
+    h[1]=(h[2]+dl+er)>>>0;h[2]=(h[3]+el+ar)>>>0;h[3]=(h[4]+al+br)>>>0;
+    h[4]=(h[0]+bl+cr)>>>0;h[0]=t;
+  }
+  var out=new Uint8Array(20),ov=new DataView(out.buffer);
+  for(i=0;i<5;i++)ov.setUint32(i*4,h[i],true);
+  return out;
+}
+
+/* ---------------- byte helpers ---------------- */
+function hex(b){var s="",i;for(i=0;i<b.length;i++)s+=(b[i]>>4).toString(16)+(b[i]&15).toString(16);return s;}
+function utf8(s){return new TextEncoder().encode(s);}
+function cat(){
+  var parts=[].slice.call(arguments),n=0,i;
+  for(i=0;i<parts.length;i++)n+=parts[i].length;
+  var out=new Uint8Array(n),k=0;
+  for(i=0;i<parts.length;i++){out.set(parts[i],k);k+=parts[i].length;}
+  return out;
+}
+function same(a,b){
+  if(!a||!b||a.length!==b.length)return false;
+  var d=0,i;for(i=0;i<a.length;i++)d|=a[i]^b[i];
+  return d===0;
+}
+function sha256(b){
+  return crypto.subtle.digest("SHA-256",b).then(function(a){return new Uint8Array(a);});
+}
+function sha256d(b){return sha256(b).then(sha256);}
+function hash160(b){return sha256(b).then(ripemd160);}
+
+/* ---------------- message magic hash ---------------- */
+function varint(n){
+  if(n<0xfd)return new Uint8Array([n]);
+  if(n<=0xffff)return new Uint8Array([0xfd,n&255,(n>>8)&255]);
+  if(n<=0xffffffff)return new Uint8Array([0xfe,n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]);
+  var b=new Uint8Array(9),v=BigInt(n),i;
+  b[0]=0xff;
+  for(i=0;i<8;i++){b[1+i]=Number(v&255n);v>>=8n;}
+  return b;
+}
+/* "Bitcoin Signed Message:" plus a line feed is 24 bytes, so the serialisation
+   starts with the varint 0x18. Both the prefix and the message are length
+   prefixed, then the whole thing is hashed twice with SHA-256. */
+var MAGIC=utf8("Bitcoin Signed Message:\n");
+function magicHash(message){
+  var m=utf8(message);
+  return sha256d(cat(varint(MAGIC.length),MAGIC,varint(m.length),m));
+}
+
+/* ---------------- base58check ---------------- */
+var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function b58enc(bytes){
+  var digits=[0],i,j,carry;
+  for(i=0;i<bytes.length;i++){
+    carry=bytes[i];
+    for(j=0;j<digits.length;j++){carry+=digits[j]<<8;digits[j]=carry%58;carry=(carry/58)|0;}
+    while(carry){digits.push(carry%58);carry=(carry/58)|0;}
+  }
+  var out="";
+  for(i=0;i<bytes.length&&bytes[i]===0;i++)out+="1";
+  for(i=digits.length-1;i>=0;i--)out+=B58[digits[i]];
+  return out;
+}
+function b58dec(s){
+  if(!s.length||s.length>40)return null;
+  var bytes=[0],i,j,v,carry,x;
+  for(i=0;i<s.length;i++){
+    v=B58.indexOf(s[i]);
+    if(v<0)return null;
+    carry=v;
+    for(j=0;j<bytes.length;j++){x=bytes[j]*58+carry;bytes[j]=x&255;carry=x>>8;}
+    while(carry){bytes.push(carry&255);carry>>=8;}
+  }
+  for(i=0;i<s.length&&s[i]==="1";i++)bytes.push(0);
+  return new Uint8Array(bytes.reverse());
+}
+function b58check(version,payload){
+  var body=cat(new Uint8Array([version]),payload);
+  return sha256d(body).then(function(c){return b58enc(cat(body,c.slice(0,4)));});
+}
+
+/* ---------------- bech32 (BIP-173) ---------------- */
+var CS="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+function polymod(v){
+  var chk=1,i,j,top;
+  for(i=0;i<v.length;i++){
+    top=chk>>>25;chk=((chk&0x1ffffff)<<5)^v[i];
+    for(j=0;j<5;j++)if((top>>>j)&1)chk^=GEN[j];
+  }
+  return chk>>>0;
+}
+function hrpExpand(h){
+  var r=[],i;
+  for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)>>5);
+  r.push(0);
+  for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)&31);
+  return r;
+}
+function to5(b){
+  var acc=0,bits=0,out=[],i;
+  for(i=0;i<b.length;i++){
+    acc=(acc<<8)|b[i];bits+=8;
+    while(bits>=5){bits-=5;out.push((acc>>bits)&31);}
+  }
+  if(bits)out.push((acc<<(5-bits))&31);
+  return out;
+}
+function from5(d){
+  var acc=0,bits=0,out=[],i;
+  for(i=0;i<d.length;i++){
+    acc=(acc<<5)|d[i];bits+=5;
+    while(bits>=8){bits-=8;out.push((acc>>bits)&255);}
+  }
+  if(bits>=5||((acc<<(8-bits))&255))return null;
+  return new Uint8Array(out);
+}
+function bech32enc(hrp,ver,prog){
+  var data=[ver].concat(to5(prog)),i;
+  var pm=polymod(hrpExpand(hrp).concat(data).concat([0,0,0,0,0,0]))^(ver===0?1:0x2bc830a3);
+  var out=hrp+"1";
+  for(i=0;i<data.length;i++)out+=CS[data[i]];
+  for(i=0;i<6;i++)out+=CS[(pm>>5*(5-i))&31];
+  return out;
+}
+function bech32dec(a){
+  if(a.length>90)return null;
+  var pos=a.lastIndexOf("1");
+  if(pos<1||pos+7>a.length)return null;
+  var hrp=a.slice(0,pos),data=[],i,d;
+  if(hrp!=="bc"&&hrp!=="tb")return null;
+  for(i=pos+1;i<a.length;i++){
+    d=CS.indexOf(a[i]);
+    if(d<0)return null;
+    data.push(d);
+  }
+  var pm=polymod(hrpExpand(hrp).concat(data));
+  var enc=pm===1?"bech32":(pm===0x2bc830a3?"bech32m":null);
+  if(!enc)return null;
+  var ver=data[0],prog=from5(data.slice(1,data.length-6));
+  if(!prog||prog.length<2||prog.length>40||ver>16)return null;
+  if(ver===0&&enc!=="bech32")return null;
+  if(ver>0&&enc!=="bech32m")return null;
+  return {hrp:hrp,ver:ver,prog:prog};
+}
+
+/* ---------------- address parsing ----------------
+   family is what the address commits to: a public key hash (p2pkh), a script
+   hash (p2sh, which for message signing means a wrapped P2WPKH), or a witness
+   v0 key hash (p2wpkh). Anything else is refused rather than guessed. */
+var B58VER={0:["p2pkh","mainnet"],5:["p2sh","mainnet"],111:["p2pkh","testnet"],196:["p2sh","testnet"]};
+function parseAddress(raw){
+  var s=raw.replace(/\s+/g,"");
+  if(!s)return {err:"empty"};
+  var lower=s.toLowerCase();
+  if(/^(bc1|tb1)/.test(lower)){
+    if(s!==lower&&s!==s.toUpperCase())return {err:"Bech32 addresses must be all lowercase or all uppercase."};
+    var b=bech32dec(lower);
+    if(!b)return {err:"That is not a valid bech32 address: the checksum does not hold."};
+    if(b.ver===1&&b.prog.length===32)
+      return {err:"That is a taproot address. Taproot message signing uses BIP-322, a different scheme this page does not implement."};
+    if(b.ver===0&&b.prog.length===32)
+      return {err:"That is a P2WSH address, a script hash rather than a single key. Verifying it needs BIP-322."};
+    if(b.ver!==0||b.prog.length!==20)
+      return {err:"Witness version "+b.ver+" with a "+b.prog.length+"-byte program is not a single-key address."};
+    return {family:"p2wpkh",net:b.hrp==="bc"?"mainnet":"testnet",prog:b.prog,text:lower};
+  }
+  if(/^[13mn2]/.test(s)){
+    var bytes=b58dec(s);
+    if(!bytes||bytes.length!==25||!B58VER[bytes[0]])
+      return {err:"That is not a recognised base58 address."};
+    var body=bytes.slice(0,21),want=bytes.slice(21);
+    return sha256d(body).then(function(c){
+      if(!same(c.slice(0,4),want))
+        return {err:"That base58 address fails its checksum, so it is mistyped. The address validator can point at the character."};
+      return {family:B58VER[bytes[0]][0],net:B58VER[bytes[0]][1],prog:body.slice(1),text:s};
+    });
+  }
+  return {err:"That does not look like a bitcoin address. Expected 1..., 3... or bc1q..."};
+}
+
+/* ---------------- signature parsing ---------------- */
+function b64dec(s){
+  /* tolerate line wrapping, missing padding and the URL-safe alphabet, since
+     wallets and messaging apps mangle all three; reject anything else */
+  s=s.replace(/\s+/g,"").replace(/-/g,"+").replace(/_/g,"/").replace(/=+$/,"");
+  if(!s||s.length%4===1||!/^[A-Za-z0-9+/]+$/.test(s))return null;
+  while(s.length%4)s+="=";
+  try{
+    var bin=atob(s),out=new Uint8Array(bin.length),i;
+    for(i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);
+    return out;
+  }catch(e){return null;}
+}
+function b2n(b){var n=0n,i;for(i=0;i<b.length;i++)n=(n<<8n)|BigInt(b[i]);return n;}
+/* BIP137 header ranges. The recovery id is the low two bits of (header - 27) and
+   is always used exactly as written; guessing it would let unrelated numbers be
+   forced to match an address. */
+var DECL=[
+  {lo:27,hi:30,key:"p2pkh-u",label:"legacy, uncompressed key"},
+  {lo:31,hi:34,key:"p2pkh-c",label:"legacy, compressed key"},
+  {lo:35,hi:38,key:"p2sh",label:"wrapped segwit, P2SH-P2WPKH"},
+  {lo:39,hi:42,key:"p2wpkh",label:"native segwit, P2WPKH"}
+];
+function parseSignature(raw){
+  var b=b64dec(raw);
+  if(!b)return {err:"The signature is not valid base64. Copy it again from the wallet, including the trailing = if there is one."};
+  if(b.length!==65)return {err:"A signed message signature is 65 bytes; this decodes to "+b.length+". It may be a DER signature, a hash or a truncated paste."};
+  var h=b[0],d=null,i;
+  for(i=0;i<DECL.length;i++)if(h>=DECL[i].lo&&h<=DECL[i].hi)d=DECL[i];
+  if(!d)return {err:"The first byte is "+h+". A signed message header is 27 to 42; this is something else."};
+  var sig;
+  try{sig=new Signature(b2n(b.slice(1,33)),b2n(b.slice(33,65)),(h-27)&3);}
+  catch(e){return {err:"The r or s value is outside the curve order, so this cannot be a signature."};}
+  return {sig:sig,header:h,rec:(h-27)&3,decl:d};
+}
+
+/* ---------------- candidate addresses for a recovered key ---------------- */
+function keyShapes(point){
+  var c=point.toRawBytes(true),u=point.toRawBytes(false);
+  return Promise.all([hash160(c),hash160(u)]).then(function(hs){
+    var hc=hs[0],hu=hs[1];
+    /* the P2SH redeem script for wrapped segwit is OP_0 PUSH20 <keyhash>,
+       and only the compressed key is allowed inside a witness program */
+    return hash160(cat(new Uint8Array([0x00,0x14]),hc)).then(function(hsh){
+      return {pubC:c,pubU:u,hc:hc,hu:hu,hsh:hsh};
+    });
+  });
+}
+function renderAddress(family,net,shapes,uncompressed){
+  if(family==="p2wpkh")return Promise.resolve(bech32enc(net==="mainnet"?"bc":"tb",0,shapes.hc));
+  if(family==="p2sh")return b58check(net==="mainnet"?5:196,shapes.hsh);
+  return b58check(net==="mainnet"?0:111,uncompressed?shapes.hu:shapes.hc);
+}
+
+/* ---------------- the verification itself ----------------
+   Returns one of exactly three states: valid, invalid, malformed. */
+function verifyOnce(addr,message,parsed){
+  return magicHash(message).then(function(h32){
+    var point;
+    try{point=parsed.sig.recoverPublicKey(h32);}
+    catch(e){return {state:"invalid",reason:"no-key",
+      note:"Those numbers do not recover to any point on the secp256k1 curve, so no key could have produced them. The signature is readable but not real."};}
+    return keyShapes(point).then(function(shapes){
+      var matched=null;
+      if(addr.family==="p2pkh"){
+        if(same(addr.prog,shapes.hc))matched="p2pkh-c";
+        else if(same(addr.prog,shapes.hu))matched="p2pkh-u";
+      }else if(addr.family==="p2sh"){
+        if(same(addr.prog,shapes.hsh))matched="p2sh";
+      }else if(addr.family==="p2wpkh"){
+        if(same(addr.prog,shapes.hc))matched="p2wpkh";
+      }
+      if(matched)return {state:"valid",matched:matched,shapes:shapes,point:point};
+      /* show the address this signature actually belongs to, rendered in the
+         same family and network as the one entered, so the two can be compared */
+      var unc=parsed.decl.key==="p2pkh-u";
+      return renderAddress(addr.family,addr.net,shapes,unc).then(function(other){
+        return {state:"invalid",reason:"wrong-key",other:other,shapes:shapes,unc:unc};
+      });
+    });
+  });
+}
+
+/* ================= SELF-TEST ================= */
+/* Real vectors, run against this exact code with node before commit and again in
+   the browser on load. Sources: RIPEMD-160 published known answers, the BIP-173
+   bech32 vector, and the bitcoinjs-message fixture set, which covers all four
+   BIP137 header ranges. If any of this fails the tool refuses to verify. */
+var RIPEMD_KAT=[
+  ["","9c1185a5c5e9fc54612808977ee8f548b2258d31"],
+  ["abc","8eb208f7e05d987a9b044a8e98c6b087f15a0bfc"],
+  ["message digest","5d0689ef49d2fae572b881b123a85ffa21595f36"],
+  ["abcdefghijklmnopqrstuvwxyz","f71c27109c692c1b56bbdceb5b9d2865b3708dbc"]
+];
+var GEN_H160="751e76e8199196d454941c45d1b3a323f1433bd6"; /* hash160 of the compressed generator point */
+var SIG_KAT=[
+  {a:"16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM",m:"vires is numeris",
+   s:"G8JawPtQOrybrSP1WHQnQPr67B9S3qrxBrl1mlzoTJOSHEpmnF7D3+t+LX0Xei9J20B5AIdPbeL3AaTBZ4N3bY0=",
+   want:"valid",kind:"p2pkh-u"},
+  {a:"1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs",m:"vires is numeris",
+   s:"H8JawPtQOrybrSP1WHQnQPr67B9S3qrxBrl1mlzoTJOSHEpmnF7D3+t+LX0Xei9J20B5AIdPbeL3AaTBZ4N3bY0=",
+   want:"valid",kind:"p2pkh-c"},
+  {a:"3JvL6Ymt8MVWiCNHC7oWU6nLeHNJKLZGLN",m:"vires is numeris",
+   s:"JF8nHqFr3K2UKYahhX3soVeoW8W1ECNbr0wfck7lzyXjCS5Q16Ek45zyBuy1Fiy9sTPKVgsqqOuPvbycuVSSVl8=",
+   want:"valid",kind:"p2sh"},
+  {a:"bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",m:"vires is numeris",
+   s:"KF8nHqFr3K2UKYahhX3soVeoW8W1ECNbr0wfck7lzyXjCS5Q16Ek45zyBuy1Fiy9sTPKVgsqqOuPvbycuVSSVl8=",
+   want:"valid",kind:"p2wpkh"},
+  {a:"1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",m:"This is an example of a signed message.",
+   s:"H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk=",
+   want:"valid",kind:"p2pkh-c"},
+  {a:"1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",m:"This is an example of a signed message",
+   s:"H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk=",
+   want:"invalid",kind:null}
+];
+function selfTest(){
+  var fails=[],i;
+  for(i=0;i<RIPEMD_KAT.length;i++){
+    var got=hex(ripemd160(utf8(RIPEMD_KAT[i][0])));
+    if(got!==RIPEMD_KAT[i][1])fails.push("ripemd160("+JSON.stringify(RIPEMD_KAT[i][0])+") = "+got);
+  }
+  var prog=new Uint8Array(20);
+  for(i=0;i<20;i++)prog[i]=parseInt(GEN_H160.substr(i*2,2),16);
+  if(bech32enc("bc",0,prog)!=="bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4")fails.push("bech32 encode");
+  var d=bech32dec("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4");
+  if(!d||d.ver!==0||hex(d.prog)!==GEN_H160)fails.push("bech32 decode");
+  var chain=hash160(new Uint8Array([2,121,190,102,126,249,220,187,172,85,160,98,149,206,135,11,7,2,155,252,219,45,206,40,217,89,242,129,91,22,248,23,152]))
+    .then(function(h){
+      if(hex(h)!==GEN_H160)fails.push("hash160 of the generator = "+hex(h));
+      return b58check(0,h);
+    })
+    .then(function(a){
+      if(a!=="1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH")fails.push("base58check encode = "+a);
+    });
+  return chain.then(function(){
+    return SIG_KAT.reduce(function(p,v){
+      return p.then(function(){
+        return Promise.resolve(parseAddress(v.a)).then(function(addr){
+          if(addr.err){fails.push("vector address "+v.a+": "+addr.err);return;}
+          var ps=parseSignature(v.s);
+          if(ps.err){fails.push("vector signature "+v.a+": "+ps.err);return;}
+          return verifyOnce(addr,v.m,ps).then(function(r){
+            if(r.state!==v.want)fails.push("vector "+v.a+" gave "+r.state+", expected "+v.want);
+            else if(v.kind&&r.matched!==v.kind)fails.push("vector "+v.a+" matched "+r.matched+", expected "+v.kind);
+          });
+        });
+      });
+    },Promise.resolve());
+  }).then(function(){
+    var total=RIPEMD_KAT.length+4+SIG_KAT.length;
+    if(fails.length){
+      console.error("[verify-message] self-test FAILED, "+fails.length+" of "+total+" checks:",fails);
+      return false;
+    }
+    console.log("[verify-message] self-test passed: "+total+" of "+total+" checks (RIPEMD-160 known answers, hash160, base58check, bech32, "+SIG_KAT.length+" signed message vectors).");
+    return true;
+  }).catch(function(e){
+    console.error("[verify-message] self-test threw:",e);
+    return false;
+  });
+}
+
+/* ================= UI ================= */
+var elA=document.getElementById("vm-addr"),elM=document.getElementById("vm-msg"),
+    elS=document.getElementById("vm-sig"),elR=document.getElementById("vm-res"),
+    elGo=document.getElementById("vm-go"),elBoot=document.getElementById("vm-boot"),
+    elClear=document.getElementById("vm-clear");
+var READY=false,run=0;
+var EXAMPLES=[
+  {a:"1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",m:"This is an example of a signed message.",
+   s:"H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="},
+  {a:"3JvL6Ymt8MVWiCNHC7oWU6nLeHNJKLZGLN",m:"vires is numeris",
+   s:"JF8nHqFr3K2UKYahhX3soVeoW8W1ECNbr0wfck7lzyXjCS5Q16Ek45zyBuy1Fiy9sTPKVgsqqOuPvbycuVSSVl8="},
+  {a:"bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",m:"vires is numeris",
+   s:"KF8nHqFr3K2UKYahhX3soVeoW8W1ECNbr0wfck7lzyXjCS5Q16Ek45zyBuy1Fiy9sTPKVgsqqOuPvbycuVSSVl8="},
+  /* same signature and address as the one above, one letter changed in the
+     message: the demonstration that the bytes are what is signed */
+  {a:"bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",m:"vires in numeris",
+   s:"KF8nHqFr3K2UKYahhX3soVeoW8W1ECNbr0wfck7lzyXjCS5Q16Ek45zyBuy1Fiy9sTPKVgsqqOuPvbycuVSSVl8="}
+];
+var FAMILY={
+  "p2pkh-u":"Legacy P2PKH, uncompressed key",
+  "p2pkh-c":"Legacy P2PKH, compressed key",
+  "p2sh":"Wrapped segwit, P2SH-P2WPKH",
+  "p2wpkh":"Native segwit, P2WPKH"
+};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function badges(list){
+  return '<div class="vm-badges">'+list.map(function(b){return "<span>"+esc(b)+"</span>";}).join("")+"</div>";
+}
+function rows(list){
+  return '<div class="vm-rows">'+list.map(function(r){
+    return '<div class="vm-r"><span>'+esc(r[0])+'</span><b'+(r[2]?' class="vm-hi"':"")+">"+esc(r[1])+"</b></div>";
+  }).join("")+"</div>";
+}
+function paint(html){elR.innerHTML=html;}
+function paintIdle(){
+  paint('<div class="vm-status vm-mut">Waiting for an address, a message and a signature</div>'
+    +'<div class="vm-note">All three parts are checked together. Nothing you paste leaves your browser.</div>');
+}
+function paintMalformed(why){
+  paint('<div class="vm-status vm-mut">Cannot be checked</div>'
+    +'<div class="vm-note">'+esc(why)+"</div>"
+    +'<div class="vm-flag">This is neither a pass nor a fail. Fix the input and check again.</div>');
+}
+
+function fillExample(i){
+  var e=EXAMPLES[i];
+  elA.value=e.a;elM.value=e.m;elS.value=e.s;
+  check();
+}
+function check(){
+  if(!READY)return;
+  var token=++run;
+  var rawA=elA.value,rawM=elM.value,rawS=elS.value.replace(/\s+/g,"");
+  if(!rawA.trim()||!rawM||!rawS){paintIdle();return;}
+  paint('<div class="vm-status vm-mut">Checking</div>');
+  Promise.resolve(parseAddress(rawA)).then(function(addr){
+    if(token!==run)return;
+    if(addr.err){paintMalformed(addr.err);return;}
+    var ps=parseSignature(rawS);
+    if(ps.err){paintMalformed(ps.err);return;}
+    return verifyOnce(addr,rawM,ps).then(function(r){
+      if(token!==run)return;
+      if(r.state==="valid"){paintValid(addr,ps,r,rawM,false);return;}
+      /* A trailing line break from a copy and paste is the single most common
+         cause of a false negative, so retry once without it and say clearly
+         which text actually verified. */
+      var trimmed=rawM.replace(/\s+$/,"");
+      if(trimmed&&trimmed!==rawM){
+        return verifyOnce(addr,trimmed,ps).then(function(r2){
+          if(token!==run)return;
+          if(r2.state==="valid")paintValid(addr,ps,r2,trimmed,true);
+          else paintInvalid(addr,ps,r);
+        });
+      }
+      paintInvalid(addr,ps,r);
+    });
+  }).catch(function(e){
+    if(token!==run)return;
+    console.error("[verify-message]",e);
+    paintMalformed("Something in that input could not be read at all.");
+  });
+}
+function paintValid(addr,ps,r,usedMessage,trimmedNote){
+  var kind=FAMILY[r.matched],
+      flagged=ps.decl.key!==r.matched,
+      pub=r.matched==="p2pkh-u"?r.shapes.pubU:r.shapes.pubC,
+      list=[
+        ["Address",addr.text,true],
+        ["Format",kind,false],
+        ["Public key",hex(pub),false],
+        ["Header byte",ps.header+", recovery "+ps.rec,false],
+        ["Message",usedMessage.length+" characters, "+utf8(usedMessage).length+" bytes",false]
+      ];
+  var html='<div class="vm-status vm-ok">Valid signature</div>'
+    +badges([kind,addr.net,"header "+ps.header])
+    +rows(list)
+    +'<div class="vm-note">The key behind <b>'+esc(addr.text)+"</b> signed that exact message. That is all it proves: not who the signer is, not that they still hold the key, and not that any coins are there.</div>";
+  if(flagged)
+    html+='<div class="vm-flag">The header byte declares '+esc(ps.decl.label)+", but the address is "+esc(kind.toLowerCase())+". Electrum and some other wallets always write the legacy compressed header, so this disagreement is normal and the recovered key is the same either way.</div>";
+  if(trimmedNote)
+    html+='<div class="vm-flag">It verified only after trailing whitespace was removed, so the signed text ends without that blank space or line break.</div>';
+  paint(html);
+}
+function paintInvalid(addr,ps,r){
+  var html='<div class="vm-status vm-bad">Invalid signature</div>'
+    +badges(["does not match",addr.net,"header "+ps.header]);
+  if(r.reason==="no-key"){
+    paint(html+'<div class="vm-note">'+esc(r.note)+"</div>");
+    return;
+  }
+  paint(html
+    +rows([
+      ["You entered",addr.text,true],
+      ["Signature is from",r.other,false],
+      ["Public key",hex(r.unc?r.shapes.pubU:r.shapes.pubC),false],
+      ["Header byte",ps.header+", recovery "+ps.rec,false]
+    ])
+    +'<div class="vm-note">The signature is well formed, but it recovers to a different key. One of the three parts does not belong with the other two.</div>'
+    +'<div class="vm-flag">Check the message first: a changed capital, a stray space, a smart quote pasted in place of a straight one or a missing line break all produce exactly this result.</div>');
+}
+
+document.querySelectorAll(".vm-ex button").forEach(function(b){
+  b.addEventListener("click",function(){fillExample(parseInt(b.dataset.ex,10));});
+});
+elGo.addEventListener("click",check);
+elClear.addEventListener("click",function(){
+  elA.value="";elM.value="";elS.value="";++run;paintIdle();elA.focus();
+});
+[elA,elS].forEach(function(el){
+  el.addEventListener("keydown",function(ev){
+    if(ev.key==="Enter"&&el===elA){ev.preventDefault();check();}
+  });
+});
+
+selfTest().then(function(pass){
+  READY=pass;
+  if(pass){
+    elGo.disabled=false;
+    elBoot.textContent="Self-test passed";
+  }else{
+    elGo.disabled=true;
+    elBoot.textContent="Self-test failed";
+    elBoot.className="vm-boot vm-boot-bad";
+    paint('<div class="vm-status vm-bad">Self-test failed</div>'
+      +'<div class="vm-note">This page checks its own arithmetic against known test vectors before it will verify anything, and one of those checks did not pass in this browser. Rather than show a result that could be wrong, it has switched itself off. Details are in the browser console.</div>');
+  }
+});
+</script>
+</Base>
