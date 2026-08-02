@@ -1,5 +1,12 @@
 # Third-party notices
 
+## Webfonts (public/fonts/)
+
+Cascadia Mono, Copyright (c) Microsoft Corporation, and Selawik,
+Copyright 2015 Microsoft Corporation with Reserved Font Name Selawik, both
+licensed under the SIL Open Font License 1.1. The full licence texts ship
+beside the font files as LICENSE-CascadiaMono.txt and LICENSE-Selawik.txt.
+
 ## noble-secp256k1 (public/js/vendor/noble-secp256k1.mjs)
 
 Copyright (c) 2019 Paul Miller (https://paulmillr.com)
