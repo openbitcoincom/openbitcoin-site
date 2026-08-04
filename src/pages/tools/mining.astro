@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import { SUBSIDY_BTC, NEXT_HALVING_HEIGHT } from '../../lib/subsidy.js';
 ---
 <Base title="Bitcoin Mining Profitability Calculator - OpenBitcoin" description="Bitcoin mining profitability calculator: enter hashrate, power draw, electricity price and pool fee to get BTC per day, revenue, cost and margin.">
 <main class="wrap doc-wrap">
@@ -202,7 +203,7 @@ import '../../styles/doc.css';
   }
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ SUBSIDY: SUBSIDY_BTC }}>
 (function(){
   /* ---------------------------------------------------------------------
      Mining arithmetic. Every formula is written out longhand in the
@@ -214,7 +215,7 @@ import '../../styles/doc.css';
   var TWO32=4294967296,      /* hash space covered by a difficulty-1 target */
       TARGET=600,            /* seconds per block the retarget aims at */
       BLOCKS=144,            /* blocks per day at the target rate */
-      SUBSIDY=3.125,         /* fixed until the next halving, block 1050000 */
+      /* SUBSIDY arrives from src/lib/subsidy.js (fixed until the next halving) */
       FEES=0.016,            /* offline fallback; replaced by the measured
                                 mean of totalFeeSat over the recent blocks */
       YEAR=31557600;         /* seconds in a 365.25 day year */

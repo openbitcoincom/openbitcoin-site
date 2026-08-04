@@ -78,6 +78,7 @@ if (real) {
     dilution: "A money supply that grows dilutes the units already in it: every newly created dollar means each existing dollar is a smaller share of all dollars. On the approximate figures shown here, M2 has grown from roughly $4.6 trillion in 2000 to roughly $22.1 trillion, about a 4.8× increase, so a dollar's share of the total supply is around one fifth of what it was in 2000; in 2020 and 2021 alone the supply expanded by roughly 40 percent. How much new supply is created, and when, is a policy decision, and holders of existing dollars do not take part in it.",
   };
 }
+import { EPOCH, MAX_BTC, SUBSIDY_DAY_BTC } from '../lib/subsidy.js';
 ---
 <Base title="US M2 Money Supply Chart Since 2000 - OpenBitcoin" description="The US M2 money supply from 2000 to today: how growth in the dollar supply dilutes savings, beside bitcoin's fixed 21 million cap.">
 <main class="wrap doc-wrap">
@@ -130,7 +131,7 @@ if (real) {
           <tr><td>2008</td><td><b>{d.t2008}</b></td><td>{d.x2008}</td><td>0 (genesis block January 3, 2009)</td></tr>
           <tr><td>2020</td><td><b>{d.t2020}</b></td><td>{d.x2020}</td><td><b>18,586,900 BTC</b></td></tr>
           <tr><td>2022</td><td><b>{d.t2022}</b></td><td>{d.x2022}</td><td><b>19,248,813 BTC</b></td></tr>
-          <tr><td>{d.latestYear}</td><td><b>{d.now}</b></td><td>{d.since}</td><td><b id="m2-sup">20,057,316 BTC</b></td></tr>
+          <tr><td>{d.latestYear}</td><td><b>{d.now}</b></td><td>{d.since}</td><td><b id="m2-sup">&#8230;</b></td></tr>
           <tr class="m2-caprow"><td>Cap</td><td>no fixed cap</td><td></td><td><b>21,000,000 BTC, fixed</b></td></tr>
         </tbody>
       </table>
@@ -150,7 +151,7 @@ if (real) {
       <div class="doc-tlab">Right now</div>
       <div class="m2-rs"><b>{d.now}</b><i>{real ? 'US M2, latest reading' : 'US M2, approximate'}</i></div>
       <div class="m2-rs"><b>{d.yoy}</b><i>{real ? 'M2 change over one year' : 'approximate change over one year'}</i></div>
-      <div class="m2-rs"><b id="m2-riss">0.82%</b><i>bitcoin annual issuance</i></div>
+      <div class="m2-rs"><b id="m2-riss">&#8230;</b><i>bitcoin annual issuance</i></div>
     </div>
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
@@ -198,14 +199,17 @@ if (real) {
     .m2-table{display:block;overflow-x:auto}
   }
 </style>
-<script is:inline define:vars={{ M2: M2CHART, Y0: 2000, Y1, M2MAX }}>
+<script is:inline define:vars={{ M2: M2CHART, Y0: 2000, Y1, M2MAX, EPOCH, MAX: MAX_BTC, SUBDAY: SUBSIDY_DAY_BTC }}>
 (function(){
   /* M2, Y0, Y1, M2MAX arrive at build via define:vars: annual points in
      trillions (December readings plus the latest month) when the FRED fetch
      succeeded, or the approximate illustrative fallback when it did not. */
   var T={bg:"#0E1929",grid:"#22304A",tx:"#8FA1BF",m2:"#F7931A",cross:"#8B9DBA"};
-  var EPOCH=210000,MAX=21000000;
-  var st={height:958341,hover:null};
+  /* EPOCH, MAX and SUBDAY arrive from src/lib/subsidy.js */
+  /* height starts null: a build-time height reads as current supply while
+     being weeks stale (audit 2026-08-03). Supply and issuance stay as the
+     ellipses they shipped with until the live height arrives. */
+  var st={height:null,hover:null};
   var cv=document.getElementById("m2-canvas"),cw=document.getElementById("m2-cwrap"),
       read=document.getElementById("m2-read");
   var geo={padL:54,plotW:0};
@@ -284,12 +288,13 @@ if (real) {
   window.addEventListener("resize",function(){draw();});
 
   function paintLive(){
-    var sup=supplyAt(st.height),iss=(450*365/sup*100).toFixed(2)+"%";
+    if(st.height===null)return;
+    var sup=supplyAt(st.height),iss=(SUBDAY*365/sup*100).toFixed(2)+"%";
     txt("m2-riss",iss);
     txt("m2-sup",fmt(Math.round(sup))+" BTC");
   }
   /* live height arrives via the chrome hook */
-  window.obPaintFiat=function(S){st.height=S.height;paintLive();};
+  window.obPaintFiat=function(S){if(typeof S.height==="number")st.height=S.height;paintLive();};
   paintLive();draw();
 })();
 </script>

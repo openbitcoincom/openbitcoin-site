@@ -20,7 +20,9 @@ const {
   analytics = true,
   canonicalPath = null,
 } = Astro.props;
-const canonical = new URL(canonicalPath || Astro.url.pathname, Astro.site).href;
+const rawPath = canonicalPath || Astro.url.pathname;
+const cleanPath = rawPath.length > 1 ? rawPath.replace(/\/+$/, '') || '/' : rawPath;
+const canonical = new URL(cleanPath, Astro.site).href;
 const ogImage = new URL('/og/default.png', Astro.site).href;
 ---
 <!doctype html>

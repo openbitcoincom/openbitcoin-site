@@ -1,4 +1,4 @@
-import { existsSync, unlinkSync, readdirSync } from 'node:fs';
+import { existsSync, unlinkSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const client = resolve(process.cwd(), 'dist/client');
@@ -13,6 +13,16 @@ const staticFiles = readdirSync(client).filter((f) => /^sitemap-\d+\.xml$/.test(
 if (!staticFiles.length) {
   console.error('postbuild-sitemap: no sitemap-N.xml in dist/client; the sitemap integration did not run');
   process.exit(1);
+}
+
+for (const f of staticFiles) {
+  const p = resolve(client, f);
+  const before = readFileSync(p, 'utf8');
+  const after = before.replace(/<loc>(https:\/\/[^<]+?\/[^<]+?)\/<\/loc>/g, '<loc>$1</loc>');
+  if (after !== before) {
+    writeFileSync(p, after);
+    console.log(`postbuild-sitemap: stripped trailing slashes from ${f}`);
+  }
 }
 
 if (existsSync(index)) {

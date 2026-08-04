@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import { ATH_USD, ATH_USD_TEXT, ATH_LABEL } from '../lib/ath.js';
 ---
 <Base title="Sats per Dollar: How Many Satoshis One US Dollar Buys - OpenBitcoin" description="Live sats-per-dollar ticker: how many satoshis one US dollar buys right now, plus what $1, $10, $100 and $1,000 buy in sats.">
 <main class="wrap doc-wrap">
@@ -19,7 +20,7 @@ import '../styles/doc.css';
         <div class="sp-cstat">
           <div class="sp-ck">At the all-time high</div>
           <div class="sp-cv">792 sats</div>
-          <div class="sp-cs">$126,272 per BTC on October 6, 2025</div>
+          <div class="sp-cs">{ATH_USD_TEXT} per BTC on {ATH_LABEL}</div>
         </div>
         <div class="sp-cstat">
           <div class="sp-ck">Versus the top</div>
@@ -95,11 +96,11 @@ import '../styles/doc.css';
     .sp-card{padding:18px 18px}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ ATH: ATH_USD }}>
 (function(){
   /* price null until the feed answers: the hero, the comparison, the table and
      the tab title all keep what they were served until a real price lands */
-  var ATH=126272, AMTS=[1,10,100,1000], P={price:null};
+  var AMTS=[1,10,100,1000], P={price:null};
   function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:d});}
   var elN=document.getElementById("sp-n"),elPx=document.getElementById("sp-px"),
       elD=document.getElementById("sp-d"),elDw=document.getElementById("sp-dw"),

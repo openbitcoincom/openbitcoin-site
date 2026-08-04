@@ -32,8 +32,8 @@ import '../../styles/doc.css';
       <ol class="tk-steps">
         <li><b>Look up your transaction.</b> Paste the transaction ID (txid) into the <a href="/">transaction lookup</a> and read the confirmation count. Zero means it is waiting in the mempool; one or more means it is already in the chain and finishing on its own. Your wallet shows the txid on the transaction's detail screen.</li>
         <li><b>Compare what you paid to what clears now.</b> The lookup and most wallets show your fee in sat/vB. Right now the targets are
-          <span class="tk-chip">economy <b id="tk-eco">2</b> sat/vB</span> <span class="tk-chip">fastest <b id="tk-fast">5</b> sat/vB</span>.
-          At or above the fastest rate, expect the next block or two. In between, expect hours. Below economy, it can sit for days. The full picture is on <a href="/fees">/fees</a> and <a href="/mempool">/mempool</a> (<b class="tk-num" id="tk-mp">4,182</b> transactions waiting right now).</li>
+          <span class="tk-chip">economy <b id="tk-eco">&#8230;</b> sat/vB</span> <span class="tk-chip">fastest <b id="tk-fast">&#8230;</b> sat/vB</span>.
+          At or above the fastest rate, expect the next block or two. In between, expect hours. Below economy, it can sit for days. The full picture is on <a href="/fees">/fees</a> and <a href="/mempool">/mempool</a> (<b class="tk-num" id="tk-mp">&#8230;</b> transactions waiting right now).</li>
         <li><b>Decide, without hurry.</b> Three options, and the first one is right for most people:</li>
       </ol>
       <div class="tk-opts">
@@ -102,11 +102,11 @@ import '../../styles/doc.css';
   <aside class="doc-rail">
     <div class="doc-tile">
       <div class="doc-tlab">Right now</div>
-      <div class="tk-rs"><b id="tk-reco">2 sat/vB</b><i>economy, a few hours</i></div>
-      <div class="tk-rs"><b id="tk-rfast">5 sat/vB</b><i>fastest, next block</i></div>
-      <div class="tk-rs"><b id="tk-rmp">4,182</b><i>transactions waiting</i></div>
-      <div class="tk-rs"><b id="tk-since">4m 12s</b><i>since last block</i></div>
-      <div class="tk-rs"><b id="tk-h">958,341</b><i>current height</i></div>
+      <div class="tk-rs"><b id="tk-reco">&#8230;</b><i>economy, a few hours</i></div>
+      <div class="tk-rs"><b id="tk-rfast">&#8230;</b><i>fastest, next block</i></div>
+      <div class="tk-rs"><b id="tk-rmp">&#8230;</b><i>transactions waiting</i></div>
+      <div class="tk-rs"><b id="tk-since">&#8230;</b><i>since last block</i></div>
+      <div class="tk-rs"><b id="tk-h">&#8230;</b><i>current height</i></div>
     </div>
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
@@ -171,22 +171,24 @@ import '../../styles/doc.css';
 </style>
 <script is:inline>
 (function(){
-  /* fallback baseline; every figure below repaints from the live summary */
-  var P={height:958341,since:252,at:Date.now(),eco:2,fast:5,mp:4182};
+  /* No baked baseline: a deploy-time snapshot of fees, mempool depth and
+     height reads as "right now" while being weeks old (audit 2026-08-03).
+     Every figure ships as an ellipsis and paints on the first live summary. */
+  var P={height:null,since:null,at:Date.now(),eco:null,fast:null,mp:null};
   function fmt(n){return n.toLocaleString("en-US");}
   function rate(r){return r%1?r.toFixed(1):String(r);}
   function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
   function sinceTxt(s){var m=Math.floor(s/60);return m?m+"m "+(s%60)+"s":s+"s";}
+  /* a null figure has not arrived yet: leave the ellipsis it shipped with
+     rather than painting NaN or a stale number */
   function paint(){
-    txt("tk-eco",rate(P.eco));
-    txt("tk-fast",rate(P.fast));
-    txt("tk-reco",rate(P.eco)+" sat/vB");
-    txt("tk-rfast",rate(P.fast)+" sat/vB");
-    txt("tk-mp",fmt(P.mp));
-    txt("tk-rmp",fmt(P.mp));
-    txt("tk-h",fmt(P.height));
+    if(P.eco!==null){txt("tk-eco",rate(P.eco));txt("tk-reco",rate(P.eco)+" sat/vB");}
+    if(P.fast!==null){txt("tk-fast",rate(P.fast));txt("tk-rfast",rate(P.fast)+" sat/vB");}
+    if(P.mp!==null){txt("tk-mp",fmt(P.mp));txt("tk-rmp",fmt(P.mp));}
+    if(P.height!==null)txt("tk-h",fmt(P.height));
   }
   function paintSince(){
+    if(P.since===null)return;
     txt("tk-since",sinceTxt(P.since+Math.floor((Date.now()-P.at)/1000)));
   }
   setInterval(paintSince,1000);

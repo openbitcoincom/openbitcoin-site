@@ -1,0 +1,1054 @@
+{
+ "compiled": "2026-08-03",
+ "note": "Curated from contemporaneous reporting, court documents and company statements; amounts are the BTC actually taken (BTC portion only for mixed-asset breaches) and usdAtTime is the contemporaneous dollar value. Researched and cross-checked 2026-08-03.",
+ "entries": [
+  {
+   "name": "allinvain theft",
+   "date": "2011-06-13",
+   "btc": 25000,
+   "usdAtTime": 500000,
+   "kind": "individual",
+   "summary": "Bitcointalk user allinvain, an early miner, found 25,000 BTC gone after his unencrypted wallet.dat file was copied from his Windows machine, with his Slush Pool account also compromised. It is widely regarded as the first major bitcoin theft.",
+   "aftermath": "The thief was never identified and the coins were gradually moved and spent.",
+   "sources": [
+    "https://www.welivesecurity.com/2011/06/16/bitcoin-wallet-hacked-heisted-500k/",
+    "https://www.livebitcoinnews.com/from-25000-btc-to-zero-unsolved-2011-bitcoin-hack-now-worth-2-4b/",
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "Mt. Gox June 2011 breach",
+   "date": "2011-06-19",
+   "btc": 2643,
+   "usdAtTime": 47000,
+   "kind": "exchange",
+   "summary": "An attacker used the compromised admin account of former owner Jed McCaleb to dump coins on Mt. Gox, crashing the exchange price from about 17.50 dollars to one cent, and a database of some 60,000 user accounts leaked. The attacker withdrew about 2,000 BTC and a trader who bought during the crash kept a further 643 BTC.",
+   "aftermath": "Mt. Gox rolled back trading and reopened, but the leaked credentials fueled follow-on thefts at other services.",
+   "sources": [
+    "https://www.bitmex.com/blog/the-june-2011-bitcoin-flash-crash",
+    "https://www.bitget.com/wiki/how-mt-gox-was-hacked",
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "MyBitcoin credential-stuffing thefts",
+   "date": "2011-06-20",
+   "btc": 4019,
+   "usdAtTime": 72000,
+   "kind": "wallet",
+   "summary": "In the days after the Mt. Gox database leak, attackers reused the leaked credentials against the MyBitcoin wallet service and drained accounts whose owners had used the same passwords, taking about 4,019 BTC from roughly 600 accounts.",
+   "aftermath": "MyBitcoin said it covered the losses, then collapsed weeks later in a separate incident that took most user funds for good.",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0",
+    "https://quadrigainitiative.com/casestudy/mybitcoinusernamepasswordbreach.php"
+   ]
+  },
+  {
+   "name": "MyBitcoin",
+   "date": "2011-08",
+   "btc": 78739,
+   "usdAtTime": 1000000,
+   "kind": "wallet",
+   "summary": "The anonymous hosted wallet service MyBitcoin went offline in late July 2011, and operator Tom Williams then claimed hackers had drained 78,739 BTC, about 51 percent of the 154,406 BTC it held. Much of the community suspected an exit scam rather than an outside hack.",
+   "aftermath": "Users recovered about 49 percent of deposits through a claims process and the operator vanished without charges.",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0",
+    "https://www.vice.com/en/article/if-your-bitcoins-are-stolen-in-a-major-hack-will-the-fbi-help-v24n1/",
+    "https://fullycrypto.com/remembering-the-2011-mybitcoin-hack-now-worth-10-billion"
+   ]
+  },
+  {
+   "name": "Bitcoin7",
+   "date": "2011-10-05",
+   "btc": 5000,
+   "usdAtTime": 32500,
+   "kind": "exchange",
+   "summary": "Bitcoin7, then one of the larger dollar exchanges, said hackers from Russia and Eastern Europe accessed its main hot wallet and two of its three backup wallets, taking about 5,000 BTC, with community estimates running as high as 15,000 BTC. The site soon went offline and many users suspected the operators had absconded.",
+   "aftermath": "The exchange disappeared and users lost access to remaining funds.",
+   "sources": [
+    "https://dn.institute/research/cyberattacks/incidents/2011-10-05-bitcoin7/",
+    "https://www.chainsec.io/exchange-hacks",
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "Linode",
+   "date": "2012-03-01",
+   "btc": 46653,
+   "usdAtTime": 228000,
+   "kind": "supply-chain",
+   "summary": "An attacker breached the customer support portal of web host Linode and emptied eight virtual servers known to hold bitcoin, taking 43,554 BTC from the Bitcoinica exchange, 3,094 BTC from Marek Palatinus's Slush mining pool wallet, and smaller amounts including the Bitcoin Faucet. It was the largest bitcoin theft to that date.",
+   "aftermath": "Bitcoinica and Slush reimbursed users, and the episode helped inspire Palatinus to create the Trezor hardware wallet.",
+   "sources": [
+    "https://siliconangle.com/2012/03/02/linode-breach-leads-to-massive-heist-of-46000-btc-from-bitcoinica-faucet/",
+    "https://www.theregister.com/2012/03/02/linode_bitcoin_heist/",
+    "https://spectrum.ieee.org/thousands-of-bitcoins-stolen-in-a-hack-on-linode",
+    "https://threatpost.com/cloud-service-linode-hacked-bitcoin-accounts-emptied-030212/76278/"
+   ]
+  },
+  {
+   "name": "Betcoin",
+   "date": "2012-04-11",
+   "btc": 3171.5,
+   "usdAtTime": 15500,
+   "kind": "other",
+   "summary": "The bitcoin betting site Betcoin (betco.in) was hacked on April 11, 2012 and its wallets were emptied of 3,171.5 BTC.",
+   "aftermath": "The thief was never identified.",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "Bitcoinica (Rackspace)",
+   "date": "2012-05-11",
+   "btc": 18547,
+   "usdAtTime": 90000,
+   "kind": "exchange",
+   "summary": "Two months after the Linode theft, attackers gained root access to Bitcoinica's Rackspace server and emptied the hot wallet of 18,547 BTC, worth about 90,000 dollars.",
+   "aftermath": "The trading platform shut down for good and entered a claims process that repaid users only in part.",
+   "sources": [
+    "https://thehackernews.com/2012/05/bitcoin-hacked-more-than-18000-bitcoins.html",
+    "https://siliconangle.com/2012/05/14/bitcoinica-suffers-staggering-87000-bitcoin-loss-in-server-breach/",
+    "https://www.forbes.com/sites/timworstall/2012/05/15/another-bitcoin-theft-at-bitconia/"
+   ]
+  },
+  {
+   "name": "Bitcoin Syndicate",
+   "date": "2012-07-04",
+   "btc": 1853,
+   "usdAtTime": 14600,
+   "kind": "other",
+   "summary": "An attacker compromised the Mt. Gox account of Bitcoin Syndicate, an early bitcoin venture, sold off its dollar balance and withdrew about 1,853 BTC.",
+   "aftermath": "",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "Bitcoinica (Mt. Gox account)",
+   "date": "2012-07-13",
+   "btc": 40000,
+   "usdAtTime": 315000,
+   "kind": "exchange",
+   "summary": "During Bitcoinica's wind down, a thief withdrew 40,000 BTC and 40,000 dollars from its Mt. Gox account after discovering that the Mt. Gox API key, compromised in an earlier breach, had been reused as the password for the LastPass account holding its credentials. It was the third theft from Bitcoinica in 2012, bringing total losses above 102,000 BTC.",
+   "aftermath": "The loss deepened the claims process and customers were never fully repaid.",
+   "sources": [
+    "https://bitcoinmagazine.com/business/bitcoinica-stolen-from-again",
+    "https://siliconangle.com/2012/07/16/bitcoinica-cant-catch-a-break-recent-breach-hemorrhages-40000-btc/",
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "BTC-e",
+   "date": "2012-07-31",
+   "btc": 4500,
+   "usdAtTime": 35000,
+   "kind": "exchange",
+   "summary": "Attackers obtained BTC-e's Liberty Reserve API key, credited themselves fake deposits on the exchange and used them to buy and withdraw about 4,500 BTC.",
+   "aftermath": "BTC-e absorbed the loss, reversed affected trades and resumed trading within days.",
+   "sources": [
+    "https://bitcoinmagazine.com/business/btc-e-attacked-1343738085",
+    "https://dn.institute/research/cyberattacks/incidents/2012-07-16-btc-e/",
+    "https://en.wikipedia.org/wiki/BTC-e"
+   ]
+  },
+  {
+   "name": "James Zhong Silk Road theft",
+   "date": "2012-09",
+   "btc": 50676,
+   "usdAtTime": 600000,
+   "kind": "marketplace",
+   "summary": "James Zhong exploited a flaw in Silk Road's withdrawal processing in September 2012, triggering rapid repeated withdrawals across multiple accounts to pull out more than 50,000 BTC, worth roughly 600,000 dollars at the time. The theft stayed hidden until November 2021, when federal agents seized 50,676 BTC from his Georgia home, then valued at about 3.36 billion dollars, the largest cryptocurrency seizure in US history at that point.",
+   "aftermath": "Zhong pleaded guilty to wire fraud and was sentenced in 2023 to a year and a day in prison, with the coins forfeited to the US government.",
+   "sources": [
+    "https://www.justice.gov/usao-sdny/pr/us-attorney-announces-historic-336-billion-cryptocurrency-seizure-and-conviction",
+    "https://www.chainalysis.com/blog/james-zhong-silk-road-hack-seizure/",
+    "https://www.wired.com/story/silk-road-bitcoin-seizure-james-zhong/",
+    "https://en.wikipedia.org/wiki/James_Zhong"
+   ]
+  },
+  {
+   "name": "Bitfloor",
+   "date": "2012-09-04",
+   "btc": 24000,
+   "usdAtTime": 250000,
+   "kind": "exchange",
+   "summary": "An intruder compromised servers of Bitfloor, then the fourth largest dollar exchange, and found an unencrypted backup of the wallet keys that founder Roman Shtylman had made during a manual upgrade, transferring out 24,000 BTC.",
+   "aftermath": "Bitfloor suspended trading, briefly reopened, then closed for good in 2013 with most users never made whole.",
+   "sources": [
+    "https://bitcoinmagazine.com/business/bitfloor-hacked-250000-missing-1346821046",
+    "https://www.nbcnews.com/id/wbna48918370",
+    "https://www.securityweek.com/hack-robs-bitfloor-250000/"
+   ]
+  },
+  {
+   "name": "cdecker theft",
+   "date": "2012-09-28",
+   "btc": 9222,
+   "usdAtTime": 105000,
+   "kind": "individual",
+   "summary": "Bitcointalk user cdecker had a personal wallet emptied of 9,222 BTC by an unknown attacker on September 28, 2012, one of the largest individual bitcoin thefts of the era.",
+   "aftermath": "",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "50BTC pool",
+   "date": "2012-10-13",
+   "btc": 1174,
+   "usdAtTime": 13400,
+   "kind": "pool",
+   "summary": "The billing system of the Russian mining pool 50BTC was compromised through a vulnerability the operators could not identify, and about 1,174 BTC in miner payouts were stolen.",
+   "aftermath": "The pool rewrote its billing system from scratch and continued operating.",
+   "sources": [
+    "https://bitcointalk.org/index.php?topic=576337.0"
+   ]
+  },
+  {
+   "name": "Silk Road insider theft",
+   "date": "2013-01",
+   "btc": 20000,
+   "usdAtTime": 350000,
+   "kind": "marketplace",
+   "summary": "After Silk Road admin Curtis Green was arrested, US Secret Service agent Shaun Bridges used Green's credentials to lock vendors out of their accounts and drain about 20,000 BTC from the marketplace, moving the proceeds through Mt. Gox. The Justice Department valued the haul at about 350,000 dollars at the time.",
+   "aftermath": "Bridges pleaded guilty in 2015, was sentenced to 71 months, and later received two more years for stealing additional seized bitcoin.",
+   "sources": [
+    "https://www.justice.gov/archives/opa/pr/former-secret-service-agent-sentenced-scheme-related-silk-road-investigation",
+    "https://www.ibtimes.co.uk/silk-road-cop-shaun-bridges-gets-71-months-jail-stealing-bitcoins-dark-web-drug-site-1532336",
+    "https://www.vice.com/en/article/great-moments-in-shaun-bridges-a-corrupt-silk-road-investigator/"
+   ]
+  },
+  {
+   "name": "OzCoin pool",
+   "date": "2013-04",
+   "btc": 923,
+   "usdAtTime": 135000,
+   "kind": "pool",
+   "summary": "An attacker broke into the Australian mining pool's server, defaced its site and database, and stole 923 BTC from its wallet. Within a day the web wallet StrongCoin modified its own code to seize 569 of the coins from a suspect user and return them to OzCoin.",
+   "aftermath": "About 354 BTC were never recovered, and StrongCoin's intervention raised alarms about hosted wallet custody.",
+   "sources": [
+    "https://bitcoinmagazine.com/business/ozcoin-hacked-stolen-funds-seized-and-returned-by-strongcoin-1366822516"
+   ]
+  },
+  {
+   "name": "Instawallet",
+   "date": "2013-04-03",
+   "btc": 35000,
+   "usdAtTime": 4600000,
+   "kind": "wallet",
+   "summary": "The Paymium run web wallet, which used a secret URL as its only credential, had its database fraudulently accessed and drained. Reported losses were more than 35,000 BTC, almost 4.6 million dollars at the time, though the operator never confirmed a figure.",
+   "aftermath": "The service shut down permanently and ran a claims process, repaying balances under 50 BTC.",
+   "sources": [
+    "https://techcrunch.com/2013/04/03/bitcoin-instawallet/",
+    "https://venturebeat.com/technology/bitcoin-wallet-instawallet-hacked",
+    "https://www.bitdefender.com/en-us/blog/hotforsecurity/fraudsters-steal-bitcoins-in-instawallet-cyber-attack",
+    "https://bytwork.com/en/articles/bitcoin-theft"
+   ]
+  },
+  {
+   "name": "BitFunder / WeExchange",
+   "date": "2013-07",
+   "btc": 6000,
+   "usdAtTime": 560000,
+   "kind": "exchange",
+   "summary": "Hackers exploited a flaw in the BitFunder bitcoin stock exchange to credit themselves and withdrew more than 6,000 BTC from the linked WeExchange wallet in late July 2013. Operator Jon Montroll concealed the breach and kept taking user funds.",
+   "aftermath": "Montroll pleaded guilty to securities fraud and obstruction and was sentenced to 14 months in 2019.",
+   "sources": [
+    "https://www.justice.gov/usao-sdny/pr/operator-bitcoin-investment-platform-pleads-guilty-securities-fraud-and-obstruction",
+    "https://www.sec.gov/litigation/litreleases/2018/lr24078.htm",
+    "https://www.bankinfosecurity.com/head-hacked-bitcoin-exchange-pleads-guilty-to-us-charges-a-11247"
+   ]
+  },
+  {
+   "name": "Android wallet RNG flaw",
+   "date": "2013-08",
+   "btc": 55.8,
+   "usdAtTime": 5700,
+   "kind": "wallet",
+   "summary": "A bug in Android's SecureRandom caused mobile bitcoin wallets to reuse ECDSA nonces, letting attackers recover private keys and sweep funds from apps including Bitcoin Wallet, blockchain.info and Mycelium. About 55.8 BTC were stolen before bitcoin.org issued an emergency alert, making it the first mass key generation failure in bitcoin.",
+   "aftermath": "Wallet apps shipped urgent updates that bypassed the broken generator and rotated keys, closing the theft window within days.",
+   "sources": [
+    "https://bitcoin.org/en/alert/2013-08-11-android",
+    "https://www.theregister.com/2013/08/12/android_bug_batters_bitcoin_wallets/",
+    "https://doge.tg/blog/2018/The-2013-Android-Bitcoin-Wallet-Vulnerability-A-Lesson-in-Randomness/"
+   ]
+  },
+  {
+   "name": "Inputs.io",
+   "date": "2013-10",
+   "btc": 4100,
+   "usdAtTime": 1200000,
+   "kind": "wallet",
+   "summary": "The hosted wallet run by the pseudonymous TradeFortress was breached on October 23 and 26, 2013, after attackers compromised a chain of old email and hosting accounts and bypassed two factor authentication on the host's side, taking 4,100 BTC. The linked lending service CoinLenders was hit as well.",
+   "aftermath": "The service could not repay users in full, offered partial refunds, and closed.",
+   "sources": [
+    "https://www.helpnetsecurity.com/2013/11/08/bitcoin-wallet-service-hacked-4100-bitcoins-stolen/",
+    "https://www.esecurityplanet.com/network-security/inputs.io-taken-down-by-1.5-million-bitcoin-theft.html",
+    "https://www.bobsguide.com/2013/11/11/bitcoin-inputs-io-australian-online-wallet-service-raided-by-hackers-using-old-email/"
+   ]
+  },
+  {
+   "name": "BIPS",
+   "date": "2013-11-17",
+   "btc": 1295,
+   "usdAtTime": 1000000,
+   "kind": "wallet",
+   "summary": "Danish payment processor and wallet provider BIPS was hit by a DDoS attack on November 15, 2013 that prepared the ground for a breach two days later, in which 1,295 BTC worth about 1 million dollars were stolen, most of it the company's own holdings.",
+   "aftermath": "BIPS shut its consumer wallet service and refocused on merchant processing without custody.",
+   "sources": [
+    "https://www.helpnetsecurity.com/2013/11/26/1m-lost-in-attack-against-bitcoin-internet-payment-services/",
+    "https://www.coindesk.com/bitcoin-payment-processor-bips-attacked-1m-stolen",
+    "https://news.softpedia.com/news/Bitcoin-Payment-Solutions-Provider-BIPS-Hacked-1-295-BTC-Stolen-403365.shtml"
+   ]
+  },
+  {
+   "name": "PicoStocks",
+   "date": "2013-11-29",
+   "btc": 5896,
+   "usdAtTime": 6000000,
+   "kind": "other",
+   "summary": "The bitcoin denominated stock exchange lost 5,896 BTC from two wallets, including 5,210 BTC from cold storage. With no sign of intrusion, PicoStocks said the wallet files had likely been copied and decrypted by someone with past access, pointing to an inside job.",
+   "aftermath": "The site covered user losses and relaunched.",
+   "sources": [
+    "https://quadrigainitiative.com/cryptocurrencyhackscamfraudwiki/index.php?title=Picostocks_%E2%80%9CCold_Wallet%E2%80%9D_Hack",
+    "https://www.chainsec.io/exchange-hacks"
+   ]
+  },
+  {
+   "name": "Sheep Marketplace",
+   "date": "2013-11-30",
+   "btc": 5400,
+   "usdAtTime": 6000000,
+   "kind": "marketplace",
+   "summary": "The darknet market vanished around November 30, 2013, claiming a vendor had exploited a bug to steal 5,400 BTC, then worth around 6 million dollars. Users alleged the true haul was far larger, circulating a disputed 96,000 BTC estimate while chasing coins through mixers.",
+   "aftermath": "US investigators traced the 5,400 BTC to two Florida men who pleaded guilty, with about 4 million dollars seized, and operator Tomas Jirikovsky was separately jailed for stealing from users.",
+   "sources": [
+    "https://www.forbes.com/sites/laurashin/2016/05/30/mystery-solved-6-6-million-bitcoin-theft-that-brought-down-dark-web-site-tied-to-2-florida-men/",
+    "https://en.wikipedia.org/wiki/Sheep_Marketplace",
+    "https://www.welivesecurity.com/2013/12/03/millions-in-bitcoin-stolen-from-sheep-dark-market-as-user-flees/"
+   ]
+  },
+  {
+   "name": "Mt. Gox",
+   "date": "2014-02",
+   "btc": 850000,
+   "usdAtTime": 450000000,
+   "kind": "exchange",
+   "summary": "The Tokyo exchange, once handling most global bitcoin trading, halted withdrawals on February 7, 2014 and filed for bankruptcy on February 28 after revealing that about 850,000 BTC, roughly 750,000 of it customer funds, had been stolen through years of undetected draining of its hot wallets. Contemporaneous reports valued the loss at roughly 450 to 477 million dollars, the largest bitcoin theft in history.",
+   "aftermath": "200,000 BTC were later found in an old wallet, CEO Mark Karpeles was convicted of record tampering, and creditor repayments finally began in 2024.",
+   "sources": [
+    "https://techcrunch.com/2014/02/28/mt-gox-files-for-bankruptcy/",
+    "https://en.bitcoin.it/wiki/Collapse_of_Mt._Gox",
+    "https://www.cbc.ca/news/technology/mt-gox-shutdown-a-major-blow-for-bitcoin-1.2550256"
+   ]
+  },
+  {
+   "name": "Silk Road 2.0",
+   "date": "2014-02-13",
+   "btc": 4476,
+   "usdAtTime": 2700000,
+   "kind": "marketplace",
+   "summary": "The successor darknet market said an attacker exploited the transaction malleability bug then plaguing bitcoin services to repeatedly withdraw from its escrow wallet until it was empty, taking about 4,476 BTC worth roughly 2.7 million dollars.",
+   "aftermath": "The site pledged to repay users from sales commissions before being seized by the FBI in November 2014.",
+   "sources": [
+    "https://www.coindesk.com/markets/2014/02/13/silk-road-2-loses-over-26-million-in-bitcoins-in-alleged-hack",
+    "https://www.forbes.com/sites/andygreenberg/2014/02/13/silk-road-2-0-hacked-using-bitcoin-bug-all-its-funds-stolen/",
+    "https://www.nbcnews.com/tech/security/silk-road-pledges-pay-back-users-after-2-6-million-n32341"
+   ]
+  },
+  {
+   "name": "Flexcoin",
+   "date": "2014-03-02",
+   "btc": 896,
+   "usdAtTime": 600000,
+   "kind": "wallet",
+   "summary": "The self described bitcoin bank lost all 896 BTC in its hot wallet when an attacker exploited a race condition in its transfer code, sending thousands of simultaneous requests to overdraw accounts before balances updated.",
+   "aftermath": "Flexcoin shut down immediately, returning only cold storage balances to verified users.",
+   "sources": [
+    "https://www.welivesecurity.com/2014/03/05/bitcoin-bank-flexcoin-shuts-down-after-attackers-loot-570000-from-hot-wallet/",
+    "https://phys.org/news/2014-03-bitcoin-bank-flexcoin-theft.html",
+    "https://amp.cbc.ca/lite/story/1.2559018"
+   ]
+  },
+  {
+   "name": "Poloniex",
+   "date": "2014-03-04",
+   "btc": 97,
+   "usdAtTime": 64000,
+   "kind": "exchange",
+   "summary": "An attacker abused a race condition by placing many withdrawal requests in the same instant, pulling 97 BTC, about 12.3 percent of the young exchange's bitcoin holdings. Small in size but widely cited as an early race condition exploit and because Poloniex later became a major exchange.",
+   "aftermath": "Poloniex temporarily docked all balances 12.3 percent and repaid affected users in full by July 2014.",
+   "sources": [
+    "https://www.coindesk.com/markets/2014/03/05/poloniex-loses-123-of-its-bitcoins-in-latest-bitcoin-exchange-hack",
+    "https://www.coindesk.com/markets/2014/07/02/poloniex-claims-all-customers-repaid-following-march-bitcoin-hack",
+    "https://www.esecurityplanet.com/networks/bitcoin-exchange-poloniex-hacked/"
+   ]
+  },
+  {
+   "name": "CryptoRush",
+   "date": "2014-03-11",
+   "btc": 950,
+   "usdAtTime": 600000,
+   "kind": "exchange",
+   "summary": "Attackers exploited a critical balance calculation flaw in the BlackCoin daemon integration on the hastily built altcoin exchange CryptoRush and withdrew about 950 BTC plus 2,500 LTC. The figures here cover the bitcoin portion only, roughly 600,000 dollars at March 2014 prices.",
+   "aftermath": "The exchange hid the loss from users, promised refunds through a debt management plan that never paid out, and collapsed amid staff whistleblowing.",
+   "sources": [
+    "http://quadrigainitiative.com/cryptocurrencyhackscamfraudwiki/index.php?title=CryptoRush_Hack",
+    "https://www.chainsec.io/exchange-hacks"
+   ]
+  },
+  {
+   "name": "Cryptsy",
+   "date": "2014-07-29",
+   "btc": 13000,
+   "usdAtTime": 7500000,
+   "kind": "exchange",
+   "summary": "The developer behind the Lucky7Coin altcoin planted an IRC backdoor in wallet code running on the Florida exchange's servers and used it on July 29, 2014 to siphon about 13,000 BTC plus 300,000 LTC. Cryptsy hid the theft from users until January 2016.",
+   "aftermath": "Cryptsy collapsed in early 2016 and founder Paul Vernon fled abroad, later losing a class action default judgment.",
+   "sources": [
+    "https://www.securityweek.com/bitcoin-trader-cryptsy-robbed-irc-backdoor/",
+    "https://www.financemagnates.com/cryptocurrency/exchange/cryptsy-finally-reveals-source-of-withdrawal-issues-6-million-hacking/",
+    "https://www.securitynewspaper.com/2016/01/16/cryptsy-bitcoin-trader-robbed-blames-backdoor-code-wallet/"
+   ]
+  },
+  {
+   "name": "Primedice",
+   "date": "2014-08",
+   "btc": 2400,
+   "usdAtTime": 1000000,
+   "kind": "other",
+   "summary": "A player known as Hufflepuff found that flooding the bitcoin gambling site with requests could expose an active server seed, letting him predict provably fair dice rolls and win to order. Across August and September 2014 he took more than 2,400 BTC, around 1 million dollars, beating an initial patch with a second account.",
+   "aftermath": "Primedice absorbed the loss from its own bankroll, patched the flaw and offered a reward to identify the player, but the coins were never recovered.",
+   "sources": [
+    "https://medium.com/@Stunna/breaking-the-house-63f1021a3e6d",
+    "https://www.ccn.com/player-cheated-online-bitcoin-gaming-site-1-million-reward-offered-help/",
+    "https://newsbtc.com/2015/06/30/primedice-bitcoin-gambling-site-hacked-for-1m"
+   ]
+  },
+  {
+   "name": "MintPal",
+   "date": "2014-10",
+   "btc": 3700,
+   "usdAtTime": 1300000,
+   "kind": "exchange",
+   "summary": "Days after relaunching under new owner Moolah, the altcoin exchange went offline and announced that all of its bitcoin, about 3,700 BTC worth roughly 1.3 million dollars, had been stolen. Investigators traced the coins to Moolah chief Ryan Kennedy, alias Alex Green, who was selling them on LocalBitcoins.",
+   "aftermath": "Kennedy was arrested in the UK in February 2015 and charged with fraud and money laundering over the theft.",
+   "sources": [
+    "https://siliconangle.com/2015/02/23/mintpal-scammer-ryan-kennedy-arrested-in-u-k-over-theft-of-3700-bitcoins/",
+    "https://www.quadrigainitiative.com/casestudy/mintpalexchangeexitscam.php"
+   ]
+  },
+  {
+   "name": "BitPay",
+   "date": "2014-12",
+   "btc": 5000,
+   "usdAtTime": 1800000,
+   "kind": "other",
+   "summary": "A spear phisher compromised the email account of BitPay CFO Bryan Krohn, studied the company's practices, then spoofed emails to CEO Stephen Pair, who authorized three transfers totaling 5,000 BTC, about 1.8 million dollars, over two days in December 2014.",
+   "aftermath": "BitPay absorbed the loss after its cyber insurer denied the claim, then sued the insurer.",
+   "sources": [
+    "https://www.csoonline.com/article/2984989/cyber-insurance-rejects-claim-after-bitpay-lost-1-8-million-in-phishing-attack.html",
+    "https://siliconangle.com/2015/09/17/bitpay-hacked-for-1-8-million-in-bitcoin-during-december-2014/",
+    "https://www.vice.com/en/article/how-a-clever-hacker-tricked-a-major-bitcoin-company-out-of-18-million/"
+   ]
+  },
+  {
+   "name": "Bitstamp",
+   "date": "2015-01-04",
+   "btc": 18866,
+   "usdAtTime": 5100000,
+   "kind": "exchange",
+   "summary": "Attackers phished six Bitstamp employees for weeks, and once sysadmin Luka Kodric opened a malicious file they reached the servers holding the hot wallet file and its passphrase, draining 18,866 BTC from the Luxembourg registered exchange.",
+   "aftermath": "Bitstamp absorbed the loss, rebuilt on new hardware with multisig hot wallets, and resumed trading within days.",
+   "sources": [
+    "https://www.coindesk.com/markets/2015/07/01/details-of-5-million-bitstamp-hack-revealed",
+    "https://thehackernews.com/2015/01/bitstamp-bitcoin-exchange-hacked.html",
+    "https://bravenewcoin.com/insights/bitstamp-hack-result-of-phishing-attack-says-leaked-internal-report"
+   ]
+  },
+  {
+   "name": "796 Exchange",
+   "date": "2015-01-27",
+   "btc": 1000,
+   "usdAtTime": 230000,
+   "kind": "exchange",
+   "summary": "A hacker exploited the withdrawal module of the Chinese exchange 796 to swap a customer's withdrawal address for a lookalike vanity address he controlled, so a staff approved withdrawal of 1,000 BTC went straight to the attacker.",
+   "aftermath": "Major shareholders promptly contributed funds to reimburse customers in full.",
+   "sources": [
+    "http://quadrigainitiative.com/cryptocurrencyhackscamfraudwiki/index.php?title=796_Exchange_Hack",
+    "https://www.chainsec.io/exchange-hacks/"
+   ]
+  },
+  {
+   "name": "Bter",
+   "date": "2015-02-14",
+   "btc": 7170,
+   "usdAtTime": 1750000,
+   "kind": "exchange",
+   "summary": "The Chinese exchange Bter lost 7,170 BTC from what it called a cold wallet, which in practice was a wallet kept on a managed server rather than fully offline. It was the exchange's second breach after 50 million NXT were stolen in 2014.",
+   "aftermath": "Bter halted trading, offered a 720 BTC bounty for recovery, and never fully recovered before shutting down.",
+   "sources": [
+    "https://www.coindesk.com/markets/2015/02/15/bter-claims-175-million-in-bitcoin-stolen-in-cold-wallet-hack",
+    "https://thehackernews.com/2015/02/bter-bitcoin-exchange-hacked.html"
+   ]
+  },
+  {
+   "name": "KipCoin",
+   "date": "2015-02-18",
+   "btc": 3000,
+   "usdAtTime": 700000,
+   "kind": "exchange",
+   "summary": "An attacker gained control of the Chinese exchange KipCoin's servers, downloaded the wallet.dat file, and quietly drained over 3,000 BTC starting in late 2014. The company disclosed the theft on February 18, 2015, days after the Bitstamp and Bter hacks, and some in the community doubted the hack story.",
+   "aftermath": "KipCoin suspended services shortly after the disclosure and never recovered.",
+   "sources": [
+    "https://www.newsbtc.com/2015/02/19/chinese-bitcoin-exchange-kipcoin-shuts-claims-losing-3000-btc-hackers/",
+    "https://coinjournal.net/news/chinese-exchange-kipcoin-hacked/"
+   ]
+  },
+  {
+   "name": "Bitfinex (2015)",
+   "date": "2015-05-22",
+   "btc": 1500,
+   "usdAtTime": 350000,
+   "kind": "exchange",
+   "summary": "Hackers compromised the keys to Bitfinex's hot wallet and stole roughly 1,500 BTC, about 0.5 percent of the exchange's holdings, with the rest protected in multisig cold storage. The incident foreshadowed the far larger 2016 breach.",
+   "aftermath": "Bitfinex absorbed the loss entirely and no customer accounts were affected.",
+   "sources": [
+    "https://siliconangle.com/2015/05/24/bitfinex-bitcoin-exchange-hot-wallet-hacked-estimated-1474-btc-stolen/",
+    "https://bitcoinmagazine.com/business/bitfinex-hot-wallets-hacked-1400-bitcoin-may-stolen-1432326539",
+    "https://cointelegraph.com/news/breaking-bitfinex-hot-wallet-hacked-bitcoins-stolen"
+   ]
+  },
+  {
+   "name": "ShapeShift",
+   "date": "2016-03-14",
+   "btc": 315,
+   "usdAtTime": 130000,
+   "kind": "exchange",
+   "summary": "ShapeShift's own infrastructure employee stole 315 BTC, about 130,000 dollars, from the exchange's hot wallet on March 14, 2016, then sold source code, server access and keys to an outside hacker who carried out two more thefts of BTC, ETH and LTC in April, bringing total losses to roughly 200,000 to 230,000 dollars. CEO Erik Voorhees documented the sabotage in the postmortem Looting of the Fox.",
+   "aftermath": "No customer funds were at risk since ShapeShift held no accounts, and the exchange rebuilt its infrastructure and resumed service.",
+   "sources": [
+    "https://news.bitcoin.com/looting-fox-sabotage-shapeshift/",
+    "https://www.quadrigainitiative.com/casestudy/shapeshiftthreethefts.php"
+   ]
+  },
+  {
+   "name": "Bitfinex",
+   "date": "2016-08-02",
+   "btc": 119756,
+   "usdAtTime": 72000000,
+   "kind": "exchange",
+   "summary": "An attacker breached Bitfinex's multisignature wallet system and pushed through about 2,000 unauthorized withdrawals, stealing 119,756 BTC from the Hong Kong exchange.",
+   "aftermath": "The US seized about 94,000 of the coins in 2022, then worth 3.6 billion dollars, and Ilya Lichtenstein, who admitted the hack, and Heather Morgan were sentenced in 2024 for laundering them.",
+   "sources": [
+    "https://www.justice.gov/usao-dc/2016-bitfinex-hack",
+    "https://en.wikipedia.org/wiki/2016_Bitfinex_hack",
+    "https://www.trmlabs.com/resources/blog/ilya-lichtenstein-sentenced-for-role-in-bitfinex-hack-in-razzlekhan-case-as-government-recovers-about-10-billion-in-stolen-funds"
+   ]
+  },
+  {
+   "name": "Bitcurex",
+   "date": "2016-10-13",
+   "btc": 2300,
+   "usdAtTime": 1500000,
+   "kind": "exchange",
+   "summary": "Someone transferred 2,300 BTC out of Polish exchange Bitcurex within seconds, after what the company described as external interference in its automated data processing. Poland's oldest bitcoin exchange never explained the breach in full.",
+   "aftermath": "Bitcurex briefly resumed then closed for good in early 2017, and prosecutors in Lodz opened a criminal investigation.",
+   "sources": [
+    "https://www.bleepingcomputer.com/news/security/polish-authorities-confirm-hack-of-bitcurex-bitcoin-exchange-launch-investigation/",
+    "https://cointelegraph.com/news/polands-bitcoin-exchange-bitcurex-disappears-in-mtgox-fashion",
+    "https://quadrigainitiative.com/casestudy/bitcurexexchangehack.php"
+   ]
+  },
+  {
+   "name": "Yapizon",
+   "date": "2017-04-22",
+   "btc": 3831,
+   "usdAtTime": 4800000,
+   "kind": "exchange",
+   "summary": "Hackers stole 3,831 BTC, about 37 percent of holdings, from the South Korean exchange Yapizon's hot wallets on April 22, 2017. UN investigators later attributed the theft to North Korean state hackers.",
+   "aftermath": "Yapizon spread the loss across all customer balances with a 37 percent haircut and rebranded as Youbit, which was hacked again that December.",
+   "sources": [
+    "https://github.com/tayvano/lazarus-bluenoroff-research/blob/main/hacks-and-thefts/youbit_aka_yapizon_aka_coinbin.md",
+    "https://www.cnbc.com/2017/12/19/yapian-youbit-exchange-files-bankruptcy.html",
+    "https://bitcoinmagazine.com/culture/after-second-hack-year-south-korean-exchange-youbit-closes-down"
+   ]
+  },
+  {
+   "name": "MyBTGWallet",
+   "date": "2017-11-21",
+   "btc": null,
+   "usdAtTime": 3000000,
+   "kind": "wallet",
+   "summary": "A fake web wallet, mybtgwallet.com, promised to let users claim Bitcoin Gold after the fork and was even linked from the official Bitcoin Gold website. It harvested the seeds and private keys users entered and drained more than 3 million dollars in bitcoin, plus about 209,000 dollars in BTG, LTC and ETH, an early template for fork claim scams.",
+   "aftermath": "The link was pulled from the Bitcoin Gold site and the stolen funds were never recovered.",
+   "sources": [
+    "https://www.coindesk.com/markets/2017/11/22/bitcoin-gold-wallet-scam-nets-3-million-in-illicit-earnings",
+    "https://www.ccn.com/bitcoin-gold-wallet-scam-nets-fraudsters-3-2-million-after-stealing-users-private-keys/"
+   ]
+  },
+  {
+   "name": "NiceHash",
+   "date": "2017-12-06",
+   "btc": 4736,
+   "usdAtTime": 64000000,
+   "kind": "pool",
+   "summary": "Attackers used sophisticated social engineering to compromise a NiceHash engineer's computer and credentials, infiltrated the Slovenian hash power marketplace, and emptied its bitcoin payment wallet of about 4,736 BTC belonging to miners and buyers, worth roughly 64 million dollars.",
+   "aftermath": "CEO Marko Kobal resigned, and a repayment program launched in 2018 restored users to 100 percent by December 2020.",
+   "sources": [
+    "https://www.infosecurity-magazine.com/news/64m-in-bitcoin-stolen-from-nicehash/",
+    "https://www.cnbc.com/2017/12/07/bitcoin-stolen-in-hack-on-nicehash-cryptocurrency-mining-marketplace.html",
+    "https://coingeek.com/nicehash-returns-100-of-stolen-funds/"
+   ]
+  },
+  {
+   "name": "Youbit",
+   "date": "2017-12-19",
+   "btc": null,
+   "usdAtTime": 16000000,
+   "kind": "exchange",
+   "summary": "Hackers broke into the hot wallet of South Korean exchange Youbit, formerly Yapizon, and stole 17 percent of its total assets in its second breach of the year. The company never disclosed the exact amount, with contemporaneous wire reports estimating the loss around 17 billion won, and the attack was later attributed to North Korea.",
+   "aftermath": "Youbit filed for bankruptcy the same day, letting users withdraw 75 percent of balances while relying on cyber insurance that was later contested.",
+   "sources": [
+    "https://www.coindesk.com/markets/2017/12/19/bitcoin-exchange-youbit-to-declare-bankruptcy-after-hack",
+    "https://bitcoinmagazine.com/culture/after-second-hack-year-south-korean-exchange-youbit-closes-down",
+    "https://www.business-standard.com/article/news-ians/south-korean-bitcoin-exchange-youbit-shut-down-after-hacking-117121901005_1.html"
+   ]
+  },
+  {
+   "name": "Zaif",
+   "date": "2018-09-14",
+   "btc": 5966,
+   "usdAtTime": 37800000,
+   "kind": "exchange",
+   "summary": "Attackers drained the hot wallet of Japanese licensed exchange Zaif on September 14, 2018, taking 5,966 BTC worth about 37.8 million dollars as part of a roughly 60 million dollar theft that also included Bitcoin Cash and MonaCoin. The breach was only disclosed several days later.",
+   "aftermath": "Fisco Group injected 44.5 million dollars and took over Zaif, and affected customers were compensated.",
+   "sources": [
+    "https://www.coindesk.com/markets/2018/09/20/crypto-exchange-zaif-hacked-in-60-million-bitcoin-theft",
+    "https://news.bitcoin.com/japanese-regulated-exchange-zaif-hacked-btc/",
+    "https://www.npr.org/2018/09/20/650079273/hackers-steal-59-million-in-cryptocurrency-from-japanese-exchange"
+   ]
+  },
+  {
+   "name": "Electrum phishing campaign",
+   "date": "2018-12-21",
+   "btc": 771,
+   "usdAtTime": 4000000,
+   "kind": "wallet",
+   "summary": "Attackers added malicious servers to the Electrum wallet's public network so that transacting users saw popup messages urging a security update, which linked to a backdoored copy of Electrum that emptied their wallets. The first waves starting December 21, 2018 netted about 771 BTC, roughly 4 million dollars, according to Malwarebytes.",
+   "aftermath": "The fake update trick persisted for years, with a ZDNet investigation counting roughly 1,980 BTC, about 22 million dollars, stolen through 2019 and 2020.",
+   "sources": [
+    "https://www.coindesk.com/markets/2018/12/28/electrum-wallet-attack-may-have-stolen-as-much-as-245-bitcoin",
+    "https://www.malwarebytes.com/blog/news/2019/04/electrum-bitcoin-wallets-under-siege",
+    "https://www.theblock.co/linked/80567/criminals-steal-22-million-through-electrum-phishing-updates"
+   ]
+  },
+  {
+   "name": "Binance",
+   "date": "2019-05-07",
+   "btc": 7074,
+   "usdAtTime": 40700000,
+   "kind": "exchange",
+   "summary": "Hackers used phishing, viruses and stolen API keys plus two factor codes to pull 7,074 BTC, about 40.7 million dollars, from Binance's hot wallet in a single well orchestrated transaction. The haul was about 2 percent of the exchange's total bitcoin holdings.",
+   "aftermath": "Binance covered all losses from its SAFU insurance fund and no customers lost money.",
+   "sources": [
+    "https://www.coindesk.com/markets/2019/05/07/hackers-steal-407-million-in-bitcoin-from-crypto-exchange-binance",
+    "https://www.binance.com/en/support/announcement/binance-security-breach-update-360028031711",
+    "https://www.cnbc.com/2019/05/08/binance-bitcoin-hack-over-40-million-of-cryptocurrency-stolen.html"
+   ]
+  },
+  {
+   "name": "BITPoint",
+   "date": "2019-07-11",
+   "btc": 1225,
+   "usdAtTime": 14000000,
+   "kind": "exchange",
+   "summary": "Attackers compromised the hot wallet keys of Japanese exchange BITPoint and stole 1,225 BTC, roughly 14 million dollars, as part of a theft initially put at about 30 million dollars that also included Bitcoin Cash, Ether and Litecoin. Cold wallets were not affected.",
+   "aftermath": "BITPoint reimbursed about 50,000 customers in kind and resumed services in August 2019 after revising the loss down to about 28 million dollars.",
+   "sources": [
+    "https://www.coindesk.com/markets/2019/07/15/hacked-crypto-exchange-bitpoint-discovers-more-millions-are-missing",
+    "https://www.quadrigainitiative.com/casestudy/bitpointtheft.php",
+    "https://www.bitdefender.com/en-us/blog/hotforsecurity/hackers-steal-32-million-from-japanese-cryptocurrency-exchange-bitpoint"
+   ]
+  },
+  {
+   "name": "Josh Jones SIM swap",
+   "date": "2020-02-22",
+   "btc": 1547,
+   "usdAtTime": 15000000,
+   "kind": "individual",
+   "summary": "A SIM swap attack on early bitcoin investor and Bitcoin Builder founder Josh Jones let the attacker take over his phone number and drain 1,547 BTC, about 15 million dollars, along with roughly 60,000 BCH, a combined theft reported at around 45 million dollars. It was one of the largest thefts from a single individual on record.",
+   "aftermath": "A teenager from Hamilton, Ontario was arrested in 2021 after investigators tied him to the funds through the purchase of a rare gaming username.",
+   "sources": [
+    "https://cryptopotato.com/45-million-worth-of-bitcoin-and-bitcoin-cash-allegedly-stolen-in-a-sim-hack/",
+    "https://torontolife.com/city/the-case-of-the-missing-46-million/",
+    "https://quadrigainitiative.com/casestudy/joshjonescryptostolenbyhamiltonteen.php"
+   ]
+  },
+  {
+   "name": "Twitter bitcoin scam",
+   "date": "2020-07-15",
+   "btc": 12.86,
+   "usdAtTime": 118000,
+   "kind": "other",
+   "summary": "Attackers social engineered Twitter employees to access internal admin tools and hijacked about 130 high profile accounts, including Barack Obama, Joe Biden, Elon Musk, Bill Gates and Apple, posting a doubling scam that collected about 12.86 BTC, roughly 118,000 dollars, from over 400 payments. The sum was small but the compromise of Twitter itself made it one of the most famous bitcoin related hacks ever.",
+   "aftermath": "Ringleader Graham Ivan Clark, aged 17, was arrested within weeks and pleaded guilty, receiving a three year sentence, while accomplice Joseph O'Connor later got five years.",
+   "sources": [
+    "https://en.wikipedia.org/wiki/2020_Twitter_account_hijacking",
+    "https://www.dfs.ny.gov/Twitter_Report",
+    "https://www.merklescience.com/blog/updated-hack-track-twitterhack-bitcoin-scam"
+   ]
+  },
+  {
+   "name": "Electrum 1,400 BTC theft",
+   "date": "2020-08-30",
+   "btc": 1400,
+   "usdAtTime": 16000000,
+   "kind": "individual",
+   "summary": "A holder who had not touched their Electrum wallet since 2017 installed a fake security update served through the wallet's malicious server popup scheme, and the backdoored software immediately swept their entire balance of about 1,400 BTC, worth around 16 million dollars. It was the single largest known loss from the long running Electrum fake update campaign.",
+   "aftermath": "The coins were never recovered and the victim publicized the loss on GitHub as a warning to others.",
+   "sources": [
+    "https://www.coindesk.com/policy/2020/08/31/someone-just-lost-16m-in-bitcoin-by-using-a-malicious-install-of-the-electrum-wallet",
+    "https://hackread.com/fake-wallet-update-steals-bitcoin-from-electrum-user/",
+    "https://coincodex.com/article/9371/16-million-worth-of-bitcoin-stolen-as-1400-btc-holder-falls-victim-to-fake-electrum-wallet-update"
+   ]
+  },
+  {
+   "name": "KuCoin",
+   "date": "2020-09-25",
+   "btc": 1008,
+   "usdAtTime": 10800000,
+   "kind": "exchange",
+   "summary": "Leaked hot wallet private keys let attackers drain about 275 million dollars in assets from KuCoin on September 25, 2020. The bitcoin portion was 1,008 BTC, worth about 10.76 million dollars; the rest was mostly Ether, ERC-20 tokens and XRP.",
+   "aftermath": "KuCoin recovered or covered the large majority of losses, and the hack was attributed to North Korea's Lazarus Group.",
+   "sources": [
+    "https://www.chainalysis.com/blog/kucoin-hack-2020-defi-uniswap/",
+    "https://www.coindesk.com/markets/2020/09/26/over-280m-drained-in-kucoin-crypto-exchange-hack",
+    "https://hacken.io/insights/kucoin-september-2020-hack-hacken-research/"
+   ]
+  },
+  {
+   "name": "Individual X Silk Road hack",
+   "date": "2020-11-05",
+   "btc": 69370,
+   "usdAtTime": 1000000000,
+   "kind": "marketplace",
+   "summary": "An unidentified hacker referred to in court filings as Individual X stole about 69,370 BTC from Silk Road in 2012 or 2013 and sat on the coins for years. The theft became public on November 5, 2020, when US prosecutors filed a civil forfeiture action after Individual X consented to hand over the wallet, then worth about 1 billion dollars.",
+   "aftermath": "The bitcoin was forfeited to the US government and later folded into the Silk Road related sales; Individual X was never publicly charged or named.",
+   "sources": [
+    "https://www.justice.gov/usao-ndca/pr/united-states-files-civil-action-forfeit-cryptocurrency-valued-over-one-billion-us",
+    "https://en.wikipedia.org/wiki/Silk_Road_(marketplace)"
+   ]
+  },
+  {
+   "name": "LuBian mining pool",
+   "date": "2020-12-29",
+   "btc": 127426,
+   "usdAtTime": 3500000000,
+   "kind": "pool",
+   "summary": "Chinese mining pool LuBian generated private keys with a flawed random number generator, and in late December 2020 an attacker brute forced the keys and drained about 127,426 BTC, more than 90 percent of its holdings, in under two hours. The theft stayed publicly unknown until Arkham Intelligence disclosed it in 2025.",
+   "aftermath": "The coins sat dormant for years until the US DOJ announced in October 2025 that it had seized about 127,000 BTC in its forfeiture case against Prince Group founder Chen Zhi.",
+   "sources": [
+    "https://info.arkm.com/research/us-government-btc-seizure-lubian-chen-zhi-pig-butchering",
+    "https://www.elliptic.co/insights/15-billion-us-seizure-reveals-prince-groups-connection-to-iran-china-bitcoin-mining-theft/",
+    "https://www.panewslab.com/en/articles/02a77211-26f7-4399-880a-2ccbc158dd8a",
+    "https://decrypt.co/348109/chinese-cybersecurity-watchdog-alleges-us-stole-13-2b-in-bitcoin-five-years-ago"
+   ]
+  },
+  {
+   "name": "pNetwork pBTC bridge",
+   "date": "2021-09-19",
+   "btc": 277,
+   "usdAtTime": 12700000,
+   "kind": "other",
+   "summary": "An attacker exploited a flaw in how the pNetwork cross chain bridge validated event logs for pBTC peg out requests on Binance Smart Chain, injecting fake withdrawal requests that the bridge treated as legitimate. The bridge unlocked 277 BTC of collateral, worth about 12.7 million dollars at the time, to the attacker.",
+   "aftermath": "pNetwork offered the attacker a 1.5 million dollar bounty for return of the funds, but no recovery was reported and the protocol patched the bug and continued operating.",
+   "sources": [
+    "https://www.halborn.com/blog/post/explained-the-pnetwork-hack-september-2021",
+    "https://decrypt.co/81301/defi-bridging-protocol-pnetwork-suffers-12-million-hack",
+    "https://www.theblock.co/post/118060/defi-pnetwork-hack-wrapped-bitcoin-12-million-lost"
+   ]
+  },
+  {
+   "name": "BadgerDAO",
+   "date": "2021-12-02",
+   "btc": 2100,
+   "usdAtTime": 119000000,
+   "kind": "other",
+   "summary": "Attackers compromised a Cloudflare API key for the front end of BadgerDAO, a bitcoin focused DeFi protocol, and injected a script that tricked roughly 500 users into granting unlimited token approvals. About 2,100 BTC held as wrapped and vaulted bitcoin tokens, plus 151 ETH, were drained, and much of the loot was bridged to native BTC through RenBridge.",
+   "aftermath": "Badger froze its contracts mid attack and later funded a partial restitution plan for affected users.",
+   "sources": [
+    "https://decrypt.co/87415/bitcoin-defi-project-badgerdao-hacked-120m",
+    "https://www.halborn.com/blog/post/explained-the-badgerdao-hack-december-2021",
+    "https://www.coindesk.com/business/2021/12/02/badger-dao-protocol-suffers-10m-exploit"
+   ]
+  },
+  {
+   "name": "Crypto.com",
+   "date": "2022-01-17",
+   "btc": 443.93,
+   "usdAtTime": 18600000,
+   "kind": "exchange",
+   "summary": "Attackers bypassed two factor authentication and made unauthorized withdrawals from 483 user accounts, taking 443.93 BTC worth about 18.6 million dollars along with 4,836 ETH and other funds, roughly 34 million dollars in total. Figures here cover the BTC portion only.",
+   "aftermath": "Crypto.com reimbursed all affected users and rebuilt its 2FA infrastructure.",
+   "sources": [
+    "https://www.halborn.com/blog/post/explained-the-crypto-com-hack-january-2022",
+    "https://www.coindesk.com/business/2022/01/20/cryptocom-says-hackers-stole-nearly-34m-from-users",
+    "https://www.cbsnews.com/news/crypto-com-hack-bitcoin-ethereum-30-million/"
+   ]
+  },
+  {
+   "name": "IRA Financial Trust",
+   "date": "2022-02-08",
+   "btc": null,
+   "usdAtTime": 21000000,
+   "kind": "other",
+   "summary": "Hackers drained self directed retirement accounts that IRA Financial Trust customers held on the Gemini exchange on February 8, 2022, stealing about 36 million dollars, of which roughly 21 million dollars was bitcoin and 15 million dollars was ether. The exact BTC coin count was never published; figures here cover the BTC portion only.",
+   "aftermath": "IRA Financial sued Gemini over the losses, and an Indiana man later pleaded guilty in US federal court to the theft.",
+   "sources": [
+    "https://news.bloomberglaw.com/privacy-and-data-security/ira-financial-hacked-36-million-in-cryptocurrency-stolen",
+    "https://decrypt.co/92950/gemini-client-ira-financial-hacked-36m-bitcoin-ethereum-report",
+    "https://www.coindesk.com/business/2022/02/14/drained-crypto-accounts-at-ira-financial-leave-victims-searching-for-answers"
+   ]
+  },
+  {
+   "name": "Deribit",
+   "date": "2022-11-01",
+   "btc": 691,
+   "usdAtTime": 14100000,
+   "kind": "exchange",
+   "summary": "The bitcoin options exchange lost about 28 million dollars when its BTC, ETH and USDC hot wallets were compromised, including 691 BTC worth about 14.1 million dollars that went to the attacker's bitcoin address. Figures here cover the BTC portion only.",
+   "aftermath": "Deribit covered the loss from company reserves, client funds were unaffected, and withdrawals resumed quickly.",
+   "sources": [
+    "https://insights.deribit.com/exchange-updates/1-november-incident-report-and-next-steps/",
+    "https://decrypt.co/113334/crypto-exchange-deribit-hacked-28m-bitcoin-ethereum-usdc",
+    "https://www.coindesk.com/business/2022/11/02/crypto-exchange-deribit-loses-28m-in-hot-wallet-hack"
+   ]
+  },
+  {
+   "name": "LastPass vault thefts",
+   "date": "2022-12",
+   "btc": null,
+   "usdAtTime": 35000000,
+   "kind": "supply-chain",
+   "summary": "Criminals cracked password vaults stolen in the 2022 LastPass breach and used recovered seed phrases to drain the wallets of long time crypto holders. Researchers Taylor Monahan and ZachXBT tied more than 35 million dollars in thefts across more than 150 victims to the breach between December 2022 and late 2023, much of it bitcoin, though a bitcoin only split was never published.",
+   "aftermath": "The thefts continued for years and US investigators later formally linked a further nine figure heist to the same breach.",
+   "sources": [
+    "https://krebsonsecurity.com/2023/09/experts-fear-crooks-are-cracking-keys-stolen-in-lastpass-breach/",
+    "https://www.coindesk.com/business/2023/10/30/lastpass-hack-victims-lose-44m-in-a-single-day",
+    "https://krebsonsecurity.com/2025/03/feds-link-150m-cyberheist-to-2022-lastpass-hacks/"
+   ]
+  },
+  {
+   "name": "Luke Dashjr",
+   "date": "2023-01-01",
+   "btc": 216.93,
+   "usdAtTime": 3600000,
+   "kind": "individual",
+   "summary": "Bitcoin Core developer Luke Dashjr reported on New Year's Day 2023 that attackers had compromised his PGP key and server access and stolen 216.93 BTC, worth about 3.6 million dollars, from wallets he had believed were secure, including what he considered cold storage.",
+   "aftermath": "The coins were never recovered and the FBI investigated, even subpoenaing the attendee list of a 2022 bitcoin developer event.",
+   "sources": [
+    "https://www.theblock.co/post/287939/fbi-luke-dashjr-btc-hack",
+    "https://gizmodo.com/bitcoin-price-hack-217-btc-og-developer-luke-dashjr-1849944799",
+    "https://beincrypto.com/early-bitcoin-developer-luke-dashjr-loses-3-6m-btc-due-supposed-key-hack/"
+   ]
+  },
+  {
+   "name": "General Bytes ATMs",
+   "date": "2023-03-18",
+   "btc": 56.28,
+   "usdAtTime": 1500000,
+   "kind": "supply-chain",
+   "summary": "Attackers exploited a zero day in the master service interface of General Bytes bitcoin ATM server software, remotely uploading a rogue Java application that exposed hot wallet keys for many ATM operators. They took 56.28 BTC worth about 1.5 million dollars, plus smaller amounts of ETH and LTC for about 1.6 million dollars in total; figures here cover the BTC portion only.",
+   "aftermath": "General Bytes shut down its cloud service and told all ATM operators to run standalone servers.",
+   "sources": [
+    "https://www.generalbytes.com/en/news/general-bytes-statement-on-the-security-incident-that-occurred-on-march-18-2023",
+    "https://thehackernews.com/2023/03/hackers-steal-over-16-million-in-crypto.html",
+    "https://therecord.media/crypto-atm-manufacturer-general-bytes-hacked"
+   ]
+  },
+  {
+   "name": "Milk Sad, Libbitcoin Explorer",
+   "date": "2023-07-12",
+   "btc": 29.65,
+   "usdAtTime": 850000,
+   "kind": "supply-chain",
+   "summary": "A weak entropy flaw in the Libbitcoin Explorer bx tool, CVE-2023-39910, generated wallet seeds from an effective 32 bit value, leaving over 2,600 actively used bitcoin wallets crackable. Thieves who found the flaw swept about 29.65 BTC, upwards of 850,000 dollars, in a coordinated theft on July 12, 2023, part of roughly 900,000 dollars taken across several chains. Included as a novel attack vector despite its size.",
+   "aftermath": "The Milk Sad disclosure prompted industry wide audits of wallet seed generation.",
+   "sources": [
+    "https://milksad.info/disclosure.html",
+    "https://bitcoinmagazine.com/technical/the-milk-sad-vulnerability-and-what-it-means-for-bitcoin"
+   ]
+  },
+  {
+   "name": "Mixin Network",
+   "date": "2023-09-23",
+   "btc": null,
+   "usdAtTime": 23700000,
+   "kind": "other",
+   "summary": "Attackers compromised the database of Mixin Network's cloud service provider and withdrew about 200 million dollars of mainnet assets. Elliptic traced 23.7 million dollars of bitcoin, 9 percent of Mixin's BTC, alongside 95.3 million dollars of ether in the attacker addresses, while Mixin itself said the main loss was bitcoin; figures here cover the traced BTC portion only.",
+   "aftermath": "Mixin offered the hacker a 20 million dollar bounty and capped user refunds at half of losses, paying the rest as tokenized claims.",
+   "sources": [
+    "https://www.elliptic.co/blog/mixin-network-hacked-for-200-million",
+    "https://techcrunch.com/2023/09/25/hackers-steal-200-million-from-crypto-company-mixin/",
+    "https://www.coindesk.com/tech/2023/09/25/mixin-network-losses-nearly-200m-in-hack"
+   ]
+  },
+  {
+   "name": "Poloniex",
+   "date": "2023-11-10",
+   "btc": 501,
+   "usdAtTime": 18000000,
+   "kind": "exchange",
+   "summary": "Attackers widely attributed to the Lazarus Group compromised private keys and drained roughly 126 to 132 million dollars from Poloniex hot wallets on the Ethereum, Tron and Bitcoin networks. The bitcoin portion was about 501 BTC worth about 18 million dollars, and figures here cover the BTC portion only.",
+   "aftermath": "Owner Justin Sun pledged full reimbursement and withdrawals resumed within weeks.",
+   "sources": [
+    "https://www.certik.com/resources/blog/poloniex-incident-analysis",
+    "https://www.halborn.com/blog/post/explained-the-poloniex-hack-november-2023",
+    "https://coingape.com/poloniex-hack-total-funds-stolen-reaches-over-126-million-btc-eth-shib-most-impacted/"
+   ]
+  },
+  {
+   "name": "FixedFloat",
+   "date": "2024-02-16",
+   "btc": 409,
+   "usdAtTime": 21000000,
+   "kind": "exchange",
+   "summary": "Attackers exploited infrastructure vulnerabilities at the no KYC instant swap exchange FixedFloat and drained its hot wallets of 409 BTC plus 1,728 ETH, about 26 million dollars in total. The BTC portion was worth about 21 million dollars at the time.",
+   "aftermath": "FixedFloat resumed service weeks later and was exploited again for about 3 million dollars in April 2024.",
+   "sources": [
+    "https://decrypt.co/218077/fixedfloat-hack-26-million-bitcoin-ethereum",
+    "https://www.halborn.com/blog/post/explained-the-fixedfloat-hack-february-2024",
+    "https://www.forbes.com/sites/digital-assets/2024/02/20/decentralized-and-non-kyc-crypto-exchange-hacked-for-26-million/"
+   ]
+  },
+  {
+   "name": "DMM Bitcoin",
+   "date": "2024-05-31",
+   "btc": 4502.9,
+   "usdAtTime": 305000000,
+   "kind": "exchange",
+   "summary": "Japan's DMM Bitcoin lost 4,502.9 BTC, about 305 million dollars, after North Korea's TraderTraitor group compromised an employee at wallet software provider Ginco through a fake recruiting test and then manipulated a legitimate transaction request. It was the largest crypto theft of 2024.",
+   "aftermath": "DMM Bitcoin wound down and transferred customer accounts to SBI VC Trade after the FBI and Japanese police attributed the theft to North Korea.",
+   "sources": [
+    "https://www.coindesk.com/business/2024/05/31/japanese-crypto-exchange-dmm-bitcoin-suffers-305m-hack",
+    "https://www.fbi.gov/news/press-releases/fbi-dc3-and-npa-identification-of-north-korean-cyber-actors-tracked-as-tradertraitor-responsible-for-theft-of-308-million-from-bitcoindmmcom",
+    "https://www.coindesk.com/business/2024/12/02/japanese-crypto-exchange-dmm-bitcoin-to-shut-down-after-305-m-hack"
+   ]
+  },
+  {
+   "name": "Genesis creditor theft",
+   "date": "2024-08-19",
+   "btc": 4064,
+   "usdAtTime": 238000000,
+   "kind": "individual",
+   "summary": "Scammers posing as Google and Gemini support tricked a Genesis creditor into resetting two factor authentication and installing AnyDesk, then extracted private keys from the victim's Bitcoin Core wallet and stole 4,064 BTC. The total haul was about 243 million dollars including small amounts of other assets.",
+   "aftermath": "Malone Lam, Jeandiel Serrano and Veer Chetal were arrested and indicted in the US, and part of the funds was frozen.",
+   "sources": [
+    "https://www.theblock.co/post/317349/blockchain-sleuth-zachxbt-alleges-three-perps-involved-in-243-million-theft-of-single-genesis-creditor",
+    "https://cryptoslate.com/zachxbt-helps-secure-arrests-in-243m-social-engineering-attack-on-one-person/",
+    "https://x.com/zachxbt/status/1836752940029149269"
+   ]
+  },
+  {
+   "name": "Elderly US holder theft",
+   "date": "2025-04-28",
+   "btc": 3520,
+   "usdAtTime": 330700000,
+   "kind": "individual",
+   "summary": "A social engineering crew using spoofed support calls and fake websites obtained credentials and keys from an elderly American bitcoin holder and stole 3,520 BTC, about 330.7 million dollars. It ranks among the largest thefts from a single person ever recorded, and the funds were rapidly laundered through more than six exchanges and swapped into Monero, briefly driving XMR up about 50 percent.",
+   "aftermath": "About 7 million dollars was frozen with exchange cooperation while investigator ZachXBT identified suspects tied to an overseas call scam ring.",
+   "sources": [
+    "https://www.theblock.co/post/352572/zachxbt-says-330-million-bitcoin-theft-victim-is-an-elderly-person-in-us",
+    "https://cryptoslate.com/zachxbt-tracks-330m-bitcoin-stolen-in-social-engineering-scam-from-elderly-american/",
+    "https://x.com/zachxbt/status/1916756932763046273"
+   ]
+  },
+  {
+   "name": "BigONE",
+   "date": "2025-07-16",
+   "btc": 120,
+   "usdAtTime": 14150000,
+   "kind": "exchange",
+   "summary": "A supply chain attack on BigONE's backend altered its withdrawal validation logic and drained hot wallets on five chains for about 27 million dollars in total, including roughly 120 BTC worth about 14 million dollars alongside ETH, SOL and TRX. Figures here cover the BTC portion only.",
+   "aftermath": "BigONE covered all user losses from its reserves and continued operating.",
+   "sources": [
+    "https://www.bleepingcomputer.com/news/security/hacker-steals-27-million-in-bigone-exchange-crypto-breach/",
+    "https://www.coindesk.com/markets/2025/07/16/crypto-exchange-bigone-confirms-27m-hack-vows-full-user-compensation",
+    "https://www.halborn.com/blog/post/explained-the-big-one-hack-july-2025"
+   ]
+  },
+  {
+   "name": "Odin.fun",
+   "date": "2025-08-13",
+   "btc": 58.2,
+   "usdAtTime": 7000000,
+   "kind": "other",
+   "summary": "An attacker manipulated prices on the Bitcoin memecoin launchpad Odin.fun by seeding its internal liquidity AMM with worthless tokens and self trading, then withdrew 58.2 BTC of user deposited liquidity. The platform's bitcoin reserves fell from 291 BTC to 232.8 BTC in under two hours, the largest known hack of a Bitcoin native token platform.",
+   "aftermath": "Odin.fun suspended operations and engaged law enforcement in the US and China while working on a user compensation plan.",
+   "sources": [
+    "https://www.coindesk.com/markets/2025/08/13/memecoin-launchpad-odin-fun-suffers-usd7m-liquidity-exploit",
+    "https://www.theblock.co/post/366704/bitcoin-launchpad-odin-fun-exploit",
+    "https://www.halborn.com/blog/post/explained-the-odin-fun-hack-august-2025"
+   ]
+  },
+  {
+   "name": "783 BTC social engineering theft",
+   "date": "2025-08-19",
+   "btc": 783,
+   "usdAtTime": 91000000,
+   "kind": "individual",
+   "summary": "An attacker impersonating hardware wallet and exchange support staff talked a longtime holder into compromising their wallet and stole 783 BTC, worth about 91 million dollars. The theft came exactly one year after the 243 million dollar Genesis creditor heist that used similar tactics.",
+   "aftermath": "The funds were peeled through Wasabi Wallet and no arrests have been reported.",
+   "sources": [
+    "https://www.coindesk.com/business/2025/08/21/victim-loses-usd91m-in-bitcoin-after-social-engineering-scam-zachxbt",
+    "https://decrypt.co/336279/bitcoin-investor-loses-91-million-to-social-engineering-scam-zachxbt",
+    "https://www.cryptotimes.io/2025/08/22/crypto-investor-loses-783-bitcoin-91m-to-social-engineering-scam/"
+   ]
+  },
+  {
+   "name": "SBI Crypto pool",
+   "date": "2025-09-24",
+   "btc": null,
+   "usdAtTime": 21000000,
+   "kind": "pool",
+   "summary": "About 21 million dollars in BTC, BCH, LTC, ETH and DOGE was drained from wallets of SBI Crypto, the bitcoin mining pool subsidiary of Japan's SBI Group, then routed through instant exchangers into Tornado Cash. ZachXBT flagged the laundering pattern as consistent with North Korea linked actors.",
+   "aftermath": "SBI made no public statement confirming the theft.",
+   "sources": [
+    "https://cryptoslate.com/top-bitcoin-mining-pool-sbi-crypto-hacked-21-million-stolen/",
+    "https://decrypt.co/342481/21m-in-bitcoin-and-other-crypto-stolen-from-japanese-miner-sbi-says-blockchain-sleuth",
+    "https://unchainedcrypto.com/sbis-bitcoin-mining-pool-hacked-for-21-million-zachxbt/"
+   ]
+  },
+  {
+   "name": "Hardware wallet support scam",
+   "date": "2026-01-10",
+   "btc": 1459,
+   "usdAtTime": 139000000,
+   "kind": "individual",
+   "summary": "A holder tricked by scammers impersonating hardware wallet support into exposing a wallet backup lost 1,459 BTC and 2.05 million LTC, worth about 282 million dollars combined. The BTC portion was worth roughly 139 million dollars with bitcoin trading near 95,500 dollars at the time. Figures here cover the BTC portion only.",
+   "aftermath": "Most of the funds were swapped to Monero through instant exchanges, pushing XMR sharply higher, and no arrests have been reported.",
+   "sources": [
+    "https://thedefiant.io/news/defi/zachxbt-highlights-usd282m-theft-of-bitcoin-and-litecoin-in-hardware-wallet-scam",
+    "https://www.coindesk.com/business/2026/01/16/hacker-steals-usd282-milion-in-hardware-wallet-social-engineering-attack",
+    "https://cryptobriefing.com/hardware-wallet-scam-crypto-fraud/"
+   ]
+  },
+  {
+   "name": "Coldcard",
+   "date": "2026-07-30",
+   "btc": 1367,
+   "usdAtTime": 88600000,
+   "kind": "wallet",
+   "summary": "A firmware bug introduced in March 2021 made Coldcard Mk3 hardware wallets on versions 4.0.1 through 4.1.9 generate seeds with a deterministic software PRNG instead of the STM32 hardware random number generator, leaving the seeds weak enough to brute force offline. Starting July 30, 2026 attackers swept at least 1,367 BTC, about 88.6 million dollars, from 4,585 addresses across several waves, including 1,083 BTC worth about 70 million dollars taken in a 41 minute wave before public disclosure.",
+   "aftermath": "Coinkite shipped emergency firmware within about two days, destroyed unshipped devices carrying affected versions, and urged everyone with a seed from firmware 4.0.1 to 4.1.9 to move funds to a fresh seed, with thefts still ongoing in early August 2026.",
+   "sources": [
+    "https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/",
+    "https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html",
+    "https://www.coindesk.com/tech/2026/07/31/major-bitcoin-wallet-flaw-drains-594-btc-in-25-minute-sweep",
+    "https://www.blockhead.co/2026/08/03/coldcard-hardware-wallets-shipped-with-broken-randomness-for-five-years-coinkite-confirms/"
+   ]
+  }
+ ]
+}

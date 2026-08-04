@@ -1,20 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import { ATH_USD, ATH_USD_TEXT, ATH_LABEL, ATH_TS } from '../lib/ath.js';
 ---
-<Base title="Bitcoin All-Time High: Price, Drawdown and Recovery Math - OpenBitcoin" description="Bitcoin's all-time high is $126,272, set October 6, 2025. Live drawdown from the peak, the gain required to reclaim it, and prior cycle highs for context.">
+<Base title="Bitcoin All-Time High: Price, Drawdown and Recovery Math - OpenBitcoin" description={`Bitcoin's all-time high is ${ATH_USD_TEXT}, set ${ATH_LABEL}. Live drawdown from the peak, the gain required to reclaim it, and prior cycle highs for context.`}>
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">All-time high</div>
     <h1>Bitcoin all-time high</h1>
-    <p class="doc-lede">The highest recorded bitcoin price is $126,272, set on October 6, 2025. Below: where the current price stands against that peak, and the peaks of prior cycles. All figures in US dollars.</p>
+    <p class="doc-lede">The highest recorded bitcoin price is {ATH_USD_TEXT}, set on {ATH_LABEL}. Below: where the current price stands against that peak, and the peaks of prior cycles. All figures in US dollars.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="at-card at-hero">
       <div class="at-hlab">All-time high</div>
-      <div class="at-hnum">$126,272</div>
-      <div class="at-hdate">Set October 6, 2025</div>
+      <div class="at-hnum">{ATH_USD_TEXT}</div>
+      <div class="at-hdate">Set {ATH_LABEL}</div>
     </div>
     <div class="at-live">
       <div class="at-stat">
@@ -25,7 +26,7 @@ import '../styles/doc.css';
       <div class="at-stat">
         <div class="at-k">Drawdown from ATH</div>
         <div class="at-v" id="at-dd">&hellip;</div>
-        <div class="at-s">below $126,272</div>
+        <div class="at-s">below {ATH_USD_TEXT}</div>
       </div>
       <div class="at-stat">
         <div class="at-k">To reclaim ATH</div>
@@ -46,7 +47,7 @@ import '../styles/doc.css';
       <div class="at-note">The multiple is the current price divided by that cycle's peak, recomputed as the price ticks. Peak figures are the recorded USD highs of each cycle.</div>
     </div>
     <div class="at-about doc-prose">
-      <p>Bitcoin's all-time high of $126,272 was recorded on October 6, 2025. Earlier cycles peaked near $69,000 in November 2021, $19,783 in December 2017, and $1,163 in November 2013. The live price on this page is a median of three exchanges, documented at <a href="/sources">/sources</a>; the drawdown and recovery figures are arithmetic against that price, not forecasts.</p>
+      <p>Bitcoin's all-time high of {ATH_USD_TEXT} was recorded on {ATH_LABEL}. Earlier cycles peaked near $69,000 in November 2021, $19,783 in December 2017, and $1,163 in November 2013. The live price on this page is a median of three exchanges, documented at <a href="/sources">/sources</a>; the drawdown and recovery figures are arithmetic against that price, not forecasts.</p>
     </div>
   </div>
   <aside class="doc-rail">
@@ -100,11 +101,11 @@ import '../styles/doc.css';
     .at-card{padding:18px 18px}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ ATH: ATH_USD, ATHTS: ATH_TS }}>
 (function(){
-  /* the ATH and its date are history; price starts null and every figure
-     derived from it holds at the ellipsis it was served with */
-  var ATH=126272,ATHTS=Date.UTC(2025,9,6),price=null;
+  /* the ATH and its date are history (canon in src/lib/ath.js); price starts
+     null and every figure derived from it holds at the ellipsis it shipped with */
+  var price=null;
   var elNow=document.getElementById("at-now"),elDd=document.getElementById("at-dd"),
       elGain=document.getElementById("at-gain"),elRnow=document.getElementById("at-rnow"),
       elDays=document.getElementById("at-rdays"),

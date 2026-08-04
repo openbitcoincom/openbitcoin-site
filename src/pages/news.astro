@@ -65,6 +65,7 @@ function fmtDate(iso) {
       <div class="doc-tlab">Related</div>
       <nav>
         <a href="/obituaries">Bitcoin obituaries</a>
+        <a href="/hacks">The largest bitcoin hacks</a>
         <a href="/chart">Full price chart</a>
       </nav>
     </div>
@@ -129,7 +130,7 @@ function fmtDate(iso) {
   }
   function load(){
     try{
-      fetch(api()+"/news?limit=30")
+      fetch(api()+"/news?limit=100")
         .then(function(r){return r.ok?r.json():null})
         .then(function(j){
           var items=(j&&j.items)||[],rows=[];

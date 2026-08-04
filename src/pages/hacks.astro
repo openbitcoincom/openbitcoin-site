@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import data from '../content/hacks.json';
+const entries = data.entries;
+const years = [...new Set(entries.map((e) => e.date.slice(0, 4)))].sort((a, b) => b - a);
+const byYear = years.map((y) => ({ y, items: entries.filter((e) => e.date.slice(0, 4) === y).sort((a, b) => b.date.localeCompare(a.date)) }));
+const count = entries.length;
+const totalBtc = Math.round(entries.reduce((s, e) => s + (e.btc || 0), 0));
+const totalThen = entries.reduce((s, e) => s + (e.usdAtTime || 0), 0);
+const biggest = entries.reduce((a, b) => ((b.btc || 0) > (a.btc || 0) ? b : a));
+const busiest = byYear.reduce((a, b) => (b.items.length > a.items.length ? b : a));
+const firstYear = years[years.length - 1];
+const KINDS = { exchange: 'Exchange', wallet: 'Wallet', pool: 'Mining pool', individual: 'Individual', 'supply-chain': 'Supply chain', marketplace: 'Marketplace', lender: 'Lender', other: '' };
+const fmtBtc = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+const fmtUsd = (n) => n >= 1e9 ? '$' + (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + 'B'
+  : n >= 1e6 ? '$' + (n / 1e6).toFixed(n >= 1e8 ? 0 : 1) + 'M'
+  : '$' + Math.round(n / 1e3) + 'K';
+const fmtMonth = (d) => {
+  const M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return M[parseInt(d.slice(5, 7), 10) - 1] + ' ' + d.slice(0, 4);
+};
+---
+<Base title={'Bitcoin Hacks: The ' + count + ' Biggest Thefts in Bitcoin History - OpenBitcoin'} description={'The full record of the largest bitcoin hacks and thefts: ' + count + ' incidents since ' + firstYear + ', with the BTC taken, its dollar value at the time, and what those coins would be worth today.'}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Hacks &amp; thefts</div>
+    <h1>Bitcoin hacks</h1>
+    <p class="doc-lede">The record of the largest bitcoin hacks and thefts, from the first big exchange breaches to the most recent incidents, each with the BTC taken, its dollar value at the time, and what those coins would be worth today.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="hk-hero">
+      <div class="hk-big">{fmtBtc(totalBtc)} <span>BTC</span></div>
+      <div class="hk-sub">stolen across the {count} incidents in the record below</div>
+      <div class="hk-line">Those coins were worth about <b>{fmtUsd(totalThen)}</b> when they were taken. At today's price they would be worth <b id="hk-now" class="hk-red">&#8230;</b>.</div>
+      <div class="hk-stats">
+        <div class="hk-stat"><b>{firstYear}</b><i>first major recorded theft</i></div>
+        <div class="hk-stat"><b>{fmtBtc(biggest.btc)} BTC</b><i>largest single theft, {biggest.name}</i></div>
+        <div class="hk-stat"><b>{busiest.y}</b><i>busiest year, {busiest.items.length} incidents</i></div>
+        <div class="hk-stat"><b id="hk-h">&#8230;</b><i>current block height</i></div>
+      </div>
+    </div>
+
+    {byYear.map((g) => (
+      <div class="hk-card" id={'y' + g.y}>
+        <div class="hk-yh">{g.y}<span>{g.items.length} {g.items.length === 1 ? 'incident' : 'incidents'}</span></div>
+        {g.items.map((e) => (
+          <div class="hk-row">
+            <div class="hk-t">
+              <b>{e.name}</b>{KINDS[e.kind] && <span class="hk-k">{KINDS[e.kind]}</span>}<span class="hk-d">{fmtMonth(e.date)}</span>
+              <p>{e.summary}{e.aftermath && <span class="hk-after"> {e.aftermath}</span>}</p>
+            </div>
+            <div class="hk-px">
+              {e.btc != null ? <span class="hk-amt">{fmtBtc(e.btc)} BTC</span> : <span class="hk-amt">BTC undisclosed</span>}
+              <span>&#8776; {fmtUsd(e.usdAtTime)} then</span>
+              {e.btc != null && <b data-btc={e.btc}>&#183;</b>}
+            </div>
+          </div>
+        ))}
+      </div>
+    ))}
+
+    <div class="hk-about doc-prose">
+      <p>Each entry records a theft of actual bitcoin: exchange breaches, wallet and supply chain attacks, mining pool thefts, and large individual losses. Where a breach took several assets, the figures here cover the BTC portion only. Dollar values are as reported at the time of each incident; the live figures are arithmetic against the current price from our feed, documented at <a href="/sources">/sources</a>. Frauds and collapses without an outside thief, however costly, are a different story and are not listed. The lesson repeats across fifteen years of entries: coins held by a custodian are only as safe as the custodian, which is why <a href="/learn/self-custody">self-custody</a> exists. Know of an incident we missed? <a href="/contact">Tell us</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The largest theft</div>
+      <div class="hk-rs"><b>{biggest.name}</b><i>{fmtMonth(biggest.date)}</i></div>
+      <div class="hk-rs"><b>{fmtBtc(biggest.btc)} BTC</b><i>&#8776; {fmtUsd(biggest.usdAtTime)} at the time</i></div>
+      <div class="hk-rs"><b id="hk-rnow">&#8230;</b><i>worth today</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Jump to a year</div>
+      <nav class="hk-years">
+        {byYear.map((g) => <a href={'#y' + g.y}>{g.y} <span>({g.items.length})</span></a>)}
+      </nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/learn/self-custody">Why self-custody matters</a>
+        <a href="/learn/scams">Common bitcoin scams</a>
+        <a href="/obituaries">Bitcoin obituaries</a>
+        <a href="/history">The full timeline</a>
+        <a href="/contact">Report an incident we missed</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .hk-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
+  .hk-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-2px}
+  .hk-big span{font-size:26px;letter-spacing:0;color:var(--ink-2)}
+  .hk-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
+  .hk-line{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:12px}
+  .hk-line b{font:700 13.5px var(--mono);color:var(--ink)}
+  .hk-line b.hk-red{color:var(--down)}
+  .hk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:18px;text-align:left}
+  .hk-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
+  .hk-stat b{display:block;font:700 14.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hk-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .hk-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 24px 8px;margin-top:14px;scroll-margin-top:18px}
+  .hk-yh{display:flex;align-items:baseline;gap:10px;font:800 22px var(--mono);color:var(--acc);letter-spacing:-.5px;
+    border-bottom:1px solid var(--line-2);padding-bottom:10px}
+  .hk-yh span{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .hk-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px dotted var(--line-2)}
+  .hk-row:last-child{border-bottom:0}
+  .hk-t{min-width:0}
+  .hk-t b{font:700 14px var(--sans);color:var(--ink)}
+  .hk-k{font:600 9px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--acc);
+    border:1px solid rgba(255,166,60,.32);border-radius:5px;padding:2px 6px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+  .hk-d{font:600 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:8px;white-space:nowrap}
+  .hk-t p{margin:4px 0 0;font:500 13px/1.55 var(--sans);color:var(--ink-2)}
+  .hk-after{color:var(--ink-3)}
+  .hk-px{font:600 12px var(--mono);color:var(--ink-3);white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;flex:none}
+  .hk-amt{display:block;font:700 13.5px var(--mono);color:var(--ink)}
+  .hk-px b{display:block;color:var(--down);font-weight:700;margin-top:2px}
+  .hk-about{margin-top:14px}
+  .hk-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .hk-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .hk-rs:last-child{border-bottom:0}
+  .hk-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .hk-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .hk-years{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+  .hk-years a{font:600 11px var(--mono);color:var(--ink-2);text-decoration:none}
+  .hk-years a:hover{color:var(--acc)}
+  .hk-years a span{color:var(--ink-3)}
+  @media(max-width:700px){
+    .hk-big{font-size:38px}
+    .hk-big span{font-size:19px}
+    .hk-row{flex-direction:column;gap:6px}
+    .hk-px{text-align:left}
+    .hk-px b{display:inline;margin-left:8px}
+  }
+</style>
+<script is:inline define:vars={{ TOTAL_BTC: totalBtc, BIGGEST_BTC: biggest.btc }}>
+(function(){
+  var els=null,now=document.getElementById("hk-now"),rnow=document.getElementById("hk-rnow"),
+      hEl=document.getElementById("hk-h");
+  function fmt(n){
+    return n>=1e9?"$"+(n/1e9).toFixed(n>=1e10?0:1)+"B"
+      :n>=1e6?"$"+(n/1e6).toFixed(n>=1e8?0:1)+"M"
+      :"$"+Math.round(n/1e3)+"K";
+  }
+  function paint(S){
+    if(!els)els=document.querySelectorAll("[data-btc]");
+    var pr=S.price;
+    now.textContent=fmt(TOTAL_BTC*pr);
+    rnow.textContent=fmt(BIGGEST_BTC*pr);
+    if(S.height)hEl.textContent=S.height.toLocaleString("en-US");
+    for(var i=0;i<els.length;i++){
+      var b=parseFloat(els[i].getAttribute("data-btc"));
+      els[i].textContent=fmt(b*pr)+" now";
+    }
+  }
+  /* live price and height arrive via the chrome hook; placeholders hold until
+     a real summary lands, same contract as /obituaries */
+  window.obPaintFiat=function(S){if(!window.OB_LIVE||!S||!S.price)return;paint(S);};
+})();
+</script>
+</Base>

@@ -50,6 +50,7 @@ export const GET: APIRoute = async () => {
   const today = new Date().toISOString().slice(0, 10);
   const files = [
     ...staticSitemaps(),
+    'sitemap-prices.xml', // the SSR price-calendar cluster (live route)
     ...Array.from({ length: Math.max(1, Math.ceil(total / PER_FILE)) },
       (_, i) => `sitemap-addresses-${i}.xml`),
   ];

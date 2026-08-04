@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import newsFile from '../content/news.json';
+import { ATH_USD } from '../lib/ath.js';
 
 const NEWS = newsFile.items.map((n) => ({ t: n.title, s: n.outlet, at: n.date, u: n.url }));
 const NSRC = {
@@ -25,6 +26,8 @@ const newsItems = NEWS.map((n) => {
   const b = NSRC_INK[n.s] || [n.s.toUpperCase(), '#9C8B75', '#161310'];
   return { ...n, logoTxt: b[0], logoBg: b[1], logoInk: b[2] };
 });
+import { FX, SYM } from '../lib/fx.js';
+import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
 ---
 <Base
   title="Bitcoin Explorer, Tools and Knowledgebase - OpenBitcoin"
@@ -110,13 +113,18 @@ const newsItems = NEWS.map((n) => {
         <thead><tr><th>height</th><th>miner</th><th>age</th><th class="r">transactions</th><th class="r hidem">size</th><th class="r">median fee</th></tr></thead>
         <tbody id="lbx-body"></tbody>
       </table>
-      <div class="lwait" id="lnx-wait">The reachable-node census is not live yet.<br>Real node counts arrive when our crawler ships; nothing simulated in the meantime.</div>
+      <table class="ltx" id="lnx" style="display:none">
+        <thead><tr><th>country</th><th class="r">nodes</th><th class="r">share</th></tr></thead>
+        <tbody id="lnx-body"></tbody>
+      </table>
+      <div class="lwait" id="lnx-wait">waiting for the node census</div>
       <canvas id="balls"></canvas>
       <div class="lfoot" id="lbx-foot" style="display:none">
         <span class="ntotal"><b id="b24">&hellip;</b> average block interval, last 15 blocks</span>
         <a class="lbtn" href="/blocks">VIEW ALL BLOCKS</a>
       </div>
       <div class="lfoot" id="lnx-foot" style="display:none">
+        <span class="ntotal"><b id="nx-tot">&hellip;</b> reachable nodes measured by our own crawler</span>
         <a class="lbtn" href="/nodes">VIEW ALL NODES</a>
       </div>
       </div>
@@ -190,16 +198,15 @@ const newsItems = NEWS.map((n) => {
                    white-space:normal;word-break:normal}
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ ATH: ATH_USD, FXSEED: FX, SYMSEED: SYM, EPOCH, HALVE: NEXT_HALVING_HEIGHT }}>
 (function(){
   var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
   var root=document.documentElement;
   function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
   /* static fiat cross-rates, same table chrome.js uses (rates 2026-07-17) */
-  var fx={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
-      sym={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
-  var ATH=126272;              /* ATH canon: $126,272 on 2025-10-06 (verified 2026-07-31, /ath) */
-  var HALVE=1050000;           /* fifth halving block (matches /halving) */
+  var fx=FXSEED,sym=SYMSEED; /* seeded from src/lib/fx.js via define:vars */
+  /* ATH canon arrives via define:vars from src/lib/ath.js */
+  /* HALVE and EPOCH arrive from src/lib/subsidy.js */
   /* price/height/fees start null: nothing renders until real data arrives */
   var S={price:null,change24h:null,cur:"USD",fiat:"USD",unit:"btc",
          mul:{btc:1,mbtc:1e3,bits:1e6,sats:1e8},height:null,lastMs:null,fees:null,memp:null};
@@ -224,7 +231,7 @@ const newsItems = NEWS.map((n) => {
      the honest denominator for MCAP, ignoring only unclaimed rewards */
   function supplyBtc(h){
     var s=0,r=50e8,blocks=h+1;
-    while(blocks>0&&r>0){var n=Math.min(blocks,210000);s+=n*r;blocks-=n;r=Math.floor(r/2);}
+    while(blocks>0&&r>0){var n=Math.min(blocks,EPOCH);s+=n*r;blocks-=n;r=Math.floor(r/2);}
     return s/1e8;
   }
 
@@ -429,12 +436,13 @@ const newsItems = NEWS.map((n) => {
   var ltxTable=document.getElementById("ltx"),
       lbxBody=document.getElementById("lbx-body"),lbxTable=document.getElementById("lbx"),
       lnxWait=document.getElementById("lnx-wait"),
+      lnxTable=document.getElementById("lnx"),lnxBody=document.getElementById("lnx-body"),
       ballsCv=document.getElementById("balls"),btnT=document.getElementById("lt-table"),
       btnBl=document.getElementById("lt-blocks"),btnN=document.getElementById("lt-nodes"),btnB=document.getElementById("lt-balls"),
       lbodyEl=document.getElementById("lbody"),
       PHONE=matchMedia("(max-width:720px)").matches,
       TXN=PHONE?10:6,
-      mode="table",ballList=[],ballsRunning=false,holdUntil=0,txSeen=false,
+      mode="table",ballList=[],ballsRunning=false,holdUntil=0,txSeen=false,nodesData=null,
       lheadEl=document.getElementById("lhead"),lhtEl=document.getElementById("lht"),hodlT;
   /* header flips to a flashing HODL fuse for the 10 s freeze, then returns to normal */
   var HPAUSE='<svg class="hstop" viewBox="0 0 24 24" aria-hidden="true"><g fill="#F7931A"><rect x="6.6" y="5" width="4" height="14" rx="1.7"/><rect x="13.4" y="5" width="4" height="14" rx="1.7"/></g></svg>';
@@ -520,6 +528,49 @@ const newsItems = NEWS.map((n) => {
         })
         .catch(function(){fetchingBlocks=false;if(mode==="blocks")renderBlocks(false);});
     }catch(e){fetchingBlocks=false;}
+  }
+  /* nodes: the census our own crawler measures, top countries by reachable
+     node. measured:false means no crawl has published yet, and the waiting
+     line stays rather than inventing a number. */
+  var CNAME={US:"United States",DE:"Germany",FR:"France",NL:"Netherlands",CA:"Canada",GB:"United Kingdom",
+    FI:"Finland",CH:"Switzerland",JP:"Japan",SG:"Singapore",AU:"Australia",SE:"Sweden",RU:"Russia",
+    CN:"China",IE:"Ireland",AT:"Austria",PL:"Poland",ES:"Spain",IT:"Italy",BR:"Brazil",IN:"India",
+    KR:"South Korea",UA:"Ukraine",CZ:"Czechia",NO:"Norway",DK:"Denmark",BE:"Belgium",HK:"Hong Kong",
+    ZA:"South Africa",MX:"Mexico",NZ:"New Zealand",MY:"Malaysia",TH:"Thailand",TW:"Taiwan",TR:"Turkey",
+    PT:"Portugal",RO:"Romania",HU:"Hungary",GR:"Greece",IL:"Israel",AE:"United Arab Emirates",
+    AR:"Argentina",CL:"Chile",CO:"Colombia",SI:"Slovenia",SK:"Slovakia",BG:"Bulgaria",HR:"Croatia",
+    LT:"Lithuania",LV:"Latvia",EE:"Estonia",IS:"Iceland",LU:"Luxembourg",MD:"Moldova",RS:"Serbia",
+    VN:"Vietnam",ID:"Indonesia",PH:"Philippines",PK:"Pakistan",NG:"Nigeria",KE:"Kenya",EG:"Egypt",
+    SV:"El Salvador",PA:"Panama",CR:"Costa Rica",UY:"Uruguay",PE:"Peru",VE:"Venezuela",SA:"Saudi Arabia"};
+  var fetchingNodes=false;
+  function fetchNodes(){
+    if(fetchingNodes)return;
+    fetchingNodes=true;
+    try{
+      fetch(api()+"/nodes")
+        .then(function(r){if(!r.ok)throw new Error("nodes "+r.status);return r.json();})
+        .then(function(j){
+          fetchingNodes=false;
+          if(!j||!j.measured||!j.countries||!j.countries.length)return;
+          nodesData=j;
+          renderNodes();
+          if(mode==="nodes"){lnxWait.style.display="none";lnxTable.style.display="table";}
+        })
+        .catch(function(){fetchingNodes=false;});
+    }catch(e){fetchingNodes=false;}
+  }
+  function renderNodes(){
+    if(!nodesData)return;
+    var rows=nodesData.countries.slice(0,PHONE?10:6),loc=nodesData.located||1,h="";
+    for(var i=0;i<rows.length;i++){
+      var c=rows[i],pct=c.nodes/loc*100;
+      h+="<tr><td class=\"mono\">"+(CNAME[c.code]||c.code)+"</td>"+
+         "<td class=\"r mono\">"+c.nodes.toLocaleString("en-US")+"</td>"+
+         "<td class=\"r mono dim\">"+(pct>=10?pct.toFixed(0):pct.toFixed(1))+"%</td></tr>";
+    }
+    lnxBody.innerHTML=h;
+    var tot=document.getElementById("nx-tot");
+    if(tot)tot.textContent=nodesData.reachable.toLocaleString("en-US");
   }
   /* visual: coin-face physics balls fed by real tx events */
   var fxRings=[],fxSparks=[],sweepUntil=0;
@@ -651,7 +702,7 @@ const newsItems = NEWS.map((n) => {
       x.strokeStyle="rgba(255,255,255,.28)";x.lineWidth=Math.max(1.2,b.r*.07);
       x.beginPath();x.arc(b.x,b.y,b.r*.86,0,7);x.stroke();
       if(b.r>=12){
-        x.fillStyle="#fff";x.textAlign="center";x.textBaseline="middle";
+        x.fillStyle="#1A1006";x.textAlign="center";x.textBaseline="middle";  /* dark ink on the orange balls: white was unreadable (owner, mobile) */
         x.font="700 "+Math.max(9,Math.min(22,b.r*.42)|0)+"px ui-monospace,Consolas,monospace";
         x.fillText(b.amt>=1000?fmt(b.amt,0):b.amt>=10?fmt(b.amt,1):b.amt.toFixed(2),b.x,b.y+.5);
       }
@@ -678,6 +729,7 @@ const newsItems = NEWS.map((n) => {
       var cw=Math.max(x.measureText(l1).width,x.measureText(l2).width,x.measureText(l3).width)+20,
           ch=52,cx2=Math.max(6,Math.min(w-cw-6,hb.x-cw/2)),
           cy2=hb.y-hb.r-ch-8;if(cy2<4)cy2=hb.y+hb.r+8;
+      tipRect={x:cx2,y:cy2,w:cw,h:ch};   /* tap target for the touch flow below */
       x.fillStyle="#F8EDD6";x.strokeStyle="#C6A170";x.lineWidth=1;
       x.beginPath();x.roundRect(cx2,cy2,cw,ch,7);x.fill();x.stroke();
       x.textAlign="left";x.textBaseline="alphabetic";
@@ -695,21 +747,38 @@ const newsItems = NEWS.map((n) => {
       if(dx*dx+dy*dy<=b.r*b.r)return b;}
     return null;
   }
-  var hoverB=null;
-  ballsCv.addEventListener("click",function(e){var b=ballAt(e);if(b)location.href="/"+b.id;});
-  ballsCv.addEventListener("mousemove",function(e){hoverB=ballAt(e);ballsCv.style.cursor=hoverB?"pointer":"default";});
-  ballsCv.addEventListener("mouseleave",function(){hoverB=null;});
+  var hoverB=null,tipRect=null;
+  /* Touch flow (owner call 2026-08-04): a tap on a ball opens its card, a
+     tap on the open card goes to the transaction, a tap on empty felt
+     closes it. Mice keep hover-to-peek and click-through unchanged. */
+  var COARSE=matchMedia("(pointer:coarse)").matches;
+  ballsCv.addEventListener("click",function(e){
+    if(COARSE){
+      var rc=ballsCv.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top;
+      if(hoverB&&ballList.indexOf(hoverB)>=0&&tipRect&&
+         mx>=tipRect.x&&mx<=tipRect.x+tipRect.w&&my>=tipRect.y&&my<=tipRect.y+tipRect.h){
+        location.href="/"+hoverB.id;return;
+      }
+      hoverB=ballAt(e);   /* ball opens its card; empty felt closes */
+      return;
+    }
+    var b=ballAt(e);if(b)location.href="/"+b.id;
+  });
+  ballsCv.addEventListener("mousemove",function(e){if(COARSE)return;hoverB=ballAt(e);ballsCv.style.cursor=hoverB?"pointer":"default";});
+  ballsCv.addEventListener("mouseleave",function(){if(!COARSE)hoverB=null;});
   function setMode(m){
     mode=m;
     ltxTable.style.display=m==="table"?"table":"none";
     lbxTable.style.display=m==="blocks"?"table":"none";
-    lnxWait.style.display=m==="nodes"?"flex":"none";
+    lnxWait.style.display=(m==="nodes"&&!nodesData)?"flex":"none";
+    lnxTable.style.display=(m==="nodes"&&nodesData)?"table":"none";
     ballsCv.style.display=m==="balls"?"block":"none";
     document.getElementById("lbx-foot").style.display=m==="blocks"?"flex":"none";
     document.getElementById("lnx-foot").style.display=m==="nodes"?"flex":"none";
     btnT.classList.toggle("on",m==="table");btnBl.classList.toggle("on",m==="blocks");
     btnN.classList.toggle("on",m==="nodes");btnB.classList.toggle("on",m==="balls");
     if(m==="blocks"){renderBlocks(false);if(!blocksData.length)fetchBlocks(false);}
+    if(m==="nodes"&&!nodesData)fetchNodes();
     ballsRunning=m==="balls";
     if(ballsRunning)requestAnimationFrame(ballsLoop);
   }

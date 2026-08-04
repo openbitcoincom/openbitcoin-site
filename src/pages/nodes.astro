@@ -1,8 +1,48 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+
+export const prerender = false;
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+let census = null;
+try {
+  const r = await fetch(`${BACKEND}/nodes`, { signal: AbortSignal.timeout(4000) });
+  if (r.ok) {
+    const j = await r.json();
+    if (j && j.measured) census = j;
+  }
+} catch { /* the cards fall back to the rebuilding note */ }
+
+const CNAME = {
+  US: 'United States', DE: 'Germany', FR: 'France', NL: 'Netherlands', CA: 'Canada',
+  GB: 'United Kingdom', FI: 'Finland', CH: 'Switzerland', JP: 'Japan', SG: 'Singapore',
+  AU: 'Australia', SE: 'Sweden', RU: 'Russia', CN: 'China', IE: 'Ireland', AT: 'Austria',
+  PL: 'Poland', ES: 'Spain', IT: 'Italy', BR: 'Brazil', IN: 'India', KR: 'South Korea',
+  UA: 'Ukraine', CZ: 'Czechia', NO: 'Norway', DK: 'Denmark', BE: 'Belgium', HK: 'Hong Kong',
+  ZA: 'South Africa', MX: 'Mexico', NZ: 'New Zealand', MY: 'Malaysia', TH: 'Thailand',
+  TW: 'Taiwan', TR: 'Turkey', PT: 'Portugal', RO: 'Romania', HU: 'Hungary', GR: 'Greece',
+  IL: 'Israel', AE: 'United Arab Emirates', AR: 'Argentina', CL: 'Chile', CO: 'Colombia',
+  SI: 'Slovenia', SK: 'Slovakia', BG: 'Bulgaria', HR: 'Croatia', LT: 'Lithuania',
+  LV: 'Latvia', EE: 'Estonia', IS: 'Iceland', LU: 'Luxembourg', MD: 'Moldova', RS: 'Serbia',
+  VN: 'Vietnam', ID: 'Indonesia', PH: 'Philippines', PK: 'Pakistan', NG: 'Nigeria',
+  KE: 'Kenya', EG: 'Egypt', SV: 'El Salvador', PA: 'Panama', CR: 'Costa Rica',
+  UY: 'Uruguay', PE: 'Peru', VE: 'Venezuela', SA: 'Saudi Arabia', GE: 'Georgia',
+  KZ: 'Kazakhstan', BY: 'Belarus', CY: 'Cyprus', MT: 'Malta', AM: 'Armenia',
+};
+const cname = (c) => CNAME[c] || c;
+const n = (x) => Number(x).toLocaleString('en-US');
+const rows = census ? census.countries.slice(0, 25) : [];
+const topN = rows.length ? rows[0].nodes : 1;
+const topVersion = census && census.versions.length ? census.versions[0] : null;
+const versionPct = census && topVersion ? Math.round(topVersion.nodes / census.reachable * 100) : null;
+const crawledAt = census
+  ? new Date(census.crawledAt).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC'
+  : null;
 ---
-<Base title="Bitcoin Nodes: Reachable Node Census and How to Run Your Own - OpenBitcoin" description="Approximately how many reachable Bitcoin nodes there are, where they run, and what it takes to run your own node with Bitcoin Core.">
+<Base title="Bitcoin Nodes: Reachable Node Census by Country - OpenBitcoin" description={census
+  ? `${n(census.reachable)} reachable Bitcoin nodes measured by our own crawler, ranked by country across ${n(census.countryCount)} countries, plus what it takes to run your own node with Bitcoin Core.`
+  : 'How many reachable Bitcoin nodes there are and where they run, measured by our own crawler, plus what it takes to run your own node with Bitcoin Core.'}>
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Nodes</div>
@@ -12,35 +52,46 @@ import '../styles/doc.css';
   <div class="doc-grid">
   <div>
     <div class="nd-hero">
-      <div class="nd-big">21,547</div>
-      <div class="nd-sub">reachable Bitcoin nodes, approximate, as of July 2026</div>
-      <div class="nd-chips">
-        <div class="nd-chip"><b>~60%</b><i>reached over Tor</i></div>
-        <div class="nd-chip"><b>Bitcoin Core 29.x</b><i>most common version, 34%</i></div>
-        <div class="nd-chip"><b>98</b><i>countries with a located node</i></div>
-      </div>
-      <p class="nd-fine">These are illustrative approximate figures based on publicly reported censuses of the reachable network, as of July 2026, not our own measurement; the site's own crawler ships later. Reachable means accepting inbound connections. Nodes behind home firewalls are invisible to any census, so the true total is higher; a count like this is a floor, not a ceiling.</p>
+      {census ? (
+        <>
+          <div class="nd-big">{n(census.reachable)}</div>
+          <div class="nd-sub">reachable Bitcoin nodes, measured by our own crawler</div>
+          <div class="nd-chips">
+            <div class="nd-chip"><b>{n(census.countryCount)}</b><i>countries with a located node</i></div>
+            {topVersion && <div class="nd-chip"><b>{topVersion.name}</b><i>most common version, {versionPct}%</i></div>}
+            <div class="nd-chip"><b>{n(census.ipv6)}</b><i>reached over IPv6</i></div>
+            <div class="nd-chip"><b>{census.medianLatencyMs} ms</b><i>median handshake time</i></div>
+          </div>
+          <p class="nd-fine">Our own measurement, not an estimate and not a third-party feed: the crawler completes a bitcoin protocol handshake with every address it can find, and a node counts only if it answered. Last crawl {crawledAt}, {n(census.tested)} addresses tested in {census.crawlSeconds} seconds; it runs every six hours.{!census.completeSweep && ` That run reached its time limit with ${n(census.candidates - census.tested)} addresses still untested, so this count is lower than a full sweep would give.`} Reachable means accepting inbound connections. Nodes behind home firewalls are invisible to any census, so the true total is higher; a count like this is a floor, not a ceiling.</p>
+        </>
+      ) : (
+        <>
+          <div class="nd-big">&#8230;</div>
+          <div class="nd-sub">the census is being rebuilt right now</div>
+          <p class="nd-fine">Our crawler publishes a fresh census every six hours and the last one is not readable at this moment. Rather than print numbers we cannot stand behind, this page waits. Try again shortly.</p>
+        </>
+      )}
     </div>
 
-    <div class="nd-card">
-      <div class="nd-tlab">Where the located nodes run</div>
-      <table class="nd-table" aria-label="Top ten countries by reachable node count">
-        <thead><tr><th>#</th><th>Country</th><th>Nodes</th><th>Share of located</th></tr></thead>
-        <tbody>
-          <tr><td class="nd-rank">1</td><td>United States</td><td>1,842</td><td><div class="nd-share"><span class="nd-bar"><i style="width:100%"></i></span><b>21.5%</b></div></td></tr>
-          <tr><td class="nd-rank">2</td><td>Germany</td><td>1,236</td><td><div class="nd-share"><span class="nd-bar"><i style="width:67%"></i></span><b>14.4%</b></div></td></tr>
-          <tr><td class="nd-rank">3</td><td>France</td><td>512</td><td><div class="nd-share"><span class="nd-bar"><i style="width:28%"></i></span><b>6.0%</b></div></td></tr>
-          <tr><td class="nd-rank">4</td><td>Netherlands</td><td>401</td><td><div class="nd-share"><span class="nd-bar"><i style="width:22%"></i></span><b>4.7%</b></div></td></tr>
-          <tr><td class="nd-rank">5</td><td>Canada</td><td>388</td><td><div class="nd-share"><span class="nd-bar"><i style="width:21%"></i></span><b>4.5%</b></div></td></tr>
-          <tr><td class="nd-rank">6</td><td>United Kingdom</td><td>344</td><td><div class="nd-share"><span class="nd-bar"><i style="width:19%"></i></span><b>4.0%</b></div></td></tr>
-          <tr><td class="nd-rank">7</td><td>Finland</td><td>296</td><td><div class="nd-share"><span class="nd-bar"><i style="width:16%"></i></span><b>3.5%</b></div></td></tr>
-          <tr><td class="nd-rank">8</td><td>Switzerland</td><td>243</td><td><div class="nd-share"><span class="nd-bar"><i style="width:13%"></i></span><b>2.8%</b></div></td></tr>
-          <tr><td class="nd-rank">9</td><td>Japan</td><td>221</td><td><div class="nd-share"><span class="nd-bar"><i style="width:12%"></i></span><b>2.6%</b></div></td></tr>
-          <tr><td class="nd-rank">10</td><td>Singapore</td><td>198</td><td><div class="nd-share"><span class="nd-bar"><i style="width:11%"></i></span><b>2.3%</b></div></td></tr>
-        </tbody>
-      </table>
-      <p class="nd-fine">Approximate figures from publicly reported censuses, as of July 2026. Country is known only for nodes reached over the open internet; the roughly 60% reached over Tor announce no location by design, so this table describes the located minority, about 8,564 nodes.</p>
-    </div>
+    {census && (
+      <div class="nd-card">
+        <div class="nd-tlab">Where the located nodes run</div>
+        <table class="nd-table" aria-label="Countries by reachable node count">
+          <thead><tr><th>#</th><th>Country</th><th>Nodes</th><th>Share of located</th></tr></thead>
+          <tbody>
+            {rows.map((c, i) => (
+              <tr>
+                <td class="nd-rank">{i + 1}</td>
+                <td>{cname(c.code)}</td>
+                <td>{n(c.nodes)}</td>
+                <td><div class="nd-share"><span class="nd-bar"><i style={`width:${Math.max(2, Math.round(c.nodes / topN * 100))}%`}></i></span><b>{(c.nodes / census.located * 100).toFixed(1)}%</b></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="nd-fine">The top {rows.length} of {n(census.countryCount)} countries where a reachable node answered us, from the crawl of {crawledAt}. Country comes from an IP database held on our own server, so no lookup leaves the box. Location is known only for nodes reached over the open internet: {n(census.located)} of the {n(census.reachable)} we reached. Peers on Tor and I2P announce no location by design, and this crawl also collected {n(census.darkCandidates.onion)} onion addresses it does not dial.</p>
+      </div>
+    )}
 
     <div class="nd-card">
       <div class="nd-tlab">Why run a node</div>
@@ -77,17 +128,19 @@ import '../styles/doc.css';
     </div>
 
     <div class="nd-about doc-prose">
-      <p>A node count is always an estimate. A crawler only sees nodes that accept inbound connections, and the many nodes listening to the network from behind home routers never appear in any census, this one included. The census figures on this page are illustrative approximations drawn from publicly reported censuses of the reachable network, as of July 2026, not our own measurement; the site's own crawler ships later, and when it does these figures become our own measured census with the method documented at <a href="/sources">/sources</a>. Running a node pairs naturally with holding your own keys, covered in the <a href="/learn/self-custody">self-custody guide</a>; the blocks it verifies are the same ones on the <a href="/blocks">latest blocks</a> page.</p>
+      <p>A node count is always a floor. A crawler only sees nodes that accept inbound connections, and the many nodes listening to the network from behind home routers never appear in any census, this one included. What is on this page is our own measurement rather than a figure borrowed from elsewhere: our crawler starts from the network's DNS seeds, asks every node it reaches for the addresses it knows, and then attempts a bitcoin protocol handshake with each one. A node is counted only when it answers with its own version and verack. The method is documented at <a href="/sources">/sources</a>. Running a node pairs naturally with holding your own keys, covered in the <a href="/learn/self-custody">self-custody guide</a>; the blocks it verifies are the same ones on the <a href="/blocks">latest blocks</a> page.</p>
     </div>
   </div>
   <aside class="doc-rail">
-    <div class="doc-tile">
-      <div class="doc-tlab">Census, approx., July 2026</div>
-      <div class="nd-rs"><b>21,547</b><i>reachable nodes</i></div>
-      <div class="nd-rs"><b>12,983</b><i>reached over Tor (~60%)</i></div>
-      <div class="nd-rs"><b>8,564</b><i>located on the open internet</i></div>
-      <div class="nd-rs"><b>98</b><i>countries</i></div>
-    </div>
+    {census && (
+      <div class="doc-tile">
+        <div class="doc-tlab">Our census, {new Date(census.crawledAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</div>
+        <div class="nd-rs"><b>{n(census.reachable)}</b><i>reachable nodes</i></div>
+        <div class="nd-rs"><b>{n(census.located)}</b><i>located on the open internet</i></div>
+        <div class="nd-rs"><b>{n(census.countryCount)}</b><i>countries</i></div>
+        <div class="nd-rs"><b>{n(census.tested)}</b><i>addresses tested</i></div>
+      </div>
+    )}
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>

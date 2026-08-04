@@ -1,19 +1,20 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import '../../../styles/doc.css';
-import { years, monthsOf, monthRows, monthSummary, fmtUsd, fmtPct, fullDate, MONTH_NAMES } from '../../../lib/prices.js';
+import { fmtUsd, fmtPct, fullDate, MONTH_NAMES } from '../../../lib/prices.js';
+import { liveSeries } from '../../../lib/prices-live.js';
 
-export function getStaticPaths() {
-  const out = [];
-  for (const y of years()) for (const m of monthsOf(y)) out.push({ params: { year: y, month: m } });
-  return out;
-}
+export const prerender = false;
+
+const S = await liveSeries();
 const { year, month } = Astro.params;
+if (!/^\d{4}$/.test(year) || !/^(0[1-9]|1[0-2])$/.test(month) || !S.has(year, month))
+  return new Response(null, { status: 404, statusText: 'Not Found' });
 const name = MONTH_NAMES[parseInt(month, 10) - 1];
-const rowsM = monthRows(year, month);
-const s = monthSummary(year, month);
+const rowsM = S.monthRows(year, month);
+const s = S.monthSummary(year, month);
 const all = [];
-for (const y of years()) for (const m of monthsOf(y)) all.push([y, m]);
+for (const y of S.years()) for (const m of S.monthsOf(y)) all.push([y, m]);
 const idx = all.findIndex(([y, m]) => y === year && m === month);
 const prev = idx > 0 ? all[idx - 1] : null;
 const next = idx < all.length - 1 ? all[idx + 1] : null;

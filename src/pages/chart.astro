@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
 ---
 <Base
   title="Bitcoin Price Chart: Live Candles and Full History - OpenBitcoin"
@@ -38,7 +39,7 @@ import Base from '../layouts/Base.astro';
   
   @media(min-height:520px){body{overflow:hidden}}
   .chartbar{padding:10px 18px;display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;
-            background:#24334E;border-bottom:1px solid #22304A}
+            background:#0E1524;border-bottom:1px solid #1D2941}
   .cpair{font:800 17px var(--mono);color:#C9D6EA}
   .cprice{font:800 17px var(--mono);color:#C9D6EA;font-variant-numeric:tabular-nums}
   .cchg{font:700 12px var(--mono);border-radius:5px;padding:3px 8px}
@@ -62,7 +63,7 @@ import Base from '../layouts/Base.astro';
         color:#A9B5C9;border-radius:7px;font:700 12px var(--mono);padding:6px 27px 6px 11px;cursor:pointer;outline:none}
   .csel:hover{border-color:#F7931A;color:#F7931A}
   .csel option{background:#121B2B;color:#A9B5C9}
-  .cwrap{position:relative;background:#0E1929}
+  .cwrap{position:relative;background:#0A101D}
   #cv{display:block;width:100%;cursor:crosshair;touch-action:pan-y}
   .clegend{position:absolute;left:12px;top:10px;font:600 12px var(--mono);pointer-events:none;border-radius:6px;
            padding:4px 9px;background:rgba(7,12,22,.85);color:#C9D6EA}
@@ -70,7 +71,7 @@ import Base from '../layouts/Base.astro';
   .cstate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
           font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#8B9DBA;pointer-events:none}
   .cstate[hidden]{display:none}
-  .cnotewrap{background:#0E1929;border-top:1px solid #22304A}
+  .cnotewrap{background:#0A101D;border-top:1px solid #1B2740}
   .cnote{max-width:1140px;margin:0 auto;padding:9px 18px;font:600 10px var(--mono);letter-spacing:.06em;color:#8B9DBA}
   .cnote a{color:#F7931A;text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.4)}
   @media(max-width:720px){
@@ -85,7 +86,7 @@ import Base from '../layouts/Base.astro';
   }
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ FXSEED: FXTABLE, SYMSEED: SYMTABLE }}>
 (function(){
   var cv=document.getElementById("cv"),cw=document.getElementById("cwrap"),
       legend=document.getElementById("legend"),state=document.getElementById("cstate"),
@@ -98,23 +99,44 @@ import Base from '../layouts/Base.astro';
   var IV=[["1m",60],["5m",300],["15m",900],["30m",1800],["1h",3600],["2h",7200],["4h",14400],["6h",21600],
           ["12h",43200],["1d",86400],["3d",259200],["1w",604800],["1mo",2592000]];
   var EX=[["coinbase","Coinbase"],["kraken","Kraken"],["bitstamp","Bitstamp"]];
-  /* static cross-rates, the same table the rest of the site quotes from (2026-07-17) */
-  var FX={USD:1,EUR:.8745,GBP:.7442,CAD:1.4023,AUD:1.4337,SEK:9.655,JPY:162.35,CNY:6.7775,RUB:78.1,
-          BRL:5.1158,MXN:17.4837,INR:96.28,TRY:47.142,KRW:1485.32,CHF:.807},
-      SYM={USD:"$",EUR:"€",GBP:"£",CAD:"$",AUD:"$",SEK:"",JPY:"¥",CNY:"¥",RUB:"₽",
-           BRL:"R$",MXN:"$",INR:"₹",TRY:"₺",KRW:"₩",CHF:""};
-  var T={bg:"#0E1929",grid:"#22304A",tx:"#8FA1BF",up:"#2EBD85",dn:"#F6465D",
+  /* cross-rates seeded from src/lib/fx.js; rate() prefers the live ECB table
+     chrome.js publishes on window.OB_FX once the first summary lands */
+  var FX=FXSEED, SYM=SYMSEED;
+  function rate(c){var t=window.OB_FX;return (t&&typeof t[c]==="number"?t[c]:FX[c]);}
+  var T={bg:"#0A101D",grid:"#1B2740",tx:"#8FA1BF",up:"#2EBD85",dn:"#F6465D",
          volUp:"rgba(46,189,133,.35)",volDn:"rgba(246,70,93,.35)",
          cross:"#8B9DBA",bub:"#F7931A",bubTx:"#101A2C",legTx:"#C9D6EA"};
   var S={ex:"bitstamp",iv:86400,cur:"USD",candles:[],hover:-1,busy:0,truncated:false};
 
   function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
   function dec(v){return v>=1000?0:v>=10?2:4;}
-  function cvx(v){var x=v*FX[S.cur];return SYM[S.cur]+fmt(x,dec(x));}
-  function cnum(v){var x=v*FX[S.cur];return fmt(x,dec(x));}
+  function cvx(v){var x=v*rate(S.cur);return SYM[S.cur]+fmt(x,dec(x));}
+  function cnum(v){var x=v*rate(S.cur);return fmt(x,dec(x));}
   function want(){return matchMedia("(max-width:720px)").matches?60:170;}
 
   function baseFor(sec){return sec<3600?["1m",60]:sec<86400?["1h",3600]:["1d",86400];}
+
+  /* The pill beside the price is the change ON THE DAY: last price against the
+     previous UTC daily close (owner report 2026-08-03: it used to span the
+     whole loaded series and read -8.77% on a flat day). The daily anchor comes
+     from the 1d series of the selected exchange; without one the pill hides
+     rather than guesses. */
+  var DAY={ex:null,prev:null};
+  function loadDay(){
+    var ex=S.ex;
+    fetch(api()+"/candles?interval=1d&limit=3&exchange="+ex)
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(j){
+        if(ex!==S.ex)return;
+        var rows=(j&&Array.isArray(j.candles))?j.candles:[];
+        var mid=Math.floor(Date.now()/86400000)*86400;
+        var prev=null;
+        for(var i=rows.length-1;i>=0;i--)if(rows[i][0]<mid){prev=rows[i][4];break;}
+        DAY.prev=prev;
+        if(S.candles.length)draw();
+      })
+      .catch(function(){if(ex===S.ex)DAY.prev=null;});
+  }
 
   /* Bucket by absolute time, not by position: a hole in the source must not
      shift every later candle into the wrong bucket. */
@@ -134,6 +156,7 @@ import Base from '../layouts/Base.astro';
   }
 
   function load(){
+    if(DAY.ex!==S.ex){DAY.ex=S.ex;DAY.prev=null;loadDay();}
     var b=baseFor(S.iv),group=Math.max(1,Math.round(S.iv/b[1])),
         limit=Math.min(5000,want()*group+group),token=++S.busy;
     state.hidden=false;state.textContent="loading candles";
@@ -212,14 +235,15 @@ import Base from '../layouts/Base.astro';
       x.fillStyle=T.bub;x.fillRect(plotW,yy-9,padR,18);
       x.fillStyle=T.bubTx;x.fillText(cvx(k2.c),plotW+8,yy+4);
       leg(k2,(k2.c-k2.o)/k2.o*100);
-    }else leg(cd[n-1],(cd[n-1].c-cd[0].o)/cd[0].o*100);
-    var last=cd[n-1],chg=(last.c-cd[0].o)/cd[0].o*100;
+    }else leg(cd[n-1],(cd[n-1].c-cd[n-1].o)/cd[n-1].o*100);
+    var last=cd[n-1];
     elP.textContent=cvx(last.c);
-    elC.hidden=false;elC.textContent=(chg>=0?"+":"")+chg.toFixed(2)+"%";
-    elC.className="cchg "+(chg>=0?"up":"down");
-    /* say what the percentage measures: sitting beside the price it reads as a
-       24h move, and on the longer intervals it spans years */
-    elC.title="Change across the "+n+" candles shown, "+tlabel(cd[0].t)+" to "+tlabel(last.t);
+    if(DAY.prev){
+      var chg=(last.c-DAY.prev)/DAY.prev*100;
+      elC.hidden=false;elC.textContent=(chg>=0?"+":"")+chg.toFixed(2)+"%";
+      elC.className="cchg "+(chg>=0?"up":"down");
+      elC.title="Change on the day: last price against the previous UTC daily close";
+    }else elC.hidden=true;
     document.title=cvx(last.c)+" BTC - OpenBitcoin: Chart";
   }
   function leg(k,pc){

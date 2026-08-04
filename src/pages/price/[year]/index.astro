@@ -1,21 +1,23 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import '../../../styles/doc.css';
-import { years, yearSummary, monthsOf, monthSummary, fmtUsd, fmtPct, MONTH_NAMES } from '../../../lib/prices.js';
+import { fmtUsd, fmtPct, MONTH_NAMES } from '../../../lib/prices.js';
+import { liveSeries } from '../../../lib/prices-live.js';
 
-export function getStaticPaths() {
-  return years().map((y) => ({ params: { year: y } }));
-}
+export const prerender = false;
+
+const S = await liveSeries();
 const { year } = Astro.params;
-const s = yearSummary(year);
-const ms = monthsOf(year);
-const ys = years();
+if (!/^\d{4}$/.test(year) || !S.has(year)) return new Response(null, { status: 404, statusText: 'Not Found' });
+const s = S.yearSummary(year);
+const ms = S.monthsOf(year);
+const ys = S.years();
 const idx = ys.indexOf(year);
 const prevY = idx > 0 ? ys[idx - 1] : null;
 const nextY = idx < ys.length - 1 ? ys[idx + 1] : null;
 const partialNote = year === ys[0]
   ? 'Daily closes begin August 18, 2010; earlier days traded below one cent with no quotable close.'
-  : (year === ys[ys.length - 1] ? "The current year fills in as the site's data snapshot is refreshed."
+  : (year === ys[ys.length - 1] ? 'The current year fills in day by day; each UTC day joins its month once the day completes.'
   : (s.closeOnly ? 'Months in the Mt. Gox era carry daily closes only; full open, high and low begin August 18, 2011.' : ''));
 ---
 <Base title={`Bitcoin Price in ${year}: Daily and Monthly History - OpenBitcoin`} description={`The bitcoin price through ${year}: opened at $${fmtUsd(s.open)}, closed at $${fmtUsd(s.close)} (${fmtPct(s.changePct)}), high $${fmtUsd(s.high)}, low $${fmtUsd(s.low)}. Every month and every day, browsable.`}>
@@ -38,7 +40,7 @@ const partialNote = year === ys[0]
     <div class="py-card py-mt">
       <div class="py-tlab">Every month of {year}</div>
       <div class="py-months">
-        {ms.map((m) => { const mm = monthSummary(year, m); return (
+        {ms.map((m) => { const mm = S.monthSummary(year, m); return (
           <a class="py-month" href={`/price/${year}/${m}`}>
             <b>{MONTH_NAMES[parseInt(m, 10) - 1]}</b>
             <span class="py-mclose">${fmtUsd(mm.close)}</span>

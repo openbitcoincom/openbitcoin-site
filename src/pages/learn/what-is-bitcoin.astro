@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import { EPOCH, MAX_BTC } from '../../lib/subsidy.js';
 ---
 <Base title="What Is Bitcoin? A Plain-Language Introduction - OpenBitcoin" description="What bitcoin is, in plain language: a shared ledger kept by a network with no company behind it, what sats are, and why the supply stops at 21 million.">
 <main class="wrap doc-wrap">
@@ -114,9 +115,9 @@ import '../../styles/doc.css';
   .wb-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:520px){.wb-units{grid-template-columns:1fr}}
 </style>
-<script is:inline>
+<script is:inline define:vars={{ EPOCH, MAX: MAX_BTC }}>
 (function(){
-  var EPOCH=210000,MAX=21000000;
+  /* EPOCH and MAX arrive from src/lib/subsidy.js */
   var st={price:null,height:null};
   function fmt(n){return n.toLocaleString("en-US");}
   function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}

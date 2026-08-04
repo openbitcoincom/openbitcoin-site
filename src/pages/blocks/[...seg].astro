@@ -11,6 +11,45 @@ if (seg !== '') {
   if (!m) return new Response(null, { status: 404, statusText: 'Not Found' });
   anchor = Number(m[1]);
 }
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+const ROWS = 15;
+let ssrBlocks = [];
+let ssrTip = null;
+try {
+  const r = await fetch(`${BACKEND}/blocks?limit=${ROWS}${anchor == null ? '' : `&before=${anchor}`}`,
+    { signal: AbortSignal.timeout(4000) });
+  if (r.ok) {
+    const j = await r.json();
+    if (Array.isArray(j.blocks)) ssrBlocks = j.blocks;
+    if (typeof j.tip === 'number') ssrTip = j.tip;
+  }
+} catch { /* the waiting line and the client fetch cover an outage */ }
+
+const nowMs = Date.now();
+const fmtN = (n) => n.toLocaleString('en-US');
+const ageTxt = (t) => {
+  const s = Math.max(0, Math.floor((nowMs - t * 1000) / 1000));
+  if (s < 60) return s + 's';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  return Math.floor(s / 3600) + 'h ' + Math.floor((s % 3600) / 60) + 'm';
+};
+const sizeTxt = (n) => {
+  if (typeof n !== 'number' || !isFinite(n)) return '';
+  if (n < 1000) return Math.round(n) + ' B';
+  if (n < 1e6) return (n / 1e3).toFixed(2) + ' KB';
+  return (n / 1e6).toFixed(2) + ' MB';
+};
+const feeSpan = (b) => {
+  const noFees = b.nTx <= 1 || (b.totalFeeSat != null && !b.totalFeeSat && !b.maxFeerate);
+  const lo = b.minFeerate == null || noFees ? null : Math.round(b.minFeerate);
+  const hi = b.maxFeerate == null || noFees ? null : Math.round(b.maxFeerate);
+  return lo != null && hi != null ? `${lo}-${hi} sat/vB` : '';
+};
+const ssrHeights = ssrBlocks.map((b) => b.height);
+const ssrTop = ssrHeights[0] ?? null;
+const ssrLow = ssrHeights.length ? ssrHeights[ssrHeights.length - 1] : null;
+const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip : ssrTop;
 ---
 <Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, size, and fee span, updating live as blocks are found."
   indexable={anchor == null} canonicalPath={anchor != null ? '/blocks' : null}>
@@ -44,12 +83,29 @@ if (seg !== '') {
       <div class="bl-hrow" aria-hidden="true">
         <span>Height</span><span>Age</span><span>Miner</span><span class="r">Txs</span><span class="r">Size</span><span class="r">Fee span</span>
       </div>
-      <div id="bl-rows" aria-label="Latest blocks, newest first"><div class="bl-wait">Loading the latest blocks&hellip;</div></div>
+      <div id="bl-rows" aria-label="Latest blocks, newest first">
+        {ssrBlocks.length ? ssrBlocks.map((b) => (
+          <div class="bl-row" data-h={b.height}>
+            <a class="bl-h" href={'/' + b.height}>{fmtN(b.height)}</a>
+            <span class="bl-age">{ageTxt(b.time)}</span>
+            <span class={'bl-miner' + ((b.miner || 'Unknown') === 'Unknown' ? ' unk' : '')}>{b.miner || 'Unknown'}</span>
+            <span class="bl-tx">{fmtN(b.nTx)}</span>
+            <span class="bl-mb">{sizeTxt(b.size)}</span>
+            <span class="bl-fee">{feeSpan(b)}</span>
+          </div>
+        )) : <div class="bl-wait">Loading the latest blocks&hellip;</div>}
+      </div>
     </div>
     <div class="bl-pager" id="bl-pager">
-      <button class="bl-pbtn" type="button" disabled>&lsaquo; OLDER</button>
-      <span class="bl-pnote">Loading&hellip;</span>
-      <button class="bl-pbtn" type="button" disabled>NEWER &rsaquo;</button>
+      {ssrLow != null && ssrLow > 0
+        ? <a class="bl-pbtn" href={'/blocks/from/' + (ssrLow - 1)}>&lsaquo; OLDER</a>
+        : <button class="bl-pbtn" type="button" disabled>&lsaquo; OLDER</button>}
+      <span class="bl-pnote">{ssrHeights.length
+        ? (anchor == null ? `Showing the latest ${ssrHeights.length} blocks.` : `Blocks ${fmtN(ssrTop)} down to ${fmtN(ssrLow)}`)
+        : 'Loading…'}</span>
+      {anchor == null
+        ? <button class="bl-pbtn" type="button" disabled>NEWER &rsaquo;</button>
+        : <a class="bl-pbtn" href={tipForPager != null && anchor + ROWS >= tipForPager ? '/blocks' : '/blocks/from/' + (anchor + ROWS)}>NEWER &rsaquo;</a>}
     </div>
     <div class="bl-foot">Pool attribution reads the tag miners write into the coinbase transaction; blocks without a recognizable tag show as Unknown. Fee span is the lowest and highest fee rate paid inside the block, in sat/vB.</div>
     <div class="bl-about doc-prose">

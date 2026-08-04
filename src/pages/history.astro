@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import { ATH_USD_TEXT } from '../lib/ath.js';
 ---
 <Base title="Bitcoin History: The Full Timeline, 2008 to Now - OpenBitcoin" description="A timeline of bitcoin's history: the 2008 whitepaper, the genesis block, pizza day, Mt. Gox, the halvings, the ETFs, and each all-time high, with prices.">
 <main class="wrap doc-wrap">
@@ -117,7 +118,7 @@ import '../styles/doc.css';
         <article class="hi-card">
           <div class="hi-meta"><span class="hi-date">February 28, 2014</span><span class="hi-px">&asymp; $550</span></div>
           <h2>Mt. Gox collapses</h2>
-          <p>The exchange that handled most of the world's bitcoin halts withdrawals in early February, then files for bankruptcy in Tokyo, admitting that about 850,000 BTC are gone: roughly 750,000 belonging to customers and 100,000 of its own. It remains the defining lesson in why an exchange balance is not the same thing as bitcoin; <a href="/learn/frozen-deposits">frozen deposits</a> traces what customers went through.</p>
+          <p>The exchange that handled most of the world's bitcoin halts withdrawals in early February, then files for bankruptcy in Tokyo, admitting that about 850,000 BTC are gone: roughly 750,000 belonging to customers and 100,000 of its own. It remains the defining lesson in why an exchange balance is not the same thing as bitcoin; <a href="/learn/frozen-deposits">frozen deposits</a> traces what customers went through, and the <a href="/hacks">hacks record</a> puts the theft beside every other major one.</p>
         </article>
       </div>
 
@@ -222,9 +223,9 @@ import '../styles/doc.css';
         <span class="hi-dot" aria-hidden="true"></span>
         <span class="hi-yr">2025</span>
         <article class="hi-card">
-          <div class="hi-meta"><span class="hi-date">October 6, 2025</span><span class="hi-px">$126,272</span></div>
+          <div class="hi-meta"><span class="hi-date">October 6, 2025</span><span class="hi-px">{ATH_USD_TEXT}</span></div>
           <h2>The all-time high</h2>
-          <p>Bitcoin records its highest price to date, $126,272. Sixteen years earlier, the first published rate valued the entire day's mining at fractions of a cent. Where the price stands against the peak right now is on the <a href="/ath">all-time high page</a>.</p>
+          <p>Bitcoin records its highest price to date, {ATH_USD_TEXT}. Sixteen years earlier, the first published rate valued the entire day's mining at fractions of a cent. Where the price stands against the peak right now is on the <a href="/ath">all-time high page</a>.</p>
         </article>
       </div>
 
@@ -257,6 +258,7 @@ import '../styles/doc.css';
       <nav>
         <a href="/history/people">The people of early bitcoin</a>
         <a href="/obituaries">Bitcoin obituaries</a>
+        <a href="/hacks">The largest bitcoin hacks</a>
         <a href="/halving">The halving schedule</a>
         <a href="/learn/who-is-satoshi">Who is Satoshi?</a>
         <a href="/history/faucets">The faucet era</a>

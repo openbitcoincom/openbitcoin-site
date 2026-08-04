@@ -8,6 +8,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/dev/'),
+      customPages: ['https://openbitcoin.com/blocks'],
     }),
   ],
 });

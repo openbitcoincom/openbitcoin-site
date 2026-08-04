@@ -27,6 +27,11 @@
       "html": "<p>Fee figures are computed by our own node's estimator every minute and logged. A labeled third-party fallback is used to bridge outages, and each row in the series is marked with its source.</p>"
     },
     {
+      "id": "node-census",
+      "heading": "Node census",
+      "html": "<p>The reachable-node figures on the <a href=\"/nodes\">nodes page</a> are our own measurement. A crawler we run starts from the network's DNS seeds, asks every node it reaches for the addresses that node knows, and then attempts a bitcoin protocol handshake with each address it collects. A node is counted only when it answers with its own version and verack, so every number is a completed conversation with our server rather than a figure taken from another census. The crawl runs every six hours and the page shows when the last one finished.</p><p>Country attribution uses the free DB-IP IP-to-Country Lite database, downloaded to our server monthly and read locally, so no visitor lookup and no census lookup is ever sent to a geolocation service. DB-IP Lite is published by db-ip.com under the Creative Commons Attribution 4.0 licence. Peers reached over Tor and I2P announce no location by design and are counted without one; nodes that do not accept inbound connections are invisible to any census, so a reachable count is a floor rather than a total.</p>"
+    },
+    {
       "id": "fx-rates",
       "heading": "Foreign exchange rates",
       "html": "<p>Conversions into fiat currencies other than the US dollar use European Central Bank reference rates.</p><p>There is currently one exception: the ECB suspended its ruble reference rate in 2022, so RUB conversions use a market source instead and are labeled where they appear.</p>"

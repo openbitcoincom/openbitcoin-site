@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ConverterBand from '../components/ConverterBand.astro';
 import '../styles/doc.css';
 import { recentCloses } from '../lib/monthly-prices.js';
+import { ATH_USD, ATH_USD_TEXT, ATH_TS } from '../lib/ath.js';
 
 const sparkDays = recentCloses(90);
 const sparkCloses = sparkDays.map((d) => d.usd);
@@ -24,6 +25,7 @@ const sparkLoY = Math.min(sy(sparkLo) + 16, SH - 6).toFixed(1);
 const sparkEndX = sx(SPARK_N - 1).toFixed(1), sparkEndY = sy(sparkCloses[SPARK_N - 1]).toFixed(1);
 const sparkEnd = sparkCloses[SPARK_N - 1].toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(sparkLo) + ' and ' + sparkUsd(sparkHi) + ', ending at $' + sparkEnd + '. Daily closes; opens the full chart.';
+import { EPOCH, MAX_BTC } from '../lib/subsidy.js';
 ---
 <Base title="Bitcoin Price Live: BTC to USD, Market Cap and ATH Distance - OpenBitcoin" description="The live bitcoin price in US dollars, a median of three exchange feeds, with 24 hour change, market cap, sats per dollar, and distance from the all-time high.">
 <main class="wrap doc-wrap">
@@ -48,7 +50,7 @@ const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(spa
         </div>
         <div class="pc-chip">
           <span class="pc-ck">All-time high</span>
-          <b>$126,272</b>
+          <b>{ATH_USD_TEXT}</b>
           <i>October 6, 2025 &middot; <span id="pc-dd">&hellip;</span> below</i>
         </div>
         <div class="pc-chip">
@@ -97,7 +99,7 @@ const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(spa
           <tr><td>Satoshis per dollar</td><td><b id="pf-spd">&hellip;</b></td></tr>
           <tr><td>Change over 24 hours</td><td><b id="pf-chg">&hellip;</b></td></tr>
           <tr class="pc-group"><td colspan="2">Against the record</td></tr>
-          <tr><td>All-time high</td><td><b>$126,272</b></td></tr>
+          <tr><td>All-time high</td><td><b>{ATH_USD_TEXT}</b></td></tr>
           <tr><td>Date of the all-time high</td><td><b>October 6, 2025</b></td></tr>
           <tr><td>Days since the all-time high</td><td><b id="pf-since">&hellip;</b></td></tr>
           <tr><td>Distance from the all-time high</td><td><b id="pf-dd">&hellip;</b></td></tr>
@@ -145,7 +147,7 @@ const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(spa
         <a class="pc-route" href="/convert"><b>Converter</b><span>Any amount of bitcoin into dollars, or the other way around, in one field.</span></a>
         <a class="pc-route" href="/chart"><b>Price chart</b><span>The same series over time, with the ranges the number above sits inside.</span></a>
         <a class="pc-route" href="/sats-per-dollar"><b>Sats per dollar</b><span>The price inverted: how many satoshis one dollar currently buys.</span></a>
-        <a class="pc-route" href="/ath"><b>Distance from the ATH</b><span>Drawdown from $126,272 and the gain that would reclaim it.</span></a>
+        <a class="pc-route" href="/ath"><b>Distance from the ATH</b><span>Drawdown from {ATH_USD_TEXT} and the gain that would reclaim it.</span></a>
         <a class="pc-route" href="/dca"><b>Averaging calculator</b><span>What a repeated fixed purchase would have accumulated over a past window.</span></a>
         <a class="pc-route" href="/usd-to-sats"><b>Dollars to sats</b><span>Type a dollar amount and read it back in satoshis at the live rate.</span></a>
         <a class="pc-route" href="/m2"><b>Bitcoin versus M2</b><span>The fixed 21 million cap against the growing dollar supply, on one chart.</span></a>
@@ -291,14 +293,14 @@ const sparkAria = 'Bitcoin price over the last 90 days, between ' + sparkUsd(spa
     .pc-spark-dot{r:5}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ ATH: ATH_USD, ATHTS: ATH_TS, EPOCH, MAX: MAX_BTC }}>
 (function(){
   /* Nothing is seeded: price, height and the 24h change start null and every
      cell that depends on them keeps the ellipsis it was served with until a
      real figure lands. Price and height arrive on the chrome hook; the 24h
      change is read off the newest summary (window.OB_LIVE). Days since the ATH
      is arithmetic on the record date, so it paints straight away. */
-  var ATH=126272, ATHTS=Date.UTC(2025,9,6), MAX=21000000, EPOCH=210000;
+  /* MAX and EPOCH arrive from src/lib/subsidy.js */
   var st={price:null,height:null,chg24:null};
   function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
   function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}

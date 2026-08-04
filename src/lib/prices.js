@@ -1,56 +1,60 @@
 import data from '../data/btc-daily.json';
 
 export const META = data.meta;
+export const LAST_BAKED = data.days[data.days.length - 1][0];
 export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
 
-const rows = data.days.map((d, i) => ({
-  date: d[0], o: d[1], h: d[2], l: d[3], c: d[4],
-  prevC: i > 0 ? data.days[i - 1][4] : null,
-  closeOnly: d[1] === null,
-}));
+export function makeSeries(extraDays = []) {
+  const days = extraDays.length ? [...data.days, ...extraDays] : data.days;
+  const rows = days.map((d, i) => ({
+    date: d[0], o: d[1], h: d[2], l: d[3], c: d[4],
+    prevC: i > 0 ? days[i - 1][4] : null,
+    closeOnly: d[1] === null,
+  }));
 
-const yearsMap = new Map();
-for (const r of rows) {
-  const y = r.date.slice(0, 4);
-  const m = r.date.slice(5, 7);
-  if (!yearsMap.has(y)) yearsMap.set(y, new Map());
-  const mm = yearsMap.get(y);
-  if (!mm.has(m)) mm.set(m, []);
-  mm.get(m).push(r);
-}
-
-function summarize(list) {
-  const o = list[0].o ?? list[0].c, c = list[list.length - 1].c;
-  let h = -Infinity, l = Infinity;
-  for (const r of list) {
-    const hh = r.h ?? r.c, ll = r.l ?? r.c;
-    if (hh > h) h = hh; if (ll < l) l = ll;
+  const yearsMap = new Map();
+  for (const r of rows) {
+    const y = r.date.slice(0, 4);
+    const m = r.date.slice(5, 7);
+    if (!yearsMap.has(y)) yearsMap.set(y, new Map());
+    const mm = yearsMap.get(y);
+    if (!mm.has(m)) mm.set(m, []);
+    mm.get(m).push(r);
   }
-  const base = list[0].prevC ?? o;
+
+  function summarize(list) {
+    const o = list[0].o ?? list[0].c, c = list[list.length - 1].c;
+    let h = -Infinity, l = Infinity;
+    for (const r of list) {
+      const hh = r.h ?? r.c, ll = r.l ?? r.c;
+      if (hh > h) h = hh; if (ll < l) l = ll;
+    }
+    const base = list[0].prevC ?? o;
+    return {
+      open: o, close: c, high: h, low: l,
+      changePct: base ? ((c - base) / base) * 100 : null, days: list.length,
+      closeOnly: list.some((r) => r.closeOnly),
+    };
+  }
+
   return {
-    open: o, close: c, high: h, low: l,
-    changePct: base ? ((c - base) / base) * 100 : null, days: list.length,
-    closeOnly: list.some((r) => r.closeOnly),
+    lastDate: rows[rows.length - 1].date,
+    years: () => [...yearsMap.keys()].sort(),
+    yearSummary: (y) => summarize([...yearsMap.get(y).values()].flat()),
+    monthsOf: (y) => [...yearsMap.get(y).keys()].sort(),
+    monthRows: (y, m) => yearsMap.get(y).get(m),
+    monthSummary: (y, m) => summarize(yearsMap.get(y).get(m)),
+    has: (y, m) => yearsMap.has(y) && (m === undefined || yearsMap.get(y).has(m)),
   };
 }
 
-export function years() {
-  return [...yearsMap.keys()].sort();
-}
-export function yearSummary(y) {
-  const all = [...yearsMap.get(y).values()].flat();
-  return summarize(all);
-}
-export function monthsOf(y) {
-  return [...yearsMap.get(y).keys()].sort();
-}
-export function monthRows(y, m) {
-  return yearsMap.get(y).get(m);
-}
-export function monthSummary(y, m) {
-  return summarize(monthRows(y, m));
-}
+const baked = makeSeries();
+export const years = baked.years;
+export const yearSummary = baked.yearSummary;
+export const monthsOf = baked.monthsOf;
+export const monthRows = baked.monthRows;
+export const monthSummary = baked.monthSummary;
 
 export function fmtUsd(v) {
   if (v >= 1000) return v.toLocaleString('en-US', { maximumFractionDigits: 0 });

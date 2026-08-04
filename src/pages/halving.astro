@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
 ---
 <Base title="Bitcoin Halving Countdown: Block 1,050,000 - OpenBitcoin" description="Live countdown to the next bitcoin halving at block 1,050,000: blocks remaining, estimated date, and the full block subsidy schedule.">
 <main class="wrap doc-wrap">
@@ -137,9 +138,9 @@ import '../styles/doc.css';
     .hv-table{display:block;overflow-x:auto}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ TARGET: NEXT_HALVING_HEIGHT, EPOCH, SUB: SUBSIDY_BTC, MAX: MAX_BTC }}>
 (function(){
-  var TARGET=1050000,EPOCH=210000,SUB=3.125,RET=2016,MAX=21000000;
+  var RET=2016; /* TARGET, EPOCH, SUB, MAX arrive from src/lib/subsidy.js */
   /* nothing is baked: 0 means "no real figure yet" and the cells stay at the
      ellipsis they were served with */
   var st={price:0,height:0};

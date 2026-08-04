@@ -39,6 +39,7 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
       : `Ranked from our own node's UTXO set at block ${fmtI(rl.snapshotHeight)}, refreshed daily.`;
   }
 }
+import { EPOCH } from '../lib/subsidy.js';
 ---
 <Base title="Bitcoin Rich List: The Largest Addresses, Explained - OpenBitcoin" description="The bitcoin rich list ranks addresses, not people. Why exchange cold wallets top it, how one owner spans many addresses, and what a big move means.">
 <main class="wrap doc-wrap">
@@ -206,7 +207,7 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
     .rl-ctl{justify-content:flex-start}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ EPOCH }}>
 (function(){
   var P={price:64362.18,height:958341};
   var PAGE=100,TOTAL=0,page=1;
@@ -214,7 +215,7 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
   /* coins issued over blocks 0..height, from the subsidy schedule */
   function supplyAt(h){
     var s=0,sub=50,b=h+1;
-    while(b>210000){s+=210000*sub;sub/=2;b-=210000;}
+    while(b>EPOCH){s+=EPOCH*sub;sub/=2;b-=EPOCH;}
     return s+b*sub;
   }
   /* real ranks from our own UTXO snapshot, served by /v1/rich-list */

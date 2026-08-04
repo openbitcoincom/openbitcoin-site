@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import data from '../content/obituaries.json';
+import { ATH_USD_TEXT, ATH_LABEL } from '../lib/ath.js';
 const entries = data.entries;
 const years = [...new Set(entries.map((e) => e.y))].sort((a, b) => b - a);
 const byYear = years.map((y) => ({ y, items: entries.filter((e) => e.y === y) }));
@@ -26,7 +27,7 @@ const fmtUsd = (p) => (p >= 100 ? '$' + Math.round(p).toLocaleString('en-US') : 
       <div class="ob-stats">
         <div class="ob-stat"><b>{first.y}</b><i>first recorded obituary</i></div>
         <div class="ob-stat"><b>{busiest.y}</b><i>busiest year, {busiest.items.length} obituaries</i></div>
-        <div class="ob-stat"><b>$126,272</b><i>all-time high, October 6, 2025</i></div>
+        <div class="ob-stat"><b>{ATH_USD_TEXT}</b><i>all-time high, {ATH_LABEL}</i></div>
         <div class="ob-stat"><b id="ob-h">&#8230;</b><i>current block height</i></div>
       </div>
     </div>
@@ -44,7 +45,7 @@ const fmtUsd = (p) => (p >= 100 ? '$' + Math.round(p).toLocaleString('en-US') : 
     ))}
 
     <div class="ob-about doc-prose">
-      <p>Each entry records a published claim that bitcoin is dead, dying, or worthless: the headline or its short paraphrase, the outlet or platform it appeared on, and the approximate price of bitcoin on the day. The count counts recorded declarations, not an official statistic; there are certainly more. The live multiples are arithmetic against the current price from our feed, documented at <a href="/sources">/sources</a>, and they describe the past, not the future: this site publishes no predictions, and a declaration aging badly is not evidence about tomorrow.</p>
+      <p>Each entry records a published claim that bitcoin is dead, dying, or worthless: the headline or its short paraphrase, the outlet, platform or person it came from, and the approximate price of bitcoin on the day. The count counts recorded declarations, not an official statistic; there are certainly more. The rows are transcribed from the two long-running public obituary compilations, <a href="https://99bitcoins.com/bitcoin-obituaries/" rel="nofollow noopener" target="_blank">99Bitcoins</a> and <a href="https://bitcoindeaths.com/" rel="nofollow noopener" target="_blank">Bitcoin Deaths</a>, which did the collecting; we keep the facts and the arithmetic. The live multiples are arithmetic against the current price from our feed, documented at <a href="/sources">/sources</a>, and they describe the past, not the future: this site publishes no predictions, and a declaration aging badly is not evidence about tomorrow.</p>
     </div>
   </div>
   <aside class="doc-rail">
@@ -64,6 +65,7 @@ const fmtUsd = (p) => (p >= 100 ? '$' + Math.round(p).toLocaleString('en-US') : 
       <div class="doc-tlab">Related</div>
       <nav>
         <a href="/ath">All-time high and drawdown</a>
+        <a href="/hacks">The largest bitcoin hacks</a>
         <a href="/chart">Full price chart</a>
         <a href="/contact">Report an obituary we missed</a>
       </nav>

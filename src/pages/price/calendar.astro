@@ -1,8 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
-import { years, yearSummary, fmtUsd, fmtPct } from '../../lib/prices.js';
-const ys = years();
+import { fmtUsd, fmtPct } from '../../lib/prices.js';
+import { liveSeries } from '../../lib/prices-live.js';
+
+export const prerender = false;
+
+const S = await liveSeries();
+const ys = S.years();
 ---
 <Base title="Bitcoin Price History: Every Day by Year and Month - OpenBitcoin" description="Browse the full bitcoin price history by date: pick a year, then a month, and see every day's open, high, low, and close since August 2011.">
 <main class="wrap doc-wrap">
@@ -16,7 +21,7 @@ const ys = years();
     <div class="ca-card">
       <div class="ca-tlab">Every year on record</div>
       <div class="ca-years">
-        {ys.map((y) => { const s = yearSummary(y); return (
+        {ys.map((y) => { const s = S.yearSummary(y); return (
           <a class="ca-year" href={`/price/${y}`}>
             <b>{y}</b>
             <span class="ca-close">${fmtUsd(s.close)}</span>

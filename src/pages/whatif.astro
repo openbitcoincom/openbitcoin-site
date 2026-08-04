@@ -4,10 +4,10 @@ import '../styles/doc.css';
 import { monthlyAverages, lastClose } from '../lib/monthly-prices.js';
 
 const Y0 = 2010;
-const ATH = 126272;
+import { ATH_USD as ATH } from '../lib/ath.js';
 let DEMO_PRICE = 64362.18;
 try {
-  const r = await fetch('http://127.0.0.1:8090/v1/price', { signal: AbortSignal.timeout(4000) });
+  const r = await fetch('https://openbitcoin.com/api/v1/price', { signal: AbortSignal.timeout(4000) });
   if (r.ok) { const d = await r.json(); if (typeof d.usd === 'number' && d.usd > 0) DEMO_PRICE = d.usd; }
 } catch {
   const lc = lastClose();
@@ -166,9 +166,9 @@ const dHonest = 'Between ' + labelOf(dIdx) + ' and today you would have held thr
     .wf-amt input{font-size:20px}
   }
 </style>
-<script is:inline define:vars={{ PRICES, Y0, PRICE0: DEMO_PRICE }}>
+<script is:inline define:vars={{ PRICES, Y0, PRICE0: DEMO_PRICE, ATH }}>
 (function(){
-  var ATH=126272;
+  /* ATH arrives via define:vars from src/lib/ath.js */
   var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
   /* PRICES and Y0 arrive at build via define:vars: monthly averages of the
      committed daily close series (src/lib/monthly-prices.js over

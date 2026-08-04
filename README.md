@@ -16,8 +16,28 @@ npm run preview    # serve the build locally
 ```
 
 A local build runs, but the live-data pages (the explorer, the blocks list,
-the rich list) expect a data service on the loopback that this repository
-does not include; without it they render their honest empty states.
+the rich list, the node census) expect a data service on the loopback that
+this repository does not include; without it they render their honest empty
+states.
+
+## How the numbers stay honest
+
+Two habits run through the codebase and are worth knowing before changing
+anything:
+
+**Nothing is seeded with a made-up figure.** A page that needs live data ships
+an ellipsis and paints when the real value arrives. If a fetch fails, the
+placeholder stands and the page says so; it never falls back to a number that
+looks current but is not.
+
+**Facts that repeat live in one module.** The all-time high
+(`src/lib/ath.js`), the issuance schedule (`src/lib/subsidy.js`) and the
+fiat fallback rates (`src/lib/fx.js`) are each defined once and passed into
+inline scripts with `define:vars`. Each has a companion check under
+`scripts/` that the deploy runs, so the build fails if reality outruns the
+constant: a new all-time high, or a halving that has already happened. Prose
+that states a number in words cannot import a module, so those modules carry
+a checklist of the copy to update by hand.
 
 The five pages under `prototype/` (the homepage, the chart page, and the
 block, transaction, and address views) are served verbatim by

@@ -10,6 +10,7 @@ const hrGrid = [
   { v: 18, t: 'EH/s' }, { v: 21, t: 'ZH/s' },
 ].map((g) => ({ y: hy(g.v).toFixed(1), t: g.t }));
 const hrAria = 'Estimated bitcoin network hashrate on a logarithmic scale, one point per difficulty retarget from the January 2009 genesis block to the present: megahashes per second in the CPU era, gigahashes as GPUs arrive in 2010, terahashes across the FPGA bridge, then the ASIC climb from 2013 through petahash, exahash around 2016, and toward a zettahash per second by the mid 2020s.';
+import { SUBSIDY_DAY_BTC } from '../lib/subsidy.js';
 ---
 <Base title="Bitcoin Hashrate, Difficulty, and Hashprice - OpenBitcoin" description="Bitcoin's live network hashrate, current difficulty and next retarget, what hashprice means for miners, and the full mining hardware history charted.">
 <main class="wrap doc-wrap">
@@ -173,9 +174,9 @@ const hrAria = 'Estimated bitcoin network hashrate on a logarithmic scale, one p
     .hr-stats{grid-template-columns:minmax(0,1fr)}
   }
 </style>
-<script is:inline>
+<script is:inline define:vars={{ SUB_DAY: SUBSIDY_DAY_BTC }}>
 (function(){
-  var RET=2016,SUB_DAY=450;
+  var RET=2016; /* SUB_DAY arrives from src/lib/subsidy.js */
   /* nothing is seeded. FEE_DAY waits for the measured median, price and
      height for the chrome band, ehs and difficulty for /network. Every leg
      still missing keeps the ellipsis it shipped as. */
