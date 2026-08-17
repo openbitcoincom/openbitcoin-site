@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { monthlyAverages, lastClose } from '../lib/monthly-prices.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 
 const Y0 = 2010;
 let DEMO_PRICE = 64362.18;
@@ -46,6 +47,7 @@ const dPl = dValue / dInvested - 1;
   <div class="doc-head">
     <div class="doc-kicker">DCA backtest</div>
     <h1>Bitcoin DCA Backtester</h1>
+    <HeroEmblem name="dca" />
     <p class="doc-lede">Pick an amount, a schedule, and a start month, and see what a steady recurring buy did: total invested, bitcoin accumulated, and what the stack is worth at the live price. Backtests describe the past; nothing here is a forecast.</p>
   </div>
   <div class="doc-grid">
@@ -172,7 +174,8 @@ const dPl = dValue / dInvested - 1;
   .dc-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:700px){
     .dc-controls{flex-direction:column;gap:14px}
-    .dc-field{width:100%}
+    
+    .dc-field{width:100%;flex:0 0 auto}
     .dc-field input{font-size:20px}
   }
 </style>

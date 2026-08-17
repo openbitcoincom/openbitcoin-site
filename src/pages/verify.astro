@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 
 function offlineTool(name, tool, page) {
   const candidates = [
@@ -32,6 +33,7 @@ const TOOLS = [
   <div class="doc-head">
     <div class="doc-kicker">Verify</div>
     <h1>Verify our tools</h1>
+    <HeroEmblem name="badge" />
     <p class="doc-lede">A tool that handles keys should not be taken on faith. Every offline build is one readable HTML file, and its SHA-256 checksum is published below, computed from the exact file this site serves: arithmetic you can rerun on your own machine.</p>
   </div>
   <div class="doc-grid">

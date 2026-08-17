@@ -2,12 +2,14 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { FX, SYM } from '../lib/fx.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Sats to USD Converter: What 50,000 Sats Is Worth - OpenBitcoin" description="Convert satoshis to US dollars and 14 other currencies, live as you type. See what 50,000 sats is worth, the value of 1 sat, and sats per dollar.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Sats</div>
     <h1>Sats converter</h1>
+    <HeroEmblem name="satgrid" />
     <p class="doc-lede">Satoshis to dollars and 14 other currencies, live as you type. One bitcoin is 100,000,000 sats; the rate is a median of three exchanges, documented at /sources.</p>
   </div>
   <div class="doc-grid">

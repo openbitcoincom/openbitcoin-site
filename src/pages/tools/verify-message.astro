@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Verify a Bitcoin Signed Message - OpenBitcoin" description="Verify a bitcoin signed message in your browser: paste the address, message and base64 signature to confirm the signer. Legacy and segwit supported.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Verify</div>
-    <h1>Verify a signed message</h1>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
+    <h1>Verify a Bitcoin signed message</h1>
+    <HeroEmblem name="signature" />
     <p class="doc-lede">Paste an address, the exact message and the base64 signature. Your browser recovers the public key and matches it against the address. Legacy, wrapped segwit and native segwit.</p>
   </div>
   <div class="doc-grid">
@@ -87,6 +89,7 @@ import '../../styles/doc.css';
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
+        <a href="/tools/hash">Hash playground</a>
         <a href="/tools/validate">Address validator</a>
         <a href="/verify">Verify what we publish</a>
         <a href="/learn/self-custody">Self custody</a>

@@ -1,0 +1,885 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+---
+<Base title="Mempool Crossing: Dodge the Fee Traffic - OpenBitcoin" description="An arcade crossing game about the bitcoin fee market. You are a transaction: six lanes of fee traffic seeded from this site's own mempool, live when our node answers and honestly labelled when it is not, stand between your broadcast and the next block. Dodge what outbids you, mind the purge, and spend Replace-By-Fee bumps wisely. Free, no wagering, no prizes." indexable={false}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Games</div>
+    <h1>Mempool Crossing</h1>
+    <p class="doc-lede">Every transaction ever confirmed made the same trip: broadcast at the bottom, block at the top, and between them a queue of everybody else's money, sorted by impatience. Here the queue is six lanes of traffic seeded from this site's own mempool, live when our node answers (the plate under the board says which), the blocks arrive whether you are ready or not, and the fee-bump button does exactly what it does in your wallet: jumps the line, for a price.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <!-- ============ THE CROSSING ============ -->
+    <div class="mc-stage" id="mc-stage">
+      <div class="mc-rig" id="mc-rig">
+        <div class="mc-marquee">
+          <div class="mc-title">MEMPOOL CROSSING</div>
+          <div class="mc-sub">six lanes of fee traffic &middot; one confirmation</div>
+        </div>
+        <div class="mc-leds">
+          <div class="mc-led"><i>Score &middot; sats</i><b id="mc-score">0</b></div>
+          <div class="mc-led"><i>Broadcasts</i><b id="mc-lives">3</b></div>
+          <div class="mc-led"><i>Bumps left</i><b id="mc-bumps">2</b></div>
+          <div class="mc-led"><i>Confirmed</i><b id="mc-conf">0</b></div>
+          <div class="mc-led"><i>Next block</i><b id="mc-block">&ndash;</b></div>
+        </div>
+        <div class="mc-boardwrap">
+          <canvas id="mc-board" role="img" aria-label="A top-down crossing: your transaction hops from the broadcast bank at the bottom, across six lanes of moving fee traffic, to the block at the top. The readouts above the board mirror score, broadcasts, bumps, confirmations and the block countdown."></canvas>
+          <div class="mc-overlay" id="mc-overlay">
+            <div class="mc-ovinner">
+              <b id="mc-ovtitle">BROADCAST YOUR TRANSACTION</b>
+              <p id="mc-ovtext">Hop lane to lane. Traffic that touches you outbids you back to the start. Camp at the bottom and the purge takes you. BUMP jumps two lanes; unused bumps score when you confirm.</p>
+              <button class="mc-go" id="mc-go" type="button">Broadcast</button>
+            </div>
+          </div>
+        </div>
+        <div class="mc-pads" id="mc-pads">
+          <button class="mc-pad" id="mc-pu" type="button" aria-label="Hop up">&#9650;</button>
+          <div class="mc-padrow">
+            <button class="mc-pad" id="mc-plft" type="button" aria-label="Hop left">&#9664;</button>
+            <button class="mc-pad mc-bump" id="mc-pbump" type="button" aria-label="Bump the fee">BUMP</button>
+            <button class="mc-pad" id="mc-prgt" type="button" aria-label="Hop right">&#9654;</button>
+          </div>
+          <button class="mc-pad" id="mc-pd" type="button" aria-label="Hop down">&#9660;</button>
+        </div>
+        <div class="mc-console">
+          <button class="mc-mini" id="mc-pause" type="button" aria-label="Pause" aria-pressed="false" title="Pause">
+            <svg viewBox="0 0 24 24" id="mc-ic-pause"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24" id="mc-ic-play" hidden><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>
+          </button>
+          <div class="mc-help">Arrows hop &middot; B bumps the fee &middot; P pauses</div>
+          <div class="mc-small">
+            <button class="mc-mini" id="mc-mute" type="button" aria-label="Mute" aria-pressed="false" title="Mute">
+              <svg viewBox="0 0 24 24" id="mc-mute-on"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9c1.2.8 1.2 5.2 0 6M18.5 7c2.2 2 2.2 8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="mc-mute-off" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l6 5M22 9.5l-6 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="mc-mini" id="mc-fs" type="button" aria-label="Fullscreen" aria-pressed="false" title="Fullscreen">
+              <svg viewBox="0 0 24 24" id="mc-fs-open"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" id="mc-fs-close" hidden><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="mc-msg" id="mc-msg">The low lanes crawl bumper to bumper; the high lanes are empty and fast. That is not game design, that is the fee market.</div>
+        <div class="mc-plate"><span id="mc-datachip">TRAFFIC FEED: &hellip;</span></div>
+      </div>
+      <div class="mc-sr" id="mc-live" aria-live="polite"></div>
+    </div>
+    <noscript><p class="mc-nojs">The crossing needs JavaScript to run. The fee-market mapping below is true either way.</p></noscript>
+
+    <!-- ============ THE LEDGER ============ -->
+    <div class="mc-card">
+      <h2 class="mc-tlab">The ledger: this browser, all time</h2>
+      <div class="mc-stats">
+        <div class="mc-stat"><b id="mc-l-games">0</b><i>runs</i></div>
+        <div class="mc-stat"><b id="mc-l-best">0</b><i>best score, sats</i></div>
+        <div class="mc-stat"><b id="mc-l-conf">0</b><i>confirmations</i></div>
+        <div class="mc-stat"><b id="mc-l-level">0</b><i>deepest congestion level</i></div>
+      </div>
+      <p class="mc-brow"><span>The ledger lives in this browser's storage and never leaves the page. The score is in sats because everything in the mempool is; none of them are real here.</span> <button class="mc-reset" id="mc-reset" type="button">Reset everything</button></p>
+    </div>
+
+    <!-- ============ THE TOY AGAINST THE TRUTH ============ -->
+    <div class="mc-card">
+      <h2 class="mc-tlab">The toy against the truth</h2>
+      <div class="mc-ptwrap">
+        <table class="mc-pt">
+          <thead><tr><th>In the game</th><th>On the network</th></tr></thead>
+          <tbody>
+            <tr><td>Six lanes, dense and slow at the bottom</td><td>Fee bands: most days, most stuck volume sits at 1-5 sat/vB, and it barely moves</td></tr>
+            <tr><td>Traffic that knocks you back</td><td>Being outbid: blocks fill from the top of the fee ladder, and you slide down the queue</td></tr>
+            <tr><td>The purge tide at the bottom bank</td><td>Mempool eviction: when memory fills, nodes drop the cheapest transactions entirely</td></tr>
+            <tr><td>The BUMP button</td><td>Replace-By-Fee (BIP 125): re-broadcast the same payment with a higher fee and jump the queue</td></tr>
+            <tr><td>Blocks arriving on their own clock</td><td>Poisson block times: roughly every ten minutes on average, and never when you want one</td></tr>
+            <tr><td>Points for unused bumps</td><td>Fees you did not pay: the whole game of fee estimation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mc-note">One knowing simplification: real queues do not knock you unconscious, they just make you wait. The collision is the wait, compressed into something your reflexes can feel.</p>
+    </div>
+
+    <!-- ============ RBF ============ -->
+    <div class="mc-card">
+      <h2 class="mc-tlab">The bump button is real</h2>
+      <p class="mc-p">Replace-By-Fee is the polite name for shoving to the front: you re-sign the same payment with a bigger fee, and nodes replace the old version because the new one pays more. Most wallets hide it behind a button called "speed up", and the rule of the game is the rule of the network: every bump costs real money, so the cheapest transaction is the one that guessed its fee right the first time. The <a href="/fees/calculator">fee calculator</a> does the guessing with live data, and the <a href="/fees">fees page</a> shows what the lanes look like right now.</p>
+    </div>
+
+    <!-- ============ A TOY ============ -->
+    <div class="mc-card mc-warncard">
+      <h2 class="mc-tlab mc-wlab">A toy, not fee advice</h2>
+      <p class="mc-p">Nothing here takes wagers or pays prizes; the score is a number in your browser. The traffic is seeded from the real mempool but the physics are arcade physics, and surviving level nine says nothing about your fee estimation. When real sats are on the line, read the <a href="/fees">live rates</a> and let arithmetic do the hopping; the <a href="/terms">terms</a> cover the rest.</p>
+    </div>
+
+    <div class="mc-about doc-prose">
+      <p>Mempool Crossing sits in the <a href="/games">games section</a>, where play is free forever. Its sibling machines: <a href="/games/block-builder">Block Builder</a> puts you on the other side of the same queue, choosing which of these transactions make the block, and <a href="/games/impossible-slot">The Impossible Slot Machine</a> spins real keys against the whole chain. The traffic report this game is drawn from lives on the <a href="/mempool">mempool page</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">House rules</div>
+      <ul class="mc-rl">
+        <li>Three broadcasts, then the wallet gives up</li>
+        <li>Two fee bumps per crossing; unused bumps score</li>
+        <li>Touching traffic sends you back to the start</li>
+        <li>Camping at the bottom invites the purge</li>
+        <li>Traffic seeded from our mempool feed; the plate says live or snapshot</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/games">All games</a>
+        <a href="/games/block-builder">Block Builder</a>
+        <a href="/mempool">The live mempool</a>
+        <a href="/fees/calculator">Fee calculator</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  
+  
+  .mc-stage,.mc-stage *{-webkit-user-select:none !important;user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .mc-stage ::selection{background:transparent}
+  .mc-stage{position:relative}
+  .mc-stage.mc-fake{position:fixed;inset:0;z-index:80;background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .mc-stage:fullscreen{background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .mc-stage.mc-fake .mc-rig,.mc-stage:fullscreen .mc-rig{margin:auto}
+  html.mc-lock{overflow:hidden}
+
+  .mc-rig{position:relative;max-width:560px;margin:0 auto;
+    background:linear-gradient(180deg,#241D14,#120E09 70%,#0C0906);
+    border:1px solid #3E3322;border-radius:20px;padding:16px 20px 12px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,160,.10),inset 0 -14px 30px rgba(0,0,0,.45)}
+  .mc-rig button:focus-visible{outline:3px solid #FFD9A0;outline-offset:2px}
+
+  .mc-marquee{text-align:center;padding:2px 0 10px;position:relative}
+  .mc-marquee::before{content:"";position:absolute;left:12%;right:12%;top:-6px;height:44px;
+    background:radial-gradient(closest-side,rgba(247,147,26,.16),transparent);pointer-events:none}
+  .mc-title{font:700 clamp(15px,3.8vw,20px) var(--mono);letter-spacing:.22em;color:#FFD9A0;
+    text-shadow:0 0 16px rgba(247,147,26,.55),0 1px 0 rgba(0,0,0,.6)}
+  .mc-sub{font:600 8.5px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:#A98F65;margin-top:4px}
+
+  .mc-leds{display:flex;gap:8px;margin-bottom:10px}
+  .mc-led{flex:1;min-width:0;background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:6px 10px 7px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .mc-led i{display:block;font:700 7.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A98F65;font-style:normal;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mc-led b{display:block;font:700 clamp(14px,3.4vw,17px) var(--mono);color:#FFD9A0;margin-top:2px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;text-shadow:0 0 9px rgba(255,166,60,.35)}
+
+  .mc-boardwrap{position:relative;background:#060504;border:1px solid #3E3322;border-radius:12px;
+    padding:8px;box-shadow:inset 0 4px 18px rgba(0,0,0,.85)}
+  .mc-boardwrap canvas{display:block;margin:0 auto;border-radius:6px}
+  .mc-overlay{position:absolute;inset:8px;display:flex;align-items:center;justify-content:center;
+    background:rgba(6,5,4,.84);border-radius:6px;overflow:auto}
+  .mc-overlay[hidden]{display:none}
+  .mc-ovinner{text-align:center;padding:14px 16px;max-width:92%;max-height:100%;margin:auto}
+  .mc-ovinner b{display:block;font:700 14px var(--mono);letter-spacing:.12em;color:#FFD9A0}
+  .mc-ovinner p{font:600 11px/1.65 var(--mono);color:#B99B6B;margin:10px 0 0}
+  .mc-ovinner p b{display:inline;font-size:11px;color:#FFB84D;letter-spacing:.02em}
+  .mc-go{margin-top:14px;background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);
+    border-radius:10px;cursor:pointer;min-height:48px;padding:0 26px;
+    font:700 14px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    box-shadow:0 5px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14),0 0 22px rgba(247,147,26,.22)}
+  .mc-go:hover{background:var(--cta-hov)}
+
+  .mc-pads{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:12px}
+  .mc-padrow{display:flex;gap:6px}
+  .mc-pad{min-width:56px;min-height:44px;background:#191410;border:1px solid #35291A;border-radius:9px;
+    color:#FFD9A0;cursor:pointer;font:700 14px var(--mono)}
+  .mc-pad:active{background:#2A2118}
+  .mc-bump{font-size:10px;letter-spacing:.14em;border-color:rgba(247,147,26,.5);color:#FFB84D}
+  @media(pointer:coarse){.mc-pads{display:flex}}
+
+  .mc-console{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .mc-help{flex:1;font:600 8.5px var(--mono);letter-spacing:.08em;color:#97815A;text-align:center}
+  .mc-small{display:flex;gap:6px}
+  .mc-mini{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none;
+    background:#191410;border:1px solid #35291A;border-radius:8px;color:#B99B6B;cursor:pointer}
+  .mc-mini:hover{color:#FFD9A0;border-color:#5A452A}
+  .mc-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .mc-mini svg{width:17px;height:17px}
+  .mc-msg{min-height:34px;margin-top:10px;text-align:center;font:600 11.5px/1.5 var(--mono);letter-spacing:.02em;color:#B99B6B}
+  .mc-msg.mc-good{color:#FFB84D}
+  .mc-msg.mc-bad{color:#E06A55}
+  .mc-plate{margin-top:8px;text-align:center;font:600 7.5px var(--mono);letter-spacing:.2em;color:#97815A;
+    border-top:1px solid #241C12;padding-top:8px}
+  .mc-plate .mc-livefeed{color:#C98A2E}
+
+  
+  .mc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .mc-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .mc-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+  .mc-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .mc-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mc-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .mc-brow{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .mc-brow span{flex:1;min-width:220px}
+  .mc-reset{background:transparent;border:1px dashed var(--line-2);border-radius:7px;color:var(--ink-3);
+    font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;min-height:40px;cursor:pointer}
+  .mc-reset:hover{color:var(--down);border-color:var(--down)}
+  .mc-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .mc-p a,.mc-about a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .mc-p a:hover,.mc-about a:hover{border-bottom-style:solid}
+  .mc-ptwrap{overflow-x:auto}
+  .mc-pt{width:100%;border-collapse:collapse}
+  .mc-pt th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .mc-pt td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:9px 10px 9px 0;border-bottom:1px dotted var(--line-2);vertical-align:top}
+  .mc-pt td:first-child{color:var(--ink);font-weight:600;min-width:150px}
+  .mc-pt tr:last-child td{border-bottom:0}
+  .mc-note{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .mc-warncard{border-color:rgba(255,166,60,.32)}
+  .mc-wlab{color:var(--acc)}
+  .mc-about{margin-top:14px}
+  .mc-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .mc-rl{margin:0;padding-left:16px}
+  .mc-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .mc-rl li:first-child{margin-top:0}
+  .mc-rl li::marker{color:var(--acc)}
+  .mc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .mc-nojs{font:600 12.5px/1.6 var(--sans);color:var(--ink-3);text-align:center;margin:12px 0 0}
+
+  @media(max-width:740px){
+    .mc-rig{padding:12px 10px 10px}
+    .mc-leds{flex-wrap:wrap}
+    .mc-led{flex:1 1 40%}
+    .mc-help{display:none}
+    .mc-msg{min-height:50px}
+  }
+  @media(max-width:700px){
+    .mc-card{padding:18px 16px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+"use strict";
+var stage=document.getElementById("mc-stage"),rig=document.getElementById("mc-rig");
+if(!stage||!rig)return;
+
+/* ---------------- board geometry ----------------
+   row 0 = the block bank, rows 1-3 fast high-fee lanes, row 4 = the bench,
+   rows 5-7 slow low-fee lanes, row 8 = the broadcast bank */
+var COLS=11,ROWS=9,LANE_ROWS=[1,2,3,5,6,7],BENCH=4,START=8,BLOCKROW=0;
+/* read lazily: Base publishes OB_DATA_API after this inline script parses */
+function apiBase(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)||"/api/v1";}
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* six game bands, high fee first (row 1) down to dust (row 7).
+   label, edge range [lo,hi), base speed px/s at cell=34, chip color */
+var BANDS=[
+  {lo:50,hi:Infinity,label:"50+", speed:82,color:"#FFD9A0",ink:"#241200"},
+  {lo:20,hi:50,      label:"20-49",speed:68,color:"#FFB454",ink:"#241200"},
+  {lo:10,hi:20,      label:"10-19",speed:54,color:"#F7931A",ink:"#241200"},
+  {lo:6, hi:10,      label:"6-9",  speed:42,color:"#C46A00",ink:"#FFF3E0"},
+  {lo:3, hi:6,       label:"3-5",  speed:31,color:"#8F6B36",ink:"#F0E9DE"},
+  {lo:1, hi:3,       label:"1-2",  speed:22,color:"#5F5140",ink:"#D8CDBB"}
+];
+/* density share per band, replaced by the live feed when it answers;
+   the snapshot mirrors a quiet chain: nearly everything cheap and stuck */
+var share=[0.02,0.04,0.06,0.10,0.26,0.52],feedLive=false,feedCount=0,feedMb=0;
+
+function paintChip(){
+  var c=document.getElementById("mc-datachip");
+  if(!c)return;
+  if(feedLive){
+    c.className="mc-livefeed";
+    c.textContent="TRAFFIC FEED: LIVE MEMPOOL · "+feedCount.toLocaleString("en-US")+" TX · "+feedMb+" MvB";
+  }else{
+    c.className="";
+    c.textContent="TRAFFIC FEED: STORED SNAPSHOT (feed unavailable)";
+  }
+}
+function fetchFeed(){
+  return fetch(apiBase()+"/mempool").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    if(j&&j.bands&&Array.isArray(j.bands.edges)&&Array.isArray(j.bands.vsizes)&&
+       j.bands.edges.length===j.bands.vsizes.length&&
+       j.bands.vsizes.every(function(v){return typeof v==="number"&&isFinite(v)&&v>=0;})&&
+       j.bands.vsizes.some(function(v){return v>0;})){
+      var sums=[0,0,0,0,0,0],total=0,i,b;
+      for(i=0;i<j.bands.edges.length;i++){
+        var rate=j.bands.edges[i],vs=j.bands.vsizes[i];
+        for(b=0;b<BANDS.length;b++)if(rate>=BANDS[b].lo&&rate<BANDS[b].hi){sums[b]+=vs;break;}
+        total+=vs;
+      }
+      if(total>0){
+        share=sums.map(function(s){return s/total;});
+        feedLive=true;feedCount=j.count|0;feedMb=Math.round((j.vsize||0)/1e6);
+        paintChip();return;
+      }
+    }
+    /* a 200 with unusable bands is still not a live feed: never claim it is */
+    feedLive=false;
+    paintChip();
+  }).catch(function(){feedLive=false;paintChip();});
+}
+
+/* ---------------- storage ---------------- */
+function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function readInt(k,d){try{var v=parseInt(localStorage.getItem(k),10);return isFinite(v)?v:d;}catch(e){return d;}}
+function readLed(){
+  try{var l=JSON.parse(localStorage.getItem("ob-mc-led"));
+    if(l&&isFinite(l.g)&&isFinite(l.best)&&isFinite(l.cf)&&isFinite(l.lv))
+      return {g:l.g|0,best:l.best|0,cf:l.cf|0,lv:l.lv|0};
+  }catch(e){}
+  return {g:0,best:0,cf:0,lv:0};
+}
+var led=readLed();
+function saveLed(){store("ob-mc-led",JSON.stringify(led));}
+
+/* ---------------- dom + sound ---------------- */
+function el(id){return document.getElementById(id);}
+function txt(id,v){var e=el(id);if(e)e.textContent=v;}
+function fmt(n){return n.toLocaleString("en-US");}
+var cv=el("mc-board"),ctx=cv.getContext("2d"),
+    overlay=el("mc-overlay"),ovTitle=el("mc-ovtitle"),ovText=el("mc-ovtext"),ovBtn=el("mc-go"),
+    msgEl=el("mc-msg"),live=el("mc-live");
+function say(m,cls){
+  msgEl.textContent=m;msgEl.className="mc-msg"+(cls?" "+cls:"");
+  if(live)live.textContent=m;
+}
+var muted=readInt("ob-mc-mute",0)===1,actx=null;
+function ac(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==="suspended")actx.resume();
+  return actx;
+}
+function tone(freq,dur,type,vol,when,slide){
+  var a=ac();if(!a||muted)return;
+  var t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(freq,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+function sHop(){tone(660,0.035,"square",0.03);}
+function sHit(){tone(220,0.16,"sawtooth",0.1,0,60);tone(140,0.2,"sine",0.12,0.04,50);}
+function sPurge(){tone(160,0.14,"square",0.08,0,80);tone(120,0.18,"square",0.08,0.12,60);}
+function sBump(){tone(700,0.08,"triangle",0.1,0,1400);}
+function sConfirm(){var seq=[659,784,1047,1319],i;for(i=0;i<seq.length;i++)tone(seq[i],0.15,"triangle",0.11,i*0.08);}
+function sMineTick(){tone(1200,0.03,"square",0.02);}
+function sMined(){tone(196,0.18,"sine",0.14,0,110);}
+function sLevel(){tone(523,0.1,"triangle",0.09);tone(659,0.12,"triangle",0.09,0.08);}
+function sOver(){var seq=[392,330,262,196],i;for(i=0;i<seq.length;i++)tone(seq[i],0.2,"triangle",0.1,i*0.12);}
+function paintMute(){
+  var on=el("mc-mute-on"),off=el("mc-mute-off"),btn=el("mc-mute");
+  if(on)on.hidden=muted;if(off)off.hidden=!muted;
+  if(btn)btn.setAttribute("aria-pressed",muted?"true":"false");
+}
+el("mc-mute").addEventListener("click",function(){
+  muted=!muted;store("ob-mc-mute",muted?"1":"0");paintMute();if(!muted)tone(880,0.08,"sine",0.08);
+});
+paintMute();
+
+/* ---------------- sizing ---------------- */
+var cell=34,W=0,H=0;
+function sizeBoard(){
+  var old=cell;
+  var avail=rig.clientWidth-40-16;
+  cell=Math.max(16,Math.min(38,Math.floor(avail/COLS)));
+  var maxH=Math.floor((window.innerHeight-300)/ROWS);
+  if(maxH>=16)cell=Math.min(cell,maxH);
+  W=COLS*cell;H=ROWS*cell;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+"px";cv.style.height=H+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  /* traffic lives in pixels: rescale chips and lane physics with the board */
+  if(lanes.length&&old!==cell&&old>0){
+    var k=cell/old;
+    lanes.forEach(function(l,li){
+      l.spec=laneSpec(li);
+      l.chips.forEach(function(ch){ch.x*=k;ch.w*=k;});
+    });
+  }
+  draw(performance.now());
+}
+
+/* ---------------- game state ---------------- */
+var state="idle",lanes=[],player=null,lives=3,bumps=2,score=0,confirms=0,level=1,
+    blockT=10000,blockCycle=10000,purgeT=0,raf=null,lastT=0,hopLock=0,
+    inTemplate=false,flash=0,nextHeight=null;
+
+var LEVEL_LINES=[
+  "Congestion rising: an inscription mint just dropped.",
+  "Congestion rising: someone is consolidating dust at the worst possible time.",
+  "Congestion rising: an exchange just batched a thousand withdrawals.",
+  "Congestion rising: weekend calm is over and the arbitrage bots are awake.",
+  "Congestion rising: a whale moved and everyone is front-running the panic."
+];
+
+function laneSpec(li){
+  /* li 0..5 = BANDS index; density from live share, clamped playable */
+  var d=Math.max(0.06,Math.min(0.6,share[li]));
+  var lvMul=1+(level-1)*0.07;
+  return {
+    speed:BANDS[li].speed*lvMul*(cell/34),
+    gapPx:Math.max(cell*1.15,cell*(4.6-d*6)/lvMul),
+    color:BANDS[li].color,ink:BANDS[li].ink,label:BANDS[li].label,
+    dir:(li%2===0)?1:-1
+  };
+}
+function initLanes(){
+  lanes=LANE_ROWS.map(function(row,li){
+    var spec=laneSpec(li);
+    var chips=[],x=-cell*2;
+    /* pre-fill the lane so traffic exists from frame one */
+    while(x<W+cell*2){
+      var wCells=1+((Math.random()<0.3)?1:0)+((Math.random()<0.12)?1:0);
+      chips.push({x:x,w:wCells*cell*0.92,rate:rateFor(li)});
+      x+=wCells*cell*0.92+spec.gapPx*(0.7+Math.random()*0.9);
+    }
+    return {row:row,li:li,spec:spec,chips:chips};
+  });
+}
+function rateFor(li){
+  var b=BANDS[li];
+  var hi=isFinite(b.hi)?b.hi:b.lo*3;
+  return Math.max(1,Math.round(b.lo+Math.random()*(hi-b.lo)));
+}
+var graceUntil=0,purgeWarned=false;
+function resetPlayer(){
+  player={c:Math.floor(COLS/2),r:START,hopAt:0};
+  inTemplate=false;purgeT=0;purgeWarned=false;
+  /* a fresh broadcast gets a moment to breathe before traffic counts;
+     hop() ends the grace the moment you leave the bank */
+  graceUntil=performance.now()+1000;
+}
+
+/* ---------------- runs ---------------- */
+function startRun(){
+  lives=3;bumps=2;score=0;confirms=0;level=1;
+  blockCycle=10000;blockT=blockCycle;
+  initLanes();resetPlayer();
+  state="run";overlay.hidden=true;paintPause();
+  fetchFeed();
+  paintHud();
+  say("Broadcast. The block is "+(nextHeight?"#"+fmt(nextHeight)+" and it is ":"")+"coming whether you are ready or not.");
+  lastT=performance.now();
+  if(!raf)raf=requestAnimationFrame(loop);
+}
+function gameOver(cause){
+  state="over";
+  led.g++;led.cf+=confirms;
+  if(score>led.best)led.best=score;
+  if(level>led.lv)led.lv=level;
+  saveLed();paintLedger();
+  sOver();
+  var causeLine=cause==="hit"?"Outbid on the last broadcast. ":(cause==="purge"?"Purged on the last broadcast. ":"");
+  var line=confirms===0?
+    "Zero confirmations. The mempool forgets you the moment you stop paying attention; so did it.":
+    confirms<3?
+    "Confirmed "+confirms+" time"+(confirms>1?"s":"")+". The queue is undefeated in the long run.":
+    "Confirmed "+confirms+" times and reached congestion level "+level+". Somewhere a fee estimator just felt obsolete.";
+  ovTitle.textContent="WALLET GAVE UP";
+  ovText.innerHTML="<b>"+fmt(score)+" sats</b> · "+confirms+" confirmation"+(confirms===1?"":"s")+" · congestion level "+level+".<br><br>"+causeLine+line;
+  ovBtn.textContent="Broadcast again";
+  overlay.hidden=false;
+  say("Run over: "+fmt(score)+" sats, "+confirms+" confirmations. "+causeLine+line);
+}
+function die(reason){
+  lives--;
+  paintHud();
+  if(lives<=0){flash=performance.now()+350;gameOver(reason);return;}
+  if(reason==="hit"){sHit();say("Outbid. A fatter fee shoved past and you slid back down the queue. Broadcasts left: "+lives+".","mc-bad");}
+  else{sPurge();say("Purged. Sit at the bottom of the mempool long enough and the mempool stops holding your coat. Broadcasts left: "+lives+".","mc-bad");}
+  flash=performance.now()+350;
+  resetPlayer();
+}
+function confirmPlayer(){
+  var bonus=3000*bumps,pay=10000+500*(level-1)+bonus;
+  score+=pay;confirms++;
+  sConfirm();
+  say("CONFIRMED in block "+(nextHeight?"#"+fmt(nextHeight):"")+": +"+fmt(pay)+" sats"+(bonus?" ("+fmt(bonus)+" of that is fees you never had to bump)":"")+".","mc-good");
+  if(nextHeight)nextHeight++;
+  level++;bumps=2;
+  if(level%1===0&&level>1){
+    setTimeout(function(){if(state==="run"){say(LEVEL_LINES[level%LEVEL_LINES.length]);sLevel();}},1600);
+  }
+  initLanes();resetPlayer();
+  blockCycle=Math.max(6500,10000-level*250);blockT=blockCycle;
+  paintHud();
+}
+
+/* ---------------- input ---------------- */
+function hop(dc,dr){
+  if(state!=="run"||inTemplate)return;
+  var now=performance.now();
+  if(now-player.hopAt<90)return;
+  var nc=player.c+dc,nr=player.r+dr;
+  if(nc<0||nc>=COLS||nr<0||nr>START)return;
+  player.c=nc;player.r=nr;player.hopAt=now;
+  if(nr!==START){
+    purgeT=0;purgeWarned=false;
+    /* the respawn grace protects the bank, never the crossing: stepping
+       into traffic ends it, or holding Up would confirm invulnerably */
+    graceUntil=0;
+  }
+  sHop();
+  if(nr===BLOCKROW)enterTemplate();
+}
+function enterTemplate(){
+  inTemplate=true;
+  say("In the template. Nothing can outbid you now; wait for the block.","mc-good");
+}
+function bump(){
+  if(state!=="run"||inTemplate)return;
+  if(bumps<=0){say("No bumps left. The wallet refuses to chase the market any further.","mc-bad");return;}
+  var nr=Math.max(BLOCKROW,player.r-2);
+  bumps--;player.r=nr;player.hopAt=performance.now();purgeT=0;purgeWarned=false;graceUntil=0;
+  sBump();
+  paintHud();
+  say("Fee bumped: same payment, bigger fee, two lanes closer. Your future self paid for that.");
+  if(nr===BLOCKROW)enterTemplate();
+}
+
+/* ---------------- main loop ---------------- */
+function loop(t){
+  raf=requestAnimationFrame(loop);
+  var dt=Math.min(80,t-lastT);lastT=t;
+  if(state==="pause")return;
+  if(state!=="run"){
+    /* idle and game-over: traffic keeps flowing behind the overlay, because
+       the mempool does not care whether you are playing */
+    lanes.forEach(function(l){
+      var sp=l.spec;
+      l.chips.forEach(function(ch){ch.x+=sp.dir*sp.speed*dt/1000;});
+      l.chips=l.chips.filter(function(ch){return ch.x>-cell*4-ch.w&&ch.x<W+cell*4;});
+      if(l.chips.length<3){
+        var wc=1+((Math.random()<0.3)?1:0);
+        l.chips.push({x:sp.dir>0?-wc*cell-cell:W+cell,w:wc*cell*0.92,rate:rateFor(l.li)});
+      }
+    });
+    draw(t);
+    return;
+  }
+  /* traffic */
+  lanes.forEach(function(l){
+    var sp=l.spec;
+    l.chips.forEach(function(ch){ch.x+=sp.dir*sp.speed*dt/1000;});
+    /* recycle: keep the lane populated with its gap rhythm */
+    if(sp.dir>0){
+      l.chips=l.chips.filter(function(ch){return ch.x<W+cell*3;});
+      var minX=Infinity;
+      l.chips.forEach(function(ch){if(ch.x<minX)minX=ch.x;});
+      if(minX>sp.gapPx*(0.7+Math.random()*0.6)-cell*2){
+        var wc=1+((Math.random()<0.3)?1:0)+((Math.random()<0.12)?1:0);
+        l.chips.push({x:-wc*cell-cell,w:wc*cell*0.92,rate:rateFor(l.li)});
+      }
+    }else{
+      l.chips=l.chips.filter(function(ch){return ch.x>-cell*3-ch.w;});
+      var maxX=-Infinity;
+      l.chips.forEach(function(ch){if(ch.x+ch.w>maxX)maxX=ch.x+ch.w;});
+      if(maxX<W-(sp.gapPx*(0.7+Math.random()*0.6))+cell*2){
+        var wc2=1+((Math.random()<0.3)?1:0)+((Math.random()<0.12)?1:0);
+        l.chips.push({x:W+cell,w:wc2*cell*0.92,rate:rateFor(l.li)});
+      }
+    }
+  });
+  /* the block clock */
+  blockT-=dt;
+  if(blockT<=2000&&blockT+dt>2000)sMineTick();
+  if(blockT<=0){
+    if(inTemplate){confirmPlayer();}
+    else{sMined();flash=t+220;if(nextHeight)nextHeight++;blockCycle=Math.max(6500,blockCycle);blockT=blockCycle;
+      say("Block found without you. It happens to most of the mempool, most of the time.");}
+    if(state==="run"&&blockT<=0)blockT=blockCycle;
+  }
+  /* purge pressure on the bottom bank */
+  if(player.r===START){
+    purgeT+=dt;
+    if(purgeT>18000){die("purge");}
+    else if(purgeT>12000){
+      if(!purgeWarned){purgeWarned=true;say("Purge warning: the mempool is about to drop you. Move up.","mc-bad");}
+      if(Math.floor((purgeT-12000)/900)!==Math.floor((purgeT-12000-dt)/900))sPurge();
+    }
+  }
+  /* collision */
+  if(!inTemplate&&t>graceUntil){
+    var lane=null;
+    for(var i=0;i<lanes.length;i++)if(lanes[i].row===player.r){lane=lanes[i];break;}
+    if(lane){
+      var px=player.c*cell+cell*0.18,pw=cell*0.64;
+      for(var k=0;k<lane.chips.length;k++){
+        var ch=lane.chips[k];
+        if(px<ch.x+ch.w&&px+pw>ch.x){die("hit");break;}
+      }
+    }
+  }
+  paintClock();
+  draw(t);
+}
+
+/* ---------------- painters ---------------- */
+function rr(x,y,w,h,r){
+  if(w<2*r)r=w/2;if(h<2*r)r=h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function draw(t){
+  ctx.fillStyle="#0B0908";ctx.fillRect(0,0,W,H);
+  /* the block bank */
+  ctx.fillStyle=inTemplate?"#2A2113":"#1B150E";
+  ctx.fillRect(0,0,W,cell);
+  ctx.strokeStyle="#3E3322";ctx.strokeRect(.5,.5,W-1,cell-1);
+  ctx.fillStyle="#A98F65";
+  ctx.font="700 "+Math.max(8,Math.floor(cell*0.28))+"px Cascadia Mono,Consolas,monospace";
+  ctx.textAlign="left";ctx.textBaseline="middle";
+  var secs=state==="run"?Math.max(0,Math.ceil(blockT/1000)):Math.ceil(blockCycle/1000);
+  ctx.fillText((nextHeight?"BLOCK #"+fmt(nextHeight):"NEXT BLOCK")+" IN 0:"+String(secs).padStart(2,"0"),6,cell/2);
+  /* countdown fuse along the top */
+  if(state==="run"){
+    ctx.fillStyle="#F7931A";
+    ctx.fillRect(0,0,W*(blockT/blockCycle),3);
+  }
+  /* the bench */
+  ctx.fillStyle="#141009";
+  ctx.fillRect(0,BENCH*cell,W,cell);
+  ctx.fillStyle="#97815A";
+  ctx.font="700 "+Math.max(7,Math.floor(cell*0.22))+"px Cascadia Mono,Consolas,monospace";
+  ctx.fillText("THE BACKLOG BENCH · SAFE, GOING NOWHERE",6,BENCH*cell+cell/2);
+  /* the broadcast bank */
+  var purgeFrac=Math.min(1,purgeT/18000);
+  ctx.fillStyle=purgeFrac>0.66?"#2A130E":"#1B150E";
+  ctx.fillRect(0,START*cell,W,cell);
+  ctx.fillStyle=purgeFrac>0.66?"#E06A55":"#A98F65";
+  ctx.fillText(purgeFrac>0.66?"PURGE IMMINENT · MOVE":"YOUR WALLET · BROADCAST BANK",6,START*cell+cell/2);
+  if(state==="run"&&player.r===START&&purgeT>0){
+    ctx.fillStyle="rgba(224,106,85,.8)";
+    ctx.fillRect(0,(START+1)*cell-3,W*purgeFrac,3);
+  }
+  /* lanes */
+  lanes.forEach(function(l){
+    var y=l.row*cell;
+    ctx.fillStyle=l.li%2?"#0E0B08":"#100D09";
+    ctx.fillRect(0,y,W,cell);
+    /* band tag */
+    ctx.fillStyle="#A98F65";
+    ctx.font="700 "+Math.max(7,Math.floor(cell*0.22))+"px Cascadia Mono,Consolas,monospace";
+    ctx.fillText(l.spec.label,4,y+cell/2);
+    l.chips.forEach(function(ch){
+      ctx.fillStyle=l.spec.color;
+      rr(ch.x,y+cell*0.16,ch.w,cell*0.68,4);ctx.fill();
+      ctx.strokeStyle="rgba(0,0,0,.35)";ctx.lineWidth=1;
+      rr(ch.x+.5,y+cell*0.16+.5,ch.w-1,cell*0.68-1,4);ctx.stroke();
+      if(ch.w>cell*1.2&&cell>=26){
+        ctx.fillStyle=l.spec.ink;
+        ctx.font="700 "+Math.floor(cell*0.3)+"px Cascadia Mono,Consolas,monospace";
+        ctx.textAlign="center";
+        ctx.fillText(String(ch.rate),ch.x+ch.w/2,y+cell/2);
+        ctx.textAlign="left";
+      }
+    });
+  });
+  /* the player */
+  if(state==="run"||state==="pause"){
+    var px=player.c*cell+cell*0.14,py=player.r*cell+cell*0.14,ps=cell*0.72;
+    if(t<graceUntil)ctx.globalAlpha=reduce?0.6:(0.45+0.45*Math.abs(Math.sin(t/150))); /* respawn blink, steady under reduced motion */
+    ctx.shadowColor="rgba(247,147,26,.8)";ctx.shadowBlur=10;
+    ctx.fillStyle="#F7931A";
+    rr(px,py,ps,ps,6);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle="#FFD9A0";ctx.lineWidth=1.6;
+    rr(px+.8,py+.8,ps-1.6,ps-1.6,6);ctx.stroke();
+    ctx.fillStyle="#241200";
+    ctx.font="700 "+Math.floor(cell*0.4)+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText("₿",px+ps/2,py+ps/2+1);
+    ctx.textAlign="left";
+    ctx.globalAlpha=1;
+  }
+  /* hit/mine flash: skipped under reduced motion */
+  if(flash>t&&!reduce){
+    ctx.fillStyle="rgba(255,217,160,"+(0.25*(flash-t)/350).toFixed(2)+")";
+    ctx.fillRect(0,0,W,H);
+  }
+}
+function paintHud(){
+  txt("mc-score",fmt(score));
+  txt("mc-lives",String(Math.max(0,lives)));
+  txt("mc-bumps",String(bumps));
+  txt("mc-conf",String(confirms));
+}
+var lastClockS=-1;
+function paintClock(){
+  /* mirror the canvas countdown into a real DOM LED for assistive tech */
+  var s=state==="run"?Math.max(0,Math.ceil(blockT/1000)):Math.ceil(blockCycle/1000);
+  if(s!==lastClockS){lastClockS=s;txt("mc-block","0:"+String(s).padStart(2,"0"));}
+}
+function paintLedger(){
+  txt("mc-l-games",fmt(led.g));txt("mc-l-best",fmt(led.best));
+  txt("mc-l-conf",fmt(led.cf));txt("mc-l-level",fmt(led.lv));
+}
+
+/* ---------------- pause ---------------- */
+var paused=false;
+function paintPause(){
+  var ip=el("mc-ic-pause"),ipl=el("mc-ic-play"),pb=el("mc-pause");
+  if(ip)ip.hidden=paused;if(ipl)ipl.hidden=!paused;
+  if(pb)pb.setAttribute("aria-pressed",paused?"true":"false");
+}
+function setPause(on){
+  if(state!=="run"&&on)return;
+  if(paused===on)return;
+  paused=on;paintPause();
+  if(on){state="pause";say("Paused. The real mempool is not.");}
+  else{state="run";lastT=performance.now();say("Back into traffic.");}
+}
+el("mc-pause").addEventListener("click",function(){
+  if(state==="run")setPause(true);
+  else if(state==="pause")setPause(false);
+});
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden&&state==="run")setPause(true);
+});
+
+/* ---------------- wiring ---------------- */
+ovBtn.addEventListener("click",function(){ac();startRun();});
+document.addEventListener("keydown",function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  var k=e.key;
+  /* cheap key filter before any layout read */
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","W","a","A","s","S","d","D","b","B","p","P"," ","Enter"].indexOf(k)<0)return;
+  var tg=e.target;
+  if(tg&&tg.closest){
+    if(tg.closest("input,select,textarea,a"))return;
+    /* a focused button keeps its native Space/Enter activation, but the
+       game keys still play so focusing Pause does not kill the arrows */
+    if(tg.closest("button")&&(k===" "||k==="Enter"))return;
+  }
+  var r=stage.getBoundingClientRect();
+  if(r.bottom<0||r.top>window.innerHeight)return;
+  if(state==="run"){
+    if(k==="ArrowUp"||k==="w"||k==="W"){e.preventDefault();hop(0,-1);}
+    else if(k==="ArrowDown"||k==="s"||k==="S"){e.preventDefault();hop(0,1);}
+    else if(k==="ArrowLeft"||k==="a"||k==="A"){e.preventDefault();hop(-1,0);}
+    else if(k==="ArrowRight"||k==="d"||k==="D"){e.preventDefault();hop(1,0);}
+    else if(k==="b"||k==="B"){e.preventDefault();bump();}
+    else if(k==="p"||k==="P"){e.preventDefault();setPause(true);}
+    else if(k===" "){e.preventDefault();} /* mid-game Space never scrolls the page */
+  }else if(state==="pause"&&(k==="p"||k==="P"||k===" ")){e.preventDefault();setPause(false);}
+  else if(state!=="pause"&&(k===" "||k==="Enter")){
+    if(!overlay.hidden){e.preventDefault();ac();startRun();}
+  }
+});
+function bindPad(id,fn){
+  var b=el(id);
+  if(!b)return;
+  b.addEventListener("pointerdown",function(e){
+    if(e.button!==0||!e.isPrimary)return;
+    e.preventDefault();fn();
+  });
+}
+bindPad("mc-pu",function(){hop(0,-1);});
+bindPad("mc-pd",function(){hop(0,1);});
+bindPad("mc-plft",function(){hop(-1,0);});
+bindPad("mc-prgt",function(){hop(1,0);});
+bindPad("mc-pbump",function(){bump();});
+
+el("mc-reset").addEventListener("click",function(){
+  led={g:0,best:0,cf:0,lv:0};
+  saveLed();paintLedger();
+  say("Wiped. The mempool keeps no score either.");
+});
+
+/* ---------------- fullscreen (shared idiom) ---------------- */
+var fsBtn=el("mc-fs");
+function fsActive(){return document.fullscreenElement===stage||stage.classList.contains("mc-fake");}
+function setInertOutside(on){
+  var node=stage;
+  while(node&&node!==document.body){
+    var p=node.parentElement;
+    if(!p)break;
+    for(var i=0;i<p.children.length;i++){
+      var sib=p.children[i];
+      if(sib===node)continue;
+      if(on)sib.setAttribute("inert","");else sib.removeAttribute("inert");
+    }
+    node=p;
+  }
+}
+function paintFs(){
+  var open=el("mc-fs-open"),close=el("mc-fs-close"),on=fsActive();
+  if(open)open.hidden=on;if(close)close.hidden=!on;
+  fsBtn.setAttribute("aria-pressed",on?"true":"false");
+  sizeBoard();
+}
+function exitFake(){
+  stage.classList.remove("mc-fake");document.documentElement.classList.remove("mc-lock");
+  setInertOutside(false);paintFs();
+}
+function fsToggle(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(stage.classList.contains("mc-fake")){exitFake();return;}
+  if(stage.requestFullscreen){
+    stage.requestFullscreen().then(paintFs).catch(function(){
+      stage.classList.add("mc-fake");document.documentElement.classList.add("mc-lock");
+      setInertOutside(true);paintFs();
+    });
+  }else{
+    stage.classList.add("mc-fake");document.documentElement.classList.add("mc-lock");
+    setInertOutside(true);paintFs();
+  }
+}
+fsBtn.addEventListener("click",fsToggle);
+document.addEventListener("fullscreenchange",paintFs);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&stage.classList.contains("mc-fake"))exitFake();
+});
+window.addEventListener("resize",sizeBoard);
+
+/* ---------------- boot ---------------- */
+initLanes();
+resetPlayer();
+sizeBoard();
+paintHud();paintLedger();paintChip();
+fetchFeed();
+fetch(apiBase()+"/height").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+  if(j&&typeof j.height==="number"&&isFinite(j.height)&&j.height>0)nextHeight=Math.floor(j.height)+1;
+}).catch(function(){});
+if(!raf)raf=requestAnimationFrame(loop); /* idle traffic keeps flowing behind the overlay */
+if(led.g>0)say("Welcome back. Best run so far: "+fmt(led.best)+" sats. The traffic has not thinned.");
+
+/* iOS long-press hardening: user-select:none alone is not honored
+   reliably on Safari, so selection is refused at the event layer and any
+   range that sneaks through is swept on touchend */
+(function(){
+  var st=document.querySelector(".mc-stage");
+  if(!st)return;
+    /* the decisive layer: cancel the NATIVE touch before Safari's selection
+     recognizer runs. Scoped to the canvas and overlay prose only, so
+     buttons keep their taps and the page keeps its scroll. */
+  st.addEventListener("touchstart",function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    if(t.closest("button,a,input,select,textarea"))return;
+    if(t.closest("canvas")||t.closest(".mc-overlay"))e.preventDefault();
+  },{passive:false});
+  ["selectstart","contextmenu"].forEach(function(ev){
+    st.addEventListener(ev,function(e){e.preventDefault();});
+  });
+  document.addEventListener("touchend",function(){
+    try{
+      var sel=window.getSelection&&window.getSelection();
+      if(!sel||!sel.rangeCount||!sel.anchorNode)return;
+      var n=sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentNode;
+      if(n&&st.contains(n))sel.removeAllRanges();
+    }catch(e){}
+  },{passive:true});
+})();
+})();
+</script>
+</Base>

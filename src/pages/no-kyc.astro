@@ -1,32 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="No-KYC Bitcoin: Buy and Use It Without ID - OpenBitcoin" description="A verified directory of no-KYC bitcoin services: peer-to-peer exchanges, gift cards, account-free swaps, and privacy tools, each with its honest ID posture.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">No-KYC directory</div>
     <h1>Buying and using bitcoin without ID</h1>
-    <p class="doc-lede">Every service below was checked by hand: what it is, whether it still operates, and exactly when it can ask for identity. The reasoning lives in the <a href="/learn/no-kyc">no-KYC guide</a>; this page is the where.</p>
+    <HeroEmblem name="masklist" />
+    <p class="doc-lede">Every service below was hand-checked: what it is, whether it still operates, and when it can ask for identity. The reasoning lives in the <a href="/learn/no-kyc">no-KYC guide</a>; this page is the where.</p>
   </div>
   <div class="doc-grid">
   <div>
-    <div class="kd-card">
-      <div class="kd-tlab">How to read this list</div>
-      <p class="kd-p">No-KYC is not one thing. The chips on each row say which kind you are getting:</p>
-      <div class="kd-legend">
-        <div class="kd-leg"><span class="kd-chip kd-never">Never asks</span><span>No account and nothing the service can freeze. There is no mechanism for an identity demand to arrive later.</span></div>
-        <div class="kd-leg"><span class="kd-chip kd-risk">No ID by default</span><span>Nothing is asked for normal use, but automated risk checks exist and a flagged order can be held pending documents. Rare, and worth knowing before large amounts.</span></div>
-        <div class="kd-leg"><span class="kd-chip kd-low">Phone / email only</span><span>A contact point is required but no identity documents. Lower exposure than an exchange account, not zero.</span></div>
-      </div>
-      <p class="kd-fine">Rows are alphabetical inside each category; nothing here is a ranking, and every link goes to the official site. Postures change; confirm on the service's own site before trusting a large amount to any row on this page.</p>
-    </div>
 
-    <div class="kd-card kd-mt">
+    <div class="kd-card">
       <div class="kd-chead"><span class="kd-num">01</span><h2>Buy and sell, peer to peer</h2></div>
       <p class="kd-p">Escrowed marketplaces and voucher sellers where the counterparty is a person, not a compliance department. Have a <a href="/wallets">wallet you control</a> ready before the first trade.</p>
       <div class="kd-svcs">
         <div class="kd-svc">
+          <a class="kd-logo" href="https://azte.co" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/azteco.ico" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://azte.co" target="_blank" rel="noopener noreferrer">Azteco</a></b><span class="kd-since">Since 2014</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Bitcoin vouchers sold over the counter in local shops; pay cash, redeem the code to your own wallet with no account anywhere in the chain. Redemption records an IP address, so privacy-minded buyers redeem behind a VPN.</p>
@@ -34,6 +27,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://azte.co" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://bisq.network" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/bisq.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://bisq.network" target="_blank" rel="noopener noreferrer">Bisq</a></b><span class="kd-since">Since 2016</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Open-source desktop exchange with no company behind it; trades are secured by deposits and escrow over Tor, and there is no one to collect your ID. Keep the app on the current release; older versions had a trade exploit patched in 2026.</p>
@@ -41,6 +35,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://bisq.network" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/hodlhodl.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer">Hodl Hodl</a></b><span class="kd-since">Since 2018</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">Peer to peer marketplace where the coins sit in a 2-of-3 multisig escrow the site cannot spend on its own. No verification to trade, but ID can be requested in disputes, and US customers are not served.</p>
@@ -48,6 +43,15 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/localcoinswap.ico" alt="" width="26" height="26" loading="lazy"></a>
+          <div class="kd-svcm">
+            <div class="kd-svct"><b><a href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer">LocalCoinSwap</a></b><span class="kd-since">Since 2018</span><span class="kd-chip kd-low">Phone / email only</span></div>
+            <p class="kd-svcp">Peer to peer marketplace trading bitcoin against 300+ payment methods with escrow protection; signing up takes an email address, not a document. Escrow runs through the platform, so settle finished trades to a wallet you control.</p>
+          </div>
+          <a class="kd-open" href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        </div>
+        <div class="kd-svc">
+          <a class="kd-logo" href="https://mostro.network" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/mostro.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://mostro.network" target="_blank" rel="noopener noreferrer">Mostro</a></b><span class="kd-since">Since 2024</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Lightning peer to peer trading over Nostr, grown out of the lnp2pBot Telegram bot; your identity is a key you generate locally. Younger and more technical than the venues above, with liquidity strongest in Latin American currencies.</p>
@@ -55,6 +59,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://mostro.network" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/peach.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer">Peach</a></b><span class="kd-since">Since 2022</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">Swiss mobile peer to peer app; sellers state their premium up front and trades settle to a wallet you supply, with no ID inside Swiss volume thresholds. Not available in the US, and its EU availability is narrowing under 2026 rules; check your region in the app.</p>
@@ -62,6 +67,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://robosats.org" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/robosats.ico" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://robosats.org" target="_blank" rel="noopener noreferrer">RoboSats</a></b><span class="kd-since">Since 2022</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Lightning order book run over Tor; a throwaway robot identity instead of an account, best suited to smaller trades. Use it over Tor as designed; the clearnet mirror is explicitly not for trading.</p>
@@ -69,12 +75,17 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://robosats.org" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://vexl.it" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/vexl.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://vexl.it" target="_blank" rel="noopener noreferrer">Vexl</a></b><span class="kd-since">Since 2022</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Mobile app that finds trading partners through your phone's contact graph; no accounts and no escrow, so the trust model is the people you already know, and the caution that comes with that.</p>
           </div>
           <a class="kd-open" href="https://vexl.it" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
+      </div>
+      <div class="kd-memorial">
+        <span class="kd-logo kd-ghost"><img src="/img/nokyc/localbitcoins.ico" alt="" width="26" height="26" loading="lazy"></span>
+        <p class="kd-fine">The giant of this category is gone: LocalBitcoins of Helsinki was the market for a decade, matching cash trades between strangers in about 190 countries from 2012 and clearing over 600 million dollars in a single quarter across more than a million active traders at its height. Mandatory identity checks arrived in 2019 under European money-laundering rules, its traders drifted to venues like the ones above, and in February 2023 it shut down for good, citing the market winter.</p>
       </div>
     </div>
 
@@ -84,6 +95,7 @@ import '../styles/doc.css';
       <div class="kd-svcs">
         
         <div class="kd-svc">
+          <a class="kd-logo" href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/bitrefill.ico" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Bitrefill</a></b><span class="kd-since">Since 2014</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">The largest gift-card, phone top-up, and eSIM catalog, with Lightning support and guest checkout. No ID for typical purchases; automated risk checks exist and can hold a flagged order pending verification.</p>
@@ -91,6 +103,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://coincards.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/coincards.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://coincards.com" target="_blank" rel="noopener noreferrer">CoinCards</a></b><span class="kd-since">Since 2014</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">Canadian gift-card and top-up service with deep US and Canadian coverage; no account and no ID for standard orders, paid over Lightning or on-chain. Orders are final, and a rare risk flag can hold one for review.</p>
@@ -98,6 +111,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://coincards.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://www.coinsbee.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/coinsbee.ico" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://www.coinsbee.com" target="_blank" rel="noopener noreferrer">Coinsbee</a></b><span class="kd-since">Since 2019</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">German seller with one of the widest international catalogs: thousands of gift-card brands and carrier top-ups across 180 plus countries. No account for low-value purchases; verification triggers above roughly 10,000 EUR of volume.</p>
@@ -105,6 +119,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://www.coinsbee.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://silent.link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/silentlink.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://silent.link" target="_blank" rel="noopener noreferrer">Silent.link</a></b><span class="kd-since">Since 2021</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Anonymous eSIM data in 160 plus countries, paid in bitcoin or Lightning with no signup, no email, and no personal data at all. Data-only in most regions, priced above KYC carriers; that gap is the privacy premium made visible.</p>
@@ -112,6 +127,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://silent.link" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://thebitcoincompany.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/tbc.svg" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://thebitcoincompany.com" target="_blank" rel="noopener noreferrer">The Bitcoin Company</a></b><span class="kd-since">Since 2021</span><span class="kd-chip kd-low">Phone number</span></div>
             <p class="kd-svcp">US-focused app selling gift cards and prepaid cards from thousands of brands over Lightning, with bitcoin-back rewards. Signup takes a phone number, so it is low-identity rather than none; no documents for the gift-card flow.</p>
@@ -126,6 +142,15 @@ import '../styles/doc.css';
       <p class="kd-p">Moving between bitcoin's layers or between assets with no account. One honest distinction matters here: a non-custodial atomic swap cannot be frozen mid-flight; a custodial instant swapper can be, and that is where surprise ID demands live. Services with a documented history of freezing funds and escalating demands are left off this list on purpose.</p>
       <div class="kd-svcs">
         <div class="kd-svc">
+          <a class="kd-logo" href="https://changenow.app.link/referral?link_id=ef2e79e6aabb3b" target="_blank" rel="sponsored noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/changenow.png" alt="" width="26" height="26" loading="lazy"></a>
+          <div class="kd-svcm">
+            <div class="kd-svct"><b><a href="https://changenow.app.link/referral?link_id=ef2e79e6aabb3b" target="_blank" rel="sponsored noopener noreferrer">ChangeNOW</a></b><span class="kd-since">Since 2017</span><span class="kd-chip kd-risk">No ID by default</span><span class="kd-partner">Partner</span></div>
+            <p class="kd-svcp">Instant swaps between bitcoin and hundreds of assets with no account, the same service behind this site's own <a href="/swap">swap page</a>. Automated risk checks can flag an order and hold it pending documents, so size trades accordingly. Listed first because they are our partner; the links support this site.</p>
+          </div>
+          <a class="kd-open" href="https://changenow.app.link/referral?link_id=ef2e79e6aabb3b" target="_blank" rel="sponsored noopener noreferrer">Open &#8599;</a>
+        </div>
+        <div class="kd-svc">
+          <a class="kd-logo" href="https://boltz.exchange" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/boltz.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://boltz.exchange" target="_blank" rel="noopener noreferrer">Boltz</a></b><span class="kd-since">Since 2019</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Non-custodial atomic swaps between on-chain bitcoin, Lightning, and Liquid; no account exists and the swap either completes or refunds by construction, so there is nothing to freeze pending ID. The strongest trust model in this category.</p>
@@ -133,6 +158,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://boltz.exchange" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://sideshift.ai" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/sideshift.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://sideshift.ai" target="_blank" rel="noopener noreferrer">SideShift</a></b><span class="kd-since">Since 2018</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">Account-free instant swaps across bitcoin, Lightning, and a long asset list. Every deposit passes an automated risk screen, and a flagged one is held for review; it also declines some jurisdictions, including US connections on sideshift.ai; a separate SideShift.us, launched June 2026, serves most US states.</p>
@@ -140,6 +166,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://sideshift.ai" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://trocador.app" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/trocador.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://trocador.app" target="_blank" rel="noopener noreferrer">Trocador</a></b><span class="kd-since">Since 2021</span><span class="kd-chip kd-risk">No ID by default</span></div>
             <p class="kd-svcp">An aggregator that compares rates across instant exchanges and grades each partner's KYC risk before you commit, with Tor access. Trocador itself never asks; the partner executing the trade still can, so pick the well-graded ones.</p>
@@ -147,7 +174,6 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://trocador.app" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
       </div>
-      <p class="kd-fine">The site's own <a href="/swap">swap page</a> runs through ChangeNOW, which applies risk-based checks of its own; it is documented there rather than listed here, and that is deliberate.</p>
     </div>
 
     <div class="kd-card kd-mt">
@@ -155,6 +181,7 @@ import '../styles/doc.css';
       <p class="kd-p">Services around the coins: connectivity, domains, and hosting that take bitcoin and do not want your name. The <a href="/vpn">VPN page</a> covers the first two in depth.</p>
       <div class="kd-svcs">
         <div class="kd-svc">
+          <a class="kd-logo" href="https://1984.hosting" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/1984.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://1984.hosting" target="_blank" rel="noopener noreferrer">1984 Hosting</a></b><span class="kd-since">Since 2006</span><span class="kd-chip kd-low">Email only</span></div>
             <p class="kd-svcp">Icelandic free-speech web host for shared, VPS, and dedicated servers, payable in bitcoin. Signup takes an email and basic contact details, no identity documents.</p>
@@ -162,6 +189,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://1984.hosting" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://www.ivpn.net" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/ivpn.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://www.ivpn.net" target="_blank" rel="noopener noreferrer">IVPN</a></b><span class="kd-since">Since 2009</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">Open-source VPN with an annually audited no-logs policy; the account is a generated ID with no email, payable in bitcoin or Lightning. Costs more than mainstream providers and says why.</p>
@@ -169,6 +197,7 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://www.ivpn.net" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://mullvad.net" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/mullvad.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://mullvad.net" target="_blank" rel="noopener noreferrer">Mullvad</a></b><span class="kd-since">Since 2009</span><span class="kd-chip kd-never">Never asks</span></div>
             <p class="kd-svcp">The reference for anonymous accounts: a random numbered account, no email, no name, payable in bitcoin, Lightning, or cash in an envelope. Runs no affiliate program anywhere, including here.</p>
@@ -176,13 +205,26 @@ import '../styles/doc.css';
           <a class="kd-open" href="https://mullvad.net" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="kd-svc">
+          <a class="kd-logo" href="https://njal.la" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/nokyc/njalla.png" alt="" width="26" height="26" loading="lazy"></a>
           <div class="kd-svcm">
             <div class="kd-svct"><b><a href="https://njal.la" target="_blank" rel="noopener noreferrer">Njalla</a></b><span class="kd-since">Since 2017</span><span class="kd-chip kd-low">Email only</span></div>
-            <p class="kd-svcp">Domain registration where your name never appears in the record, because Njalla registers the domain on your behalf and holds it for you. That custody is the design and the trade-off; read their terms before parking anything important on it.</p>
+            <p class="kd-svcp">Domain registration where your name never appears in the record, because Njalla registers the domain on your behalf and holds it for you. That custody is the design and the trade-off.</p>
+            <p class="kd-svcp kd-warn"><svg class="kd-wicn" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.15" fill="currentColor"/></svg>Njalla, not you, is the legal registrant, so the usual transfer protections do not apply to you, and users have repeatedly reported domains suspended without warning and transfers out granted only after escalation. Do not park a domain you cannot afford to lose here.</p>
           </div>
           <a class="kd-open" href="https://njal.la" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
       </div>
+    </div>
+
+    <div class="kd-card kd-mt">
+      <div class="kd-tlab">How to read this list</div>
+      <p class="kd-p">No-KYC is not one thing. The chips on each row say which kind you are getting:</p>
+      <div class="kd-legend">
+        <div class="kd-leg"><span class="kd-chip kd-never">Never asks</span><span>No account and nothing the service can freeze. There is no mechanism for an identity demand to arrive later.</span></div>
+        <div class="kd-leg"><span class="kd-chip kd-risk">No ID by default</span><span>Nothing is asked for normal use, but automated risk checks exist and a flagged order can be held pending documents. Rare, and worth knowing before large amounts.</span></div>
+        <div class="kd-leg"><span class="kd-chip kd-low">Phone / email only</span><span>A contact point is required but no identity documents. Lower exposure than an exchange account, not zero.</span></div>
+      </div>
+      <p class="kd-fine">Rows are alphabetical inside each category, with one exception: ChangeNOW, our partner, sits first among the swaps and its links support this site. Nothing else is a ranking. Postures change; confirm on the service's own site before trusting a large amount to any row on this page.</p>
     </div>
 
     <div class="kd-card kd-mt">
@@ -261,6 +303,19 @@ import '../styles/doc.css';
   .kd-svcs{margin-top:4px}
   .kd-svc{display:flex;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dotted var(--line-2)}
   .kd-svc:last-child{border-bottom:0;padding-bottom:4px}
+  .kd-logo{flex:none;width:38px;height:38px;border-radius:9px;background:rgba(124,140,168,.13);
+    border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .kd-logo img{width:26px;height:26px;object-fit:contain;border-radius:5px}
+  .kd-memorial{display:flex;align-items:flex-start;gap:12px;margin-top:14px;
+    border-top:1px dotted var(--line-2);padding-top:16px}
+  .kd-memorial .kd-fine{margin:0}
+  .kd-ghost{filter:grayscale(1);opacity:.5}  
+  a.kd-logo{text-decoration:none}
+  a.kd-logo:hover{border-color:rgba(255,166,60,.6)}
+  .kd-partner{font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);
+    border:1px solid rgba(255,166,60,.5);border-radius:99px;padding:2px 8px}
+  .kd-svcp.kd-warn{color:#EE6D5A}  
+  .kd-wicn{width:14px;height:14px;vertical-align:-2px;margin-right:6px;display:inline-block}
   .kd-svcm{flex:1;min-width:0}
   .kd-svct{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
   .kd-svct b{font:700 14px var(--sans);color:var(--ink)}
@@ -270,10 +325,10 @@ import '../styles/doc.css';
     border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
   .kd-svcp{font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin:4px 0 0}
   .kd-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    background:#F7931A;color:#101A2C;border:1.5px solid #F7931A;border-radius:9px;
     padding:10px 18px;text-decoration:none;white-space:nowrap;
-    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
-  .kd-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+    box-shadow:0 4px 14px rgba(247,147,26,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+  .kd-open:hover{background:#FFA63C;border-color:#FFA63C}
   .kd-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
   .kd-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
   .kd-col{background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px}

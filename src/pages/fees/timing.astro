@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 const HOUR_BASE = [38,32,26,22,20,18,18,20,26,34,42,50,58,68,78,86,90,92,88,82,72,62,52,44];
 const DAY_MULT = [0.96,1,1,0.98,0.92,0.62,0.52];
@@ -25,6 +26,7 @@ const hours = Array.from({ length: 24 }, (_, h) => ({
   <div class="doc-head">
     <div class="doc-kicker">Fees</div>
     <h1>When bitcoin fees are cheap</h1>
+    <HeroEmblem name="clock" />
     <p class="doc-lede">Fees follow a weekly rhythm: they climb through weekday business hours in Europe and the United States and sink at night and on weekends. If a payment can wait, timing alone often cuts the rate.</p>
   </div>
   <div class="doc-grid">

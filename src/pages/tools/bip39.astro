@@ -1,12 +1,14 @@
 ﻿---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base analytics={false} title="BIP39 Word Check: Is This Word on the Seed Wordlist? - OpenBitcoin" description="Check a single BIP39 word against the official 2048-word English wordlist in your browser, with autocomplete and near-miss suggestions for typos.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Word check</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>BIP39 word check</h1>
+    <HeroEmblem name="wordlist" />
     <p class="doc-lede">Type one word and see whether it is on the official 2048-word list, with autocomplete for partial words and near misses when it is not. One word at a time: no page here takes a phrase.</p>
   </div>
   <div class="doc-grid">

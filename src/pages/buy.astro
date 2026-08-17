@@ -7,7 +7,25 @@ import '../styles/doc.css';
   <div class="doc-head">
     <div class="doc-kicker">Buy bitcoin</div>
     <h1>How to buy bitcoin</h1>
-    <p class="doc-lede">There are four practical routes, trading off cost, speed, and how much identity you hand over. Whichever you pick, the purchase is finished only when the coins sit in a wallet you control.</p>
+    
+    <svg class="by-emblem" viewBox="0 0 118 96" aria-hidden="true">
+      <g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="6" y="18" width="76" height="44" rx="7" stroke-width="3" fill="rgba(247,147,26,.07)"/>
+        <circle cx="44" cy="40" r="12" stroke-width="2.5" stroke="rgba(247,147,26,.6)"/>
+        <path stroke-width="2.5" stroke="rgba(247,147,26,.38)" d="M16 28v24M72 28v24"/>
+      </g>
+      
+      <g class="by-emblem-coin">
+        <circle cx="92" cy="68" r="24.5" fill="#0E1524"/>
+        <g transform="translate(69.5 45.5) scale(0.7032)">
+          <g transform="translate(0.00630876,-0.00301984)">
+            <path fill="#F7931A" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/>
+            <path fill="#FFF" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+    <p class="doc-lede">Four routes, trading off cost, speed, and identity. Whichever you pick, the purchase ends only when the coins sit in a wallet you control.</p>
   </div>
   <div class="doc-grid">
   <div>
@@ -20,7 +38,7 @@ import '../styles/doc.css';
 
     <div class="by-card by-mt">
       <div class="by-chead"><span class="by-num">01</span><h2>Buy on an exchange</h2></div>
-      <p class="by-how">The usual route, and the one that handles the most volume. You open an account, verify your identity, fund it by bank transfer or card, place an order, and then withdraw the coins to your own wallet. Bank transfers are slower to clear than cards and are almost always cheaper. Some exchanges hold your coins by default until you ask for them; a few send every order straight out to an address you supply.</p>
+      <p class="by-how">The usual route, and the one that handles the most volume. You open an account, verify your identity, fund it by bank transfer or card, place an order, and then withdraw the coins to your own wallet. Bank transfers are slower to clear than cards and are almost always cheaper. Some exchanges hold your coins by default until you ask for them; a few send every order straight out to an address you supply. The same accounts sell bitcoin back to your bank when that day comes.</p>
       <div class="by-rows">
         <div class="by-row by-cost"><b>What it costs</b><span>A commission, a spread, or both. A commission is a stated percentage of the order. A spread is a markup baked into the quoted price, which is why a service advertising no commission can still be the expensive one. Add the deposit method fee and the on-chain fee to withdraw.</span></div>
         <div class="by-row by-need"><b>What it takes</b><span>Identity verification: legal name, address, date of birth, a photo of a government ID, often a selfie, and sometimes questions about where your money came from. Expect it, and expect it to be permanent.</span></div>
@@ -30,13 +48,15 @@ import '../styles/doc.css';
       
       <div class="by-svcs">
         <div class="by-svc">
+          <a class="by-logo" href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/bitcoinwell.ico" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
-            <div class="by-svct"><b><a href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer">Bitcoin Well</a></b><span class="by-since">Since 2014</span><span class="by-reg">CA</span></div>
-            <p class="by-svcp">Canadian roots in the ATM business; online buys settle straight to a wallet you control.</p>
+            <div class="by-svct"><b><a href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer">Bitcoin Well</a></b><span class="by-since">Since 2014</span><span class="by-reg">CA &#183; US</span></div>
+            <p class="by-svcp">Canadian roots in the ATM business; online buys in Canada and all 50 US states settle straight to a wallet you control.</p>
           </div>
           <a class="by-open" href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://www.bitstamp.net" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/bitstamp.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://www.bitstamp.net" target="_blank" rel="noopener noreferrer">Bitstamp</a></b><span class="by-since">Since 2011</span></div>
             <p class="by-svcp">One of the longest track records in the business; a straightforward order book with wide bank support.</p>
@@ -44,13 +64,15 @@ import '../styles/doc.css';
           <a class="by-open" href="https://www.bitstamp.net" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/bullbitcoin.ico" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
-            <div class="by-svct"><b><a href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer">Bull Bitcoin</a></b><span class="by-since">Since 2014</span><span class="by-reg">CA</span></div>
-            <p class="by-svcp">Canadian and bitcoin-only, with a non-custodial order flow: every buy settles to an address you supply.</p>
+            <div class="by-svct"><b><a href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer">Bull Bitcoin</a></b><span class="by-since">Since 2014</span><span class="by-reg">CA &#183; EU</span></div>
+            <p class="by-svcp">Canadian and bitcoin-only, with a non-custodial order flow: every buy settles to an address you supply. Serves Europe under its MiCA licence, plus parts of Latin America.</p>
           </div>
           <a class="by-open" href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://cash.app" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/cashapp.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://cash.app" target="_blank" rel="noopener noreferrer">Cash App</a></b><span class="by-since">Bitcoin since 2018</span><span class="by-reg">US</span></div>
             <p class="by-svcp">Mainstream payments app with bitcoin built in; a common first buy, with on-chain and Lightning withdrawals.</p>
@@ -58,6 +80,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://cash.app" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://www.coinbase.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/coinbase.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://www.coinbase.com" target="_blank" rel="noopener noreferrer">Coinbase</a></b><span class="by-since">Since 2012</span></div>
             <p class="by-svcp">The biggest mainstream on-ramp, publicly listed in the United States; the simple buy flow costs more than the trading view.</p>
@@ -65,6 +88,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://www.coinbase.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://www.kraken.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/kraken.ico" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://www.kraken.com" target="_blank" rel="noopener noreferrer">Kraken</a></b><span class="by-since">Since 2013</span></div>
             <p class="by-svcp">Full exchange with a deep order book; the simple and pro interfaces price the same trade differently.</p>
@@ -72,6 +96,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://www.kraken.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://relai.app" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/relai.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://relai.app" target="_blank" rel="noopener noreferrer">Relai</a></b><span class="by-since">Since 2020</span><span class="by-reg">EU</span></div>
             <p class="by-svcp">Swiss bitcoin-only app for Europe; buys settle to your own wallet by default.</p>
@@ -79,6 +104,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://relai.app" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://river.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/river.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://river.com" target="_blank" rel="noopener noreferrer">River</a></b><span class="by-since">Since 2019</span><span class="by-reg">US</span></div>
             <p class="by-svcp">Bitcoin-only brokerage with recurring buys, Lightning withdrawals, and no other assets to get lost in.</p>
@@ -86,6 +112,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://river.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://strike.me" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/strike.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://strike.me" target="_blank" rel="noopener noreferrer">Strike</a></b><span class="by-since">Since 2020</span></div>
             <p class="by-svcp">Lightning payments app with buying attached; sending money is as much the point as the purchase.</p>
@@ -93,8 +120,9 @@ import '../styles/doc.css';
           <a class="by-open" href="https://strike.me" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/swan.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
-            <div class="by-svct"><b><a href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer">Swan</a></b><span class="by-since">Since 2020</span></div>
+            <div class="by-svct"><b><a href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer">Swan</a></b><span class="by-since">Since 2020</span><span class="by-reg">US</span></div>
             <p class="by-svcp">Bitcoin-only and built around recurring buys, with automatic withdrawal to your own wallet.</p>
           </div>
           <a class="by-open" href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
@@ -113,6 +141,7 @@ import '../styles/doc.css';
       <div class="by-wlab">Where to go</div>
       <div class="by-svcs">
         <div class="by-svc">
+          <a class="by-logo" href="https://bisq.network" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/bisq.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://bisq.network" target="_blank" rel="noopener noreferrer">Bisq</a></b><span class="by-since">Since 2016</span></div>
             <p class="by-svcp">Open-source desktop marketplace with no company behind it; trades are secured by deposits and escrow.</p>
@@ -120,6 +149,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://bisq.network" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/hodlhodl.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer">Hodl Hodl</a></b><span class="by-since">Since 2018</span></div>
             <p class="by-svcp">Non-custodial marketplace: coins sit in a multisig escrow the site cannot spend on its own.</p>
@@ -127,6 +157,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://hodlhodl.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/localcoinswap.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer">LocalCoinSwap</a></b><span class="by-since">Since 2018</span></div>
             <p class="by-svcp">Wide spread of payment methods and regions with escrowed trades; it lists other coins too, so stay on the bitcoin pairs.</p>
@@ -134,6 +165,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://localcoinswap.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/peach.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer">Peach</a></b><span class="by-since">Since 2022</span><span class="by-reg">EU</span></div>
             <p class="by-svcp">Mobile-first peer to peer app; match with a buyer or seller and settle to your own wallet.</p>
@@ -141,6 +173,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://peachbitcoin.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://robosats.org" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/robosats.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://robosats.org" target="_blank" rel="noopener noreferrer">RoboSats</a></b><span class="by-since">Since 2022</span></div>
             <p class="by-svcp">Lightning-only and pseudonymous, run over Tor; small trades with no account at all.</p>
@@ -152,7 +185,7 @@ import '../styles/doc.css';
 
     <div class="by-card by-mt">
       <div class="by-chead"><span class="by-num">03</span><h2>Use a bitcoin ATM</h2></div>
-      <p class="by-how">A machine in a store takes cash and sends bitcoin to an address you scan from your wallet. It is quick, it is physical, and it is available where bank rails are not. It is also the costliest common route by a wide margin.</p>
+      <p class="by-how">A machine in a store takes cash and sends bitcoin to an address you scan from your wallet. It is quick, it is physical, and it is available where bank rails are not. It is also the costliest common route by a wide margin; our <a href="/atms">bitcoin ATM guide</a> covers the fees, the limits, and how a purchase actually goes.</p>
       <div class="by-rows">
         <div class="by-row by-cost"><b>What it costs</b><span>Fees run high. Operators charge a service fee and quote a price marked up from the market rate, and the two stack, so the all-in cost is usually several times an exchange's. Compare the machine's quoted rate against the <a href="/price">current price</a> before you feed it a bill.</span></div>
         <div class="by-row by-need"><b>What it takes</b><span>A wallet on your phone to scan, and, above small amounts, a phone number and often an ID scan. Machines are not the anonymous option people assume.</span></div>
@@ -161,6 +194,7 @@ import '../styles/doc.css';
       <div class="by-wlab">Where to go</div>
       <div class="by-svcs">
         <div class="by-svc">
+          <a class="by-logo" href="https://coinatmradar.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/coinatmradar.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://coinatmradar.com" target="_blank" rel="noopener noreferrer">CoinATMRadar</a></b><span class="by-since">Since 2014</span></div>
             <p class="by-svcp">The machine locator: who operates each ATM, what it charges, and where it sits.</p>
@@ -168,6 +202,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://coinatmradar.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://azte.co" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/azteco.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://azte.co" target="_blank" rel="noopener noreferrer">Azteco</a></b><span class="by-since">Since 2014</span></div>
             <p class="by-svcp">Bitcoin vouchers sold over the counter in local shops; redeem online to your own wallet.</p>
@@ -189,6 +224,7 @@ import '../styles/doc.css';
       <div class="by-wlab">Where to go</div>
       <div class="by-svcs">
         <div class="by-svc">
+          <a class="by-logo" href="https://bitcoinerjobs.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/bitcoinerjobs.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://bitcoinerjobs.com" target="_blank" rel="noopener noreferrer">Bitcoiner Jobs</a></b><span class="by-since">Since 2021</span></div>
             <p class="by-svcp">Job board where the employers are bitcoin companies and pay in bitcoin is common.</p>
@@ -196,6 +232,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://bitcoinerjobs.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://foldapp.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/fold.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://foldapp.com" target="_blank" rel="noopener noreferrer">Fold</a></b><span class="by-since">Since 2014</span></div>
             <p class="by-svcp">Cashback and gift card app that pays its rewards in bitcoin on everyday spending.</p>
@@ -203,6 +240,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://foldapp.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://lolli.com" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/lolli.ico" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://lolli.com" target="_blank" rel="noopener noreferrer">Lolli</a></b><span class="by-since">Since 2018</span></div>
             <p class="by-svcp">Browser extension and app that pays bitcoin rewards for shopping at big-name retailers.</p>
@@ -210,6 +248,7 @@ import '../styles/doc.css';
           <a class="by-open" href="https://lolli.com" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
         </div>
         <div class="by-svc">
+          <a class="by-logo" href="https://stacker.news" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="/img/buy/stackernews.png" alt="" width="30" height="30" loading="lazy"></a>
           <div class="by-svcm">
             <div class="by-svct"><b><a href="https://stacker.news" target="_blank" rel="noopener noreferrer">Stacker News</a></b><span class="by-since">Since 2021</span></div>
             <p class="by-svcp">Forum that pays sats for posts people find valuable; small amounts, real practice receiving.</p>
@@ -243,115 +282,6 @@ import '../styles/doc.css';
       </div>
     </div>
 
-    <div class="by-card by-mt">
-      <div class="by-tlab">Services that sell bitcoin</div>
-      <p class="by-affline">Some links on this page will become affiliate links once affiliate terms are signed. Every affiliate link is labeled, per the <a href="/disclosure">disclosure policy</a>, and affiliate status never changes what a row says. Rows are listed alphabetically; nothing here is a ranking.</p>
-      <div class="by-scroll">
-      <table class="by-table" aria-label="Services that sell bitcoin, with regions and how each one works">
-        <thead>
-          <tr><th>Service</th><th>Region</th><th>How it works</th><th>Withdrawals</th><th>Notes</th><th></th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="by-prov"><b><a href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer">Bitcoin Well</a></b><span class="by-chip">Affiliate</span></td>
-            <td>Canada, United States</td>
-            <td>Bitcoin-only; orders settle to a wallet you supply</td>
-            <td>Non-custodial by design</td>
-            <td class="by-notes">Recurring buys offered; one of the two Canadian home-market options here</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://bitcoinwell.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://www.bitstamp.net" target="_blank" rel="noopener noreferrer">Bitstamp</a></b><span class="by-chip">Affiliate</span></td>
-            <td>Europe, United States, and others</td>
-            <td>Full exchange with an order book</td>
-            <td>Supported, to any address</td>
-            <td class="by-notes">Operating since 2011, one of the longest track records; owned by Robinhood since June 2025</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://www.bitstamp.net" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer">Bull Bitcoin</a></b><span class="by-chip">Affiliate</span></td>
-            <td>Canada, with European service</td>
-            <td>Bitcoin-only; non-custodial order flow to your own address</td>
-            <td>Non-custodial by design</td>
-            <td class="by-notes">Canadian home-market pair with Bitcoin Well; no trading account balance to leave behind</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://www.bullbitcoin.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://cash.app" target="_blank" rel="noopener noreferrer">Cash App</a></b></td>
-            <td>United States</td>
-            <td>Payments app with bitcoin buys built in</td>
-            <td>Supported, on-chain and over Lightning</td>
-            <td class="by-notes">Custodial until you withdraw; a common first buy because the app is already installed</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://cash.app" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://www.coinbase.com" target="_blank" rel="noopener noreferrer">Coinbase</a></b><span class="by-chip">Affiliate</span></td>
-            <td>United States and many other countries</td>
-            <td>Full exchange with a simple buy flow on top</td>
-            <td>Supported, to any address</td>
-            <td class="by-notes">Publicly listed company; the simple buy flow and the trading view carry different fee schedules</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://www.coinbase.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://www.kraken.com" target="_blank" rel="noopener noreferrer">Kraken</a></b><span class="by-chip">Affiliate</span></td>
-            <td>United States and many other countries</td>
-            <td>Full exchange with an order book</td>
-            <td>Supported, to any address</td>
-            <td class="by-notes">Long operating history; simple and pro interfaces price the same trade differently</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://www.kraken.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://relai.app" target="_blank" rel="noopener noreferrer">Relai</a></b><span class="by-chip">Affiliate</span></td>
-            <td>Europe</td>
-            <td>Bitcoin-only app; buys settle to a wallet you supply</td>
-            <td>Non-custodial by design</td>
-            <td class="by-notes">Swiss company; recurring buys offered</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://relai.app" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://river.com" target="_blank" rel="noopener noreferrer">River</a></b><span class="by-chip">Affiliate</span></td>
-            <td>United States only</td>
-            <td>Bitcoin-only exchange, with recurring buys</td>
-            <td>Supported, on-chain and over Lightning</td>
-            <td class="by-notes">No other assets listed; check the current published fee schedule before ordering</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://river.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://strike.me" target="_blank" rel="noopener noreferrer">Strike</a></b><span class="by-chip">Affiliate</span></td>
-            <td>United States, parts of Europe and Latin America</td>
-            <td>Payments app built on Lightning, with buying attached</td>
-            <td>Supported, on-chain and over Lightning</td>
-            <td class="by-notes">Country coverage varies and changes; sending is as much the point as buying</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://strike.me" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-          <tr>
-            <td class="by-prov"><b><a href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer">Swan</a></b><span class="by-chip">Affiliate</span></td>
-            <td>United States and others</td>
-            <td>Bitcoin-only, built around recurring buys</td>
-            <td>Supported, with automatic withdrawal plans</td>
-            <td class="by-notes">Savings-plan focus rather than trading</td>
-            
-            <td class="by-act"><a class="by-visit" href="https://www.swanbitcoin.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-      <p class="by-fine">Regions, features, and fee models are as published by each service and change often; confirm on the service's own site before opening an account. Every link goes to the service's official site; when an affiliate program is signed, the link becomes a labeled affiliate link per the <a href="/disclosure">disclosure</a>.</p>
-    </div>
-
-    <div class="by-card by-mt by-note">
-      <div class="by-tlab">Availability and jurisdiction</div>
-      <p class="by-cp">Which services you can use depends on where you live, and the answer changes. A service open in one country may be closed in the next one over, may support deposits but not withdrawals for your bank, or may verify accounts in some regions and not others. Local services frequently beat global ones on cost simply because they connect to the domestic payment system directly, which is why the two Canadian options appear above alongside the larger names. Check the service's own country list rather than a page like this one, and confirm what your own jurisdiction requires of you for tax and reporting. Nothing here is financial, legal, or tax advice, per the <a href="/terms">terms</a>.</p>
-    </div>
 
     <div class="by-about doc-prose">
       <p>Buying bitcoin comes down to four routes and one habit. Exchanges are the common path and cost the least in fees, at the price of identity checks that stay on file. Peer to peer trades less of that identity for a wider spread and more responsibility. Machines are quick and expensive. Earning it skips the purchase entirely. The habit is the same in all four: get the coins into a wallet whose keys you hold, and confirm the address before you send. If you are buying a fixed amount on a schedule, the <a href="/dca">averaging calculator</a> shows how that plays out historically, and the <a href="/price">price page</a> gives you the rate to check any quote against.</p>
@@ -387,6 +317,12 @@ import '../styles/doc.css';
   </div>
 </main>
 <style is:global>
+  
+  .by-emblem{float:right;width:118px;height:auto;margin:-28px 6px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:byfloat 6s ease-in-out infinite}
+  @keyframes byfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.by-emblem{animation:none}}
+  @media(max-width:640px){.by-emblem{width:86px;margin:2px 0 6px 14px}}
   .by-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
   .by-step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
   .by-sn{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
@@ -416,9 +352,14 @@ import '../styles/doc.css';
   .by-cp{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
   .by-wlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 8px}
   .by-svcs{margin-top:2px}
-  .by-svc{display:flex;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dotted var(--line-2)}
+  .by-svc{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px dotted var(--line-2)}
   .by-svc:last-child{border-bottom:0;padding-bottom:4px}
   .by-svcm{flex:1;min-width:0}
+  
+  .by-logo{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;
+    border:1px solid var(--line-2);border-radius:8px;background:var(--field);overflow:hidden;text-decoration:none}
+  a.by-logo:hover{border-color:rgba(255,166,60,.6)}
+  .by-logo img{width:100%;height:100%;object-fit:contain;padding:3px;border-radius:inherit;display:block;box-sizing:border-box}
   .by-svct{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
   .by-svct b{font:700 14px var(--sans);color:var(--ink)}
   .by-svct b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
@@ -427,11 +368,12 @@ import '../styles/doc.css';
     border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
   .by-reg{font:700 9px var(--mono);letter-spacing:.14em;color:var(--acc)}
   .by-svcp{font:500 12.5px/1.55 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  
   .by-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    background:#F7931A;color:#101A2C;border:1.5px solid #F7931A;border-radius:9px;
     padding:10px 18px;text-decoration:none;white-space:nowrap;
-    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
-  .by-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+    box-shadow:0 4px 14px rgba(247,147,26,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+  .by-open:hover{background:#FFA63C;border-color:#FFA63C}
   .by-linknote{font:500 12px/1.55 var(--sans);color:var(--ink-3);margin:8px 0 0}
   .by-linknote a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
   .by-habit{margin-top:16px;padding-top:16px;border-top:1px dotted var(--line-2)}
@@ -439,30 +381,6 @@ import '../styles/doc.css';
   .by-list li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
   .by-list li::marker{color:var(--acc);font-weight:700}
   .by-list b{color:var(--ink);font-weight:600}
-  .by-affline{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0 0 12px}
-  .by-affline a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
-  .by-affline a:hover{border-bottom-style:solid}
-  .by-scroll{overflow-x:auto}
-  .by-table{width:100%;border-collapse:collapse}
-  .by-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
-    text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
-  .by-table td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
-    border-bottom:1px dotted var(--line-2);vertical-align:top}
-  .by-table tr:last-child td{border-bottom:0}
-  .by-prov{white-space:nowrap}
-  .by-prov b{display:block;font:700 14px var(--sans);color:var(--ink)}
-  .by-prov b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed transparent;padding-bottom:1px}
-  .by-prov b a:hover{color:var(--acc);border-bottom-color:rgba(247,147,26,.45)}
-  .by-chip{display:inline-block;margin-top:5px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--acc);border:1px dashed rgba(247,147,26,.45);border-radius:5px;padding:2px 6px}
-  .by-notes{min-width:190px}
-  .by-act{text-align:right}
-  .by-visit{display:inline-block;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    background:var(--cta);color:var(--cta-ink);border:1px solid rgba(255,166,60,.55);border-radius:8px;
-    padding:8px 14px;text-decoration:none;white-space:nowrap}
-  .by-visit:hover{background:var(--cta-hov);border-color:var(--orange)}
-  .by-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
-  .by-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
   .by-note{border-color:rgba(255,166,60,.32)}
   .by-about{margin-top:14px}
   .by-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
@@ -477,25 +395,6 @@ import '../styles/doc.css';
   @media(max-width:700px){
     .by-cols{grid-template-columns:minmax(0,1fr)}
     .by-card{padding:18px 18px 20px}
-    
-    .by-scroll{overflow:visible}
-    .by-table{min-width:0;table-layout:auto}
-    .by-table thead{display:none}
-    .by-table,.by-table tbody,.by-table tr,.by-table td{display:block;width:auto}
-    .by-table tr{position:relative;padding:14px 0 13px;border-bottom:1px dotted var(--line-2)}
-    .by-table tr:last-child{border-bottom:0}
-    .by-table td{border-bottom:0;padding:0;font-size:13px}
-    .by-prov{white-space:normal;padding-right:96px}
-    .by-prov b{display:inline-block;margin-right:8px}
-    .by-chip{margin-top:0;vertical-align:middle}
-    .by-table td:nth-child(2),.by-table td:nth-child(3),.by-table td:nth-child(4){margin-top:6px}
-    .by-table td:nth-child(2)::before,.by-table td:nth-child(3)::before,.by-table td:nth-child(4)::before{
-      font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-    .by-table td:nth-child(2)::before{content:"Region: "}
-    .by-table td:nth-child(3)::before{content:"How: "}
-    .by-table td:nth-child(4)::before{content:"Withdrawals: "}
-    .by-notes{min-width:0;margin-top:8px}
-    .by-act{position:absolute;top:12px;right:0}
     .by-svc{gap:12px}
     .by-open{font-size:11.5px;padding:9px 13px}
   }

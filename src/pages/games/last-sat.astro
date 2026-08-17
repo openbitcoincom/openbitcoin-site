@@ -1,0 +1,1520 @@
+---
+import Base from '../../layouts/Base.astro';
+import HeroEmblem from '../../components/HeroEmblem.astro';
+import '../../styles/doc.css';
+---
+<Base title="The Last Sat: Whoever Takes It Finds the Block - OpenBitcoin" description="A maze coin-chase about mining. The maze is the mempool: every coin is a transaction fee priced from this site's own mempool feed, live when our node answers and honestly labelled when it is not; four rival miners sweep the same floor, and whoever takes the last sat finds the block and scores the subsidy. Every fourth block is a halving; the fees never halve. All score, no money. Free, no wagering, no prizes." indexable={false}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Games</div>
+    <h1>The Last Sat</h1>
+    <HeroEmblem name="satmaze" />
+    <p class="doc-lede">The maze is the mempool: every coin is a transaction fee from this site's own feed, live when our node answers (the plate under the board says which), and four rival miners are sweeping the same floor. Whoever takes the last sat finds the block. The subsidy halves as you go; the fees never do.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <!-- ============ THE RIG ============ -->
+    <div class="ls-stage" id="ls-stage">
+      <div class="ls-rig" id="ls-rig">
+        <div class="ls-marquee">
+          <div class="ls-title">THE LAST SAT</div>
+          <div class="ls-sub">sweep the fees &middot; the last sat finds the block</div>
+        </div>
+        <div class="ls-leds">
+          <div class="ls-led"><i>Score</i><b id="ls-score">0</b></div>
+          <div class="ls-led"><i>Rigs</i><b id="ls-rigs">3</b></div>
+          <div class="ls-led"><i>Block</i><b id="ls-block">&ndash;</b></div>
+          <div class="ls-led"><i>Subsidy</i><b id="ls-sub">50 BTC</b></div>
+          <div class="ls-led"><i>Coins left</i><b id="ls-coins">0</b></div>
+        </div>
+        <div class="ls-boardwrap">
+          <canvas id="ls-board" role="img" aria-label="A maze of corridors strewn with coins. The orange miner sweeps coins for their fees while four rival miners sweep the same floor; whoever takes the last coin finds the block. The readouts above the board mirror score, rigs, block height, subsidy and coins remaining."></canvas>
+          <div class="ls-overlay" id="ls-overlay">
+            <div class="ls-ovinner">
+              <b id="ls-ovtitle">MINE BLOCK <span id="ls-ovheight">#&hellip;</span></b>
+              <p id="ls-ovtext">Sweep coins to score their fees. The rivals sweep too, and the last sat finds the block. Surge coins stall them; touch a stalled rival and its haul spills back. Phone: swipe to steer.</p>
+              <button class="ls-go" id="ls-go" type="button">Start sweeping</button>
+            </div>
+          </div>
+        </div>
+        <div class="ls-pads" id="ls-pads">
+          <button class="ls-pad" id="ls-pu" type="button" aria-label="Steer up">&#9650;</button>
+          <div class="ls-padrow">
+            <button class="ls-pad" id="ls-plft" type="button" aria-label="Steer left">&#9664;</button>
+            <button class="ls-pad" id="ls-pd" type="button" aria-label="Steer down">&#9660;</button>
+            <button class="ls-pad" id="ls-prgt" type="button" aria-label="Steer right">&#9654;</button>
+          </div>
+        </div>
+        <div class="ls-console">
+          <button class="ls-mini" id="ls-pause" type="button" aria-label="Pause" aria-pressed="false" title="Pause">
+            <svg viewBox="0 0 24 24" id="ls-ic-pause"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24" id="ls-ic-play" hidden><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>
+          </button>
+          <div class="ls-help">Arrows or WASD steer &middot; swipe on touch &middot; P pauses</div>
+          <div class="ls-small">
+            <button class="ls-mini" id="ls-mute" type="button" aria-label="Mute" aria-pressed="false" title="Mute">
+              <svg viewBox="0 0 24 24" id="ls-mute-on"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9c1.2.8 1.2 5.2 0 6M18.5 7c2.2 2 2.2 8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="ls-mute-off" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l6 5M22 9.5l-6 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="ls-mini" id="ls-fs" type="button" aria-label="Fullscreen" aria-pressed="false" title="Fullscreen">
+              <svg viewBox="0 0 24 24" id="ls-fs-open"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" id="ls-fs-close" hidden><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="ls-msg" id="ls-msg">Four rivals want the same coins you do. Sweep the fees, and make sure the last sat is yours.</div>
+        <div class="ls-plate"><span id="ls-datachip">COIN FEED: &hellip;</span><span class="ls-platesep">THE LAST SAT FINDS THE BLOCK &middot; ALL SCORE, NO MONEY</span></div>
+      </div>
+      <div class="ls-sr" id="ls-live" aria-live="polite"></div>
+    </div>
+    <noscript><p class="ls-nojs">The maze needs JavaScript to run. The halving arithmetic below is true either way.</p></noscript>
+
+    <!-- ============ HOW IT PLAYS ============ -->
+    <div class="ls-card">
+      <h2 class="ls-tlab">How it plays</h2>
+      <p class="ls-p">You are the orange miner. Every coin is a scoop of the real fee queue, priced from our mempool feed (the chip says if the feed is live), and sweeping one scores its fee. The four rivals sweep too, into candidate blocks of their own: what they take, you cannot. When the floor runs low everyone races for what is left, because the last sat finds the block and scores the whole subsidy, 50 BTC in epoch one and half that every fourth block after. A surge coin stalls the rivals; catch one while it reels and it is orphaned, spilling its whole candidate back onto the floor, which is both revenge and more coins. Get caught without a surge and a rig goes dark; lose all three and the run is over. All score, no money.</p>
+    </div>
+
+    <!-- ============ THE LEDGER ============ -->
+    <div class="ls-card">
+      <h2 class="ls-tlab">The ledger: this browser, all time</h2>
+      <div class="ls-stats">
+        <div class="ls-stat"><b id="ls-l-games">0</b><i>runs</i></div>
+        <div class="ls-stat"><b id="ls-l-best">0</b><i>best run</i></div>
+        <div class="ls-stat"><b id="ls-l-blk">0</b><i>blocks found</i></div>
+        <div class="ls-stat"><b id="ls-l-lost">0</b><i>blocks lost to rivals</i></div>
+        <div class="ls-stat"><b id="ls-l-ep">1</b><i>deepest epoch</i></div>
+        <div class="ls-stat"><b id="ls-l-orph">0</b><i>rivals orphaned</i></div>
+        <div class="ls-stat"><b id="ls-l-wh">0</b><i>whales swept</i></div>
+        <div class="ls-stat"><b id="ls-l-fees">0</b><i>career fee sats</i></div>
+      </div>
+      <p class="ls-brow"><span>Lives in this browser and never leaves. The sats are score; the subsidy doubles as a history lesson.</span> <button class="ls-reset" id="ls-reset" type="button">Reset everything</button></p>
+    </div>
+
+    <!-- ============ THE TROPHY SHELF ============ -->
+    <div class="ls-card">
+      <h2 class="ls-tlab">The trophy shelf</h2>
+      <div class="ls-shelf" id="ls-shelf"></div>
+    </div>
+
+    <!-- ============ THE BITCOIN BIT ============ -->
+    <div class="ls-card">
+      <h2 class="ls-tlab">The bitcoin bit</h2>
+      <p class="ls-p">The subsidy really does halve, every 210,000 blocks rather than every four, and mining really is a race where the finder collects everything in the block. As the subsidy shrinks toward nothing, transaction fees are what will keep the sweepers sweeping; in here you can watch that future arrive from epoch five onward. The actual machinery lives on the <a href="/fees">fees</a>, <a href="/mempool">mempool</a> and <a href="/pools">pools</a> pages.</p>
+    </div>
+
+    <div class="ls-about doc-prose">
+      <p>Free forever: no wagers, no prizes, and the score is pretend sats, never money (the <a href="/terms">terms</a> agree). More machines in the <a href="/games">games section</a>: <a href="/games/block-builder">Block Builder</a> packs the block you are racing to find, <a href="/games/mempool-crossing">Mempool Crossing</a> crosses this same floor as a transaction, and <a href="/games/impossible-slot">The Impossible Slot Machine</a> spins real keys against the whole chain.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">House rules</div>
+      <ul class="ls-rl">
+        <li>Every coin is a fee from our mempool feed; the plate says live or snapshot</li>
+        <li>Rivals sweep the same floor; what they take, you cannot</li>
+        <li>The last sat finds the block and scores the subsidy</li>
+        <li>Every fourth block is a halving; fees never halve</li>
+        <li>Surge coins stall rivals; touching one spills its candidate</li>
+        <li>All score, no money, free forever</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/games">All games</a>
+        <a href="/games/block-builder">Block Builder</a>
+        <a href="/mempool">The live mempool</a>
+        <a href="/fees">Fees right now</a>
+        <a href="/pools">Mining pools</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  
+  
+  .ls-stage,.ls-stage *{-webkit-user-select:none !important;user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .ls-stage ::selection{background:transparent}
+  .ls-stage{position:relative}
+  .ls-stage.ls-fake{position:fixed;inset:0;z-index:80;background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .ls-stage:fullscreen{background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .ls-stage.ls-fake .ls-rig,.ls-stage:fullscreen .ls-rig{margin:auto}
+  html.ls-lock{overflow:hidden}
+
+  .ls-rig{position:relative;max-width:600px;margin:0 auto;
+    background:linear-gradient(180deg,#241D14,#120E09 70%,#0C0906);
+    border:1px solid #3E3322;border-radius:20px;padding:16px 20px 12px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,160,.10),inset 0 -14px 30px rgba(0,0,0,.45)}
+  .ls-rig button:focus-visible{outline:3px solid #FFD9A0;outline-offset:2px}
+
+  .ls-marquee{text-align:center;padding:2px 0 10px;position:relative}
+  .ls-marquee::before{content:"";position:absolute;left:12%;right:12%;top:-6px;height:44px;
+    background:radial-gradient(closest-side,rgba(247,147,26,.16),transparent);pointer-events:none}
+  .ls-title{font:700 clamp(15px,3.8vw,20px) var(--mono);letter-spacing:.26em;color:#FFD9A0;
+    text-shadow:0 0 16px rgba(247,147,26,.55),0 1px 0 rgba(0,0,0,.6)}
+  .ls-sub{font:600 8.5px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:#A98F65;margin-top:4px}
+
+  .ls-leds{display:flex;gap:8px;margin-bottom:10px}
+  .ls-led{flex:1;min-width:0;background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:6px 10px 7px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .ls-led i{display:block;font:700 7.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A98F65;font-style:normal;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ls-led b{display:block;font:700 clamp(13px,3.2vw,16px) var(--mono);color:#FFD9A0;margin-top:2px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 9px rgba(255,166,60,.35)}
+
+  .ls-boardwrap{position:relative;background:#060504;border:1px solid #3E3322;border-radius:12px;
+    padding:8px;box-shadow:inset 0 4px 18px rgba(0,0,0,.85)}
+  .ls-boardwrap canvas{display:block;margin:0 auto;border-radius:6px;touch-action:none}
+  .ls-overlay{position:absolute;inset:8px;display:flex;align-items:center;justify-content:center;
+    background:rgba(6,5,4,.84);border-radius:6px;overflow:auto}
+  .ls-overlay[hidden]{display:none}
+  .ls-ovinner{text-align:center;padding:14px 16px;max-width:92%;max-height:100%;margin:auto}
+  .ls-ovinner b{display:block;font:700 14px var(--mono);letter-spacing:.12em;color:#FFD9A0}
+  .ls-ovinner p{font:600 11px/1.65 var(--mono);color:#B99B6B;margin:10px 0 0}
+  .ls-ovinner p b{display:inline;font-size:11px;color:#FFB84D;letter-spacing:.02em}
+  .ls-go{margin-top:14px;background:#F7931A;color:#241200;border:1.5px solid rgba(255,166,60,.65);
+    border-radius:10px;cursor:pointer;min-height:48px;padding:0 26px;
+    font:700 14px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    box-shadow:0 5px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14),0 0 22px rgba(247,147,26,.22)}
+  .ls-go:hover{background:#FFA733}
+
+  .ls-pads{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:12px}
+  .ls-padrow{display:flex;gap:6px}
+  .ls-pad{min-width:56px;min-height:44px;background:#191410;border:1px solid #35291A;border-radius:9px;
+    color:#FFD9A0;cursor:pointer;font:700 14px var(--mono)}
+  .ls-pad:active{background:#2A2118}
+  @media(pointer:coarse){.ls-pads{display:flex}}
+
+  .ls-console{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .ls-help{flex:1;font:600 8.5px var(--mono);letter-spacing:.08em;color:#97815A;text-align:center}
+  .ls-small{display:flex;gap:6px}
+  .ls-mini{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none;
+    background:#191410;border:1px solid #35291A;border-radius:8px;color:#B99B6B;cursor:pointer}
+  .ls-mini:hover{color:#FFD9A0;border-color:#5A452A}
+  .ls-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .ls-mini svg{width:17px;height:17px}
+  
+  .ls-mini svg[hidden]{display:none}
+  .ls-msg{min-height:34px;margin-top:10px;text-align:center;font:600 11.5px/1.5 var(--mono);letter-spacing:.02em;color:#B99B6B}
+  .ls-msg.ls-good{color:#FFB84D}
+  .ls-msg.ls-bad{color:#E06A55}
+  .ls-plate{margin-top:8px;text-align:center;font:600 7.5px var(--mono);letter-spacing:.18em;color:#97815A;
+    border-top:1px solid #241C12;padding-top:8px;display:flex;flex-direction:column;gap:4px}
+  .ls-plate .ls-livefeed{color:#C98A2E}
+
+  
+  .ls-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .ls-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .ls-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+  .ls-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .ls-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ls-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .ls-brow{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ls-brow span{flex:1;min-width:220px}
+  .ls-reset{background:transparent;border:1px dashed var(--line-2);border-radius:7px;color:var(--ink-3);
+    font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;min-height:40px;cursor:pointer}
+  .ls-reset:hover{color:var(--down);border-color:var(--down)}
+  .ls-reset.ls-armed{color:var(--down);border-color:var(--down);border-style:solid}
+  .ls-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .ls-p a,.ls-about a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .ls-p a:hover,.ls-about a:hover{border-bottom-style:solid}
+  .ls-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+  .ls-plaque{border:1px dashed var(--line-2);border-radius:10px;padding:10px 12px;opacity:.5;min-width:0}
+  .ls-plaque b{display:block;font:700 12px var(--mono);color:var(--ink-2)}
+  .ls-plaque i{display:block;font:600 9.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px;line-height:1.5}
+  .ls-plaque.ls-won{opacity:1;border:1px solid rgba(247,147,26,.55);background:rgba(247,147,26,.07)}
+  .ls-plaque.ls-won b{color:var(--acc)}
+  .ls-about{margin-top:14px}
+  .ls-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .ls-rl{margin:0;padding-left:16px}
+  .ls-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .ls-rl li:first-child{margin-top:0}
+  .ls-rl li::marker{color:var(--acc)}
+  .ls-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .ls-nojs{font:600 12.5px/1.6 var(--sans);color:var(--ink-3);text-align:center;margin:12px 0 0}
+
+  @media(max-width:740px){
+    .ls-rig{padding:12px 10px 10px}
+    .ls-leds{flex-wrap:wrap}
+    .ls-led{flex:1 1 30%}
+    .ls-help{display:none}
+    .ls-msg{min-height:50px}
+  }
+  @media(max-width:700px){
+    .ls-card{padding:18px 16px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+"use strict";
+var stage=document.getElementById("ls-stage"),rig=document.getElementById("ls-rig");
+if(!stage||!rig)return;
+
+/* ---------------- the mazes ----------------
+   '#' wall, '.' coin, 'o' surge coin, ' ' bare corridor (rows whose col 0
+   is corridor wrap around), '-' the house door (rivals only), 'H' house,
+   'P' start. Three floors, cycled per block. All three are machine-checked
+   in the drive suite: every coin reachable, no dead ends, door wired. */
+var COLS=19,ROWS=15;
+var LAYOUTS=[
+  [ /* the vault */
+  "###################",
+  "#........#........#",
+  "#.##.###.#.###.##.#",
+  "#o...............o#",
+  "#.##.#.#####.#.##.#",
+  "#....#...#...#....#",
+  "####.##.....##.####",
+  "#....#..#-#..#....#",
+  "#.##.#.#HHH#.#.##.#",
+  " ....#.#####.#.... ",
+  "#.##.#.#####.#.##.#",
+  "#........P........#",
+  "#.#.#.##.#.##.#.#.#",
+  "#o...............o#",
+  "###################"
+  ],
+  [ /* the boulevard */
+  "###################",
+  "#o.......#.......o#",
+  "#.##.###.#.###.##.#",
+  " ................. ",
+  "#.##.#.#####.#.##.#",
+  "#....#...#...#....#",
+  "####.##.....##.####",
+  "#....#..#-#..#....#",
+  "#.##.#.#HHH#.#.##.#",
+  "#....#.#####.#....#",
+  "#.##.#.#####.#.##.#",
+  "#........P........#",
+  "#.#.#.##.#.##.#.#.#",
+  "#o...............o#",
+  "###################"
+  ],
+  [ /* the channels */
+  "###################",
+  "#........#........#",
+  "#.##.###.#.###.##.#",
+  "#o...............o#",
+  "#.##.#.#####.#.##.#",
+  " ....#...#...#.... ",
+  "####.##.....##.####",
+  "#....#..#-#..#....#",
+  "#.##.#.#HHH#.#.##.#",
+  " ....#.#####.#.... ",
+  "#.##.#.#####.#.##.#",
+  "#........P........#",
+  "#.#.#.##.#.##.#.#.#",
+  "#o...............o#",
+  "###################"
+  ]
+];
+
+/* ---------------- constants ---------------- */
+var SUB0=5e9;                       /* epoch 1: 50 BTC, in sats */
+var COIN_VB=25000,WHALE_VB=250000;  /* a coin scoops 25,000 vb of queue; a whale 250,000 */
+var HALVE_EVERY=4;                  /* compressed: the real chain halves every 210,000 blocks */
+var PSPD=4.7;                       /* player speed, cells per second */
+var RSPD=3.85,FRIGHT_SPD=2.5,EYES_SPD=7.5;
+function apiBase(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)||"/api/v1";}
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+var RIVALS=[
+  {key:"POOL", color:"#E0503C",corner:{r:1,c:17}},
+  {key:"SNIPE",color:"#4FC3E8",corner:{r:1,c:1}},
+  {key:"FARM", color:"#B085E8",corner:{r:13,c:17}},
+  {key:"SOLO", color:"#63C36C",corner:{r:13,c:1}}
+];
+var OUT_LINES={
+  POOL:"POOL is out, and it is looking for you.",
+  SNIPE:"SNIPE is out. It likes to be where you are about to be.",
+  FARM:"FARM is out, and it is here for the coins, not for you.",
+  SOLO:"SOLO is out, mining on vibes alone."
+};
+
+/* ---------------- the fee feed: live mempool bands with a baked fallback ---------------- */
+var SNAP={edges:[1,2,3,4,5,6,8,10,15,20,30,50,100],
+          vsizes:[52e6,31e6,14e6,8e6,5e6,4e6,3e6,2.2e6,1.5e6,1.1e6,0.7e6,0.4e6,0.15e6]};
+var feed={edges:SNAP.edges,vsizes:SNAP.vsizes,live:false,count:0,mb:0};
+function paintChip(){
+  /* the chip vouches for the coins ON THE FLOOR, not the feed's mood right
+     now: dealCoins latches the provenance of each deal, so a pull landing
+     mid-floor never lets the plate claim live pricing for snapshot coins */
+  var c=document.getElementById("ls-datachip");
+  if(!c)return;
+  var src=(mz&&mz.live!==undefined)?mz:feed;
+  if(src.live){
+    c.className="ls-livefeed";
+    c.textContent="COIN FEED: LIVE MEMPOOL · "+(src.count||0).toLocaleString("en-US")+" TX · "+(src.mb||0)+" MvB";
+  }else{
+    c.className="";
+    c.textContent="COIN FEED: STORED SNAPSHOT (feed unavailable)";
+  }
+}
+function fetchFeed(){
+  return fetch(apiBase()+"/mempool").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var got=false;
+    if(j&&j.bands&&Array.isArray(j.bands.edges)&&Array.isArray(j.bands.vsizes)&&
+       j.bands.edges.length===j.bands.vsizes.length&&j.bands.edges.length>3&&
+       j.bands.vsizes.every(function(v){return typeof v==="number"&&isFinite(v)&&v>=0;})&&
+       j.bands.vsizes.some(function(v){return v>0;})){
+      feed={edges:j.bands.edges,vsizes:j.bands.vsizes,live:true,
+            count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};
+      got=true;
+    }else if(j&&Array.isArray(j.histogram)&&j.histogram.length){
+      var e=[],v=[];
+      j.histogram.slice().reverse().forEach(function(row){
+        if(Array.isArray(row)&&isFinite(row[0])&&isFinite(row[1])&&row[1]>0){e.push(Math.max(1,row[0]));v.push(row[1]);}
+      });
+      if(e.length>3){feed={edges:e,vsizes:v,live:true,count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};got=true;}
+    }
+    /* a 200 with unusable bands is still not a live feed: never claim it is */
+    if(!got)feed.live=false;
+    /* nothing at stake on the attract floor: re-deal it so the demo shows
+       real prices and the chip can honestly say so */
+    if(state==="idle"&&got){dealCoins();coinsLeft=mz.nCoins;paintHud();}
+    paintChip();
+  }).catch(function(){feed.live=false;paintChip();});
+}
+function sampleRate(){
+  var total=0,i;
+  for(i=0;i<feed.vsizes.length;i++)total+=feed.vsizes[i];
+  var x=Math.random()*total;
+  for(i=0;i<feed.vsizes.length;i++){x-=feed.vsizes[i];if(x<=0)break;}
+  if(i>=feed.edges.length)i=feed.edges.length-1;
+  var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+  return Math.max(1,Math.round(lo+Math.random()*(hi-lo)));
+}
+function topRate(){
+  /* the highest band that actually holds queue: whale coins price from it */
+  for(var i=feed.vsizes.length-1;i>=0;i--)if(feed.vsizes[i]>0){
+    var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+    return Math.max(1,Math.round(lo+Math.random()*(hi-lo)));
+  }
+  return 50;
+}
+
+/* ---------------- storage ---------------- */
+function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function readInt(k,d){try{var v=parseInt(localStorage.getItem(k),10);return isFinite(v)?v:d;}catch(e){return d;}}
+function readLed(){
+  try{var l=JSON.parse(localStorage.getItem("ob-ls-led"));
+    if(l&&isFinite(l.g)&&isFinite(l.best)&&isFinite(l.blk)&&isFinite(l.ep))
+      /* sat totals can pass 2^31: floor, never |0 (which wraps negative) */
+      return {g:l.g|0,best:Math.max(0,Math.floor(l.best)),blk:l.blk|0,
+              lost:isFinite(l.lost)?l.lost|0:0,
+              ep:Math.max(1,l.ep|0),
+              orph:isFinite(l.orph)?l.orph|0:0,
+              wh:isFinite(l.wh)?l.wh|0:0,
+              fees:isFinite(l.fees)?Math.max(0,Math.floor(l.fees)):0,
+              /* kind strings capped at 12 chars: the slot's readLed once
+                 silently dropped a long kind on reload, never again */
+              tr:Array.isArray(l.tr)?l.tr.filter(function(x){return typeof x==="string"&&x.length<=12;}).slice(0,32):[]};
+  }catch(e){}
+  return {g:0,best:0,blk:0,lost:0,ep:1,orph:0,wh:0,fees:0,tr:[]};
+}
+var led=readLed();
+function saveLed(){store("ob-ls-led",JSON.stringify(led));}
+
+/* ---------------- the trophy shelf ---------------- */
+var TROPHIES=[
+  {k:"first",n:"First block",d:"take your first last sat"},
+  {k:"snipe",n:"The snipe",d:"take the last sat with a rival 3 tiles away"},
+  {k:"reorg4",n:"Chain reorg",d:"orphan all four rivals in one surge"},
+  {k:"greedy",n:"Greedy block",d:"sweep 80% of a floor's fees yourself"},
+  {k:"whales",n:"Whale hunter",d:"sweep all four whale coins on one floor"},
+  {k:"tidy",n:"No variance",d:"reach block five with all three rigs"},
+  {k:"present",n:"The present",d:"reach epoch 5, the real 3.125 BTC era"},
+  {k:"feeera",n:"The fee era",d:"out-sweep the subsidy on one floor"},
+  {k:"b21",n:"Twenty-one",d:"21 career blocks found"},
+  {k:"coiner",n:"Whole coiner",d:"a full BTC of career fees, 100M sats"}
+];
+function paintShelf(){
+  var s=el("ls-shelf");if(!s)return;
+  s.innerHTML="";
+  TROPHIES.forEach(function(t){
+    var d=document.createElement("div");
+    d.className="ls-plaque"+(led.tr.indexOf(t.k)>=0?" ls-won":"");
+    var b=document.createElement("b");b.textContent=t.n;
+    var i2=document.createElement("i");i2.textContent=t.d;
+    d.appendChild(b);d.appendChild(i2);
+    s.appendChild(d);
+  });
+}
+function trophy(k){
+  if(led.tr.indexOf(k)>=0)return;
+  led.tr.push(k);
+  saveLed();paintShelf();
+  for(var i=0;i<TROPHIES.length;i++)if(TROPHIES[i].k===k){
+    sTrophy();
+    say("TROPHY: "+TROPHIES[i].n+". "+TROPHIES[i].d+".","ls-good",2500);
+    break;
+  }
+}
+
+/* ---------------- dom + sound ---------------- */
+function el(id){return document.getElementById(id);}
+function txt(id,v){var e=el(id);if(e)e.textContent=v;}
+/* svg icons cannot use the .hidden property (HTML-only IDL): set the
+   attribute so the .ls-mini svg[hidden] rule can do its job */
+function hideIc(node,hide){
+  if(!node)return;
+  if(hide)node.setAttribute("hidden","");else node.removeAttribute("hidden");
+}
+function fmt(n){return n.toLocaleString("en-US");}
+function fmtBtc(sats){
+  var s=(sats/1e8).toFixed(8).replace(/0+$/,"").replace(/\.$/,"");
+  return s+" BTC";
+}
+function fmtScore(sats){
+  if(sats<1e8)return fmt(sats);
+  var v=sats/1e8;
+  return (v>=100?v.toFixed(2):v.toFixed(4)).replace(/0+$/,"").replace(/\.$/,"")+" BTC";
+}
+var cv=el("ls-board"),ctx=cv.getContext("2d"),
+    overlay=el("ls-overlay"),ovTitle=el("ls-ovtitle"),ovText=el("ls-ovtext"),ovBtn=el("ls-go"),
+    msgEl=el("ls-msg"),live=el("ls-live");
+/* messages that matter (halvings, found blocks, whales) set a hold; casual
+   flavor lines (rival releases) respect it instead of stomping them */
+var sayHoldUntil=0;
+function say(m,cls,holdMs){
+  var n=performance.now();
+  if(!holdMs&&n<sayHoldUntil)return;
+  if(holdMs)sayHoldUntil=n+holdMs;
+  msgEl.textContent=m;msgEl.className="ls-msg"+(cls?" "+cls:"");
+  if(live)live.textContent=m;
+}
+var muted=readInt("ob-ls-mute",0)===1,actx=null;
+function ac(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==="suspended")actx.resume();
+  return actx;
+}
+function tone(freq,dur,type,vol,when,slide){
+  var a=ac();if(!a||muted)return;
+  var t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(freq,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+var wak=false;
+function sCoin(){wak=!wak;tone(wak?540:420,0.05,"square",0.035);}
+function sWhaleC(){tone(1319,0.1,"triangle",0.09);tone(1760,0.12,"triangle",0.07,0.06);}
+function sSurge(){tone(300,0.5,"sawtooth",0.07,0,900);tone(600,0.45,"triangle",0.06,0.05,1200);}
+function sOrphan(n){var f=520*Math.pow(1.26,Math.min(3,n-1));tone(f,0.09,"square",0.1,0,f*0.6);tone(f*0.5,0.14,"triangle",0.08,0.06);}
+function sSpill(){var i;for(i=0;i<5;i++)tone(900+Math.random()*500,0.04,"square",0.03,i*0.045);}
+function sDeath(){tone(500,0.5,"sawtooth",0.1,0,90);tone(250,0.45,"triangle",0.08,0.1,60);}
+function sBlock(){var seq=[523,659,784,1047,1319],i;
+  for(i=0;i<seq.length;i++){tone(seq[i],0.18,"triangle",0.13,i*0.09);tone(seq[i]*2,0.16,"sine",0.05,i*0.09);}}
+function sLost(){tone(220,0.22,"triangle",0.1,0,140);tone(147,0.3,"triangle",0.09,0.16);}
+function sHalve(){tone(392,0.2,"triangle",0.1);tone(311,0.24,"triangle",0.1,0.16);tone(466,0.3,"triangle",0.11,0.36);}
+function sReady(){tone(659,0.1,"triangle",0.08);tone(880,0.14,"triangle",0.09,0.12);}
+function sTrophy(){tone(1319,0.1,"triangle",0.08);tone(1760,0.12,"triangle",0.06,0.06);}
+function sOver(){var seq=[392,330,262,196],i;for(i=0;i<seq.length;i++)tone(seq[i],0.2,"triangle",0.1,i*0.12);}
+function paintMute(){
+  var btn=el("ls-mute");
+  hideIc(el("ls-mute-on"),muted);hideIc(el("ls-mute-off"),!muted);
+  if(btn)btn.setAttribute("aria-pressed",muted?"true":"false");
+}
+el("ls-mute").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  muted=!muted;store("ob-ls-mute",muted?"1":"0");paintMute();if(!muted)tone(880,0.08,"sine",0.08);
+});
+paintMute();
+
+/* ---------------- maze parsing ---------------- */
+var mz=null; /* {rows, coins[][], P, house[], door, plaza, wrapRows{}, dealt, nCoins} */
+function parseMaze(idx){
+  var rows=LAYOUTS[idx],r,c;
+  var m={rows:rows,coins:[],P:null,house:[],door:null,plaza:null,wrapRows:{},nCoins:0,dealt:0,whales:[]};
+  for(r=0;r<ROWS;r++){
+    var line=[],ch;
+    for(c=0;c<COLS;c++){
+      ch=rows[r].charAt(c);
+      line.push(0);
+      if(ch==="P")m.P={r:r,c:c};
+      if(ch==="H")m.house.push({r:r,c:c});
+      if(ch==="-")m.door={r:r,c:c};
+    }
+    m.coins.push(line);
+    if(rows[r].charAt(0)!=="#")m.wrapRows[r]=true;
+  }
+  if(m.door)m.plaza={r:m.door.r-1,c:m.door.c};
+  return m;
+}
+function charAt(r,c){
+  c=((c%COLS)+COLS)%COLS;
+  if(r<0||r>=ROWS)return "#";
+  return mz.rows[r].charAt(c);
+}
+function walkable(r,c,ghostly){
+  var ch=charAt(r,c);
+  if(ch==="#")return false;
+  if(ch==="-"||ch==="H")return !!ghostly;
+  return true;
+}
+function wrapC(c){return ((c%COLS)+COLS)%COLS;}
+function inTunnel(r,c){return mz.wrapRows[r]&&(c<=1||c>=COLS-2);}
+
+/* seed the floor with priced coins; four become whales */
+function dealCoins(){
+  var r,c,cells=[];
+  mz.nCoins=0;mz.dealt=0;mz.whales=[];
+  for(r=0;r<ROWS;r++)for(c=0;c<COLS;c++){
+    var ch=mz.rows[r].charAt(c);
+    if(ch==="."||ch==="o"){
+      var v=sampleRate()*COIN_VB;
+      mz.coins[r][c]=v;
+      mz.nCoins++;mz.dealt+=v;
+      if(ch===".")cells.push({r:r,c:c});
+    }else mz.coins[r][c]=0;
+  }
+  /* whales: far from the start, spread out */
+  mz.live=feed.live;mz.count=feed.count;mz.mb=feed.mb; /* latch provenance */
+  var picks=0,guard=0;
+  while(picks<4&&guard++<400&&cells.length){
+    var i=(Math.random()*cells.length)|0,cell=cells[i];
+    var dd=Math.abs(cell.r-mz.P.r)+Math.abs(cell.c-mz.P.c);
+    var ok=dd>=5;
+    if(ok)for(var w=0;w<mz.whales.length;w++){
+      var o=mz.whales[w];
+      if(Math.abs(o.r-cell.r)+Math.abs(o.c-cell.c)<4){ok=false;break;}
+    }
+    if(ok){
+      var wv=topRate()*WHALE_VB;
+      mz.dealt+=wv-mz.coins[cell.r][cell.c];
+      mz.coins[cell.r][cell.c]=wv;
+      mz.whales.push({r:cell.r,c:cell.c});
+      cells.splice(i,1);picks++;
+    }
+  }
+}
+function isWhale(r,c){
+  for(var i=0;i<mz.whales.length;i++)if(mz.whales[i].r===r&&mz.whales[i].c===c)return true;
+  return false;
+}
+function isSurgeCell(r,c){return charAt(r,c)==="o"&&mz.coins[r][c]>0;}
+
+/* ---------------- BFS: first step + distance ---------------- */
+var DIRS=[{dr:-1,dc:0},{dr:0,dc:-1},{dr:1,dc:0},{dr:0,dc:1}];
+function bfs(sr,sc,goal,ghostly){
+  /* goal(r,c) -> true; returns {dr,dc,dist} of the first step, or null */
+  var prev={},q=[{r:sr,c:sc}],seen={};
+  seen[sr+","+sc]=true;
+  var head=0,found=null;
+  if(goal(sr,sc))return {dr:0,dc:0,dist:0};
+  while(head<q.length){
+    var n=q[head++];
+    for(var i=0;i<4;i++){
+      var nr=n.r+DIRS[i].dr,nc=wrapC(n.c+DIRS[i].dc);
+      if(nr<0||nr>=ROWS)continue;
+      var k=nr+","+nc;
+      if(seen[k]||!walkable(nr,nc,ghostly))continue;
+      seen[k]=true;prev[k]={r:n.r,c:n.c};
+      if(goal(nr,nc)){found={r:nr,c:nc};head=q.length;break;}
+      q.push({r:nr,c:nc});
+    }
+  }
+  if(!found)return null;
+  var cur=found,dist=0;
+  while(true){
+    var p=prev[cur.r+","+cur.c];
+    dist++;
+    if(p.r===sr&&p.c===sc)break;
+    cur=p;
+  }
+  var dc=cur.c-sc;
+  if(dc>1)dc=-1;if(dc<-1)dc=1; /* wrap step */
+  return {dr:cur.r-sr,dc:dc,dist:dist};
+}
+function manDist(r1,c1,r2,c2){
+  var dc=Math.abs(c1-c2);
+  return Math.abs(r1-r2)+Math.min(dc,COLS-dc);
+}
+
+/* ---------------- game state ---------------- */
+var state="idle",player=null,rivals=[],score=0,rigs=3,
+    feesRun=0,feesBlk=0,whalesBlk=0,foundRun=0,lostRun=0,orphRun=0,whRun=0,
+    blocksTotal=0,layoutIdx=0,nextHeight=null,
+    surgeUntil=0,orphChain=0,waveChase=true,waveNext=0,
+    graceUntil=0,stateUntil=0,frenzySaid=false,lastSatSaid=false,
+    raf=null,lastT=0,pausedAt=0,hidMid=false,hidAt=0,coinsLeft=0,pendingHalving=false;
+
+function epoch(){return Math.floor(blocksTotal/HALVE_EVERY)+1;}
+function subsidy(){return Math.max(0,Math.floor(SUB0/Math.pow(2,epoch()-1)));}
+function ramp(){return Math.min(1.4,1+blocksTotal*0.035);}
+function surgeMs(){return Math.max(1500,8000-700*(epoch()-1));}
+/* the deep-run screw: each epoch the rivals start racing the floor earlier,
+   so the last-sat endgame stretches even after raw speed tops out */
+function frenzyAt(){return Math.min(36,12+3*(epoch()-1));}
+
+function mkPlayer(){
+  return {from:{r:mz.P.r,c:mz.P.c},to:{r:mz.P.r,c:mz.P.c},t:0,
+          dir:null,want:null,moving:false};
+}
+function mkRivals(delays){
+  return RIVALS.map(function(spec,i){
+    var h=mz.house[Math.min(i,mz.house.length-1)]||mz.house[0];
+    return {key:spec.key,color:spec.color,corner:spec.corner,
+            from:{r:h.r,c:h.c},to:{r:h.r,c:h.c},t:0,dir:{dr:0,dc:0},
+            state:"house",releaseAt:performance.now()+delays[i],
+            cand:0,said:false};
+  });
+}
+function releaseDelays(){
+  var k=Math.min(6,blocksTotal*0.4)*1000;
+  return [0,Math.max(2000,4000-k),Math.max(4000,8000-k),Math.max(7000,13000-k)];
+}
+
+/* ---------------- runs and mazes ---------------- */
+function startRun(){
+  score=0;rigs=3;feesRun=0;foundRun=0;lostRun=0;orphRun=0;whRun=0;
+  blocksTotal=0;layoutIdx=0;pendingHalving=false;
+  hidMid=false; /* a hide during the final death animation must not pause the NEXT run */
+  overlay.hidden=true;
+  fetchFeed();
+  startMaze();
+}
+function startMaze(){
+  mz=parseMaze(layoutIdx);
+  dealCoins();
+  coinsLeft=mz.nCoins;
+  feesBlk=0;whalesBlk=0;frenzySaid=false;lastSatSaid=false;
+  player=mkPlayer();
+  rivals=mkRivals(releaseDelays());
+  surgeUntil=0;orphChain=0;graceUntil=0;
+  waveChase=true;waveNext=performance.now()+20000;
+  state="ready";stateUntil=performance.now()+1300;
+  sReady();
+  /* floor-arrival trophies first: the block or halving line below has a
+     hold of its own and must land last, not get stomped by a plaque */
+  if(blocksTotal>=4&&rigs===3)trophy("tidy");
+  if(epoch()>=5)trophy("present");
+  var h=nextHeight?("#"+fmt(nextHeight)):"next";
+  if(pendingHalving){
+    pendingHalving=false;
+    sHalve();
+    say("HALVING: the subsidy drops to "+fmtBtc(subsidy())+". The fees just became more interesting.","ls-good",3500);
+  }else{
+    say("Block "+h+", epoch "+epoch()+": the last sat scores the "+fmtBtc(subsidy())+" subsidy. Sweep.",null,700);
+  }
+  paintHud();
+}
+function nextMaze(){
+  blocksTotal++;
+  if(nextHeight)nextHeight++;
+  if(blocksTotal%HALVE_EVERY===0)pendingHalving=true;
+  layoutIdx=blocksTotal%LAYOUTS.length;
+  fetchFeed(); /* ripens for the NEXT deal: the chip describes each floor's own deal */
+  startMaze();
+}
+function gameOver(){
+  state="over";
+  led.g++;
+  if(score>led.best)led.best=score;
+  led.blk+=foundRun;led.lost+=lostRun;led.orph+=orphRun;led.wh+=whRun;
+  led.fees+=feesRun;
+  if(epoch()>led.ep)led.ep=epoch();
+  saveLed();paintLedger();
+  sOver();
+  var line=foundRun===0?
+    "No blocks found. The rivals mined right past you, which is what hashrate does.":
+    (foundRun===1?
+     "One block found. Somewhere an orphaned rival is telling the story differently.":
+     foundRun+" blocks found, and you saw epoch "+epoch()+". The fees were carrying you by the end.");
+  ovTitle.textContent="OUT OF RIGS";
+  ovText.innerHTML="<b>"+fmtScore(score)+"</b> · "+foundRun+" block"+(foundRun===1?"":"s")+" found · "+
+    lostRun+" lost to rivals · epoch "+epoch()+".<br><br>"+line;
+  ovBtn.textContent="Mine again";
+  overlay.hidden=false;
+  say("Run over: "+fmtScore(score)+", "+foundRun+" blocks found, epoch "+epoch()+". "+line,null,5000);
+}
+
+/* ---------------- sweeping ---------------- */
+function checkCoiner(){
+  if(led.fees+feesRun>=1e8)trophy("coiner");
+}
+function playerSweep(r,c){
+  var v=mz.coins[r][c];
+  if(!v)return;
+  var whale=isWhale(r,c),surge=isSurgeCell(r,c);
+  mz.coins[r][c]=0;coinsLeft--;
+  score+=v;feesRun+=v;feesBlk+=v;
+  if(whale){
+    whalesBlk++;whRun++;
+    sWhaleC();
+    say("Whale swept: +"+fmt(v)+" sats, a "+fmt(Math.round(v/WHALE_VB))+" sat/vB scoop.","ls-good",1600);
+    if(whalesBlk>=4)trophy("whales");
+  }else sCoin();
+  if(surge)startSurge();
+  checkCoiner();
+  if(coinsLeft<=0){blockFound(true,null,r,c);paintHud();return;}
+  maybeFrenzySay();
+  paintHud();
+}
+function rivalSweep(g,r,c){
+  var v=mz.coins[r][c];
+  if(!v)return;
+  if(isSurgeCell(r,c)){
+    /* rivals cannot use a surge: they roll it into the candidate like any coin */
+  }
+  mz.coins[r][c]=0;coinsLeft--;
+  g.cand+=v;
+  if(coinsLeft<=0){blockFound(false,g,r,c);paintHud();return;}
+  maybeFrenzySay();
+  paintHud();
+}
+function maybeFrenzySay(){
+  if(coinsLeft<=frenzyAt()&&!frenzySaid&&state==="run"){
+    frenzySaid=true;
+    say("LAST SATS: everyone can count. The race is on.","ls-good",2000);
+  }
+  if(coinsLeft===1&&!lastSatSaid&&state==="run"){
+    lastSatSaid=true;
+    say("THE LAST SAT is on the floor. Take it and the block is yours.","ls-good",2500);
+  }
+}
+function startSurge(){
+  surgeUntil=performance.now()+surgeMs();
+  orphChain=0;
+  sSurge();
+  rivals.forEach(function(g){
+    if(g.state==="normal"){g.state="fright";reverseRival(g);}
+  });
+  say("SURGE: your hashrate spikes. The rivals are reeling; catch one and orphan it.","ls-good",1500);
+}
+function endSurge(){
+  surgeUntil=0;
+  rivals.forEach(function(g){if(g.state==="fright")g.state="normal";});
+}
+function reverseRival(g){
+  var f=g.from;g.from=g.to;g.to=f;g.t=Math.max(0,1-g.t);
+  g.dir={dr:g.to.r-g.from.r,dc:(g.to.c-g.from.c>1)?-1:((g.to.c-g.from.c<-1)?1:g.to.c-g.from.c)};
+}
+function orphanRival(g){
+  orphChain++;orphRun++;
+  var spilled=g.cand;
+  g.cand=0;g.state="eyes";
+  sOrphan(orphChain);
+  if(spilled>0){
+    /* the orphaned candidate goes back to the mempool: coins return to the floor */
+    var avg=Math.max(1,Math.round(mz.dealt/Math.max(1,mz.nCoins)));
+    var k=Math.max(1,Math.min(10,Math.round(spilled/avg)));
+    var spots=[],r,c;
+    for(r=0;r<ROWS;r++)for(c=0;c<COLS;c++){
+      var ch=mz.rows[r].charAt(c);
+      /* never on an 'o' cell or a whale cell: a spilled coin there would
+         redraw (and re-trigger) as a surge or whale it is not */
+      if((ch==="."||ch===" "||ch==="P")&&!mz.coins[r][c]&&!isWhale(r,c)&&
+         manDist(r,c,player.to.r,player.to.c)>2)spots.push({r:r,c:c});
+    }
+    var each=Math.max(1,Math.floor(spilled/k)),placed=0;
+    while(placed<k&&spots.length){
+      var i=(Math.random()*spots.length)|0,s=spots.splice(i,1)[0];
+      mz.coins[s.r][s.c]=each;coinsLeft++;placed++;
+    }
+    sSpill();
+    say(g.key+" orphaned: its candidate spills "+fmt(spilled)+" sats back onto the floor.","ls-good",2000);
+  }else{
+    say(g.key+" orphaned before it swept a thing. The chain will not remember it.","ls-good",2000);
+  }
+  if(orphChain>=4)trophy("reorg4");
+  paintHud();
+}
+
+/* ---------------- the block ---------------- */
+/* the compressed epochs map onto bitcoin's real eras, so the anchor phrase
+   stays honest in every one of them */
+function eraLine(){
+  var ep=epoch();
+  if(ep===1)return "what a real miner collected in the 2009 era";
+  if(ep===2)return "what a real miner collected in the 2012 era";
+  if(ep===3)return "what a real miner collected in the 2016 era";
+  if(ep===4)return "what a real miner collected in the 2020 era";
+  if(ep===5)return "exactly what a real miner collects today";
+  return "what miners will be down to in an era still to come";
+}
+function blockFound(byPlayer,rival,lr,lc){
+  state="found";stateUntil=performance.now()+(reduce?500:1400);
+  endSurge();
+  var sub=subsidy(),h=nextHeight?("#"+fmt(nextHeight)):"";
+  /* plaques first: the block line below must land last and stick */
+  if(feesBlk>=0.8*mz.dealt&&mz.dealt>0)trophy("greedy");
+  if(feesBlk>sub)trophy("feeera");
+  if(byPlayer){
+    /* was it a snatch? any hunting rival close to the last coin counts */
+    var near=false;
+    rivals.forEach(function(g){
+      if(g.state==="normal"&&manDist(g.to.r,g.to.c,lr,lc)<=3)near=true;
+    });
+    score+=sub;foundRun++;
+    trophy("first");
+    if(near)trophy("snipe");
+    if(led.blk+foundRun>=21)trophy("b21");
+    sBlock();
+    say("BLOCK "+h+" FOUND: you took the last sat and scored the "+fmtBtc(sub)+" subsidy, "+eraLine()+", plus "+fmt(feesBlk)+" sats of fees.","ls-good",3000);
+  }else{
+    lostRun++;
+    sLost();
+    say(rival.key+" took the last sat: block "+h+" is theirs, subsidy and all. Your "+fmt(feesBlk)+" sats of fees stay scored; the chain moves on.","ls-bad",3000);
+  }
+  paintHud();
+}
+
+/* ---------------- death ---------------- */
+function playerCaught(g){
+  state="dead";stateUntil=performance.now()+(reduce?400:1100);
+  endSurge();
+  rigs--;
+  sDeath();
+  paintHud();
+  if(rigs>0)say("Outmined. "+g.key+" caught you and a rig goes dark. Rigs left: "+rigs+".","ls-bad",2000);
+  else say("Outmined by "+g.key+", and that was the last rig.","ls-bad",2000);
+}
+function afterDeath(){
+  if(rigs<=0){gameOver();return;}
+  player=mkPlayer();
+  /* the rivals do NOT reset: they keep their floor positions and their
+     candidates, so feeding a rig near the endgame buys nothing. Only the
+     player pays for a death. */
+  graceUntil=performance.now()+1500;
+  state="run";
+  if(hidMid){hidMid=false;shiftClocks(performance.now()-hidAt);setPause(true);}
+}
+
+/* ---------------- movement ---------------- */
+function entPx(e){
+  var dc=e.to.c-e.from.c;
+  if(dc>1)dc=-1;if(dc<-1)dc=1;
+  return {x:(e.from.c+dc*e.t+0.5)*cell,y:(e.from.r+(e.to.r-e.from.r)*e.t+0.5)*cell};
+}
+function tryDir(fromCell,d,ghostly){
+  if(!d)return null;
+  var nr=fromCell.r+d.dr,nc=wrapC(fromCell.c+d.dc);
+  if(nr<0||nr>=ROWS)return null;
+  if(!walkable(nr,nc,ghostly))return null;
+  return {r:nr,c:nc};
+}
+function stepPlayer(dt){
+  var spd=PSPD;
+  var moved=(player.moving?spd*dt:0);
+  player.t+=moved;
+  while(player.t>=1){
+    player.t-=1;
+    player.from=player.to;
+    playerSweep(player.from.r,player.from.c);
+    if(state!=="run")return; /* the sweep may have ended the maze */
+    var next=null;
+    if(player.want){
+      next=tryDir(player.from,player.want,false);
+      if(next){player.dir=player.want;player.want=null;}
+    }
+    if(!next&&player.dir)next=tryDir(player.from,player.dir,false);
+    if(next){player.to=next;player.moving=true;}
+    else{player.to=player.from;player.t=0;player.moving=false;}
+  }
+  /* a standing player can start moving the moment a key lands */
+  if(!player.moving){
+    var d=player.want||player.dir,go=d?tryDir(player.from,d,false):null;
+    if(go){
+      if(player.want){player.dir=player.want;player.want=null;go=tryDir(player.from,player.dir,false);}
+      if(go){player.to=go;player.moving=true;}
+    }
+  }
+}
+function rivalTarget(g){
+  var ep=epoch();
+  if(g.state==="eyes")return null; /* BFS home instead */
+  if(coinsLeft<=4)               /* everyone races the floor, SOLO excepted */
+    if(g.key!=="SOLO")return "coin";
+  if(coinsLeft<=frenzyAt()&&(g.key==="FARM"||g.key==="SNIPE"))return "coin";
+  if(g.key==="FARM")return "coin";
+  if(g.key==="SOLO")return "wander";
+  if(!waveChase)return g.corner;
+  if(g.key==="POOL")return {r:player.to.r,c:player.to.c};
+  /* SNIPE: four tiles ahead of where you are going */
+  var d=player.dir||{dr:0,dc:0};
+  return {r:Math.max(0,Math.min(ROWS-1,player.to.r+d.dr*4)),c:wrapC(player.to.c+d.dc*4)};
+}
+function chooseRival(g){
+  /* called at cell arrival: pick g.to */
+  var ghostly=(g.state==="eyes"||g.state==="exit");
+  var opts=[],i;
+  for(i=0;i<4;i++){
+    var d=DIRS[i],nr=g.from.r+d.dr,nc=wrapC(g.from.c+d.dc);
+    if(nr<0||nr>=ROWS)continue;
+    if(!walkable(nr,nc,ghostly))continue;
+    /* hunters never walk back in the door */
+    if(!ghostly&&(charAt(nr,nc)==="-"||charAt(nr,nc)==="H"))continue;
+    if(g.dir&&d.dr===-g.dir.dr&&d.dc===-g.dir.dc)opts.push({d:d,r:nr,c:nc,rev:true});
+    else opts.push({d:d,r:nr,c:nc,rev:false});
+  }
+  var fwd=opts.filter(function(o){return !o.rev;});
+  if(fwd.length)opts=fwd;
+  if(!opts.length)return;
+  var pick=null;
+  if(g.state==="fright"){
+    pick=opts[(Math.random()*opts.length)|0];
+  }else if(g.state==="eyes"){
+    var step=bfs(g.from.r,g.from.c,function(r,c){return charAt(r,c)==="H";},true);
+    if(step&&(step.dr||step.dc)){
+      for(i=0;i<opts.length;i++)if(opts[i].d.dr===step.dr&&opts[i].d.dc===step.dc)pick=opts[i];
+    }
+    if(!pick)pick=opts[0];
+  }else if(g.state==="exit"){
+    var step2=bfs(g.from.r,g.from.c,function(r,c){return r===mz.plaza.r&&c===mz.plaza.c;},true);
+    if(step2&&(step2.dr||step2.dc)){
+      for(i=0;i<opts.length;i++)if(opts[i].d.dr===step2.dr&&opts[i].d.dc===step2.dc)pick=opts[i];
+    }
+    if(!pick)pick=opts[0];
+  }else{
+    var tgt=rivalTarget(g);
+    if(tgt==="coin"){
+      var step3=bfs(g.from.r,g.from.c,function(r,c){return mz.coins[r][c]>0;},false);
+      if(step3&&(step3.dr||step3.dc)){
+        for(i=0;i<opts.length;i++)if(opts[i].d.dr===step3.dr&&opts[i].d.dc===step3.dc)pick=opts[i];
+      }
+      if(!pick)pick=opts[(Math.random()*opts.length)|0];
+    }else if(tgt==="wander"){
+      pick=opts[(Math.random()*opts.length)|0];
+    }else{
+      var bd=Infinity;
+      for(i=0;i<opts.length;i++){
+        var dd=manDist(opts[i].r,opts[i].c,tgt.r,tgt.c);
+        if(dd<bd){bd=dd;pick=opts[i];}
+      }
+    }
+  }
+  if(!pick)pick=opts[0];
+  g.dir=pick.d;g.to={r:pick.r,c:pick.c};
+}
+function stepRival(g,dt,now){
+  if(g.state==="house"){
+    if(now>=g.releaseAt){
+      g.state="exit";
+      if(!g.said&&state==="run"){g.said=true;say(OUT_LINES[g.key]);}
+    }
+    return;
+  }
+  var spd=RSPD*ramp();
+  if(g.state==="fright")spd=FRIGHT_SPD;
+  else if(g.state==="eyes")spd=EYES_SPD;
+  else if(g.state==="exit")spd=3;
+  if(inTunnel(g.from.r,g.from.c))spd*=0.55;
+  g.t+=spd*dt;
+  while(g.t>=1){
+    g.t-=1;
+    g.from=g.to;
+    if(g.state==="exit"&&g.from.r===mz.plaza.r&&g.from.c===mz.plaza.c){
+      g.state=(surgeUntil>0)?"fright":"normal";
+    }
+    if(g.state==="eyes"&&charAt(g.from.r,g.from.c)==="H"){
+      g.state="house";g.releaseAt=now+2500;g.to=g.from;g.t=0;
+      return;
+    }
+    if(g.state==="normal"&&state==="run")rivalSweep(g,g.from.r,g.from.c);
+    if(state!=="run"&&state!=="idle")return;
+    chooseRival(g);
+  }
+}
+function collide(now){
+  if(now<graceUntil)return;
+  var pp=entPx(player);
+  for(var i=0;i<rivals.length;i++){
+    var g=rivals[i];
+    if(g.state==="house"||g.state==="exit"||g.state==="eyes")continue;
+    var gp=entPx(g);
+    var dx=Math.abs(pp.x-gp.x);
+    dx=Math.min(dx,W-dx); /* the tunnel wraps for collisions too */
+    var dy=pp.y-gp.y;
+    if(dx*dx+dy*dy<(cell*0.55)*(cell*0.55)){
+      if(g.state==="fright")orphanRival(g);
+      else{playerCaught(g);return;}
+    }
+  }
+}
+
+/* ---------------- main loop ---------------- */
+function loop(t){
+  raf=requestAnimationFrame(loop);
+  var dt=Math.min(50,t-lastT)/1000;lastT=t;
+  var now=t;
+  if(state==="pause"){draw(t);return;}
+  if(state==="idle"){
+    /* attract: the rivals wander the full floor behind the overlay */
+    rivals.forEach(function(g){
+      if(g.state==="house"&&now>=g.releaseAt)g.state="exit";
+      if(g.state!=="house"){
+        var spd=2.6;
+        g.t+=spd*dt;
+        while(g.t>=1){
+          g.t-=1;g.from=g.to;
+          if(g.state==="exit"&&g.from.r===mz.plaza.r&&g.from.c===mz.plaza.c)g.state="fright";
+          chooseRival(g);
+        }
+      }
+    });
+    draw(t);return;
+  }
+  if(state==="ready"){
+    if(now>=stateUntil){
+      state="run";
+      /* rAF slept while hidden, so shift every deadline by the hidden span
+         before pausing: the release stagger must survive a tab switch */
+      if(hidMid){hidMid=false;shiftClocks(performance.now()-hidAt);setPause(true);}
+    }
+    draw(t);return;
+  }
+  if(state==="dead"){
+    if(now>=stateUntil)afterDeath();
+    draw(t);return;
+  }
+  if(state==="found"){
+    if(now>=stateUntil)nextMaze();
+    draw(t);return;
+  }
+  if(state!=="run"){draw(t);return;}
+  /* the surge clock */
+  if(surgeUntil&&now>=surgeUntil)endSurge();
+  /* chase and breathe waves */
+  if(now>=waveNext){
+    waveChase=!waveChase;
+    waveNext=now+(waveChase?20000:Math.max(2000,5000-300*(epoch()-1)));
+    rivals.forEach(function(g){if(g.state==="normal")reverseRival(g);});
+  }
+  stepPlayer(dt);
+  if(state==="run"){
+    rivals.forEach(function(g){stepRival(g,dt,now);});
+    if(state==="run")collide(now);
+  }
+  draw(t);
+}
+
+/* ---------------- painting ---------------- */
+var cell=26,W=0,H=0;
+function sizeBoard(){
+  var avail=rig.clientWidth-40-16;
+  cell=Math.max(14,Math.min(30,Math.floor(avail/COLS)));
+  var maxH=Math.floor((window.innerHeight-330)/ROWS);
+  if(maxH>=14)cell=Math.min(cell,maxH);
+  W=COLS*cell;H=ROWS*cell;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+"px";cv.style.height=H+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw(performance.now());
+}
+function rr(x,y,w,h,r){
+  if(w<2*r)r=w/2;if(h<2*r)r=h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawEntity(px,fn){
+  fn(px);
+  if(px.x<cell)fn({x:px.x+W,y:px.y});
+  if(px.x>W-cell)fn({x:px.x-W,y:px.y});
+}
+function draw(t){
+  if(!mz)return;
+  ctx.fillStyle="#0B0908";ctx.fillRect(0,0,W,H);
+  var r,c;
+  /* walls */
+  for(r=0;r<ROWS;r++)for(c=0;c<COLS;c++){
+    var ch=mz.rows[r].charAt(c);
+    if(ch==="#"){
+      ctx.fillStyle="#221A10";
+      rr(c*cell+1,r*cell+1,cell-2,cell-2,3);ctx.fill();
+      ctx.strokeStyle="#3A2E1C";ctx.lineWidth=1;
+      rr(c*cell+1.5,r*cell+1.5,cell-3,cell-3,3);ctx.stroke();
+    }else if(ch==="-"){
+      ctx.fillStyle="#A98F65";
+      ctx.fillRect(c*cell+2,r*cell+cell*0.42,cell-4,Math.max(2,cell*0.14));
+    }
+  }
+  /* coins */
+  for(r=0;r<ROWS;r++)for(c=0;c<COLS;c++){
+    var v=mz.coins[r][c];
+    if(!v)continue;
+    var cx=c*cell+cell/2,cy=r*cell+cell/2;
+    if(isSurgeCell(r,c)){
+      var pul=reduce?1:(0.85+0.15*Math.sin(t/220));
+      ctx.strokeStyle="#F7931A";ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.24*pul,0,7);ctx.stroke();
+      ctx.fillStyle="#FFD9A0";
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.09,0,7);ctx.fill();
+    }else if(isWhale(r,c)){
+      ctx.shadowColor="rgba(255,233,184,.8)";ctx.shadowBlur=8;
+      ctx.fillStyle="#FFE9B8";
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.2,0,7);ctx.fill();
+      ctx.shadowBlur=0;
+      if(cell>=20){
+        ctx.fillStyle="#3A2600";
+        ctx.font="700 "+Math.floor(cell*0.26)+"px Cascadia Mono,Consolas,monospace";
+        ctx.textAlign="center";ctx.textBaseline="middle";
+        ctx.fillText("₿",cx,cy+0.5);
+        ctx.textAlign="left";ctx.textBaseline="alphabetic";
+      }
+    }else if(coinsLeft===1){
+      /* the title mechanic gets a face: the final coin glows and rings */
+      var lp=reduce?1:(0.8+0.2*Math.sin(t/180));
+      ctx.shadowColor="rgba(255,217,160,.9)";ctx.shadowBlur=10;
+      ctx.fillStyle="#FFD9A0";
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.16,0,7);ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="#F7931A";ctx.lineWidth=1.6;
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.28*lp,0,7);ctx.stroke();
+    }else{
+      ctx.fillStyle="#D8A959";
+      ctx.beginPath();ctx.arc(cx,cy,cell*0.1,0,7);ctx.fill();
+    }
+  }
+  var now=t;
+  /* rivals */
+  rivals.forEach(function(g){
+    var px=entPx(g);
+    drawEntity(px,function(p){
+      var fright=g.state==="fright";
+      var ending=fright&&surgeUntil-now<2000;
+      var flash=ending&&!reduce&&Math.floor(now/180)%2===0;
+      if(g.state==="eyes"){
+        ctx.fillStyle="#E8E2D6";
+        ctx.beginPath();ctx.arc(p.x-cell*0.13,p.y,cell*0.1,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x+cell*0.13,p.y,cell*0.1,0,7);ctx.fill();
+        ctx.fillStyle="#241200";
+        ctx.beginPath();ctx.arc(p.x-cell*0.13+g.dir.dc*2,p.y+g.dir.dr*2,cell*0.045,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x+cell*0.13+g.dir.dc*2,p.y+g.dir.dr*2,cell*0.045,0,7);ctx.fill();
+        return;
+      }
+      /* under reduced motion the about-to-recover warning is a steady lighter body */
+      ctx.fillStyle=fright?(flash?"#E8E2D6":(ending&&reduce?"#7E96BC":"#3D5A8A")):g.color;
+      var rad=cell*0.36;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y-rad*0.15,rad,Math.PI,0);
+      ctx.lineTo(p.x+rad,p.y+rad*0.7);
+      var k;
+      for(k=2;k>=-2;k--)ctx.lineTo(p.x+rad*k/2.5,p.y+rad*(k%2===0?0.7:0.5));
+      ctx.closePath();ctx.fill();
+      if(fright){
+        ctx.fillStyle=flash?"#3D5A8A":"#E8E2D6";
+        ctx.beginPath();ctx.arc(p.x-cell*0.11,p.y-cell*0.08,cell*0.05,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x+cell*0.11,p.y-cell*0.08,cell*0.05,0,7);ctx.fill();
+      }else{
+        ctx.fillStyle="#FFFFFF";
+        ctx.beginPath();ctx.arc(p.x-cell*0.12,p.y-cell*0.1,cell*0.09,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x+cell*0.12,p.y-cell*0.1,cell*0.09,0,7);ctx.fill();
+        ctx.fillStyle="#241200";
+        ctx.beginPath();ctx.arc(p.x-cell*0.12+g.dir.dc*cell*0.04,p.y-cell*0.1+g.dir.dr*cell*0.04,cell*0.045,0,7);ctx.fill();
+        ctx.beginPath();ctx.arc(p.x+cell*0.12+g.dir.dc*cell*0.04,p.y-cell*0.1+g.dir.dr*cell*0.04,cell*0.045,0,7);ctx.fill();
+      }
+    });
+  });
+  /* the player */
+  if(state!=="idle"&&state!=="over"&&player){
+    var pp=entPx(player);
+    drawEntity(pp,function(p){
+      var inGrace=now<graceUntil;
+      if(inGrace&&!reduce&&Math.floor(now/150)%2===0)return;
+      var dying=state==="dead";
+      var sc=dying?Math.max(0.15,1-(now-(stateUntil-(reduce?400:1100)))/(reduce?400:1100)):1;
+      /* reduced motion: the blink becomes a steady half-fade so the grace still shows */
+      ctx.globalAlpha=dying?Math.max(0.25,sc):(inGrace&&reduce?0.55:1);
+      ctx.shadowColor="rgba(247,147,26,.8)";ctx.shadowBlur=10;
+      ctx.fillStyle="#F7931A";
+      ctx.beginPath();ctx.arc(p.x,p.y,cell*0.36*sc,0,7);ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="#FFD9A0";ctx.lineWidth=1.4;
+      ctx.beginPath();ctx.arc(p.x,p.y,cell*0.36*sc-0.7,0,7);ctx.stroke();
+      ctx.fillStyle="#241200";
+      ctx.font="700 "+Math.floor(cell*0.4*sc)+"px Cascadia Mono,Consolas,monospace";
+      ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.fillText("₿",p.x,p.y+0.5);
+      ctx.textAlign="left";ctx.textBaseline="alphabetic";
+      ctx.globalAlpha=1;
+    });
+  }
+  /* ready banner */
+  if(state==="ready"){
+    ctx.fillStyle="rgba(6,5,4,.55)";
+    ctx.fillRect(0,H/2-cell,W,cell*2);
+    ctx.fillStyle="#FFD9A0";
+    ctx.font="700 "+Math.floor(cell*0.75)+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText("SWEEP",W/2,H/2);
+    ctx.textAlign="left";ctx.textBaseline="alphabetic";
+  }
+  /* surge vignette: steady under reduced motion, breathing otherwise */
+  if(surgeUntil>now){
+    ctx.strokeStyle=reduce?"rgba(247,147,26,.3)":"rgba(247,147,26,"+(0.25+0.15*Math.sin(now/120)).toFixed(2)+")";
+    ctx.lineWidth=3;
+    ctx.strokeRect(1.5,1.5,W-3,H-3);
+  }
+}
+function paintHud(){
+  txt("ls-score",fmtScore(score));
+  txt("ls-rigs",String(Math.max(0,rigs)));
+  txt("ls-block",nextHeight?"#"+fmt(nextHeight):"–");
+  txt("ls-sub",fmtBtc(subsidy())+" · e"+epoch());
+  txt("ls-coins",String(coinsLeft));
+}
+function paintLedger(){
+  txt("ls-l-games",fmt(led.g));txt("ls-l-best",fmtScore(led.best));
+  txt("ls-l-blk",fmt(led.blk));txt("ls-l-lost",fmt(led.lost));
+  txt("ls-l-ep",fmt(led.ep));txt("ls-l-orph",fmt(led.orph));
+  txt("ls-l-wh",fmt(led.wh));txt("ls-l-fees",fmt(led.fees));
+}
+function paintOvHeight(){
+  var e=el("ls-ovheight");
+  if(e)e.textContent=nextHeight?"#"+fmt(nextHeight):"#…";
+}
+
+/* ---------------- pause ---------------- */
+var paused=false;
+function paintPause(){
+  var pb=el("ls-pause");
+  hideIc(el("ls-ic-pause"),paused);hideIc(el("ls-ic-play"),!paused);
+  if(pb)pb.setAttribute("aria-pressed",paused?"true":"false");
+}
+function shiftClocks(delta){
+  if(surgeUntil)surgeUntil+=delta;
+  stateUntil+=delta;waveNext+=delta;
+  if(sayHoldUntil)sayHoldUntil+=delta;
+  if(graceUntil)graceUntil+=delta;
+  rivals.forEach(function(g){if(g.state==="house")g.releaseAt+=delta;});
+}
+function setPause(on){
+  if(on&&state!=="run")return;
+  if(paused===on)return;
+  paused=on;paintPause();
+  if(on){pausedAt=performance.now();state="pause";say("Paused. The rivals wait; real miners would not.",null,600);}
+  else{
+    shiftClocks(performance.now()-pausedAt);
+    state="run";lastT=performance.now();
+    say("Back to the floor.",null,600);
+  }
+}
+el("ls-pause").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  if(state==="run")setPause(true);
+  else if(state==="pause")setPause(false);
+});
+document.addEventListener("visibilitychange",function(){
+  if(!document.hidden)return;
+  if(state==="run")setPause(true);
+  else if(state==="ready"||state==="dead"||state==="found"){hidMid=true;hidAt=performance.now();}
+});
+
+/* ---------------- input ---------------- */
+function steer(dr,dc){
+  if(!player)return;
+  player.want={dr:dr,dc:dc};
+}
+ovBtn.addEventListener("click",function(){ac();startRun();});
+document.addEventListener("keydown",function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  var k=e.key;
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","W","a","A","s","S","d","D","p","P"," ","Enter"].indexOf(k)<0)return;
+  var tg=e.target;
+  if(tg&&tg.closest){
+    if(tg.closest("input,select,textarea,a"))return;
+    /* a focused button keeps its native Space/Enter activation */
+    if(tg.closest("button")&&(k===" "||k==="Enter"))return;
+  }
+  var r=stage.getBoundingClientRect();
+  if(r.bottom<0||r.top>window.innerHeight)return;
+  if(state==="run"||state==="ready"||state==="dead"||state==="found"){
+    if(k==="ArrowUp"||k==="w"||k==="W"){e.preventDefault();steer(-1,0);}
+    else if(k==="ArrowDown"||k==="s"||k==="S"){e.preventDefault();steer(1,0);}
+    else if(k==="ArrowLeft"||k==="a"||k==="A"){e.preventDefault();steer(0,-1);}
+    else if(k==="ArrowRight"||k==="d"||k==="D"){e.preventDefault();steer(0,1);}
+    else if(k==="p"||k==="P"){e.preventDefault();setPause(true);}
+    else if(k===" "){e.preventDefault();} /* mid-game Space never scrolls the page */
+  }else if(state==="pause"&&(k==="p"||k==="P"||k===" ")){e.preventDefault();setPause(false);}
+  else if((k===" "||k==="Enter")&&!overlay.hidden){e.preventDefault();ac();startRun();}
+});
+function bindPad(id,dr,dc){
+  var b=el(id);
+  if(!b)return;
+  b.addEventListener("pointerdown",function(e){
+    if(e.button!==0||!e.isPrimary)return;
+    e.preventDefault();steer(dr,dc);
+  });
+  /* keyboard/AT activation arrives as a detail-0 click (the BB pattern) */
+  b.addEventListener("click",function(e){if(e.detail===0)steer(dr,dc);});
+}
+bindPad("ls-pu",-1,0);bindPad("ls-pd",1,0);bindPad("ls-plft",0,-1);bindPad("ls-prgt",0,1);
+/* swipe on the board: each clear direction re-steers */
+var swipeOrigin=null;
+cv.addEventListener("pointerdown",function(e){
+  if(!e.isPrimary)return;
+  swipeOrigin={x:e.clientX,y:e.clientY};
+});
+cv.addEventListener("pointermove",function(e){
+  if(!swipeOrigin||!e.isPrimary)return;
+  var dx=e.clientX-swipeOrigin.x,dy=e.clientY-swipeOrigin.y,
+      ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<24&&ay<24)return;
+  /* one axis must clearly win, or a diagonal drag flip-flops the steering */
+  if(ax>ay*1.5)steer(0,dx>0?1:-1);
+  else if(ay>ax*1.5)steer(dy>0?1:-1,0);
+  else return;
+  swipeOrigin={x:e.clientX,y:e.clientY};
+});
+cv.addEventListener("pointerup",function(){swipeOrigin=null;});
+cv.addEventListener("pointercancel",function(){swipeOrigin=null;});
+
+/* two-step reset, sibling idiom */
+var resetArmed=false,resetTimer=null;
+el("ls-reset").addEventListener("click",function(){
+  var b=el("ls-reset");
+  if(!resetArmed){
+    resetArmed=true;b.classList.add("ls-armed");b.textContent="Click again to wipe";
+    resetTimer=setTimeout(function(){resetArmed=false;b.classList.remove("ls-armed");b.textContent="Reset everything";},4000);
+    return;
+  }
+  clearTimeout(resetTimer);resetArmed=false;
+  b.classList.remove("ls-armed");b.textContent="Reset everything";
+  led={g:0,best:0,blk:0,lost:0,ep:1,orph:0,wh:0,fees:0,tr:[]};
+  saveLed();paintLedger();paintShelf();
+  say("Wiped. The chain remembers nothing either.",null,600);
+});
+
+/* ---------------- fullscreen (shared idiom) ---------------- */
+var fsBtn=el("ls-fs");
+function fsActive(){return document.fullscreenElement===stage||stage.classList.contains("ls-fake");}
+function setInertOutside(on){
+  var node=stage;
+  while(node&&node!==document.body){
+    var p=node.parentElement;
+    if(!p)break;
+    for(var i=0;i<p.children.length;i++){
+      var sib=p.children[i];
+      if(sib===node)continue;
+      if(on)sib.setAttribute("inert","");else sib.removeAttribute("inert");
+    }
+    node=p;
+  }
+}
+function paintFs(){
+  var on=fsActive();
+  hideIc(el("ls-fs-open"),on);hideIc(el("ls-fs-close"),!on);
+  fsBtn.setAttribute("aria-pressed",on?"true":"false");
+  sizeBoard();
+}
+function exitFake(){
+  stage.classList.remove("ls-fake");document.documentElement.classList.remove("ls-lock");
+  setInertOutside(false);paintFs();
+}
+function fsToggle(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(stage.classList.contains("ls-fake")){exitFake();return;}
+  if(stage.requestFullscreen){
+    stage.requestFullscreen().then(paintFs).catch(function(){
+      stage.classList.add("ls-fake");document.documentElement.classList.add("ls-lock");
+      setInertOutside(true);paintFs();
+    });
+  }else{
+    stage.classList.add("ls-fake");document.documentElement.classList.add("ls-lock");
+    setInertOutside(true);paintFs();
+  }
+}
+fsBtn.addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  fsToggle();
+});
+document.addEventListener("fullscreenchange",paintFs);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&stage.classList.contains("ls-fake"))exitFake();
+});
+window.addEventListener("resize",sizeBoard);
+
+/* ---------------- boot ---------------- */
+mz=parseMaze(0);
+dealCoins();
+coinsLeft=mz.nCoins;
+player=mkPlayer();
+rivals=mkRivals([600,1800,3200,4600]); /* attract mode wander */
+sizeBoard();
+paintHud();paintLedger();paintShelf();paintChip();paintOvHeight();
+fetchFeed();
+fetch(apiBase()+"/height").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+  if(j&&typeof j.height==="number"&&isFinite(j.height)&&j.height>0){
+    nextHeight=Math.floor(j.height)+1;
+    paintOvHeight();paintHud();
+  }
+}).catch(function(){});
+lastT=performance.now();
+if(!raf)raf=requestAnimationFrame(loop); /* the attract floor runs behind the overlay */
+if(led.g>0)say("Welcome back. Best run: "+fmtScore(led.best)+". The floor is freshly swept and the rivals slept badly.");
+
+/* test hook: inert unless the drive suite predefined the global before load;
+   lets the headless harness reach the closure to drive deep scenarios
+   (halvings, last-sat races) that would take hours of simulated play */
+if(typeof window.__LS_TEST_HOOK__==="function")window.__LS_TEST_HOOK__({
+  LAYOUTS:LAYOUTS,
+  led:function(){return led;},
+  refs:function(){return {player:player,rivals:rivals,mz:mz};},
+  g:{
+    state:function(v){if(v!==undefined)state=v;return state;},
+    score:function(v){if(v!==undefined)score=v;return score;},
+    coinsLeft:function(v){if(v!==undefined)coinsLeft=v;return coinsLeft;},
+    rigs:function(v){if(v!==undefined)rigs=v;return rigs;},
+    blocksTotal:function(v){if(v!==undefined)blocksTotal=v;return blocksTotal;},
+    surgeUntil:function(){return surgeUntil;},
+    graceUntil:function(v){if(v!==undefined)graceUntil=v;return graceUntil;},
+    foundRun:function(){return foundRun;},
+    lostRun:function(){return lostRun;},
+    orphRun:function(){return orphRun;},
+    feesRun:function(v){if(v!==undefined)feesRun=v;return feesRun;},
+    feesBlk:function(){return feesBlk;},
+    nextHeight:function(v){if(v!==undefined)nextHeight=v;return nextHeight;}
+  },
+  fns:{startRun:startRun,startMaze:startMaze,nextMaze:nextMaze,
+       playerSweep:playerSweep,rivalSweep:rivalSweep,orphanRival:orphanRival,
+       startSurge:startSurge,endSurge:endSurge,subsidy:subsidy,epoch:epoch,
+       fmtBtc:fmtBtc,fmtScore:fmtScore,readLed:readLed,checkCoiner:checkCoiner,
+       setPause:setPause,steer:steer,walkable:walkable}
+});
+
+/* iOS long-press hardening: user-select:none alone is not honored
+   reliably on Safari, so selection is refused at the event layer and any
+   range that sneaks through is swept on touchend */
+(function(){
+  var st=document.querySelector(".ls-stage");
+  if(!st)return;
+    /* the decisive layer: cancel the NATIVE touch before Safari's selection
+     recognizer runs. Scoped to the canvas and overlay prose only, so
+     buttons keep their taps and the page keeps its scroll. */
+  st.addEventListener("touchstart",function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    if(t.closest("button,a,input,select,textarea"))return;
+    if(t.closest("canvas")||t.closest(".ls-overlay"))e.preventDefault();
+  },{passive:false});
+  ["selectstart","contextmenu"].forEach(function(ev){
+    st.addEventListener(ev,function(e){e.preventDefault();});
+  });
+  document.addEventListener("touchend",function(){
+    try{
+      var sel=window.getSelection&&window.getSelection();
+      if(!sel||!sel.rangeCount||!sel.anchorNode)return;
+      var n=sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentNode;
+      if(n&&st.contains(n))sel.removeAllRanges();
+    }catch(e){}
+  },{passive:true});
+})();
+})();
+</script>
+</Base>

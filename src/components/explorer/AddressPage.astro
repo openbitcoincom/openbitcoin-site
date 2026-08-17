@@ -51,10 +51,10 @@ const pageHref = (p) => mkPath(p);
         )}
         <div class="ah-stats">
           {a.totalReceivedSat != null && (
-            <span class="ast ast-btc"><b><span class="arr up" aria-hidden="true">&darr;</span>{fmtBtc(a.totalReceivedSat)}<em>BTC</em></b><i>Total received</i></span>
+            <span class="ast ast-btc"><b><span class="arr up" aria-hidden="true">&darr;</span>{fmtBtc(a.totalReceivedSat).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "")}<em>BTC</em></b><i>Total received</i></span>
           )}
           {a.totalSentSat != null && (
-            <span class="ast ast-btc"><b><span class="arr dn" aria-hidden="true">&uarr;</span>{fmtBtc(a.totalSentSat)}<em>BTC</em></b><i>Total sent</i></span>
+            <span class="ast ast-btc"><b><span class="arr dn" aria-hidden="true">&uarr;</span>{fmtBtc(a.totalSentSat).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "")}<em>BTC</em></b><i>Total sent</i></span>
           )}
           <span class="ast"><b>{orEll(a.txCount)}</b><i>Transactions</i></span>
           <span class="ast"><b>{orEll(a.utxoCount)}</b><i>Unspent outputs</i></span>
@@ -63,6 +63,9 @@ const pageHref = (p) => mkPath(p);
             <span class="ast"><b>{agoText(a.lastActivity.time)}</b><i>Last activity</i></span>
           )}
         </div>
+        {a.p2pkMerged === true && (
+          <p class="p2pknote">Includes coins paid to this address's raw public key, the 2009-era pay-to-pubkey form{a.p2pkReceivedSat > 0 ? ` (${fmtBtc(a.p2pkReceivedSat)} BTC received that way)` : ''}. Those outputs belong to the same key but live under a different ledger entry, which most explorers list separately.</p>
+        )}
         {a.historyTruncated === true && (
           a.totalReceivedSat != null
             ? <p class="truncnote">Too many transactions to list one by one; the balance, totals and count above are complete, from our full-chain index.</p>
@@ -95,7 +98,7 @@ const pageHref = (p) => mkPath(p);
         <a class={dir ? undefined : 'on'} href={mkPath(1, null, compact)}>All</a>
         <a class={dir === 'in' ? 'on' : undefined} href={mkPath(1, 'in', compact)}>Received</a>
         <a class={dir === 'out' ? 'on' : undefined} href={mkPath(1, 'out', compact)}>Sent</a>
-        <a class="lt-view" href={viewHref(compact ? 'full' : 'compact')}>{compact ? 'Full' : 'Compact'}</a>
+        <a class='lt-view' href={viewHref(compact ? 'full' : 'compact')}>{compact ? 'Full' : 'Compact'}</a>
       </div>
     </div>
     <div id="chartwrap"><canvas id="bchart"></canvas></div>
@@ -157,7 +160,9 @@ const pageHref = (p) => mkPath(p);
                     {i.coinbase
                       ? <span class="a" style="cursor:default">Coinbase (newly created coins)</span>
                       : i.address
-                        ? <a class="a" href={`/${i.address}`}>{i.address}</a>
+                        ? i.mine
+                          ? <span class="a a-self">{i.address}</span>
+                          : <a class="a" href={`/${i.address}`}>{i.address}</a>
                         : <span class="a" style="cursor:default;color:var(--ink-3)">Input details arrive with confirmation</span>}
                     {i.coinbase && <span class="iotag mine">BLOCK REWARD</span>}
                     {i.mine && <span class="iotag">THIS ADDRESS</span>}
@@ -176,7 +181,9 @@ const pageHref = (p) => mkPath(p);
                 <div class={o.mine ? 'iorow me' : 'iorow'}>
                   <span class="io-l">
                     {o.address
-                      ? <a class="a" href={`/${o.address}`}>{o.address}</a>
+                      ? o.mine
+                        ? <span class="a a-self">{o.address}</span>
+                        : <a class="a" href={`/${o.address}`}>{o.address}</a>
                       : <span class="a" style="cursor:default">{typeTag(o.type)}</span>}
                     {o.mine
                       ? <span class="iotag">{t.dir === 'out' ? 'CHANGE · THIS ADDRESS' : 'THIS ADDRESS'}</span>
@@ -206,13 +213,13 @@ const pageHref = (p) => mkPath(p);
         );
       })}
       {txs.length === 0 && (
-        <p class="txempty">{a.historyUnavailable && a.txCount > 0
+        <div class="txempty txe-none"><svg class="txe-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h8.3M4 10.5h4.1M4 14.5h4" opacity=".5"/><circle cx="14.8" cy="12.6" r="5.4"/><path d="M18.6 16.4 21.9 19.7"/></g></svg><span>{a.historyUnavailable && a.txCount > 0
           ? `This address has ${fmtInt(a.txCount)} transactions, more than the transaction lister can walk. The balance and lifetime totals above are complete.`
           : dir
             ? 'No transactions match this filter.'
             : a.txCount === 0
               ? 'No transactions yet. This address has never appeared on the blockchain.'
-              : 'No transactions on this page.'}</p>
+              : 'No transactions on this page.'}</span></div>
       )}
     </div>
     {latestOnly && txs.length > 0 && (
@@ -599,14 +606,15 @@ const pageHref = (p) => mkPath(p);
   .ast .arr.dn{color:var(--down-soft)}
   .sgrp{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   .acheck{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  
   .cbtn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--line);
-        border-radius:8px;color:var(--ink-3);font:700 10.5px var(--mono);letter-spacing:.09em;padding:6px 12px;min-height:30px;
+        border-radius:8px;color:var(--ink-3);font:700 10.5px var(--mono);letter-spacing:.09em;padding:8px 14px;min-height:34px;
         box-sizing:border-box;cursor:pointer;text-decoration:none;white-space:nowrap}
   .cbtn .extm{color:var(--orange);font-size:11px;opacity:1}
   .cbtn:hover{border-color:rgba(247,147,26,.4);color:var(--ink)}
   .cchip{display:inline-flex;align-items:center;gap:7px;border:1px dashed rgba(247,147,26,.32);border-radius:8px;
          background:rgba(124,140,168,.13);color:var(--band-tag-b);font:700 10.5px var(--mono);letter-spacing:.09em;
-         padding:8px 13px;min-height:32px;box-sizing:border-box;cursor:pointer;text-decoration:none;white-space:nowrap}
+         padding:8px 14px;min-height:34px;box-sizing:border-box;cursor:pointer;text-decoration:none;white-space:nowrap}
   .cchip .extm{color:var(--orange);font-size:11px;opacity:1}
   .cchip:hover{border-color:rgba(247,147,26,.55);color:var(--ink)}
   .spark{vertical-align:middle;opacity:.9}
@@ -622,12 +630,17 @@ const pageHref = (p) => mkPath(p);
                  cursor:pointer;min-height:32px;text-decoration:none;white-space:nowrap}
   .live-toggle a:hover{background:var(--btn-hov)}
   .live-toggle a.on{background:var(--tab-on-bg);border-color:var(--tab-on-line);color:var(--tab-on-ink);
-                    box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+                    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 0 var(--orange)}
   .truncnote{margin:10px 0 0;font:600 10.5px var(--mono);color:var(--ink-3)}
   .txempty{margin:14px 12px;font:500 12.5px var(--sans);color:var(--ink-3)}
+  
+  .txe-none{display:flex;flex-direction:column;align-items:center;text-align:center;
+    gap:16px;margin:0;padding:44px 16px 40px;font:500 13px var(--sans)}
+  .txe-none .txe-ico{width:64px;height:64px;opacity:.5}
+.p2pknote{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:10px 0 0;border-top:1px dashed var(--line-2);padding-top:9px}
 
   
-  .txc{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-top:12px}
+  .txc{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin-top:14px}
   .txc-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .txc .dir{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;
             font-weight:800;font-size:13px;flex:none}
@@ -642,27 +655,27 @@ const pageHref = (p) => mkPath(p);
   .txc.in .txc-amt{color:var(--up)}
   .txc.out .txc-amt{color:var(--down-soft)}
   .txc.self .txc-amt{color:var(--ink-2)}
-  .txc .txc-io{display:flex;flex-direction:row;gap:14px;align-items:stretch;margin-top:11px}
-  .txc .txd-col{flex:1;min-width:0;background:rgba(16,24,43,.45);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
-  .txc .txd-col h4{margin:0 0 6px;font:600 9px var(--mono);letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+  .txc .txc-io{display:flex;flex-direction:row;gap:24px;align-items:stretch;margin-top:14px}
+  .txc .txd-col{flex:1;min-width:0;background:none;border:0;border-radius:0;padding:0}
+  .txc .txd-col h4{margin:0 0 9px;font:600 9px var(--mono);letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;border-bottom:1px dotted var(--line-2);padding-bottom:7px}
   .txc .txd-col h4 b{color:var(--ink-2);margin-left:6px;letter-spacing:0}
   .txc .txd-arrow{align-self:center;color:var(--ink-3);font:700 16px var(--mono);transform:none;margin:0}
-  .txc .iorow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:7px 8px;border-radius:6px}
-  .txc .iorow+.iorow{margin-top:3px}
+  .txc .iorow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:6px 0}
+  .txc .iorow+.iorow{margin-top:1px}
   .txc .iorow .io-l{flex:1;min-width:0}
   .txc .iorow .a{display:block;font:600 12.5px var(--mono);color:var(--acc);word-break:break-all;line-height:1.45;text-decoration:none}
   .txc .iorow a.a:hover{text-decoration:underline;cursor:pointer}
   .txc .iorow .v{color:var(--ink);white-space:nowrap;font:700 12.5px var(--mono);font-variant-numeric:tabular-nums;padding-top:1px}
-  .txc .iorow.me{background:rgba(247,147,26,.07);box-shadow:inset 2px 0 0 var(--orange)}
-  .txc .iorow.me .a{color:var(--orange)}
+  .txc .iorow.me{background:none;box-shadow:none}
+  .txc .iorow .a-self{color:var(--ink-3);cursor:default}  
   .txc .iotag{display:inline-block;font:600 8.5px var(--mono);color:var(--ink-3);letter-spacing:.08em;
-              background:var(--field);border-radius:4px;padding:2px 7px;margin:5px 6px 0 0}
-  .txc .iorow.me .iotag,.txc .iotag.mine{color:var(--orange);background:rgba(247,147,26,.12)}
+              background:none;border:1px solid var(--line-2);border-radius:4px;padding:1px 7px;margin:5px 6px 0 0}
+  .txc .iorow.me .iotag,.txc .iotag.mine{color:var(--orange);border-color:rgba(247,147,26,.45)}
   
-  .txc .iomore{font:600 10.5px var(--mono);color:var(--ink-3);margin-top:7px;padding:8px 8px 1px;border-top:1px dashed var(--line)}
+  .txc .iomore{font:600 10.5px var(--mono);color:var(--ink-3);margin-top:9px;padding:8px 0 1px;border-top:1px dashed var(--line)}
   .txc .iomore a{color:var(--acc);text-decoration:none}
   .txc .iomore a:hover{text-decoration:underline}
-  .txc .txc-meta{margin-top:11px;padding-top:9px;border-top:1px dashed var(--line);
+  .txc .txc-meta{margin-top:14px;padding-top:11px;border-top:1px dashed var(--line);
                  font:600 10.5px var(--mono);color:var(--ink-3);display:flex;gap:6px 16px;flex-wrap:wrap;align-items:baseline}
   .txc .txc-meta b{color:var(--ink-2)}
   .txc .txc-vals{margin-left:auto;white-space:nowrap}
@@ -724,7 +737,31 @@ const pageHref = (p) => mkPath(p);
   
   #discussion .comentario-root{font:400 13px/1.5 var(--sans);color:var(--ink-2)}
   #discussion .comentario-root blockquote{border-left:2px solid var(--line-2);color:var(--ink-3)}
-  #discussion .comentario-root .comentario-profile-bar{justify-content:flex-end;padding:0;margin-bottom:2px}
+  
+  #discussion .comentario-root{display:flex;flex-direction:column}
+  #discussion .comentario-root .comentario-main-area{display:contents}
+  #discussion .comentario-root .comentario-add-comment-host{order:1}
+  
+  #discussion .comentario-dialog{position:fixed!important;inset:0!important;transform:none!important;
+    margin:auto!important;width:min(420px,92vw);height:fit-content}
+  #discussion .comentario-dialog-arrow{display:none}
+  
+  #discussion .comentario-comment-editor-footer .comentario-btn-secondary{display:none}
+  
+  
+  #discussion a[title="Editor help"]{display:none}
+  #discussion .comentario-toolbar button:not([title]){display:none}    
+  #discussion #comentario-login-form{display:none}
+  #discussion .comentario-dialog-body hr{display:none}
+  #discussion .comentario-dialog-body>div>div.comentario-dialog-centered{display:none}
+  #discussion #comentario-unregistered-form .comentario-dialog-centered{font-size:0}
+  #discussion #comentario-unregistered-form .comentario-dialog-centered::before{
+    content:"Comment anonymously. A display name is optional.";font-size:13px}
+  
+  #discussion .comentario-root .comentario-profile-bar{display:none}
+  #discussion .comentario-root .comentario-thread-toolbar{order:3}
+  #discussion .comentario-root .comentario-comments{order:4}
+  #discussion .comentario-root .comentario-footer{order:5}
 
   
   #discussion .comentario-root .comentario-add-comment-host{background:none;font-size:13px}
@@ -774,14 +811,7 @@ const pageHref = (p) => mkPath(p);
   
   #discussion .comentario-root .comentario-thread-buttons{display:none}
   
-  #discussion{position:relative}
-  #discussion .comentario-root .comentario-profile-bar{
-    position:absolute;top:16px;right:22px;margin:0;padding:0;border:0;background:none;
-    min-height:0;width:auto;justify-content:flex-end}
   #discussion .comentario-root .comentario-profile-bar > div:empty{display:none}
-  @media(max-width:520px){
-    #discussion .comentario-root .comentario-profile-bar{top:12px;right:14px}
-  }
   
   #discussion .comentario-root .comentario-btn.comentario-btn-link{
     --cmntr-btn-color:var(--ink-3);--cmntr-btn-hover-color:var(--acc);--cmntr-btn-active-color:var(--acc);
@@ -808,11 +838,18 @@ const pageHref = (p) => mkPath(p);
     --cmntr-btn-color:var(--ink-3);--cmntr-btn-hover-color:var(--acc);--cmntr-btn-active-color:var(--acc);
     opacity:.7}
   #discussion .comentario-root .comentario-toolbar .comentario-btn-tool:hover{opacity:1}
+  
+  #discussion .comentario-root .comentario-btn-tool[title^="Link"],
+  #discussion .comentario-root .comentario-btn-tool[title^="Code"],
+  #discussion .comentario-root .comentario-btn-tool[title="Table"],
+  #discussion .comentario-root .comentario-btn-tool[title^="Bullet list"],
+  #discussion .comentario-root .comentario-btn-tool[title^="Numbered list"]{display:none}
 
   
   #discussion .comentario-root .comentario-thread-toolbar{
     margin-top:14px;padding-top:8px;border-top:1px dashed var(--line);
     font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  #discussion .comentario-root .comentario-main-area:has(.comentario-comments:empty) .comentario-thread-toolbar{display:none}
 
   
   #discussion .comentario-root .comentario-card{margin-top:0;border-top:1px dashed var(--line)}
@@ -851,8 +888,12 @@ const pageHref = (p) => mkPath(p);
 
   
   #discussion .comentario-root .comentario-dialog{border-radius:var(--rad);box-shadow:0 18px 44px rgba(0,0,0,.45)}
+  
   #discussion .comentario-root .comentario-dialog .comentario-dialog-header{
-    font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+    display:block;position:absolute;top:7px;right:7px;padding:0;margin:0;border:0;
+    background:none;font-size:0;color:transparent}
+  #discussion .comentario-root .comentario-dialog .comentario-dialog-header .comentario-dialog-btn-close{
+    position:static;font-size:14px;color:var(--ink-3)}
   #discussion .comentario-root .comentario-checkbox-container input{
     background-color:rgba(124,140,168,.13);border:1px solid var(--line-2)}
   #discussion .comentario-root .comentario-checkbox-container input:checked{
@@ -874,7 +915,7 @@ const pageHref = (p) => mkPath(p);
   .cmamt.up{color:var(--up)}
   .cmamt.dn{color:var(--down-soft)}
   
-  .live-toggle .lt-view{margin-left:8px;color:var(--ink-3)}
+  .live-toggle .lt-view{color:var(--ink-3)}
   .live-toggle .lt-view:hover{color:var(--ink)}
   @media(max-width:520px){.cmid{font-size:11px}}
 

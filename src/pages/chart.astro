@@ -10,6 +10,7 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
     <span class="cpair" id="cpair">BTC/USD</span>
     <span class="cprice" id="cprice">&hellip;</span>
     <span class="cchg" id="cchg" hidden></span>
+    
     <span class="cgroup g-ex"><span class="glab">Exchange</span><span class="seg" id="exbtns"></span></span>
     <span class="cgroup g-iv"><span class="glab">Candles</span>
       <button type="button" class="segarr" id="ivL" aria-label="Shorter intervals">&lsaquo;</button>
@@ -63,6 +64,13 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
         color:#A9B5C9;border-radius:7px;font:700 12px var(--mono);padding:6px 27px 6px 11px;cursor:pointer;outline:none}
   .csel:hover{border-color:#F7931A;color:#F7931A}
   .csel option{background:#121B2B;color:#A9B5C9}
+  
+  .mx-exch{display:none}
+  .mx-lab{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#8B9DBA;padding:4px 12px 5px}
+  .mx-ex{display:block;padding:8px 12px;font:700 13px var(--mono);color:#A9B5C9;text-decoration:none;border-radius:8px}
+  .mx-ex:hover{color:#F7931A}
+  .mx-ex.on{color:#F7931A}
+  .mx-ex.on::after{content:"\2713";float:right}
   .cwrap{position:relative;background:#0A101D}
   #cv{display:block;width:100%;cursor:crosshair;touch-action:pan-y}
   .clegend{position:absolute;left:12px;top:10px;font:600 12px var(--mono);pointer-events:none;border-radius:6px;
@@ -77,10 +85,23 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
   @media(max-width:720px){
     .chartbar{gap:8px 10px}
     .cpair,.cprice{font-size:15px}
-    .g-cur .glab,.g-ex .glab,.g-iv .glab{display:none}
-    .g-iv{flex:1 1 100%;order:2;display:flex;flex-wrap:nowrap;align-items:center;gap:6px;min-width:0;max-width:100%}
+    .g-cur .glab,.g-iv .glab{display:none}
+    
+    .g-ex{display:none}
+    .g-cur{order:1}
+    .mx-exch{display:block;border-top:1px solid var(--line-2,#1D2941);margin-top:8px;padding-top:8px}
+    
+    #dd-menu .menu-pop{max-height:calc(100vh - 96px);overflow-y:auto}
+    .g-iv{flex:1 1 100%;order:2;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:6px;min-width:0;max-width:100%}
     .segarr{display:inline-flex}
-    .segscroll{overflow-x:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none}
+    
+    .segscroll .cbtn.iv-hide{display:none}
+    .segscroll .cbtn.iv-first{border-radius:7px 0 0 7px;margin-left:0}
+    .segscroll .cbtn.iv-last{border-radius:0 7px 7px 0}
+    
+    .clegend{font-size:10px;max-width:calc(100% - 20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    
+    .segscroll{overflow-x:auto;flex:none;scrollbar-width:none;-ms-overflow-style:none}
     .segscroll::-webkit-scrollbar{display:none}
     .cnote{font-size:9px;padding:8px 12px}
   }
@@ -106,7 +127,8 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
   var T={bg:"#0A101D",grid:"#1B2740",tx:"#8FA1BF",up:"#2EBD85",dn:"#F6465D",
          volUp:"rgba(46,189,133,.35)",volDn:"rgba(246,70,93,.35)",
          cross:"#8B9DBA",bub:"#F7931A",bubTx:"#101A2C",legTx:"#C9D6EA"};
-  var S={ex:"bitstamp",iv:86400,cur:"USD",candles:[],hover:-1,busy:0,truncated:false};
+  /* default view 15m (owner 2026-08-04, was 1d) */
+  var S={ex:"bitstamp",iv:900,cur:"USD",candles:[],hover:-1,busy:0,truncated:false};
 
   function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
   function dec(v){return v>=1000?0:v>=10?2:4;}
@@ -208,7 +230,9 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
     for(var i=0;i<=5;i++){
       var p=hi-span*i/5,y=Y(p);
       x.strokeStyle=T.grid;x.beginPath();x.moveTo(0,y+.5);x.lineTo(plotW,y+.5);x.stroke();
-      x.fillStyle=T.tx;x.fillText(cvx(p),plotW+8,y+4);
+      /* clamp the baseline: the top gridline sits at y=0 and an unclamped
+         label draws half above the canvas (owner report 2026-08-04) */
+      x.fillStyle=T.tx;x.fillText(cvx(p),plotW+8,Math.max(y+4,12));
     }
     var step=Math.max(1,Math.round(n/8));
     x.fillStyle=T.tx;x.textAlign="center";
@@ -271,9 +295,49 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
       el.appendChild(b);
     });
   }
-  mkBtns("exbtns",EX,S.ex,function(v){S.ex=v;});
+  /* phones pick the exchange from the site MENU (owner 2026-08-04): an
+     Exchange section is injected into the menu popup; it and the desktop
+     pills set the same state and mirror each other */
+  function syncEx(){
+    Array.prototype.forEach.call(document.getElementById("exbtns").children,function(z,i){
+      z.classList.toggle("on",EX[i][0]===S.ex);
+    });
+    document.querySelectorAll(".mx-ex").forEach(function(z){z.classList.toggle("on",z.dataset.ex===S.ex);});
+  }
+  var pop=document.querySelector("#dd-menu .menu-pop");
+  if(pop){
+    var sec=document.createElement("div");sec.className="mx-exch";
+    sec.innerHTML="<div class='mx-lab'>Chart exchange</div>";
+    EX.forEach(function(e){
+      var a=document.createElement("a");
+      a.href="#";a.className="mx-ex"+(e[0]===S.ex?" on":"");a.dataset.ex=e[0];a.textContent=e[1];
+      a.addEventListener("click",function(ev){
+        ev.preventDefault();
+        S.ex=e[0];syncEx();load();
+        var mb=document.querySelector("#dd-menu .btn-menu");if(mb)mb.click();
+      });
+      sec.appendChild(a);
+    });
+    pop.appendChild(sec);
+  }
+  mkBtns("exbtns",EX,S.ex,function(v){S.ex=v;syncEx();});
   mkBtns("ivbtns",IV.map(function(v){return[String(v[1]),v[0]];}),String(S.iv),
-    function(v){S.iv=parseInt(v,10);});
+    function(v){S.iv=parseInt(v,10);updateIvWindow();});
+
+  /* phones show a five-wide interval window, the selection plus two each
+     side (owner 2026-08-05), clamped at the ends; the classes only bite
+     inside the phone media query, so desktop always shows all thirteen */
+  function updateIvWindow(){
+    var btns=document.getElementById("ivbtns").children;
+    var idx=IV.findIndex(function(v){return v[1]===S.iv;});
+    var lo=Math.max(0,Math.min(idx-2,IV.length-5)),hi=lo+4;
+    for(var i=0;i<btns.length;i++){
+      btns[i].classList.toggle("iv-hide",i<lo||i>hi);
+      btns[i].classList.toggle("iv-first",i===lo);
+      btns[i].classList.toggle("iv-last",i===hi);
+    }
+  }
+  updateIvWindow();
 
   var csel=document.getElementById("csel");
   Object.keys(FX).forEach(function(c){
@@ -284,10 +348,14 @@ import { FX as FXTABLE, SYM as SYMTABLE } from '../lib/fx.js';
     S.cur=csel.value;elPair.textContent="BTC/"+S.cur;S.hover=-1;draw();
   });
 
-  /* the interval strip scrolls behind arrows on a phone */
-  var wrapIv=document.getElementById("ivwrap");
-  document.getElementById("ivL").addEventListener("click",function(){wrapIv.scrollBy({left:-120,behavior:"smooth"});});
-  document.getElementById("ivR").addEventListener("click",function(){wrapIv.scrollBy({left:120,behavior:"smooth"});});
+  /* the arrows step the selection itself; the window recenters around it */
+  function ivStep(d){
+    var idx=IV.findIndex(function(v){return v[1]===S.iv;});
+    var to=Math.max(0,Math.min(IV.length-1,idx+d));
+    if(to!==idx)document.getElementById("ivbtns").children[to].click();
+  }
+  document.getElementById("ivL").addEventListener("click",function(){ivStep(-1);});
+  document.getElementById("ivR").addEventListener("click",function(){ivStep(1);});
 
   function at(e){
     var r=cv.getBoundingClientRect();

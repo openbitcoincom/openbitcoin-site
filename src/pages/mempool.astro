@@ -1,71 +1,95 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Mempool Right Now: Size, Fee Bands, Next Block - OpenBitcoin" description="The Bitcoin mempool right now: transactions waiting, total virtual size, depth by fee band, and a projected next block, read from our own node.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Mempool</div>
     <h1>The Bitcoin mempool right now</h1>
+    <HeroEmblem name="funnel" />
     <p class="doc-lede">Every transaction waits here until a miner includes it in a block. Totals, depth by fee band, and a projected next block, all read from our own node.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="mp-hero">
-      <div class="mp-big" id="mp-big">&hellip;</div>
+      
+      <div class="mp-frow mp-big" id="mp-big" aria-label="Transactions waiting in the mempool"><span class="mp-tile">&ndash;</span><span class="mp-tile">&ndash;</span><span class="mp-comma">,</span><span class="mp-tile">&ndash;</span><span class="mp-tile">&ndash;</span><span class="mp-tile">&ndash;</span></div>
       <div class="mp-sub">transactions waiting in our node's mempool at block <b id="mp-h">&hellip;</b></div>
       <div class="mp-cells">
         <div class="mp-cell"><b id="mp-vsz">&hellip;</b><i>total virtual size</i></div>
-        <div class="mp-cell"><b id="mp-clear">&hellip;</b><i>to clear 2 sat/vB and up</i></div>
+        <div class="mp-cell"><b id="mp-clear">&hellip;</b><i id="mp-clearlab">to clear 2 sat/vB and up</i></div>
         <div class="mp-cell"><b>~1.00 MvB</b><i>cleared per block (4 MWU)</i></div>
       </div>
     </div>
 
     <div class="mp-card">
+      <div class="mpc-head">
+        <div class="mp-tlab" id="mpc-title">Mempool by fee band</div>
+        <div class="mpc-rng" id="mpc-rng" role="group" aria-label="Chart time range"></div>
+      </div>
+      <div class="mpc-wrap" id="mpc-wrap">
+        <canvas id="mpc" aria-label="Stacked area chart of mempool virtual size by feerate band over the last 7 days"></canvas>
+        <div class="mpc-tip" id="mpc-tip" hidden></div>
+      </div>
+      
+      <div class="mpc-leg" id="mpc-leg">
+        <span><i style="background:#f19728"></i>10+ sat/vB</span>
+        <span><i style="background:#d48007"></i>5-10</span>
+        <span><i style="background:#b86b00"></i>3-5</span>
+        <span><i style="background:#9a5800"></i>2-3</span>
+        <span><i style="background:#7c4600"></i>1-2</span>
+      </div>
+      <p class="mp-fine" id="mpc-note">Our node's mempool, snapshotted every 5 minutes and stacked by fee band; height is total virtual size waiting, in MvB.</p>
+    </div>
+
+    <div class="mp-card">
       <div class="mp-tlab">Depth by fee band</div>
+      
       <div aria-label="Mempool depth by feerate band">
         <div class="mp-band">
           <div class="mp-bhead">
-            <span class="mp-brate">10+ <em>sat/vB</em></span>
+            <span class="mp-brate"><span class="mp-blo">10+</span> <em>sat/vB</em></span>
             <span class="mp-beta">next block</span>
-            <span class="mp-bnums"><b id="mp-t10">&hellip;</b> txs · <b id="mp-v10">&hellip;</b> MvB</span>
+            <span class="mp-bnums"><b class="mp-btx">&hellip;</b> txs · <b class="mp-bvs">&hellip;</b> MvB</span>
           </div>
-          <div class="mp-bbar"><div class="mp-bfill" id="mp-f10" style="width:0;background:#DB8296"></div></div>
+          <div class="mp-bbar"><div class="mp-bfill" style="width:0;background:#f19728"></div></div>
         </div>
         <div class="mp-band">
           <div class="mp-bhead">
-            <span class="mp-brate">5-10 <em>sat/vB</em></span>
+            <span class="mp-brate"><span class="mp-blo">5-10</span> <em>sat/vB</em></span>
             <span class="mp-beta">next block</span>
-            <span class="mp-bnums"><b id="mp-t5">&hellip;</b> txs · <b id="mp-v5">&hellip;</b> MvB</span>
+            <span class="mp-bnums"><b class="mp-btx">&hellip;</b> txs · <b class="mp-bvs">&hellip;</b> MvB</span>
           </div>
-          <div class="mp-bbar"><div class="mp-bfill" id="mp-f5" style="width:0;background:#E98A5E"></div></div>
+          <div class="mp-bbar"><div class="mp-bfill" style="width:0;background:#d48007"></div></div>
         </div>
         <div class="mp-band">
           <div class="mp-bhead">
-            <span class="mp-brate">3-5 <em>sat/vB</em></span>
+            <span class="mp-brate"><span class="mp-blo">3-5</span> <em>sat/vB</em></span>
             <span class="mp-beta">~30 min to ~1 hour</span>
-            <span class="mp-bnums"><b id="mp-t3">&hellip;</b> txs · <b id="mp-v3">&hellip;</b> MvB</span>
+            <span class="mp-bnums"><b class="mp-btx">&hellip;</b> txs · <b class="mp-bvs">&hellip;</b> MvB</span>
           </div>
-          <div class="mp-bbar"><div class="mp-bfill" id="mp-f3" style="width:0;background:#F7931A"></div></div>
+          <div class="mp-bbar"><div class="mp-bfill" style="width:0;background:#b86b00"></div></div>
         </div>
         <div class="mp-band">
           <div class="mp-bhead">
-            <span class="mp-brate">2-3 <em>sat/vB</em></span>
+            <span class="mp-brate"><span class="mp-blo">2-3</span> <em>sat/vB</em></span>
             <span class="mp-beta">a few hours</span>
-            <span class="mp-bnums"><b id="mp-t2">&hellip;</b> txs · <b id="mp-v2">&hellip;</b> MvB</span>
+            <span class="mp-bnums"><b class="mp-btx">&hellip;</b> txs · <b class="mp-bvs">&hellip;</b> MvB</span>
           </div>
-          <div class="mp-bbar"><div class="mp-bfill" id="mp-f2" style="width:0;background:#8FB553"></div></div>
+          <div class="mp-bbar"><div class="mp-bfill" style="width:0;background:#9a5800"></div></div>
         </div>
         <div class="mp-band">
           <div class="mp-bhead">
-            <span class="mp-brate">1-2 <em>sat/vB</em></span>
+            <span class="mp-brate"><span class="mp-blo">1-2</span> <em>sat/vB</em></span>
             <span class="mp-beta">can wait days</span>
-            <span class="mp-bnums"><b id="mp-t1">&hellip;</b> txs · <b id="mp-v1">&hellip;</b> MvB</span>
+            <span class="mp-bnums"><b class="mp-btx">&hellip;</b> txs · <b class="mp-bvs">&hellip;</b> MvB</span>
           </div>
-          <div class="mp-bbar"><div class="mp-bfill" id="mp-f1" style="width:0;background:#2EBD85"></div></div>
+          <div class="mp-bbar"><div class="mp-bfill" style="width:0;background:#7c4600"></div></div>
         </div>
       </div>
-      <p class="mp-fine">Bars are proportional to virtual size; the deepest band sets the scale. Wait estimates match the <a href="/fees">fee page</a> tiers and assume current depth and inflow.</p>
+      <p class="mp-fine">Bars are proportional to virtual size; the deepest band sets the scale, and the bands themselves follow the market: when fees rise, the scale widens with them. Wait estimates come from how many blocks stand between each band and the front of the queue.</p>
     </div>
 
     <div class="mp-card">
@@ -77,11 +101,11 @@ import '../styles/doc.css';
         <div class="mp-cell"><b id="mp-nh">&hellip;</b><i>height if mined now</i></div>
       </div>
       <div class="mp-comp" aria-hidden="true">
-        <span class="mp-cseg" id="mp-c10" style="width:0;background:#DB8296"></span>
-        <span class="mp-cseg" id="mp-c5" style="width:0;background:#E98A5E"></span>
-        <span class="mp-cseg" id="mp-c3" style="width:0;background:#F7931A"></span>
-        <span class="mp-cseg" id="mp-c2" style="width:0;background:#8FB553"></span>
-        <span class="mp-cseg" id="mp-c1" style="width:0;background:#2EBD85"></span>
+        <span class="mp-cseg" style="width:0;background:#f19728"></span>
+        <span class="mp-cseg" style="width:0;background:#d48007"></span>
+        <span class="mp-cseg" style="width:0;background:#b86b00"></span>
+        <span class="mp-cseg" style="width:0;background:#9a5800"></span>
+        <span class="mp-cseg" style="width:0;background:#7c4600"></span>
       </div>
       <div class="mp-fgrow">
         <span class="mp-fgl">Fee span <b id="mp-span">&hellip;</b></span>
@@ -127,7 +151,17 @@ import '../styles/doc.css';
 </main>
 <style is:global>
   .mp-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
-  .mp-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .mp-frow{display:flex;justify-content:center;gap:4px;perspective:340px}
+  .mp-tile{position:relative;width:36px;height:50px;border-radius:7px;
+    background:linear-gradient(180deg,#1b2946 0%,#15223c 49%,#101c33 51%,#131f37 100%);
+    border:1px solid var(--line-2);box-shadow:0 3px 8px rgba(0,0,0,.35);
+    font:800 30px/48px var(--mono);color:var(--price-ink);text-align:center;font-variant-numeric:tabular-nums}
+  .mp-tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:rgba(0,0,0,.5);box-shadow:0 1px 0 rgba(255,255,255,.045)}
+  .mp-tile.flip{animation:mpflip .18s ease-in-out}
+  @keyframes mpflip{0%{transform:rotateX(0)}50%{transform:rotateX(-86deg)}100%{transform:rotateX(0)}}
+  @media(prefers-reduced-motion:reduce){.mp-tile.flip{animation:none}}
+  .mp-comma{align-self:flex-end;font:800 24px/44px var(--mono);color:var(--ink-3);padding:0 1px}
   @keyframes mppop{0%,45%{color:#FFFFFF;text-shadow:0 0 18px rgba(247,147,26,.55)}100%{color:var(--price-ink);text-shadow:none}}
   .mp-big.mp-pop{animation:mppop .9s ease-out 2}
   .mp-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
@@ -156,9 +190,28 @@ import '../styles/doc.css';
   .mp-fgl{font:600 10px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
   .mp-fgl b{color:var(--ink-2);letter-spacing:0;font-variant-numeric:tabular-nums}
   .mp-fgauge{position:relative;flex:1;min-width:180px;height:6px;border-radius:3px;
-    background:linear-gradient(90deg,#2EBD85,#F7931A 45%,#DB8296)}
+    background:linear-gradient(90deg,#7c4600,#b86b00 45%,#f19728)}
   .mp-fgauge span{position:absolute;top:-3px;width:2px;height:12px;background:var(--price-ink);border-radius:1px;
     transition:left .8s cubic-bezier(.22,.61,.36,1)}
+  
+  .mpc-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;justify-content:space-between}
+  .mpc-rng{display:flex;gap:4px;flex-wrap:wrap}
+  .mpc-rng button{font:700 10px var(--mono);letter-spacing:.06em;color:var(--ink-2);background:var(--panel-2);
+    border:1px solid var(--line-2);border-radius:6px;padding:4px 8px;cursor:pointer}
+  .mpc-rng button:hover{color:var(--acc)}
+  .mpc-rng button.on{color:var(--cta-ink);background:var(--cta);border-color:var(--line-2)}
+  .mpc-rng button:disabled{color:var(--ink-3);opacity:.38;cursor:default;pointer-events:none}
+  .mpc-wrap{position:relative;margin-top:8px}
+  .mpc-wrap canvas{display:block;width:100%;cursor:crosshair}
+  .mpc-tip{position:absolute;pointer-events:none;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;
+    padding:8px 11px;font:600 10.5px/1.5 var(--mono);color:var(--ink-2);z-index:5;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .mpc-tip b{color:var(--ink);font-variant-numeric:tabular-nums;margin-left:auto;padding-left:12px}
+  .mpc-tip .h{color:var(--ink-3);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase}
+  .mpc-tip .r{display:flex;align-items:center;gap:6px;margin-top:3px}
+  .mpc-tip .c{width:8px;height:8px;border-radius:2px;flex:none}
+  .mpc-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px}
+  .mpc-leg span{display:inline-flex;align-items:center;gap:6px;font:600 10px var(--mono);letter-spacing:.06em;color:var(--ink-3)}
+  .mpc-leg i{width:9px;height:9px;border-radius:2px;font-style:normal;flex:none}
   .mp-prose{margin-top:14px}
   .mp-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
   .mp-fine a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
@@ -173,7 +226,8 @@ import '../styles/doc.css';
     .mp-bfill,.mp-cseg,.mp-fgauge span{transition:none}
   }
   @media(max-width:700px){
-    .mp-big{font-size:40px}
+    .mp-tile{width:27px;height:40px;border-radius:5px;font:800 22px/38px var(--mono)}
+    .mp-comma{font:800 18px/34px var(--mono)}
     .mp-bnums{margin-left:0;width:100%}
   }
 </style>
@@ -181,17 +235,41 @@ import '../styles/doc.css';
 (function(){
   var BLOCK=1.0; /* MvB cleared per block (4 MWU) */
   var ELL="…";   /* what every figure shows until the node reports it */
-  /* top-first: highest feerate band drains first. rep = the band's midpoint,
-     a property of the band itself, used for the median readout until the live
-     histogram supplies a vsize-weighted mean. Depths start unknown: no depth
-     is ever shown that the node did not report. */
-  var BND=[
-    {k:"10",lo:10,rep:12, color:"#DB8296",txs:null,vsz:null},
-    {k:"5", lo:5, rep:6,  color:"#E98A5E",txs:null,vsz:null},
-    {k:"3", lo:3, rep:4,  color:"#F7931A",txs:null,vsz:null},
-    {k:"2", lo:2, rep:2.5,color:"#8FB553",txs:null,vsz:null},
-    {k:"1", lo:1, rep:1.5,color:"#2EBD85",txs:null,vsz:null}
+  /* The five display rows are slots; which fee bands they show depends on
+     the market (owner 2026-08-07: a fee spike must widen the scale, not
+     pile everything into 10+). CE are the API's canonical band edges; each
+     regime folds them into five top-first rows, picked by where the
+     next-block cutoff sits: quiet markets get 1-2..10+, and as a full
+     block's worth of vsize stacks above 10, 20, then 50 sat/vB the scale
+     shifts up with the market. */
+  var CE=[1,2,3,4,5,6,8,10,15,20,30,50,100];
+  var REGIMES=[
+    {min:0,  rows:[[7,12],[4,6],[2,3],[1,1],[0,0]]},  /* 10+ 5-10 3-5 2-3 1-2 */
+    {min:7,  rows:[[9,12],[7,8],[4,6],[2,3],[0,1]]},  /* 20+ 10-20 5-10 3-5 1-3 */
+    {min:9,  rows:[[11,12],[9,10],[7,8],[4,6],[0,3]]},/* 50+ 20-50 10-20 5-10 1-5 */
+    {min:11, rows:[[12,12],[11,11],[9,10],[7,8],[0,6]]}/* 100+ 50-100 20-50 10-20 1-10 */
   ];
+  function bandLabel(lo,hi){return hi>=CE.length-1?CE[lo]+"+":CE[lo]+"-"+CE[hi+1];}
+  function regimeFor(vsizes){
+    /* climb while a full block of vsize sits at or above the candidate
+       regime's second-highest boundary */
+    var pick=REGIMES[0],i,j;
+    for(i=1;i<REGIMES.length;i++){
+      var above=0;for(j=REGIMES[i].min;j<vsizes.length;j++)above+=vsizes[j];
+      if(above>=1e6)pick=REGIMES[i];
+    }
+    return pick;
+  }
+  /* top-first slots; label/lo/rep re-derive on every live read. Depths start
+     unknown: no depth is ever shown that the node did not report. */
+  var BND=[
+    {label:"10+", lo:10,rep:12, txs:null,vsz:null},
+    {label:"5-10",lo:5, rep:6,  txs:null,vsz:null},
+    {label:"3-5", lo:3, rep:4,  txs:null,vsz:null},
+    {label:"2-3", lo:2, rep:2.5,txs:null,vsz:null},
+    {label:"1-2", lo:1, rep:1.5,txs:null,vsz:null}
+  ];
+  var rowEls=null,segEls=null; /* positional DOM slots, resolved at boot */
   var S={height:null,since:null,at:Date.now()},last=null,topFee=null;
   var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
   function fmt(n){return Math.round(n).toLocaleString("en-US");}
@@ -203,25 +281,38 @@ import '../styles/doc.css';
     txt("mp-h",S.height===null?ELL:fmt(S.height));
     txt("mp-nh",S.height===null?ELL:fmt(S.height+1));
     /* nothing measured yet: every served ellipsis stands rather than a guess */
-    if(!live)return;
+    if(!live||!rowEls)return;
     var tot=0,totV=0,v2=0,maxV=0;
-    BND.forEach(function(b){tot+=b.txs;totV+=b.vsz;if(b.lo>=2)v2+=b.vsz;if(b.vsz>maxV)maxV=b.vsz;});
-    txt("mp-big",fmt(tot));
+    BND.forEach(function(b,i){tot+=b.txs;totV+=b.vsz;if(i<BND.length-1)v2+=b.vsz;if(b.vsz>maxV)maxV=b.vsz;});
+    boardSet(document.getElementById("mp-big"),fmt(tot));
     txt("mp-vsz",totV.toFixed(1)+" MvB");
     txt("mp-clear","~"+Math.max(1,Math.round(v2/BLOCK))+" blocks");
+    txt("mp-clearlab","to clear "+BND[BND.length-2].lo+" sat/vB and up");
+    /* wait labels from the queue itself: how many blocks stand between a
+       band's lower edge and the front (10 min per block) */
+    var cum=0;
     BND.forEach(function(b){
-      txt("mp-t"+b.k,fmt(b.txs));
-      txt("mp-v"+b.k,b.vsz.toFixed(2));
-      var f=document.getElementById("mp-f"+b.k);
-      if(f)f.style.width=Math.max(2,b.vsz/maxV*100).toFixed(1)+"%";
+      cum+=b.vsz;
+      var n=Math.max(1,Math.ceil(cum/BLOCK));
+      b.eta=n<=1?"next block":n<=4?"under an hour":n<=12?"a few hours":n<=42?"several hours":"can wait days";
+    });
+    BND.forEach(function(b,i){
+      var row=rowEls[i];if(!row)return;
+      var el;
+      el=row.querySelector(".mp-blo");if(el)el.textContent=b.label;
+      el=row.querySelector(".mp-beta");if(el)el.textContent=b.eta;
+      el=row.querySelector(".mp-btx");if(el)el.textContent=fmt(b.txs);
+      el=row.querySelector(".mp-bvs");if(el)el.textContent=b.vsz.toFixed(2);
+      el=row.querySelector(".mp-bfill");
+      if(el)el.style.width=Math.max(2,b.vsz/maxV*100).toFixed(1)+"%";
     });
     /* projected next block: fill top-down to the 1 MvB limit */
     var fill=Math.min(BLOCK,totV),need=fill,ptx=0,low=null;
-    BND.forEach(function(b){
+    BND.forEach(function(b,i){
       var take=Math.min(need,b.vsz);if(take<0)take=0;
       b._take=take;need-=take;
       if(take>0.0005){ptx+=b.txs*(b.vsz?take/b.vsz:0);low=b.lo;}
-      var c=document.getElementById("mp-c"+b.k);
+      var c=segEls&&segEls[i];
       if(c)c.style.width=(fill?take/fill*100:0).toFixed(1)+"%";
     });
     var half=fill/2,cum=0,med=BND[BND.length-1].rep;
@@ -236,6 +327,35 @@ import '../styles/doc.css';
     txt("mp-span",topFee===null?ELL:(low||1)+" - "+topFee+" sat/vB");
     var mark=document.getElementById("mp-fmark");
     if(mark){mark.style.visibility="visible";mark.style.left=Math.max(4,Math.min(92,med*6))+"%";}
+  }
+  /* split-flap mechanics, the block-1m idiom: children mirror the string one
+     to one; same shape flips changed tiles, a new shape rebuilds the row */
+  function flipTo(el,c){
+    if(reduced){el.textContent=c;return;}
+    el.classList.remove("flip");void el.offsetWidth;el.classList.add("flip");
+    setTimeout(function(){el.textContent=c;},90);
+  }
+  function boardSet(row,str){
+    if(!row||row.dataset.str===str)return;
+    var chars=str.split(""),shape=chars.map(function(c){return c===","?"c":"t";}).join(""),i;
+    if(row.dataset.shape!==shape){
+      row.innerHTML="";
+      for(i=0;i<chars.length;i++){
+        var el=document.createElement("span");
+        el.className=chars[i]===","?"mp-comma":"mp-tile";
+        el.textContent=chars[i];
+        row.appendChild(el);
+      }
+      row.dataset.shape=shape;row.dataset.str=str;return;
+    }
+    for(i=0;i<chars.length;i++){
+      var k=row.children[i];
+      if(k.textContent!==chars[i]){
+        if(k.className.indexOf("mp-tile")>-1)flipTo(k,chars[i]);
+        else k.textContent=chars[i];
+      }
+    }
+    row.dataset.str=str;
   }
   function pop(){
     if(reduced)return;
@@ -272,23 +392,54 @@ import '../styles/doc.css';
      still undefined */
   var api=null;
   function applyLive(mp,sum){
-    if(!mp||!Array.isArray(mp.histogram)||!isFinite(mp.count)||!(mp.count>0))return;
-    var acc=[0,0,0,0,0],w=[0,0,0,0,0],tot=0,maxR=0;
-    mp.histogram.forEach(function(e){
-      var r=+e[0],v=+e[1];
-      if(!isFinite(r)||!isFinite(v)||v<=0)return;
-      var i=r>=10?0:r>=5?1:r>=3?2:r>=2?3:4;
-      acc[i]+=v;w[i]+=r*v;tot+=v;if(r>maxR)maxR=r;
-    });
-    if(!(tot>0))return;
-    var scale=(isFinite(mp.vsize)&&mp.vsize>0)?mp.vsize/tot:1,used=0;
-    BND.forEach(function(b,i){
-      b.vsz=acc[i]*scale/1e6;
-      if(acc[i]>0)b.rep=Math.max(0.1,Math.round(w[i]/acc[i]*10)/10);
-      var t=(i===BND.length-1)?Math.max(0,Math.round(mp.count)-used):Math.round(mp.count*acc[i]/tot);
-      used+=t;b.txs=t;
-    });
-    if(maxR>0)topFee=Math.max(1,Math.round(maxR));
+    if(!mp||!isFinite(mp.count)||!(mp.count>0))return;
+    if(mp.bands&&Array.isArray(mp.bands.vsizes)&&Array.isArray(mp.bands.counts)){
+      /* exact path: the API's per-transaction band scan (2-min cache) carries
+         real counts and vsizes per canonical band, so 10+ finally shows the
+         handful of small high-fee payers the compressed histogram folded away
+         (owner report). The regime folds those 13 bands into the five display
+         rows, scaled to the live totals so the hero stays fresh. */
+      var ED=mp.bands.edges,MAP=regimeFor(mp.bands.vsizes).rows;
+      var sumV=0,sumC=0,k;
+      for(k=0;k<mp.bands.vsizes.length;k++){sumV+=mp.bands.vsizes[k];sumC+=mp.bands.counts[k];}
+      if(!(sumV>0)||!(sumC>0))return;
+      var sv=(isFinite(mp.vsize)&&mp.vsize>0)?mp.vsize/sumV:1;
+      var sc=mp.count/sumC;
+      BND.forEach(function(b,bi){
+        var vv=0,cc=0,ww=0,i2;
+        for(i2=MAP[bi][0];i2<=MAP[bi][1];i2++){
+          var mid=i2<ED.length-1?(ED[i2]+ED[i2+1])/2:Math.max(ED[i2]*1.2,mp.bands.maxFeerate||ED[i2]);
+          vv+=mp.bands.vsizes[i2];cc+=mp.bands.counts[i2];ww+=mid*mp.bands.vsizes[i2];
+        }
+        b.label=bandLabel(MAP[bi][0],MAP[bi][1]);b.lo=CE[MAP[bi][0]];
+        b.vsz=vv*sv/1e6;b.txs=Math.round(cc*sc);
+        if(vv>0)b.rep=Math.max(0.1,Math.round(ww/vv*10)/10);
+        else b.rep=(CE[MAP[bi][0]]+(MAP[bi][1]>=CE.length-1?CE[MAP[bi][0]]:CE[MAP[bi][1]+1]))/2;
+      });
+      if(mp.bands.maxFeerate>0)topFee=Math.max(1,Math.round(mp.bands.maxFeerate));
+    }else{
+      if(!Array.isArray(mp.histogram))return;
+      /* fallback binning is fixed at the quiet-market bands, so the labels
+         must be too, in case an earlier exact read had shifted the regime */
+      var FLB=[["10+",10],["5-10",5],["3-5",3],["2-3",2],["1-2",1]];
+      BND.forEach(function(b,i){b.label=FLB[i][0];b.lo=FLB[i][1];});
+      var acc=[0,0,0,0,0],w=[0,0,0,0,0],tot=0,maxR=0;
+      mp.histogram.forEach(function(e){
+        var r=+e[0],v=+e[1];
+        if(!isFinite(r)||!isFinite(v)||v<=0)return;
+        var i=r>=10?0:r>=5?1:r>=3?2:r>=2?3:4;
+        acc[i]+=v;w[i]+=r*v;tot+=v;if(r>maxR)maxR=r;
+      });
+      if(!(tot>0))return;
+      var scale=(isFinite(mp.vsize)&&mp.vsize>0)?mp.vsize/tot:1,used=0;
+      BND.forEach(function(b,i){
+        b.vsz=acc[i]*scale/1e6;
+        if(acc[i]>0)b.rep=Math.max(0.1,Math.round(w[i]/acc[i]*10)/10);
+        var t=(i===BND.length-1)?Math.max(0,Math.round(mp.count)-used):Math.round(mp.count*acc[i]/tot);
+        used+=t;b.txs=t;
+      });
+      if(maxR>0)topFee=Math.max(1,Math.round(maxR));
+    }
     if(sum&&typeof sum.height==="number"){
       if(live&&last!==null&&sum.height>last)pop();
       S.height=sum.height;
@@ -318,6 +469,8 @@ import '../styles/doc.css';
      the 30s poll */
   function boot(){
     try{
+      rowEls=Array.prototype.slice.call(document.querySelectorAll(".mp-band"));
+      segEls=Array.prototype.slice.call(document.querySelectorAll(".mp-cseg"));
       api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
       if(!api)return;
       fetchLive();
@@ -326,6 +479,288 @@ import '../styles/doc.css';
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
   else boot();
+})();
+</script>
+<script is:inline>
+/* 7-day mempool-by-fee-band chart: {OB_DATA_API}/mempool-history snapshots
+   (13 stored bands) folded into the page's five display bands and drawn as a
+   stacked area on canvas. The ramp is ordinal: one orange hue, dark for the
+   patient 1-2 base to bright brand orange for 10+, the same colors as the
+   depth bars below so the bands wear one coat everywhere on the page.
+   Until seven days of snapshots exist (recording began 2026-08-08) the x-axis
+   spans what has been recorded and the note under the chart says so. */
+(function(){
+  /* The stack folds the API's 13 stored bands (edges CE2) into five, and
+     which five depends on the window being drawn: it mirrors the live
+     card's regimes, so a high-fee stretch of history widens the scale
+     instead of piling into 10+. Folds are bottom-first; colors are the
+     fixed ordinal ramp, position not fee. */
+  var COLORS=["#7c4600","#9a5800","#b86b00","#d48007","#f19728"];
+  var CE2=[1,2,3,4,5,6,8,10,15,20,30,50,100];
+  var REG2=[
+    {min:0, rows:[[0,0],[1,1],[2,3],[4,6],[7,12]]},
+    {min:7, rows:[[0,1],[2,3],[4,6],[7,8],[9,12]]},
+    {min:9, rows:[[0,3],[4,6],[7,8],[9,10],[11,12]]},
+    {min:11,rows:[[0,6],[7,8],[9,10],[11,11],[12,12]]}
+  ];
+  function label2(lo,hi){return hi>=CE2.length-1?CE2[lo]+"+":CE2[lo]+"-"+CE2[hi+1];}
+  /* selectable ranges (owner 2026-08-07): 1D always live, the rest unlock
+     as recorded history reaches them; the default climbs to 1W and stops */
+  var RANGES=[{k:"1D",d:1},{k:"2D",d:2},{k:"3D",d:3},{k:"1W",d:7},{k:"2W",d:14},
+              {k:"1M",d:31},{k:"6M",d:186},{k:"1Y",d:366},{k:"5Y",d:1826}];
+  var wrap=document.getElementById("mpc-wrap"),cv=document.getElementById("mpc"),
+      tip=document.getElementById("mpc-tip"),note=document.getElementById("mpc-note"),
+      rngEl=document.getElementById("mpc-rng");
+  if(!wrap||!cv||!cv.getContext)return;
+  var ctx=cv.getContext("2d"),data=null,hover=-1,recSince=null,sel=RANGES[0],booted=false;
+  function unlocked(r){
+    if(r.d===1)return true;
+    return recSince!==null&&(Date.now()-recSince)>=r.d*86400000;
+  }
+  function defaultRange(){
+    var best=RANGES[0],i;
+    for(i=0;i<RANGES.length;i++)if(RANGES[i].d<=7&&unlocked(RANGES[i]))best=RANGES[i];
+    return best;
+  }
+  function renderRng(){
+    if(!rngEl)return;
+    if(!rngEl.childNodes.length){
+      RANGES.forEach(function(r){
+        var b=document.createElement("button");
+        b.type="button";b.textContent=r.k;
+        b.addEventListener("click",function(){
+          if(b.disabled||sel===r)return;
+          sel=r;renderRng();refresh();
+        });
+        rngEl.appendChild(b);
+      });
+    }
+    RANGES.forEach(function(r,i){
+      var b=rngEl.childNodes[i],un=unlocked(r);
+      b.disabled=!un;
+      b.title=un?"":"unlocks as recorded history reaches "+r.k;
+      b.classList.toggle("on",sel===r);
+    });
+  }
+  function cssv(n,fb){var v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||fb;}
+  function build(j){
+    if(!j||!Array.isArray(j.points)||j.points.length<2)return null;
+    var np=j.points.length,nb=CE2.length,reg=REG2[0],ri;
+    /* fold regime from the drawn window: mean vsize at or above each
+       candidate boundary vs one block's worth */
+    for(ri=1;ri<REG2.length;ri++){
+      var above=0;
+      j.points.forEach(function(p){for(var q=REG2[ri].min;q<nb;q++)above+=(+p[1+q]||0);});
+      if(above/np>=1e6)reg=REG2[ri];
+    }
+    var t=[],v=reg.rows.map(function(){return [];});
+    j.points.forEach(function(p){
+      t.push(p[0]);
+      reg.rows.forEach(function(r,bi){
+        var s=0;for(var q=r[0];q<=r[1];q++)s+=(+p[1+q]||0);
+        v[bi].push(s/1e6);
+      });
+    });
+    var bands=reg.rows.map(function(r,bi){return {label:label2(r[0],r[1]),color:COLORS[bi]};});
+    return {t:t,v:v,bands:bands};
+  }
+  function renderLegend(){
+    var leg=document.getElementById("mpc-leg");
+    if(!leg||!data)return;
+    var html="",b;
+    for(b=data.bands.length-1;b>=0;b--)
+      html+='<span><i style="background:'+data.bands[b].color+'"></i>'+
+        data.bands[b].label+(b===data.bands.length-1?" sat/vB":"")+"</span>";
+    leg.innerHTML=html;
+  }
+  function niceStep(raw){
+    var p=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10));
+    var m=raw/p;return (m>=5?10:m>=2?5:m>=1?2:1)*p;
+  }
+  function fmtMvB(x){return x>=10?Math.round(x).toString():x>=1?x.toFixed(1):x.toFixed(2);}
+  function draw(){
+    var W=wrap.clientWidth,H=W<520?200:260,dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    cv.style.height=H+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    if(!data)return;
+    var padL=40,padR=8,padT=8,padB=26,iw=W-padL-padR,ih=H-padT-padB;
+    var t=data.t,n=t.length,t0=t[0],t1=t[n-1];
+    if(!(t1>t0))return;
+    var max=0,i,b,s;
+    for(i=0;i<n;i++){s=0;for(b=0;b<data.v.length;b++)s+=data.v[b][i];if(s>max)max=s;}
+    if(!(max>0))return;
+    max*=1.08;
+    function X(x){return padL+(x-t0)/(t1-t0)*iw;}
+    function Y(y){return padT+ih-y/max*ih;}
+    var ink3=cssv("--ink-3","#7C8CA8"),line2=cssv("--line-2","#2A3B5C"),panel=cssv("--panel","#101D33");
+    ctx.font='600 10px "Cascadia Mono","Consolas",monospace';
+    /* y-axis unit, named in the corner so the tick numbers are never mystery
+       figures (owner 2026-08-13) */
+    ctx.fillStyle=ink3;ctx.textAlign="left";ctx.textBaseline="top";
+    ctx.fillText("MvB waiting",padL+6,padT+4);
+    /* y grid + labels (MvB) */
+    var step=niceStep(max/3.5),yv;
+    ctx.textAlign="right";ctx.textBaseline="middle";
+    for(yv=step;yv<max;yv+=step){
+      var gy=Math.round(Y(yv))+.5;
+      ctx.strokeStyle=line2;ctx.globalAlpha=.5;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(W-padR,gy);ctx.stroke();
+      ctx.globalAlpha=1;ctx.fillStyle=ink3;ctx.fillText(fmtMvB(yv),padL-6,gy);
+    }
+    /* x axis: a tick ladder scaled to the span, so the dates and times under
+       the chart always read clearly (owner 2026-08-07). Midnights and month
+       or year starts label as dates; intraday ticks label as HH:00. Ticks
+       closer than 44px to the last drawn one are skipped, date labels win. */
+    ctx.textAlign="center";ctx.textBaseline="top";
+    var span=t1-t0,d=new Date(t0*1000),marks=[];
+    function dayLabel(dd){return dd.toLocaleDateString("en-US",{month:"short",day:"numeric"});}
+    if(span<=3*3600){
+      /* the first hours of recording: quarter- or half-hour ticks so the
+         axis is never bare while the history is still short */
+      var stepM=span<=4500?15:30;
+      var mm=(Math.floor(d.getMinutes()/stepM)+1)*stepM;
+      d.setMinutes(mm,0,0);
+      for(;d.getTime()/1000<t1;d.setMinutes(d.getMinutes()+stepM))
+        marks.push({t:d.getTime()/1000,s:d.getHours().toString().padStart(2,"0")+":"+
+          d.getMinutes().toString().padStart(2,"0"),m:d.getHours()===0&&d.getMinutes()===0});
+    }else if(span<=1.15*86400){
+      d.setMinutes(0,0,0);d.setHours(d.getHours()+1);
+      for(;d.getTime()/1000<t1;d.setHours(d.getHours()+3))
+        marks.push({t:d.getTime()/1000,s:d.getHours()===0?dayLabel(d):
+          d.getHours().toString().padStart(2,"0")+":00",m:d.getHours()===0});
+    }else if(span<=3.5*86400){
+      d.setMinutes(0,0,0);d.setHours(d.getHours()+1);
+      for(;d.getTime()/1000<t1;d.setHours(d.getHours()+1)){
+        var hh=d.getHours();
+        if(hh===0)marks.push({t:d.getTime()/1000,s:dayLabel(d),m:true});
+        else if(hh===12)marks.push({t:d.getTime()/1000,s:"12:00",m:false});
+      }
+    }else if(span<=40*86400){
+      var stepD=span<=16*86400?1:5;
+      d.setHours(0,0,0,0);d.setDate(d.getDate()+1);
+      for(;d.getTime()/1000<t1;d.setDate(d.getDate()+stepD))
+        marks.push({t:d.getTime()/1000,s:dayLabel(d),m:d.getDate()===1});
+    }else{
+      d.setHours(0,0,0,0);d.setDate(1);d.setMonth(d.getMonth()+1);
+      for(;d.getTime()/1000<t1;d.setMonth(d.getMonth()+1))
+        marks.push({t:d.getTime()/1000,s:d.getMonth()===0?String(d.getFullYear()):
+          d.toLocaleDateString("en-US",{month:"short"}),m:d.getMonth()===0});
+    }
+    var lastX=-1e9;
+    marks.forEach(function(m){
+      var mx=X(m.t);
+      if(mx<padL+18||mx>W-padR-18)return;
+      if(mx-lastX<44&&!m.m)return;
+      lastX=mx;
+      ctx.strokeStyle=line2;ctx.globalAlpha=.35;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(Math.round(mx)+.5,padT);ctx.lineTo(Math.round(mx)+.5,padT+ih);ctx.stroke();
+      ctx.globalAlpha=1;ctx.fillStyle=m.m?cssv("--ink-2","#A9B7D0"):ink3;
+      ctx.fillText(m.s,mx,H-padB+9);
+    });
+    /* stacked fills, bottom band first */
+    var cum=new Array(n).fill(0),bounds=[];
+    for(b=0;b<data.v.length;b++){
+      var upper=new Array(n);
+      for(i=0;i<n;i++)upper[i]=cum[i]+data.v[b][i];
+      ctx.beginPath();
+      for(i=0;i<n;i++){i?ctx.lineTo(X(t[i]),Y(upper[i])):ctx.moveTo(X(t[i]),Y(upper[i]));}
+      for(i=n-1;i>=0;i--)ctx.lineTo(X(t[i]),Y(cum[i]));
+      ctx.closePath();
+      ctx.fillStyle=data.bands[b].color;ctx.fill();
+      bounds.push(upper);cum=upper;
+    }
+    /* 2px surface gap along each internal boundary keeps neighbours apart */
+    ctx.strokeStyle=panel;ctx.lineWidth=2;ctx.lineJoin="round";
+    for(b=0;b<data.v.length-1;b++){
+      ctx.beginPath();
+      for(i=0;i<n;i++){i?ctx.lineTo(X(t[i]),Y(bounds[b][i])):ctx.moveTo(X(t[i]),Y(bounds[b][i]));}
+      ctx.stroke();
+    }
+    /* crosshair */
+    if(hover>=0&&hover<n){
+      var hx=Math.round(X(t[hover]))+.5;
+      ctx.strokeStyle=ink3;ctx.globalAlpha=.7;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(hx,padT);ctx.lineTo(hx,padT+ih);ctx.stroke();
+      ctx.globalAlpha=1;
+    }
+    /* baseline */
+    ctx.strokeStyle=line2;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,Math.round(padT+ih)+.5);ctx.lineTo(W-padR,Math.round(padT+ih)+.5);ctx.stroke();
+  }
+  function showTip(px,py){
+    if(!data||hover<0){tip.hidden=true;return;}
+    var when=new Date(data.t[hover]*1000),tot=0,rows="",b;
+    for(b=data.bands.length-1;b>=0;b--){
+      var val=data.v[b][hover];tot+=val;
+      rows+='<div class="r"><span class="c" style="background:'+data.bands[b].color+'"></span>'+
+        data.bands[b].label+' sat/vB<b>'+fmtMvB(val)+' MvB</b></div>';
+    }
+    tip.innerHTML='<div class="h">'+when.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})+
+      '</div>'+rows+'<div class="r">total<b>'+fmtMvB(tot)+' MvB</b></div>';
+    tip.hidden=false;
+    var tw=tip.offsetWidth,ww=wrap.clientWidth;
+    var lx=px+14;if(lx+tw>ww-4)lx=px-tw-14;if(lx<4)lx=4;
+    var ly=py-10;var th=tip.offsetHeight;
+    if(ly+th>wrap.clientHeight-2)ly=wrap.clientHeight-th-2;if(ly<2)ly=2;
+    tip.style.left=lx+"px";tip.style.top=ly+"px";
+  }
+  function locate(ev){
+    if(!data)return;
+    var r=cv.getBoundingClientRect(),x=ev.clientX-r.left,y=ev.clientY-r.top;
+    var W=wrap.clientWidth,padL=40,padR=8,iw=W-padL-padR;
+    var t0=data.t[0],t1=data.t[data.t.length-1];
+    var tt=t0+(x-padL)/iw*(t1-t0),best=0,bd=Infinity,i;
+    for(i=0;i<data.t.length;i++){var dd=Math.abs(data.t[i]-tt);if(dd<bd){bd=dd;best=i;}}
+    hover=best;draw();showTip(x,y);
+  }
+  function clearHover(){hover=-1;tip.hidden=true;draw();}
+  cv.addEventListener("pointermove",locate);
+  cv.addEventListener("pointerdown",locate);
+  cv.addEventListener("pointerleave",clearHover);
+  function applyNote(){
+    if(!note)return;
+    var base="Our node's mempool, snapshotted every 5 minutes and stacked by fee band; height is total virtual size waiting, in MvB.";
+    if(recSince!==null&&Date.now()-recSince<31*86400000)
+      base+=" Recording began "+new Date(recSince).toLocaleDateString("en-US",{month:"long",day:"numeric"})+"; longer ranges unlock as history accumulates.";
+    note.textContent=base;
+  }
+  var api2=null;
+  function refresh(){
+    if(!api2)return;
+    /* no in-flight guard: a range click mid-poll must still fetch, and the
+       want!==sel check below already discards whichever response went stale */
+    var want=sel;
+    fetch(api2+"/mempool-history?days="+want.d).then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(j){
+        if(j&&j.recordingSince){var rs=Date.parse(j.recordingSince);if(isFinite(rs))recSince=rs;}
+        /* first response: adopt the default range for the history we turn
+           out to have, refetching finer buckets when it differs */
+        if(!booted){
+          booted=true;
+          var def=defaultRange();
+          if(def!==sel){sel=def;renderRng();applyNote();refresh();return;}
+        }
+        if(want!==sel)return; /* stale: the user switched while in flight */
+        data=build(j);renderRng();renderLegend();applyNote();hover=-1;tip.hidden=true;draw();
+      })
+      .catch(function(){inflight=false;});
+  }
+  var rt=null;
+  window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(draw,120);});
+  function boot2(){
+    api2=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
+    /* the 1W default is a guess until the first response reports how much
+       history exists; while recording is younger the default drops to fit */
+    sel=RANGES[3];
+    renderRng();draw();
+    if(!api2)return;
+    refresh();
+    setInterval(refresh,300000);
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot2);
+  else boot2();
 })();
 </script>
 </Base>

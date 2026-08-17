@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Address Validator with Typo Locator - OpenBitcoin" description="Validate any bitcoin address in your browser: bech32 and base58check checksums, address type and network, plus a locator for a single typo.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Validator</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Bitcoin address validator</h1>
+    <HeroEmblem name="cardcheck" />
     <p class="doc-lede">Paste an address and the checksum is verified as you type. When exactly one character is wrong, the validator points at it. It locates, it never corrects. Everything runs in your browser; the address is never sent anywhere.</p>
   </div>
   <div class="doc-grid">
@@ -61,6 +63,7 @@ import '../../styles/doc.css';
       <nav>
         <a href="/">Look up an address on the chain</a>
         <a href="/learn/address-poisoning">Address poisoning, explained</a>
+        <a href="/tools/qr">Make a payment QR code</a>
         <a href="/sats">What is a satoshi</a>
       </nav>
     </div>

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import data from '../content/hacks.json';
+import HeroEmblem from '../components/HeroEmblem.astro';
 const entries = data.entries;
 const years = [...new Set(entries.map((e) => e.date.slice(0, 4)))].sort((a, b) => b - a);
 const byYear = years.map((y) => ({ y, items: entries.filter((e) => e.date.slice(0, 4) === y).sort((a, b) => b.date.localeCompare(a.date)) }));
@@ -26,6 +27,7 @@ const fmtMonth = (d) => {
   <div class="doc-head">
     <div class="doc-kicker">Hacks &amp; thefts</div>
     <h1>Bitcoin hacks</h1>
+    <HeroEmblem name="brokenlock" />
     <p class="doc-lede">The record of the largest bitcoin hacks and thefts, from the first big exchange breaches to the most recent incidents, each with the BTC taken, its dollar value at the time, and what those coins would be worth today.</p>
   </div>
   <div class="doc-grid">

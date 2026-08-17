@@ -11,12 +11,14 @@ const hrGrid = [
 ].map((g) => ({ y: hy(g.v).toFixed(1), t: g.t }));
 const hrAria = 'Estimated bitcoin network hashrate on a logarithmic scale, one point per difficulty retarget from the January 2009 genesis block to the present: megahashes per second in the CPU era, gigahashes as GPUs arrive in 2010, terahashes across the FPGA bridge, then the ASIC climb from 2013 through petahash, exahash around 2016, and toward a zettahash per second by the mid 2020s.';
 import { SUBSIDY_DAY_BTC } from '../lib/subsidy.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Hashrate, Difficulty, and Hashprice - OpenBitcoin" description="Bitcoin's live network hashrate, current difficulty and next retarget, what hashprice means for miners, and the full mining hardware history charted.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Hashrate</div>
     <h1>Hashrate, difficulty, and hashprice</h1>
+    <HeroEmblem name="gauge" />
     <p class="doc-lede">Bitcoin's hashrate is the guessing speed of every miner on earth, estimated from difficulty and block times. Here is where it stands, how the retarget holds blocks near ten minutes, and what a hash earns per day.</p>
   </div>
   <div class="doc-grid">
@@ -111,6 +113,7 @@ import { SUBSIDY_DAY_BTC } from '../lib/subsidy.js';
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
+        <a href="/pools">Mining pools</a>
         <a href="/blocks">Latest blocks</a>
         <a href="/halving">Halving countdown</a>
         <a href="/tools/mining">Mining calculator</a>

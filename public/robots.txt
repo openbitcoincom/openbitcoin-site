@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+# Cloudflare injects /cdn-cgi/ links (email obfuscation) into served HTML;
+# crawlers that follow them see 4xx and report phantom errors
+Disallow: /cdn-cgi/
 
 Sitemap: https://openbitcoin.com/sitemap-index.xml

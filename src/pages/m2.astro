@@ -79,12 +79,14 @@ if (real) {
   };
 }
 import { EPOCH, MAX_BTC, SUBSIDY_DAY_BTC } from '../lib/subsidy.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="US M2 Money Supply Chart Since 2000 - OpenBitcoin" description="The US M2 money supply from 2000 to today: how growth in the dollar supply dilutes savings, beside bitcoin's fixed 21 million cap.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">M2 supply</div>
     <h1>US M2 money supply</h1>
+    <HeroEmblem name="bills" />
     <p class="doc-lede">M2 is the Federal Reserve's broad count of US dollars: currency, deposits, and retail money market funds. This page charts how that supply has grown since 2000, and what growth in a money supply means for every dollar already in it.</p>
   </div>
   <div class="doc-grid">

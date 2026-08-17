@@ -1,22 +1,13 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { GA_ID } from './config.js';
+import { consentHtml, CONSENT_STORE } from './consent-snippet.js';
 
 function consentBlock() {
   if (!GA_ID) return '';
-  return `
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
-gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
-try{if(localStorage.getItem('ob-consent')==='granted')gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});}catch(e){}
-gtag('js',new Date());gtag('config','${GA_ID}',{anonymize_ip:true});</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
-<div id="ob-consent" class="ob-consent" hidden role="dialog" aria-label="Cookie choice">
-<p class="ob-consent-t">This site uses cookies for analytics.</p>
-<div class="ob-consent-b"><button type="button" id="ob-consent-ok">OK</button><button type="button" id="ob-consent-no">No</button></div>
-</div>
-<style>.ob-consent[hidden]{display:none}.ob-consent{position:fixed;left:12px;right:12px;bottom:12px;z-index:60;width:max-content;max-width:min(560px,calc(100% - 24px));margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel,#101D33);border:1px solid var(--line-2,#2A3B5C);border-radius:12px;padding:12px 16px;box-shadow:0 8px 30px rgba(0,0,0,.4)}.ob-consent-t{font:600 12.5px/1.5 var(--sans,system-ui);color:var(--ink-2,#C7D3E8);margin:0;flex:0 1 auto}.ob-consent-b{display:flex;gap:8px}.ob-consent button{font:700 11px var(--mono,monospace);letter-spacing:.06em;text-transform:uppercase;border-radius:8px;padding:8px 16px;cursor:pointer;border:1px solid var(--line-2,#2A3B5C);background:transparent;color:var(--ink-2,#C7D3E8)}.ob-consent #ob-consent-ok{background:var(--cta,#16273F);color:var(--cta-ink,#F7931A);border-color:var(--line-2,#2A3B5C);box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}.ob-consent #ob-consent-ok:hover{background:var(--cta-hov,#1E304C)}</style>
-<script>(function(){var el=document.getElementById('ob-consent');if(!el)return;var s;try{s=localStorage.getItem('ob-consent');}catch(e){}if(!s)el.hidden=false;function c(v){try{localStorage.setItem('ob-consent',v);}catch(e){}if(v==='granted'&&window.gtag)gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});el.hidden=true;}document.getElementById('ob-consent-ok').addEventListener('click',function(){c('granted');});document.getElementById('ob-consent-no').addEventListener('click',function(){c('denied');});})();</script>`;
+  return CONSENT_STORE + consentHtml(GA_ID);
 }
+
 
 export function loadProto(name, route) {
   const candidates = [
@@ -67,11 +58,12 @@ export function loadProto(name, route) {
   html = html.split('<a href="#"><svg viewBox="0 0 24 24"><path d="M12 6.5C10 4.8').join('<a href="/learn"><svg viewBox="0 0 24 24"><path d="M12 6.5C10 4.8');
   html = html.split('<a href="#"><svg viewBox="0 0 24 24"><rect x="3.5" y="6.5"').join('<a href="/wallets"><svg viewBox="0 0 24 24"><rect x="3.5" y="6.5"');
   html = html.split('<a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="9.5"').join('<a href="/spend/gift-cards"><svg viewBox="0 0 24 24"><rect x="4" y="9.5"');
+  html = html.split('<span>Gift Cards</span></a>').join('<span>Gift Cards</span></a><a href="/vpn"><svg viewBox="0 0 24 24"><path d="M12 3.2 19.5 6v6.1c0 4.2-3 7.5-7.5 8.7-4.5-1.2-7.5-4.5-7.5-8.7V6z"/><path d="M9.2 12.2l2 2 3.6-3.9"/></svg><span>VPNs</span></a>');
   html = html.split('<a class="btn-swap" href="#"').join('<a class="btn-swap" href="/swap"');
   html = html.split('<a class="btn-buy" href="#"').join('<a class="btn-buy" href="/buy"');
-  html = html.split('<a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"').join('<a href="/casinos"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"');
+  html = html.split('<a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle class="f" cx="9" cy="9" r="1.2"/><circle class="f" cx="15" cy="9" r="1.2"/><circle class="f" cx="12" cy="12" r="1.2"/><circle class="f" cx="9" cy="15" r="1.2"/><circle class="f" cx="15" cy="15" r="1.2"/></svg><span>Casinos</span></a>').join('');
   html = html.split('<a href="#"><svg viewBox="0 0 24 24"><path d="M7.5 8.5h9a5.5 5.5').join('<a href="/games"><svg viewBox="0 0 24 24"><path d="M7.5 8.5h9a5.5 5.5');
-  html = html.replace('<a href="#">Bitcoin Casinos</a>', '<a href="/casinos">Bitcoin Casinos</a>');
+  html = html.replace('<li><a href="#">Bitcoin Casinos</a></li>', '');
   for (const [label, href] of Object.entries(footLinks)) {
     html = html.replace(`<a href="#">${label}</a>`, `<a href="${href}">${label}</a>`);
   }

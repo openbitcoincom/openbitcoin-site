@@ -28,7 +28,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/10/03130312/skip.png",
   "url": "https://coincards.com/ca/product/skip-the-dishes-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -41,7 +41,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/10/03125353/loca-500x315.jpg",
   "url": "https://coincards.com/ca/product/loca-quality-market-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Grocery",
@@ -55,7 +55,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/06/20102005/ADIDAS-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/adidas-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -69,7 +69,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/06/09133435/lavieenrose.png",
   "url": "https://coincards.com/ca/product/la-vie-en-rose-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -82,7 +82,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/06/09120013/DLRMA-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/dollarama-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -95,7 +95,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/05/20111647/bestwestern.jpg",
   "url": "https://coincards.com/ca/product/best-western-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -108,7 +108,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/05/13103718/LAMASI-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/la-maison-simons-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [],
   "type": "electronic",
@@ -119,7 +119,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/05/13103355/WJET-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/westjet-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [],
   "type": "electronic",
@@ -143,7 +143,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/05/01182216/fanatics-500x315.png",
   "url": "https://coincards.com/ca/product/fanatics-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -157,7 +157,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/05/01181417/etsy-500x315.png",
   "url": "https://coincards.com/ca/product/etsy-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -170,7 +170,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/04/28125223/lyft.jpg",
   "url": "https://coincards.com/ca/product/lyft-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -218,7 +218,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/04/11100818/sporting-life-500x315.png",
   "url": "https://coincards.com/ca/product/sporting-life-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -232,7 +232,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/04/15180128/virtual-visa-gift-card.png",
   "url": "https://coincards.com/ca/product/virtual-prepaid-visa-cad-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "Prepaid Credit Card"
@@ -244,8 +244,8 @@
   "n": "ToursGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/toursgift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -257,8 +257,8 @@
   "n": "RentacarGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/rentacargift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -270,8 +270,8 @@
   "n": "HotelsGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/hotelsgift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -283,8 +283,8 @@
   "n": "FlystayGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/flystaygift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -296,8 +296,8 @@
   "n": "eLearnGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/elearngift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -309,8 +309,8 @@
   "n": "AirlineGift Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2025/01/29100729/tripgift.jpg",
   "url": "https://coincards.com/ca/product/airlinegift-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -346,8 +346,8 @@
   "n": "Voyages Transat Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/12/07100322/zaluna-500x500.jpg",
   "url": "https://coincards.com/ca/product/voyages-transat-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -359,8 +359,8 @@
   "n": "TravelPlus Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/12/07100322/zaluna-500x500.jpg",
   "url": "https://coincards.com/ca/product/travelplus-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -372,8 +372,8 @@
   "n": "Transat Travel Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/12/07100322/zaluna-500x500.jpg",
   "url": "https://coincards.com/ca/product/transat-travel-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -385,8 +385,8 @@
   "n": "Marlin Travel Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/12/07100322/zaluna-500x500.jpg",
   "url": "https://coincards.com/ca/product/marlin-travel-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -398,8 +398,8 @@
   "n": "Club Voyages Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/12/07100322/zaluna-500x500.jpg",
   "url": "https://coincards.com/ca/product/club-voyages-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -438,7 +438,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/08/08154410/sircorp.png",
   "url": "https://coincards.com/ca/product/service-inspired-restaurants-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -487,8 +487,8 @@
   "n": "The Children’s Place Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115933/the-childrens-place.png",
   "url": "https://coincards.com/ca/product/the-childrens-place-online-gift-card-electronic-delivery/",
-  "lo": 15,
-  "hi": 15,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -501,7 +501,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/03/22104422/HARRYR-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/harry-rosen-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -528,7 +528,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/01/03120611/METAQ-US-card-500x315.png",
   "url": "https://coincards.com/ca/product/meta-quest-canada-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 100,
   "cur": "CAD",
   "tags": [
    "Gaming",
@@ -542,7 +542,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/11/25201618/1516312754375.png",
   "url": "https://coincards.com/ca/product/variable-load-prepaid-mastercard-non-reloadable-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Prepaid Credit Card"
@@ -555,7 +555,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/11/25201616/visa_prepaid_en_800x450-500x281.jpg",
   "url": "https://coincards.com/ca/product/variable-load-prepaid-visa-non-reloadable-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Prepaid Credit Card"
@@ -581,7 +581,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/11/03103607/BUCKET-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/bucketlistgift-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -593,8 +593,8 @@
   "n": "Safeway Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/safeway-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -606,8 +606,8 @@
   "n": "Lawton’s Drugs Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/lawtons-drugs-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -619,8 +619,8 @@
   "n": "Foodland Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/25103705/sobeysnew.png",
   "url": "https://coincards.com/ca/product/foodland-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -633,7 +633,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/08/08115852/rexall-500x316.png",
   "url": "https://coincards.com/ca/product/rexall-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -646,7 +646,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/09/08115840/red-lobster.png",
   "url": "https://coincards.com/ca/product/red-lobster-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -672,7 +672,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/08/08133840/KENT-CA-500x315.png",
   "url": "https://coincards.com/ca/product/kent-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Home Improvement"
@@ -699,7 +699,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/08/08131324/GUESS-CA-500x315.png",
   "url": "https://coincards.com/ca/product/guess-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -712,7 +712,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/08/08125528/GROUPN-CA-500x315.png",
   "url": "https://coincards.com/ca/product/groupon-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -725,7 +725,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/08/02102624/BATHBW-CA-500x315.png",
   "url": "https://coincards.com/ca/product/bath-body-works-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -738,7 +738,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/07/28101033/CABELA-CA-500x315.png",
   "url": "https://coincards.com/ca/product/cabelas-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -752,7 +752,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/12/18123636/hm-500x316.jpg",
   "url": "https://coincards.com/ca/product/hm-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -788,8 +788,8 @@
   "n": "CoinKite Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184631/coinkitenew-500x315.png",
   "url": "https://coincards.com/ca/product/coinkite-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [],
   "type": "electronic",
@@ -799,8 +799,8 @@
   "n": "Foundation Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184632/foundation-giftcard.svg",
   "url": "https://coincards.com/ca/product/foundation-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [],
   "type": "electronic",
@@ -825,7 +825,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/02/17105828/GHC-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/global-hotel-card-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -838,7 +838,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/02/17104250/GEC-CA-500x315.png",
   "url": "https://coincards.com/ca/product/global-experiences-card-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -850,8 +850,8 @@
   "n": "The Rabbit Hole Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184459/rabbit-500x315.png",
   "url": "https://coincards.com/ca/product/the-rabbit-hole-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -864,8 +864,8 @@
   "n": "Shenanigans Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184458/shenanigan-500x315.png",
   "url": "https://coincards.com/ca/product/shenanigans-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -878,8 +878,8 @@
   "n": "SAP Canadian Comfort Food Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184457/sap-500x315.png",
   "url": "https://coincards.com/ca/product/sap-canadian-comfort-food-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -892,8 +892,8 @@
   "n": "Maison Selby Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184456/maison-500x315.png",
   "url": "https://coincards.com/ca/product/maison-selby-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -906,8 +906,8 @@
   "n": "Kindred Food & Drink Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184455/kindred-500x315.png",
   "url": "https://coincards.com/ca/product/kindred-food-drink-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -920,8 +920,8 @@
   "n": "Braven Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184453/braven-500x315.png",
   "url": "https://coincards.com/ca/product/braven-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -935,7 +935,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/01/08115927/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/oliver-bonacini-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -961,7 +961,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/11/21102122/go.jpg",
   "url": "https://coincards.com/ca/product/go-enjoy-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -974,7 +974,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/10/12124126/Uber-Cobranded-1500X900-1-500x317.png",
   "url": "https://coincards.com/ca/product/uber-online-gift-card-electronic-delivery-2/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -987,7 +987,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/10/03103927/LGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/elearngift-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Entertainment",
@@ -1015,7 +1015,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/31105244/GAP-CA-500x315.png",
   "url": "https://coincards.com/ca/product/gap-options-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -1042,7 +1042,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/06/08115013/basspro.png",
   "url": "https://coincards.com/ca/product/bass-pro-shops-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -1070,7 +1070,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/03/02132837/Airbnb-CR80-0721-1500x950-1-500x317.png",
   "url": "https://coincards.com/ca/product/airbnb-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "wegift"
@@ -1083,7 +1083,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/05/19095510/JOEY-CA-500x315.png",
   "url": "https://coincards.com/ca/product/joey-restaurants-online-gift-card-electronic-delivery-2/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1096,7 +1096,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/05/08115513/earls.png",
   "url": "https://coincards.com/ca/product/earls-restaurants-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1109,7 +1109,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/05/19094511/ARDNE-CA-500x315.png",
   "url": "https://coincards.com/ca/product/ardene-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -1122,7 +1122,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/05/19094138/AMEAGL-CA-500x315.png",
   "url": "https://coincards.com/ca/product/american-eagle-outfitters-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -1147,8 +1147,8 @@
   "n": "Alchemy Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184452/ALCHMY-CA-500x315.png",
   "url": "https://coincards.com/ca/product/alchemy-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1187,7 +1187,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/02/11081544/Twitch-1500x950-1-500x317.jpg",
   "url": "https://coincards.com/ca/product/twitch-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "streaming"
@@ -1200,7 +1200,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2021/05/26213447/IC-CshwGftCrd-1500x950-1-500x317.png",
   "url": "https://coincards.com/ca/product/instacart-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery",
@@ -1213,8 +1213,8 @@
   "n": "Kindred Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/kindred-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1226,8 +1226,8 @@
   "n": "O&B Blue Mountain Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/ob-blue-mountain-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1239,8 +1239,8 @@
   "n": "The Rabbit Hole Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/the-rabbit-hole-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1252,8 +1252,8 @@
   "n": "Maison Selby Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/maison-selby-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1265,8 +1265,8 @@
   "n": "Braven Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/braven-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1278,8 +1278,8 @@
   "n": "Alchemy Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/alchemy-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1291,8 +1291,8 @@
   "n": "The Guild Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/the-guild-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1304,8 +1304,8 @@
   "n": "Sub Rosa Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/sub-rosa-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1317,8 +1317,8 @@
   "n": "R&D Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/rd-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1330,8 +1330,8 @@
   "n": "Parcheggio Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/parcheggio-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1343,8 +1343,8 @@
   "n": "Lena Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/lena-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1356,8 +1356,8 @@
   "n": "Jump Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/jump-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1369,8 +1369,8 @@
   "n": "Canteen Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/canteen-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1382,8 +1382,8 @@
   "n": "Buffo Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/buffo-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1395,8 +1395,8 @@
   "n": "Biff’s Bistro Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/biffs-bistro-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1408,8 +1408,8 @@
   "n": "Beauty Eats Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/beauty-eats-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1421,8 +1421,8 @@
   "n": "Beaumont Kitchen Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/beaumont-kitchen-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1434,8 +1434,8 @@
   "n": "Bar George Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/bar-george-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1447,8 +1447,8 @@
   "n": "Bannock Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/bannock-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1460,8 +1460,8 @@
   "n": "Auberge du Pommier Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/auberge-du-pommier-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1474,7 +1474,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2021/12/03104530/TRGIF-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/toursgift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -1487,7 +1487,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2021/12/03104726/FGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/flystaygift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -1513,7 +1513,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/19180409/668b35f4565b1ed5d48722b05e275545_1618863397735-500x316.png",
   "url": "https://coincards.com/ca/product/apple-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [],
   "type": "physical",
@@ -1523,8 +1523,8 @@
   "n": "Shoppers World Brampton Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2021/09/09133507/swb.jpg",
   "url": "https://coincards.com/ca/product/shoppers-world-brampton-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -1628,7 +1628,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/25103705/sobeysnew.png",
   "url": "https://coincards.com/ca/product/sobeys-online-gift-card/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -1680,7 +1680,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/10/13104034/CLMBIA-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/columbia-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -1695,7 +1695,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/05/12142513/traditional_card.png",
   "url": "https://coincards.com/ca/product/la-cage-brasserie-sportive-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1708,7 +1708,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/05/29155708/DoorDash-CR80-0524-1500x950-1-500x317.png",
   "url": "https://coincards.com/ca/product/doordash-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1721,7 +1721,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/04/23092806/SUBWAY-CA-500x315.png",
   "url": "https://coincards.com/ca/product/subway-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -1734,7 +1734,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/04/29155700/DoorDash-CR80-0524-1500x950-1-500x317.png",
   "url": "https://coincards.com/ca/product/doordash-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Restaurants",
@@ -1761,7 +1761,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/10/08120306/homedepotgc-e1508825430721-500x314.jpg",
   "url": "https://coincards.com/ca/product/home-depot-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Fathers Day",
@@ -1775,8 +1775,8 @@
   "n": "Coincards Concierge Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/01/22112959/cccon-500x315.png",
   "url": "https://coincards.com/ca/product/coincards-concierge-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -1857,8 +1857,8 @@
   "n": "RentacarGift Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/11/03104344/RGIFT-CA-500x315.png",
   "url": "https://coincards.com/ca/product/rentacargift-online-gift-card-electronic-delivery/",
-  "lo": 100,
-  "hi": 100,
+  "lo": 50,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -1871,7 +1871,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/11/03104153/HSGIF-CA-500x315.png",
   "url": "https://coincards.com/ca/product/hotelsgift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -1883,8 +1883,8 @@
   "n": "AirlineGift Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/11/01150357/AGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/airlinegift-online-gift-card-electronic-delivery/",
-  "lo": 100,
-  "hi": 100,
+  "lo": 50,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -1910,8 +1910,8 @@
   "n": "RW & Co Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184541/448-12e29892-6f24-421e-a7bb-f4228d67d21d-500x315.png",
   "url": "https://coincards.com/ca/product/rw-co-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -1923,8 +1923,8 @@
   "n": "Penningtons Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184541/448-12e29892-6f24-421e-a7bb-f4228d67d21d-500x315.png",
   "url": "https://coincards.com/ca/product/penningtons-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -1936,8 +1936,8 @@
   "n": "Reitmans Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/01/13125206/448-12e29892-6f24-421e-a7bb-f4228d67d21d-500x315.png",
   "url": "https://coincards.com/ca/product/reitmans-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -1964,7 +1964,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2022/10/19114646/Cobranded-Uber_Eats-US-CR80-0622-Front-1-500x317.png",
   "url": "https://coincards.com/ca/product/uber-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -1978,7 +1978,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/09/08115754/cobra-card-2016.jpg",
   "url": "https://coincards.com/ca/product/starbucks-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -2075,8 +2075,8 @@
   "n": "Souvlaki Bar Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184331/foodtastic-500x499.png",
   "url": "https://coincards.com/ca/product/souvlaki-bar-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2088,8 +2088,8 @@
   "n": "Vinnie Gambini Pizzeria Bar Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184331/foodtastic-500x499.png",
   "url": "https://coincards.com/ca/product/vinnie-gambini-pizzeria-bar-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2101,8 +2101,8 @@
   "n": "Nickels Delicatessen Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184331/foodtastic-500x499.png",
   "url": "https://coincards.com/ca/product/nickels-delicatessen-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2114,8 +2114,8 @@
   "n": "La Belle & La Boeuf Burger Bar Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184331/foodtastic-500x499.png",
   "url": "https://coincards.com/ca/product/la-belle-la-boeuf-burger-bar-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2156,7 +2156,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/07/12152913/ardene-500x316.png",
   "url": "https://coincards.com/ca/product/ardene-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -2169,8 +2169,8 @@
   "n": "Galaxy Cinemas Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184329/cineplex-500x315.png",
   "url": "https://coincards.com/ca/product/galaxy-cinemas-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Entertainment"
@@ -2183,7 +2183,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/04/03105023/TGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/trip-gift-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 5000,
   "cur": "CAD",
   "tags": [
    "Travel",
@@ -2197,7 +2197,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/01/13105551/Walmart-Spark-68c9ac20-4b44-4bb9-b770-332877cc2da6-500x315.png",
   "url": "https://coincards.com/ca/product/walmart-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "Grocery",
@@ -2210,8 +2210,8 @@
   "n": "Rogers Mobile Top-up Pin (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/01/08115823/rogers-500x315.png",
   "url": "https://coincards.com/ca/product/rogers-mobile-top-up/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "mobile"
@@ -2236,8 +2236,8 @@
   "n": "Fido Mobile Top-up Pin (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/01/08115825/fido-500x315.png",
   "url": "https://coincards.com/ca/product/fido-mobile-top-up/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "mobile"
@@ -2302,7 +2302,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/01/08115827/davidstea.png",
   "url": "https://coincards.com/ca/product/davids-tea-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -2315,7 +2315,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/05/08115901/lcbo-500x282.jpg",
   "url": "https://coincards.com/ca/product/lcbo-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -2329,7 +2329,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/10/20132258/SEPH-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/sephora-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Beauty"
@@ -2342,7 +2342,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/10/08144401/WYSPA-CA-500x315.png",
   "url": "https://coincards.com/ca/product/wayspa-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Spa"
@@ -2366,7 +2366,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/10/23110307/HCOM-CA-500x315.png",
   "url": "https://coincards.com/ca/product/hotels-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "wegift"
@@ -2378,8 +2378,8 @@
   "n": "The Antler Room Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184552/sir-500x315.png",
   "url": "https://coincards.com/ca/product/the-antler-room-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2391,8 +2391,8 @@
   "n": "Scaddabush Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184547/Inspired-Dining-Card-2022-500x315.png",
   "url": "https://coincards.com/ca/product/scaddabush-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2404,8 +2404,8 @@
   "n": "Reds Wine Tavern Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184547/Inspired-Dining-Card-2022-500x315.png",
   "url": "https://coincards.com/ca/product/reds-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2417,8 +2417,8 @@
   "n": "The Loose Moose Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184547/Inspired-Dining-Card-2022-500x315.png",
   "url": "https://coincards.com/ca/product/the-loose-moose-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2430,8 +2430,8 @@
   "n": "Jack Astor’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184547/Inspired-Dining-Card-2022-500x315.png",
   "url": "https://coincards.com/ca/product/jack-astors-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2443,8 +2443,8 @@
   "n": "Duke’s Refresher Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184547/Inspired-Dining-Card-2022-500x315.png",
   "url": "https://coincards.com/ca/product/dukes-refresher-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2483,8 +2483,8 @@
   "n": "Tigre Geant Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184337/giant-tiger.png",
   "url": "https://coincards.com/ca/product/tigre-geant-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -2509,8 +2509,8 @@
   "n": "St-Hubert Express Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184601/st-hubert.png",
   "url": "https://coincards.com/ca/product/st-hubert-express-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -2537,8 +2537,8 @@
   "n": "Red Lobster Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/09/08115840/red-lobster.png",
   "url": "https://coincards.com/ca/product/red-lobster-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -2591,8 +2591,8 @@
   "n": "Grocery Gateway Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184409/longos.jpg",
   "url": "https://coincards.com/ca/product/grocery-gateway-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 20,
+  "hi": 100,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -2617,8 +2617,8 @@
   "n": "Food Basics (Ontario Only) Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184410/metro-food-basics-ON.jpg",
   "url": "https://coincards.com/ca/product/food-basics-ontario-only-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -2630,8 +2630,8 @@
   "n": "Super C (Quebec Only) Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184410/metro-super-c-brunet.jpg",
   "url": "https://coincards.com/ca/product/super-c-quebec-only-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -2643,8 +2643,8 @@
   "n": "Brunet (Quebec Only) Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184410/metro-super-c-brunet.jpg",
   "url": "https://coincards.com/ca/product/brunet-quebec-only-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -2656,8 +2656,8 @@
   "n": "Beauty Eats Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184449/beauty-500x315.png",
   "url": "https://coincards.com/ca/product/beauty-barbeque-smokehouse-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2670,7 +2670,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/09/08115754/cobra-card-2016.jpg",
   "url": "https://coincards.com/ca/product/starbucks-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2696,7 +2696,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/09/12124204/Uber-Eats-1500X900-1-500x317.png",
   "url": "https://coincards.com/ca/product/uber-eats-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2709,7 +2709,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/08/12124237/Uber-RIdes-1500X900-1-500x317.png",
   "url": "https://coincards.com/ca/product/uber-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2735,7 +2735,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2020/11/13133654/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/tjx-canada-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "backtoschool",
@@ -2749,8 +2749,8 @@
   "n": "Buffo Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184446/buffo-500x315.png",
   "url": "https://coincards.com/ca/product/buffo-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2762,8 +2762,8 @@
   "n": "Sub Rosa Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184414/eGiftCard-Design-OBGeneric-Nov2017-d0a2ce3f-2741-4433-b87d-780c8d0fed6a-500x315.png",
   "url": "https://coincards.com/ca/product/sub-rosa-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2775,8 +2775,8 @@
   "n": "Parcheggio Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184447/parcheggio-500x315.png",
   "url": "https://coincards.com/ca/product/parcheggio-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2789,7 +2789,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/02/08115759/EssoMobilGiftCardNew-500x315.jpg",
   "url": "https://coincards.com/ca/product/esso-and-mobil-digital-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "CAD",
   "tags": [
    "Fuel",
@@ -2816,8 +2816,8 @@
   "n": "New York Fries Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/new-york-fries-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2843,7 +2843,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/the-ultimate-dining-card-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants",
@@ -2856,8 +2856,8 @@
   "n": "The Pickle Barrel Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/pickle-barrel-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2869,8 +2869,8 @@
   "n": "The Pickle Barrel Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184612/PIKBAR-CA-500x315.png",
   "url": "https://coincards.com/ca/product/pickle-barrel-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -2883,8 +2883,8 @@
   "n": "Original Joe’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184617/cara082018-500x315.png",
   "url": "https://coincards.com/ca/product/original-joes-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2896,8 +2896,8 @@
   "n": "Elephant & Castle Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184617/cara082018-500x315.png",
   "url": "https://coincards.com/ca/product/elephant-castle-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2909,8 +2909,8 @@
   "n": "The Landing Group Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/landing-group-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2922,8 +2922,8 @@
   "n": "State & Main Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/state-main-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2935,8 +2935,8 @@
   "n": "Elephant & Castle Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184611/ELECAS-CA-500x315.png",
   "url": "https://coincards.com/ca/product/elephant-castle-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -2949,8 +2949,8 @@
   "n": "The Landing Group Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/landing-group-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2962,8 +2962,8 @@
   "n": "State & Main Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184609/STAMAN-CA-500x315.png",
   "url": "https://coincards.com/ca/product/state-main-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -2976,7 +2976,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/01/08115842/gplay_1_1_1_1_1-500x319.png",
   "url": "https://coincards.com/ca/product/google-play-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "CAD",
   "tags": [
    "Gaming"
@@ -2988,8 +2988,8 @@
   "n": "Shift Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184413/Shift-EGiftCard-021-36845730-0568-4895-84e9-77c26f480425-500x315.png",
   "url": "https://coincards.com/ca/product/shift-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3002,8 +3002,8 @@
   "n": "R&D Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184444/eGiftCard-Design-RD-Nov2017-95ec46af-e751-47c4-b31f-4af89b844ee7-500x315.png",
   "url": "https://coincards.com/ca/product/r-d-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3016,8 +3016,8 @@
   "n": "O&B Café Grill Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184442/eGiftCard-Design-OBCG-Nov2017-01355dd7-dfb9-4c6b-8acc-1f028c99a19b-500x315.png",
   "url": "https://coincards.com/ca/product/oliver-bonacini-cafe-grill-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3030,8 +3030,8 @@
   "n": "The Guild Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184440/eGiftCard-Design-TheGuild-Nov2017-c36f0d26-2003-4fa2-ac92-ab2d42abdb02-500x315.png",
   "url": "https://coincards.com/ca/product/the-guild-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3044,8 +3044,8 @@
   "n": "Luma Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184439/eGiftCard-Design-Luma-Nov2017-324ac48d-8685-41bc-9956-7ef8a15ca94d-500x315.png",
   "url": "https://coincards.com/ca/product/luma-online-gift-card-electronic-delivery-copy/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3058,8 +3058,8 @@
   "n": "Liberty Commons at Big Rock Brewery Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184437/eGiftCard-Design-LibertyCommons-Nov2017-03ee558b-ef08-4fd4-a1e0-b6ad306995f7-500x315.png",
   "url": "https://coincards.com/ca/product/liberty-commons-big-rock-brewery-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3073,7 +3073,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184435/eGiftCard-Design-Lena-Nov2017-bd566b8f-c164-4390-aac7-862271da4224-500x315.png",
   "url": "https://coincards.com/ca/product/lena-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3085,8 +3085,8 @@
   "n": "Jump Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184434/eGiftCard-Design-Jump-Nov2017-7c017fcc-4f8a-4a3f-9288-9b494e00c10f-500x315.png",
   "url": "https://coincards.com/ca/product/jump-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3099,8 +3099,8 @@
   "n": "Canteen Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184431/eGiftCard-Design-Canteen-Nov2017-ed165de3-2bdb-4f2f-939d-b44b9ceefdff-500x315.png",
   "url": "https://coincards.com/ca/product/canteen-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3113,8 +3113,8 @@
   "n": "Canoe Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184429/eGiftCard-Design-Canoe-Nov2017-3d6ecd7b-d2ef-463e-ae9d-f7a2dde09973-500x315.png",
   "url": "https://coincards.com/ca/product/canoe-online-gift-card-electronic-delivery-copy/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3127,8 +3127,8 @@
   "n": "Biff’s Bistro Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184426/eGiftCard-Design-BiffsBistro-Nov2017-9c3760f9-99d6-4da0-a865-bbf6d72f8762-500x315.png",
   "url": "https://coincards.com/ca/product/biffs-bistro-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3141,8 +3141,8 @@
   "n": "Bannock Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184412/eGiftCard-Design-Bannock-Nov2017-f3efe036-2fd5-475c-b08e-946723fc71b4-500x315.png",
   "url": "https://coincards.com/ca/product/bannock-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3155,8 +3155,8 @@
   "n": "Auberge du Pommier Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184500/eGiftCard-Design-Auberge-Nov2017-5bed4576-7dc5-45be-b1b8-5548442f3987-500x315.png",
   "url": "https://coincards.com/ca/product/auberge-du-pommier-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3181,8 +3181,8 @@
   "n": "The Rec Room Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184327/black-42892253-cefd-4882-99ff-59e8f8e7731b-500x315.png",
   "url": "https://coincards.com/ca/product/the-rec-room-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3195,8 +3195,8 @@
   "n": "RW&CO. Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/01/11132718/RWCO-CA-500x315.png",
   "url": "https://coincards.com/ca/product/rw-co-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -3209,7 +3209,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/01/08153431/reitman.png",
   "url": "https://coincards.com/ca/product/reitmans-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -3221,8 +3221,8 @@
   "n": "Penningtons Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184541/448-12e29892-6f24-421e-a7bb-f4228d67d21d-500x315.png",
   "url": "https://coincards.com/ca/product/penningtons-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3274,8 +3274,8 @@
   "n": "Famous Players Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184329/cineplex-500x315.png",
   "url": "https://coincards.com/ca/product/famous-players-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Entertainment"
@@ -3288,7 +3288,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115933/the-childrens-place.png",
   "url": "https://coincards.com/ca/product/the-childrens-place-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3314,8 +3314,8 @@
   "n": "Roots Home Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184543/roots-e1514483809859.jpg",
   "url": "https://coincards.com/ca/product/roots-home-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -3355,7 +3355,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115855/redrobin-500x315.png",
   "url": "https://coincards.com/ca/product/red-robin-standard-gift-card-physical-gift-card/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3404,8 +3404,8 @@
   "n": "Bier Markt Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/bier-markt-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3417,8 +3417,8 @@
   "n": "Swiss Chalet Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184603/SWSCHA-CA-500x315.png",
   "url": "https://coincards.com/ca/product/swiss-chalet-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3430,8 +3430,8 @@
   "n": "Montana’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184604/MONTNS-CA-500x315.png",
   "url": "https://coincards.com/ca/product/montanas-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3443,8 +3443,8 @@
   "n": "Harvey’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/harveys-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3456,8 +3456,8 @@
   "n": "East Side Mario’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/east-side-marios-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3469,8 +3469,8 @@
   "n": "Kelsey’s Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184605/KELSEY-CA-500x315.png",
   "url": "https://coincards.com/ca/product/kelseys-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3483,7 +3483,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08120239/JoeysRestaurant.png",
   "url": "https://coincards.com/ca/product/joey-restaurants-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3522,8 +3522,8 @@
   "n": "DAVIDsTEA Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2019/01/08115827/davidstea.png",
   "url": "https://coincards.com/ca/product/davidstea-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3537,7 +3537,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115948/bathandbody.png",
   "url": "https://coincards.com/ca/product/bath-body-works-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -3576,7 +3576,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/21102643/moxie.jpg",
   "url": "https://coincards.com/ca/product/moxies-grill-bar-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3589,7 +3589,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/24171516/AIRCA-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/air-canada-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 2000,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3643,8 +3643,8 @@
   "n": "New York Fries Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/new-york-fries-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants",
@@ -3657,8 +3657,8 @@
   "n": "Old Navy Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/24142917/GAP-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/old-navy-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -3671,8 +3671,8 @@
   "n": "Banana Republic Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/24142917/GAP-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/banana-republic-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -3686,7 +3686,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08120006/michaelsgc.png",
   "url": "https://coincards.com/ca/product/michaels-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -3712,7 +3712,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115956/amazon-ca-generic-black-500x313.jpg",
   "url": "https://coincards.com/ca/product/amazon-ca-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic"
@@ -3724,8 +3724,8 @@
   "n": "la Vie en Rose Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/15120922/lavieenrose.png",
   "url": "https://coincards.com/ca/product/la-vie-en-rose-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 25,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3821,7 +3821,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/20091837/sport_chek.png",
   "url": "https://coincards.com/ca/product/sport-chek-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3836,7 +3836,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115809/indigo.png",
   "url": "https://coincards.com/ca/product/indigo-chapters-coles-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3850,7 +3850,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08125820/homehardware-500x315.png",
   "url": "https://coincards.com/ca/product/home-hardware-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "Home Improvement"
@@ -3863,7 +3863,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/10161052/FAIRMT-CA-1-500x315.png",
   "url": "https://coincards.com/ca/product/fairmont-hotels-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 2000,
   "cur": "CAD",
   "tags": [
    "Travel"
@@ -3876,7 +3876,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/10114133/IKEA-CA-500x315.png",
   "url": "https://coincards.com/ca/product/ikea-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [],
   "type": "electronic",
@@ -3887,7 +3887,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/12093450/tims.jpg",
   "url": "https://coincards.com/ca/product/tim-hortons-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 100,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3899,8 +3899,8 @@
   "n": "Scaddabush Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/08/12120059/SIRCRP-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/scaddabush-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3925,8 +3925,8 @@
   "n": "Jack Astor’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/08/12120059/SIRCRP-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/jack-astors-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3938,8 +3938,8 @@
   "n": "Duke’s Refresher Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/08/08154410/sircorp.png",
   "url": "https://coincards.com/ca/product/dukes-refresher-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -3951,8 +3951,8 @@
   "n": "Marshalls Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/marshalls-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3966,7 +3966,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/31105244/GAP-CA-500x315.png",
   "url": "https://coincards.com/ca/product/gap-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -3980,7 +3980,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115933/cineplex-500x315.png",
   "url": "https://coincards.com/ca/product/cineplex-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -3994,8 +3994,8 @@
   "n": "Original Joe’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184608/ORGJOE-CA-500x315.png",
   "url": "https://coincards.com/ca/product/original-joes-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4009,7 +4009,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/28101424/WAYFAR-CA-500x315.png",
   "url": "https://coincards.com/ca/product/wayfair-ca-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Home Improvement"
@@ -4034,8 +4034,8 @@
   "n": "Harvey’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184606/HARVEY-CA-500x315.png",
   "url": "https://coincards.com/ca/product/harveys-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4048,8 +4048,8 @@
   "n": "Kelsey’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/kelseys-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4062,8 +4062,8 @@
   "n": "East Side Mario’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2018/06/28101407/Variable_UDC_CR80-1.png",
   "url": "https://coincards.com/ca/product/east-side-marios-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4076,8 +4076,8 @@
   "n": "Montana’s Cookhouse Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184604/MONTNS-CA-500x315.png",
   "url": "https://coincards.com/ca/product/montanas-cookhouse-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4090,8 +4090,8 @@
   "n": "Swiss Chalet Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184603/SWSCHA-CA-500x315.png",
   "url": "https://coincards.com/ca/product/swiss-chalet-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4104,8 +4104,8 @@
   "n": "Bier Markt Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184602/BMARKT-CA-500x315.png",
   "url": "https://coincards.com/ca/product/bier-markt-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4118,8 +4118,8 @@
   "n": "The Loose Moose Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2024/08/12120059/SIRCRP-CA-card-500x315.png",
   "url": "https://coincards.com/ca/product/the-loose-moose-online-gift-card-electronic-delivery-2/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -4131,8 +4131,8 @@
   "n": "Needs Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/needs-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4144,8 +4144,8 @@
   "n": "Lawton’s Drugs Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/lawtons-drugs-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4157,8 +4157,8 @@
   "n": "Thrifty Foods Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/thrifty-foods-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4170,8 +4170,8 @@
   "n": "FreshCo Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/freshco-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4183,8 +4183,8 @@
   "n": "Price Chopper (Ontario) Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/price-chopper-ontario-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4196,8 +4196,8 @@
   "n": "Foodland Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/foodland-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4209,8 +4209,8 @@
   "n": "IGA Extra Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/iga-extra-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4222,8 +4222,8 @@
   "n": "IGA Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/iga-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4235,8 +4235,8 @@
   "n": "Safeway Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184553/sobeysnew.png",
   "url": "https://coincards.com/ca/product/safeway-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 25,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Grocery"
@@ -4261,8 +4261,8 @@
   "n": "Winners Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/winners-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -4275,8 +4275,8 @@
   "n": "Winners Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/winners-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4305,7 +4305,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08154955/thekeg-1.png",
   "url": "https://coincards.com/ca/product/the-keg-steakhouse-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "Restaurants"
@@ -4357,7 +4357,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08120233/roots-e1514483809859.jpg",
   "url": "https://coincards.com/ca/product/roots-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4370,8 +4370,8 @@
   "n": "Old Navy Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184335/GAP-CA-500x315.png",
   "url": "https://coincards.com/ca/product/old-navy-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -4398,8 +4398,8 @@
   "n": "Marshalls Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/marshalls-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4413,7 +4413,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08151421/kobo.png",
   "url": "https://coincards.com/ca/product/kobo-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -4426,7 +4426,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08134233/KRNLS-CA-500x315.png",
   "url": "https://coincards.com/ca/product/kernels-popcorn-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -4439,7 +4439,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08130144/indigo-1.png",
   "url": "https://coincards.com/ca/product/indigo-chapters-coles-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Retail",
@@ -4452,8 +4452,8 @@
   "n": "HomeSense Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/homesense-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": 10,
+  "hi": 250,
   "cur": "CAD",
   "tags": [
    "Atlantic"
@@ -4466,7 +4466,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08120241/golftown-1-e1514319617174.jpg",
   "url": "https://coincards.com/ca/product/golf-town-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Atlantic",
@@ -4480,7 +4480,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/08115832/golf-town.png",
   "url": "https://coincards.com/ca/product/golf-town-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Sport"
@@ -4505,8 +4505,8 @@
   "n": "HomeSense Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184625/TriBrand-Striped-500x315.png",
   "url": "https://coincards.com/ca/product/homesense-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "buyatab",
@@ -4574,8 +4574,8 @@
   "n": "Banana Republic Standard Gift Card (Physical Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2023/06/24184335/GAP-CA-500x315.png",
   "url": "https://coincards.com/ca/product/banana-republic-standard-gift-card-physical-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "CAD",
   "tags": [
    "Retail"
@@ -4588,7 +4588,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/3/2017/12/24105027/APPLE-CA-500x315.png",
   "url": "https://coincards.com/ca/product/apple-gift-card-online-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "CAD",
   "tags": [
    "Electronics"

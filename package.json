@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node scripts/postbuild-sitemap.mjs",
-    "launch-check": "node scripts/launch-check.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

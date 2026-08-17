@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
 import { TERMS, CATEGORIES, slug } from '../../lib/glossary.js';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 const sorted = [...TERMS].sort((a, b) =>
   a.t.localeCompare(b.t, 'en', { numeric: true, sensitivity: 'base' }));
@@ -36,6 +37,7 @@ const ld = {
   <div class="doc-head">
     <div class="doc-kicker">Learn</div>
     <h1>Bitcoin glossary</h1>
+    <HeroEmblem name="glossary" />
     <p class="doc-lede">{TERMS.length} terms from bitcoin and the wider crypto world, each explained in plain language. Search, filter by topic, or jump to a letter. Every entry has its own link.</p>
   </div>
 

@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="What Is a UTXO: How Bitcoin Balances Really Work - OpenBitcoin" description="Bitcoin has no account balances. It has unspent outputs, spent whole and returned as change. What a UTXO is, why it decides your fee, and what consolidation and coin control mean.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Learn</div>
     <h1>What is a UTXO</h1>
+    <HeroEmblem name="utxo" />
     <p class="doc-lede">Bitcoin has no accounts and stores no balances. It has chunks of coin sitting at addresses, each spendable only in full. Once that clicks, change addresses, fee estimates and half the odd behaviour of wallets stop being odd.</p>
   </div>
   <div class="doc-grid">

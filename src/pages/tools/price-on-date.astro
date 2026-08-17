@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Price on a Date: Cost Basis Lookup - OpenBitcoin" description="Look up the bitcoin price on any past date for cost basis: the daily open, high, low and close, and which valuation source tax authorities accept.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Tools</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Bitcoin price on a date</h1>
+    <HeroEmblem name="calmag" />
     <p class="doc-lede">The price on the day you acquired coins is where a cost basis starts. Pick a date from the first market day in July 2010 onward, and see which figure a tax return wants and why a daily close is a judgment call.</p>
   </div>
   <div class="doc-grid">
@@ -43,7 +45,7 @@ import '../../styles/doc.css';
         <div class="pd-cell"><span>Low</span><b id="pd-l">--</b></div>
         <div class="pd-cell"><span>Close</span><b id="pd-c">--</b></div>
       </div>
-      <p class="pd-gate" id="pd-note">Pick a date and the four figures fill from the daily series this site ships, with the source for that particular day named beside them. Days before August 18, 2010 predate the series; those first weeks live on the <a href="/history">timeline</a> instead.</p>
+      <p class="pd-gate" id="pd-note">Pick a date and the four figures fill from the daily series this site ships, with the source for that particular day named beside them. The series reaches back to July 17, 2010, the first day a bitcoin price was ever quoted. Every recorded day is also browsable on the <a href="/price/calendar">price calendar</a>.</p>
       <p class="pd-gate" id="pd-monthrow" hidden><a id="pd-monthlink" href="/price/calendar">See every day of that month &#8594;</a></p>
     </div>
 
@@ -96,6 +98,7 @@ import '../../styles/doc.css';
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
+        <a href="/price/calendar">Price calendar, every day</a>
         <a href="/tax">Bitcoin taxes</a>
         <a href="/tax/us">United States tax guide</a>
         <a href="/tax/ca">Canada tax guide</a>
@@ -301,6 +304,10 @@ import '../../styles/doc.css';
       if(t<MIN)t=MIN;
       inp.value=toISO(t);
       paint();
+      /* a programmatic value set fires no events, and the daily-figures module
+         in the next script block listens on the input; without this the preset
+         buttons resolved the date but never filled the figures */
+      inp.dispatchEvent(new Event("change",{bubbles:true}));
     });
   });
 
@@ -317,8 +324,10 @@ import '../../styles/doc.css';
    Blockchain.info market-price daily closes for the Mt. Gox era (close only),
    Bitstamp OHLC from BITSTAMP_FROM onward. */
 (function(){
-  var FIRST="2010-08-18",        /* first row in the committed file */
-      BITSTAMP_FROM="2011-08-18",/* first Bitstamp row; before this, Blockchain.info */
+  var FIRST="2010-07-17",        /* first row in the committed file: the first quoted market day */
+      GOX_TO="2010-08-18",       /* rows before this are OHLC from the Mt. Gox trade log */
+      BITSTAMP_FROM="2011-08-18",/* first Bitstamp row; between GOX_TO and this, Blockchain.info */
+      TAG_GOX="Mt. Gox trade log, UTC",
       TAG_BS="Bitstamp daily series, UTC",
       TAG_BI="Blockchain.info daily close, UTC",
       TAG_LIVE="Our own daily candles, UTC",
@@ -332,7 +341,8 @@ import '../../styles/doc.css';
   function fmt(v){
     if(v>=1000)return v.toLocaleString("en-US",{maximumFractionDigits:0});
     if(v>=1)return v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
-    return v.toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4});
+    /* five decimals so 0.04951, the first quoted price, survives intact */
+    return v.toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:5});
   }
   function tag(t){if(src)src.textContent=t||"Source shown per day, UTC";}
   function blank(msg){
@@ -356,7 +366,9 @@ import '../../styles/doc.css';
   function load(){
     if(cache)return Promise.resolve(cache);
     if(pending)return pending;
-    pending=fetch("/data/btc-daily.json").then(function(r){return r.json();}).then(function(d){
+    /* no-cache: revalidate, not refetch; the file changes at every deploy
+       and a heuristically-cached copy hid new days (owner 2026-08-17) */
+    pending=fetch("/data/btc-daily.json",{cache:"no-cache"}).then(function(r){return r.json();}).then(function(d){
       cache={};
       d.days.forEach(function(row){cache[row[0]]=row;});
       last=(d.meta&&d.meta.last)||(d.days.length?d.days[d.days.length-1][0]:null);
@@ -398,7 +410,7 @@ import '../../styles/doc.css';
   function show(date){
     if(!date)return;
     if(date<FIRST){
-      blank('That date predates the first quotable daily close, August 18, 2010; bitcoin traded below one cent before it. The era lives on the <a href="/history">timeline</a>.');
+      blank('No market existed before July 17, 2010, the day the first bitcoin price was quoted. The era before it lives on the <a href="/history">timeline</a>.');
       return;
     }
     load().then(function(map){
@@ -410,9 +422,11 @@ import '../../styles/doc.css';
       }
       var closeOnly=fill(row[1],row[2],row[3],row[4]);
       /* the tag names the series that actually produced this row */
-      tag(date<BITSTAMP_FROM?TAG_BI:TAG_BS);
+      tag(date<GOX_TO?TAG_GOX:date<BITSTAMP_FROM?TAG_BI:TAG_BS);
       note.textContent=closeOnly
         ?"Mt. Gox era: a Blockchain.info daily close only; open, high and low were not reliably recorded, and the thin market makes every figure approximate."
+        :date<GOX_TO
+        ?"Bitcoin's first weeks on a market: figures computed from the preserved Mt. Gox trade log. The market was tiny, so every figure is approximate."
         :"UTC day, BTC/USD. Record the source name beside the figure you use; provenance at /sources.";
       month(date);
     })["catch"](function(){

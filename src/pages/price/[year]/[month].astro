@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import '../../../styles/doc.css';
 import { fmtUsd, fmtPct, fullDate, MONTH_NAMES } from '../../../lib/prices.js';
 import { liveSeries } from '../../../lib/prices-live.js';
+import HeroEmblem from '../../../components/HeroEmblem.astro';
 
 export const prerender = false;
 
@@ -25,10 +26,17 @@ const mLabel = ([y, m]) => `${MONTH_NAMES[parseInt(m, 10) - 1].slice(0, 3)} ${y}
   <div class="doc-head">
     <div class="doc-kicker"><a class="pm-crumb" href="/price/calendar">Price calendar</a> / <a class="pm-crumb" href={`/price/${year}`}>{year}</a> / {name}</div>
     <h1>Bitcoin price in {name} {year}</h1>
+    <HeroEmblem name="calendar" />
     <p class="doc-lede">Every trading day of {name} {year}: the month {s.changePct >= 0 ? 'rose' : 'fell'} {fmtPct(Math.abs(s.changePct)).replace('+','')}, closing at ${fmtUsd(s.close)} with a high of ${fmtUsd(s.high)} and a low of ${fmtUsd(s.low)}.</p>
   </div>
   <div class="doc-grid">
   <div>
+    
+    <div class="pm-nav pm-mb">
+      {prev ? <a href={`/price/${prev[0]}/${prev[1]}`}>&#8592; {mLabel(prev)}</a> : <span></span>}
+      <a href={`/price/${year}`}>{year} overview</a>
+      {next ? <a href={`/price/${next[0]}/${next[1]}`}>{mLabel(next)} &#8594;</a> : <span></span>}
+    </div>
     <div class="pm-card">
       <table class="pm-table" aria-label={`Daily bitcoin prices for ${name} ${year}`}>
         <thead>
@@ -86,14 +94,21 @@ const mLabel = ([y, m]) => `${MONTH_NAMES[parseInt(m, 10) - 1].slice(0, 3)} ${y}
   .pm-crumb:hover{text-decoration:underline}
   .pm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 22px 20px}
   .pm-mt{margin-top:14px}
+  .pm-mb{margin-bottom:14px}
   .pm-table{width:100%;border-collapse:collapse}
   .pm-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
     text-align:right;padding:0 0 8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
   .pm-table th:first-child{text-align:left;padding-left:0}
   .pm-table td{padding:7px 0 7px 10px;border-bottom:1px dotted var(--line-2);text-align:right}
+  .pm-table th:last-child,.pm-table td:last-child{padding-right:8px}
   .pm-table tr:last-child td{border-bottom:0}
   .pm-table tr:target td{background:rgba(247,147,26,.08)}
-  .pm-date{font:700 12px var(--mono);color:var(--ink);white-space:nowrap;text-align:left;padding-left:0}
+  
+  .pm-table tbody tr{cursor:pointer}
+  .pm-table tbody tr:hover td{background:rgba(247,147,26,.05)}
+  .pm-table tbody tr.is-sel td{background:rgba(247,147,26,.14)}
+  
+  .pm-table td.pm-date{font:700 12px var(--mono);color:var(--ink);white-space:nowrap;text-align:left;padding-left:0}
   .pm-n{font:600 12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .pm-c{color:var(--ink);font-weight:700}
   .pm-chg.up{color:var(--up)}
@@ -122,4 +137,15 @@ const mLabel = ([y, m]) => `${MONTH_NAMES[parseInt(m, 10) - 1].slice(0, 3)} ${y}
     .pm-table th:nth-child(4),.pm-table td:nth-child(4){display:none}
   }
 </style>
+<script is:inline>
+/* tap-to-pin: clicking a row keeps its highlight until clicked again */
+(function(){
+  var tb=document.querySelector(".pm-table tbody");
+  if(!tb)return;
+  tb.addEventListener("click",function(e){
+    var tr=e.target&&e.target.closest?e.target.closest("tr"):null;
+    if(tr&&tb.contains(tr))tr.classList.toggle("is-sel");
+  });
+})();
+</script>
 </Base>

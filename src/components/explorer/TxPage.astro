@@ -112,6 +112,10 @@ const paramHref = (key, val) => {
           {confirmed && t.height != null && (
             <div class="blkline">In block <a href={`/${t.height}`}>{fmtInt(t.height)}</a> · <b>{agoText(t.time)}</b> · {utcStamp(t.time)}</div>
           )}
+          
+          {!confirmed && t.firstSeen != null && (
+            <div class="blkline">First seen in our mempool <b>{agoText(t.firstSeen)}</b> · {utcStamp(t.firstSeen)}</div>
+          )}
         </div>
       </div>
       <div class="ah-stats">

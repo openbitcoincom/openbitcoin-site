@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 export const prerender = false;
 
@@ -16,6 +17,7 @@ const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
 const ROWS = 15;
 let ssrBlocks = [];
 let ssrTip = null;
+let ssrTipSeen = null;
 try {
   const r = await fetch(`${BACKEND}/blocks?limit=${ROWS}${anchor == null ? '' : `&before=${anchor}`}`,
     { signal: AbortSignal.timeout(4000) });
@@ -23,6 +25,7 @@ try {
     const j = await r.json();
     if (Array.isArray(j.blocks)) ssrBlocks = j.blocks;
     if (typeof j.tip === 'number') ssrTip = j.tip;
+    if (j.tipSeenAt) ssrTipSeen = Date.parse(j.tipSeenAt);
   }
 } catch { /* the waiting line and the client fetch cover an outage */ }
 
@@ -46,18 +49,26 @@ const feeSpan = (b) => {
   const hi = b.maxFeerate == null || noFees ? null : Math.round(b.maxFeerate);
   return lo != null && hi != null ? `${lo}-${hi} sat/vB` : '';
 };
+const btcTxt = (sat) => {
+  if (typeof sat !== 'number' || !isFinite(sat)) return '';
+  const v = sat / 1e8;
+  if (v >= 1000) return v.toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' BTC';
+  if (v >= 100) return v.toFixed(1) + ' BTC';
+  return v.toFixed(3) + ' BTC';
+};
 const ssrHeights = ssrBlocks.map((b) => b.height);
 const ssrTop = ssrHeights[0] ?? null;
 const ssrLow = ssrHeights.length ? ssrHeights[ssrHeights.length - 1] : null;
 const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip : ssrTop;
 ---
-<Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, size, and fee span, updating live as blocks are found."
+<Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, miner payout, value moved, size, and fee span, updating live as blocks are found."
   indexable={anchor == null} canonicalPath={anchor != null ? '/blocks' : null}>
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Blocks</div>
     <h1>Latest Bitcoin blocks</h1>
-    <p class="doc-lede">Every block, newest first: height, age, mining pool, transaction count, size, and fee span. New blocks appear at the top as our node sees them.</p>
+    <HeroEmblem name="blockstack" />
+    <p class="doc-lede">Every block, newest first: height, age, pool, transaction count, miner earnings, value moved, size, and fee span. New blocks appear at the top as our node sees them.</p>
   </div>
   <div class="doc-grid">
   <div>
@@ -81,15 +92,20 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
         <span class="bl-live">updates as blocks are found</span>
       </div>
       <div class="bl-hrow" aria-hidden="true">
-        <span>Height</span><span>Age</span><span>Miner</span><span class="r">Txs</span><span class="r">Size</span><span class="r">Fee span</span>
+        <span>Height</span><span>Age</span><span>Miner</span><span class="r">Txs</span><span class="r">Payout</span><span class="r">Output</span><span class="r">Size</span><span class="r">Fee span</span>
       </div>
       <div id="bl-rows" aria-label="Latest blocks, newest first">
         {ssrBlocks.length ? ssrBlocks.map((b) => (
           <div class="bl-row" data-h={b.height}>
             <a class="bl-h" href={'/' + b.height}>{fmtN(b.height)}</a>
-            <span class="bl-age">{ageTxt(b.time)}</span>
-            <span class={'bl-miner' + ((b.miner || 'Unknown') === 'Unknown' ? ' unk' : '')}>{b.miner || 'Unknown'}</span>
+            
+            <span class="bl-age">{ageTxt(b.height === ssrTip && ssrTipSeen ? ssrTipSeen / 1000 : b.time)}</span>
+            {(b.miner && b.miner !== 'Unknown')
+              ? <a class="bl-miner" href={`/pools/${b.miner.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}>{b.miner}</a>
+              : <span class="bl-miner unk">Unknown</span>}
             <span class="bl-tx">{fmtN(b.nTx)}</span>
+            <span class="bl-pay">{btcTxt(b.payoutSat)}</span>
+            <span class="bl-out">{btcTxt(b.outputSat)}</span>
             <span class="bl-mb">{sizeTxt(b.size)}</span>
             <span class="bl-fee">{feeSpan(b)}</span>
           </div>
@@ -107,9 +123,9 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
         ? <button class="bl-pbtn" type="button" disabled>NEWER &rsaquo;</button>
         : <a class="bl-pbtn" href={tipForPager != null && anchor + ROWS >= tipForPager ? '/blocks' : '/blocks/from/' + (anchor + ROWS)}>NEWER &rsaquo;</a>}
     </div>
-    <div class="bl-foot">Pool attribution reads the tag miners write into the coinbase transaction; blocks without a recognizable tag show as Unknown. Fee span is the lowest and highest fee rate paid inside the block, in sat/vB.</div>
+    <div class="bl-foot">Pool attribution reads the tag miners write into the coinbase transaction; blocks without a recognizable tag show as Unknown. Every pool's lifetime record is on the <a href="/pools">mining pools</a> page. Fee span is the lowest and highest fee rate paid inside the block, in sat/vB.</div>
     <div class="bl-about doc-prose">
-      <p>The Bitcoin network adds a block roughly every ten minutes, though the actual gap swings from under a minute to more than an hour because mining is a lottery. Each row shows what a block carried: its transaction count, its size, and the span of fee rates inside, from its lowest to its highest, in sat/vB. Heights link to the full block view with every transaction and the coinbase message. Chain data comes from our own node, documented at <a href="/sources">/sources</a>, and fee figures are informational under the <a href="/terms">terms</a>. For current rates before you send, see <a href="/fees">/fees</a>; for why the subsidy inside each block shrinks on a fixed schedule, see <a href="/halving">/halving</a>.</p>
+      <p>The Bitcoin network adds a block roughly every ten minutes, though the actual gap swings from under a minute to more than an hour because mining is a lottery. Each row shows what a block carried: its transaction count, the payout its miner collected (the fixed subsidy plus every fee inside), the total value its transactions moved (the new coins themselves excluded), its size, and the span of fee rates inside, from its lowest to its highest, in sat/vB. Heights link to the full block view with every transaction and the coinbase message. Chain data comes from our own node, documented at <a href="/sources">/sources</a>, and fee figures are informational under the <a href="/terms">terms</a>. For current rates before you send, see <a href="/fees">/fees</a>; for why the subsidy inside each block shrinks on a fixed schedule, see <a href="/halving">/halving</a>.</p>
     </div>
   </div>
   <aside class="doc-rail">
@@ -124,6 +140,7 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
       <nav>
         <a href="/">Look up any block</a>
         <a href="/mempool">Mempool right now</a>
+        <a href="/stats">24h statistics</a>
         <a href="/halving">Halving countdown</a>
         <a href="/block-1m">Block 1,000,000 countdown</a>
       </nav>
@@ -157,10 +174,10 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
     border-radius:8px;padding:7px 11px;font:600 11.5px var(--mono);color:var(--ink);box-shadow:0 8px 22px rgba(0,0,0,.35);white-space:nowrap}
   .mp-tip em{font-style:normal;color:var(--ink-3);display:block;margin-top:2px}
   .mp-desc{font:600 10.5px/1.6 var(--mono);letter-spacing:.03em;color:var(--ink-3);text-align:center;margin:12px auto 2px;max-width:60ch}
-  .bl-hrow,.bl-row{display:grid;grid-template-columns:92px 78px minmax(0,1fr) 62px 76px 112px;gap:12px;align-items:center}
+  .bl-hrow,.bl-row{display:grid;grid-template-columns:92px 78px minmax(0,1fr) 62px 84px 92px 76px 112px;gap:12px;align-items:center}
   .bl-hrow{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
     padding:0 12px 8px;border-bottom:1px solid var(--line-2)}
-  .bl-hrow .r,.bl-tx,.bl-mb,.bl-fee{text-align:right}
+  .bl-hrow .r,.bl-tx,.bl-pay,.bl-out,.bl-mb,.bl-fee{text-align:right}
   .bl-row{padding:10px 12px;border-bottom:1px dashed var(--line-2)}
   .bl-row:last-child{border-bottom:0}
   .bl-h{font:700 13px var(--mono);color:var(--acc);text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -169,17 +186,26 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
   .bl-miner{justify-self:start;font:700 9.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
     background:var(--field);border-radius:5px;padding:3px 8px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
   .bl-miner.unk{color:var(--ink-3)}
+  a.bl-miner{text-decoration:none}
+  a.bl-miner:hover{color:var(--acc)}
+  .mp-lrow a{color:inherit;text-decoration:none}
+  .mp-lrow a:hover{color:var(--acc)}
+  .bl-foot a{color:var(--acc);text-decoration:none}
+  .bl-foot a:hover{text-decoration:underline}
   .bl-tx{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-pay{font:600 11.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bl-out{font:600 11.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .bl-mb{font:600 11.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .bl-fee{font:600 11px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .bl-wait{font:600 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--ink-3);padding:16px 12px 18px}
   .bl-new{animation:blflash .9s ease-out 3}
   @keyframes blflash{0%,45%{background:rgba(247,147,26,.18)}100%{background:transparent}}
   .bl-pager{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}
-  .bl-pbtn{border:1px solid var(--btn-hov);background:var(--btn);color:var(--btn-ink);border-radius:7px;
-    font:700 10.5px var(--mono);letter-spacing:.08em;padding:8px 14px;min-height:34px;cursor:pointer;white-space:nowrap;
-    display:inline-flex;align-items:center}
-  .bl-pbtn:hover{background:var(--btn-hov)}
+  
+  .bl-pbtn{border:1px solid var(--line-2);background:none;color:var(--ink-2);border-radius:8px;
+    font:700 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;cursor:pointer;white-space:nowrap;
+    display:inline-flex;align-items:center;text-decoration:none}
+  .bl-pbtn:hover{color:var(--acc);border-color:rgba(255,166,60,.6)}
   .bl-pbtn[disabled],.bl-pbtn.off{opacity:.35;cursor:default;pointer-events:none}
   .bl-pnote{font:600 10px/1.5 var(--mono);letter-spacing:.03em;color:var(--ink-3);text-align:center}
   .bl-foot{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3);margin-top:10px}
@@ -189,8 +215,17 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
   .bl-stat:last-child{border-bottom:0}
   .bl-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
   .bl-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  
+  @media(max-width:1000px){
+    .bl-hrow,.bl-row{grid-template-columns:88px 72px minmax(0,1fr) 58px 82px 90px 72px;gap:10px}
+    .bl-hrow>:nth-child(8),.bl-row>:nth-child(8){display:none}
+  }
   @media(max-width:860px){
-    .bl-hrow,.bl-row{grid-template-columns:88px 72px minmax(0,1fr) 58px 72px;gap:10px}
+    .bl-hrow,.bl-row{grid-template-columns:88px 72px minmax(0,1fr) 58px 82px 90px;gap:10px}
+    .bl-hrow>:nth-child(7),.bl-row>:nth-child(7){display:none}
+  }
+  @media(max-width:700px){
+    .bl-hrow,.bl-row{grid-template-columns:86px 66px minmax(0,1fr) 56px 82px;gap:9px}
     .bl-hrow>:nth-child(6),.bl-row>:nth-child(6){display:none}
   }
   @media(max-width:560px){
@@ -228,12 +263,23 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
     if(n<1e6)return (n/1e3).toFixed(2)+" KB";
     return (n/1e6).toFixed(2)+" MB";
   }
+  function btcTxt(sat){
+    if(typeof sat!=="number"||!isFinite(sat))return "";
+    var v=sat/1e8;
+    if(v>=1000)return v.toLocaleString("en-US",{maximumFractionDigits:0})+" BTC";
+    if(v>=100)return v.toFixed(1)+" BTC";
+    return v.toFixed(3)+" BTC";
+  }
   function rowHtml(d,fresh){
     return "<div class='bl-row"+(fresh?" bl-new":"")+"' data-h='"+d.h+"'>"+
       "<a class='bl-h' href='/"+d.h+"'>"+fmt(d.h)+"</a>"+
       "<span class='bl-age'>"+ago(d.h)+"</span>"+
-      "<span class='bl-miner"+(d.miner==="Unknown"?" unk":"")+"'>"+d.miner+"</span>"+
+      (d.miner==="Unknown"
+        ?"<span class='bl-miner unk'>Unknown</span>"
+        :"<a class='bl-miner' href='/pools/"+d.miner.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")+"'>"+d.miner+"</a>")+
       "<span class='bl-tx'>"+fmt(d.txs)+"</span>"+
+      "<span class='bl-pay'>"+btcTxt(d.pay)+"</span>"+
+      "<span class='bl-out'>"+btcTxt(d.out)+"</span>"+
       "<span class='bl-mb'>"+sizeTxt(d.size)+"</span>"+
       "<span class='bl-fee'>"+(d.lo!=null&&d.hi!=null?d.lo+"-"+d.hi+" sat/vB":"")+"</span></div>";
   }
@@ -281,7 +327,8 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
     var noFees=b.nTx<=1||(b.totalFeeSat!=null&&!b.totalFeeSat&&!b.maxFeerate),
         lo=(b.minFeerate==null||noFees?null:Math.round(b.minFeerate)),
         hi=(b.maxFeerate==null||noFees?null:Math.round(b.maxFeerate));
-    return{h:b.height,miner:b.miner||"Unknown",txs:b.nTx,size:b.size,lo:lo,hi:hi};
+    return{h:b.height,miner:b.miner||"Unknown",txs:b.nTx,size:b.size,lo:lo,hi:hi,
+           pay:b.payoutSat,out:b.outputSat};
   }
   /* the pager: OLDER walks down the chain, NEWER back up, /blocks is the
      live top. Links, not buttons: every page is a real URL. */
@@ -304,6 +351,9 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
       if(!data||!data.blocks||!data.blocks.length){showWait(WAIT);return;}
       var hs=[],TT={};
       data.blocks.forEach(function(b){hs.push(b.height);TT[b.height]=b.time*1000;});
+      /* tip row on our clock, matching the last-block tile */
+      if(data.tipSeenAt&&data.blocks[0]&&data.blocks[0].height===data.tip)
+        TT[data.blocks[0].height]=Date.parse(data.tipSeenAt);
       heights=hs;T=TT;
       var out="";
       data.blocks.forEach(function(b){out+=rowHtml(liveRow(b),prevTop!==null&&b.height>prevTop);});
@@ -381,8 +431,11 @@ const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip
       });
       svg.innerHTML=out;
       leg.innerHTML=rows.map(function(m,i){
+        var nm=m.name.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+        var label=(m.other||m.name==="Unknown")?nm
+          :"<a href='/pools/"+m.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")+"'>"+nm+"</a>";
         return '<span class="mp-lrow"><s style="background:'+(m.other?css("--mpo"):css(COLS[i]))+
-          '"></s>'+m.name.replace(/&/g,"&amp;").replace(/</g,"&lt;")+' <em>'+m.blocks+" · "+m.pct+"%</em></span>";
+          '"></s>'+label+' <em>'+m.blocks+" · "+m.pct+"%</em></span>";
       }).join("");
       svg.addEventListener("pointermove",function(e){
         var p=e.target.closest("path");if(!p){tip.hidden=true;return;}

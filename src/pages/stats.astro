@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
+
+export const prerender = false;
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+let stats = null, price = null;
+try {
+  const r = await fetch(`${BACKEND}/stats24h`, { signal: AbortSignal.timeout(9000) });
+  if (r.ok) stats = await r.json();
+} catch { /* the page renders its waiting state */ }
+try {
+  const r = await fetch(`${BACKEND}/price`, { signal: AbortSignal.timeout(5000) });
+  if (r.ok) price = (await r.json()).usd;
+} catch { /* fiat cells stay blank */ }
+
+const d = stats?.day ?? null;
+const a = stats?.allTime ?? null;
+const fmtN = (n) => (typeof n === 'number' && isFinite(n) ? n.toLocaleString('en-US') : null);
+const btc = (sat, dp = 0) => (typeof sat === 'number' ? (sat / 1e8).toLocaleString('en-US', { maximumFractionDigits: dp }) : null);
+const usd = (v) => (typeof v === 'number' && price ? (v * price).toLocaleString('en-US', { maximumFractionDigits: v * price < 10 ? 2 : 0 }) : null);
+const ELL = '…';
+const pctOf21M = a?.supplySat ? ((a.supplySat / 1e8 / 21_000_000) * 100).toFixed(2) : null;
+---
+<Base title="Bitcoin Network Statistics: Last 24 Hours and All Time - OpenBitcoin"
+  description="Live bitcoin network statistics from our own node: transactions, blocks, volume moved, fees, and hashrate over the last 24 hours, plus total transactions, circulating supply, funded addresses, and blockchain size.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Network</div>
+    <h1>Bitcoin Network Statistics</h1>
+    <HeroEmblem name="bars" />
+    <p class="doc-lede">What the network did in the last 24 hours and what it has done since 2009, every figure measured by our own node, refreshed every few minutes.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="ns-card">
+      <div class="ns-tlab">Last 24 hours</div>
+      <div class="ns-grid">
+        <div class="ns-t"><b id="ns-tx">{fmtN(d?.txs) ?? ELL}</b><i>Transactions</i></div>
+        <div class="ns-t"><b id="ns-tps">{d?.tps ?? ELL}</b><i>Transactions per second</i></div>
+        <div class="ns-t"><b id="ns-blk">{fmtN(d?.blocks) ?? ELL}</b><i>Blocks found</i></div>
+        <div class="ns-t"><b id="ns-vol">{btc(d?.volumeSat) ? btc(d?.volumeSat) + ' BTC' : ELL}</b><i>Value moved</i></div>
+        <div class="ns-t"><b id="ns-fees">{btc(d?.feeSat, 2) ? btc(d?.feeSat, 2) + ' BTC' : ELL}</b><i>Fees paid to miners</i></div>
+        <div class="ns-t"><b id="ns-avgfee">{d?.avgFeeSat ? fmtN(d.avgFeeSat) + ' sats' + (usd(d.avgFeeSat / 1e8) ? ' · $' + usd(d.avgFeeSat / 1e8) : '') : ELL}</b><i>Average fee per transaction</i></div>
+        <div class="ns-t"><b id="ns-med">{d?.medianFeerate != null ? d.medianFeerate + ' sat/vB' : ELL}</b><i>Median feerate of mined blocks</i></div>
+        <div class="ns-t"><b id="ns-hash">{d?.hashrateEhs ? d.hashrateEhs.toLocaleString('en-US') + ' EH/s' : ELL}</b><i>Hashrate, estimated</i></div>
+      </div>
+      <p class="ns-fine">Transaction and value figures exclude the coinbases, so newly minted coins are not counted as movement. The feerate is the median of each block's median; hashrate is the standard estimate from difficulty and the actual 24-hour block pace.</p>
+    </div>
+
+    <div class="ns-card ns-mt">
+      <div class="ns-tlab">All time</div>
+      <div class="ns-grid">
+        <div class="ns-t"><b id="ns-ttx">{fmtN(a?.txTotal) ?? ELL}</b><i>Transactions ever confirmed</i></div>
+        <div class="ns-t"><b id="ns-sup">{btc(a?.supplySat) ? btc(a?.supplySat) + ' BTC' : ELL}</b><i>Coins in circulation{pctOf21M ? ` · ${pctOf21M}% of 21M` : ''}</i></div>
+        <div class="ns-t"><b id="ns-addr">{fmtN(a?.fundedAddresses) ?? ELL}</b><i>Addresses holding a balance</i></div>
+        <div class="ns-t"><b id="ns-size">{(a?.rawSizeBytes ?? a?.sizeBytes) ? Math.round((a.rawSizeBytes ?? a.sizeBytes) / 1e9).toLocaleString('en-US') + ' GB' : ELL}</b><i>Blockchain size</i></div>
+      </div>
+      <p class="ns-fine">Circulation and the address count come from a weekly sweep of the full UTXO set, the supply verified against the node to the satoshi, with new issuance added block by block between sweeps. Addresses counts those holding a balance right now; the total ever used runs past a billion and is not tracked here. Size is the serialized blockchain itself, measured from our node's block files; the node stores about another 106 GB of undo data beside it, which the API reports separately.</p>
+    </div>
+
+    <div class="ns-about doc-prose">
+      <p>Everything on this page is measured, not quoted: the 24-hour figures are read block by block from our own node as each day rolls on, and the all-time figures come from the same machine's copy of the chain. No third-party API is consulted. The same numbers are served as JSON at <a href="/api">/api</a>, provenance for the rest of the site is documented at <a href="/sources">/sources</a>, and everything here is informational under the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/mempool">Mempool right now</a>
+        <a href="/hashrate">Hashrate history</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/nodes">Reachable nodes</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .ns-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 18px}
+  .ns-mt{margin-top:14px}
+  .ns-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+  .ns-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px 18px}
+  .ns-t b{display:block;font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+  .ns-t i{display:block;font:600 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px}
+  .ns-fine{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:16px 0 0;border-top:1px dotted var(--line-2);padding-top:11px}
+  .ns-about{margin-top:14px}
+  .ns-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  @media(max-width:700px){.ns-card{padding:16px 14px}.ns-t b{font-size:16.5px}}
+</style>
+<script is:inline>
+/* refresh the tiles every five minutes from the same endpoint the SSR used */
+(function(){
+  function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
+  var fmt=function(n){return n.toLocaleString("en-US");};
+  function put(id,txt){var el=document.getElementById(id);if(el&&txt!=null)el.textContent=txt;}
+  function paint(s){
+    if(!s)return;
+    var d=s.day||{},a=s.allTime||{};
+    var price=(window.OB_LIVE&&window.OB_LIVE.price&&window.OB_LIVE.price.usd)||null;
+    if(typeof d.txs==="number")put("ns-tx",fmt(d.txs));
+    if(typeof d.tps==="number")put("ns-tps",String(d.tps));
+    if(typeof d.blocks==="number")put("ns-blk",fmt(d.blocks));
+    if(typeof d.volumeSat==="number")put("ns-vol",fmt(Math.round(d.volumeSat/1e8))+" BTC");
+    if(typeof d.feeSat==="number")put("ns-fees",(d.feeSat/1e8).toLocaleString("en-US",{maximumFractionDigits:2})+" BTC");
+    if(typeof d.avgFeeSat==="number")put("ns-avgfee",fmt(d.avgFeeSat)+" sats"+(price?" · $"+(d.avgFeeSat/1e8*price).toFixed(2):""));
+    if(d.medianFeerate!=null)put("ns-med",d.medianFeerate+" sat/vB");
+    if(typeof d.hashrateEhs==="number")put("ns-hash",fmt(d.hashrateEhs)+" EH/s");
+    if(typeof a.txTotal==="number")put("ns-ttx",fmt(a.txTotal));
+    if(typeof a.supplySat==="number")put("ns-sup",fmt(Math.floor(a.supplySat/1e8))+" BTC");
+    if(typeof a.fundedAddresses==="number")put("ns-addr",fmt(a.fundedAddresses));
+    var sz=(typeof a.rawSizeBytes==="number"?a.rawSizeBytes:a.sizeBytes);
+    if(typeof sz==="number")put("ns-size",fmt(Math.round(sz/1e9))+" GB");
+  }
+  function load(){
+    try{fetch(api()+"/stats24h").then(function(r){return r.ok?r.json():null}).then(paint)["catch"](function(){});}catch(e){}
+  }
+  setInterval(load,300000);
+})();
+</script>
+</Base>

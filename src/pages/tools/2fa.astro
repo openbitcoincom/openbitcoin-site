@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Offline Authenticator: TOTP Codes with No Network - OpenBitcoin" description="How TOTP two-factor codes work, why a backup authenticator prevents lost-phone lockouts, and a single-file offline authenticator you can download.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Two-factor</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Offline authenticator</h1>
+    <HeroEmblem name="shielddots" />
     <p class="doc-lede">An authenticator is a shared secret plus a clock. Here is how that works, plus a single-file authenticator you can download, disconnect, and run offline so a lost phone never locks you out.</p>
   </div>
   <div class="doc-grid">

@@ -2,12 +2,14 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { ATH_USD, ATH_USD_TEXT, ATH_LABEL } from '../lib/ath.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Sats per Dollar: How Many Satoshis One US Dollar Buys - OpenBitcoin" description="Live sats-per-dollar ticker: how many satoshis one US dollar buys right now, plus what $1, $10, $100 and $1,000 buy in sats.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Sats per dollar</div>
     <h1>Sats per dollar</h1>
+    <HeroEmblem name="dollarsats" />
     <p class="doc-lede">The price ticker, inverted: how many satoshis one US dollar buys, updated live. The figure rises when the dollar price of bitcoin falls, and falls when it rises.</p>
   </div>
   <div class="doc-grid">

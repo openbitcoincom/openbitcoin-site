@@ -1,0 +1,56 @@
+{
+ "measured": true,
+ "reachable": 8958,
+ "located": 8958,
+ "crawledAt": "2026-08-13T20:58:40.794Z",
+ "countries": [
+  {
+   "code": "US",
+   "nodes": 2760
+  },
+  {
+   "code": "DE",
+   "nodes": 1695
+  },
+  {
+   "code": "CA",
+   "nodes": 425
+  },
+  {
+   "code": "NL",
+   "nodes": 413
+  },
+  {
+   "code": "FR",
+   "nodes": 408
+  },
+  {
+   "code": "GB",
+   "nodes": 366
+  },
+  {
+   "code": "FI",
+   "nodes": 314
+  },
+  {
+   "code": "CH",
+   "nodes": 231
+  },
+  {
+   "code": "AU",
+   "nodes": 195
+  },
+  {
+   "code": "SG",
+   "nodes": 166
+  },
+  {
+   "code": "RU",
+   "nodes": 147
+  },
+  {
+   "code": "JP",
+   "nodes": 143
+  }
+ ]
+}

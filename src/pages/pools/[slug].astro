@@ -1,0 +1,253 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+export const prerender = false;
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+const slug = Astro.params.slug || '';
+const pageQ = Number(Astro.url.searchParams.get('page')) || 1;
+let d = null;
+if (/^[a-z0-9-]{1,60}$/.test(slug)) {
+  try {
+    const r = await fetch(`${BACKEND}/pool/${slug}?page=${pageQ}`, { signal: AbortSignal.timeout(9000) });
+    if (r.ok) d = await r.json();
+  } catch { /* falls through to 404 */ }
+}
+if (!d) return Astro.rewrite('/404');
+
+let poolEhs = null;
+if (d.b7d > 0) {
+  try {
+    const rn = await fetch(`${BACKEND}/network`, { signal: AbortSignal.timeout(5000) });
+    if (rn.ok) {
+      const net = await rn.json();
+      if (net.hashrateEhs) poolEhs = net.hashrateEhs * d.b7d / (7 * 144);
+    }
+  } catch { /* the tile just stays off */ }
+}
+
+const fmtInt = (n) => n == null ? '…' : Number(n).toLocaleString('en-US');
+const fmtBtc = (sat) => (sat / 1e8).toLocaleString('en-US', { maximumFractionDigits: 0 });
+const pct = (n, dd) => dd ? (n / dd * 100).toFixed(n / dd * 100 >= 10 ? 1 : 2) + '%' : '…';
+const dateTxt = (t) => new Date(t * 1000).toISOString().slice(0, 10);
+const subsidyTxt = (h) => {
+  const sat = Math.floor(5000000000 / 2 ** Math.min(Math.floor(h / 210000), 62));
+  return parseFloat((sat / 1e8).toFixed(8)).toString();
+};
+const y0 = new Date(d.firstTime * 1000).getFullYear();
+const y1 = new Date(d.lastTime * 1000).getFullYear();
+const active = d.b30d > 0;
+const canonical = `/pools/${slug}`;
+---
+<Base title={`${d.name} Mining Pool: ${fmtInt(d.blocks)} Bitcoin Blocks - OpenBitcoin`} description={`${d.name} has mined ${fmtInt(d.blocks)} bitcoin blocks${active ? '' : ` between ${y0} and ${y1}`}: share over time, fees earned, and the full block list, from our own node's records.`} canonicalPath={canonical}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker"><a class="pd-back" href="/pools">Mining pools</a></div>
+    <h1>{d.name}</h1>
+    
+    <svg class="pd-hero" viewBox="0 0 96 96" aria-hidden="true">
+      <g transform="rotate(45 48 48)">
+        <path fill="none" stroke="#F7931A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M48 10c18.4 0 34.4 8 42.4 20.8-6.8-4.4-17.2-7.6-28.8-8.8l-13.6-.8-13.6.8C22.8 23.2 12.4 26.4 5.6 30.8 13.6 18 29.6 10 48 10z" />
+        <path fill="rgba(247,147,26,.15)" stroke="#F7931A" stroke-width="3" d="M42 19h12l1.6 13.6H40.4z"/>
+        <path fill="none" stroke="#F7931A" stroke-width="4" stroke-linecap="round" d="M48 34v50"/>
+      </g>
+    </svg>
+    <p class="doc-lede">{active
+      ? `Active pool: ${fmtInt(d.b24h)} blocks in the last day, ${fmtInt(d.blocks)} all-time.`
+      : `Historical pool, active ${y0} to ${y1}: ${fmtInt(d.blocks)} blocks on the record.`}</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pd-cells">
+      <div class="pd-cell"><b>{fmtInt(d.blocks)}</b><i>blocks all-time</i></div>
+      <div class="pd-cell"><b>{pct(d.blocks, d.totalBlocks)}</b><i>of all blocks ever</i></div>
+      {active && <div class="pd-cell"><b>{fmtInt(d.b7d)}</b><i>blocks, 7 days</i></div>}
+      {poolEhs != null && <div class="pd-cell"><b>~{poolEhs >= 100 ? Math.round(poolEhs) : poolEhs.toFixed(1)} EH/s</b><i>est. hashrate, 7d share</i></div>}
+      {!active && <div class="pd-cell"><b>{y0}-{y1}</b><i>active years</i></div>}
+      <div class="pd-cell"><b>{d.subsidySat != null ? fmtBtc(d.subsidySat) : '…'} BTC</b><i>block rewards mined</i></div>
+      <div class="pd-cell"><b>{d.feesSat != null ? fmtBtc(d.feesSat) : '…'} BTC</b><i>fees collected</i></div>
+      <div class="pd-cell"><b><a href={`/${d.firstHeight}`}>#{fmtInt(d.firstHeight)}</a></b><i>first block</i></div>
+      <div class="pd-cell"><b><a href={`/${d.lastHeight}`}>#{fmtInt(d.lastHeight)}</a></b><i>latest block</i></div>
+    </div>
+
+    <div class="pd-card pd-mt">
+      <div class="pd-tlab">Blocks per month</div>
+      <div class="pd-cwrap"><canvas id="pdc" aria-label={`Blocks mined per month by ${d.name}`}></canvas></div>
+    </div>
+
+    <div class="pd-card pd-mt">
+      <div class="pd-tlab">Block history &#183; page {d.page} of {fmtInt(d.pages)}</div>
+      <table class="pd-table" aria-label={`Blocks mined by ${d.name}`}>
+        <thead><tr><th>Height</th><th>Date</th><th>Reward</th><th class="pd-hfee">Fees</th><th class="pd-htag">Signature</th></tr></thead>
+        <tbody>
+          {d.list.map((b) => (
+            <tr>
+              <td><a class="pd-blink" href={`/${b.height}`}>{fmtInt(b.height)}</a></td>
+              <td class="pd-date">{dateTxt(b.time)}</td>
+              <td class="pd-fee">{subsidyTxt(b.height)} BTC</td>
+              <td class="pd-fee pd-hfee">{b.feeSat != null ? (b.feeSat / 1e8).toFixed(4) + ' BTC' : '·'}</td>
+              <td class="pd-tag pd-htag">{b.tag || '·'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div class="pd-pager">
+        {d.page > 1 ? <a href={`${canonical}?page=${d.page - 1}`}>&#8249; Newer</a> : <span>&#8249; Newer</span>}
+        <em>page {d.page} of {fmtInt(d.pages)}</em>
+        {d.page < d.pages ? <a href={`${canonical}?page=${d.page + 1}`}>Older &#8250;</a> : <span>Older &#8250;</span>}
+      </div>
+    </div>
+    <p class="pd-fine">Attribution reads each block's coinbase signature through the same map the live block pages use, or, for pools that reused payout wallets without signing, the wallet itself; blocks with neither are not counted here. P2Pool is the one structural exception: its decentralized coinbases carry no signature at all, so its blocks are identified by their many-shareholder payout shape. Block rewards are the coinbase subsidy of the pool's blocks (pure arithmetic on each height); fees are the transaction fees inside them. Together they are what the blocks paid, not pool revenue after cuts.</p>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/pools">All mining pools</a>
+        <a href="/hashrate">Hashrate &amp; difficulty</a>
+        <a href="/blocks">Latest blocks</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  
+  .pd-hero{float:right;width:88px;height:auto;margin:-28px 10px -22px 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:pdfloat 6s ease-in-out infinite}
+  @keyframes pdfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.pd-hero{animation:none}}
+  @media(max-width:640px){.pd-hero{width:64px;margin:2px 0 6px 14px}}
+  .pd-back{color:var(--acc);text-decoration:none}
+  .pd-back:hover{text-decoration:underline}
+  .pd-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .pd-cell{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .pd-cell b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pd-cell b a{color:var(--acc);text-decoration:none}
+  .pd-cell b a:hover{text-decoration:underline}
+  .pd-cell i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .pd-mt{margin-top:14px}
+  .pd-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
+  .pd-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .pd-cwrap{position:relative}
+  .pd-cwrap canvas{display:block;width:100%}
+  .pd-table{width:100%;border-collapse:collapse}
+  .pd-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line-2)}
+  .pd-table td{font:500 13px var(--sans);color:var(--ink-2);padding:8px 12px 8px 0;
+    border-bottom:1px dotted var(--line-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pd-table tr:last-child td{border-bottom:0}
+  .pd-blink{font:700 13px var(--mono);color:var(--acc);text-decoration:none}
+  .pd-blink:hover{text-decoration:underline}
+  .pd-date{font-family:var(--mono);font-size:12px}
+  .pd-fee{font-family:var(--mono);font-size:12px}
+  .pd-tag{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);max-width:280px;overflow:hidden;text-overflow:ellipsis}
+  .pd-pager{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:14px}
+  .pd-pager a{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);text-decoration:none;
+    border:1px solid var(--line-2);border-radius:7px;padding:6px 12px}
+  .pd-pager a:hover{border-color:rgba(255,166,60,.6)}
+  .pd-pager span{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);opacity:.4;
+    border:1px solid var(--line-2);border-radius:7px;padding:6px 12px}
+  .pd-pager em{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-style:normal}
+  .pd-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  @media(max-width:560px){
+    .pd-htag{display:none}
+  }
+</style>
+<script is:inline define:vars={{ MONTHLY: d.monthly, NAME: d.name }}>
+/* one-series house chart: monthly blocks as a filled step area, brand ramp
+   color, hover crosshair with month + count (single series, so the title
+   names it and no legend box is needed) */
+(function(){
+  var wrap=document.querySelector(".pd-cwrap"),cv=document.getElementById("pdc");
+  if(!wrap||!cv||!cv.getContext||!MONTHLY||MONTHLY.length<1)return;
+  var ctx=cv.getContext("2d"),hover=-1,tip=null;
+  function cssv(n,fb){var v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||fb;}
+  function draw(){
+    var W=wrap.clientWidth,H=W<520?150:200,dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);cv.style.height=H+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    var padL=42,padR=8,padT=8,padB=22,iw=W-padL-padR,ih=H-padT-padB;
+    var n=MONTHLY.length,max=0,i;
+    for(i=0;i<n;i++)if(MONTHLY[i][1]>max)max=MONTHLY[i][1];
+    if(!(max>0))return;
+    max*=1.08;
+    var t0=MONTHLY[0][0],t1=MONTHLY[n-1][0]+2592000;
+    function X(t){return padL+(t-t0)/(t1-t0)*iw;}
+    function Y(v){return padT+ih-v/max*ih;}
+    var ink3=cssv("--ink-3","#7C8CA8"),line2=cssv("--line-2","#2A3B5C");
+    ctx.font='600 10px "Cascadia Mono","Consolas",monospace';
+    /* y grid */
+    var step=Math.max(1,Math.pow(10,Math.floor(Math.log(max/3.5)/Math.LN10)));
+    var m=(max/3.5)/step;step*= m>=5?10:m>=2?5:m>=1?2:1;
+    ctx.textAlign="right";ctx.textBaseline="middle";
+    for(var yv=step;yv<max;yv+=step){
+      var gy=Math.round(Y(yv))+.5;
+      ctx.strokeStyle=line2;ctx.globalAlpha=.5;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(W-padR,gy);ctx.stroke();
+      ctx.globalAlpha=1;ctx.fillStyle=ink3;ctx.fillText(yv.toLocaleString("en-US"),padL-6,gy);
+    }
+    /* x labels: years */
+    ctx.textAlign="center";ctx.textBaseline="top";ctx.fillStyle=ink3;
+    var yA=new Date(t0*1000).getFullYear(),yB=new Date(t1*1000).getFullYear();
+    var span=yB-yA,stepY=span>10?2:1;
+    for(var yr=yA+1;yr<=yB;yr+=stepY){
+      var tx=Date.UTC(yr,0,1)/1000,mx=X(tx);
+      if(mx<padL+16||mx>W-padR-16)continue;
+      ctx.strokeStyle=line2;ctx.globalAlpha=.35;
+      ctx.beginPath();ctx.moveTo(Math.round(mx)+.5,padT);ctx.lineTo(Math.round(mx)+.5,padT+ih);ctx.stroke();
+      ctx.globalAlpha=1;ctx.fillText(String(yr),mx,H-padB+7);
+    }
+    /* the area, stepped per month */
+    ctx.beginPath();
+    ctx.moveTo(X(MONTHLY[0][0]),Y(0));
+    for(i=0;i<n;i++){
+      var x1=X(MONTHLY[i][0]),x2=X(i+1<n?MONTHLY[i+1][0]:t1),v=Y(MONTHLY[i][1]);
+      ctx.lineTo(x1,v);ctx.lineTo(x2,v);
+    }
+    ctx.lineTo(X(t1),Y(0));ctx.closePath();
+    ctx.fillStyle="rgba(184,107,0,.55)";ctx.fill();
+    ctx.strokeStyle="#F7931A";ctx.lineWidth=1.6;
+    ctx.beginPath();
+    for(i=0;i<n;i++){
+      var xa=X(MONTHLY[i][0]),xb=X(i+1<n?MONTHLY[i+1][0]:t1),vv=Y(MONTHLY[i][1]);
+      i?ctx.lineTo(xa,vv):ctx.moveTo(xa,vv);ctx.lineTo(xb,vv);
+    }
+    ctx.stroke();
+    /* baseline */
+    ctx.strokeStyle=line2;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(padL,Math.round(padT+ih)+.5);ctx.lineTo(W-padR,Math.round(padT+ih)+.5);ctx.stroke();
+    /* crosshair */
+    if(hover>=0&&hover<n){
+      var hx=Math.round((X(MONTHLY[hover][0])+X(hover+1<n?MONTHLY[hover+1][0]:t1))/2)+.5;
+      ctx.strokeStyle=ink3;ctx.globalAlpha=.7;
+      ctx.beginPath();ctx.moveTo(hx,padT);ctx.lineTo(hx,padT+ih);ctx.stroke();ctx.globalAlpha=1;
+    }
+  }
+  function ensureTip(){
+    if(tip)return tip;
+    tip=document.createElement("div");
+    tip.style.cssText="position:absolute;pointer-events:none;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;font:600 10.5px/1.5 var(--mono);color:var(--ink-2);white-space:nowrap;z-index:5";
+    wrap.appendChild(tip);
+    return tip;
+  }
+  cv.addEventListener("pointermove",function(ev){
+    var r=cv.getBoundingClientRect(),x=ev.clientX-r.left;
+    var W=wrap.clientWidth,padL=42,padR=8,iw=W-padL-padR;
+    var n=MONTHLY.length,t0=MONTHLY[0][0],t1=MONTHLY[n-1][0]+2592000;
+    var tt=t0+(x-padL)/iw*(t1-t0),best=0;
+    for(var i=0;i<n;i++)if(MONTHLY[i][0]<=tt)best=i;
+    hover=best;draw();
+    var d0=new Date(MONTHLY[best][0]*1000);
+    var el=ensureTip();
+    el.innerHTML=d0.toLocaleDateString("en-US",{month:"short",year:"numeric"})+" &#183; <b style='color:var(--ink)'>"+MONTHLY[best][1].toLocaleString("en-US")+"</b> blocks";
+    el.style.left=Math.min(x+14,W-el.offsetWidth-6)+"px";el.style.top="6px";
+  });
+  cv.addEventListener("pointerleave",function(){hover=-1;if(tip)tip.remove();tip=null;draw();});
+  var rt=null;
+  window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(draw,120);});
+  draw();
+})();
+</script>
+</Base>

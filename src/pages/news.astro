@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import newsFile from '../content/news.json';
+import { NSRC_INK } from '../lib/news-sources.js';
+const srcBadge = (o) => NSRC_INK[o] || [String(o).toUpperCase(), '#9C8B75', '#161310'];
 
 const items = newsFile.items;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -15,6 +17,16 @@ function fmtDate(iso) {
   <div class="doc-head">
     <div class="doc-kicker">News</div>
     <h1>Latest bitcoin news</h1>
+    
+    <svg class="nw-hero" viewBox="0 0 110 92" aria-hidden="true">
+      <g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke-width="3" stroke="rgba(247,147,26,.45)" d="M97 20v54a8 8 0 0 1-8 8H26"/>
+        <rect x="8" y="8" width="80" height="66" rx="7" stroke-width="3" fill="rgba(247,147,26,.07)"/>
+        <rect x="18" y="19" width="32" height="20" rx="3" stroke-width="2.5" stroke="rgba(247,147,26,.6)"/>
+        <path stroke-width="2.5" stroke="rgba(247,147,26,.6)" d="M57 22h21M57 29h21M57 36h21"/>
+        <path stroke-width="2.5" stroke="rgba(247,147,26,.38)" d="M18 48h60M18 56h60M18 64h42"/>
+      </g>
+    </svg>
     <p class="doc-lede">Bitcoin headlines collected automatically from five outlets, newest first. Every headline links to the outlet that did the reporting; we rewrite nothing and host no articles.</p>
   </div>
   <div class="doc-grid">
@@ -27,12 +39,14 @@ function fmtDate(iso) {
         )}
         {items.map((n) => (
           <a class="nw-row" href={n.url} target="_blank" rel="noopener noreferrer nofollow">
-            <span class="nw-src">{n.outlet}</span>
-            <span class="nw-t">{n.title}</span>
+            <span class="nw-src" style={`background:${srcBadge(n.outlet)[1]};color:${srcBadge(n.outlet)[2]}`}>{srcBadge(n.outlet)[0]}</span>
+            <span class="nw-t">{n.title}{n.blurb && <em class="nw-blurb">{n.blurb}</em>}</span>
             <span class="nw-age">{fmtDate(n.date)}</span>
           </a>
         ))}
       </div>
+      
+      <script type="application/json" id="nw-src-data" is:inline set:html={JSON.stringify(NSRC_INK)} />
     </div>
 
     <div class="nw-note nw-mt">
@@ -41,7 +55,7 @@ function fmtDate(iso) {
         <li><b>Collected automatically.</b> A scanner checks the public feeds of five outlets every 15 minutes: Bitcoin Magazine, CoinDesk, Cointelegraph, Decrypt, and Blockworks. It filters for bitcoin coverage and keeps the list newest first. Nobody pays for placement.</li>
         <li><b>Inclusion is not endorsement.</b> A headline appearing here says nothing about its accuracy; the reporting belongs to the outlet, and the filter is mechanical, not editorial. A broken or misplaced link can be reported via the <a href="/contact">contact page</a>.</li>
         <li><b>Links go to the source.</b> Every headline is an outbound link to the outlet that did the reporting. Clicking one leaves this site.</li>
-        <li><b>Nothing is rewritten.</b> Titles appear exactly as the outlets published them. We publish no articles of our own here and take no credit for anyone's work; the headline, the source name, and the date are the whole entry.</li>
+        <li><b>Nothing is rewritten.</b> Titles and the short summaries under them appear exactly as the outlets published them in their own feeds. We publish no articles of our own here and take no credit for anyone's work; the headline, the outlet's summary, the source name, and the date are the whole entry.</li>
       </ul>
     </div>
 
@@ -81,7 +95,14 @@ function fmtDate(iso) {
   .nw-row:last-of-type{border-bottom:0}
   .nw-src{justify-self:start;white-space:nowrap;background:var(--field);border:1px solid var(--line-2);border-radius:99px;
     padding:3px 9px;font:700 8.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .nw-hero{float:right;width:104px;height:auto;margin:-28px 8px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:nwfloat 6s ease-in-out infinite}
+  @keyframes nwfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.nw-hero{animation:none}}
+  @media(max-width:640px){.nw-hero{width:76px;margin:2px 0 6px 14px}}
   .nw-t{font:500 14px/1.5 var(--sans);color:var(--ink-2)}
+  .nw-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    font:400 12.5px/1.55 var(--sans);font-style:normal;color:var(--ink-3);margin-top:3px}
   .nw-row:hover .nw-t{color:var(--ink)}
   .nw-age{font:600 10.5px var(--mono);color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
   .nw-age::after{content:"\2197";margin-left:5px;font-weight:700}
@@ -114,6 +135,8 @@ function fmtDate(iso) {
   var box=document.getElementById("nw-rows");
   if(!box)return;
   var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var NSRC={};
+  try{NSRC=JSON.parse(document.getElementById("nw-src-data").textContent)||{};}catch(e){}
   function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function fmtDate(iso){
@@ -122,9 +145,11 @@ function fmtDate(iso) {
     return MONTHS[Number(m[2])-1]+" "+Number(m[3])+", "+m[1];
   }
   function row(n){
+    var b=NSRC[n.outlet]||[String(n.outlet).toUpperCase(),"#9C8B75","#161310"];
     return '<a class="nw-row" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer nofollow">'
-      +'<span class="nw-src">'+esc(n.outlet)+'</span>'
-      +'<span class="nw-t">'+esc(n.title)+'</span>'
+      +'<span class="nw-src" style="background:'+esc(b[1])+';color:'+esc(b[2])+'">'+esc(b[0])+'</span>'
+      +'<span class="nw-t">'+esc(n.title)
+      +(n.blurb?'<em class="nw-blurb">'+esc(n.blurb)+'</em>':'')+'</span>'
       +'<span class="nw-age">'+esc(fmtDate(n.date))+'</span>'
       +'</a>';
   }

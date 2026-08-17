@@ -2,62 +2,27 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 ---
-<Base title="Swap Bitcoin Without an Account: Rates, Fees, Risks - OpenBitcoin" description="Swap bitcoin for other assets without an account: how the non-custodial flow works, fixed vs floating rates, and why the spread is the real fee.">
+<Base title="Swap Crypto for Bitcoin Without an Account - OpenBitcoin" description="Swap bitcoin for other assets without an account: how the non-custodial flow works, fixed vs floating rates, and why the spread is the real fee.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Swap</div>
-    <h1>Swap between bitcoin and other assets</h1>
-    <p class="doc-lede">The one page here that touches other assets. Swaps run through ChangeNOW: no account, one deposit, delivery to a wallet you control.</p>
+    <h1>Swap crypto for bitcoin</h1>
+    
+    <svg class="sw-emblem" viewBox="0 0 100 84" aria-hidden="true">
+      <g fill="none" stroke="#F7931A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 24h68M62 8l16 16-16 16"/>
+        <path d="M90 60H22M38 44L22 60l16 16"/>
+      </g>
+    </svg>
+    <p class="doc-lede">Trade ether, stablecoins and other coins for bitcoin without an account: one deposit, delivery to a wallet you control. Swaps run both ways through ChangeNOW.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="sw-hero">
-      <div class="sw-form">
-        <div class="sw-field">
-          <label class="sw-lab" for="sw-amt">You send</label>
-          <div class="sw-inrow">
-            <input id="sw-amt" class="sw-amt" type="text" inputmode="decimal" value="0.1" autocomplete="off" spellcheck="false" disabled />
-            <select id="sw-from" class="sw-sel" aria-label="Asset to send" disabled>
-              <option value="BTC" selected>BTC</option>
-              <option value="ETH">ETH</option>
-              <option value="USDT">USDT</option>
-              <option value="USDC">USDC</option>
-              <option value="XMR">XMR</option>
-              <option value="LTC">LTC</option>
-            </select>
-          </div>
-        </div>
-        <button class="sw-flip" id="sw-flip" type="button" aria-label="Reverse the swap direction" disabled>&#8645;</button>
-        <div class="sw-field">
-          <label class="sw-lab" for="sw-to">You receive, estimated</label>
-          <div class="sw-inrow">
-            <output id="sw-out" class="sw-outv" for="sw-amt sw-from sw-to">&#8230;</output>
-            <select id="sw-to" class="sw-sel" aria-label="Asset to receive" disabled>
-              <option value="BTC">BTC</option>
-              <option value="ETH" selected>ETH</option>
-              <option value="USDT">USDT</option>
-              <option value="USDC">USDC</option>
-              <option value="XMR">XMR</option>
-              <option value="LTC">LTC</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="sw-mode" role="group" aria-label="Rate mode">
-        <button type="button" class="sw-mbtn is-on" id="sw-mfloat" disabled>Floating rate</button>
-        <button type="button" class="sw-mbtn" id="sw-mfixed" disabled>Fixed rate</button>
-        <span class="sw-mnote" id="sw-mnote">Floating: the final rate is set when your deposit confirms, so the amount received can differ from the amount you were quoted.</span>
-      </div>
-      <div class="sw-quote">
-        <div class="sw-qrate" id="sw-rate">1 BTC = &#8230;</div>
-        <span class="sw-qsub">bitcoin price, not a swap quote</span>
-        <p class="sw-qnote">This form is not connected to a quote engine, so no swap rate is shown here. It opens when the swap partner integration is signed and switched on; the ChangeNOW link further down is the working route today.</p>
-      </div>
-      <div class="sw-ctarow">
-        <button type="button" class="sw-cta" disabled>Start swap</button>
-        <span class="sw-ctan">Execution runs through ChangeNOW, a third party. Send only from a wallet you control, never straight from an exchange; the risk card below explains why.</span>
-      </div>
+      <iframe id="iframe-widget" title="Swap between bitcoin and other assets, powered by ChangeNOW" src="https://changenow.io/embeds/exchange-widget/v2/widget.html?FAQ=true&amount=0.5&amountFiat&backgroundColor=101D33&darkMode=true&from=eth&horizontal=false&isFiat=false&lang=en-US&link_id=ef2e79e6aabb3b&locales=true&logo=true&primaryColor=F7931A&to=btc&toTheMoon=false" style="height:356px;width:100%;border:none"></iframe>
+      <p class="sw-ctan">Execution runs through ChangeNOW, a third party. Send only from a wallet you control, never straight from an exchange; the risk card below explains why.</p>
     </div>
+    <script defer type="text/javascript" src="https://changenow.io/embeds/exchange-widget/v2/stepper-connector.js"></script>
 
     <div class="sw-card sw-mt">
       <div class="sw-tlab">How a cross-asset swap works</div>
@@ -80,12 +45,12 @@ import '../styles/doc.css';
       
       <div class="sw-svc">
         <div class="sw-svcm">
-          <div class="sw-svct"><b><a href="https://changenow.io" target="_blank" rel="noopener noreferrer">ChangeNOW</a></b><span class="sw-since">Since 2017</span></div>
+          <div class="sw-svct"><b><a href="https://changenow.app.link/referral?link_id=ef2e79e6aabb3b" target="_blank" rel="sponsored noopener noreferrer">ChangeNOW</a></b><span class="sw-since">Since 2017</span></div>
           <p class="sw-svcp">An account-free swap service: no registration, no balance to leave behind. Each swap is its own transaction with its own deposit address, and the service holds your coins only for the minutes the trade takes. That is still custody during those minutes, which is why amounts should stay sane and the refund address should always be set.</p>
         </div>
-        <a class="sw-open" href="https://changenow.io" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+        <a class="sw-open" href="https://changenow.app.link/referral?link_id=ef2e79e6aabb3b" target="_blank" rel="sponsored noopener noreferrer">Open &#8599;</a>
       </div>
-      <p class="sw-fine">Account-free does not mean consequence-free. Swap services screen deposits, and a flagged swap can be held pending identity checks under the service's own policy. If that trade-off matters to you, <a href="/learn/no-kyc">no-KYC bitcoin</a> covers the wider landscape honestly. When affiliate terms are signed, this link becomes a labeled affiliate link per the <a href="/disclosure">disclosure</a>; affiliate status never changes what this page says.</p>
+      <p class="sw-fine">Account-free does not mean consequence-free. Swap services screen deposits, and a flagged swap can be held pending identity checks under the service's own policy. If that trade-off matters to you, <a href="/learn/no-kyc">no-KYC bitcoin</a> covers the wider landscape honestly. The ChangeNOW links on this page are affiliate links per the <a href="/disclosure">disclosure</a>; affiliate status never changes what this page says.</p>
     </div>
 
     <div class="sw-card sw-mt">
@@ -147,6 +112,12 @@ import '../styles/doc.css';
   </div>
 </main>
 <style is:global>
+  
+  .sw-emblem{float:right;width:118px;height:auto;margin:-28px 6px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:swfloat 6s ease-in-out infinite}
+  @keyframes swfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.sw-emblem{animation:none}}
+  @media(max-width:640px){.sw-emblem{width:86px;margin:2px 0 6px 14px}}
   .sw-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
   .sw-form{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:end}
   .sw-field{min-width:0}
@@ -214,11 +185,12 @@ import '../styles/doc.css';
   .sw-since{font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
     border:1px dotted var(--line-2);border-radius:5px;padding:2px 7px;white-space:nowrap}
   .sw-svcp{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:4px 0 0}
+  
   .sw-open{display:inline-block;flex:none;font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    background:var(--cta);color:var(--cta-ink);border:1.5px solid rgba(255,166,60,.65);border-radius:9px;
+    background:#F7931A;color:#101A2C;border:1.5px solid #F7931A;border-radius:9px;
     padding:10px 18px;text-decoration:none;white-space:nowrap;
-    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
-  .sw-open:hover{background:var(--cta-hov);border-color:var(--orange)}
+    box-shadow:0 4px 14px rgba(247,147,26,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+  .sw-open:hover{background:#FFA63C;border-color:#FFA63C}
   .sw-fine{font:500 12px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
   .sw-note{border-color:rgba(255,166,60,.32)}
   .sw-about{margin-top:14px}
@@ -237,44 +209,21 @@ import '../styles/doc.css';
     .sw-flip{justify-self:center;align-self:center;transform:rotate(90deg)}
     .sw-ctarow{align-items:flex-start;flex-direction:column;gap:10px}
     .sw-svc{flex-direction:column;align-items:flex-start;gap:10px}
+    
+    .sw-mnote,.sw-ctan{flex:0 0 auto}
   }
 </style>
 <script is:inline>
 (function(){
-  /* No quote engine and no rate arithmetic: the site has no swap rates, so the
-     page states none. The only figure painted here is the live bitcoin price,
-     shown in the quote line and the rail, and labelled in the markup as the
-     bitcoin price rather than a swap quote. Both hold an ellipsis until a real
-     tick lands. The direction and mode controls stay wired (they move no
-     figures) so the integration pass only has to add real quotes. */
+  /* The widget owns quotes and rates; the site paints only the rail's live
+     bitcoin price and height off the chrome hook, ellipses until a real
+     tick lands. The old mock-form wiring left with the form (2026-08-10). */
   var LIVE={price:null,height:null};
-  var from=document.getElementById("sw-from"),to=document.getElementById("sw-to"),
-      rate=document.getElementById("sw-rate"),flip=document.getElementById("sw-flip"),
-      mf=document.getElementById("sw-mfloat"),mx=document.getElementById("sw-mfixed"),
-      mn=document.getElementById("sw-mnote"),
-      px=document.getElementById("sw-px"),ht=document.getElementById("sw-ht");
+  var px=document.getElementById("sw-px"),ht=document.getElementById("sw-ht");
   function paint(){
-    if(LIVE.price!==null){
-      var p="$"+LIVE.price.toLocaleString("en-US",{maximumFractionDigits:0});
-      if(rate)rate.textContent="1 BTC = "+p;
-      if(px)px.textContent=p;
-    }
+    if(px&&LIVE.price!==null)px.textContent="$"+LIVE.price.toLocaleString("en-US",{maximumFractionDigits:0});
     if(ht&&LIVE.height!==null)ht.textContent=LIVE.height.toLocaleString("en-US");
   }
-  flip.addEventListener("click",function(){
-    var f=from.value;from.value=to.value;to.value=f;
-  });
-  function mode(on,off,txt){
-    on.classList.add("is-on");off.classList.remove("is-on");mn.textContent=txt;
-  }
-  mf.addEventListener("click",function(){
-    mode(mf,mx,"Floating: the final rate is set when your deposit confirms, so the amount received can differ from the amount you were quoted.");
-  });
-  mx.addEventListener("click",function(){
-    mode(mx,mf,"Fixed: the quoted rate is locked for a short window; the quote is slightly worse in exchange for the certainty.");
-  });
-  /* live price and height arrive via the chrome hook; window.OB_LIVE is only
-     set once a real summary lands, so the ellipses hold until then */
   window.obPaintFiat=function(S){
     if(!window.OB_LIVE)return;
     if(S&&typeof S.price==="number"&&S.price>0)LIVE.price=S.price;

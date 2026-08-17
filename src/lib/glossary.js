@@ -95,8 +95,7 @@ export const TERMS = [
     d: 'The chain of blocks, each one committing to the one before it, which is what makes rewriting old history expensive rather than merely dishonest. In bitcoin it is the public record of every transaction since 2009.' },
 
   { t: 'Broadcast', k: 'tx', alt: 'publish transaction relay send raw',
-    d: 'Handing a signed transaction to the network. Your node passes it to its peers, they pass it on, and within seconds it sits in mempools everywhere waiting to be mined. Broadcasting costs nothing and can be done from any node, not just the wallet that signed.',
-    see: [['Broadcast a transaction', '/tools/broadcast']] },
+    d: 'Handing a signed transaction to the network. Your node passes it to its peers, they pass it on, and within seconds it sits in mempools everywhere waiting to be mined. Broadcasting costs nothing and can be done from any node, not just the wallet that signed.' },
 
   { t: 'Burn address', k: 'tx', alt: 'unspendable eater address provably unspendable',
     d: 'An address with no known private key, so anything sent to it can never move again. Sometimes used deliberately to destroy coins, and sometimes reached by accident, which is one of the ways bitcoin is permanently lost.' },

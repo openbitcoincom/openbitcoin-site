@@ -1,0 +1,18 @@
+---
+const { name } = Astro.props;
+
+import { E } from '../lib/emblems.js';
+
+
+const [vb, body] = E[name] || E.question;
+---
+<svg class="fam-hero" viewBox={vb} aria-hidden="true">
+  <g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round" set:html={body} />
+</svg>
+<style is:global>
+  .fam-hero{float:right;width:98px;height:auto;margin:-28px 8px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:famfloat 6s ease-in-out infinite}
+  @keyframes famfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.fam-hero{animation:none}}
+  @media(max-width:640px){.fam-hero{width:72px;margin:2px 0 6px 14px}}
+</style>

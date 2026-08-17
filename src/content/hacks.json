@@ -1038,15 +1038,16 @@
   {
    "name": "Coldcard",
    "date": "2026-07-30",
-   "btc": 1367,
-   "usdAtTime": 88600000,
+   "btc": 1719,
+   "usdAtTime": 111000000,
    "kind": "wallet",
-   "summary": "A firmware bug introduced in March 2021 made Coldcard Mk3 hardware wallets on versions 4.0.1 through 4.1.9 generate seeds with a deterministic software PRNG instead of the STM32 hardware random number generator, leaving the seeds weak enough to brute force offline. Starting July 30, 2026 attackers swept at least 1,367 BTC, about 88.6 million dollars, from 4,585 addresses across several waves, including 1,083 BTC worth about 70 million dollars taken in a 41 minute wave before public disclosure.",
-   "aftermath": "Coinkite shipped emergency firmware within about two days, destroyed unshipped devices carrying affected versions, and urged everyone with a seed from firmware 4.0.1 to 4.1.9 to move funds to a fresh seed, with thefts still ongoing in early August 2026.",
+   "summary": "A firmware bug introduced in March 2021 made Coldcard hardware wallets generate seeds with a deterministic software PRNG instead of the hardware random number generator, cutting effective key strength to as little as 40 bits, weak enough to brute force offline. Starting July 30, 2026 multiple attackers swept victims in at least four waves; by August 8 researchers had confirmed 1,719 BTC stolen, about 111 million dollars, with on-chain estimates near 1,816 BTC from more than 5,200 addresses and total losses expected to pass 130 million.",
+   "aftermath": "Coinkite shipped emergency firmware within about two days and urged everyone with an affected seed, initially reported as Mk3 firmware 4.0.1 through 4.1.9 and later widened to seeds generated on firmware released after March 17, 2021 on Mk3, Mk4, Mk5, and Q devices, to move funds to a fresh seed. Stolen coins are pooling at attacker addresses with little laundering so far, no attribution has been made, and researchers were still confirming additional victims in mid August 2026.",
    "sources": [
+    "https://www.trmlabs.com/resources/blog/the-largest-hardware-wallet-exploit-of-2026-inside-the-usd-116-million-coldcard-hack",
+    "https://www.cryptotimes.io/2026/08/08/galaxy-research-confirms-111m-stolen-funds-in-coldcard-exploit/",
+    "https://techcrunch.com/2026/08/04/hackers-steal-over-130-million-by-exploiting-bug-in-offline-hardware-wallets/",
     "https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/",
-    "https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html",
-    "https://www.coindesk.com/tech/2026/07/31/major-bitcoin-wallet-flaw-drains-594-btc-in-25-minute-sweep",
     "https://www.blockhead.co/2026/08/03/coldcard-hardware-wallets-shipped-with-broken-randomness-for-five-years-coinkite-confirms/"
    ]
   }

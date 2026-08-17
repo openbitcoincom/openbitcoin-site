@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 const SHEETS = [
   {
@@ -90,6 +91,7 @@ const LINES = SHEETS.map((s) =>
   <div class="doc-head ih-noprint">
     <div class="doc-kicker">Learn</div>
     <h1>Bitcoin inheritance</h1>
+    <HeroEmblem name="scroll" />
     <p class="doc-lede">Coins with no living owner and no readable instructions are simply gone. How to leave a map that says where everything is and who to call, without ever writing down a seed.</p>
   </div>
   <div class="doc-grid">

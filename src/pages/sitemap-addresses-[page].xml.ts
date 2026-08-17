@@ -1,20 +1,16 @@
-// One 50,000-URL slice of the address sitemap. Named by /sitemap-addresses.xml,
-// which is the index; that is the only URL that needs submitting.
 import type { APIRoute } from 'astro';
-import { PER_FILE } from './sitemap-addresses.xml.ts';
 
 export const prerender = false;
 
 const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
 const SITE = 'https://openbitcoin.com';
+export const PER_FILE = 50000;
 
 const xmlEscape = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export const GET: APIRoute = async ({ params }) => {
   const page = Number(params.page);
-  // reject anything that is not a plain page number, so /sitemap-addresses-x.xml
-  // 404s instead of quietly serving page zero
   if (!Number.isInteger(page) || page < 0 || String(page) !== params.page) {
     return new Response('Not found', { status: 404 });
   }
@@ -32,11 +28,8 @@ export const GET: APIRoute = async ({ params }) => {
       total = j.total || 0;
     }
   } catch {
-    // an empty but valid file beats a 500
   }
 
-  // a page past the end is a real 404, not an empty file: an index should never
-  // name one, and if it does we want that visible in Search Console
   if (page > 0 && page * PER_FILE >= Math.max(total, 1)) {
     return new Response('Not found', { status: 404 });
   }

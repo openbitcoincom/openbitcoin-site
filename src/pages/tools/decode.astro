@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Raw Bitcoin Transaction Decoder - OpenBitcoin" description="Paste raw transaction hex and decode it in your browser: version, inputs, outputs, script types, witness, locktime, txid, size and weight.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Decoder</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Raw transaction decoder</h1>
+    <HeroEmblem name="magbraces" />
     <p class="doc-lede">Paste a signed transaction in hex and it is taken apart in your browser: inputs, outputs, witness, txid and wtxid, size and weight. The hex never leaves this page.</p>
   </div>
   <div class="doc-grid">
@@ -34,8 +36,8 @@ import '../../styles/doc.css';
 
     <div class="td-card td-mt td-cta-card">
       <div class="td-tlab">Next step</div>
-      <p>Decoding tells you what a signed transaction says. It does not put it on the network: nothing here talks to a node. When the bytes read the way you expect, push them to the peer-to-peer network from the broadcast page, and watch the result in the <a href="/mempool">mempool</a>.</p>
-      <a class="td-cta" href="/tools/broadcast">Broadcast a signed transaction</a>
+      <p>Decoding tells you what a signed transaction says. It does not put it on the network: nothing here talks to a node. When the bytes read the way you expect, broadcast them from your own wallet or node, and watch the result arrive in the mempool.</p>
+      <a class="td-cta" href="/mempool">Watch the live mempool</a>
     </div>
 
     <div class="doc-card td-mt">
@@ -76,7 +78,6 @@ import '../../styles/doc.css';
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
-        <a href="/tools/broadcast">Broadcast a signed transaction</a>
         <a href="/tx/stuck">Stuck transaction help</a>
         <a href="/fees/calculator">Fee calculator</a>
       </nav>

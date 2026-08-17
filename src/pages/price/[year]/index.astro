@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import '../../../styles/doc.css';
 import { fmtUsd, fmtPct, MONTH_NAMES } from '../../../lib/prices.js';
 import { liveSeries } from '../../../lib/prices-live.js';
+import HeroEmblem from '../../../components/HeroEmblem.astro';
 
 export const prerender = false;
 
@@ -16,7 +17,7 @@ const idx = ys.indexOf(year);
 const prevY = idx > 0 ? ys[idx - 1] : null;
 const nextY = idx < ys.length - 1 ? ys[idx + 1] : null;
 const partialNote = year === ys[0]
-  ? 'Daily closes begin August 18, 2010; earlier days traded below one cent with no quotable close.'
+  ? 'The series begins July 17, 2010, the first day a bitcoin price was quoted; the first weeks are computed from the preserved Mt. Gox trade log.'
   : (year === ys[ys.length - 1] ? 'The current year fills in day by day; each UTC day joins its month once the day completes.'
   : (s.closeOnly ? 'Months in the Mt. Gox era carry daily closes only; full open, high and low begin August 18, 2011.' : ''));
 ---
@@ -25,10 +26,17 @@ const partialNote = year === ys[0]
   <div class="doc-head">
     <div class="doc-kicker"><a class="py-crumb" href="/price/calendar">Price calendar</a> / {year}</div>
     <h1>Bitcoin price in {year}</h1>
+    <HeroEmblem name="calendar" />
     <p class="doc-lede">Bitcoin {s.changePct >= 0 ? 'gained' : 'lost'} {fmtPct(Math.abs(s.changePct)).replace('+','')} in {year}: from ${fmtUsd(s.open)} at the open to ${fmtUsd(s.close)} at the close. Pick a month for every day's prices.</p>
   </div>
   <div class="doc-grid">
   <div>
+    
+    <div class="py-nav py-mb">
+      {prevY ? <a href={`/price/${prevY}`}>&#8592; {prevY}</a> : <span></span>}
+      <a href="/price/calendar">All years</a>
+      {nextY ? <a href={`/price/${nextY}`}>{nextY} &#8594;</a> : <span></span>}
+    </div>
     <div class="py-stats">
       <div class="py-stat"><b>${fmtUsd(s.open)}</b><i>Year open</i></div>
       <div class="py-stat"><b>${fmtUsd(s.close)}</b><i>Year close</i></div>
@@ -41,7 +49,7 @@ const partialNote = year === ys[0]
       <div class="py-tlab">Every month of {year}</div>
       <div class="py-months">
         {ms.map((m) => { const mm = S.monthSummary(year, m); return (
-          <a class="py-month" href={`/price/${year}/${m}`}>
+          <a class={'py-month ' + (mm.changePct >= 0 ? 'was-up' : 'was-down')} href={`/price/${year}/${m}`}>
             <b>{MONTH_NAMES[parseInt(m, 10) - 1]}</b>
             <span class="py-mclose">${fmtUsd(mm.close)}</span>
             <span class={'py-mchg ' + (mm.changePct >= 0 ? 'up' : 'down')}>{fmtPct(mm.changePct)}</span>
@@ -52,11 +60,6 @@ const partialNote = year === ys[0]
       {partialNote && <p class="py-fine">{partialNote}</p>}
     </div>
 
-    <div class="py-nav py-mt">
-      {prevY ? <a href={`/price/${prevY}`}>&#8592; {prevY}</a> : <span></span>}
-      <a href="/price/calendar">All years</a>
-      {nextY ? <a href={`/price/${nextY}`}>{nextY} &#8594;</a> : <span></span>}
-    </div>
   </div>
   <aside class="doc-rail">
     <div class="doc-tile">
@@ -82,12 +85,16 @@ const partialNote = year === ys[0]
   .py-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
   .py-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
   .py-mt{margin-top:14px}
+  .py-mb{margin-bottom:14px}
   .py-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
   .py-months{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
   .py-month{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;
-    text-decoration:none;min-width:0}
+    text-decoration:none;min-width:0;text-align:center}
+  
+  .py-month.was-up{background:rgba(46,189,133,.07);border-color:rgba(46,189,133,.30)}
+  .py-month.was-down{background:rgba(246,70,93,.06);border-color:rgba(246,70,93,.28)}
   .py-month:hover{border-color:rgba(255,166,60,.45)}
-  .py-month b{display:block;font:700 13.5px var(--sans);color:var(--ink)}
+  .py-month b{display:block;font:700 17px var(--sans);color:var(--ink);margin-bottom:2px}
   .py-mclose{display:block;font:700 13px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;margin-top:4px}
   .py-mchg{display:inline-block;font:700 10.5px var(--mono);font-variant-numeric:tabular-nums;margin-top:2px}
   .py-mchg.up{color:var(--up)}

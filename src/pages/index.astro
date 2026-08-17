@@ -1,33 +1,37 @@
 ---
 import Base from '../layouts/Base.astro';
 import newsFile from '../content/news.json';
+import nodesSeed from '../content/nodes.json';
 import { ATH_USD } from '../lib/ath.js';
 
 const NEWS = newsFile.items.map((n) => ({ t: n.title, s: n.outlet, at: n.date, u: n.url }));
-const NSRC = {
-  'Reuters': ['REUTERS', '#FA6400'],
-  'The Block': ['THE BLOCK', '#1A1A1A'],
-  'CoinDesk': ['COINDESK', '#E9A400'],
-  'Bitcoin Magazine': ['BITCOIN MAG', '#C8352C'],
-  'GitHub': ['GITHUB', '#24292E'],
-  'BITCOIN MAG': ['BITCOIN MAG', '#C8352C'],
-  'COINDESK': ['COINDESK', '#E9A400'],
-  'COINTELEGRAPH': ['COINTELEGRAPH', '#FABF2D'],
-  'DECRYPT': ['DECRYPT', '#0F1013'],
-  'BLOCKWORKS': ['BLOCKWORKS', '#5637CD'],
-};
-const inkFor = (hex) => {
-  const v = parseInt(hex.slice(1), 16);
-  const lum = (0.299 * ((v >> 16) & 255) + 0.587 * ((v >> 8) & 255) + 0.114 * (v & 255)) / 255;
-  return lum > 0.45 ? '#161310' : '#FFFFFF';
-};
-const NSRC_INK = Object.fromEntries(Object.entries(NSRC).map(([k, [label, bg]]) => [k, [label, bg, inkFor(bg)]]));
+import { NSRC_INK } from '../lib/news-sources.js';
 const newsItems = NEWS.map((n) => {
   const b = NSRC_INK[n.s] || [n.s.toUpperCase(), '#9C8B75', '#161310'];
   return { ...n, logoTxt: b[0], logoBg: b[1], logoInk: b[2] };
 });
 import { FX, SYM } from '../lib/fx.js';
 import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
+import { E } from '../lib/emblems.js';
+const EX_VB = { dollarsats: '17.8 4.8 78.4 78.4', blockstack: '15.8 4.8 68.4 68.4',
+  coins2: '15.8 6.3 69.4 69.4', bills: '12.8 2.8 74.4 74.4', gauge: '10.8 6.0 78.4 78.4',
+  key: '10.8 2.8 78.4 78.4', dca: '10.8 3.8 76.4 76.4', bag: '17.3 9.8 65.4 65.4',
+  scroll: '16.8 10.8 70.4 70.4', chartline: '8.8 -0.2 82.4 82.4', newspaper: '10.8 2.8 78.4 78.4',
+  controller: '8.8 1.8 82.4 82.4' };
+const EXPLORE = [
+  { href: '/price',    ico: 'dollarsats', t: 'Price & Convert',        d: 'Sats, history, ATH, what-if',                          m: '9 tools' },
+  { href: '/blocks',   ico: 'blockstack', t: 'Explorer',               d: 'Blocks live, mempool, rich list, nodes',               m: 'live' },
+  { href: '/fees',     ico: 'coins2',     t: 'Fees & Transactions',    d: 'Estimator, lookup, stuck-tx help',                     m: '10 tools' },
+  { href: '/buy',      ico: 'bills',      t: 'Buy, Sell & Swap',       d: 'On-ramps, swap, perps, ATMs',                          m: '7 tools' },
+  { href: '/hashrate', ico: 'gauge',      t: 'Network & Mining',       d: 'Halving, hashprice, difficulty',                       m: '16 tools' },
+  { href: '/wallets',  ico: 'key',        t: 'Keys & Wallets',         d: 'Validator, seed recovery, PSBT',                       m: '17 tools \u00b7 offline' },
+  { href: '/dca',      ico: 'dca',        t: 'Stacking & Calculators', d: 'DCA, tax, portfolio, retire',                          m: '9 tools' },
+  { href: '/spend',    ico: 'bag',        t: 'Spend',                  d: 'Gift cards, merchant map, travel',                     m: '5 tools' },
+  { href: '/learn',    ico: 'scroll',     t: 'Learn',                  d: 'Guides that own one question each, plus the glossary', m: '19 guides' },
+  { href: '/chart',    ico: 'chartline',  t: 'Charts',                 d: 'Hashrate, tweets since 2009, Wikipedia views',         m: '12 charts' },
+  { href: '/news',     ico: 'newspaper',  t: 'News',                   d: 'Headlines from five outlets, linked to the source',    m: 'live' },
+  { href: '/games',    ico: 'controller', t: 'Games',                  d: 'The Impossible Slot Machine: real keys, real odds',    m: 'fun only' },
+];
 ---
 <Base
   title="Bitcoin Explorer, Tools and Knowledgebase - OpenBitcoin"
@@ -41,8 +45,8 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
 
     <!-- 1 · LOOKUP -->
     <form class="lookup" id="sform" aria-label="Search the chain">
-      <input id="sin" maxlength="90" autocomplete="off" spellcheck="false" aria-label="Search">
-      <button type="submit">LOOKUP</button>
+      <span class="lk-field"><input id="sin" maxlength="90" autocomplete="off" spellcheck="false" aria-label="Search"></span>
+      <button type="submit"><svg class="lk-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m15.3 15.3 5.2 5.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>LOOKUP</button>
     </form>
 
     <!-- 2 · PRICE + CONVERTER -->
@@ -55,7 +59,8 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
         <div class="chips">
           <span class="chip" id="chg">&hellip;</span>
           <span class="chip" id="mcap">&hellip;</span>
-          <span class="chip" id="athc">&hellip;</span>
+          
+          <a class="chip" id="athc" href="/ath">&hellip;</a>
         </div>
       </div>
       <div>
@@ -83,10 +88,11 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
       
       <div class="nst"><div class="nv" id="since">&hellip;</div><div class="nk">Last block</div></div>
       <a class="nst" href="/mempool"><div class="nv" id="memp">&hellip;</div><div class="nk">In mempool</div></a>
-      <a class="nst hot" href="/mempool"><div class="nv" id="eco">&hellip;</div><div class="nk">Economy<span class="nklg"> fee</span> &middot; fast <span id="fastv">&hellip;</span></div></a>
+      
+      <a class="nst hot" href="/mempool"><div class="nv" id="nbf">&hellip;</div><div class="nk">Next block<span class="nklg"> fee</span></div></a>
       <a class="nst" href="/blocks"><div class="nv" id="height">&hellip;</div><div class="nk">Block height</div></a>
       <a class="nst" href="/halving"><div class="nv" id="halv">&hellip;</div><div class="nk">Bitcoin Halving</div></a>
-      <div class="nst fgmini"><div class="nv"><span id="fg-val">&hellip;</span><span class="segs" id="fg-segs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="nk">Fear &amp; Greed<span class="nklg" id="fg-label"></span></div></div>
+      <div class="nst fgmini"><div class="nv"><span id="fg-val">&hellip;</span><span class="segs" id="fg-segs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="nk"><span class="fg-full">Fear &amp; Greed</span><span class="nklg" id="fg-label"></span></div></div>
     </div>
   </div>
 </section>
@@ -97,7 +103,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     <section class="card" aria-label="Live network activity">
       <div class="live-head">
         <span class="micro lhead" id="lhead"><svg class="hico bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11L9.5 22 18.5 10H12z"/></svg><i class="hbar" aria-hidden="true"></i><b id="lht"><span class="l-long">Live blockchain data</span><span class="l-short">Live</span></b></span>
-        <div class="live-toggle" role="group" aria-label="View mode">
+        <div class="live-toggle lt-seg" role="group" aria-label="View mode">
           <button id="lt-table" class="on" type="button"><span class="t-long">Transactions</span><span class="t-short">Latest</span></button>
           <button id="lt-blocks" type="button">Blocks</button>
           <button id="lt-nodes" type="button">Nodes</button>
@@ -118,6 +124,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
         <tbody id="lnx-body"></tbody>
       </table>
       <div class="lwait" id="lnx-wait">waiting for the node census</div>
+      <script type="application/json" id="nodes-seed" is:inline set:html={JSON.stringify(nodesSeed)} />
       <canvas id="balls"></canvas>
       <div class="lfoot" id="lbx-foot" style="display:none">
         <span class="ntotal"><b id="b24">&hellip;</b> average block interval, last 15 blocks</span>
@@ -165,18 +172,12 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
   <section class="explore" aria-label="All tools">
     <h2>Our Key Pages</h2>
     <div class="grid">
-      <a class="ex" href="/price"><span class="et">Price &amp; Convert</span><span class="ed">Sats, history, ATH, what-if</span><span class="em">9 tools</span></a>
-      <a class="ex" href="/fees"><span class="et">Fees &amp; Transactions</span><span class="ed">Estimator, lookup, stuck-tx help</span><span class="em">10 tools</span></a>
-      <a class="ex" href="/dca"><span class="et">Stacking &amp; Calculators</span><span class="ed">DCA, tax, portfolio, retire</span><span class="em">9 tools</span></a>
-      <a class="ex" href="/hashrate"><span class="et">Network &amp; Mining</span><span class="ed">Halving, hashprice, difficulty</span><span class="em">16 tools</span></a>
-      <a class="ex" href="/wallets"><span class="et">Keys &amp; Wallets</span><span class="ed">Validator, seed recovery, PSBT</span><span class="em">17 tools &middot; offline</span></a>
-      <a class="ex" href="/buy"><span class="et">Buy, Sell &amp; Swap</span><span class="ed">On-ramps, swap, perps, ATMs</span><span class="em">7 tools</span></a>
-      <a class="ex" href="/spend"><span class="et">Spend</span><span class="ed">Gift cards, merchant map, travel</span><span class="em">5 tools</span></a>
-      <a class="ex" href="/learn"><span class="et">Learn</span><span class="ed">Guides that own one question each, plus the glossary</span><span class="em">19 guides</span></a>
-      <a class="ex" href="/games"><span class="et">Games</span><span class="ed">Impossible Lottery, Beat the HODLER</span><span class="em">fun only</span></a>
-      <a class="ex" href="/casinos"><span class="et">Casino</span><span class="ed">Reviews, fact sheets, graveyard</span><span class="em">18+ &middot; geo-aware</span></a>
-      <a class="ex" href="/chart"><span class="et">Charts</span><span class="ed">Hashrate, tweets since 2009, Wikipedia views</span><span class="em">12 charts</span></a>
-      <a class="ex" href="/news"><span class="et">News</span><span class="ed">Headlines from five outlets, linked to the source</span><span class="em">live</span></a>
+      {EXPLORE.map((c) => (
+        <a class="ex" href={c.href}>
+          <span class="et"><span class="ex-ico" aria-hidden="true"><svg viewBox={EX_VB[c.ico]}><g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round" set:html={E[c.ico][1]} /></svg></span>{c.t}</span>
+          <span class="ed">{c.d}</span><span class="em">{c.m}</span>
+        </a>
+      ))}
     </div>
   </section>
 </main>
@@ -215,7 +216,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
       elCurLab=document.getElementById("curlab"),
       elB=document.getElementById("ib"),elF=document.getElementById("if"),
       elH=document.getElementById("height"),elSince=document.getElementById("since"),
-      elM=document.getElementById("memp"),elEco=document.getElementById("eco"),
+      elM=document.getElementById("memp"),elNbf=document.getElementById("nbf"),
       elHalv=document.getElementById("halv"),bpop=document.getElementById("bpop");
   function fmt(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -317,6 +318,15 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
   elF.addEventListener("input",function(){lastEdited="fiat";liveFmt(elF);convF();});
   /* clicking into a box selects the whole number; leaving both empty resets to 1 BTC */
   [elB,elF].forEach(function(el){
+    /* focus selects the whole number, so a stray letter would replace it
+       with junk that liveFmt strips to nothing, blanking both boxes: any
+       insertion with no digit in it is refused before it touches the value */
+    el.addEventListener("beforeinput",function(e){
+      if(e.inputType&&e.inputType.indexOf("insert")===0){
+        var t=e.data!=null?e.data:(e.dataTransfer?e.dataTransfer.getData("text"):"");
+        if(t&&!/[\d.]/.test(t))e.preventDefault();
+      }
+    });
     el.addEventListener("focus",function(){el.select();el._selArm=1;});
     el.addEventListener("mouseup",function(e){if(el._selArm){e.preventDefault();el._selArm=0;}});
     el.addEventListener("blur",function(){
@@ -411,8 +421,8 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
   function paintStrip(){
     if(S.fees){
       if(typeof S.fees.mempoolCount==="number")elM.innerHTML=fmt(S.fees.mempoolCount,0)+"<em>tx</em>";
-      if(typeof S.fees.economy==="number")elEco.innerHTML=feeTxt(S.fees.economy)+"<em>sat/vB</em>";
-      if(typeof S.fees.fastest==="number"){var fv=document.getElementById("fastv");if(fv)fv.textContent=feeTxt(S.fees.fastest);}
+      var nb=typeof S.fees.nextBlock==="number"?S.fees.nextBlock:(typeof S.fees.fastest==="number"?S.fees.fastest:null);
+      if(nb!=null)elNbf.innerHTML=fmt(Math.max(2,Math.ceil(nb)),0)+"<em>sat/vB</em>";
     }else if(S.memp!=null){
       elM.innerHTML=fmt(S.memp,0)+"<em>tx</em>";
     }
@@ -442,7 +452,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
       lbodyEl=document.getElementById("lbody"),
       PHONE=matchMedia("(max-width:720px)").matches,
       TXN=PHONE?10:6,
-      mode="table",ballList=[],ballsRunning=false,holdUntil=0,txSeen=false,nodesData=null,
+      mode="table",ballList=[],ballsRunning=false,holdUntil=0,txSeen=false,nodesData=null,nodesFresh=false,
       lheadEl=document.getElementById("lhead"),lhtEl=document.getElementById("lht"),hodlT;
   /* header flips to a flashing HODL fuse for the 10 s freeze, then returns to normal */
   var HPAUSE='<svg class="hstop" viewBox="0 0 24 24" aria-hidden="true"><g fill="#F7931A"><rect x="6.6" y="5" width="4" height="14" rx="1.7"/><rect x="13.4" y="5" width="4" height="14" rx="1.7"/></g></svg>';
@@ -461,7 +471,12 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     if(lockedH||mode!=="table")return;
     if(ltxTable.tBodies.length>=TXN){
       lockedH=lbodyEl.offsetHeight;
+      /* hard lock, not just a floor (owner 2026-08-17: the page crept under
+         them as rows arrived): with height fixed and overflow hidden, nothing
+         inside this card can ever move the rest of the page */
       lbodyEl.style.minHeight=lockedH+"px";
+      lbodyEl.style.height=lockedH+"px";
+      lbodyEl.style.overflow="hidden";
       ballsCv.style.height=(lockedH-8)+"px";
     }
   }
@@ -488,7 +503,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     lockBody();
   }
   /* blocks view: real blocks from /blocks, top 7 shown, ages tick live */
-  var blocksData=[],fetchingBlocks=false;
+  var blocksData=[],fetchingBlocks=false,blocksTip=null,blocksTipSeen=null;
   function ago(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60);
     return h?h+"h "+m+"m":m?m+"m "+s%60+"s":s%60+"s";}
   function renderBlocks(isNew){
@@ -498,8 +513,12 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     }
     var out="",n=Math.min(7,blocksData.length),now=Date.now()/1000;
     for(var i=0;i<n;i++){var b=blocksData[i],secs=Math.max(0,Math.floor(now-b.time));
+      /* the tip row ages on OUR clock, the same one the last-block tile
+         ticks, so the two figures always agree (owner 2026-08-17); miner
+         header timestamps drift and only date the older rows */
+      if(b.height===blocksTip&&blocksTipSeen)secs=Math.max(0,Math.floor(now-blocksTipSeen));
       out+="<tr"+(isNew&&i===0?" class='new'":"")+"><td class='txid'><a href='/"+b.height+"'>"+fmt(b.height,0)+"</a></td>"+
-        "<td><span class='mico' aria-hidden='true'>?</span>"+esc(b.miner||"Unknown")+"</td><td>"+ago(secs)+
+        "<td>"+esc(b.miner||"Unknown")+"</td><td>"+ago(secs)+
         "</td><td class='r'>"+fmt(b.nTx,0)+" tx</td><td class='r hidem'>"+(b.size/1e6).toFixed(2)+" MB</td>"+
         "<td class='r'>"+(b.medianFeerate==null?(b.weight/1e6).toFixed(2)+" MWU":Math.round(b.medianFeerate)+" sat/vB")+"</td></tr>";}
     lbxBody.innerHTML=out;
@@ -522,6 +541,8 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
           if(!j||!j.blocks||!j.blocks.length)return;
           var prevTop=blocksData.length?blocksData[0].height:null;
           blocksData=j.blocks;
+          blocksTip=(typeof j.tip==="number")?j.tip:(j.blocks[0]&&j.blocks[0].height);
+          blocksTipSeen=j.tipSeenAt?Date.parse(j.tipSeenAt)/1000:null;
           paintB24();
           if(typeof j.tip==="number"&&S.height==null){S.height=j.tip;paintStrip();}
           if(mode==="blocks")renderBlocks(flash&&prevTop!=null&&blocksData[0].height>prevTop);
@@ -543,6 +564,11 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     VN:"Vietnam",ID:"Indonesia",PH:"Philippines",PK:"Pakistan",NG:"Nigeria",KE:"Kenya",EG:"Egypt",
     SV:"El Salvador",PA:"Panama",CR:"Costa Rica",UY:"Uruguay",PE:"Peru",VE:"Venezuela",SA:"Saudi Arabia"};
   var fetchingNodes=false;
+  /* the committed seed paints the tab instantly; the fetch then freshens it */
+  try{
+    var nseed=JSON.parse(document.getElementById("nodes-seed").textContent);
+    if(nseed&&nseed.countries&&nseed.countries.length){nodesData=nseed;renderNodes();}
+  }catch(e){}
   function fetchNodes(){
     if(fetchingNodes)return;
     fetchingNodes=true;
@@ -555,6 +581,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
           nodesData=j;
           renderNodes();
           if(mode==="nodes"){lnxWait.style.display="none";lnxTable.style.display="table";}
+          nodesFresh=true;
         })
         .catch(function(){fetchingNodes=false;});
     }catch(e){fetchingNodes=false;}
@@ -576,8 +603,9 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
   var fxRings=[],fxSparks=[],sweepUntil=0;
   function addBall(tx){
     var w=ballsCv.clientWidth||600;
-    /* proportional sizing: small balls chunkier (~8-10px), 100 ~ 24px, giants capped at 60px */
-    var r=Math.max(7,Math.min(60,7+3.2*Math.pow(tx.amt,.36)));
+    /* proportional sizing, 1.7x scale (owner 2026-08-04): small balls ~12-17px,
+       100 BTC ~ 41px, giants capped at 102px */
+    var r=1.7*Math.max(7,Math.min(60,7+3.2*Math.pow(tx.amt,.36)));
     ballList.push({x:w/2+(Math.random()-.5)*2,y:-r,vx:0,vy:.4+Math.random(),
                    r:r,a:1,ang:0,angV:0,amt:tx.amt,vsz:tx.vsize,id:tx.id});
     /* pile holds 50: the 51st arrival sends the oldest off */
@@ -778,7 +806,7 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     btnT.classList.toggle("on",m==="table");btnBl.classList.toggle("on",m==="blocks");
     btnN.classList.toggle("on",m==="nodes");btnB.classList.toggle("on",m==="balls");
     if(m==="blocks"){renderBlocks(false);if(!blocksData.length)fetchBlocks(false);}
-    if(m==="nodes"&&!nodesData)fetchNodes();
+    if(m==="nodes"&&!nodesFresh)fetchNodes();
     ballsRunning=m==="balls";
     if(ballsRunning)requestAnimationFrame(ballsLoop);
   }
@@ -879,9 +907,13 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     function paintFG(d){
       if(!d||typeof d.value!=="number")return;
       vEl.textContent=d.value;
-      if(lEl)lEl.textContent=" · "+d.label;
+      if(lEl)lEl.textContent=d.label;   /* the separator dot is css (.fgmini .nklg::before), so the squeezed range can show the word alone */
       var lit=Math.max(1,Math.round(d.value/10)),segs=sEl.children;
       for(var i=0;i<segs.length;i++){segs[i].className=i<lit?("on"+(i+1)):"";}
+      /* the number wears the color of the top lit segment, read from the
+         segment itself so the CSS ramp stays the single source of the palette */
+      var top=segs[Math.min(lit,segs.length)-1];
+      if(top)vEl.style.color=getComputedStyle(top).backgroundColor;
       var host=vEl.closest(".fgmini");
       if(host)host.title="House index from our own data: "+(d.method||"");
     }
@@ -934,11 +966,27 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     x.beginPath();x.moveTo(0,py(SD[0]));for(i=1;i<N;i++)x.lineTo(px(i),py(SD[i]));x.lineTo(w,ph);x.lineTo(0,ph);x.closePath();x.fillStyle=g;x.fill();
     x.beginPath();x.moveTo(0,py(SD[0]));for(i=1;i<N;i++)x.lineTo(px(i),py(SD[i]));x.strokeStyle=acc;x.lineWidth=2;x.lineJoin="round";x.stroke();
     x.beginPath();x.arc(w,py(SD[N-1]),3.2,0,7);x.fillStyle=acc;x.fill();
+    /* the week's low and high wear pulsing rings (owner 2026-08-17); the ring
+       rides the animation clock, the dot is steady, and reduced motion gets
+       the dots alone. Centers clamp 6px in so an edge extreme keeps its ring. */
+    var loI=SD.indexOf(lo),hiI=SD.indexOf(hi),
+        phz=((typeof performance!=="undefined"?performance.now():Date.now())/1600)%1;
+    [loI,hiI].forEach(function(ix){
+      var mx=Math.max(6,Math.min(w-6,px(ix))),my=py(SD[ix]);
+      if(!SRM){
+        x.beginPath();x.arc(mx,my,4+phz*7,0,7);
+        x.strokeStyle="rgba("+rgb+","+(0.55*(1-phz)).toFixed(3)+")";x.lineWidth=2;x.stroke();
+      }
+      x.beginPath();x.arc(mx,my,3.4,0,7);x.fillStyle=acc;x.fill();
+      x.lineWidth=1.5;x.strokeStyle=panel;x.beginPath();x.arc(mx,my,3.4,0,7);x.stroke();
+    });
     /* hover crosshair + readout */
     if(hoverI!=null){
       var hx=px(hoverI),hv=SD[hoverI];
       x.strokeStyle=line2;x.lineWidth=1;
-      x.beginPath();x.moveTo(hx,0);x.lineTo(hx,ph);x.stroke();
+      /* the guide stops at the dot instead of passing through the price line
+         (owner 2026-08-17): it points at the reading, it does not cut the chart */
+      x.beginPath();x.moveTo(hx,0);x.lineTo(hx,py(hv)-6);x.stroke();
       x.beginPath();x.arc(hx,py(hv),4.2,0,7);x.fillStyle=acc;x.fill();
       x.lineWidth=2;x.strokeStyle=panel;x.beginPath();x.arc(hx,py(hv),4.2,0,7);x.stroke();
       var dt2=new Date(STm[hoverI]*1000),
@@ -957,7 +1005,25 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
     drawSpark();
   });
   cvS.addEventListener("mouseleave",function(){hoverI=null;drawSpark();});
+  /* touch: a tap or a drag pins the readout where the finger is; it stays
+     up (mobile has no mouseleave) until the next tap moves it */
+  function sparkTouch(e){
+    if(!SD.length||!e.touches.length)return;
+    var rc=cvS.getBoundingClientRect();
+    hoverI=Math.max(0,Math.min(SD.length-1,Math.round((e.touches[0].clientX-rc.left)/rc.width*(SD.length-1))));
+    if(SRM)drawSpark();
+  }
+  cvS.addEventListener("touchstart",sparkTouch,{passive:true});
+  cvS.addEventListener("touchmove",sparkTouch,{passive:true});
   window.addEventListener("resize",function(){drawSpark();});
+  /* the pulse needs a clock: a rAF loop that skips work while the chart is
+     scrolled out of view, and never starts under reduced motion */
+  var SRM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,
+      sparkRaf=0,sparkVis=true;
+  if("IntersectionObserver" in window)
+    new IntersectionObserver(function(en){sparkVis=en[0].isIntersecting;}).observe(cvS);
+  function sparkLoop(){if(sparkVis)drawSpark();sparkRaf=requestAnimationFrame(sparkLoop);}
+  function startSpark(){cancelAnimationFrame(sparkRaf);if(SRM)drawSpark();else sparkLoop();}
   function loadSpark(){
     try{
       fetch(api()+"/candles?interval=1h&limit=168")
@@ -971,12 +1037,29 @@ import { EPOCH, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
           if(SD.length<2){SD=[];STm=[];sparkWait();return;}
           var lo=Math.min.apply(null,SD),hi=Math.max.apply(null,SD);
           document.getElementById("rng").textContent="$"+fmt(Math.round(lo),0)+" - $"+fmt(Math.round(hi),0);
-          requestAnimationFrame(drawSpark);
+          startSpark();
         })
         .catch(sparkWait);
     }catch(e){sparkWait();}
   }
   function sparkWait(){document.getElementById("rng").textContent="waiting for price history";}
+
+  /* phones: the boxes trade places while the tagline stays put at the top
+     (owner 2026-08-17): converter under the tagline, lookup in under the
+     network strip. The node itself moves, so its listeners ride along;
+     desktop restores the original order. */
+  (function(){
+    var mq=matchMedia("(max-width:720px)"),bg=document.querySelector(".bandgrid"),
+        lk=document.getElementById("sform"),sz=document.querySelector(".stripzone");
+    if(!bg||!sz||!lk)return;
+    var home=bg.parentNode;
+    function place(){
+      if(mq.matches){if(lk.parentNode!==sz)sz.appendChild(lk);}
+      else if(lk.parentNode!==home)home.insertBefore(lk,bg);
+    }
+    place();
+    mq.addEventListener?mq.addEventListener("change",place):mq.addListener(place);
+  })();
 
   /* ---- live wiring: /summary now, then the SSE stream ---- */
   function applySummary(d){

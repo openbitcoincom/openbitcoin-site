@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 const log2 = (x) => Math.log(x) / Math.LN2;
 const throwsFor = (faces, bits) => Math.ceil(bits / log2(faces));
@@ -23,6 +24,7 @@ const PHRASES = [shape(12), shape(24)];
   <div class="doc-head">
     <div class="doc-kicker">Learn</div>
     <h1>Rolling a seed with dice</h1>
+    <HeroEmblem name="die" />
     <p class="doc-lede">Dice replace the one part of a wallet nobody can audit: its random number generator. The arithmetic, what the devices really do with your throws, and the honest case for not bothering.</p>
   </div>
   <div class="doc-grid">

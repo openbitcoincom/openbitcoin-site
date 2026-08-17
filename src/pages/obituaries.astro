@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import data from '../content/obituaries.json';
 import { ATH_USD_TEXT, ATH_LABEL } from '../lib/ath.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 const entries = data.entries;
 const years = [...new Set(entries.map((e) => e.y))].sort((a, b) => b - a);
 const byYear = years.map((y) => ({ y, items: entries.filter((e) => e.y === y) }));
@@ -16,6 +17,7 @@ const fmtUsd = (p) => (p >= 100 ? '$' + Math.round(p).toLocaleString('en-US') : 
   <div class="doc-head">
     <div class="doc-kicker">Obituaries</div>
     <h1>Bitcoin obituaries</h1>
+    <HeroEmblem name="tombstone" />
     <p class="doc-lede">The record of declarations that bitcoin is dead, from the first in 2010 to the most recent, each with its source, the price on the day, and a live measure of how the call aged.</p>
   </div>
   <div class="doc-grid">

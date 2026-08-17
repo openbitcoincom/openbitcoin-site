@@ -1,20 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Block 1,000,000 Countdown and Estimated Date - OpenBitcoin" description="Live countdown to Bitcoin block 1,000,000: blocks remaining from the current height and the estimated arrival date at 10 minutes per block.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Block 1,000,000</div>
     <h1>Countdown to block one million</h1>
+    <HeroEmblem name="milestone" />
     <p class="doc-lede">The chain is closing in on its seventh digit. Blocks remaining from the current height, with an arrival estimate at the long-run pace of one block every 10 minutes.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="bm-card bm-hero">
-      <div class="bm-klab">Blocks remaining</div>
-      <div class="bm-big" id="bm-remain">&hellip;</div>
-      <div class="bm-sub"><span id="bm-eta-len">&hellip;</span> at 10 minutes per block</div>
+      
+      <div class="bm-flapclock" role="timer" aria-label="Estimated time until block 1,000,000">
+        <div class="bm-fgroup"><i>days</i><div class="bm-frow" id="bm-fd"><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span></div></div>
+        <div class="bm-fgroup"><i>hours</i><div class="bm-frow" id="bm-fh"><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span></div></div>
+        <div class="bm-fgroup"><i>minutes</i><div class="bm-frow" id="bm-fm"><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span></div></div>
+        <div class="bm-fgroup"><i>seconds</i><div class="bm-frow" id="bm-fs"><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span></div></div>
+      </div>
+      <div class="bm-klab bm-klab2">Blocks remaining</div>
+      <div class="bm-frow bm-fremain" id="bm-fr" aria-label="Blocks remaining until block 1,000,000"><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span><span class="bm-comma">,</span><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span><span class="bm-tile">&ndash;</span></div>
       <div class="bm-etarow">
         <div class="bm-cell">
           <b id="bm-eta-date">&hellip;</b>
@@ -73,11 +81,25 @@ import '../styles/doc.css';
 </main>
 <style is:global>
   .bm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
-  .bm-hero{text-align:center;padding:30px 24px 26px}
+  .bm-hero{text-align:center;padding:22px 24px 26px}
   .bm-klab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-  .bm-big{font:800 56px/1.05 var(--mono);letter-spacing:-1.5px;color:var(--price-ink);
-    font-variant-numeric:tabular-nums;margin-top:10px}
-  .bm-sub{font:600 13.5px var(--mono);color:var(--ink-2);margin-top:8px;font-variant-numeric:tabular-nums}
+  
+  .bm-flapclock{display:flex;justify-content:center;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-top:4px}  
+  .bm-fgroup i{display:block;font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-bottom:7px}
+  .bm-frow{display:flex;justify-content:center;gap:4px;perspective:340px}
+  .bm-tile{position:relative;width:36px;height:50px;border-radius:7px;
+    background:linear-gradient(180deg,#1b2946 0%,#15223c 49%,#101c33 51%,#131f37 100%);
+    border:1px solid var(--line-2);box-shadow:0 3px 8px rgba(0,0,0,.35);
+    font:800 30px/48px var(--mono);color:var(--price-ink);text-align:center;font-variant-numeric:tabular-nums}
+  .bm-tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:rgba(0,0,0,.5);box-shadow:0 1px 0 rgba(255,255,255,.045)}
+  .bm-tile.flip{animation:bmflip .18s ease-in-out}
+  @keyframes bmflip{0%{transform:rotateX(0)}50%{transform:rotateX(-86deg)}100%{transform:rotateX(0)}}
+  @media(prefers-reduced-motion:reduce){.bm-tile.flip{animation:none}}
+  .bm-comma{align-self:flex-end;font:800 24px/44px var(--mono);color:var(--ink-3);padding:0 1px}
+  .bm-klab2{margin-top:22px}
+  .bm-fremain{margin-top:12px}
   .bm-etarow{display:flex;justify-content:center;gap:0;margin-top:20px;border-top:1px dotted var(--line-2);padding-top:16px;flex-wrap:wrap}
   .bm-cell{flex:1;min-width:130px;padding:2px 14px;border-right:1px dotted var(--line-2)}
   .bm-cell:last-child{border-right:0}
@@ -105,55 +127,96 @@ import '../styles/doc.css';
   .bm-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
   .bm-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:700px){
-    .bm-big{font-size:42px}
     .bm-cell{min-width:110px;padding:2px 10px}
+    .bm-flapclock{gap:14px}
+    .bm-tile{width:27px;height:40px;border-radius:5px;font:800 22px/38px var(--mono)}
+    .bm-comma{font:800 18px/34px var(--mono)}
   }
 </style>
 <script is:inline>
 (function(){
   /* H is 0 until a real height lands; nothing renders from a baked one */
-  var TARGET=1000000,H=0;
-  var elRemain=document.getElementById("bm-remain"),
-      elLen=document.getElementById("bm-eta-len"),
-      elDate=document.getElementById("bm-eta-date"),
+  var TARGET=1000000,H=0,targetMs=0;
+  var elDate=document.getElementById("bm-eta-date"),
       elRow=document.getElementById("bm-eta-row"),
       elH=document.getElementById("bm-height"),
       elPct=document.getElementById("bm-pct"),
       elFill=document.getElementById("bm-fill"),
       elRH=document.getElementById("bm-r-height"),
-      elRR=document.getElementById("bm-r-remain");
+      elRR=document.getElementById("bm-r-remain"),
+      elFD=document.getElementById("bm-fd"),
+      elFH=document.getElementById("bm-fh"),
+      elFM=document.getElementById("bm-fm"),
+      elFS=document.getElementById("bm-fs"),
+      elFR=document.getElementById("bm-fr");
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function fmt(n){return n.toLocaleString("en-US");}
-  function lenTxt(days){
-    if(days>=365){
-      var y=Math.floor(days/365.25),d=Math.round(days-y*365.25);
-      return "about "+y+(y===1?" year ":" years ")+d+(d===1?" day":" days");
+  function pad2(n){return (n<10?"0":"")+n;}
+  /* split-flap board: children mirror the string one to one (tiles for
+     digits, .bm-comma for commas). Same shape flips changed tiles in place;
+     a different shape (a digit count change) rebuilds the row. */
+  function flipTo(el,c){
+    if(reduce){el.textContent=c;return;}
+    el.classList.remove("flip");void el.offsetWidth;el.classList.add("flip");
+    setTimeout(function(){el.textContent=c;},90);
+  }
+  function boardSet(row,str){
+    if(row.dataset.str===str)return;
+    var chars=str.split(""),shape=chars.map(function(c){return c===","?"c":"t";}).join(""),i;
+    if(row.dataset.shape!==shape){
+      row.innerHTML="";
+      for(i=0;i<chars.length;i++){
+        var el=document.createElement("span");
+        el.className=chars[i]===","?"bm-comma":"bm-tile";
+        el.textContent=chars[i];
+        row.appendChild(el);
+      }
+      row.dataset.shape=shape;row.dataset.str=str;return;
     }
-    var r=Math.round(days);
-    return "about "+r+(r===1?" day":" days");
+    for(i=0;i<chars.length;i++){
+      var k=row.children[i];
+      if(k.textContent!==chars[i]){
+        if(k.className==="bm-tile")flipTo(k,chars[i]);
+        else k.textContent=chars[i];
+      }
+    }
+    row.dataset.str=str;
+  }
+  function tick(){
+    if(!targetMs)return;
+    var s=Math.max(0,Math.floor((targetMs-Date.now())/1000));
+    var d=Math.floor(s/86400);s-=d*86400;
+    var h=Math.floor(s/3600);s-=h*3600;
+    var m=Math.floor(s/60);s-=m*60;
+    boardSet(elFD,String(d));
+    boardSet(elFH,pad2(h));
+    boardSet(elFM,pad2(m));
+    boardSet(elFS,pad2(s));
   }
   function render(){
     if(!H)return;
     var remain=Math.max(0,TARGET-H);
-    var mins=remain*10,days=mins/1440;
-    var eta=new Date(Date.now()+mins*60000);
+    var mins=remain*10;
+    targetMs=Date.now()+mins*60000;
+    var eta=new Date(targetMs);
     var dateTxt=eta.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
-    elRemain.textContent=fmt(remain);
+    boardSet(elFR,fmt(remain));
     elH.textContent=fmt(H);
     elRH.textContent=fmt(H);
     elRR.textContent=fmt(remain);
     if(remain===0){
-      elLen.textContent="block 1,000,000 has been mined";
       elDate.textContent="Reached";
       elRow.textContent="Reached";
     }else{
-      elLen.textContent=lenTxt(days);
       elDate.textContent=dateTxt;
       elRow.textContent=dateTxt;
     }
     var pct=Math.min(100,H/TARGET*100);
     elPct.textContent=pct.toFixed(2)+"%";
     elFill.style.width=pct.toFixed(2)+"%";
+    tick();
   }
+  setInterval(tick,1000);
   function setH(h){
     if(typeof h!=="number"||!(h>H))return false;
     H=h;render();return true;

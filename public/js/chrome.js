@@ -243,6 +243,15 @@
   function paintFiat(){
     var fp=document.getElementById("f-price");if(fp)fp.textContent=S.cur+" "+priceTxt();
     var ft=document.getElementById("f-tip");if(ft)ft.textContent="Block "+(S.height===null?ELL:fmt(S.height,0));
+    /* all-time chain pills: summary.chain, absent until the service answers */
+    var C=(window.OB_LIVE&&window.OB_LIVE.chain)||null,e;
+    if(C){
+      if(typeof C.txTotal==="number"&&(e=document.getElementById("f-ctx")))e.textContent="Txs "+fmt(C.txTotal,0);
+      if(typeof C.supplySat==="number"&&(e=document.getElementById("f-sup")))e.textContent="Mined "+fmt(Math.floor(C.supplySat/1e8),0)+" BTC · "+(C.supplySat/1e8/21e6*100).toFixed(2)+"%";
+      if(typeof C.fundedAddresses==="number"&&(e=document.getElementById("f-addr")))e.textContent="Addresses "+fmt(C.fundedAddresses,0);
+      var sz=(typeof C.rawSizeBytes==="number"?C.rawSizeBytes:C.sizeBytes);
+      if(typeof sz==="number"&&(e=document.getElementById("f-size")))e.textContent="Chain "+(sz/1e9).toFixed(2)+" GB";
+    }
     /* pages copy S straight into their own state, so the hook only fires once
        real figures exist: a null price painted through a page would render a
        fabricated $0 */
@@ -297,6 +306,12 @@
     }
     if(typeof EventSource==="function"){
       try{
+        /* first paint must not wait on the stream: some middleboxes (AV web
+           shields, proxies) buffer a nascent SSE connection for seconds, and
+           the tiles sat at ellipses meanwhile (owner cold-boot report
+           2026-08-16). A plain fetch races the stream; whichever lands first
+           paints, the stream owns every update after. */
+        fallbackFetch();
         var es=new EventSource(window.OB_DATA_API+"/stream");
         es.addEventListener("summary",function(ev){try{applySummary(JSON.parse(ev.data));}catch(e){}});
         es.addEventListener("block",function(ev){try{newBlock(JSON.parse(ev.data).height);}catch(e){}});
@@ -430,4 +445,60 @@
     document.getElementById("sq-text").textContent=q[0];
     document.getElementById("sq-cite").textContent="Satoshi Nakamoto \u00B7 "+q[1];
   })();
+})();
+
+/* phones: the slim band's three cockpit tiles ride the topbar next to the
+   burger, one at a time on a 7s rotation, rolling like a ticker (owner
+   2026-08-17). The NODES move, so the c-p/c-h/c-s fills above keep working
+   wherever the tiles sit; desktop puts them back in the band. The rotation
+   skips ticks while the tab is hidden and the fade collapses to an instant
+   swap under reduced motion (css side). */
+(function(){
+  var rotor=document.getElementById("tb-rotor"),
+      band=document.querySelector(".band.slim .cband");
+  if(!rotor||!band)return;
+  var tiles=Array.prototype.slice.call(band.querySelectorAll(".cstat"));
+  if(tiles.length<2)return;
+  var lookup=band.querySelector(".lookup"),
+      mq=matchMedia("(max-width:720px)"),timer=0,idx=0;
+  /* the box glides to hug the active reading; +16 = the chip's side padding
+     plus a little air. The observer keeps it snug when a live value changes
+     width mid-view (the last-block seconds tick every second). */
+  function fit(){
+    var sp=tiles[idx].querySelector("span");
+    if(sp)rotor.style.width=Math.min(96,Math.ceil(sp.getBoundingClientRect().width)+16)+"px";
+  }
+  function show(i){tiles.forEach(function(t,k){t.classList.toggle("on",k===i);t.classList.remove("out");});fit();}
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(function(){if(mq.matches)fit();});
+    tiles.forEach(function(t){var sp=t.querySelector("span");if(sp)ro.observe(sp);});
+  }
+  /* ticker roll: the current reading exits upward while the next rises in
+     from below in the same beat, so the box never sits empty (owner); the
+     exit class clears once the roll lands and the tile waits below again */
+  function tick(){
+    if(document.hidden)return;
+    var cur=tiles[idx];
+    cur.classList.remove("on");cur.classList.add("out");
+    idx=(idx+1)%tiles.length;
+    tiles[idx].classList.add("on");
+    fit();
+    setTimeout(function(){cur.classList.remove("out");},500);
+  }
+  var bar=document.querySelector(".topbar");
+  function place(){
+    clearInterval(timer);
+    if(mq.matches){
+      tiles.forEach(function(t){rotor.appendChild(t);});
+      show(idx);
+      timer=setInterval(tick,7000);
+      if(bar)bar.classList.add("tb-compact");   /* burger-only; the front page keeps MENU */
+    }else{
+      tiles.forEach(function(t){t.classList.remove("on");t.classList.remove("out");band.insertBefore(t,lookup);});
+      rotor.style.width="";
+      if(bar)bar.classList.remove("tb-compact");
+    }
+  }
+  place();
+  mq.addEventListener?mq.addEventListener("change",place):mq.addListener(place);
 })();

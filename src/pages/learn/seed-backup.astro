@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 
 const wordsForEntropy = (ent) => (ent + ent / 32) / 11;
 const N24 = wordsForEntropy(256);
@@ -13,6 +14,7 @@ const COPIES = ['A', 'B'];
   <div class="doc-head sb-noprint">
     <div class="doc-kicker">Learn</div>
     <h1>Backing up a seed</h1>
+    <HeroEmblem name="seedsheet" />
     <p class="doc-lede">Write it once, correctly, and the backup outlives every wallet you will ever use. How to record 12 or 24 words by hand, a blank card to print, and the restore test that proves it works.</p>
   </div>
   <div class="doc-grid">

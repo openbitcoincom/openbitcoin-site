@@ -2,13 +2,15 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { ATH_USD, ATH_USD_TEXT, ATH_LABEL, ATH_TS } from '../lib/ath.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin All-Time High: Price, Drawdown and Recovery Math - OpenBitcoin" description={`Bitcoin's all-time high is ${ATH_USD_TEXT}, set ${ATH_LABEL}. Live drawdown from the peak, the gain required to reclaim it, and prior cycle highs for context.`}>
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">All-time high</div>
     <h1>Bitcoin all-time high</h1>
-    <p class="doc-lede">The highest recorded bitcoin price is {ATH_USD_TEXT}, set on {ATH_LABEL}. Below: where the current price stands against that peak, and the peaks of prior cycles. All figures in US dollars.</p>
+    <HeroEmblem name="ath" />
+    <p class="doc-lede">The highest recorded bitcoin price is {ATH_USD_TEXT}, set on {ATH_LABEL}. Below: where the current price stands against that peak, and the peaks of prior cycles.</p>
   </div>
   <div class="doc-grid">
   <div>

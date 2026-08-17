@@ -1,0 +1,155 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+
+export const prerender = false;
+
+const BACKEND = process.env.OB_BACKEND || 'http://127.0.0.1:8090/v1';
+let data = null;
+try {
+  const r = await fetch(`${BACKEND}/pools`, { signal: AbortSignal.timeout(9000) });
+  if (r.ok) data = await r.json();
+} catch { /* the empty state below covers it */ }
+
+const fmtInt = (n) => n == null ? '…' : Number(n).toLocaleString('en-US');
+const pct = (n, d) => d ? (n / d * 100).toFixed(n / d * 100 >= 10 ? 1 : 2) + '%' : '…';
+const pools = data?.pools || [];
+const total = data?.totalBlocks || 0;
+const attributed = pools.reduce((a, p) => a + p.blocks, 0);
+const maxBlocks = pools.length ? pools[0].blocks : 1;
+---
+<Base title="Bitcoin Mining Pools: Every Block Ever Attributed - OpenBitcoin" description="Every mining pool that ever signed a bitcoin block: all-time blocks, current share, and full block history for each, read from our own node's records.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Mining</div>
+    <h1>Bitcoin mining pools</h1>
+    
+    <svg class="pl-hero" viewBox="0 0 96 96" aria-hidden="true">
+      <g transform="rotate(45 48 48)">
+        <path fill="none" stroke="#F7931A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M48 10c18.4 0 34.4 8 42.4 20.8-6.8-4.4-17.2-7.6-28.8-8.8l-13.6-.8-13.6.8C22.8 23.2 12.4 26.4 5.6 30.8 13.6 18 29.6 10 48 10z" />
+        <path fill="rgba(247,147,26,.15)" stroke="#F7931A" stroke-width="3" d="M42 19h12l1.6 13.6H40.4z"/>
+        <path fill="none" stroke="#F7931A" stroke-width="4" stroke-linecap="round" d="M48 34v50"/>
+      </g>
+    </svg>
+    <p class="doc-lede">Every pool that ever signed a block, ranked by lifetime blocks. Each name opens the pool's page: share over time and its full block history, from our own records.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="pl-card">
+      <div class="pl-tlab">All-time leaderboard</div>
+      {pools.length === 0 && <p class="pl-fine">The pool table is being rebuilt; check back in a moment.</p>}
+      {pools.length > 0 && (
+      <div class="pl-scroll">
+      <table class="pl-table" aria-label="Mining pools ranked by lifetime blocks">
+        <thead>
+          <tr><th>#</th><th>Pool</th><th>Blocks</th><th>Share</th><th class="pl-h24">24h</th><th class="pl-h7">7 days</th><th>Active</th><th></th></tr>
+        </thead>
+        <tbody>
+          {pools.map((p, i) => (
+            <tr>
+              <td class="pl-rank">{i + 1}</td>
+              <td class="pl-name"><a href={`/pools/${p.slug}`}>{p.name}</a></td>
+              <td class="pl-num">{fmtInt(p.blocks)}</td>
+              <td class="pl-share">
+                <span class="pl-bar" aria-hidden="true"><i style={`width:${Math.max(1.5, p.blocks / maxBlocks * 100)}%`}></i></span>
+                <em>{pct(p.blocks, attributed)}</em>
+              </td>
+              <td class="pl-num pl-h24">{p.b24h ? fmtInt(p.b24h) : '·'}</td>
+              <td class="pl-num pl-h7">{p.b7d ? fmtInt(p.b7d) : '·'}</td>
+              <td class="pl-era">{p.b30d > 0 ? 'now' : `${new Date(p.firstTime * 1000).getFullYear()}-${new Date(p.lastTime * 1000).getFullYear()}`}</td>
+              <td class="pl-act"><a class="pl-open" href={`/pools/${p.slug}`}>View</a></td>
+            </tr>
+          ))}
+          {data?.unknown && (
+            <tr class="pl-unk">
+              <td class="pl-rank">&#183;</td>
+              <td class="pl-name"><span class="pl-unkname">Unattributed &#183; solo &amp; unsigned</span></td>
+              <td class="pl-num">{fmtInt(data.unknown.blocks)}</td>
+              <td class="pl-share"><em>{pct(data.unknown.blocks, total)} of all blocks</em></td>
+              <td class="pl-num pl-h24">{data.unknown.b24h ? fmtInt(data.unknown.b24h) : '·'}</td>
+              <td class="pl-num pl-h7">{data.unknown.b7d ? fmtInt(data.unknown.b7d) : '·'}</td>
+              <td class="pl-era">2009-now</td>
+              <td class="pl-act"></td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      </div>
+      )}
+      <p class="pl-fine">Share is of the {fmtInt(attributed)} attributed blocks. {data?.unknown ? `Another ${fmtInt(data.unknown.blocks)} blocks carry no pool signature, mostly the solo-mined early chain, and are listed as no one's.` : ''} Attribution reads each block's coinbase signature; a pool that signs differently than it once did counts as it signed.</p>
+    </div>
+
+    
+    <div class="pl-card pl-mt">
+      <div class="pl-tlab">The giants, found and still lost</div>
+      <div class="pl-prose">
+        <p><b>50BTC</b> carried roughly a tenth of the network through 2012. From early 2013 they signed their blocks "Hi from 50BTC.com", and those 6,406 blocks sit on their page above; before 2013, in their biggest years, they mined unsigned, so that era cannot be told apart from the rest of the unattributed early chain. Among those unknowns are two payout-address clusters, 3,127 blocks mined back to back through late 2012, that match 50BTC's size and months closely, our best guess and labeled as nothing more.</p>
+        <p><b>P2Pool</b>, the decentralized pool, never signed anything: every node built its own coinbase paying dozens to hundreds of shareholders directly. That shape is itself a fingerprint, and it identifies the pool's blocks from its documented first (142,312, in 2011) through its fade around 2019, matching the pool's known history closely, which is how the table above counts them. A handful of blocks whose coinbases merely mention the name, including one that says "p2pool Sucks", are counted for whoever actually mined them.</p>
+        <p><b>DeepBit</b> remains the one giant nobody can name: the largest pool in the world through 2011 and 2012, roughly a third of all blocks at its peak, and not one of them identifiable. It never signed a coinbase, no verified payout address survives in the public record, and the attribution dataset the major explorers share does not list it at all. Its work is in the unattributed early chain, indistinguishable, unless a period source one day names a wallet, in which case this record updates the same day.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">The record</div>
+      <div class="pl-rs"><b>{fmtInt(total)}</b><i>blocks on record</i></div>
+      <div class="pl-rs"><b>{fmtInt(attributed)}</b><i>attributed to a pool</i></div>
+      <div class="pl-rs"><b>{fmtInt(pools.length)}</b><i>pools ever seen</i></div>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/hashrate">Hashrate &amp; difficulty</a>
+        <a href="/blocks">Latest blocks</a>
+        <a href="/tools/mining">Mining calculator</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .pl-hero{float:right;width:96px;height:auto;margin:-28px 10px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:plfloat 6s ease-in-out infinite}
+  @keyframes plfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.pl-hero{animation:none}}
+  @media(max-width:640px){.pl-hero{width:70px;margin:2px 0 6px 14px}}
+  .pl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .pl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .pl-scroll{overflow-x:auto}
+  .pl-table{width:100%;border-collapse:collapse}
+  .pl-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  .pl-table td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:9px 12px 9px 0;
+    border-bottom:1px dotted var(--line-2);vertical-align:middle;white-space:nowrap}
+  .pl-table tr:last-child td{border-bottom:0}
+  .pl-rank{font:700 11px var(--mono);color:var(--ink-3)}
+  .pl-name a{font:700 13.5px var(--sans);color:var(--ink);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .pl-name a:hover{color:var(--acc);border-bottom-style:solid}
+  .pl-num{font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:12.5px}
+  .pl-share{min-width:150px}
+  .pl-bar{display:inline-block;vertical-align:middle;width:76px;height:7px;border-radius:3px;background:var(--panel-2);
+    border:1px solid var(--line-2);overflow:hidden;margin-right:8px}
+  .pl-bar i{display:block;height:100%;background:#b86b00;border-radius:2px}
+  .pl-share em{font:600 11.5px var(--mono);font-style:normal;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .pl-era{font:600 10.5px var(--mono);letter-spacing:.04em;color:var(--ink-3)}
+  .pl-open{display:inline-block;font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-2);border:1px solid var(--line-2);border-radius:7px;padding:5px 11px;text-decoration:none}
+  .pl-open:hover{color:var(--acc);border-color:rgba(255,166,60,.6)}
+  .pl-unk td{color:var(--ink-3)}
+  .pl-unkname{font:600 13px var(--sans);color:var(--ink-3)}
+  .pl-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .pl-mt{margin-top:14px}
+  .pl-prose p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:10px 0 0}
+  .pl-prose p:first-child{margin-top:0}
+  .pl-prose b{color:var(--ink);font-weight:600}
+  .pl-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
+  .pl-rs:last-child{border-bottom:0}
+  .pl-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .pl-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:640px){
+    .pl-h24,.pl-h7{display:none}
+    .pl-share{min-width:110px}
+    .pl-bar{width:44px}
+  }
+</style>
+</Base>

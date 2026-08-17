@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="How Bitcoin Mining Works, Explained Plainly - OpenBitcoin" description="What bitcoin miners actually do, why it takes so much electricity, what the halving changes, and why mining is what makes the ledger expensive to rewrite.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Learn</div>
     <h1>How mining works</h1>
+    <HeroEmblem name="asic" />
     <p class="doc-lede">Mining is usually described as solving complex mathematical problems. It is not. It is guessing, billions of times a second, and the guessing is the point.</p>
   </div>
   <div class="doc-grid">
@@ -64,6 +66,7 @@ import '../../styles/doc.css';
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
+        <a href="/pools">Mining pools</a>
         <a href="/hashrate">Hashrate and difficulty</a>
         <a href="/tools/mining">Mining calculator</a>
         <a href="/halving">Halving countdown</a>

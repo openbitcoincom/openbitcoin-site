@@ -9,7 +9,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 let chromeV = 'v1';
-for (const c of [resolve(process.cwd(), 'public/js/chrome.js'), resolve(process.cwd(), 'site/public/js/chrome.js')]) {
+for (const c of [resolve(process.cwd(), 'client/js/chrome.js'), resolve(process.cwd(), 'public/js/chrome.js'), resolve(process.cwd(), 'site/public/js/chrome.js')]) {
   try { chromeV = createHash('sha1').update(readFileSync(c)).digest('hex').slice(0, 8); break; } catch {}
 }
 const {
@@ -52,6 +52,8 @@ const ogImage = new URL('/og/default.png', Astro.site).href;
 <meta name="twitter:title" content={title} />
 {description && <meta name="twitter:description" content={description} />}
 <meta name="twitter:image" content={ogImage} />
+
+{Astro.url.pathname === '/' && <meta name="msvalidate.01" content="2AC5391201B8FE0D9A658ADC1DB3CFD0" />}
 {Astro.url.pathname === '/' && (
   <script type="application/ld+json" set:html={JSON.stringify([
     // The domain spent years redirecting into reddit.com, and Google's learned

@@ -38,7 +38,7 @@ if (candles) {
     const today = new Date().toISOString().slice(0, 10);
     data.meta.fetched = today;
     data.meta.last = data.days[data.days.length - 1][0];
-    data.meta.source = 'Bitstamp public OHLC API (BTC/USD, UTC days) 2011-08-18 to 2026-07-30; Blockchain.info market-price daily closes (Mt. Gox era, close only) 2010-08 to 2011-08; extended from 2026-07-31 by the site-logged daily series (provenance at /sources)';
+    data.meta.source = 'Mt. Gox trade log (bitcoincharts archive via web.archive.org) daily OHLC 2010-07-17 to 2010-08-17; Blockchain.info market-price daily closes (Mt. Gox era, close only) 2010-08-18 to 2011-08-17; Bitstamp public OHLC API (BTC/USD, UTC days) 2011-08-18 to 2026-07-30; extended from 2026-07-31 by the site-logged daily series (provenance at /sources)';
 
     const body = '{"meta":' + JSON.stringify(data.meta) + ',"days":[\n'
       + data.days.map((d) => JSON.stringify(d)).join(',\n') + '\n]}';

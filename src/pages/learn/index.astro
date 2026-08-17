@@ -3,11 +3,24 @@ import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
 import { TERMS } from '../../lib/glossary.js';
 ---
-<Base title="Learn Bitcoin: Plain-Language Guides - OpenBitcoin" description="Bitcoin guides in plain language: what bitcoin is, double spending, confirmations, mining, Lightning, self-custody, scams and privacy, plus a glossary of every term.">
+<Base title="Learn How Bitcoin Works and Ways to Stay Safe - OpenBitcoin" description="Bitcoin guides in plain language: what bitcoin is, double spending, confirmations, mining, Lightning, self-custody, scams and privacy, plus a glossary of every term.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Learn</div>
     <h1>Learn Bitcoin</h1>
+    
+    <svg class="ln-hero" viewBox="0 0 118 88" aria-hidden="true">
+      <g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round">
+        
+        <path stroke-width="2" stroke="rgba(247,147,26,.45)" d="M12 66c14-4 30-3.5 45 4.5 15-8 31-8.5 45-4.5M14 71c13.5-3.5 29-3 43 4.6 14-7.6 29.5-8.1 43-4.6"/>
+        
+        <path stroke-width="3" fill="rgba(247,147,26,.07)" d="M57 17C48 9.5 34.5 8.6 21 11.3c-3.6.7-6 1.6-9 2.9v46.3c13.5-2.7 32-2.6 45 5.5 13-8.1 31.5-8.2 45-5.5V14.2c-3-1.3-5.4-2.2-9-2.9-13.5-2.7-27 -.2-36 5.7z"/>
+        
+        <path stroke-width="3" d="M57 17v49"/>
+        
+        <path stroke-width="2.5" stroke="rgba(247,147,26,.6)" d="M22 23.5c8-1.5 17-1.3 26 1.8M22 33c8-1.5 17-1.3 26 1.8M22 42.5c8-1.5 17-1.3 26 1.8M92 23.5c-8-1.5-17-1.3-26 1.8M92 33c-8-1.5-17-1.3-26 1.8M92 42.5c-8-1.5-17-1.3-26 1.8"/>
+      </g>
+    </svg>
     <p class="doc-lede">Guides in plain language: what the system is, how to hold your own keys, and how people lose coins. If you are new, the numbered path below takes the basics in order.</p>
   </div>
   <div class="doc-grid">
@@ -107,6 +120,18 @@ import { TERMS } from '../../lib/glossary.js';
           <b>Privacy basics</b>
           <span>What the public chain reveals about you, and habits that reveal less.</span>
         </a>
+        <a class="lh-guide" href="/learn/seed-backup">
+          <b>Backing up a seed phrase</b>
+          <span>Where the twelve words should live, and the failure modes that lose coins.</span>
+        </a>
+        <a class="lh-guide" href="/learn/dice-seed">
+          <b>Rolling a seed with dice</b>
+          <span>Generating a wallet from your own entropy, without trusting a device.</span>
+        </a>
+        <a class="lh-guide" href="/learn/inheritance">
+          <b>Inheritance planning</b>
+          <span>Making sure your coins survive you, without handing anyone the keys early.</span>
+        </a>
         <a class="lh-guide" href="/learn/frozen-deposits">
           <b>Frozen deposits explained</b>
           <span>Why custodians freeze funds, and what self-custody changes.</span>
@@ -159,6 +184,12 @@ import { TERMS } from '../../lib/glossary.js';
   </div>
 </main>
 <style is:global>
+  
+  .ln-hero{float:right;width:124px;height:auto;margin:-28px 6px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:lnfloat 6s ease-in-out infinite}
+  @keyframes lnfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.ln-hero{animation:none}}
+  @media(max-width:640px){.ln-hero{width:90px;margin:2px 0 6px 14px}}
   .lh-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;scroll-margin-top:18px}
   .lh-mt{margin-top:14px}
   .lh-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}

@@ -26,10 +26,29 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
 ---
 <Base title="Buy Gift Cards With Bitcoin: The Catalog - OpenBitcoin" description="Buy gift cards with bitcoin: hundreds of retailers across the US, Canada, Australia, and beyond, plus how the gift-card bridge actually works.">
 <main class="wrap doc-wrap">
-  <div class="doc-head">
-    <div class="doc-kicker">Spend</div>
-    <h1>Spend bitcoin on gift cards</h1>
-    <p class="doc-lede">The catalog below is a snapshot of the providers' published listings, taken July 2026: retailers whose gift cards were selling for bitcoin as of that date, by country. Pick the market you are in, filter by category, and read how the bridge works underneath.</p>
+  <div class="doc-head gc-head">
+    <div>
+      <div class="doc-kicker">Spend</div>
+      <h1>Spend bitcoin on gift cards</h1>
+    
+    <svg class="gc-hero" viewBox="0 0 118 92" aria-hidden="true">
+      <g transform="translate(4 4) scale(3.3)" fill="none" stroke="#F7931A" stroke-width="0.92" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="9.5" width="16" height="10" rx="1.8" fill="rgba(247,147,26,.07)"/>
+        <path d="M12 9.5v10M4.8 9.5h14.4"/>
+        <path d="M12 9.5c-4.2 0-5.7-1.7-5.2-3.6.4-1.5 2.8-1.8 3.9-.4 1 1.2 1.3 4 1.3 4z"/>
+        <path d="M12 9.5c4.2 0 5.7-1.7 5.2-3.6-.4-1.5-2.8-1.8-3.9-.4-1 1.2-1.3 4-1.3 4z"/>
+      </g>
+      
+      <g class="gc-hero-card" transform="rotate(-12 90 66)">
+        <rect x="62" y="48" width="54" height="36" rx="6" fill="#0E1524" stroke="#F7931A" stroke-width="3"/>
+        <path d="M64 58.5h50" stroke="#F7931A" stroke-width="3.4"/>
+        <rect x="70" y="66" width="11" height="8" rx="2" fill="#F7931A" stroke="none"/>
+        <path d="M87 70h21" stroke="#F7931A" stroke-width="2.4" stroke-linecap="round" opacity=".65"/>
+        <path d="M70 78h30" stroke="#F7931A" stroke-width="2.4" stroke-linecap="round" opacity=".4"/>
+      </g>
+    </svg>
+      <p class="doc-lede">Every retailer selling gift cards for bitcoin, by country, from the providers' July 2026 listings. Pick your market, filter by category, and see how the bridge works below.</p>
+    </div>
   </div>
   <div class="doc-grid">
   <div>
@@ -52,7 +71,8 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
         <p class="gc-p">Bitrefill covers gift cards, mobile refills, and esims across these markets; the catalog changes per country. Counts are cards per market in the snapshot. Each country below opens that region's catalog on Bitrefill in a new tab.</p>
         
         <div class="gcx-cgrid">
-          {COUNTRIES.map((c) => <a class="gcx-country" href={`https://www.bitrefill.com/${c.code.toLowerCase()}/en/gift-cards/`} target="_blank" rel="noopener noreferrer"><b>{c.flag} {c.label}</b><i>{c.n}</i></a>)}
+          
+          {COUNTRIES.map((c) => <a class="gcx-country" href={`https://www.bitrefill.com/${c.code.toLowerCase()}/en/gift-cards/`} target="_blank" rel="noopener noreferrer"><span class="gcx-out">&#8599;</span><b>{c.label}</b><i>{c.n}</i></a>)}
         </div>
         <p class="gc-fine">Browse the live international catalog at <a href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">bitrefill.com &#8599;</a>. </p>
       </div>
@@ -68,31 +88,28 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
         <li><b>Receive the code.</b> Delivery is a code and a PIN, sent by email or shown in your account. This is the point of no return: once the code exists, the bitcoin is gone and the card is yours.</li>
         <li><b>Spend it like any gift card.</b> In-store at checkout, or as a payment method online. The cashier sees a normal gift card. Nothing about the purchase looks like a bitcoin transaction from the retailer's side.</li>
       </ol>
-      <p class="gc-note">This is a bridge, not an upgrade. Direct bitcoin acceptance is better when it exists: no reseller margin, no code to lose, no card balance stranded at $3.17. Gift cards are what you reach for when direct acceptance is missing, which is most of the time.</p>
     </div>
 
     <div class="gc-card gc-mt">
       <div class="gc-tlab">Two resellers that take bitcoin</div>
-      <p class="gc-affline">Some links on this page will be affiliate links once agreements are in place. Every affiliate link is labeled, per the <a href="/disclosure">disclosure policy</a>, and affiliate status never changes what a row says. Rows are ordered alphabetically; nothing here is a ranking.</p>
+      
       <div class="gc-scroll">
       <table class="gc-table" aria-label="Gift card resellers that accept bitcoin, compared">
         <thead>
-          <tr><th>Provider</th><th>Regions</th><th>Payment methods</th><th>Delivery</th><th>Notes</th><th></th></tr>
+          <tr><th>Provider</th><th>Regions</th><th>Delivery</th><th>Notes</th><th></th></tr>
         </thead>
         <tbody>
           <tr>
-            <td class="gc-prov"><b>Bitrefill</b><span class="gc-affchip">Affiliate</span></td>
+            <td class="gc-prov"><b>Bitrefill</b></td>
             <td>International, many countries</td>
-            <td>On-chain and Lightning</td>
             <td>Code in-account and by email, usually within minutes</td>
             <td class="gc-notes">Catalog also covers mobile refills and esims; country selector changes the whole catalog</td>
             
             <td class="gc-act"><a class="gc-visit" href="https://www.bitrefill.com" target="_blank" rel="noopener noreferrer">Visit &#8599;</a></td>
           </tr>
           <tr>
-            <td class="gc-prov"><b>CoinCards</b><span class="gc-affchip">Affiliate</span></td>
+            <td class="gc-prov"><b>CoinCards</b></td>
             <td>United States and Canada</td>
-            <td>On-chain and Lightning</td>
             <td>Code by email</td>
             <td class="gc-notes">Separate storefronts per country; catalog is built around North American retailers</td>
             
@@ -101,37 +118,18 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
         </tbody>
       </table>
       </div>
-      <p class="gc-fine">Regions, payment methods, delivery timing, and account requirements are as published by each service and change often; check the service's own site before you pay.</p>
+      <p class="gc-fine">These details change often; check the service's own site before you pay.</p>
     </div>
 
     <div class="gc-card gc-mt">
       <div class="gc-tlab">Trade-offs</div>
-      <div class="gc-cols">
-        <div class="gc-col">
-          <div class="gc-clab gc-clab-yes">What it solves</div>
-          <ul class="gc-clist">
-            <li>Spends bitcoin at merchants that have no bitcoin integration and no interest in getting one.</li>
-            <li>No card, no bank account, and no linked payment method in the checkout path.</li>
-            <li>Lightning makes the payment itself close to instant, which matters when you are standing at a counter.</li>
-          </ul>
-        </div>
-        <div class="gc-col">
-          <div class="gc-clab gc-clab-no">What it costs</div>
-          <ul class="gc-clist">
-            <li>The reseller takes a margin, built into the quoted rate rather than shown as a fee.</li>
-            <li>A card is locked to one retailer and usually one country. Buy the wrong market and the code is scrap.</li>
-            <li>Leftover balances sit unspent. Small remainders are where gift card value quietly dies.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="gc-rules">
-        <div class="gc-tlab">Three habits</div>
-        <ul class="gc-crit">
-          <li><b>Treat every purchase as final.</b> A confirmed bitcoin payment cannot be reversed, and a delivered gift card code cannot be returned to the reseller. There is no chargeback anywhere in this chain. Read the amount and the retailer twice before you pay.</li>
-          <li><b>Buy close to the moment you need it.</b> Holding a stack of gift cards converts bitcoin into a claim on one company, redeemable in one currency, at one retailer. Buy what you are about to spend, and keep the rest in a wallet you control.</li>
-          <li><b>Check the balance promptly and keep the code.</b> Retailers set their own expiry and dormancy rules and those vary by jurisdiction. Verify the balance loaded correctly, note it somewhere, and spend it down rather than leaving a remainder to age.</li>
-        </ul>
-      </div>
+      
+      <ul class="gc-crit">
+        <li><b>Every purchase is final.</b> Bitcoin payments cannot be reversed and delivered codes cannot be returned; there is no chargeback anywhere in the chain.</li>
+        <li><b>The margin hides in the rate.</b> Resellers price their cut into the quote rather than showing it as a fee.</li>
+        <li><b>Cards are locked to one retailer and one country.</b> Buy the market you will spend in, or the code is scrap.</li>
+        <li><b>Buy what you are about to spend.</b> Leftover balances, dormancy rules, and expiry quietly eat value; check the balance on arrival and spend it down.</li>
+      </ul>
     </div>
 
     <div class="gc-card gc-mt">
@@ -146,7 +144,6 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
           <p class="gc-p">Paying from your own wallet sends the remainder of the coins you spent to a change address you also control. That is normal, and your wallet handles it, but it is worth understanding before you start making frequent small payments. The <a href="/learn/self-custody">self-custody guide</a> covers change, backups, and why the balance moves the way it does; <a href="/learn/privacy">privacy</a> covers what those payments reveal.</p>
         </div>
       </div>
-      <p class="gc-note">A reseller account and an email address are part of most of these flows, and the retailer sees a gift card redemption rather than a bitcoin payment. That is a privacy trade in both directions, and it is worth being clear-eyed about it.</p>
     </div>
 
     <div class="gc-about doc-prose">
@@ -162,7 +159,7 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
       <div class="gcx-rs"><b>{Object.keys(intl.countries).length}</b><i>countries internationally</i></div>
     </div>
     <div class="doc-tile">
-      <div class="doc-tlab">Three habits</div>
+      <div class="doc-tlab">Rules of thumb</div>
       <ul class="gcx-rl">
         <li>Every purchase is final</li>
         <li>Buy close to the need</li>
@@ -188,6 +185,16 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
   .gc-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0 0 12px}
   .gc-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
   .gc-p a:hover{border-bottom-style:solid}
+  
+  .gc-head{display:flow-root}
+  
+  
+  
+  .gc-hero{float:right;width:120px;height:auto;margin:-29px 4px 6px 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:gcfloat 6s ease-in-out infinite}
+  @keyframes gcfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.gc-hero{animation:none}}
+  @media(max-width:640px){.gc-hero{width:92px;margin:2px 0 6px 14px}}
   .gcx-tabs{display:flex;flex-wrap:wrap;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;margin-bottom:12px}
   .gcx-tabs button{background:transparent;border:0;color:var(--ink-2);font:700 11px var(--mono);letter-spacing:.06em;
     padding:9px 14px;cursor:pointer;border-right:1px solid var(--line);white-space:nowrap;flex:1 1 auto}
@@ -201,9 +208,10 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
     border-radius:10px;color:var(--field-ink);font:600 13.5px var(--sans);padding:10px 13px;outline:none}
   #gcx-q:focus{border-style:solid;border-color:rgba(255,166,60,.55)}
   #gcx-q::placeholder{color:var(--ink-3);font-weight:500}
-  .gcx-chips{display:flex;flex-wrap:wrap;gap:6px}
+  
+  .gcx-chips{display:flex;flex-wrap:wrap;gap:4px}
   .gcx-chips button{background:var(--field);border:1px solid var(--line-2);border-radius:99px;color:var(--ink-2);
-    font:600 10.5px var(--mono);letter-spacing:.05em;padding:5px 11px;cursor:pointer;text-transform:capitalize}
+    font:600 10.5px var(--mono);letter-spacing:.02em;padding:5px 7px;cursor:pointer;text-transform:capitalize}
   .gcx-chips button:hover{color:var(--ink);border-color:var(--line-2)}
   .gcx-chips button.on{background:rgba(247,147,26,.12);border-color:rgba(255,166,60,.5);color:var(--acc)}
   .gcx-count{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
@@ -213,7 +221,7 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
     padding:11px 22px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
   .gcx-more:hover{background:var(--cta-hov);border-color:var(--orange)}
   .gcx-more[hidden]{display:none}
-  .gcx-item{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;overflow:hidden;
+  .gcx-item{position:relative;display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;overflow:hidden;
     text-decoration:none;transition:border-color .15s}
   .gcx-item:hover{border-color:rgba(255,166,60,.5)}
   .gcx-item img{display:block;width:100%;height:auto;aspect-ratio:500/315;object-fit:cover;background:var(--panel-2)}
@@ -227,18 +235,18 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
     justify-content:space-between;align-items:baseline;gap:8px;text-decoration:none;transition:border-color .15s}
   .gcx-country:hover{border-color:rgba(255,166,60,.5)}
   .gcx-country:hover b{color:var(--ink)}
-  .gcx-country b{font:600 12px var(--sans);color:var(--ink-2);min-width:0}
+  
+  .gcx-country b{font:600 12px var(--sans);color:var(--ink-2);min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .gcx-country i{font:700 11px var(--mono);color:var(--ink-3);font-style:normal;flex:none}
+  .gcx-out{font:700 11px var(--mono);color:var(--acc);flex:none} 
+  .gcx-iout{position:absolute;top:6px;right:8px;font:700 11px var(--mono);color:var(--acc);
+    text-shadow:0 1px 3px rgba(0,0,0,.6)} 
   .gc-steps{margin:0;padding-left:22px}
   .gc-steps li{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
   .gc-steps li::marker{color:var(--acc);font-weight:700}
   .gc-steps b{color:var(--ink);font-weight:600}
   .gc-steps a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
   .gc-note{font:500 13px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;border-top:1px dotted var(--line-2);padding-top:12px}
-  .gc-affline{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0 0 12px}
-  .gc-affline a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35)}
-  .gc-affchip{display:inline-block;margin-left:8px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--acc);border:1px dashed rgba(247,147,26,.45);border-radius:5px;padding:2px 6px;vertical-align:middle}
   .gc-scroll{overflow-x:auto}
   .gc-table{width:100%;border-collapse:collapse}
   .gc-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
@@ -250,18 +258,11 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
   .gc-prov b{font:700 14px var(--sans);color:var(--ink)}
   .gc-notes{min-width:190px}
   .gc-act{text-align:right}
+  
   .gc-visit{display:inline-block;font:700 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    background:var(--cta);color:var(--cta-ink);border-radius:8px;padding:8px 13px;text-decoration:none;white-space:nowrap;
-    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09)}
-  .gc-visit:hover{background:var(--cta-hov)}
-  .gc-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-  .gc-clab{font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-  .gc-clab-yes{color:var(--up)}
-  .gc-clab-no{color:var(--down)}
-  .gc-clist{margin:0;padding-left:18px}
-  .gc-clist li{font:500 13.5px/1.6 var(--sans);color:var(--ink-2);margin-top:6px}
-  .gc-clist li::marker{color:var(--ink-3)}
-  .gc-rules{margin-top:16px;padding-top:14px;border-top:1px dotted var(--line-2)}
+    background:#F7931A;color:#101A2C;border:1.5px solid #F7931A;border-radius:8px;padding:8px 13px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(247,147,26,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+  .gc-visit:hover{background:#FFA63C;border-color:#FFA63C}
   .gc-crit{margin:0;padding-left:20px}
   .gc-crit li{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin-top:8px}
   .gc-crit li::marker{color:var(--acc)}
@@ -281,7 +282,7 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
   .gcx-rl li::marker{color:var(--acc)}
   @media(max-width:700px){
     .gc-card{padding:18px 16px}
-    .gc-cols,.gc-two{grid-template-columns:minmax(0,1fr)}
+    .gc-two{grid-template-columns:minmax(0,1fr)}
     .gcx-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
     .gcx-item img{max-width:100%}
     .gcx-cgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
@@ -296,12 +297,11 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
     .gc-prov{white-space:normal;padding-right:88px}
     .gc-act{position:absolute;top:12px;right:0}
     .gc-visit{padding:7px 11px}
-    .gc-table td:nth-child(2),.gc-table td:nth-child(3),.gc-table td:nth-child(4){display:inline-block;margin:7px 16px 0 0}
-    .gc-table td:nth-child(2)::before,.gc-table td:nth-child(3)::before,.gc-table td:nth-child(4)::before{
+    .gc-table td:nth-child(2),.gc-table td:nth-child(3){display:inline-block;margin:7px 16px 0 0}
+    .gc-table td:nth-child(2)::before,.gc-table td:nth-child(3)::before{
       font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
     .gc-table td:nth-child(2)::before{content:"Regions: "}
-    .gc-table td:nth-child(3)::before{content:"Payment: "}
-    .gc-table td:nth-child(4)::before{content:"Delivery: "}
+    .gc-table td:nth-child(3)::before{content:"Delivery: "}
     .gc-notes{min-width:0;width:100%;margin-top:8px;color:var(--ink-3)}
   }
 </style>
@@ -333,9 +333,13 @@ const GC = { us: withLocal(us), ca: withLocal(ca), au: withLocal(au) };
     if(!more.hidden)more.textContent="Load 50 more ("+(out.length-shown.length).toLocaleString("en-US")+" left)";
     grid.innerHTML=shown.map(function(p){
       var img=p.limg?'<img loading="lazy" src="'+esc(p.limg)+'" onerror="this.onerror=null;this.src=\''+esc(p.img)+'\'" alt="">':'<span class="gcx-noimg" aria-hidden="true">&#8383;</span>';
+      /* the corner arrow marks every card as an outbound link (owner 2026-08-05) */
       return '<a class="gcx-item" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">'+img+
+        '<span class="gcx-iout" aria-hidden="true">&#8599;</span>'+
         '<span class="gcx-n">'+esc(p.n)+'</span>'+
-        '<span class="gcx-r">'+money(p.lo,p.cur)+' to '+money(p.hi,p.cur)+'</span></a>';
+        /* null range = an external listing whose provider page shows no price
+           (verified 2026-08-05); say so rather than invent a number */
+        '<span class="gcx-r">'+(p.lo!=null&&p.hi!=null?money(p.lo,p.cur)+' to '+money(p.hi,p.cur):'price at the provider')+'</span></a>';
     }).join("");
   }
   document.querySelectorAll(".gcx-tabs button").forEach(function(b){

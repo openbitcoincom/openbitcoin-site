@@ -17,7 +17,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/24160243/WAYFAR-US-500x315.png",
   "url": "https://coincards.com/us/product/wayfair-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -31,7 +31,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/12/06091729/ritz.png",
   "url": "https://coincards.com/us/product/the-ritz-carlton-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2000,
   "cur": "USD",
   "tags": [],
   "type": "physical",
@@ -42,7 +42,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13103043/cheesecake-500x315.png",
   "url": "https://coincards.com/us/product/the-cheesecake-factory-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -55,7 +55,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/09092729/TGI-US-500x315.png",
   "url": "https://coincards.com/us/product/tgi-fridays-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -68,7 +68,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/23142929/SONIC-US-500x315.png",
   "url": "https://coincards.com/us/product/sonic-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -81,7 +81,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27144934/papa.png",
   "url": "https://coincards.com/us/product/papa-johns-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -94,7 +94,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/10232040/panera.png",
   "url": "https://coincards.com/us/product/panera-bread-standard-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -107,7 +107,7 @@
   "img": null,
   "url": "https://coincards.com/us/product/p-f-changs-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -120,7 +120,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27144019/omaha.png",
   "url": "https://coincards.com/us/product/omaha-steaks-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -133,7 +133,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27143702/miller.png",
   "url": "https://coincards.com/us/product/millers-ale-house-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -146,7 +146,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27140031/marriott.png",
   "url": "https://coincards.com/us/product/marriott-bonvoy-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "retail"
@@ -170,7 +170,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27135240/disney.png",
   "url": "https://coincards.com/us/product/disney-standard-gift-card-physical-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -183,7 +183,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27134935/buster.png",
   "url": "https://coincards.com/us/product/dave-busters-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -196,7 +196,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24130725/CRACKR-US-500x315.png",
   "url": "https://coincards.com/us/product/cracker-barrel-old-country-store-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -209,7 +209,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27134339/chewy-500x321.jpg",
   "url": "https://coincards.com/us/product/chewy-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "physical",
@@ -220,7 +220,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27133916/cavender-500x315.png",
   "url": "https://coincards.com/us/product/cavenders-boot-city-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "physical",
@@ -231,7 +231,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27133549/BP.png",
   "url": "https://coincards.com/us/product/bp-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "physical",
@@ -255,7 +255,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/04/27131204/mastercard-500x315.png",
   "url": "https://coincards.com/us/product/virtual-prepaid-mastercard-debit-usd-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "Prepaid Credit Card"
@@ -268,7 +268,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/03/11072128/ADMEV-US-card-500x315.png",
   "url": "https://coincards.com/us/product/adam-eve-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -290,7 +290,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2026/03/11070706/RZGOLD-US-card-500x315.png",
   "url": "https://coincards.com/us/product/razer-gold-us-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -314,7 +314,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/10/06120643/hot-topic.jpg",
   "url": "https://coincards.com/us/product/hot-topic-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -327,7 +327,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/10/06115702/gatorade.jpg",
   "url": "https://coincards.com/us/product/gatorade-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -338,7 +338,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/10/03121904/melting.jpg",
   "url": "https://coincards.com/us/product/melting-pot-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -351,7 +351,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/08/12115225/showtime.png",
   "url": "https://coincards.com/us/product/showtime-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -364,7 +364,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/08/12114115/giant-eagle-500x315.png",
   "url": "https://coincards.com/us/product/giant-eagle-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -377,7 +377,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/08/11111233/KAY-US-card-500x315.png",
   "url": "https://coincards.com/us/product/kay-jewelers-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -390,7 +390,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/08/11110655/GNC-US-card-500x315.png",
   "url": "https://coincards.com/us/product/gnc-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -401,7 +401,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/08/11104905/holland-500x315.png",
   "url": "https://coincards.com/us/product/holland-america-line-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "travel"
@@ -440,7 +440,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/07/04125909/disney.png",
   "url": "https://coincards.com/us/product/disney-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -451,7 +451,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/06/19145606/OSHKSH-US-card-500x315.png",
   "url": "https://coincards.com/us/product/oshkosh-bgosh-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -464,7 +464,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/06/19145144/CMPNG-US-card-500x315.png",
   "url": "https://coincards.com/us/product/camping-world-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -477,7 +477,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/06/13103354/LULUS-US-card-500x315.png",
   "url": "https://coincards.com/us/product/lulus-com-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "retail"
@@ -490,7 +490,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/06/09125247/MLRALE-US-card-500x315.png",
   "url": "https://coincards.com/us/product/millers-ale-house-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -503,7 +503,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/06/09124810/BBYLST-US-card-500x315.png",
   "url": "https://coincards.com/us/product/babylist-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -516,7 +516,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/05/20125039/harveys.jpg",
   "url": "https://coincards.com/us/product/harveys-supermarket-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -529,7 +529,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/05/20123528/RYABAN-US-card-500x315.png",
   "url": "https://coincards.com/us/product/ray-ban-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -542,7 +542,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/05/09092800/HULU-US-card-500x315.png",
   "url": "https://coincards.com/us/product/hulu-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -555,7 +555,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/04/09094022/nascar-500x315.png",
   "url": "https://coincards.com/us/product/nascar-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -569,7 +569,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/03/19095550/WAWA-US-card-500x315.png",
   "url": "https://coincards.com/us/product/wawa-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -619,7 +619,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/20105130/kendra-500x315.png",
   "url": "https://coincards.com/us/product/kendra-scott-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -632,7 +632,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04121912/texas-corral.jpg",
   "url": "https://coincards.com/us/product/texas-corral-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -645,7 +645,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04121242/teresa.jpg",
   "url": "https://coincards.com/us/product/teresas-pizza-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -658,7 +658,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04120318/officemax.png",
   "url": "https://coincards.com/us/product/office-max-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -671,7 +671,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04115739/jcrew.png",
   "url": "https://coincards.com/us/product/jcrew-sports-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -684,7 +684,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04115205/hibbet.png",
   "url": "https://coincards.com/us/product/hibbett-sports-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "sports"
@@ -697,7 +697,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04114724/harley.png",
   "url": "https://coincards.com/us/product/harley-davidson-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "sports"
@@ -710,7 +710,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04113931/blackeyed.jpg",
   "url": "https://coincards.com/us/product/black-eyed-pea-colorado-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -723,7 +723,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/02/04113301/bibibop.png",
   "url": "https://coincards.com/us/product/bibibop-asiangrill-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -736,7 +736,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/31110004/SWAR-US-card-500x315.png",
   "url": "https://coincards.com/us/product/swarovski-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -749,7 +749,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/27105254/skechers.jpg",
   "url": "https://coincards.com/us/product/skechers-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -762,7 +762,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/27104642/bestwestern.jpg",
   "url": "https://coincards.com/us/product/best-western-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -775,7 +775,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/22103505/bloomingdale-500x315.png",
   "url": "https://coincards.com/us/product/bloomingdales-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -788,7 +788,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13141424/wwcousin.jpg",
   "url": "https://coincards.com/us/product/w-w-cousins-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -801,7 +801,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13140907/tops.jpg",
   "url": "https://coincards.com/us/product/tops-market-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -814,7 +814,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13140459/tire-discount.jpg",
   "url": "https://coincards.com/us/product/tire-discounters-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "auto"
@@ -827,7 +827,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13135936/thirdlove-500x315.png",
   "url": "https://coincards.com/us/product/thirdlove-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 100,
+  "hi": 75,
   "cur": "USD",
   "tags": [
    "retail"
@@ -840,7 +840,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13134617/smoothie.jpg",
   "url": "https://coincards.com/us/product/smoothie-king-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -853,7 +853,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13134240/smashburger.jpg",
   "url": "https://coincards.com/us/product/smashburger-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -866,7 +866,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13133801/qdoba.png",
   "url": "https://coincards.com/us/product/qdoba-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -892,7 +892,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13131859/pastini.jpg",
   "url": "https://coincards.com/us/product/pastini-pastaria-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -905,7 +905,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13131518/pacific.jpg",
   "url": "https://coincards.com/us/product/pacific-sunwear-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "retail"
@@ -918,7 +918,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13125757/miguel.jpg",
   "url": "https://coincards.com/us/product/miguels-restaurant-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -931,7 +931,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13124557/merridee.jpg",
   "url": "https://coincards.com/us/product/merridees-breadbasket-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -944,7 +944,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13124121/mere-bulles.jpg",
   "url": "https://coincards.com/us/product/mere-bulles-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -957,7 +957,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13123044/j.-christopher.jpg",
   "url": "https://coincards.com/us/product/j-christophers-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -970,7 +970,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13121658/hotcat.jpg",
   "url": "https://coincards.com/us/product/hopcat-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "Beer/Liquor/Wine",
@@ -984,7 +984,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13120903/grimaldi.jpg",
   "url": "https://coincards.com/us/product/grimaldis-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -997,7 +997,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13120356/granite.jpg",
   "url": "https://coincards.com/us/product/granite-city-brewing-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1010,7 +1010,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13115828/dickey.jpg",
   "url": "https://coincards.com/us/product/dickeys-restaurant-brands-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1036,7 +1036,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13114211/champs.jpg",
   "url": "https://coincards.com/us/product/champs-sports-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "sports"
@@ -1049,7 +1049,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13112745/brooklyn.jpg",
   "url": "https://coincards.com/us/product/brooklyn-pizza-company-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1075,7 +1075,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13111445/blackangus.jpg",
   "url": "https://coincards.com/us/product/black-angus-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1088,7 +1088,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13111029/benihana.jpg",
   "url": "https://coincards.com/us/product/benihana-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1101,7 +1101,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/13110544/beans.jpg",
   "url": "https://coincards.com/us/product/beans-brews-coffeehouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1123,24 +1123,11 @@
   "stock": true
  },
  {
-  "n": "Turo US Online Gift Card (Electronic Delivery)",
-  "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/06112118/turo-500x315.png",
-  "url": "https://coincards.com/us/product/turo-us-online-gift-card-electronic-delivery/",
-  "lo": 15,
-  "hi": 15,
-  "cur": "USD",
-  "tags": [
-   "travel"
-  ],
-  "type": "electronic",
-  "stock": true
- },
- {
   "n": "ThredUP Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/06111654/thredup-500x315.png",
   "url": "https://coincards.com/us/product/thredup-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1166,7 +1153,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/06101902/asos-500x336.png",
   "url": "https://coincards.com/us/product/asos-us-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1179,7 +1166,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/03095833/virginexperience-500x315.png",
   "url": "https://coincards.com/us/product/virgin-experience-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -1192,7 +1179,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/03095353/tractor-500x315.png",
   "url": "https://coincards.com/us/product/tractor-supply-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -1205,7 +1192,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/03094427/Sunglass-500x315.png",
   "url": "https://coincards.com/us/product/sunglass-hut-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1218,7 +1205,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2025/01/03093903/elpollo-500x315.png",
   "url": "https://coincards.com/us/product/el-pollo-loco-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1231,7 +1218,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/12/31113136/amtrak.png",
   "url": "https://coincards.com/us/product/amtrak-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1255,7 +1242,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/12/06091729/ritz.png",
   "url": "https://coincards.com/us/product/the-ritz-carlton-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2000,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1266,7 +1253,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/11/26122610/KFC-US-card-500x315.png",
   "url": "https://coincards.com/us/product/kfc-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 100,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1277,7 +1264,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/11/29101045/IKEA-US-card-500x315.png",
   "url": "https://coincards.com/us/product/ikea-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -1290,7 +1277,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/10/31101217/ZAXBY-US-card-500x315.png",
   "url": "https://coincards.com/us/product/zaxbys-us-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1301,7 +1288,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/10/22212727/gap-500x315.png",
   "url": "https://coincards.com/us/product/gap-options-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1314,7 +1301,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/09/20090633/VCPK-US-card-500x315.png",
   "url": "https://coincards.com/us/product/victorias-secret-pink-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1327,7 +1314,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16214653/disney.png",
   "url": "https://coincards.com/us/product/disney-online-gift-card-electronic-delivery-2/",
   "lo": 5,
-  "hi": 5,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -1342,7 +1329,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/11000202/cinemark.png",
   "url": "https://coincards.com/us/product/cinemark-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -1355,7 +1342,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/10234005/starbucks.png",
   "url": "https://coincards.com/us/product/starbucks-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1368,7 +1355,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/10232040/panera.png",
   "url": "https://coincards.com/us/product/panera-bread-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1381,7 +1368,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/18125341/1081489-500x315.png",
   "url": "https://coincards.com/us/product/panda-express-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1407,7 +1394,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/10224143/footlocker.png",
   "url": "https://coincards.com/us/product/foot-locker-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -1434,7 +1421,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/06/10130551/ace.png",
   "url": "https://coincards.com/us/product/ace-hardware-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "home",
@@ -1448,7 +1435,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/30144632/SVI1039335_fp01.png",
   "url": "https://coincards.com/us/product/virtual-prepaid-american-express-usd-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "Prepaid Credit Card"
@@ -1461,7 +1448,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/12153602/walmart.png",
   "url": "https://coincards.com/us/product/walmart-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "electronics",
@@ -1476,7 +1463,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/24155640/TOPGLF-US-500x315.png",
   "url": "https://coincards.com/us/product/topgolf-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -1490,7 +1477,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17132746/target.png",
   "url": "https://coincards.com/us/product/target-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1503,7 +1490,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/02112046/TJX-US-500x315.png",
   "url": "https://coincards.com/us/product/t-j-maxx-marshalls-homegoods-homesense-sierra-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1516,7 +1503,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17132149/subway.png",
   "url": "https://coincards.com/us/product/subway-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1529,7 +1516,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/11/24105111/starbucks.jpg",
   "url": "https://coincards.com/us/product/starbucks-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1542,7 +1529,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17131810/staples-500x315.png",
   "url": "https://coincards.com/us/product/staples-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1555,7 +1542,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/02/06105654/giftcard.svg",
   "url": "https://coincards.com/us/product/southwest-airlines-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -1568,7 +1555,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17131329/shake-500x334.png",
   "url": "https://coincards.com/us/product/shake-shack-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1581,7 +1568,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17131000/sams.png",
   "url": "https://coincards.com/us/product/sams-club-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -1594,7 +1581,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17130445/nordstrom.png",
   "url": "https://coincards.com/us/product/nordstrom-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1607,7 +1594,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17101412/morton_s_the_steakhouse-500x316.png",
   "url": "https://coincards.com/us/product/mortons-the-steakhouse-standard-gift-card-physical-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1633,7 +1620,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/03/20100416/LOWES-US-500x315.png",
   "url": "https://coincards.com/us/product/lowes-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 1500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -1646,7 +1633,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16220910/kohls.png",
   "url": "https://coincards.com/us/product/kohls-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1659,7 +1646,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16143547/hotels.com_-500x316.png",
   "url": "https://coincards.com/us/product/hotels-com-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -1672,7 +1659,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13105312/the-home-depot-500x315.png",
   "url": "https://coincards.com/us/product/home-depot-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -1685,7 +1672,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/05091544/GAMSTP-US-1-500x315.png",
   "url": "https://coincards.com/us/product/gamestop-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gaming",
@@ -1699,7 +1686,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16215458/footlocker.png",
   "url": "https://coincards.com/us/product/foot-locker-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [],
   "type": "physical",
@@ -1710,7 +1697,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/11123905/DUNKIN-US-500x315.png",
   "url": "https://coincards.com/us/product/dunkin-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1723,7 +1710,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/31100628/DICKS-US-500x315.png",
   "url": "https://coincards.com/us/product/dicks-sporting-goods-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -1737,7 +1724,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16214152/cvs.png",
   "url": "https://coincards.com/us/product/cvs-pharmacy-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "beauty",
@@ -1751,7 +1738,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16213645/crate.png",
   "url": "https://coincards.com/us/product/crate-barrel-standard-gift-card-physical-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -1764,7 +1751,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16213252/cabelas.png",
   "url": "https://coincards.com/us/product/cabelas-standard-gift-card-physical-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -1778,7 +1765,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12103445/applebee-500x315.png",
   "url": "https://coincards.com/us/product/applebees-neighborhood-grill-bar-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1791,7 +1778,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16212122/amex.png",
   "url": "https://coincards.com/us/product/american-express-reward-card-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "Prepaid Credit Card"
@@ -1804,7 +1791,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14145156/amc_3-500x318.jpg",
   "url": "https://coincards.com/us/product/amc-theaters-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -1817,7 +1804,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/18115231/ADAS-US-500x315.png",
   "url": "https://coincards.com/us/product/adidas-standard-gift-card-physical-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -1831,7 +1818,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/06110422/etsy-500x315.png",
   "url": "https://coincards.com/us/product/etsy-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gifts",
@@ -1858,7 +1845,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/04/19100822/poshmark-500x315.png",
   "url": "https://coincards.com/us/product/poshmark-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1904,7 +1891,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/29190436/ADVAUT-US-card-500x315.png",
   "url": "https://coincards.com/us/product/advance-auto-parts-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1915,7 +1902,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/10234713/aber.png",
   "url": "https://coincards.com/us/product/abercrombie-fitch-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [],
   "type": "electronic",
@@ -1926,7 +1913,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/09111432/1800FL-US-card-500x315.png",
   "url": "https://coincards.com/us/product/1800flowers-online-gift-card-electronic-delivery-copy/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -1939,7 +1926,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/07092638/allbirds.png",
   "url": "https://coincards.com/us/product/allbirds-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "retail"
@@ -1951,8 +1938,8 @@
   "n": "Olive Garden Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141608/BAHBRZ-US-1-500x315.png",
   "url": "https://coincards.com/us/product/olive-garden-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1964,8 +1951,8 @@
   "n": "Longhorn Steakhouse Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141608/BAHBRZ-US-1-500x315.png",
   "url": "https://coincards.com/us/product/longhorn-steakhouse-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1978,7 +1965,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141608/BAHBRZ-US-1-500x315.png",
   "url": "https://coincards.com/us/product/darden-restaurants-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -1990,8 +1977,8 @@
   "n": "Cheddars Scratch Kitchen Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141608/BAHBRZ-US-1-500x315.png",
   "url": "https://coincards.com/us/product/cheddars-scratch-kitchen-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2003,8 +1990,8 @@
   "n": "Bahama Breeze Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141608/BAHBRZ-US-1-500x315.png",
   "url": "https://coincards.com/us/product/bahama-breeze-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2017,7 +2004,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/03/05141110/AUTZN-US-1-500x315.png",
   "url": "https://coincards.com/us/product/autozone-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "auto"
@@ -2030,7 +2017,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/02/12102838/PRSCR-US-1-500x315.png",
   "url": "https://coincards.com/us/product/princess-cruises-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -2043,7 +2030,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/02/02154230/LYFT-US-500x315.png",
   "url": "https://coincards.com/us/product/lyft-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2056,7 +2043,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/01/03120600/METAQ-US-card-500x315.png",
   "url": "https://coincards.com/us/product/meta-quest-usa-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gaming"
@@ -2069,7 +2056,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/12/07094027/WGREEN-US-500x315.png",
   "url": "https://coincards.com/us/product/walgreens-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2082,7 +2069,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/17131329/shake-500x334.png",
   "url": "https://coincards.com/us/product/shake-shack-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2095,7 +2082,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/11/10101625/INSP-US-500x315.png",
   "url": "https://coincards.com/us/product/travelcard-by-inspire-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 3000,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2121,7 +2108,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/11/03095605/BUCKET-CA-1-500x315.png",
   "url": "https://coincards.com/us/product/bucketlistgift-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 5000,
   "cur": "USD",
   "tags": [
    "travel"
@@ -2147,7 +2134,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/09/15101059/LNEBRY-US-500x315.png",
   "url": "https://coincards.com/us/product/lane-bryant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2173,7 +2160,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/08/16140634/EMBER-US-500x315.png",
   "url": "https://coincards.com/us/product/embers-restaurant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2186,7 +2173,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/08/14123711/GUESS-US-1-500x315.png",
   "url": "https://coincards.com/us/product/guess-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2199,7 +2186,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/08/14123146/PLAY-US-500x315.png",
   "url": "https://coincards.com/us/product/google-play-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "gaming"
@@ -2225,7 +2212,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/08/08142042/76GAS-US-500x315.png",
   "url": "https://coincards.com/us/product/phillips-66-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "fuel"
@@ -2238,7 +2225,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/08/08142042/76GAS-US-500x315.png",
   "url": "https://coincards.com/us/product/phillips-66-conoco-76-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "fuel"
@@ -2251,7 +2238,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/28100909/PFLYJ-US-500x315.png",
   "url": "https://coincards.com/us/product/pilot-flying-j-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2264,7 +2251,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/28095805/FNLINE-US-500x315.png",
   "url": "https://coincards.com/us/product/finish-line-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2277,7 +2264,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/10220159/SVI1039036_fp01.png",
   "url": "https://coincards.com/us/product/playstation-store-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -2290,8 +2277,8 @@
   "n": "The Capital Grille Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12113529/darden-500x315.png",
   "url": "https://coincards.com/us/product/the-capital-grille-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2304,7 +2291,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/t-rex-cafe-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2317,7 +2304,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/10100123/BATHBW-US-500x315.png",
   "url": "https://coincards.com/us/product/bath-body-works-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2329,8 +2316,8 @@
   "n": "Albertson’s/Safeway Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/07130852/albertsons-500x315.jpg",
   "url": "https://coincards.com/us/product/albertsons-companies-online-gift-card-electronic-delivery/",
-  "lo": 10,
-  "hi": 10,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -2343,7 +2330,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/06/26114520/PETCO-US-1-500x315.png",
   "url": "https://coincards.com/us/product/petco-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2356,7 +2343,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/05/20090219/VICSCT-US-card-500x315.png",
   "url": "https://coincards.com/us/product/victorias-secret-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2369,7 +2356,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/05/23105059/ihop.jpg",
   "url": "https://coincards.com/us/product/ihop-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2382,7 +2369,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/the-hunting-inn-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2395,7 +2382,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/j-gilberts-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2408,7 +2395,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/go-rio-san-antonio-river-cruises-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2421,7 +2408,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/galveston-holiday-inn-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2434,7 +2421,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/devon-seafood-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2447,7 +2434,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/craft-f-b-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2460,7 +2447,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/bristol-seafood-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2473,7 +2460,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/bouchee-patisserie-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2486,7 +2473,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/boardwalk-inn-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2499,7 +2486,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/blue-fin-seafood-sushi-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2512,7 +2499,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/05/17114159/marriott.png",
   "url": "https://coincards.com/us/product/marriott-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "travel"
@@ -2525,7 +2512,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/05/11083829/landrys_multi-brand_phy_1-500x318.png",
   "url": "https://coincards.com/us/product/mitchells-fish-market-online-gift-card-electronic-delivery-2/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2538,7 +2525,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/04/27112255/CHEWY-US-500x315.png",
   "url": "https://coincards.com/us/product/chewy-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2551,7 +2538,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/03/18103909/KROGER-US-500x315.png",
   "url": "https://coincards.com/us/product/kroger-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "electronics",
@@ -2579,7 +2566,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/02/06105654/giftcard.svg",
   "url": "https://coincards.com/us/product/southwest-airlines-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -2605,7 +2592,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/10/04091832/LGIFT-US-500x315.png",
   "url": "https://coincards.com/us/product/elearn-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 5000,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -2619,7 +2606,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/09/16141434/REDLOB-US-500x315.png",
   "url": "https://coincards.com/us/product/red-robster-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2632,7 +2619,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/trevi-italian-restaurant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2644,8 +2631,8 @@
   "n": "The Children’s Place Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19123007/CHILDP-US-500x315.png",
   "url": "https://coincards.com/us/product/the-childrens-place-online-gift-card-electronic-delivery/",
-  "lo": 15,
-  "hi": 15,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2658,7 +2645,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/the-boathouse-restaurant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2671,7 +2658,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19121447/SHTFLY-US-500x315.png",
   "url": "https://coincards.com/us/product/shutterfly-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -2684,7 +2671,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19121005/SCHLZY-US-500x315.png",
   "url": "https://coincards.com/us/product/schlotzkys-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2697,7 +2684,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16113535/PTBARN-US-500x315.png",
   "url": "https://coincards.com/us/product/pottery-barn-teen-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -2711,7 +2698,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19105129/JOSAMN-US-500x315.png",
   "url": "https://coincards.com/us/product/perigold-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -2724,7 +2711,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19115634/MOES-US-500x315.png",
   "url": "https://coincards.com/us/product/moes-southwest-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2737,7 +2724,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19115158/MCALIS-US-500x315.png",
   "url": "https://coincards.com/us/product/mcalisters-deli-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2750,7 +2737,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19113303/MRKGRM-US-500x315.png",
   "url": "https://coincards.com/us/product/mark-graham-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -2763,7 +2750,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19112324/LGNRH-US-500x315.png",
   "url": "https://coincards.com/us/product/logans-roadhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2776,7 +2763,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/king-ranch-texas-kitchen-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2789,7 +2776,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/kincaids-fish-chop-and-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2802,7 +2789,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/kemah-boardwalk-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -2816,7 +2803,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19105129/JOSAMN-US-500x315.png",
   "url": "https://coincards.com/us/product/joss-and-main-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -2829,7 +2816,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/jakes-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2842,7 +2829,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/jakes-famous-crawfish-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2855,7 +2842,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/horatios-online-gift-card-electronic-delivery-copy/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2868,7 +2855,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/henrys-tavern-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2894,7 +2881,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/19094823/FOOTWR-US-500x315.png",
   "url": "https://coincards.com/us/product/famous-footwear-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -2919,8 +2906,8 @@
   "n": "Foundation Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/08/20175510/foundation-giftcard.svg",
   "url": "https://coincards.com/us/product/foundation-online-gift-card-electronic-delivery/",
-  "lo": 45,
-  "hi": 270,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "Hardware Wallet"
@@ -2933,7 +2920,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/07/11095133/Uber-Cobranded-1500X900-500x317.png",
   "url": "https://coincards.com/us/product/uber-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants",
@@ -2947,7 +2934,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/07/18092716/TEXASR-US-500x315.png",
   "url": "https://coincards.com/us/product/texas-roadhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2960,7 +2947,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12104952/bloomin-500x315.png",
   "url": "https://coincards.com/us/product/carrabbas-italian-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -2972,8 +2959,8 @@
   "n": "Coinkite Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/06/09093956/coinkitenew-500x315.png",
   "url": "https://coincards.com/us/product/coinkite-online-gift-card-electronic-delivery/",
-  "lo": 90,
-  "hi": 180,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "Hardware Wallet"
@@ -2986,7 +2973,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/06/24122928/CHEVTX-US-1-500x315.png",
   "url": "https://coincards.com/us/product/chevron-and-texaco-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "fuel"
@@ -3013,7 +3000,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/09092729/TGI-US-500x315.png",
   "url": "https://coincards.com/us/product/tgi-fridays-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3026,7 +3013,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/09092436/SPORTS-US-500x315.png",
   "url": "https://coincards.com/us/product/sportsmans-warehouse-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -3040,7 +3027,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/09092128/SHONEY-US-500x315.png",
   "url": "https://coincards.com/us/product/shoneys-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3053,7 +3040,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06142550/QUIZNO-US-500x315.png",
   "url": "https://coincards.com/us/product/quiznos-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3066,7 +3053,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06142305/PUCKET-US-500x315.png",
   "url": "https://coincards.com/us/product/pucketts-grocery-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3079,7 +3066,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06142022/PAULM-US-500x315.png",
   "url": "https://coincards.com/us/product/paul-martins-american-grill-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3092,7 +3079,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06141745/PAPPAS-US-500x315.png",
   "url": "https://coincards.com/us/product/pappas-restaurants-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3105,7 +3092,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06141111/KRKLND-US-500x315.png",
   "url": "https://coincards.com/us/product/kirklands-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -3118,7 +3105,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06140800/JTV-US-500x315.png",
   "url": "https://coincards.com/us/product/jtv-com-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3131,7 +3118,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06140513/FRCKRS-US-500x315.png",
   "url": "https://coincards.com/us/product/frickers-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3144,7 +3131,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/05/06140116/FIVEG-US-500x315.png",
   "url": "https://coincards.com/us/product/five-guys-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3170,7 +3157,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/04/22084102/GOODCT-US-500x315.png",
   "url": "https://coincards.com/us/product/goodcents-deli-fresh-subs-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3183,7 +3170,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/04/21163753/SOF-US-500x315.png",
   "url": "https://coincards.com/us/product/saks-off-5th-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3196,7 +3183,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/04/11123435/HM-US-500x315.png",
   "url": "https://coincards.com/us/product/hm-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 300,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3250,7 +3237,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/03/10075529/MOHTL-US-500x315.png",
   "url": "https://coincards.com/us/product/mandarin-oriental-hotel-group-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "restaurants",
@@ -3265,7 +3252,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/03/07163112/HARRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/harrys-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "beauty",
@@ -3280,7 +3267,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/02/02103352/UNO-US-500x315.png",
   "url": "https://coincards.com/us/product/unos-pizzeria-grill-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3321,7 +3308,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/02/02095620/BABYB-US-500x315.png",
   "url": "https://coincards.com/us/product/baby-depot-at-burlington-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3334,7 +3321,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/31100628/DICKS-US-500x315.png",
   "url": "https://coincards.com/us/product/dicks-sporting-goods-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -3348,7 +3335,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/31095927/ANNTAY-US-500x315.png",
   "url": "https://coincards.com/us/product/ann-taylor-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3361,7 +3348,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/11102743/GEC-US-500x315.png",
   "url": "https://coincards.com/us/product/global-experiences-card-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3374,7 +3361,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/05143424/DAVEBU-US-500x315.png",
   "url": "https://coincards.com/us/product/dave-busters-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3387,7 +3374,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/05142814/BOBEVN-US-1-500x315.png",
   "url": "https://coincards.com/us/product/bob-evans-restaurants-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3400,7 +3387,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/bills-bar-burger-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3413,7 +3400,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/05141915/AERIE-US-500x315.png",
   "url": "https://coincards.com/us/product/aerie-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3426,7 +3413,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/05141657/AUNTIE-US-1-500x315.png",
   "url": "https://coincards.com/us/product/auntie-annes-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3439,7 +3426,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2022/01/05141214/TLWINE-US-500x315.png",
   "url": "https://coincards.com/us/product/total-wine-more-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "Beer/Liquor/Wine"
@@ -3452,7 +3439,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/the-palm-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3465,7 +3452,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/stanley-seaforts-saloon-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3478,7 +3465,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/skates-on-the-bay-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3491,7 +3478,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/simon-and-seaforts-saloon-and-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3504,7 +3491,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/palisade-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3517,7 +3504,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/mitchells-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3530,7 +3517,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/maggie-bluffs-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3543,7 +3530,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/galveston-island-historic-pleasure-pier-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3556,7 +3543,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/del-friscos-grille-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3569,7 +3556,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/del-friscos-double-eagle-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3582,7 +3569,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/cutters-crabhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3595,7 +3582,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/clinkerdagger-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3608,7 +3595,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/04071508/CINBON-US-card-500x315.png",
   "url": "https://coincards.com/us/product/cinnabon-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3621,7 +3608,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/21114120/CARVEL-US-500x315.png",
   "url": "https://coincards.com/us/product/carvel-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3634,7 +3621,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/cadillac-ranch-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3647,7 +3634,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/21111444/birchlane-500x315.jpg",
   "url": "https://coincards.com/us/product/birchlane-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -3660,7 +3647,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/21111101/allmodern-500x315.jpg",
   "url": "https://coincards.com/us/product/allmodern-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -3699,7 +3686,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03100613/TRGIF-CA-1-500x315.png",
   "url": "https://coincards.com/us/product/toursgift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3712,7 +3699,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03100535/RGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/us/product/rentacargift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3725,7 +3712,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03100322/HSGIF-CA-500x315.png",
   "url": "https://coincards.com/us/product/hotelsgift-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3738,7 +3725,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03095901/FGIFT-CA-1-500x315.png",
   "url": "https://coincards.com/us/product/flystaygift-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3751,7 +3738,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03095321/AGIFT-US-2-500x315.png",
   "url": "https://coincards.com/us/product/airlinegift-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 2500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -3764,7 +3751,7 @@
   "img": null,
   "url": "https://coincards.com/us/product/twitch-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -3777,7 +3764,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06132154/SUBWAY-US-500x315.png",
   "url": "https://coincards.com/us/product/subway-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3789,8 +3776,8 @@
   "n": "Brio Italian Grille Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06124024/BITALY-US-500x315.png",
   "url": "https://coincards.com/us/product/brio-italian-grille-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3803,7 +3790,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06123606/BAKERS-US-500x315.png",
   "url": "https://coincards.com/us/product/bakers-square-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3816,7 +3803,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06123143/BAJAFR-US-500x315.png",
   "url": "https://coincards.com/us/product/baja-fresh-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3829,7 +3816,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06115654/SWFROG-US-500x315.png",
   "url": "https://coincards.com/us/product/sweetfrog-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3842,7 +3829,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06113013/SHARIS-US-500x315.png",
   "url": "https://coincards.com/us/product/sharis-berries-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -3855,7 +3842,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06111603/NHL-US-500x315.png",
   "url": "https://coincards.com/us/product/nhl-shop-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -3869,7 +3856,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03132719/NBA-US-500x315.png",
   "url": "https://coincards.com/us/product/nba-store-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -3883,7 +3870,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/03132346/MLB-US-500x315.png",
   "url": "https://coincards.com/us/product/mlb-shop-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -3897,7 +3884,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24164534/MNEVNT-US-500x315.png",
   "url": "https://coincards.com/us/product/main-event-online-gift-card-electronic-delivery/",
   "lo": 20,
-  "hi": 20,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -3910,8 +3897,8 @@
   "n": "Hello Fresh Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24163344/HFRESH-US-500x315.png",
   "url": "https://coincards.com/us/product/hello-fresh-online-gift-card-electronic-delivery/",
-  "lo": 61,
-  "hi": 61,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -3937,7 +3924,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24155405/TMBAHA-US-500x315.png",
   "url": "https://coincards.com/us/product/tommy-bahama-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3950,7 +3937,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24154040/STITCH-US-500x315.png",
   "url": "https://coincards.com/us/product/stitch-fix-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -3963,7 +3950,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/24130725/CRACKR-US-500x315.png",
   "url": "https://coincards.com/us/product/cracker-barrel-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -3976,7 +3963,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/23142929/SONIC-US-500x315.png",
   "url": "https://coincards.com/us/product/sonic-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants",
@@ -3990,7 +3977,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/06094927/ZAPPO-US-card-500x315.png",
   "url": "https://coincards.com/us/product/zappos-com-100-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4003,7 +3990,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/17093911/VLGINN-US-500x315.png",
   "url": "https://coincards.com/us/product/village-inn-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4016,7 +4003,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/17093152/RUBIOS-US-500x315.png",
   "url": "https://coincards.com/us/product/rubios-coastal-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4029,7 +4016,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/17091549/RCHSON-US-500x315.png",
   "url": "https://coincards.com/us/product/pc-richard-and-son-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -4042,7 +4029,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16165535/MRICES-US-500x315.png",
   "url": "https://coincards.com/us/product/maurices-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4055,7 +4042,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16164352/JAMBA-US-500x315.png",
   "url": "https://coincards.com/us/product/jamba-juice-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 50,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4068,7 +4055,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16163757/HARDRK-US-500x315.png",
   "url": "https://coincards.com/us/product/hard-rock-cafe-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4094,7 +4081,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16161629/GANDER-US-500x315.png",
   "url": "https://coincards.com/us/product/gander-outdoors-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4107,7 +4094,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16160717/FAMDAV-US-500x315.png",
   "url": "https://coincards.com/us/product/famous-daves-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4120,7 +4107,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16120322/WHBM-US-500x315.png",
   "url": "https://coincards.com/us/product/white-house-black-market-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4133,7 +4120,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16115435/VITAMN-US-500x315.png",
   "url": "https://coincards.com/us/product/the-vitamin-shoppe-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4146,7 +4133,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16111606/JERSMK-US-500x315.png",
   "url": "https://coincards.com/us/product/jersey-mikes-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4159,7 +4146,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16104501/COST-US-500x315.png",
   "url": "https://coincards.com/us/product/cost-plus-world-market-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4172,7 +4159,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/16101204/BLAZE-US-500x315.png",
   "url": "https://coincards.com/us/product/blaze-pizza-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4185,7 +4172,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/04083602/RCSTK-US-500x315.png",
   "url": "https://coincards.com/us/product/ruths-chris-steak-house-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4198,7 +4185,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/11/02111816/CONTNR-US-1-500x315.png",
   "url": "https://coincards.com/us/product/the-container-store-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -4212,7 +4199,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/11123905/DUNKIN-US-500x315.png",
   "url": "https://coincards.com/us/product/dunkin-donuts-25-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4225,7 +4212,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/27132545/burlington-500x325.jpg",
   "url": "https://coincards.com/us/product/burlington-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4251,7 +4238,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/20143712/CABELA-US-500x315.png",
   "url": "https://coincards.com/us/product/cabelas-online-gift-card-electronic-delivery-2/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -4264,7 +4251,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/20143343/BASPRO-US-500x315.png",
   "url": "https://coincards.com/us/product/bass-pro-shops-online-gift-card-electronic-delivery-2/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -4278,7 +4265,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/24160243/WAYFAR-US-500x315.png",
   "url": "https://coincards.com/us/product/wayfair-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -4292,7 +4279,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/12153602/walmart.png",
   "url": "https://coincards.com/us/product/walmart-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "electronics",
@@ -4307,7 +4294,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/02112046/TJX-US-500x315.png",
   "url": "https://coincards.com/us/product/t-j-maxx-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4320,7 +4307,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/12112055/coffee.png",
   "url": "https://coincards.com/us/product/the-coffee-bean-tea-leaf-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4333,7 +4320,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/12110136/taco-bell-500x315.png",
   "url": "https://coincards.com/us/product/taco-bell-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4346,7 +4333,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/12105334/soma-500x318.png",
   "url": "https://coincards.com/us/product/soma-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4359,7 +4346,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/24132302/SEPHRA-US-500x315.png",
   "url": "https://coincards.com/us/product/sephora-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "beauty",
@@ -4387,7 +4374,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/08104111/saks.png",
   "url": "https://coincards.com/us/product/saks-fifth-avenue-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4400,7 +4387,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/24131450/REI-US-500x315.png",
   "url": "https://coincards.com/us/product/rei-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4425,8 +4412,8 @@
   "n": "Old Navy Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/08095037/oldnavy.png",
   "url": "https://coincards.com/us/product/old-navy-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4439,7 +4426,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/08094137/maggiano.png",
   "url": "https://coincards.com/us/product/maggianos-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4465,7 +4452,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/07120706/krispy-500x315.png",
   "url": "https://coincards.com/us/product/krispy-kreme-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4478,7 +4465,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/24163651/JIFFYL-US-500x315.png",
   "url": "https://coincards.com/us/product/jiffy-lube-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "auto"
@@ -4491,7 +4478,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/08112025/GRBHUB-US-1-500x315.png",
   "url": "https://coincards.com/us/product/grubhub-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4517,7 +4504,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/10085341/CHILIS-US-500x315.png",
   "url": "https://coincards.com/us/product/chilis-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4530,7 +4517,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/07085839/chicos.png",
   "url": "https://coincards.com/us/product/chicos-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4543,7 +4530,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/23143232/BUFWW-US-500x315.png",
   "url": "https://coincards.com/us/product/buffalo-wild-wings-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4556,7 +4543,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/06112753/BELK_fp01.png",
   "url": "https://coincards.com/us/product/belk-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4568,8 +4555,8 @@
   "n": "Banana Republic Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/06110316/banana-republic.png",
   "url": "https://coincards.com/us/product/banana-republic-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4581,8 +4568,8 @@
   "n": "Athleta Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/06111139/athleta-1.png",
   "url": "https://coincards.com/us/product/athleta-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4595,7 +4582,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/06111612/americaneagle-1.png",
   "url": "https://coincards.com/us/product/american-eagle-outfitters-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4608,7 +4595,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05153821/STAPLS-US-500x315.png",
   "url": "https://coincards.com/us/product/staples-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4621,7 +4608,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05134404/99REST-US-500x315.png",
   "url": "https://coincards.com/us/product/ninety-nine-restaurant-pub-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4634,7 +4621,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05134039/NAUTCA-US-500x315.png",
   "url": "https://coincards.com/us/product/nautica-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4647,7 +4634,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05133029/LANDSE-US-500x315.png",
   "url": "https://coincards.com/us/product/lands-end-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4660,7 +4647,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05132137/CALPZA-US-500x315.png",
   "url": "https://coincards.com/us/product/california-pizza-kitchen-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4673,7 +4660,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/10/05131715/BBEAR-US-500x315.png",
   "url": "https://coincards.com/us/product/build-a-bear-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4686,7 +4673,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/04/06131217/NRDRCK-US-500x315.png",
   "url": "https://coincards.com/us/product/nordstrom-rack-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4699,7 +4686,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/04/06131609/NORD-US-500x315.png",
   "url": "https://coincards.com/us/product/nordstrom-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4712,7 +4699,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/03/16111615/airbnb.png",
   "url": "https://coincards.com/us/product/airbnb-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -4725,7 +4712,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/03/16110843/RESPONSIVE_petsmart_ca_CRM18268960_NOV_Everyday_Gift_Card_Gpig.png",
   "url": "https://coincards.com/us/product/petsmart-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4738,7 +4725,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/03/26203522/IC-CshwGftCrd-1500x950-1-500x317.png",
   "url": "https://coincards.com/us/product/instacart-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "grocery",
@@ -4752,7 +4739,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/03/09134431/jcpenney.png",
   "url": "https://coincards.com/us/product/jcpenney-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4765,7 +4752,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/01/21104954/carters.png",
   "url": "https://coincards.com/us/product/carters-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4778,7 +4765,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/01/04070904/MXITUP-US-card-500x315.png",
   "url": "https://coincards.com/us/product/mix-it-up-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4791,7 +4778,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/10/24164819/MICHLS-US-500x315.png",
   "url": "https://coincards.com/us/product/michaels-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gifts",
@@ -4805,7 +4792,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/07/27091619/CBK-US-500x315.png",
   "url": "https://coincards.com/us/product/crate-kids-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -4818,7 +4805,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/06/22124821/yankee-500x315.png",
   "url": "https://coincards.com/us/product/yankee-candle-online-gift-card-electronic-delivery-2/",
   "lo": 25,
-  "hi": 25,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4831,7 +4818,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/03/20101114/CHARI-US-500x315.png",
   "url": "https://coincards.com/us/product/charity-choice-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -4844,7 +4831,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/03/20100416/LOWES-US-500x315.png",
   "url": "https://coincards.com/us/product/lowes-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -4857,7 +4844,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/03/11075711/SOOTH-US-500x315.png",
   "url": "https://coincards.com/us/product/soothe-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "Spa"
@@ -4870,7 +4857,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2020/03/29145650/DoorDash-CR80-0524-1500x950-1-500x317.png",
   "url": "https://coincards.com/us/product/door-dash-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -4883,7 +4870,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/11/04101557/HMCHF-US-500x315.png",
   "url": "https://coincards.com/us/product/home-chef-online-gift-card-electronic-delivery/",
   "lo": 50,
-  "hi": 50,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "grocery"
@@ -4896,7 +4883,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/08/24155907/UNDARM-US-500x315.png",
   "url": "https://coincards.com/us/product/under-armour-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -4910,7 +4897,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/26145135/REGAL-US-500x315.png",
   "url": "https://coincards.com/us/product/regal-cinemas-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -4923,7 +4910,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/21125246/groupon.jpg",
   "url": "https://coincards.com/us/product/groupon-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4936,7 +4923,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/18115231/ADAS-US-500x315.png",
   "url": "https://coincards.com/us/product/adidas-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -4950,7 +4937,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/21105651/CB2-US-500x315.png",
   "url": "https://coincards.com/us/product/cb2-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -4963,7 +4950,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16213645/crate.png",
   "url": "https://coincards.com/us/product/crate-and-barrel-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -4976,7 +4963,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2024/05/16220910/kohls.png",
   "url": "https://coincards.com/us/product/kohls-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -4989,7 +4976,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13105312/the-home-depot-500x315.png",
   "url": "https://coincards.com/us/product/home-depot-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 2000,
   "cur": "USD",
   "tags": [
    "home improvement"
@@ -5002,7 +4989,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13103351/ULTAB-US-500x315.png",
   "url": "https://coincards.com/us/product/ulta-beauty-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "beauty"
@@ -5015,7 +5002,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13103043/cheesecake-500x315.png",
   "url": "https://coincards.com/us/product/the-cheesecake-factory-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5028,7 +5015,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13102556/pfchang-500x315.png",
   "url": "https://coincards.com/us/product/p-f-changs-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5041,7 +5028,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/yak-and-yak-restaurant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5054,7 +5041,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/simms-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5067,7 +5054,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/rusty-pelican-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5080,7 +5067,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/red-sushi-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5093,7 +5080,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/the-post-oak-hotel-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5106,7 +5093,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/pleasure-pier-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5119,7 +5106,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/peohes-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5132,7 +5119,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/mortons-grille-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5145,7 +5132,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/mastros-restaurants-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5158,7 +5145,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/mai-tai-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5171,7 +5158,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/grand-concourse-restaurant-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5184,7 +5171,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/gandy-dancer-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5197,7 +5184,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/the-flying-dutchman-restaurant-oyster-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5210,7 +5197,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/fish-tales-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5223,7 +5210,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/fishermans-wharf-seafood-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5236,7 +5223,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/brick-house-tavern-tap-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5249,7 +5236,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/brenners-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5262,7 +5249,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/13090628/oceanaire-500x315.png",
   "url": "https://coincards.com/us/product/the-oceanaire-seafood-room-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5275,7 +5262,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12111152/chipotle-500x315.png",
   "url": "https://coincards.com/us/product/chipotle-mexican-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5288,7 +5275,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/21202417/OSTEAKH-US-1-500x315.png",
   "url": "https://coincards.com/us/product/outback-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5301,7 +5288,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/03130947/FLEMNG-US-500x315.png",
   "url": "https://coincards.com/us/product/flemings-prime-steakhouse-wine-bar-online-gift-card-electronic-delivery-2/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5314,7 +5301,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/06130638/BONFSH-US-500x315.png",
   "url": "https://coincards.com/us/product/bonefish-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5327,7 +5314,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12104952/bloomin-500x315.png",
   "url": "https://coincards.com/us/product/bloomin-brands-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5340,7 +5327,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/12103445/applebee-500x315.png",
   "url": "https://coincards.com/us/product/applebees-grill-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5353,7 +5340,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/06/11095243/Uber-Eats-1500X900-500x317.png",
   "url": "https://coincards.com/us/product/uber-eats-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5366,7 +5353,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/27103143/landrys_cadillac_d-500x318.png",
   "url": "https://coincards.com/us/product/cadillac-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5433,7 +5420,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17110605/joes-500x315.png",
   "url": "https://coincards.com/us/product/joes-crab-shack-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5446,7 +5433,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17105947/brgues-500x315.png",
   "url": "https://coincards.com/us/product/troys-liquor-bar-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5459,7 +5446,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17105947/brgues-500x315.png",
   "url": "https://coincards.com/us/product/br-guest-hospitality-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5472,7 +5459,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17105947/brgues-500x315.png",
   "url": "https://coincards.com/us/product/atlantic-grill-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5485,7 +5472,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17105707/wolferman-500x315.png",
   "url": "https://coincards.com/us/product/wolfermans-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts",
@@ -5499,7 +5486,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17105427/stockyard-500x315.png",
   "url": "https://coincards.com/us/product/stock-yards-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts",
@@ -5513,7 +5500,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17102728/willie_g_s-500x316.png",
   "url": "https://coincards.com/us/product/willie-gs-seafood-steaks-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5526,7 +5513,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17102601/vic_anthony_s-500x316.png",
   "url": "https://coincards.com/us/product/vic-and-anthonys-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5539,7 +5526,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17102435/tower_of_the_america-500x316.png",
   "url": "https://coincards.com/us/product/tower-of-the-americas-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -5554,7 +5541,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/06113702/STRIP-US-500x315.png",
   "url": "https://coincards.com/us/product/strip-house-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5567,7 +5554,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17101853/saltgrass_steakhouse-500x316.png",
   "url": "https://coincards.com/us/product/saltgrass-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5580,7 +5567,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17101729/river_crab_bluewater_inn-500x316.png",
   "url": "https://coincards.com/us/product/river-crab-bluewater-inn-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants",
@@ -5594,7 +5581,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17101550/rainforest_cafe_1-500x316.png",
   "url": "https://coincards.com/us/product/rainforest-cafe-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5607,7 +5594,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17101412/morton_s_the_steakhouse-500x316.png",
   "url": "https://coincards.com/us/product/mortons-the-steakhouse-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5620,7 +5607,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17100747/mitchell_s_fish_market-500x316.png",
   "url": "https://coincards.com/us/product/mitchells-fish-market-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5633,7 +5620,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17100619/mccormick_schmick_s-500x316.png",
   "url": "https://coincards.com/us/product/mccormick-and-schmicks-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5646,7 +5633,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17100432/landry_s_seafood-500x316.png",
   "url": "https://coincards.com/us/product/landrys-seafood-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5659,7 +5646,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/la-griglia-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5672,7 +5659,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/03131737/GROTTO-US-500x315.png",
   "url": "https://coincards.com/us/product/grotto-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5685,7 +5672,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17093007/landrys_goldennugget_d-500x318.png",
   "url": "https://coincards.com/us/product/golden-nugget-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -5700,7 +5687,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/03130413/DOSCAM-US-500x315.png",
   "url": "https://coincards.com/us/product/dos-caminos-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5713,7 +5700,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17091934/claimjumper_d_1-500x318.png",
   "url": "https://coincards.com/us/product/claim-jumper-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5726,7 +5713,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17091817/landrys_charthouse_d-500x318.png",
   "url": "https://coincards.com/us/product/chart-house-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5739,7 +5726,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17091446/bubba-500x318.png",
   "url": "https://coincards.com/us/product/bubba-gump-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5752,7 +5739,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/06121918/BABINS-US-500x315.png",
   "url": "https://coincards.com/us/product/babins-seafood-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5765,7 +5752,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/06121637/AQRIUM-US-500x315.png",
   "url": "https://coincards.com/us/product/aquarium-restaurants-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5778,7 +5765,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2023/07/21092649/LANDRYS-US-500x315.png",
   "url": "https://coincards.com/us/product/landrys-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants",
@@ -5792,7 +5779,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17083415/fruit-bouquets_d-1-500x318.png",
   "url": "https://coincards.com/us/product/fruitbouquets-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -5805,7 +5792,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/17083138/harry_david-1.png",
   "url": "https://coincards.com/us/product/harry-david-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -5818,7 +5805,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16154720/carnival.jpg",
   "url": "https://coincards.com/us/product/carnival-cruises-online-gift-card-electronic-delivery/",
   "lo": 100,
-  "hi": 100,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "travel"
@@ -5831,7 +5818,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16154217/chuck-e-cheese-500x316.png",
   "url": "https://coincards.com/us/product/chuck-e-cheeses-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "entertainment",
@@ -5845,7 +5832,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/20142722/DSW-US-500x315.png",
   "url": "https://coincards.com/us/product/dsw-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -5858,7 +5845,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16153121/nflshop.png.png",
   "url": "https://coincards.com/us/product/nflshop-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -5872,7 +5859,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16113114/PNKBRY-US-1-500x315.png",
   "url": "https://coincards.com/us/product/pinkberry-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5885,7 +5872,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16113535/PTBARN-US-500x315.png",
   "url": "https://coincards.com/us/product/pottery-barn-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -5899,7 +5886,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/11095307/Uber-RIdes-1500X900-500x317.png",
   "url": "https://coincards.com/us/product/uber-rides-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -5912,7 +5899,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/24155640/TOPGLF-US-500x315.png",
   "url": "https://coincards.com/us/product/topgolf-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -5926,7 +5913,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16151238/williams_sonoma-500x316.png",
   "url": "https://coincards.com/us/product/williams-sonoma-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -5940,7 +5927,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16120051/WSTELM-US-500x315.png",
   "url": "https://coincards.com/us/product/wwest-elm-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "home improvement",
@@ -5953,8 +5940,8 @@
   "n": "The Spa & Wellness Gift Card by Spa Week Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/05102731/SPAWK-US-card-500x315.png",
   "url": "https://coincards.com/us/product/the-spa-wellness-gift-card-by-spa-week-online-gift-card-electronic-delivery/",
-  "lo": 10,
-  "hi": 10,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "Spa"
@@ -5967,7 +5954,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/06131856/STEAKN-US-500x315.png",
   "url": "https://coincards.com/us/product/steak-n-shake-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5980,7 +5967,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/02102849/RUBYTU-US-1-500x315.png",
   "url": "https://coincards.com/us/product/ruby-tuesday-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 250,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -5993,7 +5980,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16112702/PEETS-US-500x315.png",
   "url": "https://coincards.com/us/product/peets-coffee-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6006,7 +5993,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16144859/papajohns_d_1-500x318.png",
   "url": "https://coincards.com/us/product/papa-johns-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6019,7 +6006,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/24165027/OMAHAS-US-500x315.png",
   "url": "https://coincards.com/us/product/omaha-steaks-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "gifts",
@@ -6033,7 +6020,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16144153/karmakoin-500x316.png",
   "url": "https://coincards.com/us/product/karma-koin-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gaming"
@@ -6046,7 +6033,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16143931/legal_sea_food-500x316.png",
   "url": "https://coincards.com/us/product/legal-sea-foods-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6059,7 +6046,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16164035/IFLY-US-1-500x315.png",
   "url": "https://coincards.com/us/product/ifly-com-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -6072,7 +6059,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16143547/hotels.com_-500x316.png",
   "url": "https://coincards.com/us/product/hotels-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "travel"
@@ -6085,7 +6072,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16142806/guitarcentre-500x316.png",
   "url": "https://coincards.com/us/product/guitar-center-online-gift-card-electronic-delivery/",
   "lo": 25,
-  "hi": 25,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -6098,7 +6085,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/22212318/GapOptions_1021133.png",
   "url": "https://coincards.com/us/product/gap-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -6111,7 +6098,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/05091544/GAMSTP-US-1-500x315.png",
   "url": "https://coincards.com/us/product/gamestop-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "gaming",
@@ -6125,7 +6112,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16141441/fanatics-500x318.png",
   "url": "https://coincards.com/us/product/fanatics-online-gift-card-electronic-delivery/",
   "lo": 5,
-  "hi": 5,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -6139,7 +6126,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16141012/dominos-500x318.png",
   "url": "https://coincards.com/us/product/dominos-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6165,7 +6152,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16102133/BKING-US-1-500x315.png",
   "url": "https://coincards.com/us/product/burger-king-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 1000,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6178,7 +6165,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/16140227/BUCADB-US-500x315.png",
   "url": "https://coincards.com/us/product/buca-di-beppo-online-gift-card-electronic-delivery/",
   "lo": 15,
-  "hi": 15,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6190,8 +6177,8 @@
   "n": "Bertucci’s Online Gift Card (Electronic Delivery)",
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2021/12/06124024/BITALY-US-500x315.png",
   "url": "https://coincards.com/us/product/bertuccis-online-gift-card-electronic-delivery/",
-  "lo": 0,
-  "hi": 0,
+  "lo": null,
+  "hi": null,
   "cur": "USD",
   "tags": [
    "restaurants"
@@ -6204,7 +6191,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14200643/CLMBIA-US-500x315.png",
   "url": "https://coincards.com/us/product/columbia-sportswear-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail",
@@ -6218,7 +6205,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14150721/the_popcorn_factory-500x316.png",
   "url": "https://coincards.com/us/product/the-popcorn-factory-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -6231,7 +6218,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14145736/cheryl_s-cookies_d-500x319.png",
   "url": "https://coincards.com/us/product/cheryls-cookies-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 200,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -6244,7 +6231,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14145156/amc_3-500x318.jpg",
   "url": "https://coincards.com/us/product/amc-theaters-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "entertainment"
@@ -6257,7 +6244,7 @@
   "img": null,
   "url": "https://coincards.com/us/product/aeropostale-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"
@@ -6270,7 +6257,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/05/14143914/1800baskets_d-500x319.png",
   "url": "https://coincards.com/us/product/1800-baskets-com-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 100,
   "cur": "USD",
   "tags": [
    "gifts"
@@ -6283,7 +6270,7 @@
   "img": "https://assets.coincards.com/wp-content/uploads/sites/2/2019/03/29084532/BARNES-US-500x315.png",
   "url": "https://coincards.com/us/product/barnes-noble-online-gift-card-electronic-delivery/",
   "lo": 10,
-  "hi": 10,
+  "hi": 500,
   "cur": "USD",
   "tags": [
    "retail"

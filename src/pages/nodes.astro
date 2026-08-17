@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 
 export const prerender = false;
 
@@ -47,14 +48,18 @@ const crawledAt = census
   <div class="doc-head">
     <div class="doc-kicker">Nodes</div>
     <h1>Bitcoin nodes</h1>
-    <p class="doc-lede">A census of the nodes anyone can reach, on the open internet and over Tor, plus what it takes to add one of your own. Every node independently verifies every block; running one is how you check the rules yourself instead of trusting someone who says they did.</p>
+    <HeroEmblem name="network" />
+    <p class="doc-lede">A census of the nodes anyone can reach, on the open internet and over Tor, plus what it takes to add one of your own. Every node independently verifies every block.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="nd-hero">
       {census ? (
         <>
-          <div class="nd-big">{n(census.reachable)}</div>
+          
+          <div class="nd-frow" aria-label={n(census.reachable) + ' reachable nodes'}>
+            {n(census.reachable).split('').map((c) => c === ',' ? <span class="nd-comma">,</span> : <span class="nd-tile">{c}</span>)}
+          </div>
           <div class="nd-sub">reachable Bitcoin nodes, measured by our own crawler</div>
           <div class="nd-chips">
             <div class="nd-chip"><b>{n(census.countryCount)}</b><i>countries with a located node</i></div>
@@ -62,13 +67,15 @@ const crawledAt = census
             <div class="nd-chip"><b>{n(census.ipv6)}</b><i>reached over IPv6</i></div>
             <div class="nd-chip"><b>{census.medianLatencyMs} ms</b><i>median handshake time</i></div>
           </div>
-          <p class="nd-fine">Our own measurement, not an estimate and not a third-party feed: the crawler completes a bitcoin protocol handshake with every address it can find, and a node counts only if it answered. Last crawl {crawledAt}, {n(census.tested)} addresses tested in {census.crawlSeconds} seconds; it runs every six hours.{!census.completeSweep && ` That run reached its time limit with ${n(census.candidates - census.tested)} addresses still untested, so this count is lower than a full sweep would give.`} Reachable means accepting inbound connections. Nodes behind home firewalls are invisible to any census, so the true total is higher; a count like this is a floor, not a ceiling.</p>
+          <p class="nd-fine">Our own measurement, not an estimate and not a third-party feed: the crawler completes a bitcoin protocol handshake with every address it can find, and a node counts only if it answered. Last crawl {crawledAt}, {n(census.tested)} addresses tested in {census.crawlSeconds} seconds; it runs every ten days.{!census.completeSweep && ` That run reached its time limit with ${n(census.candidates - census.tested)} addresses still untested, so this count is lower than a full sweep would give.`} Reachable means accepting inbound connections. Nodes behind home firewalls are invisible to any census, so the true total is higher; a count like this is a floor, not a ceiling.</p>
         </>
       ) : (
         <>
-          <div class="nd-big">&#8230;</div>
+          <div class="nd-frow" aria-hidden="true">
+            <span class="nd-tile">&ndash;</span><span class="nd-comma">,</span><span class="nd-tile">&ndash;</span><span class="nd-tile">&ndash;</span><span class="nd-tile">&ndash;</span>
+          </div>
           <div class="nd-sub">the census is being rebuilt right now</div>
-          <p class="nd-fine">Our crawler publishes a fresh census every six hours and the last one is not readable at this moment. Rather than print numbers we cannot stand behind, this page waits. Try again shortly.</p>
+          <p class="nd-fine">Our crawler publishes a fresh census every ten days and the last one is not readable at this moment. Rather than print numbers we cannot stand behind, this page waits. Try again shortly.</p>
         </>
       )}
     </div>
@@ -108,12 +115,12 @@ const crawledAt = census
       <table class="nd-table nd-hw" aria-label="Hardware options for running a node">
         <thead><tr><th>Hardware</th><th>Disk</th><th>RAM</th><th>Cost</th></tr></thead>
         <tbody>
-          <tr><td>Any recent desktop or laptop</td><td>1 TB or larger, SSD preferred</td><td>8 GB or more</td><td>Nothing extra if you already own it; the node runs alongside normal use</td></tr>
-          <tr><td>Raspberry Pi-class board</td><td>1 TB SSD over USB</td><td>4 to 8 GB</td><td>A complete dedicated build lands in the low hundreds of dollars</td></tr>
-          <tr><td>An old laptop</td><td>Add a 1 TB drive if needed</td><td>4 GB or more</td><td>Close to free, with a built-in battery for power cuts</td></tr>
+          <tr><td>Any recent desktop or laptop</td><td data-l="Disk">2 TB SSD preferred</td><td data-l="RAM">8 GB or more</td><td data-l="Cost">Nothing extra if you already own it; the node runs alongside normal use</td></tr>
+          <tr><td>Raspberry Pi-class board</td><td data-l="Disk">2 TB SSD over USB</td><td data-l="RAM">4 to 8 GB</td><td data-l="Cost">A complete dedicated build lands in the low hundreds of dollars</td></tr>
+          <tr><td>An old laptop</td><td data-l="Disk">Add a 2 TB drive if needed</td><td data-l="RAM">4 GB or more</td><td data-l="Cost">Close to free, with a built-in battery for power cuts</td></tr>
         </tbody>
       </table>
-      <p class="nd-fine">Disk: the chain is roughly 750 GB and growing, so 1 TB is the practical minimum for a full archive; pruned mode can cut that to a few gigabytes if you give up serving historical blocks. Bandwidth: the initial sync downloads the whole chain once, then a node typically moves tens of gigabytes a month, more if it serves many peers. An unmetered connection suits it well, and upload can be capped in the settings.</p>
+      <p class="nd-fine">Disk: the chain is roughly 865 GB and growing by close to 100 GB a year, so 1 TB is the bare minimum for a full archive and 2 TB gives years of headroom; pruned mode can cut that to a few gigabytes if you give up serving historical blocks. Bandwidth: the initial sync downloads the whole chain once, then a node typically moves tens of gigabytes a month, more if it serves many peers. An unmetered connection suits it well, and upload can be capped in the settings.</p>
     </div>
 
     <div class="nd-card">
@@ -154,7 +161,14 @@ const crawledAt = census
 </main>
 <style is:global>
   .nd-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 20px;text-align:center}
-  .nd-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .nd-frow{display:flex;justify-content:center;gap:4px}
+  .nd-tile{position:relative;width:36px;height:50px;border-radius:7px;
+    background:linear-gradient(180deg,#1b2946 0%,#15223c 49%,#101c33 51%,#131f37 100%);
+    border:1px solid var(--line-2);box-shadow:0 3px 8px rgba(0,0,0,.35);
+    font:800 30px/48px var(--mono);color:var(--price-ink);text-align:center;font-variant-numeric:tabular-nums}
+  .nd-tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:rgba(0,0,0,.5);box-shadow:0 1px 0 rgba(255,255,255,.045)}
+  .nd-comma{align-self:flex-end;font:800 24px/44px var(--mono);color:var(--ink-3);padding:0 1px}
   .nd-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
   .nd-chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
   .nd-chip{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px}
@@ -189,9 +203,20 @@ const crawledAt = census
   .nd-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
   .nd-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:700px){
-    .nd-big{font-size:40px}
+    .nd-tile{width:27px;height:40px;border-radius:5px;font:800 22px/38px var(--mono)}
+    .nd-comma{font:800 18px/34px var(--mono)}
     .nd-table{display:block;overflow-x:auto}
-    .nd-hw td{min-width:150px}
+    
+    .nd-hw{overflow:visible}
+    .nd-hw thead{display:none}
+    .nd-hw tbody,.nd-hw tr,.nd-hw td{display:block}
+    .nd-hw tr{border-bottom:1px dotted var(--line-2);padding:11px 0}
+    .nd-hw tr:first-child{padding-top:2px}
+    .nd-hw tr:last-child{border-bottom:0;padding-bottom:2px}
+    .nd-hw td,.nd-hw tr:last-child td{border-bottom:0;padding:2px 0}
+    .nd-hw td:first-child{font-weight:700;padding-bottom:4px}
+    .nd-hw td[data-l]::before{content:attr(data-l);font:700 8.5px var(--mono);letter-spacing:.11em;
+      text-transform:uppercase;color:var(--ink-3);margin-right:8px}
   }
 </style>
 </Base>

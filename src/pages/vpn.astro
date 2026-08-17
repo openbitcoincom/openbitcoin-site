@@ -2,78 +2,77 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 ---
-<Base title="VPNs That Accept Bitcoin: 5 Providers Compared - OpenBitcoin" description="Five VPNs that accept bitcoin, compared: how each takes payment, email required or not, pricing, jurisdiction, and audit history.">
+<Base title="VPNs You Pay for With Bitcoin - OpenBitcoin" description="Five VPNs that accept bitcoin, compared: how each takes payment, email required or not, pricing, jurisdiction, and audit history.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">VPN</div>
-    <h1>VPNs you can pay for with bitcoin</h1>
-    <p class="doc-lede">Every provider below accepts bitcoin, so a subscription never has to touch a card or a bank. And your wallet talks to servers that see an IP address. The <a href="/learn/privacy">privacy guide</a> covers where a VPN fits.</p>
+    <h1>VPNs that accept bitcoin</h1>
+    
+    
+    <svg class="vp-hero" viewBox="0 0 92 100" aria-hidden="true">
+      <g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke-width="3" d="M46 4 78 16v26.2c0 18.1-12.9 32.2-32 37.3-19.1-5.1-32-19.2-32-37.3V16z" fill="rgba(247,147,26,.07)"/>
+        <path stroke-width="2" stroke="rgba(247,147,26,.38)" d="M46 13.5 69.5 22.3v19.9c0 13.4-9.5 23.9-23.5 27.9-14-4-23.5-14.5-23.5-27.9V22.3z"/>
+        <path stroke-width="4" d="M33 45l9.5 9.5L63 32.5"/>
+      </g>
+    </svg>
+    <p class="doc-lede">Every provider below accepts bitcoin, so a subscription never has to touch a card or a bank. The <a href="/learn/privacy">privacy guide</a> covers where a VPN fits in.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="vp-card">
       <div class="vp-tlab">Five providers that accept bitcoin</div>
-      <p class="vp-affline">Every link on this page goes to the provider's official site; when an affiliate program is signed, the link becomes a labeled affiliate link per the <a href="/disclosure">disclosure policy</a>, and affiliate status never changes what a row says. Rows are ordered by account model, then alphabetically; nothing here is a ranking.</p>
+      <p class="vp-intro">The <b>Method</b> column is the one that matters: Mullvad and IVPN issue a random account number and never ask for an email, so a subscription paid in bitcoin carries no identity at all. The rest is context: jurisdiction, monthly price, and any no-logs claims.</p>
       <div class="vp-scroll">
       <table class="vp-table" aria-label="VPN providers that accept bitcoin, compared">
         <thead>
-          <tr><th>Provider</th><th>Accepts bitcoin</th><th>Account model</th><th>Price, approx. monthly</th><th>Jurisdiction</th><th>Notes</th><th></th></tr>
+          <tr><th>Provider</th><th>Method</th><th>Price</th><th>Jurisdiction</th><th>Notes</th><th></th></tr>
         </thead>
         <tbody>
           <tr>
-            <td class="vp-prov"><b>IVPN</b><span class="vp-chip">Affiliate</span></td>
-            <td>On-chain and Lightning</td>
+            <td class="vp-prov"><span class="vp-pwrap"><a class="vp-logo vp-limg" href="https://mullvad.net" target="_blank" rel="noopener nofollow" tabindex="-1" aria-hidden="true"><img src="/img/vpn/mullvad.png" alt="" width="28" height="28" loading="lazy"></a><span class="vp-pname"><b><a href="https://mullvad.net" rel="noopener nofollow" target="_blank">Mullvad</a></b></span></span></td>
             <td>Numbered account, no email</td>
-            <td>~$5 to $10</td>
-            <td>Gibraltar</td>
-            <td class="vp-notes">Annual independent audits; open-source apps</td>
-            
-            <td class="vp-act"><a class="vp-visit" href="https://ivpn.net" rel="noopener nofollow" target="_blank">Visit</a></td>
-          </tr>
-          <tr>
-            <td class="vp-prov"><b>Mullvad</b><span class="vp-noaff">no affiliate program</span></td>
-            <td>On-chain and Lightning</td>
-            <td>Numbered account, no email</td>
-            <td>~$5, flat</td>
+            <td>&#8364;5</td>
             <td>Sweden</td>
             <td class="vp-notes">Independent audits; one price at every term length</td>
-            
-            <td class="vp-act"><a class="vp-visit" href="https://mullvad.net" rel="noopener nofollow" target="_blank">Visit</a></td>
+            <td class="vp-act"><a class="vp-visit" href="https://mullvad.net" rel="noopener nofollow" target="_blank">Get &#8599;</a></td>
           </tr>
           <tr>
-            <td class="vp-prov"><b>ExpressVPN</b><span class="vp-chip">Affiliate</span></td>
-            <td>On-chain, via a payment processor</td>
-            <td>Email account</td>
-            <td>~$5 to $13</td>
-            <td>British Virgin Islands</td>
-            <td class="vp-notes">Commissioned no-logs and security audits</td>
-            
-            <td class="vp-act"><a class="vp-visit" href="https://expressvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+            <td class="vp-prov"><span class="vp-pwrap"><a class="vp-logo vp-limg" href="https://ivpn.net" target="_blank" rel="noopener nofollow" tabindex="-1" aria-hidden="true"><img src="/img/vpn/ivpn.png" alt="" width="28" height="28" loading="lazy"></a><span class="vp-pname"><b><a href="https://ivpn.net" rel="noopener nofollow" target="_blank">IVPN</a></b></span></span></td>
+            <td>Numbered account, no email</td>
+            <td>$6</td>
+            <td>Gibraltar</td>
+            <td class="vp-notes">Annual independent audits; open-source apps</td>
+            <td class="vp-act"><a class="vp-visit" href="https://ivpn.net" rel="noopener nofollow" target="_blank">Get &#8599;</a></td>
           </tr>
           <tr>
-            <td class="vp-prov"><b>NordVPN</b><span class="vp-chip">Affiliate</span></td>
-            <td>On-chain, via a payment processor</td>
+            <td class="vp-prov"><span class="vp-pwrap"><a class="vp-logo vp-limg" href="https://nordvpn.com" target="_blank" rel="noopener nofollow" tabindex="-1" aria-hidden="true"><img src="/img/vpn/nordvpn.png" alt="" width="28" height="28" loading="lazy"></a><span class="vp-pname"><b><a href="https://nordvpn.com" rel="noopener nofollow" target="_blank">NordVPN</a></b></span></span></td>
             <td>Email account</td>
-            <td>~$3 to $13</td>
+            <td>$15</td>
             <td>Panama</td>
             <td class="vp-notes">Commissioned no-logs audits</td>
-            
-            <td class="vp-act"><a class="vp-visit" href="https://nordvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+            <td class="vp-act"><a class="vp-visit" href="https://nordvpn.com" rel="noopener nofollow" target="_blank">Get &#8599;</a></td>
           </tr>
           <tr>
-            <td class="vp-prov"><b>Proton VPN</b><span class="vp-chip">Affiliate</span></td>
-            <td>On-chain, through its own checkout</td>
+            <td class="vp-prov"><span class="vp-pwrap"><a class="vp-logo vp-limg" href="https://protonvpn.com" target="_blank" rel="noopener nofollow" tabindex="-1" aria-hidden="true"><img src="/img/vpn/protonvpn.png" alt="" width="28" height="28" loading="lazy"></a><span class="vp-pname"><b><a href="https://protonvpn.com" rel="noopener nofollow" target="_blank">Proton VPN</a></b></span></span></td>
             <td>Email account</td>
-            <td>~$4 to $10</td>
+            <td>$10</td>
             <td>Switzerland</td>
             <td class="vp-notes">Open-source apps; published audits; free tier exists</td>
-            
-            <td class="vp-act"><a class="vp-visit" href="https://protonvpn.com" rel="noopener nofollow" target="_blank">Visit</a></td>
+            <td class="vp-act"><a class="vp-visit" href="https://protonvpn.com" rel="noopener nofollow" target="_blank">Get &#8599;</a></td>
+          </tr>
+          <tr>
+            <td class="vp-prov"><span class="vp-pwrap"><a class="vp-logo vp-limg" href="https://expressvpn.com" target="_blank" rel="noopener nofollow" tabindex="-1" aria-hidden="true"><img src="/img/vpn/expressvpn.png" alt="" width="28" height="28" loading="lazy"></a><span class="vp-pname"><b><a href="https://expressvpn.com" rel="noopener nofollow" target="_blank">ExpressVPN</a></b></span></span></td>
+            <td>Email account</td>
+            <td>$13</td>
+            <td>British Virgin Islands</td>
+            <td class="vp-notes">Commissioned no-logs and security audits</td>
+            <td class="vp-act"><a class="vp-visit" href="https://expressvpn.com" rel="noopener nofollow" target="_blank">Get &#8599;</a></td>
           </tr>
         </tbody>
       </table>
       </div>
-      <p class="vp-fine">Prices are approximate monthly bands across plan lengths and change often; check the provider's own site for current figures. Payment methods, audit status, and jurisdictions are as published by each provider and can also change.</p>
+      <p class="vp-fine">Prices are the monthly rates as checked in August 2026 and change often; audit status and jurisdictions are as published by each provider.</p>
     </div>
 
     <div class="vp-card vp-mt">
@@ -119,7 +118,6 @@ import '../styles/doc.css';
         <li>No-logs claim with a published independent audit</li>
         <li>Account number instead of an email address</li>
         <li>Takes bitcoin, so billing carries no identity</li>
-        <li>Open-source client apps</li>
       </ul>
     </div>
     <div class="doc-tile">
@@ -134,12 +132,19 @@ import '../styles/doc.css';
   </div>
 </main>
 <style is:global>
+  
+  
+  .vp-hero{float:right;width:92px;height:auto;margin:-28px 12px 0 26px;
+    filter:drop-shadow(0 10px 26px rgba(247,147,26,.16));animation:vpfloat 6s ease-in-out infinite}
+  @keyframes vpfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(prefers-reduced-motion:reduce){.vp-hero{animation:none}}
+  @media(max-width:640px){.vp-hero{width:88px;margin:2px 0 6px 14px}}
   .vp-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
   .vp-mt{margin-top:14px}
   .vp-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
-  .vp-affline{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0 0 12px}
-  .vp-affline a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
-  .vp-affline a:hover{border-bottom-style:solid}
+  
+  .vp-intro{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0 0 16px}
+  .vp-intro b{color:var(--ink);font-weight:600}
   .vp-scroll{overflow-x:auto}
   .vp-table{width:100%;border-collapse:collapse}
   .vp-table th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
@@ -147,16 +152,31 @@ import '../styles/doc.css';
   .vp-table td{font:500 13px/1.5 var(--sans);color:var(--ink-2);padding:11px 14px 11px 0;
     border-bottom:1px dotted var(--line-2);vertical-align:top}
   .vp-table tr:last-child td{border-bottom:0}
-  .vp-prov{white-space:nowrap}
+  
   .vp-prov b{display:block;font:700 14px var(--sans);color:var(--ink)}
-  .vp-chip{display:inline-block;margin-top:5px;font:700 8.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--acc);border:1px dashed rgba(247,147,26,.45);border-radius:5px;padding:2px 6px}
-  .vp-noaff{display:inline-block;margin-top:5px;font:600 10px var(--mono);letter-spacing:.04em;color:var(--ink-3)}
-  .vp-notes{min-width:180px}
+  .vp-prov b a{color:var(--ink);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .vp-prov b a:hover{color:var(--acc);border-bottom-style:solid}
+  
+  .vp-logo{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;
+    border:1px solid var(--line-2);border-radius:8px;background:var(--field);overflow:hidden;
+    font:700 13px var(--mono);color:var(--ink-2);text-decoration:none}
+  a.vp-logo:hover{border-color:rgba(255,166,60,.6)}
+  .vp-limg img{width:100%;height:100%;object-fit:contain;padding:3px;border-radius:inherit;display:block;box-sizing:border-box}
+  
+  .vp-prov{vertical-align:top}
+  .vp-prov .vp-pwrap{display:flex;align-items:center;gap:9px}
+  .vp-pname{min-width:0}
+  .vp-table td{padding-right:10px}
+  .vp-table th{padding-right:10px}
+  
+  .vp-notes{min-width:132px}
   .vp-act{text-align:right}
-  .vp-visit{display:inline-block;font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    color:var(--ink-3);border:1px solid var(--line-2);border-radius:7px;padding:6px 12px;
-    text-decoration:none}
+  
+  .vp-visit{display:inline-block;font:700 13.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    background:#F7931A;color:#101A2C;border:1.5px solid #F7931A;border-radius:9px;
+    padding:11px 20px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(247,147,26,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+  .vp-visit:hover{background:#FFA63C;border-color:#FFA63C}
   .vp-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
   .vp-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
   .vp-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
@@ -186,9 +206,31 @@ import '../styles/doc.css';
   .vp-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
   .vp-rl li:first-child{margin-top:0}
   .vp-rl li::marker{color:var(--acc)}
-  @media(max-width:700px){
+  
+  @media(max-width:1150px){
     .vp-cols{grid-template-columns:1fr}
-    .vp-table td{font-size:12.5px}
+    .vp-card{padding:18px 16px}
+    
+    .vp-scroll{overflow:visible}
+    .vp-table{min-width:0;table-layout:auto}
+    .vp-table thead{display:none}
+    .vp-table,.vp-table tbody,.vp-table tr,.vp-table td{display:block;width:auto}
+    .vp-table tr{position:relative;padding:14px 0 13px;border-bottom:1px dotted var(--line-2)}
+    .vp-table tr:last-child{padding-bottom:4px;border-bottom:0}
+    .vp-table td{border-bottom:0;padding:0;font-size:13px}
+    .vp-prov{padding-right:84px;white-space:normal}
+    
+    .vp-table td:nth-child(2),.vp-table td:nth-child(3),
+    .vp-table td:nth-child(4){margin-top:8px;color:var(--ink-2)}
+    .vp-table td:nth-child(2)::before{content:"Method: "}
+    .vp-table td:nth-child(3)::before{content:"Price: "}
+    .vp-table td:nth-child(4)::before{content:"Jurisdiction: "}
+    .vp-table td:nth-child(2)::before,.vp-table td:nth-child(3)::before,
+    .vp-table td:nth-child(4)::before{
+      font:600 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+    .vp-notes{margin-top:8px;min-width:0;font-size:13px;color:var(--ink-2)}
+    .vp-act{position:absolute;top:12px;right:0;text-align:right}
+    .vp-visit{font-size:11.5px;padding:9px 13px}
   }
 </style>
 </Base>

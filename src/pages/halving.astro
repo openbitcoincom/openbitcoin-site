@@ -2,21 +2,30 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Halving Countdown: Block 1,050,000 - OpenBitcoin" description="Live countdown to the next bitcoin halving at block 1,050,000: blocks remaining, estimated date, and the full block subsidy schedule.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Halving</div>
     <h1>Bitcoin halving countdown</h1>
-    <p class="doc-lede">The fifth halving cuts the block subsidy from 3.125 to 1.5625 BTC at block 1,050,000. The countdown tracks the live block height; the date assumes one block every 10 minutes.</p>
+    <HeroEmblem name="halvecoin" />
+    <p class="doc-lede">The fifth halving cuts the block subsidy from 3.125 to 1.5625 BTC at block 1,050,000. The countdown tracks the live block height; the date assumes 10-minute blocks.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="hv-hero">
-      <div class="hv-big" id="hv-blocks">&hellip;</div>
-      <div class="hv-sub">blocks remaining until block <b>1,050,000</b>, the fifth halving</div>
+      
+      <div class="hv-flapclock" role="timer" aria-label="Estimated time until the fifth halving">
+        <div class="hv-fgroup"><i>days</i><div class="hv-frow" id="hv-fd"><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span></div></div>
+        <div class="hv-fgroup"><i>hours</i><div class="hv-frow" id="hv-fh"><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span></div></div>
+        <div class="hv-fgroup"><i>minutes</i><div class="hv-frow" id="hv-fm"><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span></div></div>
+        <div class="hv-fgroup"><i>seconds</i><div class="hv-frow" id="hv-fs"><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span></div></div>
+      </div>
+      <div class="hv-klab2">Blocks remaining</div>
+      <div class="hv-frow hv-fremain" id="hv-fr" aria-label="Blocks remaining until block 1,050,000"><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span><span class="hv-comma">,</span><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span><span class="hv-tile">&ndash;</span></div>
+      <div class="hv-sub">until block <b>1,050,000</b>, the fifth halving</div>
       <div class="hv-stats">
-        <div class="hv-stat"><b id="hv-time">&hellip;</b><i>estimated, at 10 min per block</i></div>
         <div class="hv-stat"><b id="hv-date">&hellip;</b><i>estimated date</i></div>
         <div class="hv-stat"><b>3.125 → 1.5625 BTC</b><i>subsidy per block</i></div>
         <div class="hv-stat"><b>450 → 225 BTC</b><i>new supply per day</i></div>
@@ -98,8 +107,24 @@ import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } fro
   </div>
 </main>
 <style is:global>
-  .hv-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 24px 22px;text-align:center}
-  .hv-big{font:800 54px/1 var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .hv-hero{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px;text-align:center}
+  
+  .hv-flapclock{display:flex;justify-content:center;align-items:flex-start;gap:24px;flex-wrap:wrap}
+  .hv-fgroup i{display:block;font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-3);font-style:normal;margin-bottom:7px}
+  .hv-frow{display:flex;justify-content:center;gap:4px;perspective:340px}
+  .hv-tile{position:relative;width:36px;height:50px;border-radius:7px;
+    background:linear-gradient(180deg,#1b2946 0%,#15223c 49%,#101c33 51%,#131f37 100%);
+    border:1px solid var(--line-2);box-shadow:0 3px 8px rgba(0,0,0,.35);
+    font:800 30px/48px var(--mono);color:var(--price-ink);text-align:center;font-variant-numeric:tabular-nums}
+  .hv-tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
+    background:rgba(0,0,0,.5);box-shadow:0 1px 0 rgba(255,255,255,.045)}
+  .hv-tile.flip{animation:hvflip .18s ease-in-out}
+  @keyframes hvflip{0%{transform:rotateX(0)}50%{transform:rotateX(-86deg)}100%{transform:rotateX(0)}}
+  @media(prefers-reduced-motion:reduce){.hv-tile.flip{animation:none}}
+  .hv-comma{align-self:flex-end;font:800 24px/44px var(--mono);color:var(--ink-3);padding:0 1px}
+  .hv-klab2{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:22px}
+  .hv-fremain{margin-top:12px}
   .hv-sub{font:600 12.5px var(--mono);color:var(--ink-2);margin-top:9px}
   .hv-sub b{color:var(--acc);font-weight:700}
   .hv-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:20px;text-align:left}
@@ -134,8 +159,10 @@ import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } fro
   .hv-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
   .hv-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:700px){
-    .hv-big{font-size:40px}
     .hv-table{display:block;overflow-x:auto}
+    .hv-flapclock{gap:14px}
+    .hv-tile{width:27px;height:40px;border-radius:5px;font:800 22px/38px var(--mono)}
+    .hv-comma{font:800 18px/34px var(--mono)}
   }
 </style>
 <script is:inline define:vars={{ TARGET: NEXT_HALVING_HEIGHT, EPOCH, SUB: SUBSIDY_BTC, MAX: MAX_BTC }}>
@@ -143,9 +170,55 @@ import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } fro
   var RET=2016; /* TARGET, EPOCH, SUB, MAX arrive from src/lib/subsidy.js */
   /* nothing is baked: 0 means "no real figure yet" and the cells stay at the
      ellipsis they were served with */
-  var st={price:0,height:0};
+  var st={price:0,height:0},targetMs=0;
   function fmt(n){return n.toLocaleString("en-US");}
   function txt(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  /* split-flap board, same mechanics as block-1m: children mirror the string
+     one to one; same shape flips changed tiles, a new shape rebuilds the row */
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var elFD=document.getElementById("hv-fd"),elFH=document.getElementById("hv-fh"),
+      elFM=document.getElementById("hv-fm"),elFS=document.getElementById("hv-fs"),
+      elFR=document.getElementById("hv-fr");
+  function pad2(n){return (n<10?"0":"")+n;}
+  function flipTo(el,c){
+    if(reduce){el.textContent=c;return;}
+    el.classList.remove("flip");void el.offsetWidth;el.classList.add("flip");
+    setTimeout(function(){el.textContent=c;},90);
+  }
+  function boardSet(row,str){
+    if(!row||row.dataset.str===str)return;
+    var chars=str.split(""),shape=chars.map(function(c){return c===","?"c":"t";}).join(""),i;
+    if(row.dataset.shape!==shape){
+      row.innerHTML="";
+      for(i=0;i<chars.length;i++){
+        var el=document.createElement("span");
+        el.className=chars[i]===","?"hv-comma":"hv-tile";
+        el.textContent=chars[i];
+        row.appendChild(el);
+      }
+      row.dataset.shape=shape;row.dataset.str=str;return;
+    }
+    for(i=0;i<chars.length;i++){
+      var k=row.children[i];
+      if(k.textContent!==chars[i]){
+        if(k.className==="hv-tile")flipTo(k,chars[i]);
+        else k.textContent=chars[i];
+      }
+    }
+    row.dataset.str=str;
+  }
+  function tick(){
+    if(!targetMs)return;
+    var s=Math.max(0,Math.floor((targetMs-Date.now())/1000));
+    var d=Math.floor(s/86400);s-=d*86400;
+    var h=Math.floor(s/3600);s-=h*3600;
+    var m=Math.floor(s/60);s-=m*60;
+    boardSet(elFD,String(d));
+    boardSet(elFH,pad2(h));
+    boardSet(elFM,pad2(m));
+    boardSet(elFS,pad2(s));
+  }
+  setInterval(tick,1000);
   function supplyAt(h){
     var s=0,sub=50;
     for(var e=0;e<64;e++){
@@ -158,14 +231,16 @@ import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } fro
     var H=st.height,P=st.price;
     if(H>0){
       var left=Math.max(0,TARGET-H),mins=left*10,
-          days=Math.floor(mins/1440),hrs=Math.floor(mins%1440/60),
           eta=new Date(Date.now()+mins*60000),
           sup=supplyAt(H),leftH=left*SUB,
           nextRt=(Math.floor(H/RET)+1)*RET,rtLeft=nextRt-H,
           rtMin=rtLeft*10,rtD=Math.floor(rtMin/1440),rtH=Math.floor(rtMin%1440/60),
           p=Math.max(0,Math.min(100,(H-(TARGET-EPOCH))/EPOCH*100));
-      txt("hv-blocks",fmt(left));
-      txt("hv-time",fmt(days)+"d "+hrs+"h");
+      boardSet(elFR,fmt(left));
+      /* the chrome hook repaints every ~1.5s for prices; only a height change
+         may move the countdown target, or the seconds never tick down */
+      if(st.height!==st.targetH){targetMs=Date.now()+mins*60000;st.targetH=st.height;}
+      tick();
       txt("hv-date",eta.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}));
       txt("hv-est",eta.toLocaleDateString("en-US",{month:"long",year:"numeric"})+" (est.)");
       txt("hv-pct",p.toFixed(1)+"%");

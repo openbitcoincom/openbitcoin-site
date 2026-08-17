@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
-<Base title="Bitcoin Payment QR Code Generator - OpenBitcoin" description="Make a scannable bitcoin payment QR code in your browser: the address checksum is verified, and amount and label are optional. Nothing is sent.">
+<Base title="Bitcoin QR Code Generator: Free, In Your Browser - OpenBitcoin" description="Free bitcoin QR code generator: turn any address into a scannable payment code, with optional amount and label. The checksum is verified first and nothing you type is sent.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Payment QR</div>
-    <h1>Bitcoin payment QR code</h1>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
+    <h1>Bitcoin QR code generator</h1>
+    <HeroEmblem name="qr" />
     <p class="doc-lede">Turn an address into a scannable payment code. The checksum is verified first, the amount is optional and in BTC, and the code is drawn in your browser. Nothing you type is sent anywhere.</p>
   </div>
   <div class="doc-grid">

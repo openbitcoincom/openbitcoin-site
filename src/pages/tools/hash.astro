@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Hash Playground: SHA-256, Base58Check, Bech32 - OpenBitcoin" description="Run the hashes and encodings Bitcoin uses in your browser: SHA-256, double SHA-256, RIPEMD-160, HASH160, Base58Check and Bech32. Nothing is sent.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Tools</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Hash and encoding playground</h1>
+    <HeroEmblem name="fingerprint" />
     <p class="doc-lede">Run the primitives bitcoin is built from on your own bytes: SHA-256, double SHA-256, RIPEMD-160, HASH160, Base58Check, Bech32 and Bech32m, plus a byte order flip. All of it in this tab.</p>
   </div>
   <div class="doc-grid">

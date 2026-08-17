@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Lightning Invoice Decoder: Read a BOLT11 Invoice - OpenBitcoin" description="Paste a BOLT11 Lightning invoice and decode it in your browser: amount, payment hash, description, timestamp, expiry and routing hints. Nothing is sent.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Lightning</div>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
     <h1>Lightning invoice decoder</h1>
+    <HeroEmblem name="boltreceipt" />
     <p class="doc-lede">Paste a BOLT11 invoice and it is taken apart in your browser: amount, payment hash, description, expiry and routing hints. The invoice never leaves this page.</p>
   </div>
   <div class="doc-grid">

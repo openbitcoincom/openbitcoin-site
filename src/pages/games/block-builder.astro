@@ -1,0 +1,1784 @@
+---
+import Base from '../../layouts/Base.astro';
+import HeroEmblem from '../../components/HeroEmblem.astro';
+import '../../styles/doc.css';
+---
+<Base title="Block Builder: Stack the Mempool - OpenBitcoin" description="Build a bitcoin block from the bottom up. Bricks fall in a fee mix sampled from this site's own mempool feed; rows seal bottom-first and score their fees, a full row above a gap burns to nothing, and sealing all ten rows finds the block and scores the 3.125 BTC subsidy a real miner would collect. All score, no money. Free, no wagering, no prizes.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker"><a href="/games">Games</a></div>
+    <h1>Block Builder</h1>
+    <HeroEmblem name="brickfall" />
+    <p class="doc-lede">You already know the controls: steer the bricks, complete rows. The goal is the bitcoin part: fill the block solid from the bottom, and ten sealed rows find it.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <!-- ============ THE RIG ============ -->
+    <div class="bb-stage" id="bb-stage">
+      <div class="bb-rig" id="bb-rig">
+        <div class="bb-bgblocks" aria-hidden="true">
+          <svg class="bb-bgfloor"><defs><pattern id="bbrow1" width="216" height="32" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="32" height="32" rx="5" fill="#F7931A"/><rect x="36" y="0" width="32" height="32" rx="5" fill="#5E81B5"/><rect x="72" y="0" width="32" height="32" rx="5" fill="#FFD43B"/><rect x="108" y="0" width="32" height="32" rx="5" fill="#63C36C"/><rect x="144" y="0" width="32" height="32" rx="5" fill="#3BB9B0"/><rect x="180" y="0" width="32" height="32" rx="5" fill="#FFE9B8"/></pattern><pattern id="bbrow2" width="216" height="32" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="32" height="32" rx="5" fill="#63C36C"/><rect x="36" y="0" width="32" height="32" rx="5" fill="#3BB9B0"/><rect x="72" y="0" width="32" height="32" rx="5" fill="#FFE9B8"/><rect x="108" y="0" width="32" height="32" rx="5" fill="#F7931A"/><rect x="144" y="0" width="32" height="32" rx="5" fill="#5E81B5"/><rect x="180" y="0" width="32" height="32" rx="5" fill="#FFD43B"/></pattern></defs><rect x="0" y="0" width="100%" height="32" fill="url(#bbrow2)"/><rect x="0" y="36" width="100%" height="32" fill="url(#bbrow1)"/></svg>
+          <svg class="bb-bgcol bb-bgcol-l" aria-hidden="true"><rect x="0" y="112" width="32" height="32" rx="5" fill="#F7931A"/><rect x="0" y="148" width="32" height="32" rx="5" fill="#5E81B5"/><rect x="0" y="184" width="32" height="32" rx="5" fill="#FFD43B"/><rect x="0" y="220" width="32" height="32" rx="5" fill="#63C36C"/><rect x="0" y="256" width="32" height="32" rx="5" fill="#3BB9B0"/><rect x="0" y="292" width="32" height="32" rx="5" fill="#FFE9B8"/><rect x="0" y="328" width="32" height="32" rx="5" fill="#F7931A"/><rect x="0" y="364" width="32" height="32" rx="5" fill="#5E81B5"/><rect x="36" y="292" width="32" height="32" rx="5" fill="#63C36C"/><rect x="36" y="328" width="32" height="32" rx="5" fill="#3BB9B0"/><rect x="36" y="364" width="32" height="32" rx="5" fill="#FFE9B8"/></svg>
+          <svg class="bb-bgcol bb-bgcol-r" aria-hidden="true"><rect x="36" y="112" width="32" height="32" rx="5" fill="#FFD43B"/><rect x="36" y="148" width="32" height="32" rx="5" fill="#63C36C"/><rect x="36" y="184" width="32" height="32" rx="5" fill="#3BB9B0"/><rect x="36" y="220" width="32" height="32" rx="5" fill="#FFE9B8"/><rect x="36" y="256" width="32" height="32" rx="5" fill="#F7931A"/><rect x="36" y="292" width="32" height="32" rx="5" fill="#5E81B5"/><rect x="36" y="328" width="32" height="32" rx="5" fill="#FFD43B"/><rect x="36" y="364" width="32" height="32" rx="5" fill="#63C36C"/><rect x="0" y="292" width="32" height="32" rx="5" fill="#FFE9B8"/><rect x="0" y="328" width="32" height="32" rx="5" fill="#F7931A"/><rect x="0" y="364" width="32" height="32" rx="5" fill="#5E81B5"/></svg>
+        </div>
+        <div class="bb-wmark" aria-hidden="true"></div>
+        <div class="bb-marquee">
+          <div class="bb-title" role="img" aria-label="Block Builder"><span style="background:#5E81B5;color:#0A1526;--tilt:-7.5deg;--d:.35s">B</span><span style="background:#3BB9B0;color:#032120;--tilt:7.5deg;--d:.10s">L</span><span style="background:#63C36C;color:#06230C;--tilt:-7.5deg;--d:.50s">O</span><span style="background:#FFD43B;color:#332600;--tilt:7.5deg;--d:.20s">C</span><span style="background:#F7931A;color:#2A1600;--tilt:7.5deg;--d:0s">K</span><i></i><span style="background:#FFE9B8;color:#3A2600;--tilt:-7.5deg;--d:.55s">B</span><span style="background:#5E81B5;color:#0A1526;--tilt:7.5deg;--d:.15s">U</span><span style="background:#3BB9B0;color:#032120;--tilt:-7.5deg;--d:.40s">I</span><span style="background:#63C36C;color:#06230C;--tilt:7.5deg;--d:.05s">L</span><span style="background:#FFD43B;color:#332600;--tilt:-7.5deg;--d:.45s">D</span><span style="background:#F7931A;color:#2A1600;--tilt:-7.5deg;--d:.25s">E</span><span style="background:#FFE9B8;color:#3A2600;--tilt:7.5deg;--d:.30s">R</span></div>
+        </div>
+        <div class="bb-deck">
+          <div class="bb-boardwrap">
+            <canvas id="bb-board" role="img" aria-label="A ten by sixteen well filling with falling transaction bricks. The bottom ten rows are the block: rows seal from the bottom up and score their fees, a complete row above a gap burns away, and sealing all ten rows finds the block. The readouts beside the board mirror the fee score, blocks found and rows sealed."></canvas>
+            <div class="bb-overlay" id="bb-overlay">
+              <div class="bb-ovinner" id="bb-ovinner">
+                <b id="bb-ovtitle">MINE BLOCK <span id="bb-ovheight">#&hellip;</span></b>
+                <p id="bb-ovtext">Fill the block from the bottom up: rows on solid rows seal and score, rows over a gap burn, ten sealed rows finds the block. Phone: drag to steer, tap to rotate, flick to drop, two-finger tap to hold.</p>
+                <button class="bb-go" id="bb-go" type="button">Start mining</button>
+              </div>
+            </div>
+            <button class="bb-opttab" id="bb-opttab" type="button" aria-label="Options" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <div class="bb-topbtns" id="bb-topbtns" hidden>
+            <button class="bb-mini" id="bb-pause" type="button" aria-label="Pause" aria-pressed="false" title="Pause">
+              <svg viewBox="0 0 24 24" id="bb-ic-pause"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bb-ic-play" hidden><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>
+            </button>
+            <button class="bb-mini" id="bb-music" type="button" aria-label="Music" aria-pressed="true" title="Music">
+              <svg viewBox="0 0 24 24" id="bb-music-on"><path d="M9 18V6l8-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" id="bb-music-off" hidden><path d="M9 18V6l8-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/><path d="M4 21L20 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="bb-mini" id="bb-ghost" type="button" aria-label="Landing guide" aria-pressed="true" title="Landing guide">
+              <svg viewBox="0 0 24 24" id="bb-ghost-on"><path d="M5 5h4M15 5h4M5 5v4M19 5v4M5 15v4M5 19h4M19 15v4M15 19h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" id="bb-ghost-off" hidden><path d="M5 5h4M15 5h4M5 5v4M19 5v4M5 15v4M5 19h4M19 15v4M15 19h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 19L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="bb-mini" id="bb-mute" type="button" aria-label="Sound" aria-pressed="true" title="Sound">
+              <svg viewBox="0 0 24 24" id="bb-mute-on"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9c1.2.8 1.2 5.2 0 6M18.5 7c2.2 2 2.2 8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bb-mute-off" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l6 5M22 9.5l-6 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="bb-mini" id="bb-fs" type="button" aria-label="Fullscreen" aria-pressed="false" title="Fullscreen">
+              <svg viewBox="0 0 24 24" id="bb-fs-open"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bb-fs-close" hidden><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            </div>
+          </div>
+          <div class="bb-side">
+            <div class="bb-led"><i>Level</i><b id="bb-level">1</b></div>
+            <div class="bb-led"><i>Fee score</i><b id="bb-fees">0</b></div>
+            <div class="bb-led"><i>Blocks found</i><b id="bb-blocks">0</b></div>
+            <div class="bb-led"><i>Block fill</i><b id="bb-rows">0/10</b><span class="bb-tbar"><span id="bb-tfill"></span></span></div>
+            <div class="bb-next">
+              <i>Next</i>
+              <div id="bb-queue" class="bb-queue" aria-hidden="true"></div>
+            </div>
+            <div class="bb-hold">
+              <i>Hold &middot; C</i>
+              <div id="bb-holdbox" class="bb-queue" aria-hidden="true"></div>
+            </div>
+            <div class="bb-chip" id="bb-datachip">PIECE FEED: &hellip;</div>
+          </div>
+        </div>
+        <div class="bb-console">
+          <div class="bb-help">&#8592; &#8594; steer &middot; &#8593; rotate &middot; &#8595; fast &middot; Space drops &middot; C holds &middot; G guide &middot; M music &middot; P pauses</div>
+        </div>
+        <div class="bb-msg" id="bb-msg">The bricks are transactions, colored cold to hot by feerate, dealt from this site's mempool feed (the chip says which). Seal the block from the bottom.</div>
+      </div>
+      <div class="bb-sr" id="bb-live" aria-live="polite"></div>
+    </div>
+    <noscript><p class="bb-nojs">The rig needs JavaScript to run. The block-space arithmetic below is true either way.</p></noscript>
+
+    <!-- ============ HOW IT PLAYS ============ -->
+    <div class="bb-card">
+      <h2 class="bb-tlab">How it plays</h2>
+      <p class="bb-p">You are packing a block, bottom row first. The bricks are transactions, colored cold blue dust to white-hot gold, dealt in the fee mix of our own mempool (the chip says if the feed is live). A row resting on solid rows seals and scores its fees. A full row floating over a gap burns to nothing, so mind your holes; burning the cover off a buried gap on purpose is a legal move and feels great. Fill all ten rows and the block is found: the score grabs the 3.125 BTC subsidy a real miner would collect, and the next block deals faster. All score, no money.</p>
+    </div>
+
+    <!-- ============ THE LEDGER ============ -->
+    <div class="bb-card">
+      <h2 class="bb-tlab">The ledger: this browser, all time</h2>
+      <div class="bb-stats">
+        <div class="bb-stat"><b id="bb-l-games">0</b><i>runs</i></div>
+        <div class="bb-stat"><b id="bb-l-best">0</b><i>best fees, sats</i></div>
+        <div class="bb-stat"><b id="bb-l-career">0</b><i>career fee sats</i></div>
+        <div class="bb-stat"><b id="bb-l-blocks">0</b><i>blocks found</i></div>
+        <div class="bb-stat"><b id="bb-l-rows">0</b><i>rows sealed</i></div>
+        <div class="bb-stat"><b id="bb-l-burn">0</b><i>rows burned</i></div>
+        <div class="bb-stat"><b id="bb-l-brow">0</b><i>best row, sats</i></div>
+        <div class="bb-stat"><b id="bb-l-lv">1</b><i>best level</i></div>
+      </div>
+      <p class="bb-brow"><span>Lives in this browser and never leaves. The sats are score; the blocks are pride, which is worse.</span> <button class="bb-reset" id="bb-reset" type="button">Reset everything</button></p>
+    </div>
+
+    <!-- ============ THE TROPHY SHELF ============ -->
+    <div class="bb-card">
+      <h2 class="bb-tlab">The trophy shelf</h2>
+      <div class="bb-shelf" id="bb-shelf"></div>
+    </div>
+
+    <!-- ============ THE BITCOIN BIT ============ -->
+    <div class="bb-card">
+      <h2 class="bb-tlab">The bitcoin bit</h2>
+      <p class="bb-p">Real blocks are packed exactly like this: 4 million weight units, filled solid, because empty space in a found block is wasted forever. Real miners do it in milliseconds by sorting the queue; your thumbs are the artisanal version. Want the actual machinery? It lives on the <a href="/fees">fees</a>, <a href="/mempool">mempool</a> and <a href="/pools">pools</a> pages.</p>
+    </div>
+
+    <div class="bb-about doc-prose">
+      <p>Free forever: no wagers, no prizes, and the score is pretend sats, never money (the <a href="/terms">terms</a> agree). More machines in the <a href="/games">games section</a>: <a href="/games/mempool-crossing">Mempool Crossing</a> drops you into the fee traffic as a transaction, and <a href="/games/impossible-slot">The Impossible Slot Machine</a> spins real keys against the whole chain.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">House rules</div>
+      <ul class="bb-rl">
+        <li>Fill the block from the bottom row up</li>
+        <li>Rows on solid rows seal and score their fees</li>
+        <li>A full row above a gap burns to nothing</li>
+        <li>Ten sealed rows finds the block; then it deals faster</li>
+        <li>Top out and the mempool buries you</li>
+        <li>All score, no money, free forever</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/games">All games</a>
+        <a href="/games/mempool-crossing">Mempool Crossing</a>
+        <a href="/mempool">The live mempool</a>
+        <a href="/fees">Fees right now</a>
+        <a href="/pools">Mining pools</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .doc-kicker a{color:inherit;text-decoration:none}
+  .doc-kicker a:hover{text-decoration:underline}
+  
+  
+  .bb-stage,.bb-stage *{-webkit-user-select:none !important;user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .bb-stage ::selection{background:transparent}
+  .bb-stage{position:relative}
+  .bb-stage.bb-fake{position:fixed;inset:0;z-index:80;background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .bb-stage:fullscreen{background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .bb-stage.bb-fake .bb-rig,.bb-stage:fullscreen .bb-rig{margin:auto;max-width:940px}
+  html.bb-lock{overflow:hidden}
+
+  
+  .bb-bgblocks{position:absolute;left:0;right:0;bottom:0;height:80%;z-index:-1;
+    opacity:.07;pointer-events:none;border-radius:0 0 19px 19px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to top,#000 40%,transparent 97%);
+    mask-image:linear-gradient(to top,#000 40%,transparent 97%)}
+  .bb-bgblocks svg{position:absolute;display:block}
+  .bb-bgfloor{left:12px;bottom:10px;width:calc(100% - 24px);height:32px}
+  .bb-bgcol{bottom:48px;width:68px;height:396px}
+  .bb-bgcol-l{left:6px}
+  .bb-bgcol-r{right:6px}
+  .bb-rig{position:relative;isolation:isolate;max-width:600px;margin:0 auto;
+    -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+    -webkit-user-select:none;user-select:none;
+    background:linear-gradient(180deg,#171310,#100D09 70%,#0C0906);
+    border:1px solid #3E3322;border-radius:20px;padding:16px 20px 12px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,160,.10),inset 0 -14px 30px rgba(0,0,0,.45)}
+  .bb-rig button:focus-visible{outline:3px solid #FFD9A0;outline-offset:2px}
+
+  .bb-marquee{text-align:center;padding:6px 0 22px;position:relative}
+  .bb-marquee::before{content:"";position:absolute;left:12%;right:12%;top:-6px;height:44px;
+    background:radial-gradient(closest-side,rgba(247,147,26,.10),transparent);pointer-events:none}
+  .bb-title{display:flex;gap:3px;justify-content:center;align-items:center;flex-wrap:wrap;
+    font:700 clamp(13px,3.4vw,18px) var(--mono);
+    animation:bb-tgap 1.75s ease both}
+  .bb-title span{display:inline-flex;align-items:center;justify-content:center;position:relative;
+    min-width:1.5em;padding:.22em 0;border-radius:5px;
+    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.45);
+    transform:rotate(var(--tilt));
+    animation:bb-tin 1.5s cubic-bezier(.3,.6,.3,1.1) var(--d) both}
+  
+  .bb-title span::before{content:"";position:absolute;inset:24% 20%;z-index:-1;
+    background:rgba(255,255,255,.30);border-radius:40%;filter:blur(2px)}
+  .bb-title i{width:7px;animation:bb-tigap 1.75s ease both}
+  
+  @keyframes bb-tin{
+    0%{transform:translateY(-72px) rotate(0deg);opacity:0}
+    12%{opacity:1}
+    27%{transform:translateY(0) rotate(0deg)}
+    63%{transform:translateY(0) rotate(0deg)}
+    88%{transform:translateY(0) rotate(var(--tilt))}
+    100%{transform:translateY(0) rotate(var(--tilt))}
+  }
+  @keyframes bb-tgap{0%,57%{gap:3px}74%{gap:0px}100%{gap:3px}}
+  @keyframes bb-tigap{0%,57%{width:7px}74%{width:0px}100%{width:7px}}
+  @media(prefers-reduced-motion:reduce){
+    .bb-title,.bb-title span,.bb-title i{animation:none}
+  }
+
+  .bb-deck{display:flex;gap:12px;align-items:flex-start;justify-content:center}
+  .bb-boardwrap{position:relative;flex:0 0 auto;background:#060504;border:1px solid #3E3322;border-radius:12px;
+    padding:8px;box-shadow:inset 0 4px 18px rgba(0,0,0,.85)}
+  .bb-boardwrap{transition:box-shadow .5s ease,border-color .5s ease}
+  
+  .bb-boardwrap.bb-deadframe{border-color:#8B2A1E;
+    box-shadow:inset 0 0 56px rgba(224,80,60,.34),0 0 26px rgba(224,80,60,.20)}
+  .bb-boardwrap canvas{display:block;border-radius:6px;touch-action:none}
+  
+  .bb-wmark{position:absolute;top:24%;left:38px;width:200px;height:36px;
+    transform:translate(-50%,-50%) rotate(-90deg);
+    background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%230A0F1B%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat center/contain;
+    opacity:.035;pointer-events:none;z-index:-1}
+  .bb-float{position:absolute;pointer-events:none;transform:translateX(-50%);
+    font:700 13px var(--mono);letter-spacing:.06em;color:#FFD9A0;white-space:nowrap;
+    text-shadow:0 0 10px rgba(255,166,60,.8),0 1px 2px rgba(0,0,0,.8);
+    animation:bb-floatup .95s ease-out forwards}
+  .bb-float.bb-bigfloat{font-size:16px;letter-spacing:.14em;color:#FFB84D}
+  @keyframes bb-floatup{from{opacity:1;margin-top:0}to{opacity:0;margin-top:-44px}}
+  .bb-rig.bb-shake{animation:bb-shakes .45s ease}
+  @keyframes bb-shakes{0%,100%{transform:translate(0,0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-2px,-1px)}80%{transform:translate(2px,1px)}}
+  @media(prefers-reduced-motion:reduce){
+    .bb-float{animation-duration:.01s;animation-delay:.9s;opacity:1}
+    .bb-rig.bb-shake{animation:none}
+  }
+  .bb-overlay{position:absolute;inset:8px;display:flex;align-items:center;justify-content:center;
+    background:rgba(6,5,4,.82);border-radius:6px;overflow:auto}
+  .bb-overlay[hidden]{display:none}
+  .bb-ovinner{text-align:center;padding:14px 16px;max-width:92%;max-height:100%;margin:auto}
+  .bb-ovinner b{display:block;font:700 15px var(--mono);letter-spacing:.12em;color:#FFD9A0}
+  .bb-ovinner p{font:600 11px/1.65 var(--mono);color:#B99B6B;margin:10px 0 0}
+  .bb-ovinner p b{display:inline;font-size:11px;color:#FFB84D;letter-spacing:.02em}
+  .bb-go{margin-top:14px;background:#F7931A;color:#241200;border:1.5px solid rgba(255,166,60,.65);
+    border-radius:10px;cursor:pointer;min-height:48px;padding:0 26px;
+    font:700 14px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    box-shadow:0 5px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14),0 0 22px rgba(247,147,26,.22)}
+  .bb-go:hover{background:#FFA733}
+
+  .bb-side{display:flex;flex-direction:column;gap:8px;min-width:128px;flex:0 1 150px}
+  .bb-led{background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:7px 10px 8px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .bb-led i{display:block;font:700 7.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#A98F65;font-style:normal;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bb-led b{display:block;font:700 17px var(--mono);color:#FFD9A0;margin-top:3px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;text-shadow:0 0 9px rgba(255,166,60,.35)}
+  .bb-led b.bb-hot{color:#FFB84D}
+  .bb-tbar{display:block;height:4px;background:#241C12;border-radius:2px;margin-top:6px;overflow:hidden}
+  .bb-tbar span{display:block;height:100%;width:0%;background:#F7931A;border-radius:2px;
+    transition:width .3s ease}
+  .bb-next{box-sizing:border-box;background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:7px 10px 9px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7);display:flex;flex-direction:column}
+  .bb-next i{display:block;font:700 7.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#A98F65;font-style:normal}
+  .bb-hold{box-sizing:border-box;background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:7px 10px 9px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7);min-height:56px;display:flex;flex-direction:column}
+  .bb-hold i{display:block;font:700 7.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#A98F65;font-style:normal}
+  .bb-queue{flex:0 0 58px;display:flex;gap:8px;margin-top:8px;align-items:center;justify-content:center}
+  
+  .bb-topbtns{position:absolute;top:8px;right:42px;
+    display:flex;gap:6px;z-index:3;opacity:.7;transition:opacity .15s ease}
+  .bb-topbtns:hover{opacity:1}
+  .bb-opttab{position:absolute;top:8px;right:8px;z-index:3;
+    display:flex;align-items:center;justify-content:center;background:rgba(18,14,10,.45);
+    border:1px solid rgba(62,51,34,.55);border-radius:7px;color:#B99B6B;cursor:pointer;
+    width:28px;height:28px;opacity:.7;transition:opacity .15s ease}
+  .bb-opttab:hover{opacity:1}
+  .bb-opttab svg{width:14px;height:14px}
+  .bb-opttab[aria-expanded="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D;opacity:1}
+  .bb-opttab:hover{color:#FFD9A0;border-color:#5A452A}
+  
+  .bb-opttab[hidden],.bb-topbtns[hidden]{display:none}
+  .bb-topbtns .bb-mini{width:28px;height:28px;min-height:0;border-radius:7px;
+    background:rgba(18,14,10,.45);border:1px solid rgba(62,51,34,.55)}
+  .bb-topbtns .bb-mini svg{width:13px;height:13px}
+  .bb-topbtns .bb-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .bb-holdhint{font:600 7.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:#8A7452;
+    text-align:center;line-height:1.9;padding:2px}
+  .bb-qpiece{display:grid;gap:1px}
+  .bb-qcell{width:11px;height:11px;border-radius:2px}
+  .bb-qcell.bb-qempty{background:transparent}
+  .bb-qcell.bb-qrb{animation:bb-rb 1s linear infinite}
+  @keyframes bb-rb{0%,100%{background:#FF5A5A}20%{background:#FFD43B}40%{background:#63C36C}60%{background:#3BB9B0}80%{background:#5E81B5}}
+  @media(prefers-reduced-motion:reduce){.bb-qcell.bb-qrb{animation:none;background:#FFD43B}}
+  .bb-qcell.bb-qbomb{background:#2A1214;border:1px solid #E0503C;animation:bb-bomb 1s ease infinite}
+  @keyframes bb-bomb{0%,100%{box-shadow:0 0 2px rgba(224,80,60,.4)}50%{box-shadow:0 0 7px rgba(224,80,60,.9)}}
+  @media(prefers-reduced-motion:reduce){.bb-qcell.bb-qbomb{animation:none}}
+  .bb-chip{font:700 7.5px var(--mono);letter-spacing:.14em;color:#97815A;text-align:center;
+    border:1px dashed #4A3B24;border-radius:7px;padding:6px 8px;line-height:1.5}
+  .bb-chip.bb-livefeed{color:#C98A2E;border-color:#6B5A3E}
+
+
+  .bb-console{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .bb-help{flex:1;font:600 8.5px var(--mono);letter-spacing:.08em;color:#97815A;text-align:center}
+  .bb-mini{min-height:40px;display:flex;align-items:center;justify-content:center;
+    background:#191410;border:1px solid #35291A;border-radius:8px;color:#B99B6B;cursor:pointer}
+  .bb-mini:hover{color:#FFD9A0;border-color:#5A452A}
+  .bb-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .bb-mini svg{width:17px;height:17px}
+  
+  .bb-mini svg[hidden]{display:none}
+  .bb-msg{min-height:34px;margin-top:10px;text-align:center;font:600 11.5px/1.5 var(--mono);letter-spacing:.02em;color:#B99B6B}
+  .bb-msg.bb-good{color:#FFB84D}
+
+  
+  .bb-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .bb-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .bb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+  .bb-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .bb-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bb-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .bb-brow{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .bb-brow span{flex:1;min-width:220px}
+  .bb-reset{background:transparent;border:1px dashed var(--line-2);border-radius:7px;color:var(--ink-3);
+    font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;min-height:40px;cursor:pointer}
+  .bb-reset:hover{color:var(--down);border-color:var(--down)}
+  .bb-reset.bb-armed{color:var(--down);border-color:var(--down);border-style:solid}
+  .bb-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .bb-p a,.bb-about a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .bb-p a:hover,.bb-about a:hover{border-bottom-style:solid}
+  .bb-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+  .bb-plaque{border:1px dashed var(--line-2);border-radius:10px;padding:10px 12px;opacity:.5;min-width:0}
+  .bb-plaque b{display:block;font:700 12px var(--mono);color:var(--ink-2)}
+  .bb-plaque i{display:block;font:600 9.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px;line-height:1.5}
+  .bb-plaque.bb-won{opacity:1;border:1px solid rgba(247,147,26,.55);background:rgba(247,147,26,.07)}
+  .bb-plaque.bb-won b{color:var(--acc)}
+  .bb-about{margin-top:14px}
+  .bb-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .bb-rl{margin:0;padding-left:16px}
+  .bb-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .bb-rl li:first-child{margin-top:0}
+  .bb-rl li::marker{color:var(--acc)}
+  .bb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .bb-nojs{font:600 12.5px/1.6 var(--sans);color:var(--ink-3);text-align:center;margin:12px 0 0}
+
+  @media(max-width:740px){
+    .bb-rig{padding:12px 10px 10px}
+    .bb-marquee{padding:2px 0 10px}
+    .bb-wmark{display:none}
+    .bb-deck{flex-wrap:wrap}
+    .bb-side{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;min-width:0}
+    .bb-side .bb-led{flex:1 1 38%}
+    .bb-next{flex:1 1 52%}
+    .bb-hold{flex:1 1 34%}
+    .bb-chip{margin-left:auto;margin-right:auto}
+    .bb-console{display:none}
+    .bb-help{display:none}
+    .bb-msg{min-height:50px}
+  }
+  @media(max-width:700px){
+    .bb-card{padding:18px 16px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+"use strict";
+var stage=document.getElementById("bb-stage"),rig=document.getElementById("bb-rig");
+if(!stage||!rig)return;
+
+/* ---------------- constants: the block, honestly scaled ---------------- */
+var COLS=10,ROWS=16,CELL_VB=10000; /* one cell = 40,000 WU = 10,000 vb */
+var BLOCK_ROWS=10,BLOCK_TOP=ROWS-BLOCK_ROWS; /* the block is the bottom ten rows: 10 x 400k WU = exactly 4M WU */
+var SUBSIDY=312500000;             /* 3.125 BTC, the coinbase subsidy a real miner collects */
+var RB=-1;                         /* the rainbow brick's marker value in the grid */
+var RB2=-2;                        /* the purge brick: blasts a 4x4 hole on landing */
+/* read lazily: Base publishes OB_DATA_API after this inline script parses */
+function apiBase(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)||"/api/v1";}
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var coarse=window.matchMedia&&window.matchMedia("(pointer: coarse)").matches;
+
+/* six heat colors, hottest first: cold blue dust up through teal, green and
+   yellow to the brand orange and white-hot gold. The rate thresholds between
+   them are recomputed from each feed's quantiles so today's queue always
+   spans the whole ramp: a quiet 1-3 sat/vB mempool still deals every color */
+var TIERS=[
+  {bg:"#FFE9B8",ink:"#3A2600",glow:true},
+  {bg:"#F7931A",ink:"#2A1600",glow:false},
+  {bg:"#FFD43B",ink:"#332600",glow:false},
+  {bg:"#63C36C",ink:"#06230C",glow:false},
+  {bg:"#3BB9B0",ink:"#032120",glow:false},
+  {bg:"#5E81B5",ink:"#0A1526",glow:false}
+];
+var tierCuts=[3,6,12,30,80];
+function tierOf(rate){
+  for(var i=tierCuts.length-1;i>=0;i--)if(rate>=tierCuts[i])return TIERS[4-i];
+  return TIERS[5];
+}
+function computeCuts(){
+  var total=0,i;
+  for(i=0;i<feed.vsizes.length;i++)total+=feed.vsizes[i];
+  if(!(total>0))return;
+  var cuts=[],qi=1,acc=0;
+  for(i=0;i<feed.edges.length&&qi<=5;i++){
+    acc+=feed.vsizes[i];
+    while(qi<=5&&acc>=total*qi/6){
+      var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+      cuts.push(Math.max(1,Math.round((lo+hi)/2)));
+      qi++;
+    }
+  }
+  while(cuts.length<5)cuts.push((cuts.length?cuts[cuts.length-1]:40)*2);
+  for(i=1;i<5;i++)if(cuts[i]<=cuts[i-1])cuts[i]=cuts[i-1]+1;
+  tierCuts=cuts;
+}
+
+/* polyomino set, 1-4 cells, deliberately NOT the trademark seven.
+   cells are [row,col] offsets; rotation is generic. Small skew, like
+   real transaction sizes. */
+var SHAPES=[
+  {cells:[[0,0]],p:12},
+  {cells:[[0,0],[0,1]],p:18},
+  {cells:[[0,0],[1,0]],p:7},
+  {cells:[[0,0],[0,1],[0,2]],p:14},
+  {cells:[[0,0],[1,0],[1,1]],p:10},
+  {cells:[[0,0],[0,1],[1,0],[1,1]],p:12},
+  {cells:[[0,0],[0,1],[0,2],[0,3]],p:10},
+  {cells:[[0,0],[1,0],[2,0],[2,1]],p:6},
+  {cells:[[0,0],[0,1],[0,2],[1,1]],p:7}
+];
+var SHAPE_TOTAL=SHAPES.reduce(function(a,s){return a+s.p;},0);
+function dims(cells){
+  var mr=0,mc=0;
+  cells.forEach(function(c){if(c[0]>mr)mr=c[0];if(c[1]>mc)mc=c[1];});
+  return {h:mr+1,w:mc+1};
+}
+function rotateCells(cells){
+  /* 90 degrees clockwise: (r,c) -> (c, H-1-r), then renormalize */
+  var d=dims(cells);
+  var out=cells.map(function(c){return [c[1],d.h-1-c[0]];});
+  var minR=Infinity,minC=Infinity;
+  out.forEach(function(c){if(c[0]<minR)minR=c[0];if(c[1]<minC)minC=c[1];});
+  return out.map(function(c){return [c[0]-minR,c[1]-minC];});
+}
+
+/* ---------------- the fee feed: live mempool bands with a baked fallback ---------------- */
+var SNAP={edges:[1,2,3,4,5,6,8,10,15,20,30,50,100],
+          vsizes:[52e6,31e6,14e6,8e6,5e6,4e6,3e6,2.2e6,1.5e6,1.1e6,0.7e6,0.4e6,0.15e6]};
+var feed={edges:SNAP.edges,vsizes:SNAP.vsizes,live:false,count:0,mb:0};
+function paintChip(){
+  var c=document.getElementById("bb-datachip");
+  if(!c)return;
+  if(feed.live){
+    c.className="bb-chip bb-livefeed";
+    c.textContent="PIECE FEED: LIVE MEMPOOL "+feed.count.toLocaleString("en-US")+" TX · "+feed.mb+" MvB";
+  }else{
+    c.className="bb-chip";
+    c.textContent="PIECE FEED: STORED SNAPSHOT (feed unavailable)";
+  }
+}
+function fetchFeed(){
+  return fetch(apiBase()+"/mempool").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var got=false;
+    if(j&&j.bands&&Array.isArray(j.bands.edges)&&Array.isArray(j.bands.vsizes)&&
+       j.bands.edges.length===j.bands.vsizes.length&&j.bands.edges.length>3&&
+       /* edges validated like the histogram path: one malformed edge would
+          deal a NaN-rate brick that locks falsy and vanishes on landing */
+       j.bands.edges.every(function(v){return typeof v==="number"&&isFinite(v)&&v>=1;})&&
+       j.bands.vsizes.every(function(v){return typeof v==="number"&&isFinite(v)&&v>=0;})&&
+       j.bands.vsizes.some(function(v){return v>0;})){
+      feed={edges:j.bands.edges,vsizes:j.bands.vsizes,live:true,
+            count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};
+      got=true;
+    }else if(j&&Array.isArray(j.histogram)&&j.histogram.length){
+      var e=[],v=[];
+      j.histogram.slice().reverse().forEach(function(row){
+        if(Array.isArray(row)&&isFinite(row[0])&&isFinite(row[1])&&row[1]>0){e.push(Math.max(1,row[0]));v.push(row[1]);}
+      });
+      if(e.length>3){feed={edges:e,vsizes:v,live:true,count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};got=true;}
+    }
+    /* a 200 with unusable bands is still not a live feed: never claim it is */
+    if(!got)feed.live=false;
+    computeCuts();
+    paintChip();
+  }).catch(function(){feed.live=false;computeCuts();paintChip();});
+}
+function sampleRate(){
+  var total=0,i;
+  for(i=0;i<feed.vsizes.length;i++)total+=feed.vsizes[i];
+  var x=Math.random()*total;
+  for(i=0;i<feed.vsizes.length;i++){x-=feed.vsizes[i];if(x<=0)break;}
+  if(i>=feed.edges.length)i=feed.edges.length-1;
+  var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+  return Math.max(1,Math.round(lo+Math.random()*(hi-lo)));
+}
+function dealPiece(){
+  /* once in a while the queue deals a legend (tune the odds here):
+     rainbow 1 in 450 seals six rows; purge 1 in 250 blasts a hole */
+  var sp=Math.random();
+  if(sp<1/450)return {cells:[[0,0]],rate:RB};
+  if(sp<1/450+1/250)return {cells:[[0,0]],rate:RB2};
+  var x=Math.random()*SHAPE_TOTAL,s=SHAPES[0],i;
+  for(i=0;i<SHAPES.length;i++){x-=SHAPES[i].p;if(x<=0){s=SHAPES[i];break;}}
+  return {cells:s.cells,rate:sampleRate()};
+}
+
+/* ---------------- storage ---------------- */
+function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function readInt(k,d){try{var v=parseInt(localStorage.getItem(k),10);return isFinite(v)?v:d;}catch(e){return d;}}
+function readLed(){
+  try{var l=JSON.parse(localStorage.getItem("ob-bb-led"));
+    if(l&&isFinite(l.g)&&isFinite(l.best)&&isFinite(l.sum)&&isFinite(l.blk)&&isFinite(l.rows))
+      /* sat totals can pass 2^31: floor, never |0 (which wraps negative) */
+      return {g:l.g|0,best:Math.max(0,Math.floor(l.best)),sum:Math.max(0,Math.floor(l.sum)),
+              blk:l.blk|0,rows:l.rows|0,br:isFinite(l.br)?Math.max(0,Math.floor(l.br)):0,
+              bu:isFinite(l.bu)?Math.max(0,Math.floor(l.bu)):0,
+              lv:isFinite(l.lv)?Math.max(0,Math.floor(l.lv)):0,
+              /* kind strings capped at 12 chars: the slot's readLed once
+                 silently dropped a long kind on reload, never again */
+              tr:Array.isArray(l.tr)?l.tr.filter(function(x){return typeof x==="string"&&x.length<=12;}).slice(0,32):[]};
+  }catch(e){}
+  return {g:0,best:0,sum:0,blk:0,rows:0,br:0,bu:0,lv:0,tr:[]};
+}
+var led=readLed();
+function saveLed(){store("ob-bb-led",JSON.stringify(led));}
+
+/* ---------------- the trophy shelf: what long play digs up ----------------
+   Three are rolled INSIDE each found block at printed odds; the rest are
+   earned. All score and glory, nothing else, per the house rules. */
+var TROPHIES=[
+  {k:"btc",n:"₿ in the block",d:"1 in 21 found blocks carries the logo"},
+  {k:"pizza",n:"The pizza block",d:"1 in 100: two pies, ten thousand coins"},
+  {k:"headline",n:"The headline block",d:"1 in 2,009: chancellor on brink"},
+  {k:"rainbow",n:"The rainbow brick",d:"catch one; it seals six rows on the spot"},
+  {k:"satoshi",n:"Satoshi's block",d:"1 in 52,500: a quarter epoch of mining"},
+  {k:"purge",n:"The purge brick",d:"catch one; it blasts a 4x4 hole"},
+  {k:"clean",n:"Clean sweep",d:"find a block with zero burned rows"},
+  {k:"airtight",n:"Airtight",d:"find a block with nothing parked above the line"},
+  {k:"lvl10",n:"Level 10",d:"mine your way to level ten"},
+  {k:"lvl21",n:"Level 21",d:"mine your way to level twenty-one"},
+  {k:"blk1",n:"Genesis",d:"your first career block found"},
+  {k:"blk10",n:"Double digits",d:"10 career blocks found"},
+  {k:"epoch",n:"Epoch",d:"21 career blocks found"},
+  {k:"blk100",n:"The century",d:"100 career blocks found"},
+  {k:"blk500",n:"Five hundred deep",d:"500 career blocks found"},
+  {k:"blk2016",n:"The retarget",d:"2,016 career blocks: one difficulty period"},
+  {k:"rows100",n:"Bricklayer",d:"100 career rows sealed"},
+  {k:"stacker",n:"Stacker",d:"1,000 career rows sealed"},
+  {k:"rows5k",n:"Foreman",d:"5,000 career rows sealed"},
+  {k:"rows21k",n:"The architect",d:"21,000 career rows sealed"}
+];
+function paintShelf(){
+  var s=el("bb-shelf");if(!s)return;
+  s.innerHTML="";
+  TROPHIES.forEach(function(t){
+    var d=document.createElement("div");
+    d.className="bb-plaque"+(led.tr.indexOf(t.k)>=0?" bb-won":"");
+    var b=document.createElement("b");b.textContent=t.n;
+    var i2=document.createElement("i");i2.textContent=t.d;
+    d.appendChild(b);d.appendChild(i2);
+    s.appendChild(d);
+  });
+}
+function trophy(k){
+  if(led.tr.indexOf(k)>=0)return;
+  led.tr.push(k);
+  saveLed();paintShelf();
+  for(var i=0;i<TROPHIES.length;i++)if(TROPHIES[i].k===k){
+    sWhale();
+    say("TROPHY: "+TROPHIES[i].n+". "+TROPHIES[i].d+".",true);
+    break;
+  }
+}
+
+/* ---------------- dom + sound ---------------- */
+function el(id){return document.getElementById(id);}
+function txt(id,v){var e=el(id);if(e)e.textContent=v;}
+/* svg icons cannot use the .hidden property (HTML-only IDL): set the
+   attribute so the .bb-mini svg[hidden] rule can do its job */
+function hideIc(node,hide){
+  if(!node)return;
+  if(hide)node.setAttribute("hidden","");else node.removeAttribute("hidden");
+}
+function fmt(n){return n.toLocaleString("en-US");}
+var cv=el("bb-board"),ctx=cv.getContext("2d"),
+    overlay=el("bb-overlay"),ovTitle=el("bb-ovtitle"),ovText=el("bb-ovtext"),ovBtn=el("bb-go"),
+    msgEl=el("bb-msg"),live=el("bb-live");
+var lastSayAt=0;
+function say(m,good){
+  lastSayAt=Date.now();
+  msgEl.textContent=m;msgEl.className="bb-msg"+(good?" bb-good":"");
+  if(live)live.textContent=m;
+}
+/* floating sat text over the board: pure decoration, removed after a beat */
+function floatText(text,row,big){
+  var wrap=cv.parentNode;
+  var d=document.createElement("div");
+  d.className="bb-float"+(big?" bb-bigfloat":"");
+  d.textContent=text;
+  d.style.left=(8+W/2)+"px";
+  d.style.top=(8+Math.max(1,row)*cell-10)+"px";
+  wrap.appendChild(d);
+  setTimeout(function(){d.remove();},1000);
+}
+function shakeRig(){
+  if(reduce)return;
+  rig.classList.remove("bb-shake");
+  void rig.offsetWidth;
+  rig.classList.add("bb-shake");
+}
+var muted=readInt("ob-bb-mute",0)===1,actx=null;
+/* the dashed landing ghost is optional: some want the challenge, some find
+   it noisy. On by default, remembered per browser. */
+var ghostOn=readInt("ob-bb-ghost",1)===1;
+function paintGhostBtn(){
+  var btn=el("bb-ghost");
+  hideIc(el("bb-ghost-on"),!ghostOn);hideIc(el("bb-ghost-off"),ghostOn);
+  if(btn)btn.setAttribute("aria-pressed",ghostOn?"true":"false");
+}
+function toggleGhost(){
+  ghostOn=!ghostOn;store("ob-bb-ghost",ghostOn?"1":"0");
+  paintGhostBtn();
+  say(ghostOn?"Landing guide on.":"Landing guide off. Feel it out.");
+  draw();
+}
+function ac(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==="suspended")actx.resume();
+  return actx;
+}
+function tone(freq,dur,type,vol,when,slide){
+  var a=ac();if(!a||muted)return;
+  var t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(freq,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+function sMove(){tone(700,0.03,"square",0.02);}
+function sRot(){tone(920,0.04,"square",0.025);}
+function sLand(){tone(160,0.06,"sine",0.12,0,90);}
+function sClear(n){
+  var base=[523,659,784,1047],i;
+  for(i=0;i<Math.min(4,n+1);i++)tone(base[i],0.14,"triangle",0.12,i*0.07);
+}
+function sBlock(){var seq=[523,659,784,1047,1319],i;
+  for(i=0;i<seq.length;i++){tone(seq[i],0.18,"triangle",0.13,i*0.09);tone(seq[i]*2,0.16,"sine",0.05,i*0.09);}}
+function sOver(){var seq=[392,330,262,196],i;for(i=0;i<seq.length;i++)tone(seq[i],0.2,"triangle",0.1,i*0.12);}
+function sDanger(){tone(220,0.09,"square",0.06,0,180);tone(220,0.09,"square",0.06,0.14,180);}
+function sWhale(){tone(1319,0.1,"triangle",0.08);tone(1760,0.12,"triangle",0.06,0.06);}
+function sBurn(){tone(320,0.2,"square",0.07,0,90);tone(240,0.22,"square",0.05,0.07,70);}
+function sHold(){tone(520,0.05,"sine",0.05);tone(660,0.05,"sine",0.04,0.05);}
+
+/* ---------------- ambient music: generative, so it never loops exactly.
+   A slow pad cycling Am F G Dm, a quiet bass root, and a sparse pentatonic
+   music box rolled fresh every bar. Everything sits far below the SFX. */
+var musicOn=readInt("ob-bb-music",1)===1;
+var mus={on:false,next:0,timer:null,gain:null,chord:0};
+var MUS_SCALE=[220,261.63,293.66,329.63,392,440,523.25,587.33];
+var MUS_CHORDS=[[110,164.81,220],[87.31,130.81,174.61],[98,146.83,196],[73.42,110,146.83]];
+function musNote(freq,t,dur,vol,type){
+  var o=actx.createOscillator(),g=actx.createGain();
+  o.type=type||"triangle";o.frequency.setValueAtTime(freq,t);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+dur*0.4);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(mus.gain);
+  o.start(t);o.stop(t+dur+0.1);
+}
+function musBar(){
+  var a=ac();if(!a||!mus.on)return;
+  var bar=3.2,t=Math.max(a.currentTime+0.05,mus.next);
+  mus.next=t+bar;
+  var ch=MUS_CHORDS[mus.chord%MUS_CHORDS.length];
+  mus.chord+=(Math.random()<0.2)?2:1; /* the progression wanders a little */
+  for(var i=0;i<ch.length;i++)musNote(ch[i]*2,t,bar*1.15,0.014,"triangle");
+  musNote(ch[0],t,bar*1.1,0.02,"sine");
+  for(var k=0;k<8;k++){
+    if(Math.random()<0.62)continue;
+    var f=MUS_SCALE[(Math.random()*MUS_SCALE.length)|0];
+    musNote(f*(Math.random()<0.15?2:1),t+k*bar/8,0.9,0.011+Math.random()*0.008,"sine");
+  }
+  mus.timer=setTimeout(musBar,Math.max(200,(mus.next-a.currentTime-0.25)*1000));
+}
+function startMusic(){
+  if(!musicOn||muted||mus.on)return;
+  var a=ac();if(!a)return;
+  if(!mus.gain){mus.gain=a.createGain();mus.gain.gain.value=0.5;mus.gain.connect(a.destination);}
+  /* fade in, and cancel any stop-fade so a quick restart never layers a
+     fresh bar over a still-loud old one */
+  mus.gain.gain.cancelScheduledValues(a.currentTime);
+  mus.gain.gain.setValueAtTime(0.0001,a.currentTime);
+  mus.gain.gain.linearRampToValueAtTime(0.5,a.currentTime+0.6);
+  mus.on=true;mus.next=0;
+  musBar();
+}
+function stopMusic(){
+  mus.on=false;
+  if(mus.timer){clearTimeout(mus.timer);mus.timer=null;}
+  if(mus.gain&&actx){
+    mus.gain.gain.cancelScheduledValues(actx.currentTime);
+    mus.gain.gain.setValueAtTime(mus.gain.gain.value,actx.currentTime);
+    mus.gain.gain.linearRampToValueAtTime(0.0001,actx.currentTime+0.3);
+  }
+}
+function paintMusicBtn(){
+  var btn=el("bb-music");
+  hideIc(el("bb-music-on"),!musicOn);hideIc(el("bb-music-off"),musicOn);
+  if(btn)btn.setAttribute("aria-pressed",musicOn?"true":"false");
+}
+function toggleMusic(){
+  musicOn=!musicOn;store("ob-bb-music",musicOn?"1":"0");
+  paintMusicBtn();
+  if(musicOn&&(state==="run"||state==="settle"||state==="found"))startMusic();
+  else stopMusic();
+  say(musicOn?(muted?"Music on, once the mute lifts.":"Music on."):"Music off. The mempool hums to itself anyway.");
+}
+function paintMute(){
+  var btn=el("bb-mute");
+  hideIc(el("bb-mute-on"),muted);hideIc(el("bb-mute-off"),!muted);
+  /* the ring means "audible", matching music/guide where lit = active */
+  if(btn)btn.setAttribute("aria-pressed",muted?"false":"true");
+}
+el("bb-mute").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  muted=!muted;store("ob-bb-mute",muted?"1":"0");paintMute();
+  if(muted)stopMusic();
+  else{tone(880,0.08,"sine",0.08);if(state==="run"||state==="settle"||state==="found")startMusic();}
+});
+paintMute();
+var optTab=el("bb-opttab"),optRow=el("bb-topbtns"),optOpen=false;
+function setOpts(open){
+  optOpen=open;
+  if(optRow)optRow.hidden=!open;
+  if(optTab)optTab.setAttribute("aria-expanded",open?"true":"false");
+}
+if(optTab)optTab.addEventListener("click",function(e){if(e.detail>0)this.blur();setOpts(!optOpen);});
+el("bb-music").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  toggleMusic();
+});
+paintMusicBtn();
+el("bb-ghost").addEventListener("click",function(e){
+  if(e.detail>0)this.blur(); /* a mouse click must not steal Space from the drop */
+  toggleGhost();
+});
+paintGhostBtn();
+
+/* ---------------- board sizing ---------------- */
+var cell=26,W=0,H=0;
+var bigH=0;
+function sizeBoard(){
+  var fs=fsActive();
+  var avail=rig.clientWidth-40-140-24;
+  if(window.innerWidth<=740)avail=rig.clientWidth-40;
+  /* fullscreen on a big display earns bigger cells and a wider rig */
+  cell=Math.max(16,Math.min(fs?46:34,Math.floor(avail/COLS)));
+  /* the height clamp uses the most generous height ever seen, so a mobile
+     URL bar collapsing mid-scroll can never shrink the board */
+  if(!fs&&window.innerHeight>bigH)bigH=window.innerHeight;
+  var maxH=Math.floor(((fs?window.innerHeight:bigH)-280)/ROWS);
+  if(maxH>=12)cell=Math.min(cell,maxH);
+  W=COLS*cell;H=ROWS*cell;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+"px";cv.style.height=H+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+
+/* ---------------- game state ---------------- */
+var grid=[],cur=null,queue=[],state="idle",
+    fees=0,feesBlk=0,blocks=0,rowsSealed=0,rowsBurned=0,burnsBlk=0,rowBest=0,
+    sealed=0,holdP=null,canHold=true,
+    lastT=0,dropAcc=0,fastDrop=false,raf=null,
+    sealRows=[],burnRows=[],settleUntil=0,foundUntil=0,nextHeight=null,
+    groundedSince=null,lockResets=0,danger=false,hidMid=false,
+    deadStart=0,deadUntil=0,
+    parts=[],lastPartT=0;
+
+/* the ramp: honest 60ms steps to level 10, then a long gentle tail so the
+   good runs get to breathe (owner died at 14 and wanted a longer window) */
+function gravityMs(){
+  if(blocks<=9)return 850-blocks*60;
+  /* the wall: level 21 and beyond holds at 180ms, so past the wall a
+     skilled run ends on mistakes, never on raw impossibility */
+  return Math.max(180,310-(blocks-9)*12);
+}
+function newGrid(){
+  grid=[];
+  for(var r=0;r<ROWS;r++){var row=[];for(var c=0;c<COLS;c++)row.push(0);grid.push(row);}
+}
+function pieceDims(p){return dims(p.cells);}
+function collides(p,x,y){
+  for(var i=0;i<p.cells.length;i++){
+    var r=y+p.cells[i][0],c=x+p.cells[i][1];
+    if(c<0||c>=COLS||r>=ROWS)return true;
+    if(r>=0&&grid[r][c])return true;
+  }
+  return false;
+}
+function ghostY(){
+  var y=cur.y;
+  while(!collides(cur,cur.x,y+1))y++;
+  return y;
+}
+function spawn(){
+  while(queue.length<4)queue.push(dealPiece());
+  var d=queue.shift();
+  var dm=dims(d.cells);
+  cur={cells:d.cells,rate:d.rate,x:Math.floor((COLS-dm.w)/2),y:-dm.h};
+  groundedSince=null;lockResets=0;
+  paintQueue();
+  /* nowhere to land fully on the board = the stack reached the sky */
+  if(ghostY()<0){jamPiece();gameOver();return false;}
+  /* a genuinely fat feerate from the feed deserves an announcement, but
+     never at the cost of stepping on a fresh clear message */
+  if(cur.rate===RB){
+    sWhale();
+    say("A RAINBOW BRICK is falling: six rows seal on the spot.",true);
+  }else if(cur.rate===RB2){
+    sWhale();
+    say("A PURGE BRICK is falling: it blasts a four by four hole.",true);
+  }else if(cur.rate>=80&&Date.now()-lastSayAt>1600){
+    sWhale();
+    say("A "+cur.rate+" sat/vB whale is falling. Do not waste it.",true);
+  }
+  return true;
+}
+function frontRow(){return ROWS-1-sealed;}
+/* sealed is derivable state: the contiguous full rows up from the floor.
+   Recounting from the board at every settle exit means NO code path can
+   leave the counter claiming a sealed row the grid does not have (owner
+   screenshot: bricks resting one row above an empty floor). */
+/* the fatal piece stays visible: jam whatever fits into the top rows so
+   the player sees exactly where the mempool buried them */
+function jamPiece(){
+  if(!cur)return;
+  var gy=ghostY();if(gy>cur.y)cur.y=gy;
+  for(var i=0;i<cur.cells.length;i++){
+    var r=cur.y+cur.cells[i][0],c=cur.x+cur.cells[i][1];
+    if(r>=0&&r<ROWS&&c>=0&&c<COLS)grid[r][c]=cur.rate;
+  }
+  cur=null;
+}
+function recountSealed(){
+  if(grid.length!==ROWS){
+    /* should be impossible; if you ever see this warn, tell the console
+       story to the workshop */
+    console.warn("bb invariant: grid has "+grid.length+" rows");
+    while(grid.length>ROWS)grid.shift();
+    while(grid.length<ROWS){var fr9=[];for(var c9=0;c9<COLS;c9++)fr9.push(0);grid.unshift(fr9);}
+  }
+  var k=0;
+  for(var r=ROWS-1;r>=BLOCK_TOP;r--){
+    var fullR=true;
+    for(var c=0;c<COLS;c++)if(!grid[r][c]){fullR=false;break;}
+    if(!fullR)break;
+    k++;
+  }
+  sealed=k;
+}
+/* per-column gravity over the unsealed rows: a burn must never leave a
+   brick hanging in the air (owner hit exactly that near the top line) */
+function dropLoose(){
+  var front=frontRow(),r,c;
+  for(c=0;c<COLS;c++){
+    var stack=[];
+    for(r=front;r>=0;r--)if(grid[r][c]){stack.push(grid[r][c]);grid[r][c]=0;}
+    for(var i=0;i<stack.length;i++)grid[front-i][c]=stack[i];
+  }
+}
+function lock(){
+  /* a landing above the top row also ends the run (belt to spawn's braces) */
+  var top=cur.y;
+  if(top<0){jamPiece();gameOver();return false;}
+  var isRB=cur.rate===RB,isBomb=cur.rate===RB2;
+  if(!isBomb)for(var i=0;i<cur.cells.length;i++)
+    grid[cur.y+cur.cells[i][0]][cur.x+cur.cells[i][1]]=cur.rate;
+  if(isBomb){
+    /* the purge: a 4x4 blast around the landing cell, sealed rows very
+       much included (owner: the block takes the hit and gets rebuilt);
+       recount derives the new seal line from whatever survived */
+    var bx=cur.x,by=cur.y,bc=0,sealedBefore=sealed;
+    for(var br=Math.max(0,by-1);br<=Math.min(ROWS-1,by+2);br++)
+      for(var bcc=Math.max(0,bx-1);bcc<=Math.min(COLS-1,bx+2);bcc++)
+        if(grid[br][bcc]&&grid[br][bcc]!==RB2){grid[br][bcc]=0;bc++;}
+    recountSealed();
+    var breached=Math.max(0,sealedBefore-sealed);
+    trophy("purge");
+    sBurn();shakeRig();
+    say("THE PURGE: "+bc+" bricks blasted"+(breached?", "+breached+" sealed row"+(breached===1?"":"s")+" breached. Rebuild.":"."),true);
+    paintHud();
+  }
+  cur=null;canHold=true;
+  if(isBomb)dropLoose(); /* what survived the blast tumbles down */
+  if(isRB){
+    /* the rainbow brick lands: the next SIX rows flood solid upward from
+       the seal front (bricks already in them still score their fees);
+       reach the top of the block and the level is beaten */
+    var rbFront=frontRow(),rbTop=Math.max(BLOCK_TOP,rbFront-5);
+    for(var rr2=rbTop;rr2<=rbFront;rr2++)for(var rc2=0;rc2<COLS;rc2++)
+      if(!grid[rr2][rc2])grid[rr2][rc2]=RB;
+    trophy("rainbow");
+    sWhale();
+  }
+  /* scan only the unsealed rows: the sealed ones are full by construction */
+  var front=frontRow(),full=[];
+  for(var r=0;r<=front;r++){
+    var ok=true;
+    for(var c=0;c<COLS;c++)if(!grid[r][c]){ok=false;break;}
+    if(ok)full.push(r);
+  }
+  /* the seal front climbs through contiguous complete rows, bottom first... */
+  sealRows=[];burnRows=[];
+  while(front>=BLOCK_TOP&&full.indexOf(front)>=0){sealRows.push(front);front--;}
+  /* ...and any other complete row is floating above a gap: it burns (the
+     house rule). Unless this piece just finished the block, in which case
+     whatever sits in the sky is overflow and the wipe handles it. */
+  if(sealed+sealRows.length<BLOCK_ROWS)
+    burnRows=full.filter(function(r){return r<=front;});
+  if(sealRows.length||burnRows.length){
+    settleUntil=performance.now()+(reduce?60:(burnRows.length?430:350));
+    state="settle";
+    if(sealRows.length)sClear(sealRows.length);
+    if(burnRows.length)sBurn();
+    return true;
+  }
+  sLand();
+  return spawn();
+}
+function settleApply(){
+  /* seal: score the fees of every cell in the sealed rows, with a combo bonus */
+  var sats=0,topRow=ROWS,n=sealRows.length;
+  sealRows.forEach(function(r){
+    if(r<topRow)topRow=r;
+    for(var c=0;c<COLS;c++){
+      var v=grid[r][c];
+      if(v>0)sats+=v*CELL_VB; /* rainbow flood cells score nothing */
+      /* coin burst from every sealed cell, colored like its brick */
+      if(!reduce&&Math.random()<0.6)parts.push({
+        x:c*cell+cell/2,y:r*cell+cell/2,
+        vx:(Math.random()-.5)*140,vy:-(60+Math.random()*170),
+        r:2+Math.random()*2.5,color:v===RB?"#FFD43B":tierOf(v).bg,life:1});
+    }
+  });
+  var mult=n>=4?3:(n===3?2:(n===2?1.5:1));
+  sats=Math.round(sats*mult);
+  if(n){
+    fees+=sats;feesBlk+=sats;
+    rowsSealed+=n;
+    if(sats>rowBest)rowBest=sats;
+  }
+  /* burn: the floating row goes to nothing and everything above falls one,
+     which re-exposes whatever the row was covering */
+  var nb=burnRows.length,burnTop=ROWS;
+  burnRows.sort(function(a,b){return a-b;}).forEach(function(r){
+    if(r<burnTop)burnTop=r;
+    if(!reduce)for(var c=0;c<COLS;c++)if(Math.random()<0.5)parts.push({
+      x:c*cell+cell/2,y:r*cell+cell/2,
+      vx:(Math.random()-.5)*90,vy:-(20+Math.random()*70),
+      r:1.5+Math.random()*2,color:"#E0503C",life:0.8});
+    grid.splice(r,1);
+    var fresh=[];for(var c2=0;c2<COLS;c2++)fresh.push(0);
+    grid.unshift(fresh);
+  });
+  rowsBurned+=nb;burnsBlk+=nb;
+  recountSealed(); /* derive, never accumulate: the board is the truth */
+  if(n){
+    var cr=led.rows+rowsSealed;
+    if(cr>=100)trophy("rows100");
+    if(cr>=1000)trophy("stacker");
+    if(cr>=5000)trophy("rows5k");
+    if(cr>=21000)trophy("rows21k");
+  }
+  sealRows=[];burnRows=[];
+  if(n){
+    floatText("+"+fmt(sats)+(mult>1?" ×"+mult:""),topRow,n>=2);
+    if(n>=2)shakeRig();
+    if(nb)say(n+" row"+(n===1?"":"s")+" sealed (+"+fmt(sats)+" sats), and a full row above a gap burned to nothing.",true);
+    else say(n>=2?
+      (n+" rows sealed at once: +"+fmt(sats)+" sats ("+mult+"x combo)."):
+      ("Row sealed: +"+fmt(sats)+" sats. The block grows from the bottom."),true);
+  }else{
+    floatText("BURNED · 0 SATS",Math.max(1,burnTop),false);
+    say(nb===1?
+      "A full row burned above a gap: packed space over a hole is wasted. Seal from the bottom up.":
+      (nb+" full rows burned above the gaps. Seal from the bottom up."));
+  }
+  paintHud();
+  if(sealed>=BLOCK_ROWS){blockFound();return;}
+  if(nb){
+    /* the burn pulled the floor out: let loose bricks tumble, and if the
+       fallen debris completes the front row it seals like anything else
+       (contiguous from the front by construction, so never a new burn) */
+    dropLoose();
+    var front2=frontRow(),full2=[],r2,c2,ok2;
+    for(r2=front2;r2>=BLOCK_TOP;r2--){
+      ok2=true;
+      for(c2=0;c2<COLS;c2++)if(!grid[r2][c2]){ok2=false;break;}
+      if(!ok2)break;
+      full2.push(r2);
+    }
+    if(full2.length){
+      sealRows=full2;burnRows=[];
+      settleUntil=performance.now()+(reduce?60:350);
+      sClear(full2.length);
+      return; /* stay in settle; the next apply banks these */
+    }
+  }
+  state="run";
+  spawn();
+  if(hidMid){hidMid=false;setPause(true);}
+}
+function blockFound(){
+  state="found";
+  foundUntil=performance.now()+(reduce?300:1050);
+  blocks++;
+  /* whatever got parked above the line never made this block */
+  var over=0;
+  for(var r=0;r<BLOCK_TOP;r++)for(var c=0;c<COLS;c++)if(grid[r][c])over++;
+  sBlock();shakeRig();
+  if(!reduce)for(var k=0;k<70;k++)parts.push({
+    x:Math.random()*W,y:(BLOCK_TOP+Math.random()*BLOCK_ROWS)*cell,
+    vx:(Math.random()-.5)*220,vy:-(120+Math.random()*260),
+    r:2+Math.random()*3,
+    color:TIERS[(Math.random()*TIERS.length)|0].bg,life:1.3});
+  floatText("BLOCK"+(nextHeight?" #"+fmt(nextHeight):"")+" FOUND",BLOCK_TOP+2,true);
+  say("BLOCK"+(nextHeight?" #"+fmt(nextHeight):"")+" FOUND: scored the "+(SUBSIDY/1e8)+" BTC subsidy a real miner would collect, plus "+fmt(feesBlk)+" sats in fees."+
+    (over?" The "+over+" cells above the line fall to the floor of the next one.":"")+" Level "+(blocks+1)+": it deals faster.",true);
+  /* what is inside this one? printed odds, one roll per found block,
+     rarest checked first */
+  var roll=Math.random();
+  if(roll<1/52500){trophy("satoshi");floatText("SATOSHI'S BLOCK",BLOCK_TOP+4,true);}
+  else if(roll<1/2009)trophy("headline");
+  else if(roll<1/100)trophy("pizza");
+  else if(roll<1/21){trophy("btc");floatText("₿",BLOCK_TOP+4,true);}
+  if(burnsBlk===0)trophy("clean");
+  if(over===0)trophy("airtight");
+  if(blocks+1>=10)trophy("lvl10");
+  if(blocks+1>=21)trophy("lvl21");
+  var cb=led.blk+blocks;
+  if(cb>=1)trophy("blk1");
+  if(cb>=10)trophy("blk10");
+  if(cb>=21)trophy("epoch");
+  if(cb>=100)trophy("blk100");
+  if(cb>=500)trophy("blk500");
+  if(cb>=2016)trophy("blk2016");
+  paintHud();
+}
+function foundApply(){
+  /* what did not fit above the line falls to the floor and starts the next
+     template: the mempool never empties */
+  var stacks=[],r,c;
+  for(c=0;c<COLS;c++){
+    var s=[];
+    for(r=0;r<BLOCK_TOP;r++)if(grid[r][c])s.push(grid[r][c]);
+    stacks.push(s);
+  }
+  newGrid();
+  for(c=0;c<COLS;c++){
+    var s2=stacks[c];
+    for(var i=0;i<s2.length;i++)grid[ROWS-1-i][c]=s2[s2.length-1-i];
+  }
+  sealed=0;feesBlk=0;burnsBlk=0;
+  if(nextHeight){nextHeight++;paintOvHeight();}
+  fetchFeed(); /* a found block drains the pool: deal the next from a fresh feed */
+  state="run";
+  paintHud();
+  /* fallen debris can already complete bottom rows; they seal like anything
+     else resting on the floor (never above a gap: gravity leaves no holes) */
+  var front=frontRow(),full=[];
+  for(r=0;r<=front;r++){
+    var ok=true;
+    for(c=0;c<COLS;c++)if(!grid[r][c]){ok=false;break;}
+    if(ok)full.push(r);
+  }
+  sealRows=[];burnRows=[];
+  while(front>=BLOCK_TOP&&full.indexOf(front)>=0){sealRows.push(front);front--;}
+  if(sealRows.length){
+    settleUntil=performance.now()+(reduce?60:350);
+    state="settle";
+    sClear(sealRows.length);
+  }else{
+    spawn();
+    if(hidMid){hidMid=false;setPause(true);}
+  }
+}
+/* a successful move while resting on the stack earns a short lock-delay
+   reset (capped, so a piece cannot dance forever) */
+function touchGround(){
+  if(!cur)return;
+  if(!collides(cur,cur.x,cur.y+1)){groundedSince=null;return;}
+  if(groundedSince!==null&&lockResets<5){groundedSince=performance.now();lockResets++;}
+}
+function tryMove(dx){
+  if(!cur||state!=="run")return;
+  if(!collides(cur,cur.x+dx,cur.y)){cur.x+=dx;sMove();touchGround();draw();}
+}
+function tryRotate(){
+  if(!cur||state!=="run")return;
+  var rc=rotateCells(cur.cells);
+  var old=cur.cells,oldX=cur.x;
+  cur.cells=rc;
+  /* wall kicks: try in place, then one and two cells to either side */
+  var kicks=[0,-1,1,-2,2],ok=false;
+  for(var i=0;i<kicks.length;i++){
+    if(!collides(cur,oldX+kicks[i],cur.y)){cur.x=oldX+kicks[i];ok=true;break;}
+  }
+  if(!ok){cur.cells=old;cur.x=oldX;return;}
+  sRot();touchGround();draw();
+}
+function hardDrop(){
+  if(!cur||state!=="run")return;
+  var gy=ghostY();
+  if(gy<0){jamPiece();gameOver();draw();return;}
+  cur.y=gy;
+  groundedSince=null;
+  lock();draw();
+}
+/* the classic pressure valve: set one transaction aside, once per drop */
+function tryHold(){
+  if(!cur||state!=="run")return;
+  if(!canHold){say("Hold is spent until this brick lands.");return;}
+  var swap=holdP;
+  holdP={cells:cur.cells,rate:cur.rate};
+  canHold=false;
+  paintHold();sHold();
+  if(swap){
+    var dm=dims(swap.cells);
+    cur={cells:swap.cells,rate:swap.rate,x:Math.floor((COLS-dm.w)/2),y:-dm.h};
+    groundedSince=null;lockResets=0;
+    say("Swapped: the held "+swap.rate+" sat/vB brick is falling, "+holdP.rate+" sat/vB set aside.");
+    if(ghostY()<0){jamPiece();gameOver();draw();return;}
+  }else{
+    cur=null;
+    say("Held the "+holdP.rate+" sat/vB brick. Next one is falling.");
+    spawn();
+  }
+  draw();
+}
+
+/* ---------------- runs ---------------- */
+function startRound(){
+  if(cv.parentNode&&cv.parentNode.classList)cv.parentNode.classList.remove("bb-deadframe");
+  newGrid();queue=[];sealRows=[];burnRows=[];parts=[];
+  fees=0;feesBlk=0;blocks=0;rowsSealed=0;rowsBurned=0;burnsBlk=0;rowBest=0;sealed=0;
+  holdP=null;canHold=true;paintHold();
+  dropAcc=0;fastDrop=false;
+  groundedSince=null;lockResets=0;danger=false;hidMid=false;
+  state="run";
+  overlay.hidden=true;
+  paintPause();
+  startMusic();
+  fetchFeed();
+  spawn();
+  say("Mining"+(nextHeight?" toward block #"+fmt(nextHeight):"")+". Seal the bottom row first; a full row above a gap burns.");
+  lastT=performance.now();
+  if(!raf)raf=requestAnimationFrame(loop);
+  paintHud();draw();
+}
+/* death comes in two beats: the stack floods red from the top down (the
+   "dead" state, drawn in draw()), then the overlay reads the will */
+function gameOver(){
+  if(state==="over"||state==="dead")return;
+  cur=null;
+  state="dead";
+  if(cv.parentNode&&cv.parentNode.classList)cv.parentNode.classList.add("bb-deadframe");
+  deadStart=performance.now();
+  deadUntil=deadStart+(reduce?200:900)+250;
+  stopMusic();
+  sOver();
+}
+function finishOver(){
+  state="over";
+  led.g++;led.sum+=fees;led.blk+=blocks;led.rows+=rowsSealed;led.bu+=rowsBurned;
+  if(fees>led.best)led.best=fees;
+  if(rowBest>led.br)led.br=rowBest;
+  if(blocks+1>led.lv)led.lv=blocks+1;
+  saveLed();paintLedger();
+  var score=(blocks*SUBSIDY+fees)/1e8;
+  var math=blocks>0?
+    ("what a real miner would collect: "+blocks+" × "+(SUBSIDY/1e8)+" BTC subsidy + "+fmt(fees)+" sats in fees"):
+    ("fees only, "+fmt(fees)+" sats: no block, no subsidy");
+  var line;
+  if(blocks===0)line="No block found. The subsidy scores nothing for almost; that is the entire business.";
+  else if(blocks<3)line="The stack always wins eventually; the question is how many blocks you pull out of it first.";
+  else line="Blocks "+blocks+" deep at that speed is genuinely respectable. The difficulty adjustment sends its regards.";
+  ovTitle.textContent="THE MEMPOOL BURIED YOU";
+  ovText.innerHTML="<b>Score "+score.toFixed(3)+" BTC</b> ("+math+") · "+blocks+" block"+(blocks===1?"":"s")+" found · "+rowsSealed+" rows sealed · "+rowsBurned+" burned"+
+    (rowBest>0?" · best row "+fmt(rowBest)+" sats":"")+".<br><br>"+line;
+  ovBtn.textContent="Mine again";
+  overlay.hidden=false;
+  say("Run over: score "+score.toFixed(3)+" BTC, "+blocks+" blocks found, "+rowsSealed+" rows sealed, "+rowsBurned+" burned. "+line);
+}
+
+/* ---------------- the attract demo: a silent self-player behind the start
+   overlay, sibling idiom. It uses the real grid, pieces and seal/burn rules
+   but never touches fees, trophies, sounds or the HUD. */
+var demoNext=0;
+function demoStep(t){
+  if(t<demoNext)return;
+  demoNext=t+70;
+  if(!cur){
+    var d=dealPiece();
+    if(d.rate<0)d={cells:[[0,0]],rate:sampleRate()}; /* no legends in the lobby */
+    if(Math.random()<0.5)d={cells:rotateCells(d.cells),rate:d.rate};
+    var dm=dims(d.cells);
+    /* aim for an open slot in the front row most of the time */
+    var fr=frontRow(),opts=[],c0;
+    for(c0=0;c0<=COLS-dm.w;c0++)if(!grid[fr][c0])opts.push(c0);
+    var x=(opts.length&&Math.random()<0.75)?
+      opts[(Math.random()*opts.length)|0]:
+      ((Math.random()*(COLS-dm.w+1))|0);
+    cur={cells:d.cells,rate:d.rate,x:x,y:-dm.h};
+    return;
+  }
+  if(!collides(cur,cur.x,cur.y+1)){cur.y++;return;}
+  if(cur.y<0){newGrid();sealed=0;cur=null;return;} /* demo topped out: reset */
+  for(var i=0;i<cur.cells.length;i++){
+    var r=cur.y+cur.cells[i][0],c=cur.x+cur.cells[i][1];
+    if(r>=0&&r<ROWS)grid[r][c]=cur.rate;
+  }
+  cur=null;
+  /* silent seal/burn, same rules as play */
+  var front=frontRow(),full=[],r2,c2,ok2;
+  for(r2=0;r2<=front;r2++){
+    ok2=true;
+    for(c2=0;c2<COLS;c2++)if(!grid[r2][c2]){ok2=false;break;}
+    if(ok2)full.push(r2);
+  }
+  var f2=front;
+  while(f2>=BLOCK_TOP&&full.indexOf(f2)>=0)f2--;
+  full.filter(function(rr){return rr<=f2;}).sort(function(x2,y2){return x2-y2;}).forEach(function(rr){
+    grid.splice(rr,1);
+    var fresh=[];for(var cc=0;cc<COLS;cc++)fresh.push(0);
+    grid.unshift(fresh);
+  });
+  recountSealed();
+  if(sealed>=BLOCK_ROWS){newGrid();sealed=0;} /* demo block found: go again */
+}
+
+/* ---------------- main loop ---------------- */
+function loop(t){
+  raf=requestAnimationFrame(loop);
+  var dt=Math.min(100,t-lastT);lastT=t;
+  if(state==="idle"){
+    demoStep(t);
+    draw();
+    return;
+  }
+  if(state==="settle"){
+    if(t>=settleUntil)settleApply();
+    draw();
+    return;
+  }
+  if(state==="found"){
+    if(t>=foundUntil)foundApply();
+    draw();
+    return;
+  }
+  if(state==="dead"){
+    if(t>=deadUntil)finishOver();
+    draw();
+    return;
+  }
+  if(state!=="run"){
+    if(parts.length)draw(); /* let clear particles finish falling */
+    return;
+  }
+  dropAcc+=dt;
+  var interval=fastDrop?45:gravityMs();
+  while(dropAcc>=interval){
+    dropAcc-=interval;
+    if(cur){
+      if(!collides(cur,cur.x,cur.y+1)){cur.y++;groundedSince=null;}
+      else if(cur.y<0){jamPiece();gameOver();break;}
+      else{
+        /* grounded: the lock delay below gives a beat to slide, the way
+           every falling-brick game since the 90s has been kind */
+        if(groundedSince===null)groundedSince=t;
+        dropAcc=0;break;
+      }
+    }
+  }
+  if(cur&&state==="run"&&groundedSince!==null){
+    if(!collides(cur,cur.x,cur.y+1))groundedSince=null; /* slid off a ledge */
+    else if(t-groundedSince>=(fastDrop?70:380)){
+      groundedSince=null;
+      lock();
+    }
+  }
+  /* danger heat: the stack is inside the top four rows */
+  var hot=false;
+  for(var r=0;r<4&&!hot;r++)for(var c=0;c<COLS;c++)if(grid[r][c]){hot=true;break;}
+  if(hot&&!danger)sDanger();
+  danger=hot;
+  draw();
+}
+
+/* ---------------- painters ---------------- */
+function draw(){
+  ctx.fillStyle="#0B0908";ctx.fillRect(0,0,W,H);
+  /* the sky above the block line is overflow parking: darker, never paid */
+  ctx.fillStyle="rgba(0,0,0,.30)";
+  ctx.fillRect(0,0,W,BLOCK_TOP*cell);
+  ctx.strokeStyle="rgba(255,220,160,.05)";ctx.lineWidth=1;
+  for(var c=1;c<COLS;c++){ctx.beginPath();ctx.moveTo(c*cell+.5,0);ctx.lineTo(c*cell+.5,H);ctx.stroke();}
+  for(var r=1;r<ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*cell+.5);ctx.lineTo(W,r*cell+.5);ctx.stroke();}
+  /* the 4M WU line: everything below it is the block being built */
+  ctx.strokeStyle="rgba(255,217,160,.30)";ctx.lineWidth=1;
+  ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(0,BLOCK_TOP*cell+.5);ctx.lineTo(W,BLOCK_TOP*cell+.5);ctx.stroke();
+  ctx.setLineDash([]);
+  if(cell>=18){
+    ctx.fillStyle="rgba(255,217,160,.34)";
+    ctx.font="700 "+Math.max(7,Math.floor(cell*0.26))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="right";ctx.textBaseline="bottom";
+    ctx.fillText("THE 4M WU LINE",W-4,BLOCK_TOP*cell-3);
+  }
+  /* settled cells */
+  for(r=0;r<ROWS;r++)for(c=0;c<COLS;c++)if(grid[r][c])drawCell(c,r,grid[r][c]);
+  /* the sealed part of the block: welded, with a bright seam on top */
+  if(sealed>0){
+    var sy=(ROWS-sealed)*cell;
+    ctx.fillStyle="rgba(247,147,26,.08)";
+    ctx.fillRect(0,sy,W,sealed*cell);
+    ctx.strokeStyle="rgba(255,217,160,.55)";ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,sy+1);ctx.lineTo(W,sy+1);ctx.stroke();
+  }
+  /* the open cells of the row the block wants next: soft glowing sockets,
+     a FILL on purpose so they can never be mistaken for the dashed ghost */
+  if((state==="run"||state==="pause"||state==="idle")&&sealed<BLOCK_ROWS){
+    var fr=frontRow();
+    var ga=reduce?0.04:(0.03+0.02*(0.5+0.5*Math.sin(performance.now()/950)));
+    ctx.fillStyle="rgba(255,217,160,"+ga.toFixed(3)+")";
+    for(var gc=0;gc<COLS;gc++)if(!grid[fr][gc])
+      ctx.fillRect(gc*cell+1,fr*cell+1,cell-2,cell-2);
+  }
+  /* sealing rows flash gold, burning rows flash ember red */
+  if(state==="settle"){
+    var u=reduce?0.5:Math.abs(Math.sin(performance.now()/60));
+    if(sealRows.length){
+      ctx.fillStyle="rgba(255,217,160,"+(0.25+0.45*u).toFixed(2)+")";
+      sealRows.forEach(function(rr2){ctx.fillRect(0,rr2*cell,W,cell);});
+    }
+    if(burnRows.length){
+      ctx.fillStyle="rgba(224,80,60,"+(0.30+0.40*u).toFixed(2)+")";
+      burnRows.forEach(function(rr3){ctx.fillRect(0,rr3*cell,W,cell);});
+    }
+  }
+  /* a found block glows whole while the fanfare plays */
+  if(state==="found"){
+    var fu=reduce?0.4:Math.abs(Math.sin(performance.now()/90));
+    ctx.fillStyle="rgba(255,217,160,"+(0.16+0.30*fu).toFixed(2)+")";
+    ctx.fillRect(0,BLOCK_TOP*cell,W,BLOCK_ROWS*cell);
+  }
+  /* the death flood: red rolls from the sky down to the floor, then the
+     overlay reads the will */
+  if(state==="dead"||state==="over"){
+    var df=state==="over"?1:Math.min(1,(performance.now()-deadStart)/(reduce?200:900));
+    var covered=Math.ceil(df*ROWS);
+    if(covered>0){
+      ctx.fillStyle="rgba(224,80,60,.62)";
+      ctx.fillRect(0,0,W,covered*cell);
+    }
+  }
+  if(cur&&(state==="run"||state==="pause"||state==="idle")){
+    if(ghostOn){
+      var gy=ghostY();
+      ctx.strokeStyle="rgba(255,220,160,.19)";ctx.lineWidth=1.5;
+      ctx.setLineDash([4,3]);
+      cur.cells.forEach(function(cc){
+        ctx.strokeRect(( cur.x+cc[1])*cell+1.5,(gy+cc[0])*cell+1.5,cell-3,cell-3);
+      });
+      ctx.setLineDash([]);
+    }
+    cur.cells.forEach(function(cc){
+      if(cur.y+cc[0]>=0)drawCell(cur.x+cc[1],cur.y+cc[0],cur.rate);
+    });
+  }
+  /* coin particles from cleared rows */
+  if(parts.length){
+    var now=performance.now(),pdt=Math.min(0.05,(now-(lastPartT||now))/1000);
+    lastPartT=now;
+    for(var k=parts.length-1;k>=0;k--){
+      var pp=parts[k];
+      pp.vy+=560*pdt;pp.x+=pp.vx*pdt;pp.y+=pp.vy*pdt;pp.life-=pdt*1.4;
+      if(pp.life<=0||pp.y>H+10){parts.splice(k,1);continue;}
+      ctx.globalAlpha=Math.min(1,pp.life*2);
+      ctx.fillStyle=pp.color;
+      ctx.beginPath();ctx.arc(pp.x,pp.y,pp.r,0,6.3);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }else lastPartT=0;
+  /* danger heat when the stack is inside the top four rows */
+  if(danger&&(state==="run"||state==="pause")){
+    var da=reduce?0.16:(0.10+0.08*Math.abs(Math.sin(performance.now()/280)));
+    var grad=ctx.createLinearGradient(0,0,0,cell*5);
+    grad.addColorStop(0,"rgba(224,80,60,"+da.toFixed(2)+")");
+    grad.addColorStop(1,"rgba(224,80,60,0)");
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,cell*5);
+  }
+}
+function drawCell(cx,cyR,rate){
+  var px=cx*cell+1,py=cyR*cell+1,ps=cell-2;
+  if(rate===RB2){
+    /* the purge brick: charcoal shell, pulsing red core */
+    ctx.fillStyle="#2A1214";
+    rr(px,py,ps,ps,3);ctx.fill();
+    var ra=reduce?0.7:(0.45+0.45*Math.abs(Math.sin(performance.now()/160)));
+    ctx.strokeStyle="rgba(224,80,60,"+ra.toFixed(2)+")";ctx.lineWidth=1.5;
+    rr(px+1,py+1,ps-2,ps-2,3);ctx.stroke();
+    ctx.fillStyle="rgba(224,80,60,"+ra.toFixed(2)+")";
+    ctx.beginPath();ctx.arc(px+ps/2,py+ps/2,Math.max(2,ps*0.16),0,6.3);ctx.fill();
+    return;
+  }
+  if(rate===RB){
+    /* the rainbow brick: hue slides along the diagonal, road style */
+    var hue=reduce?45:Math.floor((performance.now()/6+(cx+cyR)*36)%360);
+    ctx.fillStyle=reduce?"#FFD43B":"hsl("+hue+",85%,62%)";
+    rr(px,py,ps,ps,3);ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,.4)";ctx.lineWidth=1;
+    rr(px+.5,py+.5,ps-1,ps-1,3);ctx.stroke();
+    return;
+  }
+  var t=tierOf(rate);
+  if(t.glow){ctx.shadowColor="rgba(255,217,160,.7)";ctx.shadowBlur=8;}
+  ctx.fillStyle=t.bg;
+  rr(px,py,ps,ps,3);ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle="rgba(0,0,0,.35)";ctx.lineWidth=1;
+  rr(px+.5,py+.5,ps-1,ps-1,3);ctx.stroke();
+  ctx.strokeStyle="rgba(255,255,255,.16)";
+  ctx.beginPath();ctx.moveTo(px+2.5,py+2);ctx.lineTo(px+ps-2.5,py+2);ctx.stroke();
+  if(cell>=20){
+    ctx.fillStyle=t.ink;
+    ctx.font="700 "+Math.max(8,Math.floor(cell*0.38))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(String(rate),px+ps/2,py+ps/2+1);
+  }
+}
+function rr(x,y,w,h,r){
+  if(w<2*r)r=w/2;if(h<2*r)r=h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function paintHud(){
+  var fe=el("bb-fees");if(fe){fe.textContent=fmt(fees);fe.className=fees>0?"bb-hot":"";}
+  txt("bb-level",String(blocks+1));
+  txt("bb-blocks",String(blocks));
+  txt("bb-rows",sealed+"/"+BLOCK_ROWS);
+  var tf=el("bb-tfill");
+  if(tf)tf.style.width=(sealed/BLOCK_ROWS*100)+"%";
+}
+function pieceEl(p,px){
+  px=px||11;
+  /* the preview boxes are fixed-height: tall pieces shrink to fit instead
+     of growing the box and shoving the layout below (owner report) */
+  var dmH=dims(p.cells).h;
+  if(dmH*px+dmH-1>56)px=Math.floor((56-(dmH-1))/dmH);
+  var t=(p.rate===RB||p.rate===RB2)?null:tierOf(p.rate),dm=dims(p.cells);
+  var d=document.createElement("div");
+  d.className="bb-qpiece";
+  d.style.gridTemplateColumns="repeat("+dm.w+","+px+"px)";
+  var occ={};
+  p.cells.forEach(function(cc){occ[cc[0]+"_"+cc[1]]=1;});
+  for(var rI=0;rI<dm.h;rI++)for(var cI=0;cI<dm.w;cI++){
+    var cellEl=document.createElement("div");
+    cellEl.className="bb-qcell"+(occ[rI+"_"+cI]?(t?"":(p.rate===RB2?" bb-qbomb":" bb-qrb")):" bb-qempty");
+    cellEl.style.width=px+"px";cellEl.style.height=px+"px";
+    if(occ[rI+"_"+cI]&&t)cellEl.style.background=t.bg;
+    d.appendChild(cellEl);
+  }
+  d.title=t?p.rate+" sat/vB":(p.rate===RB2?"the purge brick":"the rainbow brick");
+  return d;
+}
+/* one piece, big and centered: the only brick worth planning around */
+function paintQueue(){
+  var q=el("bb-queue");if(!q)return;
+  q.innerHTML="";
+  if(queue.length)q.appendChild(pieceEl(queue[0],18));
+}
+function paintHold(){
+  var h=el("bb-holdbox");if(!h)return;
+  h.innerHTML="";
+  if(holdP)h.appendChild(pieceEl(holdP,18));
+  else{
+    var hint=document.createElement("span");
+    hint.className="bb-holdhint";
+    hint.textContent=coarse?
+      "two-finger tap to stash the falling brick for later":
+      "press C to stash the falling brick for later";
+    h.appendChild(hint);
+  }
+}
+function paintLedger(){
+  txt("bb-l-games",fmt(led.g));txt("bb-l-best",fmt(led.best));txt("bb-l-career",fmt(led.sum));
+  txt("bb-l-blocks",fmt(led.blk));txt("bb-l-rows",fmt(led.rows));txt("bb-l-burn",fmt(led.bu));
+  txt("bb-l-brow",fmt(led.br));txt("bb-l-lv",String(Math.max(1,led.lv)));
+}
+function paintOvHeight(){
+  var e=el("bb-ovheight");if(e)e.textContent=nextHeight?"#"+fmt(nextHeight):"#…";
+}
+
+/* ---------------- pause ---------------- */
+var paused=false;
+function paintPause(){
+  var pb=el("bb-pause");
+  hideIc(el("bb-ic-pause"),paused);hideIc(el("bb-ic-play"),!paused);
+  if(pb)pb.setAttribute("aria-pressed",paused?"true":"false");
+}
+function setPause(on){
+  if(state!=="run"&&on)return;
+  if(paused===on)return;
+  paused=on;paintPause();
+  fastDrop=false; /* a keyup lost to the tab switch must not stick */
+  if(on){state="pause";stopMusic();say("Paused. The real network never does this.");}
+  else{
+    state="run";lastT=performance.now();
+    /* the slide window must not age while paused: hand back a fresh beat */
+    if(groundedSince!==null)groundedSince=lastT;
+    startMusic();
+    say("Back to work.");
+  }
+}
+window.addEventListener("blur",function(){fastDrop=false;});
+el("bb-pause").addEventListener("click",function(){
+  if(state==="run")setPause(true);
+  else if(state==="pause")setPause(false);
+});
+document.addEventListener("visibilitychange",function(){
+  if(!document.hidden)return;
+  stopMusic(); /* a hidden tab must fall silent NOW: rAF is frozen, so a
+     settle/found state cannot resolve into the deferred pause */
+  if(state==="run")setPause(true);
+  /* hiding during a flash cannot pause mid-animation; remember to pause the
+     moment the settle or fanfare resolves instead of resuming unwatched */
+  else if(state==="settle"||state==="found")hidMid=true;
+});
+
+/* ---------------- input ---------------- */
+ovBtn.addEventListener("click",function(){ac();startRound();});
+document.addEventListener("keydown",function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  var k=e.key;
+  if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," ","Enter","z","Z","p","P","c","C","h","H","g","G","m","M"].indexOf(k)<0)return;
+  var tg=e.target;
+  if(tg&&tg.closest){
+    if(tg.closest("input,select,textarea,a"))return;
+    /* a focused button keeps its native Space/Enter activation, but the
+       game keys still play so focusing Pause does not kill the arrows */
+    if(tg.closest("button")&&(k===" "||k==="Enter"))return;
+  }
+  var r=stage.getBoundingClientRect();
+  if(r.bottom<0||r.top>window.innerHeight)return;
+  if(state==="run"){
+    if(k==="ArrowLeft"){e.preventDefault();tryMove(-1);}
+    else if(k==="ArrowRight"){e.preventDefault();tryMove(1);}
+    else if(k==="ArrowUp"||k==="z"||k==="Z"){e.preventDefault();tryRotate();}
+    else if(k==="ArrowDown"){e.preventDefault();if(!fastDrop){fastDrop=true;dropAcc=Math.min(dropAcc,45);}}
+    else if(k===" "){e.preventDefault();hardDrop();}
+    else if(k==="c"||k==="C"||k==="h"||k==="H"){e.preventDefault();if(!e.repeat)tryHold();}
+    else if(k==="g"||k==="G"){e.preventDefault();if(!e.repeat)toggleGhost();}
+    else if(k==="m"||k==="M"){e.preventDefault();if(!e.repeat)toggleMusic();}
+    else if(k==="p"||k==="P"){e.preventDefault();setPause(true);}
+  }else if(state==="settle"||state==="found"||state==="dead"){
+    /* the seal/burn flash, the found fanfare and the death flood are still
+       mid-game: swallow every game key so a held arrow never scrolls the
+       page, and keep a held soft-drop armed for the next piece */
+    e.preventDefault();
+    if(k==="ArrowDown")fastDrop=true;
+    else if((k==="m"||k==="M")&&!e.repeat)toggleMusic();
+  }
+  else if(state==="pause"&&(k==="m"||k==="M")){e.preventDefault();if(!e.repeat)toggleMusic();}
+  else if(state==="pause"&&(k==="p"||k==="P"||k===" ")){e.preventDefault();setPause(false);}
+  else if(state!=="pause"&&(k===" "||k==="Enter")){
+    if(!overlay.hidden){e.preventDefault();ac();startRound();}
+  }
+});
+document.addEventListener("keyup",function(e){
+  if(e.key==="ArrowDown")fastDrop=false;
+});
+function bindPad(id,fn,repeat){
+  var b=el(id),timer=null,pid=null;
+  if(!b)return;
+  b.addEventListener("pointerdown",function(e){
+    if(e.button!==0||!e.isPrimary)return;
+    e.preventDefault();
+    if(timer)return; /* a second finger must not orphan the repeat timer */
+    pid=e.pointerId;
+    fn();
+    if(repeat)timer=setInterval(fn,140);
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(function(ev){
+    /* only the pointer that pressed may release: a second finger's up or a
+       mouse merely passing over must not kill a held repeat or soft drop */
+    b.addEventListener(ev,function(e){
+      if(e.pointerId!==pid)return;
+      pid=null;
+      if(timer){clearInterval(timer);timer=null;}
+      if(id==="bb-pdrop")fastDrop=false;
+    });
+  });
+  /* keyboard and assistive-tech activation arrives as a detail-0 click,
+     never as pointerdown; the soft-drop pad gets a timed pulse since a
+     keyboard click has no release to clear it */
+  b.addEventListener("click",function(e){
+    if(e.detail!==0)return;
+    fn();
+    if(id==="bb-pdrop")setTimeout(function(){fastDrop=false;},200);
+  });
+}
+
+/* the wipe wants a second press: the ledger is not reborn (slot idiom) */
+var resetTimer=null;
+function disarmReset(){
+  if(resetTimer){clearTimeout(resetTimer);resetTimer=null;}
+  var rb=el("bb-reset");
+  rb.textContent="Reset everything";
+  rb.classList.remove("bb-armed");
+}
+el("bb-reset").addEventListener("click",function(){
+  var rb=this;
+  if(!resetTimer){
+    rb.textContent="Sure?";
+    rb.classList.add("bb-armed");
+    resetTimer=setTimeout(disarmReset,4000);
+    return;
+  }
+  disarmReset();
+  led={g:0,best:0,sum:0,blk:0,rows:0,br:0,bu:0,lv:0,tr:[]};
+  saveLed();paintLedger();paintShelf();
+  say("Wiped. The mempool keeps no score either.");
+});
+
+/* ---------------- touch on the board itself: drag to steer, tap to rotate,
+   flick down to drop. The pads stay for anyone who prefers buttons. */
+(function(){
+  var tId=null,sx=0,sy=0,lx=0,startAt=0,movedCols=0,softening=false;
+  cv.addEventListener("pointerdown",function(e){
+    if(state==="pause"){setPause(false);return;} /* a tap on the board resumes */
+    /* settle and found are still mid-game: a finger that lands during the
+       flash must own the next piece the moment run resumes */
+    if(e.pointerType==="mouse"||(state!=="run"&&state!=="settle"&&state!=="found"))return;
+    /* a second finger while one is down = HOLD (the pads are gone) */
+    if(tId!==null&&e.pointerId!==tId){tryHold();e.preventDefault();return;}
+    tId=e.pointerId;sx=lx=e.clientX;sy=e.clientY;startAt=performance.now();
+    movedCols=0;softening=false;
+    cv.setPointerCapture(tId);
+    e.preventDefault();
+  });
+  cv.addEventListener("pointermove",function(e){
+    if(e.pointerId!==tId||state!=="run")return;
+    var step=cell*0.8;
+    while(e.clientX-lx>=step){tryMove(1);lx+=step;movedCols++;}
+    while(lx-e.clientX>=step){tryMove(-1);lx-=step;movedCols++;}
+    var dy=e.clientY-sy;
+    if(dy>cell*1.3&&movedCols===0){
+      if(!softening){softening=true;fastDrop=true;dropAcc=Math.min(dropAcc,45);}
+    }else if(softening&&dy<cell*0.8){softening=false;fastDrop=false;}
+  });
+  function endTouch(e){
+    if(e.pointerId!==tId)return;
+    tId=null;
+    if(softening)fastDrop=false;
+    var dt2=performance.now()-startAt,dy=e.clientY-sy,dx=Math.abs(e.clientX-sx);
+    if(state!=="run")return;
+    if(dy>cell*2&&dt2<240){hardDrop();return;}          /* fast flick down */
+    if(movedCols===0&&!softening&&dt2<260&&dx<cell*0.6&&Math.abs(dy)<cell*0.6)tryRotate(); /* tap */
+  }
+  cv.addEventListener("pointerup",endTouch);
+  cv.addEventListener("pointercancel",function(e){if(e.pointerId===tId){tId=null;fastDrop=false;}});
+})();
+
+/* ---------------- fullscreen (shared idiom) ---------------- */
+var fsBtn=el("bb-fs");
+function fsActive(){return document.fullscreenElement===stage||stage.classList.contains("bb-fake");}
+function setInertOutside(on){
+  var node=stage;
+  while(node&&node!==document.body){
+    var p=node.parentElement;
+    if(!p)break;
+    for(var i=0;i<p.children.length;i++){
+      var sib=p.children[i];
+      if(sib===node)continue;
+      if(on)sib.setAttribute("inert","");else sib.removeAttribute("inert");
+    }
+    node=p;
+  }
+}
+function paintFs(){
+  var on=fsActive();
+  hideIc(el("bb-fs-open"),on);hideIc(el("bb-fs-close"),!on);
+  fsBtn.setAttribute("aria-pressed",on?"true":"false");
+  sizeBoard();
+}
+function exitFake(){
+  stage.classList.remove("bb-fake");document.documentElement.classList.remove("bb-lock");
+  setInertOutside(false);paintFs();
+}
+function fsToggle(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(stage.classList.contains("bb-fake")){exitFake();return;}
+  if(stage.requestFullscreen){
+    stage.requestFullscreen().then(paintFs).catch(function(){
+      stage.classList.add("bb-fake");document.documentElement.classList.add("bb-lock");
+      setInertOutside(true);paintFs();
+    });
+  }else{
+    stage.classList.add("bb-fake");document.documentElement.classList.add("bb-lock");
+    setInertOutside(true);paintFs();
+  }
+}
+fsBtn.addEventListener("click",fsToggle);
+document.addEventListener("fullscreenchange",paintFs);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&stage.classList.contains("bb-fake"))exitFake();
+});
+var lastSizeW=window.innerWidth;
+window.addEventListener("resize",function(){
+  /* mobile browsers fire resize while scrolling as the URL bar collapses;
+     the board must not breathe with it. Only a real width change (rotation,
+     window resize, fullscreen) re-racks the board. */
+  var w=window.innerWidth;
+  if(w===lastSizeW&&!fsActive())return;
+  lastSizeW=w;
+  sizeBoard();
+});
+
+/* ---------------- boot ---------------- */
+newGrid();
+sizeBoard();
+paintLedger();
+paintShelf();
+paintHold();
+/* the chip keeps its honest "..." until the first feed answer: never claim
+   the feed is unavailable while it is merely still being asked */
+fetchFeed();
+fetch(apiBase()+"/height").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+  if(j&&typeof j.height==="number"&&isFinite(j.height)&&j.height>0){nextHeight=Math.floor(j.height)+1;paintOvHeight();}
+}).catch(function(){});
+lastT=performance.now();
+if(!raf)raf=requestAnimationFrame(loop); /* the attract demo runs behind the overlay */
+if(led.g>0)say("Welcome back. Best fee score in this browser: "+fmt(led.best)+" sats. The block wants filling.");
+
+/* iOS long-press hardening: user-select:none alone is not honored
+   reliably on Safari, so selection is refused at the event layer and any
+   range that sneaks through is swept on touchend */
+(function(){
+  var st=document.querySelector(".bb-stage");
+  if(!st)return;
+    /* the decisive layer: cancel the NATIVE touch before Safari's selection
+     recognizer runs. Scoped to the canvas and overlay prose only, so
+     buttons keep their taps and the page keeps its scroll. */
+  st.addEventListener("touchstart",function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    if(t.closest("button,a,input,select,textarea"))return;
+    if(t.closest("canvas")||t.closest(".bb-overlay"))e.preventDefault();
+  },{passive:false});
+  ["selectstart","contextmenu"].forEach(function(ev){
+    st.addEventListener(ev,function(e){e.preventDefault();});
+  });
+  document.addEventListener("touchend",function(){
+    try{
+      var sel=window.getSelection&&window.getSelection();
+      if(!sel||!sel.rangeCount||!sel.anchorNode)return;
+      var n=sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentNode;
+      if(n&&st.contains(n))sel.removeAllRanges();
+    }catch(e){}
+  },{passive:true});
+})();
+})();
+</script>
+</Base>

@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base analytics={false} title="Seed Phrase Recovery: Fixing a Mis-Transcribed Backup - OpenBitcoin" description="What to do when a seed phrase will not restore, why no website should see your words, and an offline toolkit that checks the checksum and last word.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
-    <div class="doc-kicker">Seed recovery</div>
-    <h1>When the words will not restore</h1>
+    <div class="doc-kicker"><a href="/tools">Tools</a></div>
+    <h1>Seed phrase recovery</h1>
+    <HeroEmblem name="sheetmag" />
     <p class="doc-lede">A seed that fails is usually a transcription slip: one word wrong, one missing, two rows read in the wrong order. Here is what to check, and an offline file to check it on.</p>
   </div>
   <div class="doc-grid">

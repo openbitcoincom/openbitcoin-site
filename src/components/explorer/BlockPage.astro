@@ -3,6 +3,7 @@ import { fmtInt, fmtBtc, utcStamp, utcFull, agoText } from '../../lib/explorer.j
 const { b } = Astro.props;
 
 const minerName = b.coinbase?.miner || null;
+const minerSlug = minerName ? minerName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null;
 const inBestChain = b.confirmations >= 0;
 const stats = b.stats;
 const subsidyPlusFees = stats ? stats.subsidySat + stats.totalFeeSat : null;
@@ -58,7 +59,7 @@ const pageHref = (p) => `/${b.height}${p > 1 ? `/${p}` : ''}`;
           </button></div>
       </div>
       <div class="abadges">
-        <i class="miner">MINER · {minerName ? minerName.toUpperCase() : 'UNKNOWN'}</i>
+        <i class="miner">MINER · {minerName ? <a class="miner-link" href={`/pools/${minerSlug}`}>{minerName.toUpperCase()}</a> : 'UNKNOWN'}</i>
         {inBestChain
           ? <i class="ok">{fmtInt(b.confirmations)} CONFIRMATIONS</i>
           : <i>NOT IN BEST CHAIN</i>}

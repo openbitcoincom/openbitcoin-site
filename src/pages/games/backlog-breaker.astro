@@ -1,0 +1,1717 @@
+---
+import Base from '../../layouts/Base.astro';
+import HeroEmblem from '../../components/HeroEmblem.astro';
+import '../../styles/doc.css';
+---
+<Base title="Backlog Breaker: Break the Mempool Wall - OpenBitcoin" description="A paddle arcade game about clearing the mempool. The wall is the backlog: every brick is a transaction priced from this site's own mempool feed, live when our node answers and honestly labelled when it is not. Break bricks to score their fees, clear the wall to find the block, and survive the difficulty adjustments. Fifteen wall patterns from gentle to fortress, splitting balls, random drops. All score, no money. Free, no wagering, no prizes.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker"><a href="/games">Games</a></div>
+    <h1>Backlog Breaker</h1>
+    <HeroEmblem name="wallbreak" />
+    <p class="doc-lede">Every brick is a transaction priced from our own node's fee feed. Bounce your bitcoin, smash the backlog, find the block; the chain notices and the difficulty adjusts.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <!-- ============ THE RIG ============ -->
+    <div class="bk-stage" id="bk-stage">
+      <div class="bk-rig" id="bk-rig">
+        <div class="bk-marquee">
+          <div class="bk-title" role="img" aria-label="Backlog Breaker"><span class="bk-word"><span style="background:#5E81B5;color:#0A1526;--d:0.35s">B</span><span style="background:#3BB9B0;color:#032120;--d:0.1s">A</span><span style="background:#63C36C;color:#06230C;--d:0.5s">C</span><span style="background:#FFD43B;color:#332600;--d:0.2s">K</span><span style="background:#F7931A;color:#2A1600;--d:0s">L</span><span style="background:#FFE9B8;color:#3A2600;--d:0.55s">O</span><span style="background:#5E81B5;color:#0A1526;--d:0.15s">G</span></span><i></i><span class="bk-word"><span style="background:#3BB9B0;color:#032120;--tilt:-7.5deg;--d:0.4s">B</span><span style="background:#63C36C;color:#06230C;--tilt:7.5deg;--d:0.05s">R</span><span style="background:#FFD43B;color:#332600;--tilt:-7.5deg;--d:0.45s">E</span><span style="background:#F7931A;color:#2A1600;--tilt:7.5deg;--d:0.25s">A</span><span style="background:#FFE9B8;color:#3A2600;--tilt:-7.5deg;--d:0.3s">K</span><span style="background:#5E81B5;color:#0A1526;--tilt:-7.5deg;--d:0.6s">E</span><span style="background:#3BB9B0;color:#032120;--tilt:7.5deg;--d:0.12s">R</span></span></div>
+        </div>
+        <div class="bk-leds">
+          <div class="bk-led"><i>Level</i><b id="bk-level">1</b></div>
+          <div class="bk-led"><i>Score</i><b id="bk-score">0</b></div>
+          <div class="bk-led"><i>Bitcoins</i><b id="bk-rigs">3</b></div>
+          <div class="bk-led"><i>Block</i><b id="bk-block">&ndash;</b></div>
+          <div class="bk-led"><i>Difficulty</i><b id="bk-diff">e1</b></div>
+          <div class="bk-led"><i>Backlog</i><b id="bk-left">0</b></div>
+        </div>
+        <div class="bk-boardwrap">
+          <canvas id="bk-board" role="img" aria-label="A wall of transaction bricks at the top, your paddle rig at the bottom, and a ball bouncing between them. Breaking a brick scores its fee, drops sometimes fall for the paddle to catch, and clearing the wall finds the block. The readouts above the board mirror score, rigs, block height, level, difficulty and bricks remaining."></canvas>
+          <button class="bk-opttab" id="bk-opttab" type="button" aria-label="Options" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <div class="bk-topbtns" id="bk-topbtns" hidden>
+            <button class="bk-mini" id="bk-pause" type="button" aria-label="Pause" aria-pressed="false" title="Pause">
+              <svg viewBox="0 0 24 24" id="bk-ic-pause"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bk-ic-play" hidden><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>
+            </button>
+            <button class="bk-mini" id="bk-music" type="button" aria-label="Music" aria-pressed="true" title="Music">
+              <svg viewBox="0 0 24 24" id="bk-music-on"><path d="M9 18V6l8-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" id="bk-music-off" hidden><path d="M9 18V6l8-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/><path d="M4 21L20 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="bk-mini" id="bk-mute" type="button" aria-label="Sound" aria-pressed="true" title="Sound">
+              <svg viewBox="0 0 24 24" id="bk-mute-on"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9c1.2.8 1.2 5.2 0 6M18.5 7c2.2 2 2.2 8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bk-mute-off" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l6 5M22 9.5l-6 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="bk-mini" id="bk-fs" type="button" aria-label="Fullscreen" aria-pressed="false" title="Fullscreen">
+              <svg viewBox="0 0 24 24" id="bk-fs-open"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" id="bk-fs-close" hidden><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="bk-overlay" id="bk-overlay">
+            <div class="bk-ovinner">
+              <b id="bk-ovtitle">MINE BLOCK <span id="bk-ovheight">#&hellip;</span></b>
+              <p id="bk-ovtext">Steer the rig with your mouse, finger or arrow keys. Break bricks to score their fees, catch the drops (mind the FUD), clear the wall to find the block. Space or tap launches.</p>
+              <button class="bk-go" id="bk-go" type="button">Start breaking</button>
+            </div>
+          </div>
+        </div>
+        <div class="bk-help">
+          <span class="bk-hslide" id="bk-helpsteer">Mouse or &#8592; &#8594; steer &middot; Space launches &middot; M music &middot; P pauses</span>
+          <span class="bk-hslide bk-hout" id="bk-datachip">BACKLOG FEED: &hellip;</span>
+        </div>
+        <div class="bk-msg" id="bk-msg">Fifteen walls, easy first, then they come back harder. The backlog never really clears; that is the point.</div>
+      </div>
+      <div class="bk-sr" id="bk-live" aria-live="polite"></div>
+    </div>
+    <noscript><p class="bk-nojs">The wall needs JavaScript to fall. The difficulty arithmetic below is true either way.</p></noscript>
+
+    <!-- ============ HOW IT PLAYS ============ -->
+    <div class="bk-card">
+      <h2 class="bk-tlab">How it plays</h2>
+      <p class="bk-p">Every brick is a scoop of the real fee queue, colored cold blue dust to white-hot gold by its feerate (the chip says if the feed is live). Break one and its fee is scored; string bricks together in a single flight and the chain doubles them. Gold whale bricks take three hits and always drop something. Clear the whole wall and the block is found: the score grabs the 3.125 BTC subsidy a real miner collects today, the next wall deals in a new pattern, and every third block the difficulty adjusts upward; the real chain retargets too, though it is honest enough to go both ways. Drop a bitcoin and a spare steps in; drop all three and the run is over.</p>
+    </div>
+
+    <!-- ============ THE DROPS ============ -->
+    <div class="bk-card">
+      <h2 class="bk-tlab">The drops</h2>
+      <p class="bk-p" style="margin-bottom:10px">They arrive gradually: the first walls deal only the simple ones, the trickier tools and the FUD wait until level five.</p>
+      <ul class="bk-drops">
+        <li><b class="bk-dg">BATCH</b> one hash becomes three: the ball splits</li>
+        <li><b class="bk-dg">RBF</b> the ball shoves straight through bricks for a while</li>
+        <li><b class="bk-dg">HOLD</b> cold storage: the ball sticks to the rig, aim your shot</li>
+        <li><b class="bk-dg">WIDE</b> a rig upgrade: the paddle grows</li>
+        <li><b class="bk-dg">SLOW</b> traffic calms: the ball eases off</li>
+        <li><b class="bk-dg">SPIKE</b> a fee spike: every brick is worth half again more, briefly</li>
+        <li><b class="bk-dg">+COIN</b> a spare bitcoin joins the rack</li>
+        <li><b class="bk-db">FUD</b> the one to dodge: your rig shrinks</li>
+      </ul>
+    </div>
+
+    <!-- ============ THE LEDGER ============ -->
+    <div class="bk-card">
+      <h2 class="bk-tlab">The ledger: this browser, all time</h2>
+      <div class="bk-stats">
+        <div class="bk-stat"><b id="bk-l-games">0</b><i>runs</i></div>
+        <div class="bk-stat"><b id="bk-l-best">0</b><i>best run</i></div>
+        <div class="bk-stat"><b id="bk-l-blk">0</b><i>blocks found</i></div>
+        <div class="bk-stat"><b id="bk-l-lv">0</b><i>deepest level</i></div>
+        <div class="bk-stat"><b id="bk-l-ep">1</b><i>deepest difficulty epoch</i></div>
+        <div class="bk-stat"><b id="bk-l-dr">0</b><i>drops caught</i></div>
+        <div class="bk-stat"><b id="bk-l-wh">0</b><i>whales broken</i></div>
+        <div class="bk-stat"><b id="bk-l-fees">0</b><i>career fee sats</i></div>
+      </div>
+      <p class="bk-brow"><span>Lives in this browser and never leaves. The sats are score; the difficulty in here only goes up, which is more than the real chain promises.</span> <button class="bk-reset" id="bk-reset" type="button">Reset everything</button></p>
+    </div>
+
+    <!-- ============ THE TROPHY SHELF ============ -->
+    <div class="bk-card">
+      <h2 class="bk-tlab">The trophy shelf</h2>
+      <div class="bk-shelf" id="bk-shelf"></div>
+    </div>
+
+    <!-- ============ THE BITCOIN BIT ============ -->
+    <div class="bk-card">
+      <h2 class="bk-tlab">The bitcoin bit</h2>
+      <p class="bk-p">The real backlog is a fee auction, and miners clear it exactly this way: highest feerates first, block by block, subsidy plus fees to whoever finds each one. The difficulty really does adjust, every 2,016 blocks rather than every three, so that blocks keep arriving about every ten minutes no matter how much hashrate shows up. The machinery lives on the <a href="/fees">fees</a>, <a href="/mempool">mempool</a> and <a href="/pools">pools</a> pages.</p>
+    </div>
+
+    <div class="bk-about doc-prose">
+      <p>Free forever: no wagers, no prizes, and the score is pretend sats, never money (the <a href="/terms">terms</a> agree). More machines in the <a href="/games">games section</a>: <a href="/games/block-builder">Block Builder</a> packs these transactions into blocks, <a href="/games/last-sat">The Last Sat</a> races rival miners across the same mempool floor, and <a href="/games/impossible-slot">The Impossible Slot Machine</a> spins real keys against the whole chain.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">House rules</div>
+      <ul class="bk-rl">
+        <li>Every brick is a fee from our mempool feed; the plate says live or snapshot</li>
+        <li>Breaking a brick scores its fee; chains of four double them</li>
+        <li>Clear the wall to find the block and score the subsidy</li>
+        <li>Every third block the difficulty adjusts up</li>
+        <li>Catch the drops, dodge the FUD</li>
+        <li>All score, no money, free forever</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/games">All games</a>
+        <a href="/games/block-builder">Block Builder</a>
+        <a href="/games/last-sat">The Last Sat</a>
+        <a href="/mempool">The live mempool</a>
+        <a href="/fees">Fees right now</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .doc-kicker a{color:inherit;text-decoration:none}
+  .doc-kicker a:hover{text-decoration:underline}
+  
+  
+  .bk-stage,.bk-stage *{-webkit-user-select:none !important;user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .bk-stage ::selection{background:transparent}
+  .bk-stage{position:relative}
+  .bk-stage.bk-fake{position:fixed;inset:0;z-index:80;background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .bk-stage:fullscreen{background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .bk-stage.bk-fake .bk-rig,.bk-stage:fullscreen .bk-rig{margin:auto}
+  html.bk-lock{overflow:hidden}
+
+  .bk-rig{position:relative;max-width:600px;margin:0 auto;
+    -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+    -webkit-user-select:none;user-select:none;
+    background:linear-gradient(180deg,#241D14,#120E09 70%,#0C0906);
+    border:1px solid #3E3322;border-radius:20px;padding:16px 20px 12px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,160,.10),inset 0 -14px 30px rgba(0,0,0,.45)}
+  .bk-rig button:focus-visible{outline:3px solid #FFD9A0;outline-offset:2px}
+
+  .bk-marquee{text-align:center;padding:4px 0 18px;position:relative}
+  .bk-marquee::before{content:"";position:absolute;left:12%;right:12%;top:-6px;height:44px;
+    background:radial-gradient(closest-side,rgba(247,147,26,.16),transparent);pointer-events:none}
+  .bk-title{display:flex;gap:3px;justify-content:center;align-items:center;flex-wrap:wrap;
+    font:700 clamp(11px,2.9vw,16px) var(--mono);
+    animation:bk-tgap 1.75s ease both}
+  
+  .bk-word{display:inline-flex;gap:3px}
+  .bk-word>span{--tilt:0deg;display:inline-flex;align-items:center;justify-content:center;position:relative;
+    min-width:1.5em;padding:.22em 0;border-radius:5px;
+    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.45);
+    transform:rotate(var(--tilt));
+    animation:bk-tin 1.5s cubic-bezier(.3,.6,.3,1.1) var(--d) both}
+  .bk-word>span::before{content:"";position:absolute;inset:24% 20%;z-index:-1;
+    background:rgba(255,255,255,.30);border-radius:40%;filter:blur(2px)}
+  .bk-title i{width:7px;animation:bk-tigap 1.75s ease both}
+  
+  @keyframes bk-tin{
+    0%{transform:translateY(-72px) rotate(0deg);opacity:0}
+    12%{opacity:1}
+    27%{transform:translateY(0) rotate(0deg)}
+    63%{transform:translateY(0) rotate(0deg)}
+    88%{transform:translateY(0) rotate(var(--tilt))}
+    100%{transform:translateY(0) rotate(var(--tilt))}
+  }
+  @keyframes bk-tgap{0%,57%{gap:3px}74%{gap:0px}100%{gap:3px}}
+  @keyframes bk-tigap{0%,57%{width:7px}74%{width:0px}100%{width:7px}}
+  @media(prefers-reduced-motion:reduce){
+    
+    .bk-title,.bk-word>span,.bk-title i{animation:none}
+  }
+
+  .bk-leds{display:flex;gap:8px;margin-bottom:10px}
+  .bk-led{box-sizing:border-box;flex:1;min-width:0;background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:6px 8px 7px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .bk-led i{display:block;font:700 7.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#A98F65;font-style:normal;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bk-led b{display:block;font:700 clamp(12px,3vw,15px) var(--mono);color:#FFD9A0;margin-top:2px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 9px rgba(255,166,60,.35)}
+
+  .bk-boardwrap{position:relative;background:#060504;border:1px solid #3E3322;border-radius:12px;
+    padding:8px;box-shadow:inset 0 4px 18px rgba(0,0,0,.85)}
+  .bk-boardwrap{transition:box-shadow .5s ease,border-color .5s ease}
+  .bk-boardwrap.bk-deadframe{border-color:#8B2A1E;
+    box-shadow:inset 0 0 56px rgba(224,80,60,.34),0 0 26px rgba(224,80,60,.20)}
+  .bk-boardwrap canvas{display:block;margin:0 auto;border-radius:6px;touch-action:none;max-width:100%;
+    
+    cursor:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%225.5%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-opacity%3D%22.25%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%225%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.22%22%2F%3E%3C%2Fsvg%3E') 12 12,none}
+  .bk-overlay{position:absolute;inset:8px;display:flex;align-items:center;justify-content:center;
+    background:rgba(6,5,4,.84);border-radius:6px;overflow:auto}
+  .bk-overlay[hidden]{display:none}
+  .bk-ovinner{text-align:center;padding:14px 16px;max-width:92%;max-height:100%;margin:auto}
+  .bk-ovinner b{display:block;font:700 14px var(--mono);letter-spacing:.12em;color:#FFD9A0}
+  .bk-ovinner p{font:600 11px/1.65 var(--mono);color:#B99B6B;margin:10px 0 0}
+  .bk-ovinner p b{display:inline;font-size:11px;color:#FFB84D;letter-spacing:.02em}
+  .bk-go{margin-top:14px;background:#F7931A;color:#241200;border:1.5px solid rgba(255,166,60,.65);
+    border-radius:10px;cursor:pointer;min-height:48px;padding:0 26px;
+    font:700 14px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    box-shadow:0 5px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14),0 0 22px rgba(247,147,26,.22)}
+  .bk-go:hover{background:#FFA733}
+
+  .bk-help{margin-top:12px;position:relative;min-height:14px;
+    font:600 8.5px var(--mono);letter-spacing:.08em;color:#97815A;text-align:center}
+  .bk-hslide{position:absolute;left:0;right:0;top:0;opacity:1;transition:opacity .9s ease}
+  .bk-hslide.bk-hout{opacity:0}
+  @media(prefers-reduced-motion:reduce){.bk-hslide{transition:none}}
+  .bk-hslide.bk-livefeed{color:#C98A2E}
+  .bk-topbtns{position:absolute;top:8px;right:42px;
+    display:flex;gap:6px;z-index:3;opacity:.7;transition:opacity .15s ease}
+  .bk-topbtns:hover{opacity:1}
+  .bk-opttab{position:absolute;top:8px;right:8px;z-index:3;
+    display:flex;align-items:center;justify-content:center;background:rgba(18,14,10,.45);
+    border:1px solid rgba(62,51,34,.55);border-radius:7px;color:#B99B6B;cursor:pointer;
+    width:28px;height:28px;opacity:.7;transition:opacity .15s ease}
+  .bk-opttab:hover{opacity:1}
+  .bk-opttab svg{width:14px;height:14px}
+  .bk-opttab[aria-expanded="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D;opacity:1}
+  .bk-opttab[hidden],.bk-topbtns[hidden]{display:none}
+  .bk-topbtns .bk-mini{width:28px;height:28px;min-height:0;border-radius:7px;
+    background:rgba(18,14,10,.45);border:1px solid rgba(62,51,34,.55)}
+  .bk-topbtns .bk-mini svg{width:13px;height:13px}
+  @media(pointer:coarse){
+    .bk-opttab,.bk-topbtns .bk-mini{width:38px;height:38px}
+  }
+  .bk-topbtns .bk-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .bk-mini{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none;
+    background:#191410;border:1px solid #35291A;border-radius:8px;color:#B99B6B;cursor:pointer}
+  .bk-mini:hover{color:#FFD9A0;border-color:#5A452A}
+  .bk-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .bk-mini svg{width:17px;height:17px}
+  
+  .bk-mini svg[hidden]{display:none}
+  .bk-msg{min-height:34px;margin-top:10px;text-align:center;font:600 11.5px/1.5 var(--mono);letter-spacing:.02em;color:#B99B6B}
+  .bk-msg.bk-good{color:#FFB84D}
+  .bk-msg.bk-bad{color:#E06A55}
+
+  
+  .bk-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .bk-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .bk-drops{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+  .bk-drops li{font:500 12.5px/1.55 var(--sans);color:var(--ink-2);min-width:0;
+    background:var(--field);border:1px dashed rgba(255,166,60,.28);border-radius:10px;padding:10px 12px}
+  .bk-drops li:last-child{border-color:rgba(224,80,60,.45)}
+  .bk-drops b{display:inline-block;min-width:52px;font:700 10px var(--mono);letter-spacing:.08em;
+    border:1px solid rgba(247,147,26,.45);border-radius:6px;padding:2px 6px;margin:0 0 6px;text-align:center;display:block;width:fit-content}
+  .bk-dg{color:var(--acc)}
+  .bk-db{color:var(--down);border-color:currentColor !important}
+  .bk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+  .bk-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .bk-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bk-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .bk-brow{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .bk-brow span{flex:1;min-width:220px}
+  .bk-reset{background:transparent;border:1px dashed var(--line-2);border-radius:7px;color:var(--ink-3);
+    font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;min-height:40px;cursor:pointer}
+  .bk-reset:hover{color:var(--down);border-color:var(--down)}
+  .bk-reset.bk-armed{color:var(--down);border-color:var(--down);border-style:solid}
+  .bk-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .bk-p a,.bk-about a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .bk-p a:hover,.bk-about a:hover{border-bottom-style:solid}
+  .bk-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+  .bk-plaque{border:1px dashed var(--line-2);border-radius:10px;padding:10px 12px;opacity:.5;min-width:0}
+  .bk-plaque b{display:block;font:700 12px var(--mono);color:var(--ink-2)}
+  .bk-plaque i{display:block;font:600 9.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px;line-height:1.5}
+  .bk-plaque.bk-won{opacity:1;border:1px solid rgba(247,147,26,.55);background:rgba(247,147,26,.07)}
+  .bk-plaque.bk-won b{color:var(--acc)}
+  .bk-about{margin-top:14px}
+  .bk-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .bk-rl{margin:0;padding-left:16px}
+  .bk-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .bk-rl li:first-child{margin-top:0}
+  .bk-rl li::marker{color:var(--acc)}
+  .bk-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .bk-nojs{font:600 12.5px/1.6 var(--sans);color:var(--ink-3);text-align:center;margin:12px 0 0}
+
+  @media(max-width:740px){
+    .bk-rig{padding:12px 10px 10px}
+    .bk-leds{flex-wrap:wrap}
+    .bk-led{flex:1 1 30%}
+    .bk-msg{min-height:50px}
+  }
+  @media(max-width:700px){
+    .bk-card{padding:18px 16px}
+  }
+</style>
+
+<script is:inline>
+(function(){
+"use strict";
+var stage=document.getElementById("bk-stage"),rig=document.getElementById("bk-rig");
+if(!stage||!rig)return;
+
+/* ---------------- the walls ----------------
+   13 columns, up to 12 rows. '.' empty, 'x' one-hit tx brick, '2' two-hit
+   consolidation brick (a 50,000 vb double scoop), 'W' whale brick (three
+   hits, 250,000 vb from the top band, always drops). Fifteen patterns run
+   easy to hard; dealWall gates armor ('2' from level 3, whales from level
+   5) and hardens bricks every full cycle through the list. */
+var COLS=13;
+var WALLS=[
+  {name:"The warmup",cols:7,bhf:0.95,line:"A few fat scoops loitering up top. Every backlog starts somewhere.",rows:[
+    ".xxxxx.",
+    "..xxx.."]},
+  {name:"The steps",cols:9,bhf:0.8,line:"Fees climb. So do you.",rows:[
+    "......xxx",
+    "....xxxxx",
+    "..xxxxxxx"]},
+  {name:"The arch",cols:11,bhf:0.65,line:"A doorway in the queue. Knock politely, then harder.",rows:[
+    "..xxxxxxx..",
+    ".xx.....xx.",
+    ".xx.....xx.",
+    ".2x.....x2."]},
+  {name:"The first wall",line:"A gentle backlog to warm the rig up. It will not stay gentle.",rows:[
+    ".xxxxxxxxxxx.",
+    ".xxxxxWxxxxx.",
+    ".xxxxxxxxxxx."]},
+  {name:"The pyramid",line:"Fees stack the way they always stack: a few whales on top of everything else.",rows:[
+    "......x......",
+    ".....xxx.....",
+    "....xxxxx....",
+    "...xxxxxxx...",
+    "..xxxxxxxxx..",
+    ".xxxxxWxxxxx."]},
+  {name:"The checkerboard",line:"Half the mempool is always somebody's dust.",rows:[
+    "x.x.x.x.x.x.x",
+    ".x.x.x.x.x.x.",
+    "x.x.x.x.x.x.x",
+    ".x.x.x.x.x.x.",
+    "x.x.x.W.x.x.x",
+    ".x.x.x.x.x.x."]},
+  {name:"The columns",line:"Six lanes of traffic, seen from the side for once.",rows:[
+    "x..x..x..x..x",
+    "x..x..x..x..x",
+    "x..2..2..2..x",
+    "x..x..x..x..x",
+    "x..x..x..x..x",
+    "W..x..W..x..W"]},
+  {name:"The halving",line:"A wall split down the middle. Something about this chain likes doing that.",rows:[
+    "xxxxxx.xxxxxx",
+    "xxxxxx.xxxxxx",
+    "222222.222222",
+    "xxxxxx.xxxxxx",
+    "xxxxxW.Wxxxxx"]},
+  {name:"The big B",line:"You know this shape. Break it gently.",rows:[
+    "....xx.xx....",
+    "...xxxxxxx...",
+    "...xx...xx...",
+    "...xx...xx...",
+    "...xWWxxx....",
+    "...xx...xx...",
+    "...xx...xx...",
+    "...xxxxxxx...",
+    "....xx.xx...."]},
+  {name:"The chain",line:"Two links, armored where it counts. Chains usually are.",rows:[
+    "..x.......x..",
+    ".x2x.....x2x.",
+    "x2W2x...x2W2x",
+    ".x2x.....x2x.",
+    "..x.......x.."]},
+  {name:"The rocket",line:"Number go up. Brick come down.",rows:[
+    "......x......",
+    ".....xxx.....",
+    ".....x2x.....",
+    "....xx2xx....",
+    "....x.W.x....",
+    "...xx.x.xx...",
+    "..xx..x..xx..",
+    ".....xxx.....",
+    "....xx.xx...."]},
+  {name:"The fortress",line:"Armor on the outside, fees on the inside. Crack it open.",rows:[
+    "2222222222222",
+    "2xxxxxxxxxxx2",
+    "2xWxxxxxxxWx2",
+    "2xxxxxxxxxxx2",
+    "2222222222222"]},
+  {name:"The vault",line:"Three whales in a vault. The door is the hard part.",rows:[
+    "xxxxxxxxxxxxx",
+    "x22222222222x",
+    "x2xxxxxxxxx2x",
+    "x2x..WWW..x2x",
+    "x2xxxxxxxxx2x",
+    "x22222222222x",
+    "xxxxxxxxxxxxx"]},
+  {name:"The crossing",line:"A thin wall is a fast wall. Do not miss.",rows:[
+    "x...........x",
+    ".x.........x.",
+    "..x.......x..",
+    "...2.....2...",
+    "....x...x....",
+    ".....x.x.....",
+    "......W......",
+    ".....x.x.....",
+    "....x...x....",
+    "...x.....x..."]},
+  {name:"The full backlog",line:"Everything, everywhere, all at once, at 1 sat/vB.",rows:[
+    "2222222222222",
+    "xxxxxxxxxxxxx",
+    "xWxxxx2xxxxWx",
+    "xxxxxxxxxxxxx",
+    "2xxxx2W2xxxx2",
+    "xxxxxxxxxxxxx",
+    "x2xxxxxxxxx2x"]}
+];
+
+/* ---------------- constants ---------------- */
+var SUBSIDY=312500000;              /* 3.125 BTC: today's subsidy, in sats */
+var COIN_VB=25000,DOUBLE_VB=50000,WHALE_VB=250000;
+var RETARGET_EVERY=3;               /* compressed: the real chain retargets every 2,016 blocks */
+var DIFF_STEP=1.062;                /* +6.2% ball speed per adjustment, compounding */
+var MAX_BALLS=5;
+function apiBase(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)||"/api/v1";}
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* heat colors, coldest last, same ramp as Block Builder */
+var TIERS=[
+  {bg:"#FFE9B8",ink:"#3A2600"},
+  {bg:"#F7931A",ink:"#2A1600"},
+  {bg:"#FFD43B",ink:"#332600"},
+  {bg:"#63C36C",ink:"#06230C"},
+  {bg:"#3BB9B0",ink:"#032120"},
+  {bg:"#5E81B5",ink:"#0A1526"}
+];
+var tierCuts=[3,6,12,30,80];
+function tierIdx(rate){
+  for(var i=tierCuts.length-1;i>=0;i--)if(rate>=tierCuts[i])return 4-i;
+  return 5;
+}
+
+/* the drop table: weights, colors, and what they do */
+var DROPS=[
+  {k:"BATCH",w:18,color:"#F7931A",good:true},
+  {k:"WIDE", w:15,color:"#63C36C",good:true},
+  {k:"SLOW", w:13,color:"#3BB9B0",good:true},
+  {k:"HOLD", w:12,color:"#5E81B5",good:true},
+  {k:"RBF",  w:12,color:"#FFD43B",good:true},
+  {k:"SPIKE",w:10,color:"#FFE9B8",good:true},
+  {k:"FUD",  w:14,color:"#E0503C",good:false},
+  {k:"+COIN",w:6, color:"#FFB84D",good:true}
+];
+var DROP_TOTAL=DROPS.reduce(function(a,d){return a+d.w;},0);
+
+/* ---------------- the fee feed (sibling idiom, provenance latched) ---------------- */
+var SNAP={edges:[1,2,3,4,5,6,8,10,15,20,30,50,100],
+          vsizes:[52e6,31e6,14e6,8e6,5e6,4e6,3e6,2.2e6,1.5e6,1.1e6,0.7e6,0.4e6,0.15e6]};
+var feed={edges:SNAP.edges,vsizes:SNAP.vsizes,live:false,count:0,mb:0};
+function paintChip(){
+  /* the chip vouches for the bricks ON THE WALL: dealWall latches the
+     provenance of each deal, so a pull landing mid-wall never lets the
+     plate claim live pricing for snapshot bricks */
+  var c=document.getElementById("bk-datachip");
+  if(!c)return;
+  var src=(wl&&wl.live!==undefined)?wl:feed;
+  if(c.classList)c.classList.toggle("bk-livefeed",!!src.live);
+  c.textContent=src.live?
+    "BACKLOG FEED: LIVE MEMPOOL "+(src.count||0).toLocaleString("en-US")+" TX · "+(src.mb||0)+" MvB":
+    "BACKLOG FEED: STORED SNAPSHOT (feed unavailable)";
+}
+function computeCuts(){
+  var total=0,i;
+  for(i=0;i<feed.vsizes.length;i++)total+=feed.vsizes[i];
+  if(!(total>0))return;
+  var cuts=[],qi=1,acc=0;
+  for(i=0;i<feed.edges.length&&qi<=5;i++){
+    acc+=feed.vsizes[i];
+    while(qi<=5&&acc>=total*qi/6){
+      var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+      cuts.push(Math.max(1,Math.round((lo+hi)/2)));
+      qi++;
+    }
+  }
+  while(cuts.length<5)cuts.push((cuts.length?cuts[cuts.length-1]:40)*2);
+  for(i=1;i<5;i++)if(cuts[i]<=cuts[i-1])cuts[i]=cuts[i-1]+1;
+  tierCuts=cuts;
+}
+function fetchFeed(){
+  return fetch(apiBase()+"/mempool").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var got=false;
+    if(j&&j.bands&&Array.isArray(j.bands.edges)&&Array.isArray(j.bands.vsizes)&&
+       j.bands.edges.length===j.bands.vsizes.length&&j.bands.edges.length>3&&
+       j.bands.vsizes.every(function(v){return typeof v==="number"&&isFinite(v)&&v>=0;})&&
+       j.bands.vsizes.some(function(v){return v>0;})){
+      feed={edges:j.bands.edges,vsizes:j.bands.vsizes,live:true,
+            count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};
+      got=true;
+    }else if(j&&Array.isArray(j.histogram)&&j.histogram.length){
+      var e=[],v=[];
+      j.histogram.slice().reverse().forEach(function(row){
+        if(Array.isArray(row)&&isFinite(row[0])&&isFinite(row[1])&&row[1]>0){e.push(Math.max(1,row[0]));v.push(row[1]);}
+      });
+      if(e.length>3){feed={edges:e,vsizes:v,live:true,count:(j.count|0),mb:Math.round((j.vsize||0)/1e6)};got=true;}
+    }
+    /* a 200 with unusable bands is still not a live feed: never claim it is */
+    if(!got)feed.live=false;
+    computeCuts();
+    /* nothing at stake on the attract wall: re-deal it so the demo shows
+       real prices and the chip can honestly say so */
+    if(state==="idle"&&got){dealWall();paintHud();}
+    paintChip();
+  }).catch(function(){feed.live=false;paintChip();});
+}
+function sampleRate(){
+  var total=0,i;
+  for(i=0;i<feed.vsizes.length;i++)total+=feed.vsizes[i];
+  var x=Math.random()*total;
+  for(i=0;i<feed.vsizes.length;i++){x-=feed.vsizes[i];if(x<=0)break;}
+  if(i>=feed.edges.length)i=feed.edges.length-1;
+  var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+  return Math.max(1,Math.round(lo+Math.random()*(hi-lo)));
+}
+function topRate(){
+  for(var i=feed.vsizes.length-1;i>=0;i--)if(feed.vsizes[i]>0){
+    var lo=feed.edges[i],hi=(i+1<feed.edges.length)?feed.edges[i+1]:Math.max(lo+1,lo*3);
+    return Math.max(1,Math.round(lo+Math.random()*(hi-lo)));
+  }
+  return 50;
+}
+
+/* ---------------- storage ---------------- */
+function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function readInt(k,d){try{var v=parseInt(localStorage.getItem(k),10);return isFinite(v)?v:d;}catch(e){return d;}}
+function readLed(){
+  try{var l=JSON.parse(localStorage.getItem("ob-bkb-led"));
+    if(l&&isFinite(l.g)&&isFinite(l.best)&&isFinite(l.blk)&&isFinite(l.lv))
+      /* sat totals can pass 2^31: floor, never |0 (which wraps negative) */
+      return {g:l.g|0,best:Math.max(0,Math.floor(l.best)),blk:l.blk|0,
+              lv:Math.max(0,l.lv|0),
+              ep:isFinite(l.ep)?Math.max(1,l.ep|0):1,
+              dr:isFinite(l.dr)?l.dr|0:0,
+              wh:isFinite(l.wh)?l.wh|0:0,
+              fees:isFinite(l.fees)?Math.max(0,Math.floor(l.fees)):0,
+              /* kind strings capped at 12 chars: the slot's readLed once
+                 silently dropped a long kind on reload, never again */
+              tr:Array.isArray(l.tr)?l.tr.filter(function(x){return typeof x==="string"&&x.length<=12;}).slice(0,32):[]};
+  }catch(e){}
+  return {g:0,best:0,blk:0,lv:0,ep:1,dr:0,wh:0,fees:0,tr:[]};
+}
+var led=readLed();
+function saveLed(){store("ob-bkb-led",JSON.stringify(led));}
+
+/* ---------------- the trophy shelf ---------------- */
+var TROPHIES=[
+  {k:"first",n:"First block",d:"clear your first wall"},
+  {k:"bigb",n:"The big B",d:"break the ₿ wall, brick by brick"},
+  {k:"flight8",n:"Chain of eight",d:"eight bricks in one flight"},
+  {k:"multi5",n:"Five hashes",d:"five bitcoins in the air at once"},
+  {k:"whales",n:"Whale hunter",d:"break every whale in a multi-whale wall"},
+  {k:"cleanpass",n:"Clean pass",d:"clear a wall without dropping a bitcoin"},
+  {k:"fudproof",n:"FUD proof",d:"catch the FUD and clear the wall anyway"},
+  {k:"epoch5",n:"The grind",d:"reach difficulty epoch 5"},
+  {k:"b21",n:"Twenty-one",d:"21 career blocks found"},
+  {k:"coiner",n:"Whole coiner",d:"a full BTC of career fees, 100M sats"},
+  {k:"vault",n:"Vault cracker",d:"break into The vault and clean it out"},
+  {k:"fast30",n:"Fast block",d:"clear a full-width wall in under 30 seconds"},
+  {k:"rack5",n:"Full rack",d:"five bitcoins on the rack at once"},
+  {k:"lastcoin",n:"Last coin standing",d:"find a block with one bitcoin left"},
+  {k:"drops50",n:"Safe hands",d:"catch 50 drops, career"},
+  {k:"whale25",n:"The pod",d:"break 25 whales, career"},
+  {k:"lap1",n:"The full lap",d:"clear all fifteen walls in one run"},
+  {k:"feeblock",n:"High-fee era",d:"a whole bitcoin of fees in one block"},
+  {k:"cap21",n:"Hard cap",d:"score 21 bitcoin in a single run"},
+  {k:"epoch10",n:"Terminal velocity",d:"reach epoch 10, where the ball tops out"}
+];
+function paintShelf(){
+  var s=el("bk-shelf");if(!s)return;
+  s.innerHTML="";
+  TROPHIES.forEach(function(t){
+    var d=document.createElement("div");
+    d.className="bk-plaque"+(led.tr.indexOf(t.k)>=0?" bk-won":"");
+    var b=document.createElement("b");b.textContent=t.n;
+    var i2=document.createElement("i");i2.textContent=t.d;
+    d.appendChild(b);d.appendChild(i2);
+    s.appendChild(d);
+  });
+}
+function trophy(k){
+  if(led.tr.indexOf(k)>=0)return;
+  led.tr.push(k);
+  saveLed();paintShelf();
+  for(var i=0;i<TROPHIES.length;i++)if(TROPHIES[i].k===k){
+    sTrophy();
+    say("TROPHY: "+TROPHIES[i].n+". "+TROPHIES[i].d+".","bk-good",2500);
+    break;
+  }
+}
+
+/* ---------------- dom + sound ---------------- */
+function el(id){return document.getElementById(id);}
+function txt(id,v){var e=el(id);if(e)e.textContent=v;}
+/* svg icons cannot use the .hidden property (HTML-only IDL): set the
+   attribute so the .bk-mini svg[hidden] rule can do its job */
+function hideIc(node,hide){
+  if(!node)return;
+  if(hide)node.setAttribute("hidden","");else node.removeAttribute("hidden");
+}
+function fmt(n){return n.toLocaleString("en-US");}
+function fmtBtc(sats){
+  var s=(sats/1e8).toFixed(8).replace(/0+$/,"").replace(/\.$/,"");
+  return s+" BTC";
+}
+function fmtScore(sats){
+  /* compact on purpose: the LED must never ellipsize (owner report) */
+  if(sats<1e6)return fmt(sats);
+  if(sats<1e8)return (sats/1e6).toFixed(sats<1e7?2:1)+"M sats";
+  var v=sats/1e8;
+  return "₿ "+(v>=100?v.toFixed(1):v.toFixed(2));
+}
+var cv=el("bk-board"),ctx=cv.getContext("2d"),
+    overlay=el("bk-overlay"),ovTitle=el("bk-ovtitle"),ovText=el("bk-ovtext"),ovBtn=el("bk-go"),
+    msgEl=el("bk-msg"),live=el("bk-live");
+/* messages that matter set a hold; casual lines respect it */
+var sayHoldUntil=0;
+function say(m,cls,holdMs){
+  var n=performance.now();
+  if(!holdMs&&n<sayHoldUntil)return;
+  if(holdMs)sayHoldUntil=n+holdMs;
+  msgEl.textContent=m;msgEl.className="bk-msg"+(cls?" "+cls:"");
+  if(live)live.textContent=m;
+}
+var muted=readInt("ob-bkb-mute",0)===1,actx=null;
+function ac(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==="suspended")actx.resume();
+  return actx;
+}
+function tone(freq,dur,type,vol,when,slide){
+  var a=ac();if(!a||muted)return;
+  var t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(freq,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+/* the real mark, verbatim from the site logo asset: coin + tilted B */
+var BCOIN=new Path2D("m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z");
+var BGLYPH=new Path2D("m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z");
+var POPS=[760,590,470,370,290,220]; /* pitch by heat tier, hottest highest */
+function sPop(ti){tone(POPS[Math.max(0,Math.min(5,ti))],0.06,"square",0.05);}
+function sClink(){tone(1050,0.05,"triangle",0.06);}
+function sPaddle(){tone(180,0.05,"sine",0.1,0,140);}
+function sWallB(){tone(320,0.03,"square",0.025);}
+function sLaunch(){tone(440,0.08,"triangle",0.07,0,660);}
+function sCatch(){tone(880,0.07,"triangle",0.08);tone(1175,0.09,"triangle",0.06,0.05);}
+function sBad(){tone(180,0.2,"sawtooth",0.09,0,80);}
+function sSplit(){tone(660,0.06,"square",0.06);tone(880,0.06,"square",0.06,0.06);tone(1100,0.07,"square",0.05,0.12);}
+function sLost(){tone(500,0.5,"sawtooth",0.1,0,90);}
+function sBlock(){var seq=[523,659,784,1047,1319],i;
+  for(i=0;i<seq.length;i++){tone(seq[i],0.18,"triangle",0.13,i*0.09);tone(seq[i]*2,0.16,"sine",0.05,i*0.09);}}
+function sRetarget(){tone(392,0.14,"triangle",0.1);tone(494,0.14,"triangle",0.1,0.11);tone(622,0.2,"triangle",0.11,0.22);}
+function sTrophy(){tone(1319,0.1,"triangle",0.08);tone(1760,0.12,"triangle",0.06,0.06);}
+function sOver(){var seq=[392,330,262,196],i;for(i=0;i<seq.length;i++)tone(seq[i],0.2,"triangle",0.1,i*0.12);}
+/* ---------------- ambient music: generative, ported from Block Builder so
+   the cabinets hum the same tune. No audio assets, never repeats. */
+var musicOn=readInt("ob-bkb-music",1)===1;
+var mus={on:false,next:0,timer:null,gain:null,chord:0};
+var MUS_SCALE=[220,261.63,293.66,329.63,392,440,523.25,587.33];
+var MUS_CHORDS=[[110,164.81,220],[87.31,130.81,174.61],[98,146.83,196],[73.42,110,146.83]];
+function musNote(freq,t,dur,vol,type){
+  var o=actx.createOscillator(),g2=actx.createGain();
+  o.type=type||"triangle";o.frequency.setValueAtTime(freq,t);
+  g2.gain.setValueAtTime(0,t);
+  g2.gain.linearRampToValueAtTime(vol,t+dur*0.4);
+  g2.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g2);g2.connect(mus.gain);
+  o.start(t);o.stop(t+dur+0.1);
+}
+function musBar(){
+  var a=ac();if(!a||!mus.on)return;
+  var bar=3.2,t=Math.max(a.currentTime+0.05,mus.next);
+  mus.next=t+bar;
+  var chd=MUS_CHORDS[mus.chord%MUS_CHORDS.length];
+  mus.chord+=(Math.random()<0.2)?2:1;
+  for(var i=0;i<chd.length;i++)musNote(chd[i]*2,t,bar*1.15,0.014,"triangle");
+  musNote(chd[0],t,bar*1.1,0.02,"sine");
+  for(var k=0;k<8;k++){
+    if(Math.random()<0.62)continue;
+    var f2=MUS_SCALE[(Math.random()*MUS_SCALE.length)|0];
+    musNote(f2*(Math.random()<0.15?2:1),t+k*bar/8,0.9,0.011+Math.random()*0.008,"sine");
+  }
+  mus.timer=setTimeout(musBar,Math.max(200,(mus.next-a.currentTime-0.25)*1000));
+}
+function startMusic(){
+  if(!musicOn||muted||mus.on)return;
+  var a=ac();if(!a)return;
+  if(!mus.gain){mus.gain=a.createGain();mus.gain.gain.value=0.5;mus.gain.connect(a.destination);}
+  mus.gain.gain.cancelScheduledValues(a.currentTime);
+  mus.gain.gain.setValueAtTime(0.0001,a.currentTime);
+  mus.gain.gain.linearRampToValueAtTime(0.5,a.currentTime+0.6);
+  mus.on=true;mus.next=0;
+  musBar();
+}
+function stopMusic(){
+  mus.on=false;
+  if(mus.timer){clearTimeout(mus.timer);mus.timer=null;}
+  if(mus.gain&&actx){
+    mus.gain.gain.cancelScheduledValues(actx.currentTime);
+    mus.gain.gain.setValueAtTime(mus.gain.gain.value,actx.currentTime);
+    mus.gain.gain.linearRampToValueAtTime(0.0001,actx.currentTime+0.3);
+  }
+}
+function paintMusicBtn(){
+  var btn=el("bk-music");
+  hideIc(el("bk-music-on"),!musicOn);hideIc(el("bk-music-off"),musicOn);
+  if(btn)btn.setAttribute("aria-pressed",musicOn?"true":"false");
+}
+function toggleMusic(){
+  musicOn=!musicOn;store("ob-bkb-music",musicOn?"1":"0");
+  paintMusicBtn();
+  if(musicOn&&(state==="run"||state==="serve"||state==="found"||state==="dead"))startMusic();
+  else stopMusic();
+  say(musicOn?(muted?"Music on, once the mute lifts.":"Music on."):"Music off. The backlog hums to itself anyway.",null,900);
+}
+function paintMute(){
+  var btn=el("bk-mute");
+  hideIc(el("bk-mute-on"),muted);hideIc(el("bk-mute-off"),!muted);
+  /* the ring means "audible", matching the music toggle */
+  if(btn)btn.setAttribute("aria-pressed",muted?"false":"true");
+}
+el("bk-mute").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  muted=!muted;store("ob-bkb-mute",muted?"1":"0");paintMute();
+  if(muted)stopMusic();
+  else{tone(880,0.08,"sine",0.08);if(state==="run"||state==="serve"||state==="found"||state==="dead")startMusic();}
+});
+paintMute();
+el("bk-music").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  toggleMusic();
+});
+paintMusicBtn();
+var optTab=el("bk-opttab"),optRow=el("bk-topbtns"),optOpen=false;
+function setOpts(open){
+  optOpen=open;
+  if(optRow)optRow.hidden=!open;
+  if(optTab)optTab.setAttribute("aria-expanded",open?"true":"false");
+}
+if(optTab)optTab.addEventListener("click",function(e){if(e.detail>0)this.blur();setOpts(!optOpen);});
+
+/* ---------------- game state ---------------- */
+var state="idle",wl=null,balls=[],drops=[],parts=[],flashes=[],
+    paddleX=0,paddleTarget=0,
+    score=0,rigs=3,feesRun=0,feesBlk=0,level=1,blocksTotal=0,nextHeight=null,
+    hitRamp=0,flight=0,lastBreakAt=0,wallStartAt=0,diedThisWall=false,fudThisWall=false,
+    widenUntil=0,shrinkUntil=0,slowUntil=0,pierceUntil=0,holdUntil=0,spikeUntil=0,
+    stateUntil=0,pendingRetarget=false,
+    raf=null,lastT=0,paused=false,pausedAt=0,pausedFrom="run",
+    keysDown={};
+
+function epoch(){return Math.floor(blocksTotal/RETARGET_EVERY)+1;}
+function diffPct(){
+  /* quoted percent tracks the CAPPED multiplier: the HUD never claims speed
+     the code stopped delivering */
+  return ((Math.min(1.6,Math.pow(DIFF_STEP,epoch()-1))-1)*100).toFixed(1);
+}
+function speedNow(now){
+  var s=cell*8.2*Math.min(1.6,Math.pow(DIFF_STEP,epoch()-1))*Math.min(1.45,Math.pow(1.015,hitRamp));
+  if(slowUntil>now)s*=0.72;
+  return s;
+}
+function paddleW(now){
+  /* once the ball speed caps (epoch 9), difficulty keeps a lever: the rig
+     narrows 3% per further epoch, floored at three quarters width */
+  var w=cell*2.6*Math.max(0.75,1-0.03*Math.max(0,epoch()-9));
+  if(widenUntil>now)w*=1.5;
+  if(shrinkUntil>now)w*=0.65;
+  return w;
+}
+function paddleY(){return H-cell*1.1;}
+
+/* ---------------- the wall ---------------- */
+function dealWall(){
+  var spec=WALLS[(level-1)%WALLS.length];
+  var wallCycle=Math.floor((level-1)/WALLS.length);
+  var wcols=spec.cols||COLS;
+  wl={name:spec.name,line:spec.line,rows:spec.rows.length,bricks:[],left:0,dealt:0,
+      whalesTotal:0,whalesBroken:0,cols:wcols,bhf:spec.bhf||0.5,
+      live:feed.live,count:feed.count,mb:feed.mb}; /* latch provenance */
+  for(var r=0;r<spec.rows.length;r++){
+    var line=[];
+    for(var c=0;c<wcols;c++){
+      var ch=spec.rows[r].charAt(c);
+      if(ch==="."){line.push(null);continue;}
+      /* the ladder: armor arrives at level 3, whales at level 5, and every
+         full cycle through the walls hardens what the pattern dealt */
+      if(ch==="W"&&level<5)ch="2";
+      if(ch==="2"&&level<3)ch="x";
+      if(ch==="x"&&wallCycle>0&&Math.random()<Math.min(0.5,0.15*wallCycle))ch="2";
+      else if(ch==="2"&&wallCycle>1&&Math.random()<Math.min(0.2,0.06*wallCycle))ch="W";
+      var b;
+      if(ch==="W"){
+        var wr=topRate();
+        b={hp:3,max:3,rate:wr,val:wr*WHALE_VB,whale:true};
+        wl.whalesTotal++;
+      }else if(ch==="2"){
+        var r2=sampleRate();
+        b={hp:2,max:2,rate:r2,val:r2*DOUBLE_VB,whale:false};
+      }else{
+        var r1=sampleRate();
+        b={hp:1,max:1,rate:r1,val:r1*COIN_VB,whale:false};
+      }
+      line.push(b);
+      wl.left++;wl.dealt+=b.val;
+    }
+    wl.bricks.push(line);
+  }
+}
+
+/* ---------------- runs, walls, serves ---------------- */
+function fetchHeight(){
+  fetch(apiBase()+"/height").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    if(j&&typeof j.height==="number"&&isFinite(j.height)&&j.height>0){
+      nextHeight=Math.floor(j.height)+1;
+      paintOvHeight();paintHud();
+    }
+  }).catch(function(){});
+}
+function startRun(){
+  score=0;rigs=3;feesRun=0;level=1;blocksTotal=0;pendingRetarget=false;
+  overlay.hidden=true;
+  if(cv.parentNode&&cv.parentNode.classList)cv.parentNode.classList.remove("bk-deadframe");
+  startMusic();
+  fetchFeed();
+  fetchHeight(); /* re-sync so the shown height never drifts across runs */
+  startWall();
+}
+function startWall(){
+  dealWall();
+  feesBlk=0;diedThisWall=false;fudThisWall=false;hitRamp=0;flight=0;lastBreakAt=performance.now();wallStartAt=lastBreakAt;
+  drops=[];parts=[];flashes=[];
+  clearEffects();
+  serve();
+  /* floor-arrival trophies first: the wall line below must land last */
+  if(epoch()>=5)trophy("epoch5");
+  if(epoch()>=10)trophy("epoch10");
+  var h=nextHeight?("#"+fmt(nextHeight)):"next";
+  var lap=Math.floor((level-1)/WALLS.length)+1;
+  if(lap>1&&(level-1)%WALLS.length===0){
+    /* the wrap. Every lap boundary is also a retarget (15 walls, retarget
+       every 3), so this line owns the slot and carries the speed news */
+    pendingRetarget=false;
+    sRetarget();
+    say("LAP "+lap+": the backlog rebuilt itself, and it learned from last time. Same fifteen shapes, meaner bricks, ball "+diffPct()+"% faster than block one.","bk-good",4000);
+  }else if(pendingRetarget){
+    pendingRetarget=false;
+    sRetarget();
+    if(epoch()>=10)say("DIFFICULTY ADJUSTMENT: the ball tops out at +60%, so the wall leans on the rig instead. It narrows from here.","bk-good",3500);
+    else say("DIFFICULTY ADJUSTMENT: the ball is "+diffPct()+"% faster than block one. The chain noticed you.","bk-good",3500);
+  }else{
+    say("Block "+h+", level "+level+": "+wl.name+". "+wl.line,null,700);
+  }
+  paintHud();
+}
+function nextWall(){
+  level++;
+  if(level>WALLS.length)trophy("lap1"); /* all fifteen shapes cleared this run */
+  if(nextHeight)nextHeight++;
+  if(blocksTotal%RETARGET_EVERY===0)pendingRetarget=true;
+  fetchFeed(); /* ripens for the NEXT deal: the chip describes each wall's own deal */
+  startWall();
+}
+function serve(){
+  if(cv.parentNode&&cv.parentNode.classList)cv.parentNode.classList.remove("bk-deadframe");
+  startMusic(); /* idempotent: heals the hidden-tab stop during dead/found */
+  balls=[{x:paddleX,y:paddleY()-cell*0.2,dx:0,dy:-1,stuck:true,stickDx:0,stickAt:performance.now()}];
+  state="serve";
+}
+function launch(){
+  if(state==="serve")state="run";
+  var now=performance.now(),released=0;
+  balls.forEach(function(b){
+    if(!b.stuck)return;
+    b.stuck=false;released++;
+    var ang=(Math.random()*0.5-0.25)+(b.stickDx/Math.max(1,paddleW(now)))*0.9;
+    b.dx=Math.sin(ang);b.dy=-Math.cos(ang);
+  });
+  if(released)sLaunch(); /* a no-op press stays silent */
+}
+function clearEffects(){
+  widenUntil=0;shrinkUntil=0;slowUntil=0;pierceUntil=0;holdUntil=0;spikeUntil=0;
+}
+function gameOver(){
+  state="over";
+  stopMusic();
+  led.g++;
+  if(score>led.best)led.best=score;
+  led.blk+=blocksTotal;
+  if(level>led.lv)led.lv=level;
+  if(epoch()>led.ep)led.ep=epoch();
+  led.fees+=feesRun;
+  saveLed();paintLedger();
+  sOver();
+  var line=blocksTotal===0?
+    "No blocks found. The backlog does not clear itself, but it did outlast you.":
+    (blocksTotal<3?
+     blocksTotal+" block"+(blocksTotal===1?"":"s")+" found. The wall always gets another row somewhere.":
+     blocksTotal+" blocks found and difficulty epoch "+epoch()+" reached. The chain would have retargeted around you eventually.");
+  ovTitle.textContent="OUT OF BITCOINS";
+  ovText.innerHTML="<b>"+fmtScore(score)+"</b> · "+blocksTotal+" block"+(blocksTotal===1?"":"s")+" found · level "+level+" · epoch "+epoch()+".<br><br>"+line;
+  ovBtn.textContent="Break again";
+  overlay.hidden=false;
+  say("Run over: "+fmtScore(score)+", "+blocksTotal+" blocks found, level "+level+". "+line,null,5000);
+}
+
+/* ---------------- scoring ---------------- */
+function checkCoiner(){
+  if(led.fees+feesRun>=1e8)trophy("coiner");
+  if(feesBlk>=1e8)trophy("feeblock");
+  if(score>=21e8)trophy("cap21");
+}
+function breakBrick(r,c,now,src){
+  var b=wl.bricks[r][c];
+  if(!b)return;
+  b.hp--;
+  if(b.hp>0){sClink();return;}
+  wl.bricks[r][c]=null;
+  wl.left--;lastBreakAt=now;
+  /* flights belong to the ball that flew them: a shared counter would let
+     any paddle touch during multiball kill every chain */
+  var f=src?(src.flight=(src.flight||0)+1):++flight;
+  var mult=(f>=4?2:1)*(spikeUntil>now?1.5:1);
+  var sats=Math.round(b.val*mult);
+  score+=sats;feesRun+=sats;feesBlk+=sats;
+  if(b.whale){
+    wl.whalesBroken++;led.wh++;
+    if(led.wh>=25)trophy("whale25");
+    sClink();sPop(0);
+    say("Whale broken: +"+fmt(sats)+" sats"+(sats===b.val?"":" with multipliers")+", a "+fmt(b.rate)+" sat/vB scoop of "+fmt(WHALE_VB)+" vb.","bk-good",1600);
+    spawnDrop(r,c,true);
+  }else{
+    sPop(tierIdx(b.rate));
+    spawnDrop(r,c,false);
+  }
+  if(f===4)say("Chain of four: fees doubled while the flight lasts.","bk-good",1500);
+  if(f>=8)trophy("flight8");
+  if(!reduce){
+    var ti=TIERS[tierIdx(b.rate)];
+    for(var k=0;k<6;k++)parts.push({
+      x:c*brickW()+brickW()/2,y:topOff()+r*brickH()+brickH()/2,
+      vx:(Math.random()-.5)*180,vy:-(30+Math.random()*140),
+      r:1.5+Math.random()*2.5,color:ti.bg,life:0.8});
+  }
+  checkCoiner();
+  paintHud();
+  if(wl.left<=0)wallFound(now);
+}
+function wallFound(now){
+  state="found";stateUntil=performance.now()+(reduce?500:1500);
+  blocksTotal++;
+  clearEffects();
+  var h=nextHeight?("#"+fmt(nextHeight)):"";
+  /* plaques first: the block line below must land last and stick */
+  trophy("first");
+  var wname=WALLS[(level-1)%WALLS.length].name;
+  if(wname==="The big B")trophy("bigb");
+  if(wname==="The vault")trophy("vault");
+  if(!diedThisWall)trophy("cleanpass");
+  if(fudThisWall)trophy("fudproof");
+  if(wl.whalesTotal>=2&&wl.whalesBroken>=wl.whalesTotal)trophy("whales");
+  if(led.blk+blocksTotal>=21)trophy("b21");
+  if(rigs===1)trophy("lastcoin");
+  /* the warmup shapes are too small to count as a fast clear */
+  if(wl.cols===COLS&&now-wallStartAt<30000)trophy("fast30");
+  score+=SUBSIDY;
+  checkCoiner(); /* the subsidy can tip the 21 BTC cap */
+  sBlock();
+  if(!reduce)for(var k=0;k<50;k++)parts.push({
+    x:Math.random()*W,y:Math.random()*H*0.5,
+    vx:(Math.random()-.5)*220,vy:-(80+Math.random()*220),
+    r:2+Math.random()*3,color:TIERS[(Math.random()*TIERS.length)|0].bg,life:1.2});
+  say("BLOCK "+h+" FOUND: wall cleared. The "+fmtBtc(SUBSIDY)+" subsidy is scored, exactly what a real miner collects today, plus "+fmt(feesBlk)+" sats of fees.","bk-good",3000);
+  paintHud();
+}
+
+/* ---------------- drops ---------------- */
+/* drops arrive gradually: the first walls deal only the simple boons, the
+   trickier ones and the FUD wait until the player has their feet */
+function dropUnlocked(k){
+  if(level<=2)return k==="WIDE"||k==="SLOW"||k==="+COIN";
+  if(level<=4)return k!=="RBF"&&k!=="SPIKE"&&k!=="FUD";
+  return true;
+}
+function pickDrop(){
+  var pool=DROPS.filter(function(dd){return dropUnlocked(dd.k);});
+  var tot=0,i;
+  for(i=0;i<pool.length;i++)tot+=pool[i].w;
+  var x=Math.random()*tot;
+  for(i=0;i<pool.length;i++){x-=pool[i].w;if(x<=0)return pool[i];}
+  return pool[0];
+}
+function spawnDrop(r,c,always){
+  if(!always&&Math.random()>=0.06)return;
+  drops.push({x:c*brickW()+brickW()/2,y:topOff()+r*brickH()+brickH()/2,spec:pickDrop()});
+}
+var DROP_BLURBS={BATCH:"THE HASH SPLITS",WIDE:"PADDLE GROWS",SLOW:"TRAFFIC CALMS",
+  HOLD:"CATCH AND AIM",RBF:"PIERCES THE WALL",SPIKE:"FEES ×1.5","+COIN":"SPARE BITCOIN",FUD:"RIG SHRINKS"};
+function applyDrop(spec,now){
+  led.dr++;
+  if(led.dr>=50)trophy("drops50");
+  /* every catch says its name where the player is looking */
+  flashes.push({text:spec.k+" · "+(DROP_BLURBS[spec.k]||""),color:spec.good?"#FFD9A0":"#E0503C",t0:now});
+  if(spec.k==="FUD"){
+    fudThisWall=true;
+    shrinkUntil=now+9000;
+    sBad();
+    say("FUD caught. The rig shrinks while the doubt lasts. Should have dodged that one.","bk-bad",1800);
+    return;
+  }
+  sCatch();
+  if(spec.k==="BATCH"){
+    var live0=balls.filter(function(b){return !b.stuck;});
+    var src=live0[0]||balls[0];
+    if(src){
+      var added=0;
+      for(var i=0;i<2&&balls.length<MAX_BALLS;i++){
+        var ang=(i===0?-0.45:0.45);
+        var ndx=src.dx*Math.cos(ang)-src.dy*Math.sin(ang),
+            ndy=src.dx*Math.sin(ang)+src.dy*Math.cos(ang);
+        if(src.stuck){ndx=Math.sin(ang);ndy=-Math.cos(ang);}
+        balls.push({x:src.x,y:src.y,dx:ndx,dy:ndy,stuck:false,stickDx:0,stickAt:0});
+        added++;
+      }
+      if(added){
+        sSplit();
+        if(balls.length>=5)trophy("multi5");
+        say("BATCH: one hash becomes "+(added+1)+". The wall disagrees with this development.","bk-good",1500);
+      }else{
+        say("BATCH caught, but five hashes is all the rack can run.","bk-good",1200);
+      }
+    }
+  }else if(spec.k==="WIDE"){
+    widenUntil=now+12000;
+    say("Rig upgrade: wider paddle while it lasts.","bk-good",1200);
+  }else if(spec.k==="SLOW"){
+    slowUntil=now+9000;
+    say("Traffic calms: the ball eases off for a while.","bk-good",1200);
+  }else if(spec.k==="HOLD"){
+    holdUntil=now+10000;
+    say("Cold storage: the ball will stick to the rig. Aim your shot.","bk-good",1500);
+  }else if(spec.k==="RBF"){
+    pierceUntil=now+7000;
+    say("RBF: the ball shoves straight through the queue for a while.","bk-good",1500);
+  }else if(spec.k==="SPIKE"){
+    spikeUntil=now+9000;
+    say("FEE SPIKE: every brick is worth half again more, briefly. Break fast.","bk-good",1800);
+  }else if(spec.k==="+COIN"){
+    if(rigs<5){rigs++;if(rigs===5)trophy("rack5");paintHud();say("A spare bitcoin joins the rack. Bitcoins: "+rigs+".","bk-good",1500);}
+    else say("A spare bitcoin arrives, but the rack is full.","bk-good",1200);
+  }
+}
+
+/* ---------------- geometry ---------------- */
+var cell=36,W=0,H=0;
+function topOff(){return cell*0.9;}
+function brickH(){return cell*(wl&&wl.bhf?wl.bhf:0.5);}
+function brickW(){return wl&&wl.cols?W/wl.cols:cell;}
+function sizeBoard(){
+  var avail=rig.clientWidth-40-16;
+  var old=cell;
+  /* the playfield fills its frame to the pixel: cell is fractional on
+     purpose, physics and drawing are float-safe */
+  cell=Math.max(22,avail/COLS);
+  var maxH=(window.innerHeight-240)/12;
+  if(maxH>=18)cell=Math.min(cell,maxH);
+  W=avail;H=cell*12;
+  var dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+"px";cv.style.height=H+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(old>0&&old!==cell){
+    var k=cell/old;
+    paddleX*=k;paddleTarget*=k;
+    balls.forEach(function(b){b.x*=k;b.y*=k;b.stickDx*=k;});
+    drops.forEach(function(d){d.x*=k;d.y*=k;});
+  }
+  paddleX=Math.max(0,Math.min(W,paddleX));
+  paddleTarget=Math.max(0,Math.min(W,paddleTarget));
+  draw(performance.now());
+}
+
+/* ---------------- physics ---------------- */
+function ballR(){return cell*0.21;}
+function loseBall(i){
+  balls.splice(i,1);
+  if(balls.length===0){
+    state="dead";stateUntil=performance.now()+(reduce?400:1000);
+    if(cv.parentNode&&cv.parentNode.classList)cv.parentNode.classList.add("bk-deadframe");
+    diedThisWall=true;
+    hitRamp=0; /* the mercy rule: a fresh serve never resumes at the speed that killed you */
+    rigs--;
+    sLost();
+    clearEffects();
+    drops=[];
+    paintHud();
+    if(rigs>0)say("A bitcoin slipped past the rig. Bitcoins left: "+rigs+".","bk-bad",2000);
+    else say("The last bitcoin slipped away.","bk-bad",2000);
+  }
+}
+function stepBalls(dt,now){
+  var r=ballR(),spd=speedNow(now),pw=paddleW(now),py=paddleY();
+  for(var i=balls.length-1;i>=0;i--){
+    var b=balls[i];
+    if(b.stuck){
+      b.x=paddleX+b.stickDx;b.y=py-r-1;
+      /* held balls relaunch themselves before the stall gets boring */
+      if(now-b.stickAt>2500&&state==="run")launch();
+      continue;
+    }
+    var total=spd*dt,stepMax=Math.max(2,r),n=Math.ceil(total/stepMax),step=total/n;
+    for(var s=0;s<n;s++){
+      b.x+=b.dx*step;b.y+=b.dy*step;
+      /* side + top walls */
+      if(b.x<r){b.x=r;b.dx=Math.abs(b.dx);sWallB();}
+      else if(b.x>W-r){b.x=W-r;b.dx=-Math.abs(b.dx);sWallB();}
+      if(b.y<r){b.y=r;b.dy=Math.abs(b.dy);sWallB();}
+      /* paddle */
+      if(b.dy>0&&b.y+r>=py&&b.y+r<=py+cell*0.6&&Math.abs(b.x-paddleX)<=pw/2+r){
+        if(holdUntil>now){
+          b.stuck=true;b.stickDx=Math.max(-pw/2,Math.min(pw/2,b.x-paddleX));b.stickAt=now;
+          b.flight=0;flight=0;sPaddle();
+          break; /* the caught ball is done integrating this frame */
+        }
+        var rel=Math.max(-1,Math.min(1,(b.x-paddleX)/(pw/2)));
+        var ang=rel*1.05; /* up to ~60 degrees off vertical */
+        b.dx=Math.sin(ang);b.dy=-Math.cos(ang);
+        b.y=py-r;
+        hitRamp++;b.flight=0;flight=0;
+        sPaddle();
+        continue;
+      }
+      /* the wall of bricks */
+      if(b.y-r<topOff()+wl.rows*brickH()&&b.y+r>topOff()){
+        var hit=collideBricks(b,r,now);
+        if(hit&&state!=="run")return; /* wallFound mid-flight ends the frame */
+        if(hit&&pierceUntil<=now)continue;
+      }
+      /* the floor */
+      if(b.y>H+r*2){loseBall(i);break;}
+    }
+    /* never let a ball grind fully horizontal */
+    if(!b.stuck&&Math.abs(b.dy)<0.18){
+      b.dy=(b.dy<0?-0.18:0.18);
+      var norm=Math.sqrt(b.dx*b.dx+b.dy*b.dy);
+      b.dx/=norm;b.dy/=norm;
+    }
+    if(state!=="run")return;
+  }
+}
+function collideBricks(b,r,now){
+  var bh=brickH(),bw=brickW(),to=topOff();
+  var c0=Math.max(0,Math.floor((b.x-r)/bw)),c1=Math.min(wl.cols-1,Math.floor((b.x+r)/bw)),
+      r0=Math.max(0,Math.floor((b.y-r-to)/bh)),r1=Math.min(wl.rows-1,Math.floor((b.y+r-to)/bh));
+  for(var rr=r0;rr<=r1;rr++)for(var cc=c0;cc<=c1;cc++){
+    var brick=wl.bricks[rr]&&wl.bricks[rr][cc];
+    if(!brick)continue;
+    var bx=cc*bw+bw/2,by=to+rr*bh+bh/2,
+        hw=bw/2-1,hh=bh/2-1;
+    var dx=b.x-bx,dy=b.y-by;
+    if(Math.abs(dx)>hw+r||Math.abs(dy)>hh+r)continue;
+    if(pierceUntil<=now){
+      /* reflect off the axis with the shallower overlap, and push the ball
+         flush so the next sub-step cannot double-hit the same brick */
+      var penX=hw+r-Math.abs(dx),penY=hh+r-Math.abs(dy);
+      if(penX<penY){
+        b.dx=dx<0?-Math.abs(b.dx):Math.abs(b.dx);
+        b.x=bx+(dx<0?-1:1)*(hw+r+0.5);
+      }else{
+        b.dy=dy<0?-Math.abs(b.dy):Math.abs(b.dy);
+        b.y=by+(dy<0?-1:1)*(hh+r+0.5);
+      }
+    }
+    breakBrick(rr,cc,now,b);
+    return true;
+  }
+  return false;
+}
+function stepDrops(dt,now){
+  var py=paddleY(),pw=paddleW(now);
+  for(var i=drops.length-1;i>=0;i--){
+    var d=drops[i];
+    d.y+=cell*3.2*dt;
+    if(d.y>H+20){drops.splice(i,1);continue;}
+    if(d.y>=py-6&&d.y<=py+cell*0.6&&Math.abs(d.x-paddleX)<=pw/2+cell*0.35){
+      drops.splice(i,1);
+      applyDrop(d.spec,now);
+      paintHud();
+    }
+  }
+}
+
+/* ---------------- main loop ---------------- */
+function loop(t){
+  raf=requestAnimationFrame(loop);
+  var dt=Math.min(50,t-lastT)/1000;lastT=t;
+  var now=t;
+  if(state==="pause"){draw(pausedAt);return;}
+  /* keyboard steering applies in every live state */
+  if(state==="run"||state==="serve"||state==="found"||state==="idle"){
+    var kv=(keysDown.left?-1:0)+(keysDown.right?1:0);
+    if(kv)paddleTarget=Math.max(0,Math.min(W,paddleTarget+kv*cell*11*dt));
+  }
+  if(state==="idle"){
+    /* attract: an endless demo rally behind the overlay, nothing scored */
+    if(!balls.length||balls[0].stuck)balls=[{x:W/2,y:H*0.6,dx:0.5,dy:-0.86,stuck:false,stickDx:0,stickAt:0}];
+    var b0=balls[0],sp=cell*5.5*dt;
+    b0.x+=b0.dx*sp;b0.y+=b0.dy*sp;
+    var r0=ballR();
+    if(b0.x<r0){b0.x=r0;b0.dx=Math.abs(b0.dx);}
+    if(b0.x>W-r0){b0.x=W-r0;b0.dx=-Math.abs(b0.dx);}
+    if(b0.y<topOff()+wl.rows*brickH()+r0){b0.y=topOff()+wl.rows*brickH()+r0;b0.dy=Math.abs(b0.dy);}
+    if(b0.y>paddleY()-r0){b0.y=paddleY()-r0;b0.dy=-Math.abs(b0.dy);}
+    paddleTarget=b0.x;
+    paddleX+=(paddleTarget-paddleX)*Math.min(1,dt*8);
+    draw(t);return;
+  }
+  paddleX+=(paddleTarget-paddleX)*Math.min(1,dt*18);
+  if(state==="dead"){
+    if(now>=stateUntil){
+      if(rigs<=0)gameOver();
+      else serve();
+    }
+    draw(t);return;
+  }
+  if(state==="found"){
+    stepDrops(dt,now); /* a whale broken last still drops something catchable */
+    if(now>=stateUntil)nextWall();
+    draw(t);return;
+  }
+  if(state==="serve"){
+    stepBalls(dt,now);
+    draw(t);return;
+  }
+  if(state!=="run"){draw(t);return;}
+  /* last-brick mercy: when a handful of stragglers dodge the ball for 18
+     seconds, the bench sends in an RBF drop rather than let the hunt drag */
+  if(wl.left>0&&wl.left<=4&&now-lastBreakAt>18000){
+    lastBreakAt=now;
+    drops.push({x:W/2,y:topOff()+wl.rows*brickH()+10,spec:DROPS[4]});
+    say("The stragglers dug in. An RBF drop comes off the bench.",null,1500);
+  }
+  stepBalls(dt,now);
+  if(state==="run")stepDrops(dt,now);
+  draw(t);
+}
+
+/* ---------------- painting ---------------- */
+function rr2(x,y,w,h,rad){
+  if(w<2*rad)rad=w/2;if(h<2*rad)rad=h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+rad,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rad);ctx.arcTo(x+w,y+h,x,y+h,rad);
+  ctx.arcTo(x,y+h,x,y,rad);ctx.arcTo(x,y,x+w,y,rad);
+  ctx.closePath();
+}
+function draw(t){
+  if(!wl)return;
+  var now=t;
+  ctx.fillStyle="#0B0908";ctx.fillRect(0,0,W,H);
+  var bh=brickH(),bw=brickW(),to=topOff();
+  /* bricks */
+  for(var r=0;r<wl.rows;r++)for(var c=0;c<wl.cols;c++){
+    var b=wl.bricks[r][c];
+    if(!b)continue;
+    var x=c*bw+1.5,y=to+r*bh+1.5,w=bw-3,h=bh-3;
+    if(b.whale){
+      ctx.shadowColor="rgba(255,233,184,.7)";ctx.shadowBlur=8;
+      ctx.fillStyle="#FFE9B8";
+      rr2(x,y,w,h,4);ctx.fill();
+      ctx.shadowBlur=0;
+      if(bw>=26){
+        ctx.fillStyle="#3A2600";
+        ctx.font="700 "+Math.floor(bh*0.62)+"px Cascadia Mono,Consolas,monospace";
+        ctx.textAlign="center";ctx.textBaseline="middle";
+        ctx.fillText("₿",x+w/2,y+h/2+0.5);
+        ctx.textAlign="left";ctx.textBaseline="alphabetic";
+      }
+    }else{
+      var ti=TIERS[tierIdx(b.rate)];
+      ctx.fillStyle=ti.bg;
+      rr2(x,y,w,h,3);ctx.fill();
+      if(b.max===2){
+        ctx.strokeStyle="rgba(0,0,0,.4)";ctx.lineWidth=1.6;
+        rr2(x+1.5,y+1.5,w-3,h-3,2);ctx.stroke();
+      }
+    }
+    /* straggler beacon: the last few bricks glow so the hunt has a target */
+    if(wl.left<=4&&(state==="run"||state==="serve")){
+      var bg=reduce?0.5:(0.35+0.3*Math.sin(t/200));
+      ctx.strokeStyle="rgba(255,217,160,"+bg.toFixed(2)+")";
+      ctx.lineWidth=2;
+      rr2(x-1,y-1,w+2,h+2,4);ctx.stroke();
+    }
+    /* damage cracks */
+    if(b.hp<b.max){
+      ctx.strokeStyle="rgba(0,0,0,.55)";ctx.lineWidth=1;
+      ctx.beginPath();
+      ctx.moveTo(x+w*0.25,y+1);ctx.lineTo(x+w*0.45,y+h*0.55);ctx.lineTo(x+w*0.3,y+h-1);
+      if(b.hp<b.max-1){ctx.moveTo(x+w*0.7,y+1);ctx.lineTo(x+w*0.6,y+h*0.5);ctx.lineTo(x+w*0.78,y+h-1);}
+      ctx.stroke();
+    }
+  }
+  /* drops */
+  drops.forEach(function(d){
+    var dw=Math.max(32,cell*0.95),dh=Math.max(14,cell*0.38);
+    /* FUD is the one SOLID chip; boons are outlined. A shape cue, so the
+       tell survives color blindness and 7px labels */
+    if(d.spec.good){
+      ctx.fillStyle="#14100B";
+      rr2(d.x-dw/2,d.y-dh/2,dw,dh,4);ctx.fill();
+      ctx.strokeStyle=d.spec.color;ctx.lineWidth=1.5;
+      rr2(d.x-dw/2+0.75,d.y-dh/2+0.75,dw-1.5,dh-1.5,4);ctx.stroke();
+      ctx.fillStyle=d.spec.color;
+    }else{
+      ctx.fillStyle=d.spec.color;
+      rr2(d.x-dw/2,d.y-dh/2,dw,dh,4);ctx.fill();
+      ctx.fillStyle="#14100B";
+    }
+    ctx.font="700 "+Math.max(8,Math.floor(dh*0.58))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(d.spec.k,d.x,d.y+0.5);
+    ctx.textAlign="left";ctx.textBaseline="alphabetic";
+  });
+  /* particles */
+  if(!reduce){
+    for(var i=parts.length-1;i>=0;i--){
+      var p=parts[i];
+      p.life-=0.016;
+      if(p.life<=0){parts.splice(i,1);continue;}
+      p.x+=p.vx*0.016;p.y+=p.vy*0.016;p.vy+=340*0.016;
+      ctx.globalAlpha=Math.max(0,p.life);
+      ctx.fillStyle=p.color;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
+      ctx.globalAlpha=1;
+    }
+  }else parts=[];
+  /* the rig (paddle) */
+  var pw=paddleW(now),py=paddleY();
+  var shrunk=shrinkUntil>now,wide=widenUntil>now;
+  ctx.shadowColor="rgba(247,147,26,.6)";ctx.shadowBlur=8;
+  ctx.fillStyle=shrunk?"#C46A00":"#F7931A";
+  rr2(paddleX-pw/2,py,pw,cell*0.42,cell*0.21);ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle=wide?"#FFE9B8":"#FFD9A0";ctx.lineWidth=1.4;
+  rr2(paddleX-pw/2+0.7,py+0.7,pw-1.4,cell*0.42-1.4,cell*0.21);ctx.stroke();
+  if(holdUntil>now){
+    ctx.fillStyle="#5E81B5";
+    ctx.fillRect(paddleX-pw/2+3,py+cell*0.42-3,pw-6,2);
+  }
+  /* balls */
+  var brd=ballR();
+  balls.forEach(function(b){
+    var pierce=pierceUntil>now;
+    ctx.shadowColor=pierce?"rgba(255,212,59,.9)":"rgba(247,147,26,.8)";ctx.shadowBlur=8;
+    ctx.fillStyle=pierce?"#FFD43B":"#F7931A";
+    ctx.save();
+    var bs=(brd*2)/63.6;
+    ctx.translate(b.x-brd,b.y-brd);
+    ctx.scale(bs,bs);
+    ctx.fill(BCOIN);
+    ctx.shadowBlur=0;
+    ctx.fillStyle="#FFFFFF";
+    ctx.fill(BGLYPH);
+    ctx.restore();
+  });
+  /* dead flood */
+  if(state==="dead"){
+    /* steady under reduced motion, a rising flood otherwise */
+    var frac=reduce?0.7:1-Math.max(0,(stateUntil-now)/1000);
+    ctx.fillStyle="rgba(224,80,60,"+(0.18*frac).toFixed(2)+")";
+    ctx.fillRect(0,0,W,H);
+  }
+  /* serve hint */
+  if(state==="serve"){
+    ctx.fillStyle="#A98F65";
+    ctx.font="700 "+Math.max(9,Math.floor(cell*0.32))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";
+    ctx.fillText("SPACE OR TAP TO SERVE THE HASH",W/2,H-cell*2.1);
+    ctx.textAlign="left";
+  }
+  /* catch flashes: the drop announces itself where the player is looking */
+  for(var fi=flashes.length-1;fi>=0;fi--){
+    var fl=flashes[fi],age=(now-fl.t0)/1400;
+    if(age>=1){flashes.splice(fi,1);continue;}
+    ctx.globalAlpha=reduce?0.9:(1-age);
+    ctx.fillStyle=fl.color;
+    ctx.font="700 "+Math.max(10,Math.floor(cell*0.34))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";
+    ctx.fillText(fl.text,W/2,paddleY()-cell*(reduce?1.2:(1.2+age*1.6)));
+    ctx.textAlign="left";
+    ctx.globalAlpha=1;
+  }
+  /* active effects: labeled chips with a draining time bar, bottom right */
+  var fx=[];
+  if(pierceUntil>now)fx.push(["RBF",pierceUntil,7000,"#FFD43B"]);
+  if(widenUntil>now)fx.push(["WIDE",widenUntil,12000,"#63C36C"]);
+  if(shrinkUntil>now)fx.push(["FUD",shrinkUntil,9000,"#E0503C"]);
+  if(slowUntil>now)fx.push(["SLOW",slowUntil,9000,"#3BB9B0"]);
+  if(spikeUntil>now)fx.push(["SPIKE",spikeUntil,9000,"#FFE9B8"]);
+  if(holdUntil>now)fx.push(["HOLD",holdUntil,10000,"#5E81B5"]);
+  if(fx.length&&state!=="idle"){
+    var chw=Math.max(38,cell*1.15),chh=Math.max(15,cell*0.42),chx=W-6;
+    ctx.font="700 "+Math.max(8,Math.floor(chh*0.55))+"px Cascadia Mono,Consolas,monospace";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    for(var xf=0;xf<fx.length;xf++){
+      var eff=fx[xf];chx-=chw+5;
+      ctx.fillStyle="rgba(20,16,11,.85)";
+      rr2(chx,H-chh-6,chw,chh,4);ctx.fill();
+      ctx.strokeStyle=eff[3];ctx.lineWidth=1.2;
+      rr2(chx+0.6,H-chh-5.4,chw-1.2,chh-1.2,4);ctx.stroke();
+      ctx.fillStyle=eff[3];
+      ctx.fillText(eff[0],chx+chw/2,H-chh/2-5.6);
+      var remain=Math.max(0,Math.min(1,(eff[1]-now)/eff[2]));
+      ctx.fillRect(chx+2,H-8.5,(chw-4)*remain,2);
+    }
+    ctx.textAlign="left";ctx.textBaseline="alphabetic";
+  }
+}
+function paintHud(){
+  txt("bk-score",fmtScore(score));
+  txt("bk-rigs",String(Math.max(0,rigs)));
+  txt("bk-block",nextHeight?"#"+fmt(nextHeight):"–");
+  txt("bk-level",String(level));
+  txt("bk-diff","+"+diffPct()+"%");
+  txt("bk-left",wl?String(wl.left):"0");
+}
+function paintLedger(){
+  txt("bk-l-games",fmt(led.g));txt("bk-l-best",fmtScore(led.best));
+  txt("bk-l-blk",fmt(led.blk));txt("bk-l-lv",fmt(led.lv));
+  txt("bk-l-ep",fmt(led.ep));txt("bk-l-dr",fmt(led.dr));
+  txt("bk-l-wh",fmt(led.wh));txt("bk-l-fees",fmt(led.fees));
+}
+function paintOvHeight(){
+  var e=el("bk-ovheight");
+  if(e)e.textContent=nextHeight?"#"+fmt(nextHeight):"#…";
+}
+
+/* ---------------- pause ---------------- */
+function paintPause(){
+  var pb=el("bk-pause");
+  hideIc(el("bk-ic-pause"),paused);hideIc(el("bk-ic-play"),!paused);
+  if(pb)pb.setAttribute("aria-pressed",paused?"true":"false");
+}
+function shiftClocks(delta){
+  stateUntil+=delta;lastBreakAt+=delta;
+  if(sayHoldUntil)sayHoldUntil+=delta;
+  if(widenUntil)widenUntil+=delta;
+  if(shrinkUntil)shrinkUntil+=delta;
+  if(slowUntil)slowUntil+=delta;
+  if(pierceUntil)pierceUntil+=delta;
+  if(holdUntil)holdUntil+=delta;
+  if(spikeUntil)spikeUntil+=delta;
+  balls.forEach(function(b){if(b.stuck)b.stickAt+=delta;});
+  flashes.forEach(function(fl){fl.t0+=delta;});
+}
+function setPause(on){
+  if(on&&state!=="run"&&state!=="serve")return;
+  if(paused===on)return;
+  paused=on;paintPause();
+  if(on){
+    pausedAt=performance.now();pausedFrom=state;state="pause";
+    stopMusic();
+    say("Paused. The real backlog is not.",null,600);
+  }else{
+    shiftClocks(performance.now()-pausedAt);
+    state=pausedFrom;lastT=performance.now();
+    startMusic();
+    say("Back to the wall.",null,600);
+  }
+}
+el("bk-pause").addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  if(state==="run"||state==="serve")setPause(true);
+  else if(state==="pause")setPause(false);
+  else say("Nothing running to pause yet.",null,700);
+});
+document.addEventListener("visibilitychange",function(){
+  if(!document.hidden)return;
+  keysDown={}; /* keys can release unseen while the tab is hidden */
+  stopMusic(); /* a hidden tab falls silent NOW: rAF freezes, deferred paths cannot */
+  if(state==="run"||state==="serve")setPause(true);
+  /* dead and found need no deferral: both resolve into the serve state,
+     which holds still until the player is back anyway */
+});
+
+/* ---------------- input ---------------- */
+ovBtn.addEventListener("click",function(){ac();startRun();});
+var bwrap=cv.parentNode;
+bwrap.addEventListener("pointermove",function(e){
+  if(!e.isPrimary)return;
+  if(state==="idle"||state==="over")return;
+  var rect=cv.getBoundingClientRect();
+  paddleTarget=Math.max(0,Math.min(W,(e.clientX-rect.left)*(W/Math.max(1,rect.width))));
+});
+cv.addEventListener("pointerdown",function(e){
+  if(state==="pause"){setPause(false);return;} /* a click on the board resumes */
+  if(state==="idle"||state==="over")return;
+  if(!e.isPrimary){
+    /* a second finger can serve or release without stealing the steering */
+    if(state==="serve"){ac();launch();}
+    else if(state==="run")launch();
+    return;
+  }
+  var rect=cv.getBoundingClientRect();
+  paddleTarget=Math.max(0,Math.min(W,(e.clientX-rect.left)*(W/Math.max(1,rect.width))));
+  if(state==="serve"){ac();launch();}
+  else if(state==="run")launch(); /* releases held balls */
+});
+document.addEventListener("keydown",function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  var k=e.key;
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","a","A","d","D","p","P","m","M"," ","Enter"].indexOf(k)<0)return;
+  var tg=e.target;
+  if(tg&&tg.closest){
+    if(tg.closest("input,select,textarea,a"))return;
+    /* a focused button keeps its native Space/Enter activation */
+    if(tg.closest("button")&&(k===" "||k==="Enter"))return;
+  }
+  var r=stage.getBoundingClientRect();
+  if(r.bottom<0||r.top>window.innerHeight)return;
+  if(state==="run"||state==="serve"||state==="dead"||state==="found"){
+    if(k==="ArrowLeft"||k==="a"||k==="A"){e.preventDefault();keysDown.left=true;}
+    else if(k==="ArrowRight"||k==="d"||k==="D"){e.preventDefault();keysDown.right=true;}
+    else if(k===" "||k==="ArrowUp"){e.preventDefault();if(state==="serve"){ac();launch();}else if(state==="run")launch();}
+    else if(k==="m"||k==="M"){e.preventDefault();if(!e.repeat)toggleMusic();}
+    else if(k==="p"||k==="P"){e.preventDefault();setPause(true);}
+    else if(k==="ArrowDown"||k==="Enter"){e.preventDefault();}
+  }else if(k==="m"||k==="M"){e.preventDefault();if(!e.repeat)toggleMusic();}
+  else if(state==="pause"&&(k==="p"||k==="P"||k===" ")){e.preventDefault();setPause(false);}
+  else if((k===" "||k==="Enter")&&!overlay.hidden){e.preventDefault();ac();startRun();}
+});
+document.addEventListener("keyup",function(e){
+  var k=e.key;
+  if(k==="ArrowLeft"||k==="a"||k==="A")keysDown.left=false;
+  else if(k==="ArrowRight"||k==="d"||k==="D")keysDown.right=false;
+});
+window.addEventListener("blur",function(){keysDown={};});
+
+/* two-step reset, sibling idiom */
+var resetArmed=false,resetTimer=null;
+el("bk-reset").addEventListener("click",function(){
+  var b=el("bk-reset");
+  if(!resetArmed){
+    resetArmed=true;b.classList.add("bk-armed");b.textContent="Click again to wipe";
+    resetTimer=setTimeout(function(){resetArmed=false;b.classList.remove("bk-armed");b.textContent="Reset everything";},4000);
+    return;
+  }
+  clearTimeout(resetTimer);resetArmed=false;
+  b.classList.remove("bk-armed");b.textContent="Reset everything";
+  led={g:0,best:0,blk:0,lv:0,ep:1,dr:0,wh:0,fees:0,tr:[]};
+  saveLed();paintLedger();paintShelf();
+  say("Wiped. The backlog holds no grudges either.",null,600);
+});
+
+/* ---------------- fullscreen (shared idiom) ---------------- */
+var fsBtn=el("bk-fs");
+function fsActive(){return document.fullscreenElement===stage||stage.classList.contains("bk-fake");}
+function setInertOutside(on){
+  var node=stage;
+  while(node&&node!==document.body){
+    var p=node.parentElement;
+    if(!p)break;
+    for(var i=0;i<p.children.length;i++){
+      var sib=p.children[i];
+      if(sib===node)continue;
+      if(on)sib.setAttribute("inert","");else sib.removeAttribute("inert");
+    }
+    node=p;
+  }
+}
+function paintFs(){
+  var on=fsActive();
+  hideIc(el("bk-fs-open"),on);hideIc(el("bk-fs-close"),!on);
+  fsBtn.setAttribute("aria-pressed",on?"true":"false");
+  sizeBoard();
+}
+function exitFake(){
+  stage.classList.remove("bk-fake");document.documentElement.classList.remove("bk-lock");
+  setInertOutside(false);paintFs();
+}
+function fsToggle(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(stage.classList.contains("bk-fake")){exitFake();return;}
+  if(stage.requestFullscreen){
+    stage.requestFullscreen().then(paintFs).catch(function(){
+      stage.classList.add("bk-fake");document.documentElement.classList.add("bk-lock");
+      setInertOutside(true);paintFs();
+    });
+  }else{
+    stage.classList.add("bk-fake");document.documentElement.classList.add("bk-lock");
+    setInertOutside(true);paintFs();
+  }
+}
+fsBtn.addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  fsToggle();
+});
+document.addEventListener("fullscreenchange",paintFs);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&stage.classList.contains("bk-fake"))exitFake();
+});
+window.addEventListener("resize",sizeBoard);
+
+/* ---------------- boot ---------------- */
+dealWall();
+sizeBoard();
+paddleX=W/2;paddleTarget=W/2;
+paintHud();paintLedger();paintShelf();paintChip();paintOvHeight();
+fetchFeed();
+fetchHeight();
+/* the help line and the feed chip share one slot, trading places every
+   ten seconds with a soft crossfade */
+(function(){
+  var slides=[el("bk-helpsteer"),el("bk-datachip")],cur2=0;
+  if(slides[0]&&slides[1])setInterval(function(){
+    cur2=1-cur2;
+    slides[cur2].classList.remove("bk-hout");
+    slides[1-cur2].classList.add("bk-hout");
+  },10000);
+})();
+lastT=performance.now();
+if(!raf)raf=requestAnimationFrame(loop); /* the attract rally runs behind the overlay */
+if(led.g>0)say("Welcome back. Best run: "+fmtScore(led.best)+". The wall rebuilt itself overnight, as walls do.");
+
+/* test hook: inert unless the drive suite predefined the global before load;
+   lets the headless harness reach the closure to drive deep scenarios */
+if(typeof window.__BKB_TEST_HOOK__==="function")window.__BKB_TEST_HOOK__({
+  WALLS:WALLS,
+  led:function(){return led;},
+  refs:function(){return {balls:balls,drops:drops,wl:wl};},
+  g:{
+    state:function(v){if(v!==undefined)state=v;return state;},
+    score:function(v){if(v!==undefined)score=v;return score;},
+    rigs:function(v){if(v!==undefined)rigs=v;return rigs;},
+    level:function(v){if(v!==undefined)level=v;return level;},
+    blocksTotal:function(v){if(v!==undefined)blocksTotal=v;return blocksTotal;},
+    feesRun:function(){return feesRun;},
+    feesBlk:function(){return feesBlk;},
+    flight:function(v){if(v!==undefined)flight=v;return flight;},
+    hitRamp:function(v){if(v!==undefined)hitRamp=v;return hitRamp;},
+    widenUntil:function(){return widenUntil;},
+    shrinkUntil:function(){return shrinkUntil;},
+    pierceUntil:function(){return pierceUntil;},
+    spikeUntil:function(){return spikeUntil;},
+    holdUntil:function(){return holdUntil;},
+    slowUntil:function(){return slowUntil;},
+    paddleX:function(v){if(v!==undefined){paddleX=v;paddleTarget=v;}return paddleX;},
+    nextHeight:function(v){if(v!==undefined)nextHeight=v;return nextHeight;}
+  },
+  fns:{startRun:startRun,startWall:startWall,nextWall:nextWall,serve:serve,launch:launch,
+       breakBrick:breakBrick,wallFound:wallFound,applyDrop:applyDrop,spawnDrop:spawnDrop,
+       clearEffects:clearEffects,epoch:epoch,diffPct:diffPct,speedNow:speedNow,paddleW:paddleW,
+       fmtBtc:fmtBtc,fmtScore:fmtScore,readLed:readLed,checkCoiner:checkCoiner,setPause:setPause,
+       loseBall:loseBall,dealWall:dealWall}
+});
+
+/* iOS long-press hardening: user-select:none alone is not honored
+   reliably on Safari, so selection is refused at the event layer and any
+   range that sneaks through is swept on touchend */
+(function(){
+  var st=document.querySelector(".bk-stage");
+  if(!st)return;
+    /* the decisive layer: cancel the NATIVE touch before Safari's selection
+     recognizer runs. Scoped to the canvas and overlay prose only, so
+     buttons keep their taps and the page keeps its scroll. */
+  st.addEventListener("touchstart",function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    if(t.closest("button,a,input,select,textarea"))return;
+    if(t.closest("canvas")||t.closest(".bk-overlay"))e.preventDefault();
+  },{passive:false});
+  ["selectstart","contextmenu"].forEach(function(ev){
+    st.addEventListener(ev,function(e){e.preventDefault();});
+  });
+  document.addEventListener("touchend",function(){
+    try{
+      var sel=window.getSelection&&window.getSelection();
+      if(!sel||!sel.rangeCount||!sel.anchorNode)return;
+      var n=sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentNode;
+      if(n&&st.contains(n))sel.removeAllRanges();
+    }catch(e){}
+  },{passive:true});
+})();
+})();
+</script>
+</Base>

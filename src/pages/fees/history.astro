@@ -34,23 +34,26 @@ const fhLine = 'M' + FH_VALS.map((v, i) => fx(i).toFixed(1) + ',' + fy(v).toFixe
 const fhArea = fhLine + 'L' + fx(FH_N - 1).toFixed(1) + ',' + (FH - FPB) + 'L' + fx(0).toFixed(1) + ',' + (FH - FPB) + 'Z';
 const fhGrid = [0.25, 0.5, 0.75].map((q) => (FPT + q * (FH - FPT - FPB)).toFixed(1));
 const fhTicks = [2010, 2014, 2018, 2022, 2026].map((y) => ({ x: fx((y - FH_START) * 4).toFixed(1), t: String(y) }));
+const FH_USD = { 2017: 34, 2021: 26, 2023: 31 }; // rough median $ at each spike's peak day (public fee datasets; 2017/2021 match the prose)
 const fhEras = [2017, 2021, 2023].map((yy) => {
   const a = (yy - FH_START) * 4;
   let b = a;
   for (let k = a; k < Math.min(a + 4, FH_N); k++) if (FH_VALS[k] > FH_VALS[b]) b = k;
-  return { x: fx(b).toFixed(1), y: Math.max(fy(FH_VALS[b]) - 9, 15).toFixed(1), t: String(yy) };
+  return { x: fx(b).toFixed(1), y: Math.max(fy(FH_VALS[b]) - 9, 15).toFixed(1), t: '~$' + FH_USD[yy] };
 });
 const fhEnd = { x: fx(FH_N - 1).toFixed(1), y: fy(FH_VALS[FH_N - 1]).toFixed(1) };
 let fhPk = 0;
 for (let i = 1; i < FH_N; i++) if (FH_VALS[i] > FH_VALS[fhPk]) fhPk = i;
-const fhAria = 'Median bitcoin transaction feerate in satoshis per virtual byte, quarterly from ' + FH_START + ' through ' + FH_END_YEAR + ': free or near free into early 2012, elevated through 2012 and 2013 when flat default fees set the price, peaking near ' + FH_VALS[fhPk] + ' sat per virtual byte in ' + (FH_START + Math.floor(fhPk / 4)) + ', spiking again in 2021 and 2023, and near ' + FH_VALS[FH_N - 1] + ' in the latest quarter.';
+const fhAria = 'Median bitcoin transaction feerate in satoshis per virtual byte, quarterly from ' + FH_START + ' through ' + FH_END_YEAR + ': free or near free into early 2012, elevated through 2012 and 2013 when flat default fees set the price, peaking near ' + FH_VALS[fhPk] + ' sat per virtual byte in ' + (FH_START + Math.floor(fhPk / 4)) + ', spiking again in 2021 and 2023, and near ' + FH_VALS[FH_N - 1] + ' in the latest quarter. At the spike peaks the median payment cost roughly 34 dollars in late 2017, 26 in April 2021, and 31 in December 2023.';
 import { FX, SYM } from '../../lib/fx.js';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Fee History: What Sending Bitcoin Has Cost - OpenBitcoin" description="The history of bitcoin transaction fees: the 2017 backlog, the 2021 spike, the 2023 inscriptions wave, and why the fee auction spikes and reverts.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Fee history</div>
     <h1>What sending bitcoin has cost</h1>
+    <HeroEmblem name="histclock" />
     <p class="doc-lede">For most of bitcoin's history a payment has cost pennies to send. Three times the fee market has spiked into real money, and each spike has unwound. Here is the record since 2009, and the mechanics behind it.</p>
   </div>
   <div class="doc-grid">
@@ -278,7 +281,8 @@ import { FX, SYM } from '../../lib/fx.js';
       t.setAttribute("x",fx(b).toFixed(1));
       t.setAttribute("y",Math.max(fy(vals[b])-9,15).toFixed(1));
       t.setAttribute("text-anchor","middle");
-      t.textContent=String(y);
+      var USD={2017:34,2021:26,2023:31};
+      t.textContent=USD[y]?"~$"+USD[y]:String(y);
       eg.appendChild(t);
     });
     while(tg.firstChild)tg.removeChild(tg.firstChild);
@@ -294,7 +298,7 @@ import { FX, SYM } from '../../lib/fx.js';
       tg.appendChild(tx);
     }
     range.textContent=y0+" to "+y1+", linear scale from zero";
-    svg.setAttribute("aria-label","Median bitcoin transaction feerate in satoshis per virtual byte, quarterly from "+y0+" through "+y1+": free or near free into early 2012, elevated through 2012 and 2013 when flat default fees set the price, peaking near "+hi+" sat per virtual byte in "+years[pk]+", spiking again in 2021 and 2023, and near "+vals[n-1]+" in the latest quarter.");
+    svg.setAttribute("aria-label","Median bitcoin transaction feerate in satoshis per virtual byte, quarterly from "+y0+" through "+y1+": free or near free into early 2012, elevated through 2012 and 2013 when flat default fees set the price, peaking near "+hi+" sat per virtual byte in "+years[pk]+", spiking again in 2021 and 2023, and near "+vals[n-1]+" in the latest quarter. At the spike peaks the median payment cost roughly 34 dollars in late 2017, 26 in April 2021, and 31 in December 2023.");
   }
   /* OB_DATA_API is set by Base.astro after this script parses, so wait for
      DOMContentLoaded */

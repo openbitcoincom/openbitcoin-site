@@ -1,40 +1,68 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
+import { E } from '../../lib/emblems.js';
+
+const MINI_VB = {
+  '/convert': '16.0 8.0 68.0 68.0',
+  '/sats': '10.5 1.5 81.0 81.0',
+  '/usd-to-sats': '2.0 -7.5 95.0 95.0',
+  '/sats-per-dollar': '15.0 2.0 84.0 84.0',
+  '/tools/price-on-date': '8.0 0.0 88.0 88.0',
+  '/price/calendar': '10.0 2.0 80.0 80.0',
+  '/dca': '8.0 1.0 82.0 82.0',
+  '/whatif': '13.0 -2.3 79.9 79.9',
+  '/fees': '13.0 3.5 75.0 75.0',
+  '/fees/calculator': '10.0 2.0 80.0 80.0',
+  '/fees/timing': '14.0 6.0 72.0 72.0',
+  '/fees/history': '14.9 7.8 70.2 70.2',
+  '/fees/consolidate': '6.0 0.0 84.0 84.0',
+  '/tools/decode': '12.0 6.0 76.0 76.0',
+  '/tx/stuck': '13.0 4.5 69.0 69.0',
+  '/tools/qr': '6.0 6.0 88.0 88.0',
+  '/tools/lightning': '13.0 2.0 74.0 74.0',
+  '/tools/validate': '4.0 1.0 93.0 93.0',
+  '/tools/verify-message': '12.0 1.0 80.0 80.0',
+  '/tools/bip39': '10.0 2.0 80.0 80.0',
+  '/tools/seed-recovery': '10.0 2.0 86.0 86.0',
+  '/tools/2fa': '9.0 2.0 82.0 82.0',
+  '/verify': '10.5 3.0 79.0 79.0',
+  '/tools/hash': '16.8 10.8 66.4 66.4',
+};
 
 const groups = [
-  { name: 'Money and price', tools: [
-    { href: '/convert', t: 'BTC to fiat converter', d: 'Bitcoin to any currency and back, live rate.' },
-    { href: '/sats', t: 'Sats calculator', d: 'Fiat amounts into satoshis and back.' },
-    { href: '/usd-to-sats', t: 'USD to sats', d: 'What a dollar buys, updated live.' },
-    { href: '/sats-per-dollar', t: 'Sats per dollar', d: 'The inverse price, tracked over time.' },
-    { href: '/tools/price-on-date', t: 'Price on a date', d: 'The cost-basis lookup for any day.' },
-    { href: '/price/calendar', t: 'Price calendar', d: 'Every day since 2010, browsable by month.' },
-    { href: '/dca', t: 'DCA backtester', d: 'What steady buying did historically.' },
-    { href: '/whatif', t: 'What-if calculator', d: 'Any past purchase, valued today.' },
+  { name: 'Money and price', k: 'price', tools: [
+    { href: '/convert', ico: 'convert', t: 'BTC to fiat converter', d: 'Bitcoin to any currency and back, live rate.' },
+    { href: '/sats', ico: 'satgrid', t: 'Sats calculator', d: 'Fiat amounts into satoshis and back.' },
+    { href: '/usd-to-sats', ico: 'notesats', t: 'USD to sats', d: 'What a dollar buys, updated live.' },
+    { href: '/sats-per-dollar', ico: 'dollarsats', t: 'Sats per dollar', d: 'The inverse price, tracked over time.' },
+    { href: '/tools/price-on-date', ico: 'calmag', t: 'Price on a date', d: 'The cost-basis lookup for any day.' },
+    { href: '/price/calendar', ico: 'calendar', t: 'Price calendar', d: 'Every day since 2010, browsable by month.' },
+    { href: '/dca', ico: 'dca', t: 'DCA backtester', d: 'What steady buying did historically.' },
+    { href: '/whatif', ico: 'bubble', t: 'What-if calculator', d: 'Any past purchase, valued today.' },
   ]},
-  { name: 'Fees and timing', tools: [
-    { href: '/fees', t: 'Fee estimator', d: 'What to pay right now, by urgency.' },
-    { href: '/fees/calculator', t: 'Fee calculator', d: 'Transaction size and cost by input type.' },
-    { href: '/fees/timing', t: 'When fees are cheap', d: 'The weekly rhythm, hour by hour.' },
-    { href: '/fees/history', t: 'Fee history', d: 'What sending cost across the eras.' },
-    { href: '/fees/consolidate', t: 'UTXO consolidation', d: 'When merging small coins saves money.' },
+  { name: 'Fees and timing', k: 'fees', tools: [
+    { href: '/fees', ico: 'coins2', t: 'Fee estimator', d: 'What to pay right now, by urgency.' },
+    { href: '/fees/calculator', ico: 'calculator', t: 'Fee calculator', d: 'Transaction size and cost by input type.' },
+    { href: '/fees/timing', ico: 'clock', t: 'When fees are cheap', d: 'The weekly rhythm, hour by hour.' },
+    { href: '/fees/history', ico: 'histclock', t: 'Fee history', d: 'What sending cost across the eras.' },
+    { href: '/fees/consolidate', ico: 'consolidate', t: 'UTXO consolidation', d: 'When merging small coins saves money.' },
   ]},
-  { name: 'Transactions', tools: [
-    { href: '/tools/decode', t: 'Transaction decoder', d: 'Raw hex into inputs, outputs, and fees.' },
-    { href: '/tools/broadcast', t: 'Broadcast', d: 'Relay a signed transaction to the network.' },
-    { href: '/tx/stuck', t: 'Stuck transaction help', d: 'RBF, CPFP, and what actually works.' },
-    { href: '/tools/qr', t: 'Payment QR generator', d: 'A scannable request for any address.' },
-    { href: '/tools/lightning', t: 'Lightning invoice decoder', d: 'What a BOLT11 invoice really says.' },
+  { name: 'Transactions', k: 'tx', tools: [
+    { href: '/tools/decode', ico: 'magbraces', t: 'Transaction decoder', d: 'Raw hex into inputs, outputs, and fees.' },
+    { href: '/tx/stuck', ico: 'stuck', t: 'Stuck transaction help', d: 'RBF, CPFP, and what actually works.' },
+    { href: '/tools/qr', ico: 'qr', t: 'QR code generator', d: 'A scannable request for any address.' },
+    { href: '/tools/lightning', ico: 'boltreceipt', t: 'Lightning invoice decoder', d: 'What a BOLT11 invoice really says.' },
   ]},
-  { name: 'Keys and verification', tools: [
-    { href: '/tools/validate', t: 'Address validator', d: 'Checksum-check any bitcoin address.' },
-    { href: '/tools/verify-message', t: 'Verify a signed message', d: 'Prove an address signed a message.' },
-    { href: '/tools/bip39', t: 'BIP39 word check', d: 'Is that word on the seed wordlist?' },
-    { href: '/tools/seed-recovery', t: 'Seed recovery toolkit', d: 'Offline help for a mis-copied phrase.' },
-    { href: '/tools/2fa', t: 'Offline authenticator', d: 'A 2FA backup that runs with wifi off.' },
-    { href: '/verify', t: 'Verify a download', d: 'Check our offline tools by checksum.' },
-    { href: '/tools/hash', t: 'Hash playground', d: 'SHA-256, HASH160, base58, bech32.' },
+  { name: 'Keys and verification', k: 'keys', tools: [
+    { href: '/tools/validate', ico: 'cardcheck', t: 'Address validator', d: 'Checksum-check any bitcoin address.' },
+    { href: '/tools/verify-message', ico: 'signature', t: 'Verify a signed message', d: 'Prove an address signed a message.' },
+    { href: '/tools/bip39', ico: 'wordlist', t: 'BIP39 word check', d: 'Is that word on the seed wordlist?' },
+    { href: '/tools/seed-recovery', ico: 'sheetmag', t: 'Seed recovery toolkit', d: 'Offline help for a mis-copied phrase.' },
+    { href: '/tools/2fa', ico: 'shielddots', t: 'Offline authenticator', d: 'A 2FA backup that runs with wifi off.' },
+    { href: '/verify', ico: 'badge', t: 'Verify a download', d: 'Check our offline tools by checksum.' },
+    { href: '/tools/hash', ico: 'fingerprint', t: 'Hash playground', d: 'SHA-256, HASH160, base58, bech32.' },
   ]},
 ] as const;
 ---
@@ -43,18 +71,23 @@ const groups = [
   <div class="doc-head">
     <div class="doc-kicker">Tools</div>
     <h1>Bitcoin tools</h1>
+    <HeroEmblem name="toolbox" />
     <p class="doc-lede">Twenty-five utilities, all running in your browser against our own data. Nothing you type here leaves the page, and the key-shaped tools run offline by design.</p>
   </div>
   <div class="doc-grid">
   <div>
     {groups.map((g) => (
-      <div class="tl-card tl-mt">
+      <div class={"tl-card tl-mt tl-sec-" + g.k}>
         <div class="tl-tlab">{g.name}</div>
         <div class="tl-grid">
           {g.tools.map((tool) => (
             <a class="tl-tool" href={tool.href}>
-              <b>{tool.t}</b>
-              <span>{tool.d}</span>
+              
+              <span class="tl-ico"><svg viewBox={MINI_VB[tool.href] || E[tool.ico][0]} aria-hidden="true"><g fill="none" stroke="#F7931A" stroke-linecap="round" stroke-linejoin="round" set:html={E[tool.ico][1]} /></svg></span>
+              <span class="tl-txt">
+                <b>{tool.t}</b>
+                <span>{tool.d}</span>
+              </span>
             </a>
           ))}
         </div>
@@ -91,9 +124,29 @@ const groups = [
   .tl-card:first-child{margin-top:0}
   .tl-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
   .tl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
-  .tl-tool{display:block;background:var(--field);border:1px solid var(--line-2);border-radius:10px;
+  .tl-tool{display:flex;align-items:flex-start;gap:12px;background:var(--field);border:1px solid var(--line-2);border-radius:10px;
     padding:12px 14px;text-decoration:none;min-width:0}
   .tl-tool:hover{border-color:rgba(255,166,60,.45)}
+  
+  .tl-tool .tl-ico{flex:none;display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+    margin:0;background:rgba(247,147,26,.07);border:1px solid rgba(255,166,60,.22);border-radius:10px}
+  
+  .tl-ico svg{width:28px;height:28px;display:block}
+  
+  .tl-sec-fees .tl-ico{filter:hue-rotate(118deg) saturate(.75)}
+  .tl-sec-tx .tl-ico{filter:hue-rotate(-48deg) saturate(.8)}
+  .tl-sec-keys .tl-ico{filter:hue-rotate(14deg) saturate(1.1) brightness(1.05)}
+  
+  .tl-sec-price{--sec:#F7931A;--sec-soft:rgba(247,147,26,.4)}
+  .tl-sec-fees{--sec:#2EBD85;--sec-soft:rgba(46,189,133,.4)}
+  .tl-sec-tx{--sec:#DB8296;--sec-soft:rgba(219,130,150,.4)}
+  .tl-sec-keys{--sec:#E5B94E;--sec-soft:rgba(229,185,78,.4)}
+  .tl-card[class*="tl-sec-"]{border-top:2px solid var(--sec-soft)}
+  .tl-card[class*="tl-sec-"] .tl-tlab{color:var(--sec)}
+  .tl-card[class*="tl-sec-"] .tl-tool:hover{border-color:var(--sec-soft)}
+  .tl-card[class*="tl-sec-"] .tl-tool:hover b{color:var(--sec)}
+  .tl-tool:hover .tl-ico{background:rgba(247,147,26,.13);border-color:rgba(255,166,60,.5)}
+  .tl-tool .tl-txt{display:block;min-width:0;margin:0}
   .tl-tool b{display:block;font:700 13.5px var(--sans);color:var(--ink)}
   .tl-tool span{display:block;font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin-top:4px}
   .tl-note{border-color:rgba(255,166,60,.32)}

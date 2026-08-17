@@ -2,12 +2,14 @@
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
 import { FX, SYM } from '../lib/fx.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Fees Right Now: Current sat/vB Rates - OpenBitcoin" description="Current bitcoin fee rates for four confirmation speeds, in sat/vB, with what a typical payment costs at each rate in sats and fiat. Estimates from our own node.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Fees</div>
     <h1>Bitcoin fees right now</h1>
+    <HeroEmblem name="coins2" />
     <p class="doc-lede">Fee rates in sat/vB for four confirmation targets, with what a typical payment costs at each. Estimates come from our own node, not a third-party API.</p>
   </div>
   <div class="doc-grid">

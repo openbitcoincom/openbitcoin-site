@@ -19,7 +19,7 @@
     {
       "id": "historical-candles",
       "heading": "Historical candles",
-      "html": "<p>Candle history going forward is our own logged series, built from the blend described above. Backfill comes from exchange-published history: Bitstamp daily candles reaching back to 2011, and Kraken's published OHLC archives.</p><p>Data from before 2011 reflects thin, early markets on small venues and is labeled accordingly.</p>"
+      "html": "<p>Candle history going forward is our own logged series, built from the blend described above. Backfill comes from exchange-published history: Bitstamp daily candles reaching back to 2011, and Kraken's published OHLC archives.</p><p>Data from before 2011 reflects thin, early markets on small venues and is labeled accordingly. The earliest stretch, July 17 to August 17, 2010, is daily OHLC computed from the preserved Mt. Gox trade log (the bitcoincharts archive, held by the Internet Archive); August 2010 through August 2011 carries Blockchain.info daily closes only.</p>"
     },
     {
       "id": "fees",

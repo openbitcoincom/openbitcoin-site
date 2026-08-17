@@ -18,21 +18,25 @@ const balFmt = (b) => b >= 1000 ? b.toLocaleString('en-US', { maximumFractionDig
 
 let rl = null;
 try {
-  const r = await fetch(`${BACKEND}/rich-list?limit=1000`, { signal: AbortSignal.timeout(6000) });
+  const r = await fetch(`${BACKEND}/rich-list?limit=100`, { signal: AbortSignal.timeout(6000) });
   if (r.ok) rl = await r.json();
 } catch { /* client fetch takes over */ }
 
 let ssrRows = '', ssrCount = '', ssrSnap = '';
 if (rl && Array.isArray(rl.entries) && rl.entries.length) {
   const supply = supplyAt(rl.snapshotHeight || 960000);
+  const tipH = rl.snapshotHeight || 962000;
+  const lastAct = (h) => h == null ? '&#8212;'
+    : new Date(Date.now() - (tipH - h) * 600000).toISOString().slice(0, 10);
   ssrRows = rl.entries.slice(0, 100).map((w) => {
     const bal = w.balanceSat / 1e8, share = bal / supply * 100;
     return `<tr><td class="rl-rank">${w.rank}</td><td class="rl-addr"><a href="/${esc(w.address)}">${esc(w.address)}</a></td>` +
       `<td class="rl-bal">${balFmt(bal)} BTC</td><td class="rl-share">${share >= 0.01 ? share.toFixed(3) : share.toFixed(4)}%</td>` +
+      `<td class="rl-ins">${w.txCount == null ? '&#8212;' : fmtI(w.txCount)}</td>` +
       `<td class="rl-ins">${w.utxoCount == null ? '&#8212;' : fmtI(w.utxoCount)}</td>` +
-      `<td class="rl-seen">${w.firstSeen || '&#8212;'}</td><td class="rl-last">&#8212;</td></tr>`;
+      `<td class="rl-seen">${w.firstSeen || '&#8212;'}</td><td class="rl-last">${lastAct(w.lastSpendHeight)}</td></tr>`;
   }).join('');
-  ssrCount = `Ranks 1 to 100 of ${fmtI(rl.entries.length)}`;
+  ssrCount = `Ranks 1 to ${Math.min(100, rl.entries.length)} of ${fmtI(rl.total || rl.entries.length)}`;
   if (rl.snapshotHeight) {
     ssrSnap = rl.source === 'live'
       ? `Ranked live from our own address index at block ${fmtI(rl.snapshotHeight)}, refreshed as blocks arrive.`
@@ -40,18 +44,20 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
   }
 }
 import { EPOCH } from '../lib/subsidy.js';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin Rich List: The Largest Addresses, Explained - OpenBitcoin" description="The bitcoin rich list ranks addresses, not people. Why exchange cold wallets top it, how one owner spans many addresses, and what a big move means.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Rich list</div>
     <h1>The bitcoin rich list</h1>
-    <p class="doc-lede">Sort every address on the ledger by balance and you get the rich list. It looks like a roster of the biggest fortunes, but it ranks rows in a public database that tell less than people assume.</p>
+    <HeroEmblem name="crown" />
+    <p class="doc-lede">Sort every address by balance and you get the rich list: the biggest balances on the public ledger and what they really mean.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="rl-card">
-      <div class="rl-tlab">The largest addresses, ranks 1 to 10,000</div>
+      <div class="rl-tlab">The largest addresses</div>
       <p class="rl-gate" id="rl-snap">{ssrSnap || "Ranked from our own node's UTXO set, refreshed daily."}</p>
       <div class="rl-ctl">
         <span class="rl-count" id="rl-count">{ssrCount || 'Loading the ranks…'}</span>
@@ -61,18 +67,24 @@ import { EPOCH } from '../lib/subsidy.js';
       </div>
       <table class="rl-table" aria-label="The largest bitcoin addresses by balance" id="rl-table">
         <thead>
-          <tr><th>Rank</th><th>Address</th><th>Balance</th><th>Share of supply</th><th>Unspent outputs</th><th>First seen</th><th>Last activity</th></tr>
+          <tr><th>Rank</th><th>Address</th><th>Balance</th><th>Share</th><th>Txs</th><th>Unspent outputs</th><th>First seen</th><th>Last activity</th></tr>
         </thead>
         <tbody id="rl-body" set:html={ssrRows}></tbody>
       </table>
       <nav class="rl-pager" id="rl-pager" aria-label="Rich list pages"></nav>
-      {rl && rl.entries && rl.entries.length > 0 && (
-        <script type="application/json" id="rl-data" set:html={JSON.stringify({
-          entries: rl.entries, snapshotHeight: rl.snapshotHeight,
-          snapshotTime: rl.snapshotTime, source: rl.source || null,
-        })} />
-      )}
-      <p class="rl-fine">The top 1,000 addresses, 100 per page. Share of supply divides each balance by the coins issued so far, shown in the denominator card below. Address formats differ because they were created in different eras: 1 for the original format, 3 for script addresses, bc1q for segwit.</p>
+      <p class="rl-fine">One hundred addresses per page. Share of supply divides each balance by the coins issued so far, shown in the denominator card below. Last activity is the last time the address sent coins out, dated from that block at ten minutes per block; an address that has only ever received shows a dash. First seen is the date of the oldest coin the address still holds. Address formats differ because they were created in different eras: 1 for the original format, 3 for script addresses, bc1q for segwit.</p>
+    </div>
+
+    
+    <div class="rl-card rl-mt" id="rl-distcard" hidden>
+      <div class="rl-tlab">Bitcoin distribution</div>
+      <div class="rl-scrollx">
+      <table class="rl-table rl-dist" aria-label="Distribution of bitcoin across address balance ranges">
+        <thead><tr><th>Balance, BTC</th><th>Addresses</th><th>% Addresses</th><th>BTC</th><th>USD</th><th>% BTC</th></tr></thead>
+        <tbody id="rl-dist-body"></tbody>
+      </table>
+      </div>
+      <p class="rl-fine" id="rl-dist-fine"></p>
     </div>
 
     <div class="rl-card rl-mt">
@@ -155,6 +167,9 @@ import { EPOCH } from '../lib/subsidy.js';
   .rl-jump input:focus{outline:none;border-color:var(--acc)}
   .rl-ins{font:600 12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap;padding-right:14px}
   .rl-last{font:500 13px var(--sans);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-scrollx{overflow-x:auto}
+  .rl-dist td:first-child{font-family:var(--mono);font-weight:600;color:var(--ink)}
+  .rl-dist td{white-space:nowrap}
   .rl-pager{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
   .rl-pgbtn{font:700 11.5px var(--mono);background:var(--field);border:1px solid var(--line-2);border-radius:8px;
     color:var(--ink-2);padding:7px 11px;cursor:pointer;min-width:36px;text-align:center}
@@ -187,7 +202,7 @@ import { EPOCH } from '../lib/subsidy.js';
   .rl-rl li::marker{color:var(--acc)}
   @media(max-width:700px){
     .rl-card{padding:18px 18px 20px}
-    /* Rich list table becomes stacked cards: no horizontal scroll, nothing hidden */
+    
     .rl-table thead{display:none}
     .rl-table,.rl-table tbody,.rl-table tr,.rl-table td{display:block;width:auto}
     .rl-table tr{padding:12px 0 11px;border-bottom:1px dotted var(--line-2)}
@@ -218,8 +233,9 @@ import { EPOCH } from '../lib/subsidy.js';
     while(b>EPOCH){s+=EPOCH*sub;sub/=2;b-=EPOCH;}
     return s+b*sub;
   }
-  /* real ranks from our own UTXO snapshot, served by /v1/rich-list */
-  var ROWS=[],SNAP={height:null,time:null};
+  /* real ranks from our own index, fetched 100 per page via the offset
+     endpoint; PAGES caches each fetched page for the session */
+  var PAGES={},SNAP={height:null,time:null};TOTAL=10000;
   function api(){return (typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";}
   function balFmt(b){
     return b>=1000?b.toLocaleString("en-US",{maximumFractionDigits:0})
@@ -228,47 +244,99 @@ import { EPOCH } from '../lib/subsidy.js';
   function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
   function renderTable(){
     var body=document.getElementById("rl-body");
-    if(!ROWS.length){
-      body.innerHTML='<tr><td colspan="7" class="rl-wait">Loading the ranks from our own index&#8230;</td></tr>';
+    var slice=PAGES[page];
+    if(!slice||!slice.length){
+      body.innerHTML='<tr><td colspan="8" class="rl-wait">Loading the ranks from our own index&#8230;</td></tr>';
       document.getElementById("rl-count").textContent="";
       return;
     }
     var s=supplyAt(SNAP.height||P.height),start=(page-1)*PAGE,out=[];
-    var slice=ROWS.slice(start,start+PAGE);
     slice.forEach(function(w){
       var bal=w.balanceSat/1e8,share=bal/s*100;
+      var la=w.lastSpendHeight==null?"&#8212;":new Date(Date.now()-((SNAP.height||P.height)-w.lastSpendHeight)*600000).toISOString().slice(0,10);
       out.push('<tr><td class="rl-rank">'+w.rank+'</td><td class="rl-addr"><a href="/'+esc(w.address)+'">'+esc(w.address)+
         '</a></td><td class="rl-bal">'+balFmt(bal)+' BTC</td><td class="rl-share">'+
         (share>=0.01?share.toFixed(3):share.toFixed(4))+'%</td><td class="rl-ins">'+
-        fmt(w.utxoCount)+'</td><td class="rl-seen">'+(w.firstSeen||"&#8212;")+
-        '</td><td class="rl-last">&#8212;</td></tr>');
+        (w.txCount==null?'&#8212;':fmt(w.txCount))+'</td><td class="rl-ins">'+
+        (w.utxoCount==null?'&#8212;':fmt(w.utxoCount))+'</td><td class="rl-seen">'+(w.firstSeen||"&#8212;")+
+        '</td><td class="rl-last">'+la+'</td></tr>');
     });
     body.innerHTML=out.join("");
     document.getElementById("rl-count").textContent="Ranks "+fmt(start+1)+" to "+fmt(start+slice.length)+" of "+fmt(TOTAL);
     renderPager();
   }
-  function takeRanks(j){
+  function takeRanks(j,pno){
     if(!j||!Array.isArray(j.entries)||!j.entries.length)return;
-    ROWS=j.entries;TOTAL=ROWS.length;
+    PAGES[pno]=j.entries;
+    if(j.total)TOTAL=j.total;
     SNAP.height=j.snapshotHeight||null;SNAP.time=j.snapshotTime||null;
     var note=document.getElementById("rl-snap");
     if(note&&SNAP.height)note.textContent=(j.source==="live")
       ?"Ranked live from our own address index at block "+fmt(SNAP.height)+", refreshed as blocks arrive."
       :"Ranked from our own node's UTXO set at block "+fmt(SNAP.height)+", refreshed daily.";
-    renderTable();
+    if(pno===page)renderTable();else renderPager();
+  }
+  function fetchPage(pno){
+    try{
+      fetch(api()+"/rich-list?limit=100&offset="+((pno-1)*PAGE)+"&t="+Math.floor(Date.now()/600000))
+        .then(function(r){return r.ok?r.json():null})
+        .then(function(j){takeRanks(j,pno);}).catch(function(){});
+    }catch(e){}
   }
   function loadRanks(){
-    /* the server rendered page one and embedded the full thousand: seed the
-       pager from that block so it works with no fetch at all */
+    /* the server rendered page one; fetch it again quietly so a long-lived
+       tab tracks the ten-minute index, and later pages arrive on demand */
+    fetchPage(1);
+  }
+  /* the distribution card: nightly buckets over every funded address; the
+     (total) columns read at-or-above each row's floor, bitinfocharts-style */
+  var DIST=null;
+  function btcAmt(sat){
+    var v=sat/1e8;
+    return v>=1000?v.toLocaleString("en-US",{maximumFractionDigits:0})
+          :v>=1?v.toLocaleString("en-US",{maximumFractionDigits:2})
+          :parseFloat(v.toFixed(8)).toString();
+  }
+  function pct(x){return x<0.005?"0%":x.toFixed(2)+"%";}
+  function updateDistUsd(){
+    if(!DIST)return;
+    var cells=document.querySelectorAll("#rl-dist-body td[data-sat]");
+    for(var i=0;i<cells.length;i++)
+      cells[i].textContent="$"+fmt(Math.round(parseFloat(cells[i].getAttribute("data-sat"))/1e8*P.price));
+  }
+  function renderDist(d){
+    if(!d||!d.buckets||!d.buckets.length)return;
+    DIST=d;
+    var totA=0,i;
+    d.buckets.forEach(function(b){totA+=b.addresses;});
+    /* coin percentages divide by the supply issued at the snapshot height
+       (owner 2026-08-14), not the bucketed sum: outputs with no standard
+       address form hold the remainder and the rows honestly sum short */
+    var supply=supplyAt(d.snapshotHeight||P.height);
+    /* the parentheses are running totals down the table: this row plus every
+       row above it (owner 2026-08-14: at-or-above read as nonsense) */
+    var runA=0,runB=0,out=[];
+    for(i=0;i<d.buckets.length;i++){
+      var b=d.buckets[i];
+      var next=b.floorSat===0?1000:b.floorSat*10;
+      var label=b.floorSat===0?"(0 - "+btcAmt(1000)+")":"["+btcAmt(b.floorSat)+" - "+btcAmt(next)+")";
+      runA+=b.addresses;runB+=b.balanceSat;
+      out.push('<tr><td>'+label+'</td><td>'+fmt(b.addresses)+'</td><td>'+
+        pct(b.addresses/totA*100)+'</td><td>'+btcAmt(b.balanceSat)+' BTC</td>'+
+        '<td data-sat="'+b.balanceSat+'"></td><td>'+
+        pct(b.balanceSat/1e8/supply*100)+'</td></tr>');
+    }
+    document.getElementById("rl-dist-body").innerHTML=out.join("");
+    document.getElementById("rl-dist-fine").textContent=
+      "Every funded address bucketed by balance, computed nightly from our own node's UTXO set at block "+
+      fmt(d.snapshotHeight)+". USD follows the live price. Coin percentages are of all bitcoin issued by that block; the remainder sits in outputs with no standard address form.";
+    document.getElementById("rl-distcard").hidden=false;
+    updateDistUsd();
+  }
+  function loadDist(){
     try{
-      var seed=document.getElementById("rl-data");
-      if(seed)takeRanks(JSON.parse(seed.textContent));
-    }catch(e){}
-    /* still refetch: a long-lived tab tracks the ten-minute index */
-    try{
-      fetch(api()+"/rich-list?limit=1000")
-        .then(function(r){return r.ok?r.json():null})
-        .then(takeRanks).catch(function(){});
+      fetch(api()+"/rich-distribution?d="+new Date().toISOString().slice(0,10)).then(function(r){return r.ok?r.json():null})
+        .then(renderDist).catch(function(){});
     }catch(e){}
   }
   function renderPager(){
@@ -284,7 +352,9 @@ import { EPOCH } from '../lib/subsidy.js';
     document.getElementById("rl-pager").innerHTML=h.join("");
   }
   function goto(p){
-    page=Math.min(Math.max(1,Math.ceil(TOTAL/PAGE)),Math.max(1,p));renderTable();
+    page=Math.min(Math.max(1,Math.ceil(TOTAL/PAGE)),Math.max(1,p));
+    if(!PAGES[page])fetchPage(page);
+    renderTable();
     document.getElementById("rl-table").scrollIntoView({block:"start"});
   }
   document.getElementById("rl-pager").addEventListener("click",function(e){
@@ -302,6 +372,7 @@ import { EPOCH } from '../lib/subsidy.js';
   function paint(){
     var s=supplyAt(P.height),h=fmt(P.height),b=fmt(s);
     txt("rl-px","$"+fmt(P.price));
+    updateDistUsd();
     txt("rl-ht",h);
     txt("rl-ht2",h);
     txt("rl-pht",h);
@@ -319,7 +390,7 @@ import { EPOCH } from '../lib/subsidy.js';
   paint();renderTable();
   /* the ranks come from the API; Base sets OB_DATA_API at the end of body */
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadRanks);
-  else loadRanks();
+  else loadRanks();loadDist();
 })();
 </script>
 </Base>

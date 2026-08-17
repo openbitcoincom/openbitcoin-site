@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
 ---
 <Base title="UTXO Consolidation: Merge Small Coins While Fees Are Cheap - OpenBitcoin" description="How UTXO consolidation works: why wallets fill with small coins, and how merging during a cheap fee week saves money later, with a sats and USD estimator.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Fees</div>
     <h1>UTXO consolidation</h1>
+    <HeroEmblem name="consolidate" />
     <p class="doc-lede">Every payment you receive becomes a separate coin in your wallet, and each one costs about 68 vB to spend. Merging them into one while fees are cheap pays those vbytes at the quiet-week rate, not the busy-week one.</p>
   </div>
   <div class="doc-grid">

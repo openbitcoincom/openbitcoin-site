@@ -1,0 +1,1421 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/doc.css';
+import HeroEmblem from '../../components/HeroEmblem.astro';
+---
+<Base title="The Impossible Slot Machine: Match a Bitcoin Address - OpenBitcoin" description="A slot machine where every spin draws real bitcoin private keys in your browser and compares your fresh address against the machine's own fresh draw. A full match wins, at odds of exactly 1 in 2^160. No balance checks, nobody's coins involved, nothing leaves your browser. Free, no wagering, no prizes." analytics={false}>
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker"><a href="/games">Games</a></div>
+    <h1>The Impossible Slot Machine</h1>
+    <HeroEmblem name="slotmachine" />
+    <p class="doc-lede">Real keys, drawn in your browser: one for the machine, one per reel. Match its address in full and you win, at 1 in 2<sup>160</sup> odds. Nobody ever has.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+
+    <!-- ============ THE MACHINE ============ -->
+    <div class="is-stage" id="is-stage">
+      <div class="is-cab" id="is-cab">
+        <div class="is-marquee">
+          <div class="is-title">IMPOSSIBLE SLOT MACHINE</div>
+          <div class="is-sub">every key real &middot; only for fun</div>
+        </div>
+
+        <div class="is-window">
+          <div class="is-rows" id="is-rows"></div>
+          <canvas class="is-fx" id="is-fx"></canvas>
+        </div>
+
+        <div class="is-console">
+          <div class="is-led">
+            <i>Addresses drawn</i>
+            <b id="is-c-keys">0</b>
+          </div>
+          <div class="is-led">
+            <i>Best match &middot; chars</i>
+            <b id="is-c-won">0</b>
+          </div>
+          <div class="is-led">
+            <i>Trophies</i>
+            <b id="is-c-tr">0</b>
+          </div>
+        </div>
+        <div class="is-console is-console2">
+          <div class="is-draws" role="group" aria-label="Address family">
+            <span class="is-dlab">Family</span>
+            <button class="is-dbtn is-fbtn" id="is-f-p2pkh" type="button" aria-pressed="false" title="Legacy addresses">1&hellip;</button>
+            <button class="is-dbtn is-fbtn" id="is-f-p2sh" type="button" aria-pressed="true" title="Script addresses">3&hellip;</button>
+            <button class="is-dbtn is-fbtn" id="is-f-p2wpkh" type="button" aria-pressed="false" title="SegWit addresses">bc1q</button>
+            <button class="is-dbtn is-fbtn" id="is-f-p2tr" type="button" aria-pressed="false" title="Taproot addresses">bc1p</button>
+          </div>
+          <div class="is-draws" role="group" aria-label="Reels per spin">
+            <span class="is-dlab">Reels</span>
+            <button class="is-dbtn" id="is-d1" type="button" aria-pressed="true">&times;1</button>
+            <button class="is-dbtn" id="is-d2" type="button" aria-pressed="false">&times;2</button>
+            <button class="is-dbtn" id="is-d3" type="button" aria-pressed="false">&times;3</button>
+          </div>
+          <div class="is-spinrow">
+          <button class="is-spin" id="is-spin" type="button">Spin</button>
+          <div class="is-small">
+            <button class="is-mini" id="is-auto" type="button" aria-label="Auto spin" aria-pressed="false" title="Auto spin">
+              <svg viewBox="0 0 24 24" id="is-auto-ic"><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M17.6 2.5v4h-4M6.4 21.5v-4h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="is-autoN" id="is-autoN" hidden></span>
+            </button>
+            <button class="is-mini" id="is-fast" type="button" aria-label="Fast mode" aria-pressed="false" title="Fast mode">
+              <svg viewBox="0 0 24 24"><path d="M13 2 5 14h5l-1 8 8-12h-5z" fill="currentColor"/></svg>
+            </button>
+            <button class="is-mini" id="is-mute" type="button" aria-label="Mute" aria-pressed="false" title="Mute">
+              <svg viewBox="0 0 24 24" id="is-mute-on"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9c1.2.8 1.2 5.2 0 6M18.5 7c2.2 2 2.2 8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" id="is-mute-off" hidden><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l6 5M22 9.5l-6 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <button class="is-mini" id="is-fs" type="button" aria-label="Fullscreen" aria-pressed="false" title="Fullscreen">
+              <svg viewBox="0 0 24 24" id="is-fs-open"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" id="is-fs-close" hidden><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          </div>
+        </div>
+        <div class="is-autopick" id="is-autopick" hidden>
+          <span class="is-dlab">Auto spins</span>
+          <button class="is-dbtn" id="is-a50" type="button">50</button>
+          <button class="is-dbtn" id="is-a100" type="button">100</button>
+          <button class="is-dbtn" id="is-a500" type="button">500</button>
+          <button class="is-dbtn" id="is-a1000" type="button">1000</button>
+          <button class="is-dbtn" id="is-ainf" type="button" aria-label="Unlimited">&infin;</button>
+          <button class="is-dbtn is-acancel" id="is-a0" type="button" aria-label="Cancel">&times;</button>
+        </div>
+        <div class="is-msg" id="is-msg">The machine deals itself a fresh address; your reels try to match it. Every key is real, nobody's coins are involved, and nothing leaves this page. Good luck anyway.</div>
+        <div class="is-plate">
+          <span class="is-plab">ODDS OF A FULL MATCH: 1 IN</span>
+          <span class="is-pnum">1,461,501,637,330,902,918,203,684,832,716,283,019,655,932,542,976</span>
+        </div>
+        <div class="is-lever" id="is-lever" aria-hidden="true">
+          <div class="is-track"></div>
+          <div class="is-arm" id="is-arm"><div class="is-knob"></div></div>
+        </div>
+      </div>
+      
+      <div class="is-sr" id="is-live" aria-live="polite"></div>
+    </div>
+    <noscript><p class="is-nojs">The machine needs JavaScript to draw keys. The odds and arithmetic below are true either way.</p></noscript>
+
+    <!-- the match panel, revealed ONLY on a full match (which will never
+         occur; the honest contingency, not a promise) -->
+    <div class="is-card is-mircard" id="is-mir" hidden>
+      <h2 class="is-tlab is-mlab">You appear to have won</h2>
+      <p class="is-p">A reel matched the machine's address in full: odds of 1 in 2<sup>160</sup>, an event with no precedent anywhere. Before celebrating, know the honest ranking of explanations: your browser's random number generator failing catastrophically is overwhelmingly more likely than the universe delivering a genuine collision, and either way we would love to hear about it via the <a href="/contact">contact page</a>. No coins are involved and nobody is at risk: both keys are yours, the address is empty, and the only thing you have won is the best story on earth. Screenshot it; the <a href="/terms">terms</a> apply.</p>
+    </div>
+
+    <!-- ============ THE LEDGER ============ -->
+    <div class="is-card">
+      <h2 class="is-tlab">The ledger: this browser, all time</h2>
+      <div class="is-stats">
+        <div class="is-stat"><b id="is-l-spins">0</b><i>spins</i></div>
+        <div class="is-stat"><b id="is-l-keys">0</b><i>addresses drawn</i></div>
+        <div class="is-stat"><b id="is-l-bm">0</b><i>best match, characters</i></div>
+        <div class="is-stat"><b id="is-l-tr">0</b><i>trophies</i></div>
+      </div>
+      <p class="is-ledaddr"><i>The machine's address this spin, the one your reels were chasing:</i>
+      <b id="is-haddr">none yet; spin to deal one</b></p>
+      <p class="is-share" id="is-share">Share of the key space you have explored: none yet.</p>
+      <p class="is-brow"><span>The ledger lives in this browser's storage and never leaves the page. The best-match column is the machine's honest tease: every extra character is 32 times rarer than the last, and there are 38 of them.</span> <button class="is-reset" id="is-reset" type="button">Reset everything</button></p>
+    </div>
+
+    <!-- ============ THE TROPHY CASE ============ -->
+    <div class="is-card">
+      <h2 class="is-tlab">The trophy case</h2>
+      <p class="is-p">Coins never come out of this machine, but pretty addresses do. Every draw is a real address nobody has ever seen and nobody will ever own, and once in a while one arrives wearing a pattern, or brushes unusually close to the machine's. Each trophy is earned once: the table below lights up as you collect them. The machine keeps the plates, keys and all, in this browser; each pattern plate can show you its private key, which is genuinely yours and genuinely worthless. A webpage is still not a wallet.</p>
+      <div class="is-trophies" id="is-trophies"><p class="is-trempty" id="is-trempty">Nothing yet. The common ones turn up about once in 900 draws.</p></div>
+      <div class="is-ptwrap">
+        <table class="is-pt" id="is-ptable">
+          <thead><tr><th>Trophy</th><th>Example</th><th>True odds</th></tr></thead>
+          <tbody>
+            <tr data-kind="openbitcoin"><td>"openbitcoin" in a legacy draw</td><td class="is-mono">&hellip;opEnbitcoin&hellip;</td><td>about 1 in 8 quadrillion</td></tr>
+            <tr data-kind="d10"><td>Match depth 10: ten leading characters shared</td><td class="is-mono">bc1q<u>w508d6qejx</u>&hellip;</td><td>about 1 in 1.1 quadrillion</td></tr>
+            <tr data-kind="d9"><td>Match depth 9</td><td class="is-mono">bc1q<u>w508d6qej</u>&hellip;</td><td>about 1 in 35 trillion</td></tr>
+            <tr data-kind="d8"><td>Match depth 8</td><td class="is-mono">bc1q<u>w508d6qe</u>&hellip;</td><td>about 1 in 1.1 trillion</td></tr>
+            <tr data-kind="d7"><td>Match depth 7</td><td class="is-mono">bc1q<u>w508d6q</u>&hellip;</td><td>about 1 in 34 billion</td></tr>
+            <tr data-kind="bitcoin"><td>"bitcoin" in a legacy draw</td><td class="is-mono">&hellip;bItcoin&hellip;</td><td>about 1 in 5 billion</td></tr>
+            <tr data-kind="satoshi"><td>"satoshi" in a legacy draw</td><td class="is-mono">&hellip;sAtoshi&hellip;</td><td>about 1 in 2.6 billion</td></tr>
+            <tr data-kind="d6"><td>Match depth 6</td><td class="is-mono">bc1q<u>w508d6</u>&hellip;</td><td>about 1 in 1.1 billion</td></tr>
+            <tr data-kind="d5"><td>Match depth 5</td><td class="is-mono">bc1q<u>w508d</u>&hellip;</td><td>about 1 in 34 million</td></tr>
+            <tr data-kind="d4"><td>Match depth 4</td><td class="is-mono">bc1q<u>w508</u>&hellip;</td><td>about 1 in a million</td></tr>
+            <tr data-kind="stutter"><td>The stutter: address starts bc1qqqq</td><td class="is-mono">bc1qqqq&hellip;</td><td>exactly 1 in 32,768</td></tr>
+            <tr data-kind="run5"><td>Five identical characters in a row</td><td class="is-mono">&hellip;kkkkk&hellip;</td><td>about 1 in 31,000</td></tr>
+            <tr data-kind="sats"><td>"sats" anywhere in it</td><td class="is-mono">&hellip;w2sats7&hellip;</td><td>about 1 in 30,000</td></tr>
+            <tr data-kind="run4"><td>Four identical characters in a row</td><td class="is-mono">&hellip;7777&hellip;</td><td>about 1 in 900</td></tr>
+            <tr data-kind="sat"><td>"sat" anywhere in it</td><td class="is-mono">&hellip;9sat0&hellip;</td><td>about 1 in 900</td></tr>
+            <tr data-kind="btc"><td>"btc" in a legacy draw</td><td class="is-mono">&hellip;1BtC&hellip;</td><td>about 1 in 800</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="is-note">Pattern odds are quoted for bc1q draws over the 38 characters after the prefix; other families' alphabets shift them a little. Match-depth odds are per reel against the machine's draw. Bech32 has no b, i, o or 1, so "btc", "bitcoin", "satoshi" and "openbitcoin" only ever turn up wearing a 1 or a 3. Milestone plates arrive at 1,000, 10,000, 100,000 and 1,000,000 addresses drawn.</p>
+    </div>
+
+    <!-- ============ WHAT A SPIN IS ============ -->
+    <div class="is-card">
+      <h2 class="is-tlab">What a spin actually is</h2>
+      <div class="is-pipe">
+        <div class="is-step"><span>01</span><b>The machine's key</b><i>256 random bits from <code class="is-code">crypto.getRandomValues</code>, drawn on this page, derived to a real address in the family you chose.</i></div>
+        <div class="is-step"><span>02</span><b>Your keys</b><i>Each reel draws its own, exactly the same way. Legacy 1, script 3, segwit bc1q or taproot bc1p, all real derivations.</i></div>
+        <div class="is-step"><span>03</span><b>The comparison</b><i>Reel address against machine address. Every shared leading character is a 1-in-32 event; all 38 shared is the win.</i></div>
+      </div>
+      <p class="is-note">One footnote for the purists: the three hash-based families compare 160-bit hashes, so a full match is exactly 1 in 2<sup>160</sup>. Taproot compares 256-bit output keys, which is rarer still, at 1 in 2<sup>256</sup>. Both round to never.</p>
+    </div>
+
+    <!-- ============ THE MATHEMATICS ============ -->
+    <div class="is-card">
+      <h2 class="is-tlab">The mathematics of never</h2>
+      <div class="doc-sec doc-prose">
+        <h3>The space</h3>
+        <p>An address is a 160-bit number, so there are about <strong>1.46 &times; 10<sup>48</sup></strong> of them. Matching the machine's fresh draw is the same arithmetic as guessing any one specific address: the exact event bitcoin's security rests on never happening. For scale, the Earth contains about 1.3 &times; 10<sup>50</sup> atoms; picking one named atom out of the planet at random is only about a hundred times harder than what this machine asks of you.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h3>The hardware fantasy</h3>
+        <p>Bitcoin's entire mining network performs on the order of 10<sup>20</sup> hash computations a second, the largest purpose-built computation on earth. Repurposed to pulling this lever (it cannot be; a draw costs far more than one hash), an even chance of one full match would still take on the order of <strong>10<sup>20</sup> years</strong>: billions of times the age of the universe. Your browser checks a few reels per spin.</p>
+      </div>
+      <div class="doc-sec doc-prose">
+        <h3>Why no-match is the product</h3>
+        <p>Every spin that ends in NO MATCH is bitcoin's security model, demonstrated live. The reason you cannot land on the machine's address is the same reason nobody lands on yours. The real risks live elsewhere, in <a href="/learn/self-custody">backups and custody</a>, in <a href="/learn/scams">scams</a>, and for exposed public keys someday perhaps in <a href="/quantum">quantum computers</a>; never in someone's browser drawing your number.</p>
+      </div>
+    </div>
+
+    <!-- ============ IF YOU BEAT THE ODDS ============ -->
+    <div class="is-card">
+      <h2 class="is-tlab">If you beat the odds</h2>
+      <p class="is-p">Suppose a reel actually matches: 1 in 1,461,501,637,330,902,918,203,684,832,716,283,019,655,932,542,976, which nobody has ever beaten at anything. The machine halts, stops any auto run, and says:</p>
+      <ol class="is-drill">
+        <li><b>Nothing needs protecting.</b> Both keys are yours, the address is empty, and nobody's coins were ever involved.</li>
+        <li><b>Suspect your browser before the universe.</b> A broken random number generator is trillions of times likelier than a genuine collision; either way, tell us via the <a href="/contact">contact page</a>.</li>
+        <li><b>Screenshot it, tell everyone, prove nothing.</b> Buy a real lottery ticket while you are at it: 1 in 300 million is now beneath you. This machine will deny everything.</li>
+      </ol>
+    </div>
+
+    <!-- ============ A TOY, NOT A CASINO ============ -->
+    <div class="is-card is-warncard">
+      <h2 class="is-tlab is-wlab">A toy, not a casino</h2>
+      <p class="is-p">Nothing on this site takes wagers or pays prizes, and nothing here ever will. There is no jackpot and nothing to win except the event itself; the machine checks no balances, touches nobody's coins, and sends nothing anywhere. The arithmetic on the plate is the house edge: 2<sup>160</sup> to 1, in favour of everyone who owns bitcoin. A real slot machine hides a much smaller number and charges admission. The <a href="/terms">terms</a> cover the rest.</p>
+    </div>
+
+    <div class="is-about doc-prose">
+      <p>The Impossible Slot Machine is what a fair game over the whole address space actually looks like: real keys, real derivations, and a comparison that will read NO MATCH for the lifetime of the universe. It sits in the <a href="/games">games section</a>, where play is free forever. The unit its families encode is explained on <a href="/sats">the sats page</a>, and the game about the only strategy that has historically worked is the <a href="/dca">DCA backtester</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">House rules</div>
+      <ul class="is-rl">
+        <li>One to three reels per spin; four families on the dial</li>
+        <li>The machine draws its own fresh address every spin</li>
+        <li>Match it in full and you win; odds 1 in 2<sup>160</sup></li>
+        <li>No balance checks; nothing leaves your browser</li>
+        <li>Trophies and milestones at printed odds; free forever</li>
+      </ul>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/games">All games</a>
+        <a href="/quantum">Quantum and bitcoin</a>
+        <a href="/learn/self-custody">Self-custody basics</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+
+<style is:global>
+  .doc-kicker a{color:inherit;text-decoration:none}
+  .doc-kicker a:hover{text-decoration:underline}
+  
+  
+  .is-stage,.is-stage *{-webkit-user-select:none !important;user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .is-stage ::selection{background:transparent}
+  .is-stage{position:relative}
+  @media(min-width:741px){.is-stage{padding-right:74px}}
+  .is-stage.is-fake{position:fixed;inset:0;z-index:80;background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .is-stage:fullscreen{background:#0A0806;display:flex;justify-content:center;padding:12px;overflow:auto}
+  .is-stage.is-fake .is-cab,.is-stage:fullscreen .is-cab{margin:auto;max-width:640px}
+  html.is-lock{overflow:hidden}
+
+  .is-cab{position:relative;max-width:600px;margin:0 auto;
+    background:linear-gradient(180deg,#241D14,#120E09 70%,#0C0906);
+    border:1px solid #3E3322;border-radius:20px;
+    padding:16px 20px 12px;
+    box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,160,.10),inset 0 -14px 30px rgba(0,0,0,.45)}
+  .is-cab button:focus-visible{outline:3px solid #FFD9A0;outline-offset:2px}
+
+  
+  .is-marquee{text-align:center;padding:0 0 10px;position:relative;z-index:1}
+  .is-marquee::before{content:"";position:absolute;left:8%;right:8%;top:-6px;height:52px;
+    background:radial-gradient(closest-side,rgba(247,147,26,.18),transparent);pointer-events:none}
+  .is-title{font:700 clamp(14px,3.6vw,19px) var(--mono);letter-spacing:.18em;color:#FFD9A0;
+    text-shadow:0 0 16px rgba(247,147,26,.55),0 1px 0 rgba(0,0,0,.6)}
+  .is-sub{font:600 8.5px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:#A98F65;margin-top:5px}
+
+  
+  .is-window{position:relative;background:#060504;border:1px solid #3E3322;border-radius:14px;
+    padding:8px;box-shadow:inset 0 4px 18px rgba(0,0,0,.85)}
+  .is-row{position:relative;isolation:isolate;background:linear-gradient(180deg,#171310,#1E1913 50%,#171310);
+    border-radius:9px;box-shadow:inset 0 0 0 1px #2C241A;padding:8px 12px 9px;margin-top:6px;overflow:hidden}
+  .is-row:first-child{margin-top:0}
+  
+  .is-row::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.035;pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20395%2072%22%3E%3Cg%20transform%3D%22translate(0%2C6)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22m63.033%2C39.744c-4.274%2C17.143-21.637%2C27.576-38.782%2C23.301-17.138-4.274-27.571-21.638-23.295-38.78%2C4.272-17.145%2C21.635-27.579%2C38.775-23.305%2C17.144%2C4.274%2C27.576%2C21.64%2C23.302%2C38.784z%22%2F%3E%3Cpath%20fill%3D%22%230A0F1B%22%20d%3D%22m46.103%2C27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4%2C5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439%2C5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934%2C3.75s2.605%2C0.597%2C2.55%2C0.634c1.422%2C0.355%2C1.679%2C1.296%2C1.636%2C2.042l-1.638%2C6.571c0.098%2C0.025%2C0.225%2C0.061%2C0.365%2C0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296%2C9.205c-0.174%2C0.432-0.615%2C1.08-1.609%2C0.834%2C0.035%2C0.051-2.552-0.637-2.552-0.637l-1.743%2C4.019%2C4.569%2C1.139c0.85%2C0.213%2C1.683%2C0.436%2C2.503%2C0.646l-1.453%2C5.834%2C3.507%2C0.875%2C1.439-5.772c0.958%2C0.26%2C1.888%2C0.5%2C2.798%2C0.726l-1.434%2C5.745%2C3.511%2C0.875%2C1.453-5.823c5.987%2C1.133%2C10.489%2C0.676%2C12.384-4.739%2C1.527-4.36-0.076-6.875-3.226-8.515%2C2.294-0.529%2C4.022-2.038%2C4.483-5.155zm-8.022%2C11.249c-1.085%2C4.36-8.426%2C2.003-10.806%2C1.412l1.928-7.729c2.38%2C0.594%2C10.012%2C1.77%2C8.878%2C6.317zm1.086-11.312c-0.99%2C3.966-7.1%2C1.951-9.082%2C1.457l1.748-7.01c1.982%2C0.494%2C8.365%2C1.416%2C7.334%2C5.553z%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate(-9%2C0)%22%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M93.86%2057.81Q90.79%2057.81%2088.53%2056.88Q86.27%2055.96%2084.79%2054.27Q83.31%2052.59%2082.55%2050.30Q81.80%2048.01%2081.80%2045.23Q81.80%2041.75%2082.93%2038.27Q84.06%2034.79%2086.27%2032Q88.47%2029.22%2091.66%2027.45Q94.85%2025.68%2098.97%2025.68Q101.98%2025.68%20104.28%2026.61Q106.57%2027.54%20108.05%2029.22Q109.52%2030.90%20110.28%2033.19Q111.03%2035.48%20111.03%2038.27Q111.03%2041.75%20109.93%2045.23Q108.83%2048.71%20106.68%2051.49Q104.54%2054.27%20101.32%2056.04Q98.10%2057.81%2093.86%2057.81M98.16%2032.99Q96.24%2032.99%2094.79%2034.09Q93.34%2035.19%2092.36%2036.87Q91.37%2038.56%2090.88%2040.56Q90.38%2042.56%2090.38%2044.36Q90.38%2047.31%2091.31%2048.91Q92.24%2050.50%2094.68%2050.50Q96.59%2050.50%2098.04%2049.40Q99.49%2048.30%20100.48%2046.62Q101.46%2044.94%20101.95%2042.94Q102.45%2040.93%20102.45%2039.14Q102.45%2036.18%20101.52%2034.58Q100.59%2032.99%2098.16%2032.99M127.56%2033.39L123.50%2050.27Q124.49%2050.50%20125.94%2050.50Q128.20%2050.50%20130.06%2049.66Q131.91%2048.82%20133.22%2047.31Q134.52%2045.81%20135.25%2043.69Q135.97%2041.57%20135.97%2039.02Q135.97%2036.53%20134.87%2034.79Q133.77%2033.05%20131.04%2033.05Q129.19%2033.05%20127.56%2033.39M144.56%2038.38Q144.56%2042.62%20143.16%2046.13Q141.77%2049.63%20139.31%2052.19Q136.84%2054.74%20133.39%2056.16Q129.94%2057.58%20125.88%2057.58Q123.91%2057.58%20121.94%2057.23L119.33%2067.73L110.74%2067.73L120.37%2027.59Q122.69%2026.90%20125.68%2026.35Q128.66%2025.80%20132.14%2025.80Q135.39%2025.80%20137.74%2026.78Q140.09%2027.77%20141.60%2029.48Q143.11%2031.19%20143.83%2033.48Q144.56%2035.77%20144.56%2038.38M148.62%2045.05Q148.62%2041.34%20149.92%2037.86Q151.23%2034.38%20153.60%2031.68Q155.98%2028.99%20159.38%2027.33Q162.77%2025.68%20166.89%2025.68Q168.92%2025.68%20170.66%2026.26Q172.40%2026.84%20173.70%2027.94Q175.01%2029.04%20175.73%2030.64Q176.46%2032.23%20176.46%2034.26Q176.46%2037.51%20175.01%2039.77Q173.56%2042.04%20170.97%2043.46Q168.39%2044.88%20164.86%2045.52Q161.32%2046.15%20157.14%2046.15Q157.55%2048.59%20158.91%2049.60Q160.27%2050.62%20163.23%2050.62Q165.09%2050.62%20167%2050.30Q168.92%2049.98%20170.60%2049.34L171.24%2056.13Q169.61%2056.77%20167.09%2057.29Q164.57%2057.81%20161.61%2057.81Q158.01%2057.81%20155.55%2056.80Q153.08%2055.78%20151.55%2054.04Q150.01%2052.30%20149.31%2049.98Q148.62%2047.66%20148.62%2045.05M165.49%2032.52Q162.54%2032.52%20160.30%2034.64Q158.07%2036.76%20157.37%2040.24Q160.97%2040.12%20163.17%2039.63Q165.38%2039.14%20166.60%2038.44Q167.81%2037.74%20168.22%2036.93Q168.63%2036.12%20168.63%2035.31Q168.63%2032.52%20165.49%2032.52M177.62%2057L184.63%2027.88Q185.62%2027.59%20186.81%2027.22Q188%2026.84%20189.48%2026.52Q190.96%2026.20%20192.78%2026Q194.61%2025.80%20196.93%2025.80Q203.77%2025.80%20206.33%2029.74Q208.88%2033.68%20207.20%2040.53L203.25%2057L194.61%2057L198.44%2040.88Q198.79%2039.37%20198.99%2037.95Q199.19%2036.53%20198.96%2035.45Q198.73%2034.38%20197.89%2033.71Q197.05%2033.05%20195.31%2033.05Q193.62%2033.05%20191.88%2033.39L186.26%2057%22%2F%3E%3Cpath%20fill%3D%22%23F7931A%22%20d%3D%22M230.74%2025.85Q233.53%2025.85%20235.56%2026.84Q237.59%2027.83%20238.92%2029.51Q240.26%2031.19%20240.89%2033.45Q241.53%2035.71%20241.53%2038.32Q241.53%2042.33%20240.05%2045.89Q238.57%2049.46%20236.02%2052.10Q233.47%2054.74%20229.99%2056.27Q226.51%2057.81%20222.45%2057.81Q221.93%2057.81%20220.62%2057.78Q219.32%2057.75%20217.64%2057.52Q215.95%2057.29%20214.07%2056.83Q212.18%2056.36%20210.50%2055.55L220.54%2013.38L229.53%2011.99L225.93%2026.96Q227.09%2026.43%20228.25%2026.14Q229.41%2025.85%20230.74%2025.85M223.20%2050.68Q225.23%2050.68%20227.03%2049.69Q228.83%2048.71%20230.14%2047.05Q231.44%2045.40%20232.19%2043.31Q232.95%2041.22%20232.95%2038.96Q232.95%2036.18%20232.02%2034.61Q231.09%2033.05%20228.60%2033.05Q227.79%2033.05%20226.48%2033.34Q225.18%2033.63%20224.13%2034.55L220.30%2050.45Q220.65%2050.50%20220.91%2050.56Q221.17%2050.62%20221.46%2050.65Q221.75%2050.68%20222.16%2050.68Q222.57%2050.68%20223.20%2050.68M259.74%2026.49L252.44%2057L243.85%2057L251.10%2026.49L259.74%2026.49M256.61%2022.78Q254.81%2022.78%20253.36%2021.71Q251.91%2020.63%20251.91%2018.43Q251.91%2017.21%20252.41%2016.14Q252.90%2015.07%20253.71%2014.28Q254.52%2013.50%20255.60%2013.04Q256.67%2012.57%20257.89%2012.57Q259.69%2012.57%20261.14%2013.64Q262.59%2014.72%20262.59%2016.92Q262.59%2018.14%20262.09%2019.21Q261.60%2020.29%20260.79%2021.07Q259.98%2021.85%20258.90%2022.32Q257.83%2022.78%20256.61%2022.78M262.88%2042.91L268.56%2018.89L277.55%2017.50L275.35%2026.49L284.97%2026.49L283.23%2033.57L273.66%2033.57L271.11%2044.24Q270.76%2045.57%20270.68%2046.73Q270.59%2047.89%20270.97%2048.73Q271.34%2049.58%20272.27%2050.04Q273.20%2050.50%20274.82%2050.50Q276.22%2050.50%20277.52%2050.24Q278.83%2049.98%20280.16%2049.52L280.80%2056.13Q279.06%2056.77%20277.03%2057.23Q275%2057.70%20272.21%2057.70Q268.21%2057.70%20266.01%2056.51Q263.80%2055.32%20262.88%2053.26Q261.95%2051.20%20262.06%2048.53Q262.18%2045.86%20262.88%2042.91M285.26%2044.82Q285.26%2040.88%20286.54%2037.40Q287.82%2033.92%20290.19%2031.31Q292.57%2028.70%20295.96%2027.19Q299.36%2025.68%20303.53%2025.68Q306.14%2025.68%20308.20%2026.17Q310.26%2026.67%20311.94%2027.48L308.99%2034.21Q307.83%2033.74%20306.58%2033.36Q305.33%2032.99%20303.53%2032.99Q299.18%2032.99%20296.69%2035.92Q294.20%2038.85%20294.20%2043.89Q294.20%2046.85%20295.47%2048.68Q296.75%2050.50%20300.17%2050.50Q301.85%2050.50%20303.42%2050.16Q304.98%2049.81%20306.20%2049.29L306.84%2056.19Q305.22%2056.83%20303.27%2057.32Q301.33%2057.81%20298.55%2057.81Q294.95%2057.81%20292.46%2056.77Q289.96%2055.72%20288.34%2053.95Q286.71%2052.19%20285.99%2049.81Q285.26%2047.43%20285.26%2044.82M323.72%2057.81Q320.64%2057.81%20318.38%2056.88Q316.12%2055.96%20314.64%2054.27Q313.16%2052.59%20312.41%2050.30Q311.65%2048.01%20311.65%2045.23Q311.65%2041.75%20312.78%2038.27Q313.92%2034.79%20316.12%2032Q318.32%2029.22%20321.51%2027.45Q324.70%2025.68%20328.82%2025.68Q331.84%2025.68%20334.13%2026.61Q336.42%2027.54%20337.90%2029.22Q339.38%2030.90%20340.13%2033.19Q340.89%2035.48%20340.89%2038.27Q340.89%2041.75%20339.78%2045.23Q338.68%2048.71%20336.54%2051.49Q334.39%2054.27%20331.17%2056.04Q327.95%2057.81%20323.72%2057.81M328.01%2032.99Q326.10%2032.99%20324.65%2034.09Q323.20%2035.19%20322.21%2036.87Q321.22%2038.56%20320.73%2040.56Q320.24%2042.56%20320.24%2044.36Q320.24%2047.31%20321.17%2048.91Q322.09%2050.50%20324.53%2050.50Q326.44%2050.50%20327.89%2049.40Q329.34%2048.30%20330.33%2046.62Q331.32%2044.94%20331.81%2042.94Q332.30%2040.93%20332.30%2039.14Q332.30%2036.18%20331.37%2034.58Q330.45%2032.99%20328.01%2032.99M359.10%2026.49L351.79%2057L343.21%2057L350.46%2026.49L359.10%2026.49M355.97%2022.78Q354.17%2022.78%20352.72%2021.71Q351.27%2020.63%20351.27%2018.43Q351.27%2017.21%20351.76%2016.14Q352.25%2015.07%20353.07%2014.28Q353.88%2013.50%20354.95%2013.04Q356.02%2012.57%20357.24%2012.57Q359.04%2012.57%20360.49%2013.64Q361.94%2014.72%20361.94%2016.92Q361.94%2018.14%20361.45%2019.21Q360.95%2020.29%20360.14%2021.07Q359.33%2021.85%20358.26%2022.32Q357.18%2022.78%20355.97%2022.78M359.62%2057L366.64%2027.88Q367.62%2027.59%20368.81%2027.22Q370%2026.84%20371.48%2026.52Q372.96%2026.20%20374.79%2026Q376.61%2025.80%20378.93%2025.80Q385.78%2025.80%20388.33%2029.74Q390.88%2033.68%20389.20%2040.53L385.26%2057L376.61%2057L380.44%2040.88Q380.79%2039.37%20380.99%2037.95Q381.20%2036.53%20380.96%2035.45Q380.73%2034.38%20379.89%2033.71Q379.05%2033.05%20377.31%2033.05Q375.63%2033.05%20373.89%2033.39L368.26%2057%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat center/min(460px,104%)}
+  .is-rowhead{display:flex;align-items:baseline;gap:10px;min-width:0}
+  .is-rn{flex:none;font:700 8.5px var(--mono);letter-spacing:.18em;color:#A98F65}
+  .is-klab{flex:none;font:600 7.5px var(--mono);letter-spacing:.14em;color:#A98F65;text-transform:uppercase}
+  .is-klab2{display:block;margin-top:5px}
+  .is-key{display:block;margin-top:3px;font:600 9px/1.5 var(--mono);letter-spacing:.05em;
+    word-break:break-all;color:#6B5A3E;min-height:14px}
+  .is-key span.is-spinch{color:#C98A2E}
+  .is-key span.is-setch{color:#A98F65}
+  .is-addr{min-width:0;margin-top:3px}
+  .is-addr b{display:block;font:700 13.5px var(--mono);color:#F0E9DE;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:18px}
+  .is-addr b em{font-style:normal;color:#F7931A}
+  .is-addr b u{text-decoration:none;color:#FFD9A0;text-shadow:0 0 9px rgba(255,166,60,.65)}
+  .is-matchrow{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:5px;min-height:20px}
+  .is-mchip{font:700 9px var(--mono);letter-spacing:.12em;color:#97815A;
+    border:1px dashed #4A3B24;border-radius:6px;padding:3px 8px}
+  .is-mchip.is-mwarm{color:#FFB84D;border-color:rgba(247,147,26,.6);border-style:solid}
+  .is-row.is-won{box-shadow:inset 0 0 0 1px rgba(247,147,26,.8),inset 0 0 26px rgba(247,147,26,.25)}
+  .is-stamp{position:absolute;right:10px;top:8px;pointer-events:none;
+    font:700 10px var(--mono);letter-spacing:.2em;color:#A98F65;
+    border:1.5px solid #6B5A3E;border-radius:5px;padding:3px 8px;transform:rotate(-4deg);
+    opacity:0;transition:opacity .18s ease}
+  .is-stamp.is-show{opacity:1;animation:is-stampin .28s cubic-bezier(.2,1.6,.4,1)}
+  @keyframes is-stampin{from{transform:rotate(-4deg) scale(1.7);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+  .is-stamp.is-tr{color:#FFB84D;border-color:rgba(247,147,26,.7)}
+  .is-fx{position:absolute;inset:0;pointer-events:none}
+
+  
+  .is-console{display:flex;align-items:stretch;gap:10px;margin-top:10px}
+  .is-console2{margin-top:8px}
+  .is-led{flex:1;min-width:0;background:#0A0705;border:1px solid #35291A;border-radius:9px;
+    padding:7px 10px 8px;box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .is-led i{display:block;font:700 8px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#A98F65;font-style:normal;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .is-led b{display:block;font:700 clamp(15px,3.6vw,19px) var(--mono);color:#FFD9A0;margin-top:3px;
+    font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    text-shadow:0 0 9px rgba(255,166,60,.35)}
+  .is-draws{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:#0A0705;
+    border:1px solid #35291A;border-radius:9px;padding:5px 10px;box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .is-dlab{font:700 8px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#A98F65}
+  .is-dbtn{min-width:40px;min-height:40px;background:#191410;border:1px solid #35291A;border-radius:7px;
+    font:700 12px var(--mono);color:#B99B6B;cursor:pointer}
+  .is-dbtn:hover{color:#FFD9A0;border-color:#5A452A}
+  .is-dbtn[aria-pressed="true"]{background:rgba(247,147,26,.16);border-color:rgba(247,147,26,.65);color:#FFB84D}
+  .is-dbtn.is-dim,.is-reset.is-dim{opacity:.45;cursor:default}
+  .is-fbtn{min-width:46px;font-size:11px;padding:0 7px}
+  
+  .is-console2{flex-wrap:wrap}
+  .is-console2 .is-draws{flex:1 1 auto;justify-content:center}
+  .is-console2 .is-dbtn{flex:1 1 auto}
+  .is-spinrow{flex:1 1 100%;display:flex;gap:8px;align-items:stretch}
+  .is-spinrow .is-spin{flex:1;min-height:52px}
+  .is-spinrow .is-small{flex:0 0 auto;align-items:stretch}
+  .is-spinrow .is-mini{height:auto;min-height:52px;width:42px}
+  
+  .is-spin{flex:1;min-width:110px;min-height:52px;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,#FFC983 0%,#F7931A 48%,#D97800 100%);
+    color:#241200;border:1px solid rgba(122,58,0,.65);border-radius:11px;cursor:pointer;
+    font:700 16px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    text-shadow:0 1px 0 rgba(255,255,255,.35);
+    box-shadow:0 5px 18px rgba(247,147,26,.3),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -3px 8px rgba(122,58,0,.35)}
+  .is-spin::after{content:"";position:absolute;top:-40%;bottom:-40%;width:34%;left:-45%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-18deg);animation:is-sheen 3.4s ease-in-out infinite;pointer-events:none}
+  @keyframes is-sheen{0%,55%{left:-45%}90%,100%{left:120%}}
+  .is-spin:hover{background:linear-gradient(180deg,#FFD9A0 0%,#FFA733 48%,#E07E06 100%)}
+  .is-spin:active{transform:translateY(1px)}
+  .is-spin.is-busy{opacity:.6;cursor:default}
+  .is-spin.is-busy::after{animation:none}
+  .is-small{display:flex;gap:6px;align-items:center}
+  .is-mini{width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    background:#191410;border:1px solid #35291A;border-radius:8px;color:#B99B6B;cursor:pointer}
+  .is-mini:hover{color:#FFD9A0;border-color:#5A452A}
+  .is-mini[aria-pressed="true"]{border-color:rgba(247,147,26,.55);color:#FFB84D}
+  .is-mini svg{width:17px;height:17px}
+  .is-autoN{font:700 12px var(--mono);color:#FFB84D}
+  .is-autopick{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:10px;width:100%;
+    background:#0A0705;border:1px solid #35291A;border-radius:9px;padding:6px 10px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.7)}
+  .is-autopick[hidden]{display:none}
+  .is-acancel{min-width:34px;color:#8F7A57}
+  .is-msg{min-height:30px;margin-top:8px;text-align:center;
+    font:600 12px/1.5 var(--mono);letter-spacing:.02em;color:#B99B6B}
+  .is-msg.is-good{color:#FFB84D}
+  .is-plate{margin-top:6px;text-align:center;border-top:1px solid #241C12;padding-top:7px}
+  .is-plab{display:block;font:600 8px var(--mono);letter-spacing:.22em;color:#97815A}
+  .is-pnum{display:block;margin-top:4px;font:700 12.5px/1.55 var(--mono);letter-spacing:.02em;color:#FFB84D;
+    overflow-wrap:anywhere;font-variant-numeric:tabular-nums;text-shadow:0 0 10px rgba(255,166,60,.35)}
+
+  
+  .is-lever{position:absolute;right:-58px;top:120px;width:58px;height:190px;display:none}
+  @media(min-width:741px){.is-lever{display:block}}
+  .is-track{position:absolute;left:0;top:64px;width:26px;height:66px;
+    background:linear-gradient(180deg,#0C0906,#1B1510);border:1px solid #3E3322;border-radius:8px;
+    box-shadow:inset 0 3px 8px rgba(0,0,0,.8)}
+  .is-arm{position:absolute;left:6px;top:78px;width:14px;height:104px;transform-origin:7px 8px;
+    cursor:grab;touch-action:none}
+  .is-arm::before{content:"";position:absolute;left:4px;top:6px;width:6px;height:78px;border-radius:3px;
+    background:linear-gradient(90deg,#4A3B24,#8F7A57 45%,#4A3B24)}
+  .is-knob{position:absolute;left:-11px;top:72px;width:36px;height:36px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%,#FFB454,#D97800 55%,#8F4E00);
+    box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 2px 4px rgba(255,255,255,.35)}
+  .is-arm.is-pull{animation:is-pull .62s cubic-bezier(.34,1.4,.5,1)}
+  @keyframes is-pull{0%{transform:rotate(0deg)}30%{transform:rotate(44deg)}100%{transform:rotate(0deg)}}
+  .is-arm:active{cursor:grabbing}
+
+  .is-cab.is-shake{animation:is-shake .5s ease}
+  @keyframes is-shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-2px,-1px)}80%{transform:translate(2px,1px)}}
+
+  
+  .is-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px;margin-top:14px}
+  .is-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .is-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+  .is-stat{background:rgba(124,140,168,.13);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:10px 12px;min-width:0}
+  .is-stat b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .is-stat i{display:block;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:3px}
+  .is-ledaddr{margin:12px 0 0}
+  .is-ledaddr i{display:block;font:500 11.5px/1.5 var(--sans);color:var(--ink-3);font-style:normal}
+  .is-ledaddr b{display:block;margin-top:3px;font:700 13px var(--mono);color:var(--ink);word-break:break-all}
+  .is-ledaddr b em{font-style:normal;color:var(--acc)}
+  .is-ledaddr b u{text-decoration:none;color:var(--acc);font-weight:700}
+  .is-share{font:600 11px var(--mono);letter-spacing:.03em;color:var(--ink-3);margin:12px 0 0;word-break:break-all}
+  .is-brow{font:500 11.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .is-brow span{flex:1;min-width:220px}
+  .is-reset{background:transparent;border:1px dashed var(--line-2);border-radius:7px;color:var(--ink-3);
+    font:700 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;min-height:40px;cursor:pointer}
+  .is-reset:hover{color:var(--down);border-color:var(--down)}
+  .is-reset.is-armed{color:var(--down);border-color:var(--down);border-style:solid}
+  .is-p{font:500 13.5px/1.65 var(--sans);color:var(--ink-2);margin:0;overflow-wrap:anywhere}
+  .is-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .is-p a:hover{border-bottom-style:solid}
+  .is-code{font:600 11px var(--mono);background:var(--field);color:var(--ink);border-radius:5px;padding:1px 5px}
+  .is-trophies{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+  .is-trempty{grid-column:1/-1;font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:0}
+  .is-trophy{background:var(--panel-2);border:1px solid rgba(247,147,26,.4);border-radius:10px;padding:11px 13px;min-width:0}
+  .is-trophy b{display:block;font:700 11px var(--mono);color:var(--acc);letter-spacing:.08em;text-transform:uppercase}
+  .is-trophy code{display:block;font:600 11px var(--mono);color:var(--ink);margin-top:5px;word-break:break-all}
+  .is-trophy i{display:block;font:600 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:5px}
+  .is-trbtn{margin-top:7px;background:transparent;border:1px dashed var(--line-2);border-radius:6px;
+    color:var(--ink-3);font:700 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 8px;min-height:28px;cursor:pointer}
+  .is-trbtn:hover{color:var(--acc);border-color:rgba(247,147,26,.5)}
+  .is-trkey{display:block;font:600 10.5px var(--mono);color:var(--ink-2);margin-top:6px;word-break:break-all}
+  .is-trkey[hidden]{display:none}
+  .is-ptwrap{overflow-x:auto;margin-top:14px}
+  .is-pt{width:100%;border-collapse:collapse}
+  .is-pt th{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line-2)}
+  .is-pt td{font:500 13px var(--sans);color:var(--ink-2);padding:8px 10px 8px 0;border-bottom:1px dotted var(--line-2)}
+  .is-pt td.is-mono{font:600 12px var(--mono);white-space:nowrap}
+  .is-pt td.is-mono u{text-decoration:none;color:var(--acc)}
+  .is-pt tr:last-child td{border-bottom:0}
+  
+  .is-pt tr.is-got{background:rgba(247,147,26,.08)}
+  .is-pt tr.is-got td:first-child{color:var(--acc);font-weight:600}
+  .is-pt tr.is-got td:first-child::before{content:"\2713\00a0";font-weight:700}
+  .is-note{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:12px 0 0}
+  .is-note a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .is-note a:hover{border-bottom-style:solid}
+  .is-pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+  .is-mt12{margin-top:12px}
+  .is-step{background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+  .is-step span{font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--acc)}
+  .is-step b{display:block;font:700 13.5px var(--sans);color:var(--ink);margin-top:4px}
+  .is-step i{display:block;font:500 11.5px/1.55 var(--sans);color:var(--ink-3);font-style:normal;margin-top:3px}
+  .is-step i a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .is-step i a:hover{border-bottom-style:solid}
+  .is-drill{margin:11px 0 0;padding:0;list-style:none;counter-reset:drill}
+  .is-drill li{position:relative;padding-left:30px;margin-top:7px;
+    font:500 13px/1.55 var(--sans);color:var(--ink-2);counter-increment:drill}
+  .is-drill li::before{content:counter(drill,decimal-leading-zero);position:absolute;left:0;top:2px;
+    font:700 9.5px var(--mono);letter-spacing:.08em;color:var(--acc)}
+  .is-drill b{color:var(--ink)}
+  .is-drill a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .is-drill a:hover{border-bottom-style:solid}
+  
+  .is-card .doc-sec{margin-top:14px;padding-top:14px}
+  .is-card .doc-sec:first-of-type{margin-top:0;padding-top:0;border-top:0}
+  .is-card .doc-prose h3{font:700 14.5px var(--sans);color:var(--ink);margin:0 0 6px}
+  .is-card .doc-prose p{margin:6px 0 0;font:500 13.5px/1.62 var(--sans)}
+  .is-warncard{border-color:rgba(255,166,60,.32)}
+  .is-wlab{color:var(--acc)}
+  .is-mircard{border-color:rgba(247,147,26,.6)}
+  .is-mlab{color:var(--acc)}
+  .is-about{margin-top:14px}
+  .is-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .is-about a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
+  .is-about a:hover{border-bottom-style:solid}
+  .is-rl{margin:0;padding-left:16px}
+  .is-rl li{font:600 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:6px}
+  .is-rl li:first-child{margin-top:0}
+  .is-rl li::marker{color:var(--acc)}
+  .is-rl sup{font-size:8px}
+  .is-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .is-nojs{font:600 12.5px/1.6 var(--sans);color:var(--ink-3);text-align:center;margin:12px 0 0}
+
+  @media(max-width:740px){
+    .is-cab{padding:14px 12px 12px}
+    .is-console2 .is-draws{flex:1 1 100%}
+    .is-msg{min-height:44px}
+  }
+  @media(max-width:700px){
+    .is-card{padding:18px 16px}
+    .is-addr b{white-space:normal;word-break:break-all;overflow:visible;line-height:1.4}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .is-arm.is-pull,.is-cab.is-shake,.is-stamp.is-show,.is-spin::after{animation:none}
+  }
+</style>
+
+<script is:inline type="module">
+import { getPublicKey, ProjectivePoint, CURVE } from "/js/vendor/noble-secp256k1.mjs";
+/* Same import pattern as /tools/verify-message: a same-origin static module,
+   nothing third-party. This page makes NO other network requests at all:
+   there are no balance lookups, no server calls, nothing. */
+(function(){
+"use strict";
+var stage=document.getElementById("is-stage"),cab=document.getElementById("is-cab");
+if(!stage||!cab)return;
+
+/* ---------------- RIPEMD-160 + bech32, lifted from /tools/verify-message ---------------- */
+var RL=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,7,4,13,1,10,6,15,3,12,0,9,5,2,14,11,8,3,10,14,4,9,15,8,1,2,7,0,6,13,11,5,12,1,9,11,10,0,8,12,4,13,3,7,15,14,5,6,2,4,0,5,9,7,12,2,10,14,1,3,8,11,6,15,13];
+var RR=[5,14,7,0,9,2,11,4,13,6,15,8,1,10,3,12,6,11,3,7,0,13,5,10,14,15,8,12,4,9,1,2,15,5,1,3,7,14,6,9,11,8,12,2,10,0,4,13,8,6,4,1,3,11,15,0,5,12,2,13,9,7,10,14,12,15,10,4,1,5,8,7,6,2,13,14,0,3,9,11];
+var SL=[11,14,15,12,5,8,7,9,11,13,14,15,6,7,9,8,7,6,8,13,11,9,7,15,7,12,15,9,11,7,13,12,11,13,6,7,14,9,13,15,14,8,13,6,5,12,7,5,11,12,14,15,14,15,9,8,9,14,5,6,8,6,5,12,9,15,5,11,6,8,13,12,5,12,13,14,11,8,5,6];
+var SR=[8,9,9,11,13,15,15,5,7,7,8,11,14,14,12,6,9,13,15,7,12,8,9,11,7,7,12,7,6,15,13,11,9,7,15,11,8,6,6,14,12,13,5,14,13,13,7,5,15,5,8,11,14,14,6,14,6,9,12,9,12,5,15,8,8,5,12,9,12,5,14,6,8,13,6,5,15,13,11,11];
+var KL=[0x00000000,0x5a827999,0x6ed9eba1,0x8f1bbcdc,0xa953fd4e];
+var KR=[0x50a28be6,0x5c4dd124,0x6d703ef3,0x7a6d76e9,0x00000000];
+function rol(x,n){return ((x<<n)|(x>>>(32-n)))>>>0;}
+function rf(j,x,y,z){
+  if(j<16)return (x^y^z)>>>0;
+  if(j<32)return ((x&y)|((~x)&z))>>>0;
+  if(j<48)return ((x|(~y))^z)>>>0;
+  if(j<64)return ((x&z)|(y&(~z)))>>>0;
+  return (x^(y|(~z)))>>>0;
+}
+function ripemd160(msg){
+  var len=msg.length,padded=new Uint8Array((((len+8)>>6)+1)<<6),i;
+  padded.set(msg);padded[len]=0x80;
+  var dv=new DataView(padded.buffer);
+  dv.setUint32(padded.length-8,(len<<3)>>>0,true);
+  dv.setUint32(padded.length-4,Math.floor(len/536870912)>>>0,true);
+  var h=[0x67452301,0xefcdab89,0x98badcfe,0x10325476,0xc3d2e1f0],X=new Array(16);
+  for(var off=0;off<padded.length;off+=64){
+    for(i=0;i<16;i++)X[i]=dv.getUint32(off+i*4,true);
+    var al=h[0],bl=h[1],cl=h[2],dl=h[3],el=h[4],
+        ar=h[0],br=h[1],cr=h[2],dr=h[3],er=h[4],t;
+    for(var j=0;j<80;j++){
+      var r=(j/16)|0;
+      t=(rol((al+rf(j,bl,cl,dl)+X[RL[j]]+KL[r])>>>0,SL[j])+el)>>>0;
+      al=el;el=dl;dl=rol(cl,10);cl=bl;bl=t;
+      t=(rol((ar+rf(79-j,br,cr,dr)+X[RR[j]]+KR[r])>>>0,SR[j])+er)>>>0;
+      ar=er;er=dr;dr=rol(cr,10);cr=br;br=t;
+    }
+    t=(h[1]+cl+dr)>>>0;
+    h[1]=(h[2]+dl+er)>>>0;h[2]=(h[3]+el+ar)>>>0;h[3]=(h[4]+al+br)>>>0;
+    h[4]=(h[0]+bl+cr)>>>0;h[0]=t;
+  }
+  var out=new Uint8Array(20),ov=new DataView(out.buffer);
+  for(i=0;i<5;i++)ov.setUint32(i*4,h[i],true);
+  return out;
+}
+var CS="qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+var GEN=[0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+function polymod(v){
+  var chk=1,i,j,top;
+  for(i=0;i<v.length;i++){
+    top=chk>>>25;chk=((chk&0x1ffffff)<<5)^v[i];
+    for(j=0;j<5;j++)if((top>>>j)&1)chk^=GEN[j];
+  }
+  return chk>>>0;
+}
+function hrpExpand(h){
+  var r=[],i;
+  for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)>>5);
+  r.push(0);
+  for(i=0;i<h.length;i++)r.push(h.charCodeAt(i)&31);
+  return r;
+}
+function to5(b){
+  var acc=0,bits=0,out=[],i;
+  for(i=0;i<b.length;i++){
+    acc=(acc<<8)|b[i];bits+=8;
+    while(bits>=5){bits-=5;out.push((acc>>bits)&31);}
+  }
+  if(bits)out.push((acc<<(5-bits))&31);
+  return out;
+}
+function bech32enc(hrp,ver,prog){
+  var data=[ver].concat(to5(prog)),i;
+  var pm=polymod(hrpExpand(hrp).concat(data).concat([0,0,0,0,0,0]))^(ver===0?1:0x2bc830a3);
+  var out=hrp+"1";
+  for(i=0;i<data.length;i++)out+=CS[data[i]];
+  for(i=0;i<6;i++)out+=CS[(pm>>5*(5-i))&31];
+  return out;
+}
+function hexOf(b){var s="",i;for(i=0;i<b.length;i++)s+=(b[i]>>4).toString(16)+(b[i]&15).toString(16);return s;}
+function sha256(b){return crypto.subtle.digest("SHA-256",b).then(function(a){return new Uint8Array(a);});}
+function normBytes(x){
+  if(typeof x==="string"){var o=new Uint8Array(x.length/2),i;
+    for(i=0;i<o.length;i++)o[i]=parseInt(x.substr(i*2,2),16);return o;}
+  return x instanceof Uint8Array?x:new Uint8Array(x);
+}
+
+/* ---------------- base58check, for the legacy families ---------------- */
+var B58="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function b58enc(bytes){
+  var digits=[0],i,j,carry;
+  for(i=0;i<bytes.length;i++){
+    carry=bytes[i];
+    for(j=0;j<digits.length;j++){carry+=digits[j]<<8;digits[j]=carry%58;carry=(carry/58)|0;}
+    while(carry){digits.push(carry%58);carry=(carry/58)|0;}
+  }
+  var out="";
+  for(i=0;i<bytes.length&&bytes[i]===0;i++)out+="1";
+  for(i=digits.length-1;i>=0;i--)out+=B58[digits[i]];
+  return out;
+}
+function cat2(a,b){var o=new Uint8Array(a.length+b.length);o.set(a);o.set(b,a.length);return o;}
+function sha256d(b){return sha256(b).then(sha256);}
+function b58check(version,payload){
+  var body=cat2(new Uint8Array([version]),payload);
+  return sha256d(body).then(function(c){return b58enc(cat2(body,c.slice(0,4)));});
+}
+function hash160(b){return sha256(b).then(ripemd160);}
+
+/* ---------------- the BIP341 key-path tweak, for taproot draws ---------------- */
+function bytesToBig(b){var n=0n,i;for(i=0;i<b.length;i++)n=(n<<8n)|BigInt(b[i]);return n;}
+function bigTo32(n){
+  var o=new Uint8Array(32),i;
+  for(i=31;i>=0;i--){o[i]=Number(n&255n);n>>=8n;}
+  return o;
+}
+var TAP_PREFIX=null;
+function taprootProgram(pubCompressed){
+  var pre=TAP_PREFIX?Promise.resolve(TAP_PREFIX):
+    sha256(new TextEncoder().encode("TapTweak")).then(function(tag){TAP_PREFIX=cat2(tag,tag);return TAP_PREFIX;});
+  return pre.then(function(prefix){
+    var P=ProjectivePoint.fromHex(hexOf(pubCompressed));
+    if(pubCompressed[0]===3)P=P.negate();
+    var xb=bigTo32(P.x);
+    return sha256(cat2(prefix,xb)).then(function(th){
+      var t=bytesToBig(th)%CURVE.n;
+      if(t===0n)return null;
+      var Q=P.add(ProjectivePoint.BASE.multiply(t));
+      return bigTo32(Q.x);
+    });
+  });
+}
+
+/* ---------------- one real draw: key -> curve -> address ---------------- */
+var FAMILIES={
+  p2pkh:{name:"legacy",pfx:1},
+  p2sh:{name:"script",pfx:1},
+  p2wpkh:{name:"segwit",pfx:4},
+  p2tr:{name:"taproot",pfx:4}
+};
+function randKeypair(){
+  for(;;){
+    var b=new Uint8Array(32);
+    window.crypto.getRandomValues(b);
+    try{return {priv:b,pub:normBytes(getPublicKey(b,true))};}
+    catch(e){/* out of curve range: below 1 in 10^38 per draw; redraw */}
+  }
+}
+function drawOne(famKey){
+  var kp=randKeypair();
+  var wifP=b58check(0x80,cat2(kp.priv,new Uint8Array([1])));
+  var addrP;
+  if(famKey==="p2tr"){
+    addrP=taprootProgram(kp.pub).then(function(prog){
+      if(!prog)return null;
+      return bech32enc("bc",1,prog);
+    });
+  }else{
+    addrP=hash160(kp.pub).then(function(h160){
+      if(famKey==="p2pkh")return b58check(0x00,h160);
+      if(famKey==="p2sh"){
+        var redeem=cat2(new Uint8Array([0x00,0x14]),h160);
+        return hash160(redeem).then(function(rh){return b58check(0x05,rh);});
+      }
+      return bech32enc("bc",0,h160);
+    });
+  }
+  return Promise.all([wifP,addrP]).then(function(r){
+    if(!r[1])return drawOne(famKey); /* taproot t==0: redraw; never in practice */
+    return {wif:r[0],addr:r[1],fam:famKey};
+  });
+}
+
+/* ---------------- storage ---------------- */
+function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function readInt(k,d){try{var v=parseInt(localStorage.getItem(k),10);return isFinite(v)?v:d;}catch(e){return d;}}
+function readLed(){
+  try{var l=JSON.parse(localStorage.getItem("ob-isl-led"));
+    if(l&&isFinite(l.s)&&isFinite(l.k)&&isFinite(l.bm)&&isFinite(l.tn)&&Array.isArray(l.tr)){
+      var tr=[],i,t;
+      for(i=0;i<l.tr.length&&tr.length<60;i++){
+        t=l.tr[i];
+        if(t&&typeof t.a==="string"&&typeof t.l==="string"&&isFinite(t.n)){
+          var entry={a:t.a.slice(0,140),l:t.l.slice(0,80),n:t.n|0};
+          if(typeof t.w==="string"&&t.w.length<=60)entry.w=t.w;
+          tr.push(entry);
+        }
+      }
+      var tk=Array.isArray(l.tk)?
+        l.tk.filter(function(x){return typeof x==="string"&&x.length<=12;}).slice(0,40):
+        /* older ledgers: reconstruct earned kinds from the plates they hold */
+        tr.map(function(t){
+          if(t.l.indexOf('"openbitcoin"')>=0)return "openbitcoin";
+          if(t.l.indexOf('"bitcoin"')>=0)return "bitcoin";
+          if(t.l.indexOf('"satoshi"')>=0)return "satoshi";
+          if(t.l.indexOf("stutter")>=0)return "stutter";
+          if(t.l.indexOf('"sats"')>=0)return "sats";
+          if(t.l.indexOf("five in a row")>=0)return "run5";
+          if(t.l.indexOf('"btc"')>=0)return "btc";
+          if(t.l.indexOf('"sat"')>=0)return "sat";
+          if(t.l.indexOf("four in a row")>=0)return "run4";
+          var m=t.l.match(/match depth (\d+)/);
+          if(m)return "d"+Math.min(10,parseInt(m[1],10));
+          return null;
+        }).filter(function(x,i,a){return x&&a.indexOf(x)===i;});
+      /* a depth kind implies every depth beneath it; backfill ledgers written
+         before the cascade so the lower checkmarks light too */
+      var maxd=0;
+      tk.forEach(function(x){var dm=/^d(\d+)$/.exec(x);if(dm)maxd=Math.max(maxd,parseInt(dm[1],10));});
+      for(var dd=4;dd<=Math.min(10,maxd);dd++)if(tk.indexOf("d"+dd)<0)tk.push("d"+dd);
+      return {s:l.s|0,k:l.k|0,bm:l.bm|0,tn:l.tn|0,tr:tr,tk:tk,
+              ms:Array.isArray(l.ms)?l.ms.filter(function(x){return isFinite(x);}).map(Math.floor):[]};
+    }
+  }catch(e){}
+  return {s:0,k:0,bm:0,tn:0,tr:[],tk:[],ms:[]};
+}
+var led=readLed();
+function saveLed(){store("ob-isl-led",JSON.stringify(led));}
+/* lifetime milestones: awarded once, kept in the trophy case */
+var MILESTONES=[
+  [1000,"1,000 addresses drawn","A thousand doors knocked. Nobody home. The chain never even noticed."],
+  [10000,"10,000 addresses drawn","Ten thousand draws: a body of work statistically identical to zero."],
+  [100000,"100,000 addresses drawn","One hundred thousand. At this point you are burning electricity on principle, like a real miner."],
+  [1000000,"1,000,000 addresses drawn","A million addresses. The key space remains 10⁷¹ times larger than your ambition."]
+];
+function checkMilestones(){
+  var hit=null;
+  MILESTONES.forEach(function(m){
+    if(led.k>=m[0]&&led.ms.indexOf(m[0])<0){
+      led.ms.push(m[0]);
+      led.tn++;
+      led.tr.unshift({a:m[2],l:"milestone · "+m[1],n:led.k});
+      led.tr=led.tr.slice(0,60);
+      hit=m;
+    }
+  });
+  return hit;
+}
+
+/* ---------------- dom ---------------- */
+function el(id){return document.getElementById(id);}
+function txt(id,v){var e=el(id);if(e)e.textContent=v;}
+function fmt(n){return n.toLocaleString("en-US");}
+var msgEl=el("is-msg"),live=el("is-live"),spinBtn=el("is-spin"),rowsEl=el("is-rows"),
+    houseAddrEl=el("is-haddr");
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+var rows=[];
+for(var r0=0;r0<3;r0++){
+  var row=document.createElement("div");
+  row.className="is-row";
+  row.innerHTML=
+    '<div class="is-rowhead"><span class="is-rn">REEL '+(r0+1)+'</span>'+
+    '<span class="is-klab">bitcoin address generated</span></div>'+
+    '<div class="is-addr"><b>&nbsp;</b></div>'+
+    '<span class="is-klab is-klab2">private key &middot; wif</span>'+
+    '<span class="is-key" aria-hidden="true"></span>'+
+    '<div class="is-matchrow"><span class="is-mchip" hidden></span></div>'+
+    '<div class="is-stamp"></div>';
+  rowsEl.appendChild(row);
+  var keyEl=row.querySelector(".is-key"),spans=[];
+  for(var kc=0;kc<52;kc++){var sp=document.createElement("span");sp.textContent="·";keyEl.appendChild(sp);spans.push(sp);}
+  rows.push({el:row,keySpans:spans,addrEl:row.querySelector(".is-addr b"),
+             stampEl:row.querySelector(".is-stamp"),chipEl:row.querySelector(".is-mchip"),keyTimer:null});
+}
+
+/* ---------------- sound: everything synthesized, nothing fetched ---------------- */
+var muted=readInt("ob-isl-mute",0)===1,actx=null;
+function ac(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==="suspended")actx.resume();
+  return actx;
+}
+function tone(freq,dur,type,vol,when,slide){
+  var a=ac();if(!a||muted)return;
+  var t=a.currentTime+(when||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(freq,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+var lastTick=0;
+function sTick(){var n=Date.now();if(n-lastTick<50)return;lastTick=n;tone(1500+Math.random()*300,0.03,"square",0.02);}
+function sStamp(){tone(90,0.12,"sine",0.2,0,55);}
+function sMatchTick(i){tone(700+i*160,0.06,"triangle",0.07);}
+function sTrophy(){var seq=[659,784,1047,1319],i;for(i=0;i<seq.length;i++)tone(seq[i],0.15,"triangle",0.11,i*0.08);}
+function sWin(){var seq=[523,659,784,1047,784,1047,1319,1568],i;
+  for(i=0;i<seq.length;i++){tone(seq[i],0.22,"triangle",0.14,i*0.11);tone(seq[i]*2,0.2,"sine",0.05,i*0.11);}}
+function paintMute(){
+  var on=el("is-mute-on"),off=el("is-mute-off"),btn=el("is-mute");
+  if(on)on.hidden=muted;if(off)off.hidden=!muted;
+  if(btn)btn.setAttribute("aria-pressed",muted?"true":"false");
+}
+el("is-mute").addEventListener("click",function(e){
+  muted=!muted;store("ob-isl-mute",muted?"1":"0");paintMute();if(!muted)tone(880,0.08,"sine",0.08);
+  if(e.detail>0)this.blur();
+});
+paintMute();
+
+/* ---------------- fast mode ---------------- */
+var fastMode=readInt("ob-isl-fast",0)===1;
+function paintFast(){
+  var b=el("is-fast");
+  if(b)b.setAttribute("aria-pressed",fastMode?"true":"false");
+}
+el("is-fast").addEventListener("click",function(e){
+  fastMode=!fastMode;store("ob-isl-fast",fastMode?"1":"0");paintFast();
+  say(fastMode?
+    "Fast mode. Less suspense, more addresses drawn. The odds stay exactly as printed.":
+    "Full theater restored. The suspense is fake; the arithmetic is not.");
+  if(e.detail>0)this.blur();
+});
+paintFast();
+
+/* ---------------- auto spin ---------------- */
+var autoLeft=0,autoTimer=null,autoLastStart=0;
+/* background auto: hidden tabs get throttled timers, so hidden spins skip
+   the theater entirely, and the deficit is repaid in a visible fast burst
+   the moment the tab returns */
+var burstLeft=0,hiddenAt=0,hiddenSpins=0;
+function instant(){return reduce||document.hidden||burstLeft>0;}
+function paintAuto(){
+  var b=el("is-auto"),ic=el("is-auto-ic"),nEl=el("is-autoN"),on=autoLeft>0;
+  var inf=autoLeft===Infinity;
+  if(b){
+    b.setAttribute("aria-pressed",on?"true":"false");
+    b.setAttribute("aria-label",on?(inf?"Stop auto spin, running unlimited":("Stop auto spin, "+autoLeft+" spins left")):"Auto spin");
+  }
+  if(ic)ic.hidden=on;
+  if(nEl){nEl.hidden=!on;nEl.textContent=on?(inf?"∞":String(autoLeft)):"";}
+}
+function autoStop(msg){
+  autoLeft=0;
+  if(autoTimer){clearTimeout(autoTimer);autoTimer=null;}
+  paintAuto();
+  if(msg)say(msg);
+}
+function maybeAutoNext(){
+  if(autoLeft<=0)return;
+  autoLeft--;
+  paintAuto();
+  if(autoLeft<=0){
+    autoStop();
+    say("Auto run complete: no match, exactly on schedule.",true);
+    return;
+  }
+  var since=performance.now()-autoLastStart;
+  /* every draw is local now: lightning mode can rip, no rate limit to respect */
+  if(burstLeft>0)burstLeft--;
+  if(document.hidden)hiddenSpins++;
+  var wait=burstLeft>0?0:(fastMode?Math.max(70,250-since):Math.max(300,400-since));
+  autoTimer=setTimeout(function(){autoTimer=null;if(autoLeft>0)spin();},wait);
+}
+el("is-auto").addEventListener("click",function(e){
+  if(autoLeft>0){autoStop("Auto stopped at your word.");if(e.detail>0)this.blur();return;}
+  var p=el("is-autopick");
+  if(p)p.hidden=!p.hidden;
+  if(e.detail>0)this.blur();
+});
+[50,100,500,1000].forEach(function(n){
+  el("is-a"+n).addEventListener("click",function(e){
+    el("is-autopick").hidden=true;
+    if(e.detail>0)this.blur();
+    if(spinning)return;
+    autoLeft=n;paintAuto();
+    say("Auto: "+n+" spins. Sit back; the odds will do the rest.");
+    spin();
+  });
+});
+el("is-ainf").addEventListener("click",function(e){
+  el("is-autopick").hidden=true;
+  if(e.detail>0)this.blur();
+  if(spinning)return;
+  /* Infinity survives the countdown untouched; every stop rule still applies */
+  autoLeft=Infinity;paintAuto();
+  say("Auto: unlimited. It runs until you stop it or the tab looks away; the odds were never going to stop it first.");
+  spin();
+});
+el("is-a0").addEventListener("click",function(e){
+  el("is-autopick").hidden=true;
+  if(e.detail>0)this.blur();
+});
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden){
+    if(autoLeft>0){hiddenAt=performance.now();hiddenSpins=0;}
+    return;
+  }
+  if(autoLeft>0&&hiddenAt){
+    /* the browser throttled the chain while hidden; repay the difference
+       against a ~1.2s reference cadence, capped so a week away does not
+       hang the tab */
+    var away=performance.now()-hiddenAt;hiddenAt=0;
+    var deficit=Math.min(400,Math.floor(away/1200)-hiddenSpins);
+    if(deficit>0){
+      burstLeft=deficit;
+      say("The machine kept pulling while you were away: catching up "+deficit+" spin"+(deficit===1?"":"s")+".");
+    }
+  }
+});
+paintAuto();
+
+/* ---------------- painters ---------------- */
+var lastSayAt=0;
+function say(m,good,quietLive){
+  lastSayAt=Date.now();
+  msgEl.textContent=m;msgEl.className="is-msg"+(good?" is-good":"");
+  if(live&&!quietLive)live.textContent=m;
+}
+function paintCounters(){
+  txt("is-c-keys",fmt(led.k));txt("is-c-won",String(led.bm));txt("is-c-tr",fmt(led.tn));
+  txt("is-l-spins",fmt(led.s));txt("is-l-keys",fmt(led.k));txt("is-l-bm",String(led.bm));
+  txt("is-l-tr",fmt(led.tn));
+  var sh=el("is-share");
+  if(sh){
+    if(led.k<1)sh.textContent="Share of the key space you have explored: none yet.";
+    else{
+      var exp=77-String(led.k).length;
+      sh.textContent="Share of the key space you have explored: "+fmt(led.k)+
+        " draws out of 1.16 × 10⁷⁷ keys, which is one part in about 10"+sup(exp)+".";
+    }
+  }
+}
+function sup(n){
+  var M={0:"⁰",1:"¹",2:"²",3:"³",4:"⁴",5:"⁵",6:"⁶",7:"⁷",8:"⁸",9:"⁹"};
+  return String(n).replace(/\d/g,function(d){return M[d];});
+}
+function paintTrophies(){
+  var box=el("is-trophies");if(!box)return;
+  var none=el("is-trempty");
+  if(!led.tr.length){if(none)none.hidden=false;box.querySelectorAll(".is-trophy").forEach(function(e){e.remove();});return;}
+  if(none)none.hidden=true;
+  box.querySelectorAll(".is-trophy").forEach(function(e){e.remove();});
+  led.tr.slice(0,24).forEach(function(t){
+    var d=document.createElement("div");
+    d.className="is-trophy";
+    var b=document.createElement("b");b.textContent=t.l;
+    var c=document.createElement("code");c.textContent=t.a;
+    var i=document.createElement("i");i.textContent="draw №"+fmt(t.n);
+    d.appendChild(b);d.appendChild(c);d.appendChild(i);
+    if(t.w){
+      /* the drawn key belongs to the visitor; show it on request only */
+      var kc=document.createElement("code");
+      kc.className="is-trkey";kc.textContent=t.w;kc.hidden=true;
+      var kb=document.createElement("button");
+      kb.type="button";kb.className="is-trbtn";kb.textContent="show private key";
+      kb.addEventListener("click",function(){
+        kc.hidden=!kc.hidden;
+        kb.textContent=kc.hidden?"show private key":"hide private key";
+      });
+      d.appendChild(kb);d.appendChild(kc);
+    }
+    box.appendChild(d);
+  });
+}
+var spinning=false;
+function paintSpin(){
+  spinBtn.className="is-spin"+(spinning?" is-busy":"");
+  spinBtn.setAttribute("aria-disabled",spinning?"true":"false");
+  ["is-d1","is-d2","is-d3","is-reset","is-f-p2pkh","is-f-p2sh","is-f-p2wpkh","is-f-p2tr"].forEach(function(id){
+    var b=el(id);if(!b)return;
+    b.classList.toggle("is-dim",spinning);
+    b.setAttribute("aria-disabled",spinning?"true":"false");
+  });
+}
+
+/* ---------------- family selector ---------------- */
+var fam=(function(){
+  try{var v=localStorage.getItem("ob-isl-fam");return FAMILIES[v]?v:"p2sh";}catch(e){return "p2sh";}
+})();
+function paintFam(){
+  Object.keys(FAMILIES).forEach(function(k){
+    var b=el("is-f-"+k);
+    if(b)b.setAttribute("aria-pressed",k===fam?"true":"false");
+  });
+}
+Object.keys(FAMILIES).forEach(function(k){
+  var b=el("is-f-"+k);
+  if(!b)return;
+  b.addEventListener("click",function(e){
+    if(spinning)return;
+    fam=k;store("ob-isl-fam",k);paintFam();
+    say("Now drawing "+FAMILIES[k].name+" addresses. Same key space, same odds, different clothes.");
+    if(e.detail>0)this.blur();
+  });
+});
+paintFam();
+
+/* ---------------- reels selector: the cabinet grows and shrinks with it ---------------- */
+var draws=Math.min(3,Math.max(1,readInt("ob-isl-draws2",1)));
+function paintDraws(){
+  for(var i=1;i<=3;i++){
+    el("is-d"+i).setAttribute("aria-pressed",i===draws?"true":"false");
+    rows[i-1].el.style.display=(i>draws)?"none":"";
+  }
+}
+[1,2,3].forEach(function(n){
+  el("is-d"+n).addEventListener("click",function(e){
+    if(spinning)return;
+    var prev=draws;
+    draws=n;store("ob-isl-draws2",""+n);paintDraws();
+    for(var i=prev;i<draws;i++)restRow(rows[i]);
+    if(e.detail>0)this.blur();
+  });
+});
+paintDraws();
+
+/* ---------------- coin particles (trophies and the never-win) ---------------- */
+var fx=el("is-fx"),fctx=fx.getContext("2d"),coins=[],fxRaf=null;
+function burst(nCoins){
+  if(reduce)return;
+  var w=fx.parentNode.clientWidth,h=fx.parentNode.clientHeight,dpr=window.devicePixelRatio||1;
+  fx.width=w*dpr;fx.height=h*dpr;fctx.setTransform(dpr,0,0,dpr,0,0);
+  for(var i=0;i<nCoins;i++)coins.push({
+    x:w/2+(Math.random()-.5)*w*.5,y:h/2,
+    vx:(Math.random()-.5)*260,vy:-(140+Math.random()*260),
+    r:4+Math.random()*5,a:Math.random()*6.3,va:(Math.random()-.5)*10,life:1});
+  if(!fxRaf){var last=performance.now();
+    (function step(t){
+      var dt=Math.min(0.05,(t-last)/1000);last=t;
+      var W=fx.width/(window.devicePixelRatio||1),H=fx.height/(window.devicePixelRatio||1);
+      fctx.clearRect(0,0,W,H);
+      for(var k=coins.length-1;k>=0;k--){
+        var cn=coins[k];
+        cn.vy+=760*dt;cn.x+=cn.vx*dt;cn.y+=cn.vy*dt;cn.a+=cn.va*dt;cn.life-=dt*0.7;
+        if(cn.life<=0||cn.y>H+20){coins.splice(k,1);continue;}
+        fctx.save();fctx.translate(cn.x,cn.y);fctx.rotate(cn.a);fctx.globalAlpha=Math.min(1,cn.life*2);
+        fctx.scale(1,0.55+0.45*Math.abs(Math.sin(cn.a*2)));
+        fctx.beginPath();fctx.arc(0,0,cn.r,0,6.3);fctx.fillStyle="#F7931A";fctx.fill();
+        fctx.lineWidth=1.4;fctx.strokeStyle="#B96A00";fctx.stroke();
+        fctx.restore();
+      }
+      if(coins.length)fxRaf=requestAnimationFrame(step);
+      else{fxRaf=null;fctx.clearRect(0,0,W,H);}
+    })(last);
+  }
+}
+
+/* ---------------- key + address theater ---------------- */
+function keyScramble(rw,wifKey,done){
+  if(rw.keyTimer)clearInterval(rw.keyTimer);
+  var n=rw.keySpans.length;
+  if(instant()){
+    rw.keySpans.forEach(function(sp,i){sp.textContent=wifKey.charAt(i);sp.className="is-setch";});
+    done();return;
+  }
+  var start=performance.now(),base=fastMode?40:260,step=fastMode?2:11;
+  rw.keyTimer=setInterval(function(){
+    var t=performance.now()-start,allSet=true;
+    for(var i=0;i<n;i++){
+      if(t>=base+i*step){rw.keySpans[i].textContent=wifKey.charAt(i);rw.keySpans[i].className="is-setch";}
+      else{allSet=false;rw.keySpans[i].textContent=B58.charAt(Math.floor(Math.random()*58));rw.keySpans[i].className="is-spinch";}
+    }
+    if(t>120)sTick();
+    if(allSet){clearInterval(rw.keyTimer);rw.keyTimer=null;done();}
+  },fastMode?16:30);
+}
+function typeAddr(elB,addr,pfx,done){
+  if(instant()){paintAddr(elB,addr,pfx,0);done();return;}
+  var i=0,step=fastMode?9:2;
+  var iv=setInterval(function(){
+    i+=step;
+    if(i>=addr.length){clearInterval(iv);paintAddr(elB,addr,pfx,0);done();return;}
+    elB.textContent=addr.slice(0,i);
+  },fastMode?8:16);
+}
+function paintAddr(elB,addr,pfx,matched){
+  /* family prefix in brand orange; matched leading characters glow gold */
+  elB.textContent="";
+  var em=document.createElement("em");em.textContent=addr.slice(0,pfx);
+  elB.appendChild(em);
+  if(matched>0){
+    var u=document.createElement("u");u.textContent=addr.slice(pfx,pfx+matched);
+    elB.appendChild(u);
+    elB.appendChild(document.createTextNode(addr.slice(pfx+matched)));
+  }else{
+    elB.appendChild(document.createTextNode(addr.slice(pfx)));
+  }
+}
+function stamp(rw,text,cls){
+  rw.stampEl.textContent=text;
+  rw.stampEl.className="is-stamp is-show"+(cls?" "+cls:"");
+}
+function clearRow(rw){
+  rw.stampEl.className="is-stamp";
+  rw.el.classList.remove("is-won");
+  rw.chipEl.hidden=true;rw.chipEl.className="is-mchip";
+}
+function restRow(rw){
+  clearRow(rw);
+  rw.keySpans.forEach(function(sp){sp.textContent="·";sp.className="";});
+  rw.addrEl.innerHTML="&nbsp;";
+}
+
+/* ---------------- trophies: real patterns at printed odds ---------------- */
+function scanTrophy(addr,famKey){
+  /* each kind is collectible ONCE: already-earned kinds scan as nothing */
+  var bech=(famKey==="p2wpkh"||famKey==="p2tr");
+  var body=bech?addr.slice(4):addr.slice(1);
+  var lower=body.toLowerCase();
+  var got=function(k){return led.tk.indexOf(k)>=0;};
+  /* the house words live in base58 only: bech32 has no o, i or b */
+  if(!bech&&lower.indexOf("openbitcoin")>=0&&!got("openbitcoin"))return {k:"openbitcoin",l:'"openbitcoin" · about 1 in 8 quadrillion'};
+  if(!bech&&lower.indexOf("bitcoin")>=0&&!got("bitcoin"))return {k:"bitcoin",l:'"bitcoin" · about 1 in 5 billion'};
+  if(!bech&&lower.indexOf("satoshi")>=0&&!got("satoshi"))return {k:"satoshi",l:'"satoshi" · about 1 in 2.6 billion'};
+  /* checked rarest first, so a multi-pattern draw awards its rarest plate */
+  if(famKey==="p2wpkh"&&body.slice(0,3)==="qqq"&&!got("stutter"))return {k:"stutter",l:"the stutter · 1 in 32,768"};
+  if(/(.)\1{4}/.test(body)&&!got("run5"))return {k:"run5",l:"five in a row · about 1 in 31,000"};
+  if(lower.indexOf("sats")>=0&&!got("sats"))return {k:"sats",l:'"sats" · about 1 in 30,000'};
+  if(/(.)\1{3}/.test(body)&&!got("run4"))return {k:"run4",l:"four in a row · about 1 in 900"};
+  if(lower.indexOf("sat")>=0&&!got("sat"))return {k:"sat",l:'"sat" · about 1 in 900'};
+  if(!bech&&lower.indexOf("btc")>=0&&!got("btc"))return {k:"btc",l:'"btc" · about 1 in 800'};
+  return null;
+}
+/* light the trophy table rows the visitor has collected */
+function paintTable(){
+  document.querySelectorAll("#is-ptable tr[data-kind]").forEach(function(row){
+    row.classList.toggle("is-got",led.tk.indexOf(row.getAttribute("data-kind"))>=0);
+  });
+}
+/* match-depth odds label: each character is 1 in 32 (bech32) / 1 in 58 (base58) */
+function depthOdds(d,famKey){
+  var base=(famKey==="p2pkh"||famKey==="p2sh")?58:32;
+  var x=Math.pow(base,d);
+  if(x>=1e15)return (x/1e15).toFixed(1).replace(/\.0$/,"")+" quadrillion";
+  if(x>=1e12)return (x/1e12).toFixed(1).replace(/\.0$/,"")+" trillion";
+  if(x>=1e9)return (x/1e9).toFixed(1).replace(/\.0$/,"")+" billion";
+  if(x>=1e6)return (x/1e6).toFixed(1).replace(/\.0$/,"")+" million";
+  return fmt(Math.round(x));
+}
+function matchDepth(a,b,pfx){
+  if(a.length!==b.length)return 0; /* different lengths cannot fully match */
+  var d=0;
+  for(var i=pfx;i<a.length;i++){
+    if(a.charAt(i)===b.charAt(i))d++;else break;
+  }
+  return d;
+}
+
+/* ---------------- the spin ---------------- */
+var NOMATCH_LINES=[
+  "No match. The space is 10⁴⁸ wide; you are one.",
+  "No match. Bitcoin remains secure; inconvenient, but reassuring.",
+  "No match. The odds on the plate are not decoration.",
+  "No match. Somewhere in the 10⁴⁸, the machine's address sits alone.",
+  "No match. This is what 2¹⁶⁰ feels like from the inside."
+];
+function delay(ms){return new Promise(function(rs){setTimeout(rs,ms);});}
+function spin(){
+  if(spinning)return;
+  spinning=true;paintSpin();
+  autoLastStart=performance.now();
+  ac(); /* wake audio inside the user gesture */
+  var k=draws,active=rows.slice(0,k);
+  say("Drawing "+FAMILIES[fam].name+" keys: one for the machine, "+k+" for you…");
+  if(live)live.textContent="Spinning: "+k+" reel"+(k===1?"":"s")+" against the machine's fresh address.";
+  active.forEach(clearRow);
+  houseAddrEl.innerHTML="&nbsp;";
+  Promise.all([drawOne(fam)].concat(active.map(function(){return drawOne(fam);}))).then(function(ds){
+    var house=ds[0],players=ds.slice(1);
+    var pfx=FAMILIES[fam].pfx;
+    /* theater: the machine reveals its target first, then the reels chase it */
+    var t0=fastMode?60:300;
+    setTimeout(function(){
+      typeAddr(houseAddrEl,house.addr,pfx,function(){});
+    },instant()?0:(fastMode?30:80));
+    active.forEach(function(rw,i){
+      setTimeout(function(){
+        keyScramble(rw,players[i].wif,function(){
+          typeAddr(rw.addrEl,players[i].addr,pfx,function(){});
+        });
+      },instant()?0:t0+i*(fastMode?25:160));
+    });
+    var settleAt=instant()?120:(fastMode?360+(k-1)*25:2000+(k-1)*160);
+    delay(settleAt).then(function(){
+      settleAll(active,players,house,pfx);
+    });
+  }).catch(function(e){
+    spinning=false;paintSpin();
+    say("The draw failed in the browser ("+(e&&e.message?e.message:"error")+"). Nothing was counted; spin again.");
+    if(autoLeft>0)autoStop();
+  });
+}
+
+function settleAll(active,players,house,pfx){
+  var winners=[],trophies=[],bestD=0;
+  var perRow=instant()?0:(fastMode?70:340);
+  active.forEach(function(rw,i){
+    var p=players[i];
+    var full=(p.addr===house.addr);
+    var d=full?(p.addr.length-pfx):matchDepth(p.addr,house.addr,pfx);
+    setTimeout(function(){
+      led.k++;
+      paintAddr(rw.addrEl,p.addr,pfx,d);
+      if(full){winners.push({rw:rw,d:p});return;}
+      if(d>bestD)bestD=d;
+      if(d>led.bm)led.bm=d;
+      /* the chip ticks the depth up with a little sound per character */
+      rw.chipEl.hidden=false;
+      rw.chipEl.className="is-mchip"+(d>=2?" is-mwarm":"");
+      rw.chipEl.textContent="MATCH "+d+(d>0?" · 1 IN "+depthOdds(d,p.fam):"");
+      if(d>0&&!reduce)for(var s=1;s<=Math.min(d,6);s++)(function(s2){setTimeout(function(){sMatchTick(s2);},s2*90);})(s);
+      /* depth d contains every depth beneath it, so a deep match lights the
+         whole ladder up to it; one plate, all the checkmarks */
+      var newKinds=[];
+      if(d>=4)for(var dd=4;dd<=Math.min(10,d);dd++)if(led.tk.indexOf("d"+dd)<0)newKinds.push("d"+dd);
+      if(newKinds.length){
+        newKinds.forEach(function(kk){led.tk.push(kk);});
+        led.tn++;
+        led.tr.unshift({a:p.addr+"  vs  "+house.addr,l:"match depth "+d+" · about 1 in "+depthOdds(d,p.fam),n:led.k,w:p.wif});
+        led.tr=led.tr.slice(0,60);
+        trophies.push({d:d,p:p});
+        rw.el.classList.add("is-won");
+        stamp(rw,"DEPTH "+d,"is-tr");
+        sTrophy();burst(30);
+      }else{
+        var tr=scanTrophy(p.addr,p.fam);
+        if(tr){
+          led.tk.push(tr.k);
+          led.tn++;
+          led.tr.unshift({a:p.addr,l:tr.l,n:led.k,w:p.wif});
+          led.tr=led.tr.slice(0,60);
+          trophies.push({t:tr,p:p});
+          rw.el.classList.add("is-won");
+          stamp(rw,"TROPHY","is-tr");
+          sTrophy();burst(26);
+        }else{
+          stamp(rw,"NO MATCH №"+fmt(led.k));
+          sStamp();
+        }
+      }
+      paintCounters();
+    },perRow*i+ (reduce?0:(fastMode?40:120)));
+  });
+  var total=perRow*(active.length-1)+(reduce?60:(fastMode?160:400));
+  setTimeout(function(){
+    led.s++;
+    if(winners.length){matchWin(winners[0],house);}
+    else if(trophies.length){
+      var t=trophies[0];
+      say(t.d?
+        ("Depth "+t.d+": your reel shared "+t.d+" leading characters with the machine, about 1 in "+depthOdds(t.d,t.p.fam)+". Into the trophy case."):
+        ("No coins, but look at it: "+t.p.addr+" ("+t.t.l+"). Into the trophy case; nobody will ever own it."),true);
+    }else{
+      /* Infinity%5 is NaN, which would mute the live region for the whole
+         unlimited run; count spins instead to keep the every-5th cadence */
+      say(NOMATCH_LINES[led.s%NOMATCH_LINES.length],false,
+        autoLeft>1&&(autoLeft===Infinity?led.s%5!==0:autoLeft%5!==0));
+    }
+    var mHit=checkMilestones();
+    if(mHit&&!winners.length){
+      sTrophy();burst(40);
+      say("MILESTONE: "+mHit[1]+". "+mHit[2],true);
+    }
+    saveLed();paintCounters();paintTrophies();paintTable();
+    spinning=false;paintSpin();
+    maybeAutoNext();
+  },total+(fastMode?50:120));
+}
+
+/* the never-branch, honest if it ever runs: no coins, no risk, one story */
+function matchWin(w,house){
+  autoStop();
+  led.bm=w.d.addr.length-FAMILIES[w.d.fam].pfx;
+  w.rw.el.classList.add("is-won");
+  stamp(w.rw,"FULL MATCH","is-tr");
+  paintAddr(w.rw.addrEl,w.d.addr,FAMILIES[w.d.fam].pfx,w.d.addr.length);
+  /* the full match contains every depth: light the whole ladder */
+  for(var dd=4;dd<=10;dd++)if(led.tk.indexOf("d"+dd)<0)led.tk.push("d"+dd);
+  saveLed();paintCounters();paintTable();
+  var mir=el("is-mir");if(mir)mir.hidden=false;
+  say("FULL MATCH: your reel drew "+w.d.addr+", the machine's exact address. 1 in 2¹⁶⁰. Read the panel below.",true);
+  try{
+    if(!reduce){
+      cab.classList.add("is-shake");setTimeout(function(){cab.classList.remove("is-shake");},600);
+      burst(120);
+    }
+    sWin();
+  }catch(e){}
+}
+
+spinBtn.addEventListener("click",function(e){
+  if(e.detail>0)this.blur();
+  spin();
+});
+/* the wipe wants a second press: milestones and trophies are not reborn */
+var resetTimer=null;
+function disarmReset(){
+  if(resetTimer){clearTimeout(resetTimer);resetTimer=null;}
+  var rb=el("is-reset");
+  rb.textContent="Reset everything";
+  rb.classList.remove("is-armed");
+}
+el("is-reset").addEventListener("click",function(){
+  if(spinning)return;
+  var rb=this;
+  if(!resetTimer){
+    rb.textContent="Sure?";
+    rb.classList.add("is-armed");
+    resetTimer=setTimeout(disarmReset,4000);
+    return;
+  }
+  disarmReset();
+  autoStop();
+  led={s:0,k:0,bm:0,tn:0,tr:[],tk:[],ms:[]};
+  saveLed();paintCounters();paintTrophies();paintTable();
+  rows.forEach(restRow);
+  houseAddrEl.textContent="none yet; spin to deal one";
+  say("Wiped. The key space does not remember you either.");
+});
+document.addEventListener("keydown",function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.repeat)return;
+  var k=e.key;
+  if(k!==" "&&k!=="Enter")return;
+  var tg=e.target;
+  if(tg&&tg.closest){
+    if(tg.closest("input,select,textarea,a"))return;
+    if(tg.closest("button"))return;
+  }
+  var r=stage.getBoundingClientRect();
+  if(r.bottom<0||r.top>window.innerHeight)return;
+  e.preventDefault();spin();
+});
+
+/* ---------------- the lever ---------------- */
+var arm=el("is-arm"),dragging=false,dragY0=0,armAngle=0;
+function pullAndSpin(){
+  arm.classList.remove("is-pull");
+  void arm.offsetWidth;
+  arm.classList.add("is-pull");
+  spin();
+}
+if(arm){
+  arm.addEventListener("pointerdown",function(e){
+    if(e.button!==0||!e.isPrimary)return;
+    dragging=true;dragY0=e.clientY;armAngle=0;
+    arm.setPointerCapture(e.pointerId);
+    arm.classList.remove("is-pull");
+    e.preventDefault();
+  });
+  arm.addEventListener("pointermove",function(e){
+    if(!dragging)return;
+    armAngle=Math.max(0,Math.min(46,(e.clientY-dragY0)*0.55));
+    arm.style.transform="rotate("+armAngle+"deg)";
+  });
+  function release(){
+    if(!dragging)return;
+    dragging=false;
+    arm.style.transform="";
+    if(armAngle>30||armAngle<4)pullAndSpin();
+    armAngle=0;
+  }
+  arm.addEventListener("pointerup",release);
+  arm.addEventListener("pointercancel",release);
+}
+
+/* ---------------- fullscreen ---------------- */
+var fsBtn=el("is-fs");
+function fsActive(){return document.fullscreenElement===stage||stage.classList.contains("is-fake");}
+function setInertOutside(on){
+  var node=stage;
+  while(node&&node!==document.body){
+    var p=node.parentElement;
+    if(!p)break;
+    for(var i=0;i<p.children.length;i++){
+      var sib=p.children[i];
+      if(sib===node)continue;
+      if(on)sib.setAttribute("inert","");
+      else sib.removeAttribute("inert");
+    }
+    node=p;
+  }
+}
+function paintFs(){
+  var open=el("is-fs-open"),close=el("is-fs-close"),on=fsActive();
+  if(open)open.hidden=on;if(close)close.hidden=!on;
+  fsBtn.setAttribute("aria-pressed",on?"true":"false");
+}
+function exitFake(){
+  stage.classList.remove("is-fake");
+  document.documentElement.classList.remove("is-lock");
+  setInertOutside(false);
+  paintFs();
+}
+function fsToggle(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(stage.classList.contains("is-fake")){exitFake();return;}
+  if(stage.requestFullscreen){
+    stage.requestFullscreen().then(paintFs).catch(function(){
+      stage.classList.add("is-fake");document.documentElement.classList.add("is-lock");
+      setInertOutside(true);paintFs();
+    });
+  }else{
+    stage.classList.add("is-fake");document.documentElement.classList.add("is-lock");
+    setInertOutside(true);paintFs();
+  }
+}
+fsBtn.addEventListener("click",fsToggle);
+document.addEventListener("fullscreenchange",paintFs);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&stage.classList.contains("is-fake"))exitFake();
+});
+
+/* ---------------- boot ---------------- */
+paintCounters();paintTrophies();paintTable();
+if(led.k>0)say("Welcome back. "+fmt(led.k)+" addresses drawn, no match yet, exactly as the arithmetic promised.");
+
+/* iOS long-press hardening: user-select:none alone is not honored
+   reliably on Safari, so selection is refused at the event layer and any
+   range that sneaks through is swept on touchend */
+(function(){
+  var st=document.querySelector(".is-stage");
+  if(!st)return;
+    /* the decisive layer: cancel the NATIVE touch before Safari's selection
+     recognizer runs. Scoped to the canvas and overlay prose only, so
+     buttons keep their taps and the page keeps its scroll. */
+  st.addEventListener("touchstart",function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    if(t.closest("button,a,input,select,textarea"))return;
+    if(t.closest("canvas")||t.closest(".is-overlay"))e.preventDefault();
+  },{passive:false});
+  ["selectstart","contextmenu"].forEach(function(ev){
+    st.addEventListener(ev,function(e){e.preventDefault();});
+  });
+  document.addEventListener("touchend",function(){
+    try{
+      var sel=window.getSelection&&window.getSelection();
+      if(!sel||!sel.rangeCount||!sel.anchorNode)return;
+      var n=sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentNode;
+      if(n&&st.contains(n))sel.removeAllRanges();
+    }catch(e){}
+  },{passive:true});
+})();
+})();
+</script>
+</Base>

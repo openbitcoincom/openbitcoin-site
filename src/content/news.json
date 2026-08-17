@@ -2,34 +2,34 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
-      "title": "What Is an Air-Gapped Bitcoin Wallet? Why the Coldcard Exploit Changes the Conversation About Offline Security",
-      "url": "https://decrypt.co/374868/what-is-air-gapped-bitcoin-wallet-coldcard-exploit-security",
-      "outlet": "DECRYPT",
-      "date": "2026-08-03"
-    },
-    {
-      "title": "American Bitcoin Reports Quarterly Loss But Boosts Bitcoin Stash",
-      "url": "https://bitcoinmagazine.com/news/american-bitcoin-reports-loss-boosts-stash",
+      "title": "US Treasury Asks For Public Input on Landmark Genius Act Crypto Legislation",
+      "url": "https://bitcoinmagazine.com/news/us-treasury-asks-for-input-on-genius-act",
       "outlet": "BITCOIN MAG",
-      "date": "2026-08-03"
+      "date": "2026-08-17"
     },
     {
-      "title": "Crypto Clarity Act Risks More Delay As Recess Looms",
-      "url": "https://bitcoinmagazine.com/news/crypto-clarity-act-risks-more-delay",
+      "title": "Bitcoin hits $64K as gold gains while oil shakes off Trump Oman threat",
+      "url": "https://cointelegraph.com/markets/bitcoin-hits-64k-as-gold-gains-while-oil-shakes-off-trump-oman-threat?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
+      "outlet": "COINTELEGRAPH",
+      "date": "2026-08-17"
+    },
+    {
+      "title": "Strategy Goes Another Week Without Buying — Or Selling — Bitcoin, Builds Up Cash Reserve",
+      "url": "https://bitcoinmagazine.com/news/strategy-goes-another-week-without-buying",
       "outlet": "BITCOIN MAG",
-      "date": "2026-08-03"
+      "date": "2026-08-17"
     },
     {
-      "title": "Solo Bitcoin Miner Hits Jackpot, Scoring $200K BTC Reward",
-      "url": "https://decrypt.co/374859/solo-bitcoin-miner-hits-jackpot-scoring-200k-btc-reward",
-      "outlet": "DECRYPT",
-      "date": "2026-08-03"
+      "title": "Strategy raises $334M through stock sales but buys no Bitcoin",
+      "url": "https://cointelegraph.com/news/strategy-stock-sales-buys-no-bitcoin?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
+      "outlet": "COINTELEGRAPH",
+      "date": "2026-08-17"
     },
     {
-      "title": "Trump Family’s American Bitcoin Tops 8,000 BTC After Record Mining Quarter",
-      "url": "https://decrypt.co/374850/trump-american-bitcoin-8000-btc-record-mining-quarter",
-      "outlet": "DECRYPT",
-      "date": "2026-08-03"
+      "title": "No change in bitcoin holdings as Strategy boosted dollar reserve, bought back more STRC last week",
+      "url": "https://www.coindesk.com/markets/2026/08/17/no-change-in-bitcoin-holdings-as-strategy-lifted-dollar-reserve-and-bought-back-more-strc-last-week",
+      "outlet": "COINDESK",
+      "date": "2026-08-17"
     }
   ]
 }

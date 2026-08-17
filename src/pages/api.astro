@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
 <Base title="Bitcoin API: Public JSON Endpoints from Our Own Node - OpenBitcoin" description="A public Bitcoin API: price, candles, blocks, transactions, addresses, mempool, and fees as plain JSON, served from our own full node with no third-party pass-through.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">API</div>
     <h1>A public JSON API, from our own node</h1>
-    <p class="doc-lede">Eighteen small endpoints, one push, and a live event stream for the numbers this site runs on: price, candles, blocks, transactions, addresses, the mempool, fees, network stats, and history going back to the genesis block. Plain JSON over GET, CORS open to any origin, no wrapper objects, no third-party pass-through. Every data path the server answers is documented on this page.</p>
+    <HeroEmblem name="api" />
+    <p class="doc-lede">Twenty-two small endpoints and a live event stream for the numbers this site runs on: price, candles, blocks, transactions, addresses, the mempool, fees, network stats, and history going back to the genesis block. Plain JSON over GET, CORS open to any origin, no wrapper objects, no third-party pass-through. Every data path the server answers is documented on this page.</p>
   </div>
   <div class="doc-grid">
   <div>
@@ -30,7 +32,7 @@ import '../styles/doc.css';
 
     <div class="ai-ep ai-mt">
       <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/fees</code></div>
-      <p class="ai-purpose">Current feerate tiers in sat/vB, the same four tiers the <a href="/fees">fee page</a> shows, plus the mempool figures they were read against. mempoolVsize is in vbytes; source names the process that produced the tiers.</p>
+      <p class="ai-purpose">Current feerate tiers in sat/vB, the same four tiers the <a href="/fees">fee page</a> shows, plus the mempool figures they were read against. nextBlock is the estimated rate to enter the very next block, interpolated from our node's mempool fee histogram and floored at 1 sat/vB; it can sit below the estimator's fastest tier when the mempool is quiet. The homepage headlines this figure rounded up to a whole number, never below 2. mempoolVsize is in vbytes; source names the process that produced the tiers.</p>
       <div class="ai-exl">Example response</div>
       <pre class="ai-json" is:raw>{
   "fastest": 5,
@@ -38,6 +40,7 @@ import '../styles/doc.css';
   "hour": 3,
   "economy": 2,
   "minimum": 1,
+  "nextBlock": 3.27,
   "mempoolCount": 4182,
   "mempoolVsize": 12400000,
   "source": "node",
@@ -70,13 +73,14 @@ import '../styles/doc.css';
 
     <div class="ai-ep ai-mt">
       <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/summary</code></div>
-      <p class="ai-purpose">One call for the whole band: price, fee tiers, and height in a single body, the same feed the site chrome runs on. lastBlockAt is when our node last saw the tip advance.</p>
+      <p class="ai-purpose">One call for the whole band: price, fee tiers, height, and the all-time chain figures in a single body, the same feed the site chrome runs on. lastBlockAt is when our node last saw the tip advance; chain matches the allTime body of /api/v1/stats24h.</p>
       <div class="ai-exl">Example response</div>
       <pre class="ai-json" is:raw>{
   "price": { "usd": 64362.18, "change24h": 1.42, "feeds": 3, "asOf": "2026-07-31T12:00:05.000Z" },
   "fees": ,
   "height": 960469,
   "lastBlockAt": "2026-07-31T11:58:27.402Z",
+  "chain": ,
   "asOf": "2026-07-31T12:00:09.311Z"
 }</pre>
     </div>
@@ -93,9 +97,76 @@ import '../styles/doc.css';
   "histogram": [
     [12.1, 431200],
     [8.4, 1230400]
-    /* [feerate sat/vB, vsize] pairs, highest feerate first */
+    /* [feerate sat/vB, vsize] pairs, highest feerate first; compressed
+       into coarse bins by the index, so the high-fee tail blurs */
   ],
+  "bands": {
+    "edges": [1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 30, 50, 100],
+    "vsizes": [41026269, 498405, 298460, 101198, 83195, 46084, 9120, 4210, 30666, 8402, 2210, 890, 310],
+    "counts": [77067, 588, 289, 112, 80, 41, 12, 8, 40, 11, 5, 3, 2],
+    "maxFeerate": 412.7
+    /* exact per-band depth from a per-transaction scan, 2-minute cache;
+       band i spans edges[i] to edges[i+1] sat/vB, the last is open-ended,
+       sub-1 folds into the first. null if the scan failed */
+  },
   "asOf": "2026-07-31T12:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/mempool-history</code></div>
+      <p class="ai-purpose">The mempool over time: our data service snapshots exact per-band depth every 5 minutes and serves it bucketed by feerate band, in vbytes. Band i spans edges[i] to edges[i+1] sat/vB, the last band is open-ended, and sub-1 folds into the first. days is 1 to 1826 (default 7); responses bucket from 5-minute averages for a day of data up to weekly for the 5-year view. recordingSince is the first snapshot ever taken, 2026-08-08; nothing earlier exists. The <a href="/mempool">mempool page</a> chart reads this feed.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/mempool-history?days=7</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "edges": [1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 30, 50, 100],
+  "bucketSeconds": 1800,
+  "points": [
+    [1786149000, 41026269, 498405, 298460, 101198, 83195, 46084, 0, 0, 30666, 0, 0, 0, 0]
+    /* [bucket unix time, vsize per band...] oldest first */
+  ],
+  "since": "2026-08-08T00:30:00.000Z",
+  "recordingSince": "2026-08-08T00:30:00.000Z",
+  "asOf": "2026-08-08T00:31:41.088Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/pools</code></div>
+      <p class="ai-purpose">Every mining pool that ever signed a block, with lifetime and recent counts, from our own all-history attribution table (updated with every block). Share math: blocks over the sum of attributed blocks; the unknown object is the unattributed remainder, mostly the solo-mined early chain. The <a href="/pools">pools page</a> reads this feed.</p>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "totalBlocks": 962060,
+  "pools": [
+    {
+      "name": "AntPool", "slug": "antpool",
+      "blocks": 109337, "b24h": 25, "b7d": 182, "b30d": 776,
+      "firstHeight": 286681, "lastHeight": 962030,
+      "firstTime": 1393517383, "lastTime": 1786195000,
+      "feesSat": 4578654835469, "subsidySat": 137002812500000
+    }
+    /* every pool ever seen, sorted by lifetime blocks */
+  ],
+  "unknown": { "blocks": 211404 /* same shape, no slug */ },
+  "asOf": "2026-08-12T01:00:09.311Z"
+}</pre>
+    </div>
+
+    <div class="ai-ep ai-mt">
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path" is:raw>/api/v1/pool/{slug}</code></div>
+      <p class="ai-purpose">One pool's whole record: the stats row from /api/v1/pools plus a blocks-per-month series and its block list, 25 per page via ?page=. Attribution is by coinbase signature, by reused payout wallet for pools that never signed, and structural for P2Pool; the <a href="/pools">pools page</a> fine print explains each.</p>
+      <div class="ai-exl">Example request</div>
+      <div class="ai-req">GET /api/v1/pool/btc-guild?page=2</div>
+      <div class="ai-exl">Example response</div>
+      <pre class="ai-json" is:raw>{
+  "name": "BTC Guild", "slug": "btc-guild", "blocks": 32935,
+  "monthly": [[1320105600, 391] /* [month epoch, blocks] */],
+  "list": [
+    { "height": 362951, "time": 1435518628, "feeSat": 27895074, "tag": "Mined by BTC Guild," }
+  ],
+  "page": 2, "pages": 1318, "perPage": 25,
+  "asOf": "2026-08-12T01:00:09.311Z"
 }</pre>
     </div>
 
@@ -127,17 +198,16 @@ import '../styles/doc.css';
     "momentum": 48,
     "trend": 33,
     "drawdown": 29,
-    "volatility": 62,
-    "activity": 54
+    "volatility": 62
   },
-  "method": "House index from our own data: momentum vs 30d average (20%), ...",
+  "method": "House index from our own price data: momentum vs 30d average (25%), ...",
   "asOf": "2026-07-31T12:00:09.311Z"
 }</pre>
     </div>
 
     <div class="ai-ep ai-mt">
       <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/blocks</code></div>
-      <p class="ai-purpose">The most recent blocks, newest first, with the miner where the coinbase names one and the fees actually paid in each. limit is how many blocks you want (default 15, up to 30). The four fee fields are null for a block our node cannot produce statistics for. The <a href="/blocks">blocks page</a> shows the same feed.</p>
+      <p class="ai-purpose">The most recent blocks, newest first, with the miner where the coinbase names one and the fees actually paid in each. limit is how many blocks you want (default 15, up to 30). payoutSat is what the miner collected (subsidy plus every fee); outputSat is the total value the block's transactions moved, coinbase excluded. These and the four fee fields are null for a block our node cannot produce statistics for. The <a href="/blocks">blocks page</a> shows the same feed.</p>
       <div class="ai-exl">Example request</div>
       <div class="ai-req">GET /api/v1/blocks?limit=15</div>
       <div class="ai-exl">Example response</div>
@@ -154,6 +224,8 @@ import '../styles/doc.css';
       "miner": "F2Pool",
       "minerTag": "/F2Pool/",
       "totalFeeSat": 1642318,
+      "payoutSat": 314142318,
+      "outputSat": 812409231554,
       "medianFeerate": 4,
       "minFeerate": 1,
       "maxFeerate": 402
@@ -396,25 +468,24 @@ import '../styles/doc.css';
     </div>
 
     <div class="ai-ep ai-mt">
-      <div class="ai-ephead"><span class="ai-method">POST</span><code class="ai-path">/api/v1/broadcast</code></div>
-      <p class="ai-purpose">Push a signed raw transaction to the network through our node, and nothing else: it runs testmempoolaccept first and only then sendrawtransaction, so a transaction that will not be accepted is never relayed. The one endpoint here that is not a GET, and the only one that takes a body. Send JSON with a single hex field. This is what the <a href="/tools/broadcast">broadcast tool</a> does when you press the button. Rate limited to a small burst a minute per address, so it answers 429 if you hammer it, and the body is capped at 1 MB.</p>
-      <div class="ai-exl">Example request</div>
-      <div class="ai-req" is:raw>POST /api/v1/broadcast
-Content-Type: application/json
-
-{"hex": "0200000000010138f5...b400000000"}</div>
-      <div class="ai-exl">Accepted, 200</div>
-      <pre class="ai-json" is:raw>{ "ok": true, "txid": "9c2e0f24629a...41aa" }</pre>
-      <div class="ai-exl">Refused by the node, 422</div>
+      <div class="ai-ephead"><span class="ai-method">GET</span><code class="ai-path">/api/v1/stats24h</code></div>
+      <p class="ai-purpose">Network statistics measured by our node: the rolling 24 hours (read block by block) and the all-time figures the <a href="/stats">stats page</a> shows. Transaction counts and value moved exclude coinbases; medianFeerate is the median of per-block medians; hashrateEhs is estimated from difficulty and the actual 24h block pace. In allTime, supplySat is the weekly UTXO-sweep measurement plus issuance since its snapshot, and fundedAddresses counts addresses currently holding a balance, both null until the first sweep has written. rawSizeBytes is the serialized blockchain itself, the conventional "blockchain size"; sizeBytes (size_on_disk) additionally counts the undo data the node keeps.</p>
+      <div class="ai-exl">Example response</div>
       <pre class="ai-json" is:raw>{
-  "error": "rejected",
-  "reason": "min relay fee not met",
-  "txid": "9c2e0f24629a...41aa"
-}
-/* reason is the node's own words; txid is null when the bytes never got
-   far enough to have one */</pre>
-      <div class="ai-exl">Malformed request, 400</div>
-      <pre class="ai-json" is:raw>{ "error": "not a hex transaction" }</pre>
+  "day": {
+    "hours": 24, "blocks": 133, "txs": 567317, "tps": 6.57,
+    "volumeSat": 83600358292688, "feeSat": 367964892, "avgFeeSat": 649,
+    "medianFeerate": 1, "hashrateEhs": 834.58,
+    "asOf": "2026-08-06T17:49:58.480Z"
+  },
+  "allTime": {
+    "height": 961323, "txTotal": 1412348998,
+    "sizeBytes": 865511877264, "rawSizeBytes": 759757143440,
+    "supplySat": 2006640738500000, "fundedAddresses": 56681950,
+    "sweptAt": "2026-08-06T03:54:04.490Z",
+    "asOf": "2026-08-06T17:49:55.307Z"
+  }
+}</pre>
     </div>
 
     <div class="ai-ep ai-mt">
@@ -436,7 +507,7 @@ data: {"txid":"9c2e0f24629a...41aa","valueSat":321714321,"vsize":141}</pre>
       <ul class="ai-list">
         <li><b>Our own node and index answer every request.</b> The stack behind these endpoints is the one described on <a href="/about">about</a> and <a href="/sources">sources</a>: a fully validating Bitcoin node and an index built from it, on hardware we run.</li>
         <li><b>No third-party pass-through.</b> No request is proxied to someone else's API. An answer from these endpoints is our node's answer, which is the point of having them.</li>
-        <li><b>Plain GET, open CORS.</b> Every endpoint on this page answers JSON with CORS open to any origin, so a page anywhere can read it directly, and all of them are GET except the one that pushes a transaction. Limits may apply; be gentle, and cache what you can.</li>
+        <li><b>Plain GET, open CORS.</b> Every endpoint on this page answers JSON with CORS open to any origin, so a page anywhere can read it directly, and all of them are GET. Limits may apply; be gentle, and cache what you can.</li>
         <li><b>The surface may change before 1.0.</b> The aim for v1 is that fields are added, not renamed or removed, and a new shape gets a new version prefix. Until 1.0 the endpoints may still be adjusted, and this page changes with them.</li>
       </ul>
       <p class="ai-fine">Figures in the example bodies are representative rather than captured output; the field names and shapes match what the server answers. If you would rather not trust our node at all, <a href="/nodes">running your own</a> is the better answer, and we mean that.</p>

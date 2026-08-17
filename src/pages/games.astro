@@ -1,30 +1,59 @@
 ---
 import Base from '../layouts/Base.astro';
 import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
 ---
-<Base title="Bitcoin Games - OpenBitcoin" description="Free games about bitcoin are being built for this page: no wagering, no prizes, nothing to buy, just play that builds intuition for big numbers and volatility.">
+<Base title="Bitcoin Games - OpenBitcoin" description="Free games about bitcoin: no wagering, no prizes, nothing to buy. Stack the live mempool into full blocks on Block Builder, smash the fee backlog wall on Backlog Breaker, or spin real private keys on The Impossible Slot Machine.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Games</div>
-    <h1>Games are in the workshop</h1>
-    <p class="doc-lede">Free games about bitcoin are being built for this page. No wagering, no prizes, nothing to buy: just play.</p>
+    <h1>Games</h1>
+    <HeroEmblem name="controller" />
+    <p class="doc-lede">Free games about bitcoin. No wagering, no prizes, nothing to buy: just play that builds intuition for odds, big numbers, the fee market and volatility.</p>
   </div>
   <div class="doc-grid">
   <div>
-    <div class="gm-card">
-      <div class="gm-tlab">What is planned</div>
-      <div class="gm-teasers">
-        <div class="gm-teaser">
-          <b>The Impossible Lottery</b>
-          <p>Generate a real bitcoin private key and see why the address space is so large that guessing a funded one is not a thing that happens in this universe. A game about the number 2<sup>160</sup>.</p>
-        </div>
-        <div class="gm-teaser">
-          <b>Beat the HODLER</b>
-          <p>Trade your way through a hidden price path against an opponent who never sells, and find out which of you ends up ahead. A game about why timing is harder than it looks.</p>
-        </div>
+    <a class="gm-feat" href="/games/block-builder">
+      <div class="gm-art" aria-hidden="true">
+        <svg viewBox="0 0 72 72"><rect x="10" y="12" width="52" height="48" rx="10" fill="#5E81B5"/><text x="36" y="47" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-weight="700" font-size="28" fill="#0A1526">1</text></svg>
+        <svg viewBox="0 0 72 72"><rect x="10" y="12" width="52" height="48" rx="10" fill="#63C36C"/><text x="36" y="47" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-weight="700" font-size="28" fill="#06230C">6</text></svg>
+        <svg viewBox="0 0 72 72"><rect x="10" y="12" width="52" height="48" rx="10" fill="#FFE9B8"/><text x="36" y="47" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-weight="700" font-size="26" fill="#3A2600">80</text></svg>
       </div>
-      <p class="gm-note">This section opens when the games are ready. Play here stays free forever; real-money wagering is a different thing entirely and lives behind the 18+ <a href="/casinos">casino section</a>.</p>
-    </div>
+      <div class="gm-fbody">
+        <div class="gm-flab">Playable now</div>
+        <h2>Block Builder</h2>
+        <p>The falling-brick controls you already know, aimed at the one thing a bitcoin block demands: fill it solid, bottom row first. Sealed rows score their fees, a full row above a gap burns to nothing, and ten sealed rows finds the block and scores the subsidy a real miner would collect. Rainbow bricks, purge bombs and a twenty-plaque trophy shelf wait in the deep runs.</p>
+        <span class="gm-play">Start mining</span>
+      </div>
+    </a>
+
+    <a class="gm-feat gm-mt" href="/games/backlog-breaker">
+      <div class="gm-art" aria-hidden="true">
+        <svg viewBox="0 0 72 72"><rect x="11" y="13" width="24" height="13" rx="3" fill="#FFE9B8"/><rect x="37" y="13" width="24" height="13" rx="3" fill="#F7931A"/><rect x="11" y="29" width="24" height="13" rx="3" fill="#FFD43B"/><rect x="37" y="29" width="24" height="13" rx="3" fill="#63C36C"/><rect x="11" y="45" width="24" height="13" rx="3" fill="#3BB9B0"/></svg>
+        <svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="27" fill="#F7931A"/><path fill="#241200" d="M46.9 31.2c.6-4-2.5-6.2-6.7-7.6l1.4-5.4-3.3-.8-1.3 5.3c-.9-.2-1.8-.4-2.7-.6l1.3-5.3-3.3-.8-1.4 5.4c-.7-.2-1.4-.3-2.1-.5l-4.6-1.1-.9 3.5s2.5.6 2.4.6c1.3.3 1.6 1.2 1.5 1.9l-1.5 6.2.3.1h-.3l-2.2 8.7c-.2.4-.6 1-1.5.8 0 0-2.4-.6-2.4-.6l-1.6 3.8 4.3 1.1c.8.2 1.6.4 2.4.6l-1.4 5.5 3.3.8 1.4-5.4c.9.2 1.8.5 2.6.7l-1.3 5.4 3.3.8 1.4-5.5c5.6 1.1 9.9.6 11.6-4.5 1.4-4.1-.1-6.4-3-8 2.2-.5 3.8-1.9 4.2-4.9zM39.4 41.8c-1 4.1-7.9 1.9-10.1 1.3l1.8-7.3c2.2.6 9.4 1.7 8.3 6zm1-10.7c-.9 3.7-6.7 1.8-8.5 1.4l1.6-6.6c1.9.5 7.9 1.3 6.9 5.2z"/></svg>
+        <svg viewBox="0 0 72 72"><circle cx="36" cy="27" r="7" fill="#F7931A"/><rect x="14" y="46" width="44" height="9" rx="4.5" fill="#FFD9A0"/></svg>
+      </div>
+      <div class="gm-fbody">
+        <div class="gm-flab">Playable now</div>
+        <h2>Backlog Breaker</h2>
+        <p>The paddle game you already know, aimed at the mempool: the wall is the backlog, every brick a transaction priced from our own fee feed, and clearing it finds the block and scores the subsidy. Fifteen wall shapes that lap around meaner every pass, balls that split, drops worth catching and one worth dodging, and a twenty-plaque trophy shelf for the long haul.</p>
+        <span class="gm-play">Break the backlog</span>
+      </div>
+    </a>
+
+    <a class="gm-feat gm-mt" href="/games/impossible-slot">
+      <div class="gm-art" aria-hidden="true">
+        <svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="27" fill="#F7931A"/><path fill="#241200" d="M46.9 31.2c.6-4-2.5-6.2-6.7-7.6l1.4-5.4-3.3-.8-1.3 5.3c-.9-.2-1.8-.4-2.7-.6l1.3-5.3-3.3-.8-1.4 5.4c-.7-.2-1.4-.3-2.1-.5l-4.6-1.1-.9 3.5s2.5.6 2.4.6c1.3.3 1.6 1.2 1.5 1.9l-1.5 6.2.3.1h-.3l-2.2 8.7c-.2.4-.6 1-1.5.8 0 0-2.4-.6-2.4-.6l-1.6 3.8 4.3 1.1c.8.2 1.6.4 2.4.6l-1.4 5.5 3.3.8 1.4-5.4c.9.2 1.8.5 2.6.7l-1.3 5.4 3.3.8 1.4-5.5c5.6 1.1 9.9.6 11.6-4.5 1.4-4.1-.1-6.4-3-8 2.2-.5 3.8-1.9 4.2-4.9zM39.4 41.8c-1 4.1-7.9 1.9-10.1 1.3l1.8-7.3c2.2.6 9.4 1.7 8.3 6zm1-10.7c-.9 3.7-6.7 1.8-8.5 1.4l1.6-6.6c1.9.5 7.9 1.3 6.9 5.2z"/></svg>
+        <svg viewBox="0 0 72 72"><rect x="10" y="12" width="52" height="48" rx="8" fill="#171310" stroke="#3E3322" stroke-width="2"/><text x="36" y="47" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-weight="700" font-size="30" fill="#FFD9A0">0</text></svg>
+        <svg viewBox="0 0 72 72"><rect x="10" y="12" width="52" height="48" rx="8" fill="#171310" stroke="#3E3322" stroke-width="2"/><text x="36" y="47" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-weight="700" font-size="30" fill="#FFD9A0">0</text></svg>
+      </div>
+      <div class="gm-fbody">
+        <div class="gm-flab">Playable now</div>
+        <h2>The Impossible Slot Machine</h2>
+        <p>Every spin draws real bitcoin private keys in your browser: one address for the machine, one for each reel. Match the machine's draw in full and you have won, at odds of exactly 1 in 2<sup>160</sup>. Nobody ever has, no coins are involved, and nothing leaves your browser.</p>
+        <span class="gm-play">Pull the lever</span>
+      </div>
+    </a>
 
     <div class="gm-card gm-mt">
       <div class="gm-tlab">Meanwhile</div>
@@ -32,6 +61,14 @@ import '../styles/doc.css';
     </div>
   </div>
   <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Play</div>
+      <nav>
+        <a href="/games/block-builder">Block Builder</a>
+        <a href="/games/backlog-breaker">Backlog Breaker</a>
+        <a href="/games/impossible-slot">The Impossible Slot Machine</a>
+      </nav>
+    </div>
     <div class="doc-tile">
       <div class="doc-tlab">Related</div>
       <nav>
@@ -44,21 +81,34 @@ import '../styles/doc.css';
   </div>
 </main>
 <style is:global>
+  .gm-feat{display:flex;gap:20px;align-items:center;background:var(--panel);border:1px solid rgba(255,166,60,.45);
+    border-radius:12px;padding:22px 24px;text-decoration:none;
+    box-shadow:0 0 0 rgba(247,147,26,0);transition:box-shadow .18s ease,border-color .18s ease}
+  .gm-feat:hover{border-color:var(--orange);box-shadow:0 6px 24px rgba(247,147,26,.14)}
+  .gm-art{flex:0 0 auto;display:flex;gap:6px;background:#0A0806;border:1px solid #3E3322;border-radius:10px;padding:12px 10px}
+  .gm-art svg{width:40px;height:40px;display:block}
+  .gm-fbody{min-width:0}
+  .gm-flab{font:700 9px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+  .gm-fbody h2{display:block;font:800 19px var(--sans);color:var(--ink);margin:5px 0 0}
+  .gm-fbody p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:6px 0 0}
+  .gm-fbody sup{font-size:9px}
+  .gm-play{display:inline-block;margin-top:11px;background:var(--cta);color:var(--cta-ink);border-radius:8px;
+    font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:9px 16px}
+  .gm-feat:hover .gm-play{background:var(--cta-hov)}
   .gm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px 22px}
   .gm-mt{margin-top:14px}
   .gm-tlab{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
-  .gm-teasers{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .gm-teasers{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
   .gm-teaser{background:var(--field);border:1px dashed rgba(255,166,60,.32);border-radius:10px;padding:16px 18px}
   .gm-teaser b{display:block;font:700 15px var(--sans);color:var(--ink)}
   .gm-teaser p{font:500 13px/1.6 var(--sans);color:var(--ink-2);margin:7px 0 0}
-  .gm-teaser sup{font-size:10px}
   .gm-note{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:14px 0 0}
   .gm-note a,.gm-p a{color:var(--acc);text-decoration:none;border-bottom:1px dashed rgba(247,147,26,.35);padding-bottom:1px}
   .gm-note a:hover,.gm-p a:hover{border-bottom-style:solid}
-  .gm-p{font:500 14px/1.65 var(--sans);color:var(--ink-2);margin:0}
+  .gm-p{font:500 14px/1.65 var(--sans);margin:0;color:var(--ink-2)}
   @media(max-width:700px){
+    .gm-feat{flex-direction:column;align-items:flex-start;padding:18px 16px}
     .gm-card{padding:18px 16px}
-    .gm-teasers{grid-template-columns:minmax(0,1fr)}
   }
 </style>
 </Base>
