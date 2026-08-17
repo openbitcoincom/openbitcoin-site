@@ -7,6 +7,43 @@ static HTML, and the explorer routes render server-side. The data services
 behind them (the node, the address index, the price feeds) are not part of
 this repository.
 
+## What is open and what is not
+
+The site is this repository, and the backend pieces that produce its measured
+numbers are published too:
+[node-crawler](https://github.com/openbitcoincom/node-crawler) is the
+reachable-node census behind /nodes, and
+[address-index](https://github.com/openbitcoincom/address-index) builds the
+address statistics, rich list and chain totals behind the explorer's address
+pages, /rich-list and /stats. So the methodology behind every figure on the
+site can be read, run and checked on your own node. What stays private is the
+hosted service's operational layer: server configuration, rate limiting,
+caching and abuse defenses. That is deliberate, since the site is a free
+public instance with no accounts, and publishing the exact limits and how
+they are enforced would be a manual for getting around them. Nothing in that
+private layer changes any number; it only keeps the instance standing.
+
+## Verify the numbers on your own node
+
+Every measured figure on the site can be reproduced independently:
+
+1. Run Bitcoin Core. The address index needs `getblock` verbosity 3
+   (recent Core versions); the rich list needs `coinstatsindex=1` and a
+   Core new enough for the version 2 `dumptxoutset` format. The crawler
+   needs no special flags at all.
+2. Build the address statistics and the rich list with
+   [address-index](https://github.com/openbitcoincom/address-index): a full
+   lifetime index of every address over RPC, and the top balances plus the
+   balance distribution from a UTXO snapshot, integrity-gated against your
+   own node's `coinstatsindex`.
+3. Count reachable nodes with
+   [node-crawler](https://github.com/openbitcoincom/node-crawler): P2P
+   handshakes from your own machine, an offline IP-to-country database, and
+   the same honesty rules the /nodes page states.
+
+Each repository carries a complete standalone setup guide. If your node and
+this site disagree on a number, that is worth a bug report to either side.
+
 ## Build
 
 ```
