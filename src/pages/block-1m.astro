@@ -118,7 +118,12 @@ import HeroEmblem from '../components/HeroEmblem.astro';
   .bm-table tr:last-child td{border-bottom:0}
   .bm-table td:first-child{color:var(--ink);font-weight:700;font-family:var(--sans);white-space:normal}
   .bm-table td b{color:var(--price-ink);font-weight:700}
-  @media(max-width:700px){.bm-table{display:block;overflow-x:auto}}
+  
+  @media(max-width:700px){
+    .bm-table{display:block;overflow-x:auto}
+    .bm-table td{white-space:normal;font-size:13px;padding:9px 8px 9px 0}
+    .bm-table th{font-size:9px}
+  }
   .bm-prose{margin-top:14px}
   .bm-about{margin-top:14px}
   .bm-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}

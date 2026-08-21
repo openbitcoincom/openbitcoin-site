@@ -4,7 +4,8 @@ import '../styles/doc.css';
 import { EPOCH, MAX_BTC, SUBSIDY_BTC, SUBSIDY_DAY_BTC, NEXT_HALVING_HEIGHT } from '../lib/subsidy.js';
 import HeroEmblem from '../components/HeroEmblem.astro';
 ---
-<Base title="Bitcoin Halving Countdown: Block 1,050,000 - OpenBitcoin" description="Live countdown to the next bitcoin halving at block 1,050,000: blocks remaining, estimated date, and the full block subsidy schedule.">
+<Base title="Bitcoin Halving Countdown: Block 1,050,000 - OpenBitcoin" description="Live countdown to the next bitcoin halving at block 1,050,000: blocks remaining, estimated date, and the full block subsidy schedule."
+  ogImage="/og/halving.png" ogImageAlt="Bitcoin Halving Countdown card: a coin split in two halves, in OpenBitcoin's dark and orange colors">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Halving</div>
@@ -160,6 +161,12 @@ import HeroEmblem from '../components/HeroEmblem.astro';
   .hv-rs i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
   @media(max-width:700px){
     .hv-table{display:block;overflow-x:auto}
+    
+    .hv-table td,.hv-table th{white-space:normal;font-size:13px;padding:9px 8px 9px 0}
+    
+    .hv-table:not(.hv-stats-table) td{font-size:12.5px;padding:9px 6px 9px 0}
+    .hv-stats-table td{overflow-wrap:anywhere}
+    .hv-stats-table td+td{text-align:right}
     .hv-flapclock{gap:14px}
     .hv-tile{width:27px;height:40px;border-radius:5px;font:800 22px/38px var(--mono)}
     .hv-comma{font:800 18px/34px var(--mono)}

@@ -1,11 +1,10 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { GA_ID } from './config.js';
-import { consentHtml, CONSENT_STORE } from './consent-snippet.js';
+import { UMAMI_ID } from './config.js';
+import { analyticsHtml } from './analytics-snippet.js';
 
-function consentBlock() {
-  if (!GA_ID) return '';
-  return CONSENT_STORE + consentHtml(GA_ID);
+function analyticsBlock() {
+  return analyticsHtml(UMAMI_ID);
 }
 
 
@@ -76,7 +75,7 @@ export function loadProto(name, route) {
   html = html.replace('<li><a href="/nodes">Nodes</a></li>',
     '<li><a href="/hashrate">Hashrate</a></li><li><a href="/nodes">Nodes</a></li>');
   html = html.replace('<a href="/privacy">Privacy</a>', '<a href="/privacy">Privacy</a><a href="/terms">Terms</a>');
-  const cb = consentBlock();
+  const cb = analyticsBlock();
   if (cb) html = html.replace('</body>', cb + '\n</body>');
   return html;
 }

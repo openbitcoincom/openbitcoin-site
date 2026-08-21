@@ -2,34 +2,34 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
-      "title": "US Treasury Asks For Public Input on Landmark Genius Act Crypto Legislation",
-      "url": "https://bitcoinmagazine.com/news/us-treasury-asks-for-input-on-genius-act",
+      "title": "Pakistan’s Crypto Pitch: “Come Build Here” as Virtual Assets Act Moves Forward",
+      "url": "https://bitcoinmagazine.com/news/pakistan-tells-companies-to-build-there",
       "outlet": "BITCOIN MAG",
-      "date": "2026-08-17"
+      "date": "2026-08-21"
     },
     {
-      "title": "Bitcoin hits $64K as gold gains while oil shakes off Trump Oman threat",
-      "url": "https://cointelegraph.com/markets/bitcoin-hits-64k-as-gold-gains-while-oil-shakes-off-trump-oman-threat?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin ETFs Just Had Their Biggest Day Since May—BlackRock Took 83% of It",
+      "url": "https://decrypt.co/376211/bitcoin-etfs-biggest-day-since-may",
+      "outlet": "DECRYPT",
+      "date": "2026-08-21"
+    },
+    {
+      "title": "Bitcoin rally sends crypto stocks soaring as miners, treasury companies jump",
+      "url": "https://cointelegraph.com/markets/bitcoin-rally-crypto-stocks-canaan-strive-metaplanet?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
       "outlet": "COINTELEGRAPH",
-      "date": "2026-08-17"
+      "date": "2026-08-21"
     },
     {
-      "title": "Strategy Goes Another Week Without Buying — Or Selling — Bitcoin, Builds Up Cash Reserve",
-      "url": "https://bitcoinmagazine.com/news/strategy-goes-another-week-without-buying",
-      "outlet": "BITCOIN MAG",
-      "date": "2026-08-17"
+      "title": "Bitcoin Climbs Higher as $1.2 Billion in Shorts Liquidated",
+      "url": "https://decrypt.co/376183/bitcoin-price-higher-1-2-billion-shorts-liquidated",
+      "outlet": "DECRYPT",
+      "date": "2026-08-21"
     },
     {
-      "title": "Strategy raises $334M through stock sales but buys no Bitcoin",
-      "url": "https://cointelegraph.com/news/strategy-stock-sales-buys-no-bitcoin?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
-      "outlet": "COINTELEGRAPH",
-      "date": "2026-08-17"
-    },
-    {
-      "title": "No change in bitcoin holdings as Strategy boosted dollar reserve, bought back more STRC last week",
-      "url": "https://www.coindesk.com/markets/2026/08/17/no-change-in-bitcoin-holdings-as-strategy-lifted-dollar-reserve-and-bought-back-more-strc-last-week",
+      "title": "Coldcard ships firmware after $114 million bitcoin theft; says AI helped catch more bugs",
+      "url": "https://www.coindesk.com/tech/2026/08/21/coldcard-ships-firmware-after-usd114-million-bitcoin-theft-says-ai-helped-catch-more-bugs",
       "outlet": "COINDESK",
-      "date": "2026-08-17"
+      "date": "2026-08-21"
     }
   ]
 }

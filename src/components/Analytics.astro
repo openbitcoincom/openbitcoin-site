@@ -1,0 +1,7 @@
+---
+import { UMAMI_ID } from '../lib/config.js';
+import { analyticsHtml } from '../lib/analytics-snippet.js';
+const { analytics = true } = Astro.props;
+const on = !!UMAMI_ID && analytics;
+---
+{on && <Fragment set:html={analyticsHtml(UMAMI_ID)} />}

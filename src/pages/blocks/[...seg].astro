@@ -61,7 +61,7 @@ const ssrTop = ssrHeights[0] ?? null;
 const ssrLow = ssrHeights.length ? ssrHeights[ssrHeights.length - 1] : null;
 const tipForPager = ssrTip != null && ssrTop != null && ssrTip > ssrTop ? ssrTip : ssrTop;
 ---
-<Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, miner payout, value moved, size, and fee span, updating live as blocks are found."
+<Base title="Latest Bitcoin Blocks: Live Block List - OpenBitcoin" description="The latest Bitcoin blocks, newest first: height, age, mining pool, transaction count, miner payout, value moved, size and fee span, updating live."
   indexable={anchor == null} canonicalPath={anchor != null ? '/blocks' : null}>
 <main class="wrap doc-wrap">
   <div class="doc-head">

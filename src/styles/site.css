@@ -797,3 +797,9 @@
     --foot-ink2:#8593AC;--foot-ink3:#64718A;--foot-hi:#DCE4F0;
     --foot-quote:#C6D1E4;--foot-acc:#F7931A;
   }
+
+  
+  @media(max-width:430px){
+    .mast{flex-wrap:nowrap;min-height:44px}
+    .cta{position:absolute;right:0;top:50%;transform:translateY(-50%);gap:8px;margin-left:0;z-index:2}
+  }

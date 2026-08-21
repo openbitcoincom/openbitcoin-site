@@ -23,7 +23,6 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
-        !page.includes('/dev/') &&
         !page.includes('/games/mempool-crossing') &&
         !page.includes('/games/last-sat'),
       customPages: ['https://openbitcoin.com/blocks'],

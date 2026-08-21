@@ -2,45 +2,58 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/doc.css';
 import HeroEmblem from '../../components/HeroEmblem.astro';
+import seed from '../../content/fee-heatmap.json';
 
-const HOUR_BASE = [38,32,26,22,20,18,18,20,26,34,42,50,58,68,78,86,90,92,88,82,72,62,52,44];
-const DAY_MULT = [0.96,1,1,0.98,0.92,0.62,0.52];
-const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const LEVEL_NAME = ['cheapest','cheap','moderate','busy','busiest'];
-const level = (v) => v < 25 ? 1 : v < 42 ? 2 : v < 60 ? 3 : v < 78 ? 4 : 5;
-const rows = DAYS.map((name, d) => ({
-  name,
-  abbr: name.slice(0, 2),
-  cells: HOUR_BASE.map((b, h) => {
-    const L = level(b * DAY_MULT[d]);
-    return { L, t: `${name} ${String(h).padStart(2, '0')}:00 UTC, ${LEVEL_NAME[L - 1]}` };
-  }),
+const LEVEL_NAME = seed.levelNames;
+const fmtMed = (m) => (m % 1 ? m.toFixed(1) : String(m));
+const rows = seed.days.map((d) => ({
+  name: d.name,
+  abbr: d.name.slice(0, 2),
+  cells: d.medians.map((m, h) => ({
+    L: d.levels[h],
+    t: `${d.name} ${String(h).padStart(2, '0')}:00 UTC, median ${fmtMed(m)} sat/vB, ${LEVEL_NAME[d.levels[h] - 1]}`,
+  })),
 }));
 const hours = Array.from({ length: 24 }, (_, h) => ({
   txt: h % 3 === 0 ? String(h).padStart(2, '0') : '',
   mid: h % 3 === 0 && h % 6 !== 0,
 }));
+
+const FULL = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
+const startDay = seed.meta.rangeStart.slice(0, 10);
+const endDay = seed.meta.rangeEnd.slice(0, 10);
+const minMed = seed.meta.minMedian;
+const maxMed = seed.meta.maxMedian;
+const peakCount = (d) => d.medians.filter((m) => m === maxMed).length;
+const peakDay = seed.days.reduce((a, b) => (peakCount(b) > peakCount(a) ? b : a));
+const peakHours = peakDay.medians.flatMap((m, h) => (m === maxMed ? [h] : []));
+const hh = (h) => `${String(h).padStart(2, '0')}:00`;
+const peakSpan = `${hh(peakHours[0])} to ${hh(peakHours[peakHours.length - 1] + 1)}`;
+const daySum = (d) => d.medians.reduce((s, m) => s + m, 0);
+const quietDay = seed.days.reduce((a, b) => (daySum(b) < daySum(a) ? b : a));
+const quietAtFloor = quietDay.medians.every((m) => m === minMed);
+const mapLabel = `Heatmap of median next-block fee rates by day of week and hour, UTC, from this site's logged fee series, ${startDay} to ${endDay}. Hourly medians ran from ${fmtMed(minMed)} to ${fmtMed(maxMed)} sat/vB. The busiest cells fell on ${FULL[peakDay.name]} from ${peakSpan} UTC, and ${FULL[quietDay.name]}${quietAtFloor ? ` stayed at the window's floor of ${fmtMed(minMed)} sat/vB all day` : ' averaged the lowest levels of the week'}.`;
 ---
-<Base title="When Bitcoin Fees Are Cheap: The Weekly Fee Rhythm - OpenBitcoin" description="When bitcoin fees are cheapest: weekday business hours run busiest, nights and weekends run cheapest. A day-by-hour heatmap and why it happens.">
+<Base title="When Bitcoin Fees Are Cheap: The Weekly Fee Rhythm - OpenBitcoin" description="When bitcoin fees are cheap, measured from our own minute-by-minute fee log: weekday evenings run busiest, Sundays cheapest. A day-by-hour heatmap and why it happens.">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Fees</div>
     <h1>When bitcoin fees are cheap</h1>
     <HeroEmblem name="clock" />
-    <p class="doc-lede">Fees follow a weekly rhythm: they climb through weekday business hours in Europe and the United States and sink at night and on weekends. If a payment can wait, timing alone often cuts the rate.</p>
+    <p class="doc-lede">Fees follow a weekly rhythm. In our logged series they climb into weekday afternoons and evenings and sink across the weekend, with Sunday the quietest day. If a payment can wait, timing alone often cuts the rate.</p>
   </div>
   <div class="doc-grid">
   <div>
     <div class="ft-card">
       <div class="ft-mhead">
-        <div class="ft-tlab">Typical fee level by day and hour, UTC</div>
+        <div class="ft-tlab">Median next-block fee by day and hour, UTC</div>
         <div class="ft-leg" aria-hidden="true">
           <span class="ft-legt">Cheaper</span>
           <i class="ft-sw ft-l1"></i><i class="ft-sw ft-l2"></i><i class="ft-sw ft-l3"></i><i class="ft-sw ft-l4"></i><i class="ft-sw ft-l5"></i>
           <span class="ft-legt">Busier</span>
         </div>
       </div>
-      <div class="ft-map" role="img" aria-label="Heatmap of typical bitcoin fee levels by day of week and hour, in UTC. Weekday hours from about 13:00 to 21:00 UTC show the highest levels, nights from about 02:00 to 08:00 UTC the lowest, and Saturday and Sunday stay low for most of the day, with Sunday the quietest.">
+      <div class="ft-map" role="img" aria-label={mapLabel}>
         {rows.map((r) => (
           <Fragment>
             <span class="ft-day"><b class="ft-dl">{r.name}</b><b class="ft-ds">{r.abbr}</b></span>
@@ -54,13 +67,13 @@ const hours = Array.from({ length: 24 }, (_, h) => ({
           <span class={'ft-hr' + (hh.mid ? ' ft-hm' : '')}>{hh.txt}</span>
         ))}
       </div>
-      <p class="ft-note">Hours are UTC. Levels are relative to the week, cheapest to busiest, not sat/vB rates; the whole curve moves with demand. This map shows a demo pattern shaped to the documented weekly cycle; it switches to levels computed from this site's own logged fee series once enough weeks are on file.</p>
+      <p class="ft-note">Hours are UTC. Each cell is the median of the fastest (next-block) tier for that hour of the week, computed from this site's own fee log: one sample a minute, {startDay} to {endDay}. Colors are scaled to the window, cheapest to busiest, and the whole curve moves with demand; hover a cell for its median. Sources are documented on the <a href="/sources">sources page</a>.</p>
     </div>
 
     <div class="ft-cols">
       <div class="ft-col">
         <div class="ft-clab">Why weekends dip</div>
-        <p class="ft-cp">Most on-chain traffic is business traffic. Exchanges process withdrawals, custodians move balances, and payment desks settle on weekday schedules, batched through office hours in Europe and North America. When those desks go quiet on Friday evening, the queue drains and the clearing rate falls with it. The same logic makes early UTC mornings cheap even midweek: it is night in both regions that generate most of the traffic.</p>
+        <p class="ft-cp">Most on-chain traffic is business traffic. Exchanges process withdrawals, custodians move balances, and payment desks settle on weekday schedules, batched through office hours in Europe and North America. When those desks go quiet on Friday evening, the queue drains and the clearing rate falls with it. The same lull shows up midweek: in our logged window the floor reappeared from late morning to mid-afternoon UTC on most weekdays, before North American activity peaked.</p>
       </div>
       <div class="ft-col">
         <div class="ft-clab">Why waiting works</div>
@@ -81,11 +94,11 @@ const hours = Array.from({ length: 24 }, (_, h) => ({
     <div class="doc-card ft-mt">
       <div class="doc-sec doc-prose">
         <h2>A tendency, not a promise</h2>
-        <p>The map is an average, and averages hide the exceptions. Any single week can break the pattern: a sharp price move, a popular new use of block space, or one large consolidation run can fill blocks at six in the morning on a Sunday, and when demand surges the weekly shape flattens and stays flat for as long as the surge lasts. Treat the map as a guide to when savings are likely, then check the live numbers before sending: <a href="/fees">current rates</a> for the price, the <a href="/mempool">mempool</a> for the queue itself.</p>
+        <p>The map shows medians, and medians hide the exceptions. Any single week can break the pattern: a sharp price move, a popular new use of block space, or one large consolidation run can fill blocks at six in the morning on a Sunday, and when demand surges the weekly shape flattens and stays flat for as long as the surge lasts. Treat the map as a guide to when savings are likely, then check the live numbers before sending: <a href="/fees">current rates</a> for the price, the <a href="/mempool">mempool</a> for the queue itself.</p>
       </div>
       <div class="doc-sec doc-prose">
         <h2>Reading the map</h2>
-        <p>Each cell is the typical level for that hour of the week on a relative scale, not a sat/vB number, because the whole curve rises and falls with demand. The busy band, roughly 13:00 to 21:00 UTC on weekdays, is the stretch where European afternoons overlap North American mornings. How much timing saves depends on the week: when the queue is deep, the overnight and weekend discount is large; when the mempool clears at the floor rate all day, there is little left to save, and the economy tier on the <a href="/fees">fee page</a> is already the answer.</p>
+        <p>Each cell is the median next-block rate for its hour of the week over the logged window, colored on a scale relative to that window, because the whole curve rises and falls with demand. In this window the busiest cells landed on {FULL[peakDay.name]} from {peakSpan} UTC, and weekday evenings generally ran above the quiet late-morning stretch. How much timing saves depends on the week: when the queue is deep, the discount in the cheap hours is large; when the mempool clears at the floor rate all day, there is little left to save, and the economy tier on the <a href="/fees">fee page</a> is already the answer.</p>
       </div>
     </div>
 
@@ -101,11 +114,12 @@ const hours = Array.from({ length: 24 }, (_, h) => ({
       <div class="ft-stat"><b id="ft-h">958,341</b><i>current height</i></div>
     </div>
     <div class="doc-tile">
-      <div class="doc-tlab">Cheap windows, UTC</div>
+      <div class="doc-tlab">This window, UTC</div>
       <ul class="ft-rl">
-        <li>Saturday and Sunday, most of the day</li>
-        <li>Weekdays, about 02:00 to 08:00</li>
-        <li>Busiest: weekdays 13:00 to 21:00</li>
+        <li>Cheapest: {FULL[quietDay.name]}, all day</li>
+        <li>Saturday at the floor from about noon</li>
+        <li>Most weekdays dip late morning to mid-afternoon</li>
+        <li>Busiest: {FULL[peakDay.name]}, {peakSpan}</li>
       </ul>
     </div>
     <div class="doc-tile">

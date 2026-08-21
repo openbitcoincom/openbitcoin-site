@@ -23,6 +23,7 @@ try {
 } catch { /* client fetch takes over */ }
 
 let ssrRows = '', ssrCount = '', ssrSnap = '';
+let ssrH = '958,341', ssrSup = '20,057,319', ssrPct = '95.5%';
 if (rl && Array.isArray(rl.entries) && rl.entries.length) {
   const supply = supplyAt(rl.snapshotHeight || 960000);
   const tipH = rl.snapshotHeight || 962000;
@@ -36,6 +37,9 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
       `<td class="rl-ins">${w.utxoCount == null ? '&#8212;' : fmtI(w.utxoCount)}</td>` +
       `<td class="rl-seen">${w.firstSeen || '&#8212;'}</td><td class="rl-last">${lastAct(w.lastSpendHeight)}</td></tr>`;
   }).join('');
+  ssrH = fmtI(tipH);
+  ssrSup = fmtI(Math.round(supply));
+  ssrPct = (supply / 21e6 * 100).toFixed(1) + '%';
   ssrCount = `Ranks 1 to ${Math.min(100, rl.entries.length)} of ${fmtI(rl.total || rl.entries.length)}`;
   if (rl.snapshotHeight) {
     ssrSnap = rl.source === 'live'
@@ -46,7 +50,8 @@ if (rl && Array.isArray(rl.entries) && rl.entries.length) {
 import { EPOCH } from '../lib/subsidy.js';
 import HeroEmblem from '../components/HeroEmblem.astro';
 ---
-<Base title="Bitcoin Rich List: The Largest Addresses, Explained - OpenBitcoin" description="The bitcoin rich list ranks addresses, not people. Why exchange cold wallets top it, how one owner spans many addresses, and what a big move means.">
+<Base title="Bitcoin Rich List: The Largest Addresses, Explained - OpenBitcoin" description="The bitcoin rich list ranks addresses, not people. Why exchange cold wallets top it, how one owner spans many addresses, and what a big move means."
+  ogImage="/og/rich-list.png" ogImageAlt="Bitcoin Rich List card: a crown emblem in OpenBitcoin's dark and orange colors">
 <main class="wrap doc-wrap">
   <div class="doc-head">
     <div class="doc-kicker">Rich list</div>
@@ -101,12 +106,12 @@ import HeroEmblem from '../components/HeroEmblem.astro';
     <div class="rl-card rl-mt">
       <div class="rl-tlab">The denominator: known supply</div>
       <div class="rl-stats">
-        <div class="rl-stat"><b id="rl-sup">20,057,319</b><i>BTC issued so far</i></div>
-        <div class="rl-stat"><b id="rl-ht2">958,341</b><i>Block height</i></div>
-        <div class="rl-stat"><b id="rl-pct">95.5%</b><i>Of the 21 million cap</i></div>
+        <div class="rl-stat"><b id="rl-sup">{ssrSup}</b><i>BTC issued so far</i></div>
+        <div class="rl-stat"><b id="rl-ht2">{ssrH}</b><i>Block height</i></div>
+        <div class="rl-stat"><b id="rl-pct">{ssrPct}</b><i>Of the 21 million cap</i></div>
         <div class="rl-stat"><b>21,000,000</b><i>Cap, fixed</i></div>
       </div>
-      <p class="rl-cp">Every share figure on this page divides a balance by the coins the issuance schedule has produced so far: about <span id="rl-psup">20,057,319</span> BTC at height <span id="rl-pht">958,341</span>, with 3.125 new BTC added per block. The spendable total is slightly lower than the scheduled one, because the genesis reward and a handful of early rewards can never be spent, and coins whose keys are lost stay on the ledger forever. The denominator grows on a schedule anyone can check and stops just short of 21 million; for how a fixed supply compares against money that grows, see <a href="/m2">bitcoin versus M2</a>.</p>
+      <p class="rl-cp">Every share figure on this page divides a balance by the coins the issuance schedule has produced so far: about <span id="rl-psup">{ssrSup}</span> BTC at height <span id="rl-pht">{ssrH}</span>, with 3.125 new BTC added per block. The spendable total is slightly lower than the scheduled one, because the genesis reward and a handful of early rewards can never be spent, and coins whose keys are lost stay on the ledger forever. The denominator grows on a schedule anyone can check and stops just short of 21 million; for how a fixed supply compares against money that grows, see <a href="/m2">bitcoin versus M2</a>.</p>
     </div>
 
     <div class="rl-about doc-prose">
@@ -117,7 +122,7 @@ import HeroEmblem from '../components/HeroEmblem.astro';
     <div class="doc-tile">
       <div class="doc-tlab">Right now</div>
       <div class="rl-rstat"><b id="rl-px">$64,362</b><i>1 BTC</i></div>
-      <div class="rl-rstat"><b id="rl-ht">958,341</b><i>Block height</i></div>
+      <div class="rl-rstat"><b id="rl-ht">{ssrH}</b><i>Block height</i></div>
     </div>
     <div class="doc-tile">
       <div class="doc-tlab">Reading the list</div>
