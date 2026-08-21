@@ -48,15 +48,28 @@ const dshort = (d) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { m
 const hist = census && Array.isArray(census.history) && census.history.length > 1 ? census.history : null;
 let hsvg = null;
 if (hist) {
-  const W = 640, H = 170, P = 12;
+  const labeled = hist.length <= 20;
+  const W = 640, H = 190, P = 14, PT = labeled ? 30 : 16;
   const vs = hist.map((h) => h.reachable);
   const lo = Math.min(...vs), hi = Math.max(...vs);
   const span = Math.max(1, hi - lo);
   const x = (i) => P + (i / (hist.length - 1)) * (W - 2 * P);
-  const y = (v) => H - P - ((v - lo) / span) * (H - 2 * P);
+  const y = (v) => (H - P) - ((v - lo) / span) * (H - P - PT);
+  const anchor = (i) => i === 0 ? 'start' : i === hist.length - 1 ? 'end' : 'middle';
   hsvg = {
     path: hist.map((h, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(h.reachable).toFixed(1)).join(''),
     dots: hist.map((h, i) => ({ cx: x(i).toFixed(1), cy: y(h.reachable).toFixed(1) })),
+    labels: labeled ? hist.map((h, i) => {
+      const isMin = i > 0 && i < hist.length - 1
+        && h.reachable < hist[i - 1].reachable && h.reachable < hist[i + 1].reachable;
+      return {
+        x: x(i).toFixed(1), y: (y(h.reachable) + (isMin ? 22 : -11)).toFixed(1),
+        t: n(h.reachable), a: anchor(i),
+      };
+    }) : [],
+    grid: labeled ? [] : [lo, Math.round((lo + hi) / 2), hi].map((v) => ({
+      y: y(v).toFixed(1), t: n(v),
+    })),
     lo, hi, d0: dshort(hist[0].d), d1: dshort(hist[hist.length - 1].d), runs: hist.length,
   };
 }
@@ -157,9 +170,14 @@ if (hist) {
     {hsvg && (
       <div class="nd-card">
         <div class="nd-tlab">The census over time</div>
-        <svg class="nd-hist" viewBox="0 0 640 170" role="img" aria-label="Reachable nodes per crawl day">
+        <svg class="nd-hist" viewBox="0 0 640 190" role="img" aria-label="Reachable nodes per crawl day">
+          {hsvg.grid.map((g) => (<>
+            <line x1="0" x2="640" y1={g.y} y2={g.y} stroke="var(--line-2)" stroke-width="0.6" stroke-dasharray="3 4"/>
+            <text x="4" y={Number(g.y) - 4} class="nd-hval" text-anchor="start">{g.t}</text>
+          </>))}
           <path d={hsvg.path} fill="none" stroke="var(--acc)" stroke-width="1.8" vector-effect="non-scaling-stroke"/>
           {hsvg.dots.map((p) => (<circle cx={p.cx} cy={p.cy} r="3" fill="var(--acc)"/>))}
+          {hsvg.labels.map((l) => (<text x={l.x} y={l.y} class="nd-hval" text-anchor={l.a}>{l.t}</text>))}
         </svg>
         <div class="nd-hx"><span>{hsvg.d0}</span><span>{hsvg.d1}</span></div>
         <p class="nd-fine">One point per crawl day, complete sweeps only: {hsvg.runs} so far, ranging {n(hsvg.lo)} to {n(hsvg.hi)} reachable. The series is young and deepens with every run. Day-to-day wiggle is normal; reachability itself breathes as nodes start, stop and change addresses.</p>
@@ -270,6 +288,7 @@ if (hist) {
   .nd-net b{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
   .nd-darkchips{margin-top:14px}
   .nd-hist{display:block;width:100%;height:auto;background:var(--panel-2,transparent);border-radius:8px}
+  .nd-hval{font:700 10.5px var(--mono);fill:var(--ink-2);font-variant-numeric:tabular-nums}
   .nd-hx{display:flex;justify-content:space-between;font:600 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-3);margin-top:5px}
   .nd-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
   .nd-rs:last-child{border-bottom:0}
