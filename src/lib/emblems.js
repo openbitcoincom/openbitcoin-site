@@ -67,6 +67,8 @@ export const E = {
     `<rect x="10" y="24" width="80" height="38" rx="19" stroke-width="3.5" fill="${F1}"/><path stroke-width="3.5" stroke="${S2}" d="M30 35v16M22 43h16"/><g fill="${S2}" stroke="none"><circle cx="66" cy="38" r="4"/><circle cx="76" cy="48" r="4"/></g>`],
   brokenlock: ['0 0 100 84',
     `<g transform="translate(-4,-5)"><path stroke-width="3.5" stroke="${S2}" d="M34 32v-8a16 16 0 0 1 16-16"/><path stroke-width="3.5" fill="${F1}" d="M50 32H33a7 7 0 0 0-7 7v26a7 7 0 0 0 7 7h15L46 59l8-9-9-8z"/><circle cx="38" cy="51" r="3.5" stroke-width="2.8" stroke="${S2}"/></g><g transform="translate(4,5)"><path stroke-width="3.5" stroke="${S2}" d="M66 32v-8a16 16 0 0 0-16-16"/><path stroke-width="3.5" fill="${F1}" d="M50 32h17a7 7 0 0 1 7 7v26a7 7 0 0 1-7 7H48L46 59l8-9-9-8z"/></g>`],
+  gauge: ['0 0 100 84',
+    `<path stroke-width="3.5" fill="${F1}" d="M14 62a36 36 0 0 1 72 0z"/><path stroke-width="2.8" stroke="${S3}" stroke-dasharray="5 6" d="M20 62a30 30 0 0 1 30-30"/><path stroke-width="2.8" stroke="${S3}" d="M50 32a30 30 0 0 1 30 30"/><path stroke-width="2.5" stroke="${S2}" d="M24 47l-6-3.5M50 32v-7M76 47l6-3.5"/><path stroke-width="4" d="M50 62 68 44"/><circle cx="50" cy="62" r="4.5" stroke-width="3" fill="${F2}"/>`],
   halvecoin: ['0 0 100 84',
     `<path stroke-width="3.5" fill="${F1}" d="M46 14a27 27 0 0 0 0 54z"/><path stroke-width="2.8" stroke="${S3}" d="M46 22a19 19 0 0 0 0 38"/><path stroke-width="3" stroke="${S3}" stroke-dasharray="5 6" d="M54 14a27 27 0 0 1 0 54"/><path stroke-width="3" stroke="${S3}" stroke-dasharray="5 6" d="M54 14v54"/>`],
   halving: ['0 0 100 84',

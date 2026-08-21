@@ -8,7 +8,7 @@ import HeroEmblem from '../components/HeroEmblem.astro';
   <div class="doc-head">
     <div class="doc-kicker">Sentiment</div>
     <h1>Bitcoin Fear and Greed Index</h1>
-    <HeroEmblem name="ath" />
+    <HeroEmblem name="gauge" />
     <p class="doc-lede">One number for market mood, 0 to 100, computed from our own price data. Nothing here comes from a third-party sentiment feed, and every input is measurable.</p>
   </div>
   <div class="doc-grid">
@@ -78,8 +78,8 @@ import HeroEmblem from '../components/HeroEmblem.astro';
   </div>
 </main>
 <style is:global>
-  .fg-hero{display:flex;flex-direction:column;gap:6px}
-  .fg-now{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .fg-hero{display:flex;flex-direction:column;gap:12px}
+  .fg-now{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
   .fg-now b{font:700 56px var(--mono);color:var(--price-ink);letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1}
   .fg-nlab{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .fg-nlab>span:first-child{font:700 18px var(--sans);color:var(--ink)}
@@ -87,20 +87,23 @@ import HeroEmblem from '../components/HeroEmblem.astro';
   .fg-segs i{width:14px;height:20px;border-radius:3px}
   .fg-asof{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3)}
   .fg-card{margin-top:14px}
-  .fg-chartbox{margin-top:4px}
+  .fg-chartbox{margin-top:10px}
   #fg-chart{display:block;width:100%;height:auto;background:var(--panel-2,transparent);border-radius:8px}
   .fg-xlab{display:flex;justify-content:space-between;font:600 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-3);margin-top:4px}
-  .fg-comp{padding:10px 0;border-bottom:1px dotted var(--line-2)}
-  .fg-comp:last-child{border-bottom:0}
-  .fg-cr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .fg-comp{padding:13px 0;border-bottom:1px dotted var(--line-2)}
+  .fg-comp:first-of-type{padding-top:8px}
+  .fg-comp:last-child{border-bottom:0;padding-bottom:4px}
+  .fg-cr{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
   .fg-cn{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
   .fg-cn em{font-style:normal;color:var(--ink-3);letter-spacing:.04em;margin-left:4px}
   .fg-cv{font:700 15px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums}
-  .fg-track{height:6px;border-radius:3px;background:var(--line);margin-top:7px;overflow:hidden}
+  .fg-track{height:6px;border-radius:3px;background:var(--line);margin-top:9px;overflow:hidden}
   .fg-track i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#C93B3B,#D8AC50,#2EBD85);background-size:0 100%;background-color:var(--acc);transition:width .5s ease}
-  .fg-comp p{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:7px 0 0}
+  .fg-comp p{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:10px 0 0}
+  .fg-stat{padding:2px 0 10px}
   .fg-stat b{display:block;font:700 22px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
-  .fg-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  .fg-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:4px}
+  .doc-rail .doc-tile nav{margin-top:6px}
   @media(max-width:380px){.fg-now b{font-size:44px}.fg-segs i{width:11px;height:17px}}
 </style>
 <script is:inline>

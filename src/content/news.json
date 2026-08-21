@@ -2,6 +2,12 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
+      "title": "Bitcoin Has Its Best Week Since 2023 as Shortsellers Continue To Get Wiped Out",
+      "url": "https://bitcoinmagazine.com/markets/bitcoin-has-best-week-since-2023",
+      "outlet": "BITCOIN MAG",
+      "date": "2026-08-21"
+    },
+    {
       "title": "Strategy Swings From $13 Billion Bitcoin Loss to $1.4 Billion Profit as BTC Rallies",
       "url": "https://decrypt.co/376230/strategy-profit-bitcoin-holdings-btc-rallies",
       "outlet": "DECRYPT",
@@ -23,12 +29,6 @@
       "title": "Bitcoin rally sends crypto stocks soaring as miners, treasury companies jump",
       "url": "https://cointelegraph.com/markets/bitcoin-rally-crypto-stocks-canaan-strive-metaplanet?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
       "outlet": "COINTELEGRAPH",
-      "date": "2026-08-21"
-    },
-    {
-      "title": "Bitcoin Climbs Higher as $1.2 Billion in Shorts Liquidated",
-      "url": "https://decrypt.co/376183/bitcoin-price-higher-1-2-billion-shorts-liquidated",
-      "outlet": "DECRYPT",
       "date": "2026-08-21"
     }
   ]
