@@ -52,10 +52,14 @@ npm run build      # dist/client (static pages) + dist/server (SSR entry)
 npm run preview    # serve the build locally
 ```
 
-A local build runs, but the live-data pages (the explorer, the blocks list,
-the rich list, the node census) expect a data service on the loopback that
-this repository does not include; without it they render their honest empty
-states.
+A local build runs, but the live-data pages expect a data service on the
+loopback that this repository does not include.
+[explorer-adapter](https://github.com/openbitcoincom/explorer-adapter) fills
+that gap: a minimal self-hostable service that brings the explorer routes
+(blocks, transactions, mempool, fees, and with an electrum server the address
+pages) alive from your own Bitcoin Core. Pages backed by the hosted site's
+own features (news, price history, rich list, node census) render their
+honest empty states.
 
 ## How the numbers stay honest
 
