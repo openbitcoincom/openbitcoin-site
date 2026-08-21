@@ -2,6 +2,12 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
+      "title": "Strategy Swings From $13 Billion Bitcoin Loss to $1.4 Billion Profit as BTC Rallies",
+      "url": "https://decrypt.co/376230/strategy-profit-bitcoin-holdings-btc-rallies",
+      "outlet": "DECRYPT",
+      "date": "2026-08-21"
+    },
+    {
       "title": "Pakistan’s Crypto Pitch: “Come Build Here” as Virtual Assets Act Moves Forward",
       "url": "https://bitcoinmagazine.com/news/pakistan-tells-companies-to-build-there",
       "outlet": "BITCOIN MAG",
@@ -23,12 +29,6 @@
       "title": "Bitcoin Climbs Higher as $1.2 Billion in Shorts Liquidated",
       "url": "https://decrypt.co/376183/bitcoin-price-higher-1-2-billion-shorts-liquidated",
       "outlet": "DECRYPT",
-      "date": "2026-08-21"
-    },
-    {
-      "title": "Coldcard ships firmware after $114 million bitcoin theft; says AI helped catch more bugs",
-      "url": "https://www.coindesk.com/tech/2026/08/21/coldcard-ships-firmware-after-usd114-million-bitcoin-theft-says-ai-helped-catch-more-bugs",
-      "outlet": "COINDESK",
       "date": "2026-08-21"
     }
   ]

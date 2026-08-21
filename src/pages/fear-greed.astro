@@ -1,0 +1,176 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/doc.css';
+import HeroEmblem from '../components/HeroEmblem.astro';
+---
+<Base title="Bitcoin Fear and Greed Index - OpenBitcoin" description="A fear and greed index for bitcoin computed from our own price data: the live value, the four components behind it, and a year of history. No third-party sentiment feed.">
+<main class="wrap doc-wrap">
+  <div class="doc-head">
+    <div class="doc-kicker">Sentiment</div>
+    <h1>Bitcoin Fear and Greed Index</h1>
+    <HeroEmblem name="ath" />
+    <p class="doc-lede">One number for market mood, 0 to 100, computed from our own price data. Nothing here comes from a third-party sentiment feed, and every input is measurable.</p>
+  </div>
+  <div class="doc-grid">
+  <div>
+    <div class="doc-card fg-hero">
+      <div class="fg-now">
+        <b id="fg-big">&hellip;</b>
+        <div class="fg-nlab"><span id="fg-word">&hellip;</span><span class="segs fg-segs" id="fg-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+      </div>
+      <div class="fg-asof">Recomputed every ten minutes from daily closes. <span id="fg-asof"></span></div>
+    </div>
+
+    <div class="doc-card fg-card">
+      <div class="doc-tlab">One year of the index</div>
+      <div class="fg-chartbox">
+        <svg id="fg-chart" viewBox="0 0 640 220" role="img" aria-label="Fear and greed index over the last year">
+          <g id="fg-zones"></g>
+          <g id="fg-grid"></g>
+          <path id="fg-line" fill="none" stroke="var(--acc)" stroke-width="1.8" vector-effect="non-scaling-stroke"/>
+          <circle id="fg-dot" r="3.2" fill="var(--acc)" style="display:none"/>
+        </svg>
+        <div class="fg-xlab"><span id="fg-x0"></span><span id="fg-x1"></span></div>
+      </div>
+    </div>
+
+    <div class="doc-card fg-card">
+      <div class="doc-tlab">The four components</div>
+      <div class="fg-comp" data-k="momentum"><div class="fg-cr"><span class="fg-cn">Momentum <em>25%</em></span><span class="fg-cv">&hellip;</span></div><div class="fg-track"><i></i></div><p>Price against its 30 day average. Stretched above reads greedy, sagging below reads fearful.</p></div>
+      <div class="fg-comp" data-k="trend"><div class="fg-cr"><span class="fg-cn">Trend <em>30%</em></span><span class="fg-cv">&hellip;</span></div><div class="fg-track"><i></i></div><p>Price against its 200 day average, the long trend line bulls and bears argue over.</p></div>
+      <div class="fg-comp" data-k="drawdown"><div class="fg-cr"><span class="fg-cn">Drawdown <em>30%</em></span><span class="fg-cv">&hellip;</span></div><div class="fg-track"><i></i></div><p>Distance below the 365 day high. Near the high reads greedy; deep under it reads fearful.</p></div>
+      <div class="fg-comp" data-k="volatility"><div class="fg-cr"><span class="fg-cn">Volatility <em>15%</em></span><span class="fg-cv">&hellip;</span></div><div class="fg-track"><i></i></div><p>The last week's realized volatility against the 90 day norm. Wild weeks read fearful, calm ones mildly greedy.</p></div>
+    </div>
+
+    <div class="doc-card fg-card doc-prose">
+      <h2>How it is computed</h2>
+      <p>The index is a weighted blend of the four components above, each scored 0 to 100 and computed from daily closing prices in our own database. No social feeds, no survey, no exchange volumes, no scraping someone else's index. The weights are fixed: trend and drawdown carry 30% each, momentum 25%, volatility 15%.</p>
+      <h2>Why there is no mempool component</h2>
+      <p>An earlier version of this index gave mempool and fee pressure a 20% weight, and it was wrong twice over. A fee spike is blockspace demand, not emotion: it rises on consolidation sweeps and inscription waves that say nothing about how anyone feels, and it made the index climb while the price fell, which is the one thing a fear gauge must not do. Sentiment here now comes from price behavior alone. Fee pressure is still published honestly on <a href="/fees">the fees page</a>, where it belongs.</p>
+      <h2>Reading the scale</h2>
+      <ul>
+        <li><strong>0 to 24, Extreme Fear.</strong> Historically where capitulation lives.</li>
+        <li><strong>25 to 44, Fear.</strong> The market braced, prices below their averages.</li>
+        <li><strong>45 to 55, Neutral.</strong> No stretch in either direction.</li>
+        <li><strong>56 to 75, Greed.</strong> Price running above its averages.</li>
+        <li><strong>76 to 100, Extreme Greed.</strong> Everything stretched at once; historically fragile.</li>
+      </ul>
+      <p>An index like this describes the present, it does not predict. Where our price data comes from is documented at <a href="/sources">/sources</a>, and everything on this page is informational under the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+  <aside class="doc-rail">
+    <div class="doc-tile">
+      <div class="doc-tlab">Right now</div>
+      <div class="fg-stat"><b id="fg-rv">&hellip;</b><i id="fg-rl">index value</i></div>
+      <nav><a href="/chart">See the price behind it</a></nav>
+    </div>
+    <div class="doc-tile">
+      <div class="doc-tlab">Related</div>
+      <nav>
+        <a href="/chart">Price chart</a>
+        <a href="/fees">Fees right now</a>
+        <a href="/mempool">Live mempool</a>
+        <a href="/halving">Halving countdown</a>
+        <a href="/ath">Distance from ATH</a>
+      </nav>
+    </div>
+  </aside>
+  </div>
+</main>
+<style is:global>
+  .fg-hero{display:flex;flex-direction:column;gap:6px}
+  .fg-now{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .fg-now b{font:700 56px var(--mono);color:var(--price-ink);letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1}
+  .fg-nlab{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .fg-nlab>span:first-child{font:700 18px var(--sans);color:var(--ink)}
+  .fg-segs{margin-left:0}
+  .fg-segs i{width:14px;height:20px;border-radius:3px}
+  .fg-asof{font:600 10.5px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink-3)}
+  .fg-card{margin-top:14px}
+  .fg-chartbox{margin-top:4px}
+  #fg-chart{display:block;width:100%;height:auto;background:var(--panel-2,transparent);border-radius:8px}
+  .fg-xlab{display:flex;justify-content:space-between;font:600 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-3);margin-top:4px}
+  .fg-comp{padding:10px 0;border-bottom:1px dotted var(--line-2)}
+  .fg-comp:last-child{border-bottom:0}
+  .fg-cr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .fg-cn{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .fg-cn em{font-style:normal;color:var(--ink-3);letter-spacing:.04em;margin-left:4px}
+  .fg-cv{font:700 15px var(--mono);color:var(--price-ink);font-variant-numeric:tabular-nums}
+  .fg-track{height:6px;border-radius:3px;background:var(--line);margin-top:7px;overflow:hidden}
+  .fg-track i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#C93B3B,#D8AC50,#2EBD85);background-size:0 100%;background-color:var(--acc);transition:width .5s ease}
+  .fg-comp p{font:500 12.5px/1.6 var(--sans);color:var(--ink-3);margin:7px 0 0}
+  .fg-stat b{display:block;font:700 22px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .fg-stat i{display:block;font:600 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-style:normal;margin-top:2px}
+  @media(max-width:380px){.fg-now b{font-size:44px}.fg-segs i{width:11px;height:17px}}
+</style>
+<script is:inline>
+(function(){
+  var ELL="…";
+  /* the ten-step red-to-green ramp shared with the front-page tile: the bar
+     fill takes the color of its own tenth so the two read as one system */
+  var RAMP=["#C93B3B","#D65454","#E07B5A","#DB965A","#D8AC50","#C9B44A","#A8B44E","#7FB35A","#54AC6B","#2EBD85"];
+  function fmtDate(s){
+    var d=new Date(s+"T00:00:00Z");
+    return d.toLocaleDateString("en-US",{month:"short",year:"numeric",timeZone:"UTC"});
+  }
+  function paint(d){
+    if(!d||typeof d.value!=="number")return;
+    var v=d.value;
+    var big=document.getElementById("fg-big"),word=document.getElementById("fg-word");
+    big.textContent=v;word.textContent=d.label||"";
+    var rv=document.getElementById("fg-rv"),rl=document.getElementById("fg-rl");
+    if(rv)rv.textContent=v;if(rl&&d.label)rl.textContent=d.label;
+    var on=Math.max(1,Math.min(10,Math.round(v/10)));
+    document.querySelectorAll("#fg-bar i").forEach(function(seg,i){
+      seg.className=i<on?("on"+(i+1)):"";
+    });
+    if(d.asOf){var el=document.getElementById("fg-asof");
+      try{el.textContent="As of "+new Date(d.asOf).toUTCString().replace(":00 GMT"," UTC");}catch(e){}}
+    if(d.components)Object.keys(d.components).forEach(function(k){
+      var row=document.querySelector('.fg-comp[data-k="'+k+'"]');
+      if(!row)return;
+      var cv=d.components[k];
+      if(typeof cv!=="number")return;
+      row.querySelector(".fg-cv").textContent=cv;
+      var bar=row.querySelector(".fg-track i");
+      bar.style.width=Math.max(2,cv)+"%";
+      bar.style.background=RAMP[Math.max(0,Math.min(9,Math.round(cv/10)-1))];
+    });
+    graph(d.history,v);
+  }
+  function graph(h,nowV){
+    if(!Array.isArray(h)||h.length<2)return;
+    var W=640,H=220,PAD=6;
+    var zones=document.getElementById("fg-zones"),grid=document.getElementById("fg-grid");
+    var y=function(v){return H-PAD-(v/100)*(H-2*PAD);};
+    var x=function(i){return (i/(h.length-1))*W;};
+    /* faint horizontal bands, one per label zone, in the ramp's own colors */
+    var Z=[[0,25,RAMP[0]],[25,45,RAMP[3]],[45,55,RAMP[5]],[55,75,RAMP[7]],[75,100,RAMP[9]]];
+    zones.innerHTML=Z.map(function(z){
+      return '<rect x="0" width="'+W+'" y="'+y(z[1])+'" height="'+(y(z[0])-y(z[1]))+'" fill="'+z[2]+'" opacity="0.05"/>';
+    }).join("");
+    grid.innerHTML=[25,50,75].map(function(g){
+      return '<line x1="0" x2="'+W+'" y1="'+y(g)+'" y2="'+y(g)+'" stroke="var(--line-2)" stroke-width="0.6" stroke-dasharray="3 4"/>';
+    }).join("");
+    var pts=h.map(function(p,i){return (i?"L":"M")+x(i).toFixed(1)+" "+y(p.v).toFixed(1);}).join("");
+    document.getElementById("fg-line").setAttribute("d",pts);
+    var dot=document.getElementById("fg-dot");
+    dot.setAttribute("cx",x(h.length-1).toFixed(1));
+    dot.setAttribute("cy",y(h[h.length-1].v).toFixed(1));
+    dot.style.display="";
+    var x0=document.getElementById("fg-x0"),x1=document.getElementById("fg-x1");
+    if(x0)x0.textContent=fmtDate(h[0].d);
+    if(x1)x1.textContent="today";
+  }
+  function boot(){
+    try{
+      var api=window.OB_DATA_API;
+      if(typeof api!=="string"||!api)return;
+      fetch(api+"/fear-greed").then(function(r){return r.ok?r.json():null;}).then(paint).catch(function(){});
+    }catch(e){}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
+</Base>
