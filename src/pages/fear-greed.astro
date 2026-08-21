@@ -45,8 +45,6 @@ import HeroEmblem from '../components/HeroEmblem.astro';
     <div class="doc-card fg-card doc-prose">
       <h2>How it is computed</h2>
       <p>The index is a weighted blend of the four components above, each scored 0 to 100 and computed from daily closing prices in our own database. No social feeds, no survey, no exchange volumes, no scraping someone else's index. The weights are fixed: trend and drawdown carry 30% each, momentum 25%, volatility 15%.</p>
-      <h2>Why there is no mempool component</h2>
-      <p>An earlier version of this index gave mempool and fee pressure a 20% weight, and it was wrong twice over. A fee spike is blockspace demand, not emotion: it rises on consolidation sweeps and inscription waves that say nothing about how anyone feels, and it made the index climb while the price fell, which is the one thing a fear gauge must not do. Sentiment here now comes from price behavior alone. Fee pressure is still published honestly on <a href="/fees">the fees page</a>, where it belongs.</p>
       <h2>Reading the scale</h2>
       <ul>
         <li><strong>0 to 24, Extreme Fear.</strong> Historically where capitulation lives.</li>
