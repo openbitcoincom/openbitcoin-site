@@ -40,6 +40,26 @@ const versionPct = census && topVersion ? Math.round(topVersion.nodes / census.r
 const crawledAt = census
   ? new Date(census.crawledAt).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC'
   : null;
+
+const ipv4 = census ? census.reachable - census.ipv6 : 0;
+const vrows = census && Array.isArray(census.versions) ? census.versions.slice(0, 10) : [];
+const topV = vrows.length ? vrows[0].nodes : 1;
+const dshort = (d) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const hist = census && Array.isArray(census.history) && census.history.length > 1 ? census.history : null;
+let hsvg = null;
+if (hist) {
+  const W = 640, H = 170, P = 12;
+  const vs = hist.map((h) => h.reachable);
+  const lo = Math.min(...vs), hi = Math.max(...vs);
+  const span = Math.max(1, hi - lo);
+  const x = (i) => P + (i / (hist.length - 1)) * (W - 2 * P);
+  const y = (v) => H - P - ((v - lo) / span) * (H - 2 * P);
+  hsvg = {
+    path: hist.map((h, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(h.reachable).toFixed(1)).join(''),
+    dots: hist.map((h, i) => ({ cx: x(i).toFixed(1), cy: y(h.reachable).toFixed(1) })),
+    lo, hi, d0: dshort(hist[0].d), d1: dshort(hist[hist.length - 1].d), runs: hist.length,
+  };
+}
 ---
 <Base title="Bitcoin Nodes: Reachable Node Census by Country - OpenBitcoin" description={census
   ? `${n(census.reachable)} reachable Bitcoin nodes measured by our own crawler, ranked by country across ${n(census.countryCount)} countries, plus what it takes to run your own node with Bitcoin Core.`
@@ -98,6 +118,51 @@ const crawledAt = census
           </tbody>
         </table>
         <p class="nd-fine">The top {rows.length} of {n(census.countryCount)} countries where a reachable node answered us, from the crawl of {crawledAt}. Country comes from an IP database held on our own server, so no lookup leaves the box. Location is known only for nodes reached over the open internet: {n(census.located)} of the {n(census.reachable)} we reached. Peers on Tor and I2P announce no location by design, and this crawl also collected {n(census.darkCandidates.onion)} onion addresses it does not dial.</p>
+      </div>
+    )}
+
+    {vrows.length > 0 && census && (
+      <div class="nd-card">
+        <div class="nd-tlab">What the nodes run</div>
+        <table class="nd-table" aria-label="Reachable nodes by client and version series">
+          <thead><tr><th>#</th><th>Client</th><th>Nodes</th><th>Share</th></tr></thead>
+          <tbody>
+            {vrows.map((v, i) => (
+              <tr>
+                <td class="nd-rank">{i + 1}</td>
+                <td>{v.name}</td>
+                <td>{n(v.nodes)}</td>
+                <td><div class="nd-share"><span class="nd-bar"><i style={`width:${Math.max(2, Math.round(v.nodes / topV * 100))}%`}></i></span><b>{(v.nodes / census.reachable * 100).toFixed(1)}%</b></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="nd-fine">From the version message each node answered our handshake with. Bitcoin Core is grouped by major series; Bitcoin Knots counts as its own client whatever Core series it builds on, and so do other implementations.</p>
+      </div>
+    )}
+
+    {census && (
+      <div class="nd-card">
+        <div class="nd-tlab">How they connect</div>
+        <div class="nd-net"><span>IPv4</span><span class="nd-bar"><i style={`width:${Math.max(2, Math.round(ipv4 / census.reachable * 100))}%`}></i></span><b>{n(ipv4)} · {(ipv4 / census.reachable * 100).toFixed(1)}%</b></div>
+        <div class="nd-net"><span>IPv6</span><span class="nd-bar"><i style={`width:${Math.max(2, Math.round(census.ipv6 / census.reachable * 100))}%`}></i></span><b>{n(census.ipv6)} · {(census.ipv6 / census.reachable * 100).toFixed(1)}%</b></div>
+        <div class="nd-chips nd-darkchips">
+          <div class="nd-chip"><b>{n(census.darkCandidates.onion)}</b><i>Tor onion addresses in gossip</i></div>
+          <div class="nd-chip"><b>{n(census.darkCandidates.i2p)}</b><i>I2P addresses in gossip</i></div>
+        </div>
+        <p class="nd-fine">Reachable means we completed a handshake over that network. The Tor and I2P figures are addresses other nodes gossiped to us: our crawler does not dial private networks yet, so they are not in the reachable count, and a node listening on both clearnet and Tor appears once, by its clearnet address. Dialing Tor is on the roadmap; when it lands those addresses move from counted to verified.</p>
+      </div>
+    )}
+
+    {hsvg && (
+      <div class="nd-card">
+        <div class="nd-tlab">The census over time</div>
+        <svg class="nd-hist" viewBox="0 0 640 170" role="img" aria-label="Reachable nodes per crawl day">
+          <path d={hsvg.path} fill="none" stroke="var(--acc)" stroke-width="1.8" vector-effect="non-scaling-stroke"/>
+          {hsvg.dots.map((p) => (<circle cx={p.cx} cy={p.cy} r="3" fill="var(--acc)"/>))}
+        </svg>
+        <div class="nd-hx"><span>{hsvg.d0}</span><span>{hsvg.d1}</span></div>
+        <p class="nd-fine">One point per crawl day, complete sweeps only: {hsvg.runs} so far, ranging {n(hsvg.lo)} to {n(hsvg.hi)} reachable. The series is young and deepens with every run. Day-to-day wiggle is normal; reachability itself breathes as nodes start, stop and change addresses.</p>
       </div>
     )}
 
@@ -199,6 +264,13 @@ const crawledAt = census
   .nd-fine{font:500 11.5px/1.5 var(--sans);color:var(--ink-3);margin:12px 0 0}
   .nd-about{margin-top:14px}
   .nd-about p{font:500 13.5px/1.65 var(--sans);color:var(--ink-3)}
+  .nd-net{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dotted var(--line-2)}
+  .nd-net:nth-of-type(2){border-bottom:0}
+  .nd-net>span:first-child{font:700 12px var(--mono);letter-spacing:.08em;color:var(--ink);width:38px}
+  .nd-net b{font:700 12.5px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .nd-darkchips{margin-top:14px}
+  .nd-hist{display:block;width:100%;height:auto;background:var(--panel-2,transparent);border-radius:8px}
+  .nd-hx{display:flex;justify-content:space-between;font:600 9.5px var(--mono);letter-spacing:.08em;color:var(--ink-3);margin-top:5px}
   .nd-rs{padding:7px 0;border-bottom:1px dotted var(--line-2)}
   .nd-rs:last-child{border-bottom:0}
   .nd-rs b{display:block;font:700 16px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
