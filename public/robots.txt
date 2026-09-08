@@ -3,5 +3,8 @@ Allow: /
 # Cloudflare injects /cdn-cgi/ links (email obfuscation) into served HTML;
 # crawlers that follow them see 4xx and report phantom errors
 Disallow: /cdn-cgi/
+# the API is data plumbing, not pages; /api/v1/stream never ends and was
+# AI crawlers' most-fetched path (63k hangs in one day, seen 2026-08-30)
+Disallow: /api/
 
 Sitemap: https://openbitcoin.com/sitemap-index.xml

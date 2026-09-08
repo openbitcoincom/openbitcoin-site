@@ -2,34 +2,34 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
-      "title": "Bitcoin Has Its Best Week Since 2023 as Shortsellers Continue To Get Wiped Out",
-      "url": "https://bitcoinmagazine.com/markets/bitcoin-has-best-week-since-2023",
+      "title": "Castle Opens Its Bitcoin Savings Stack to Individuals",
+      "url": "https://bitcoinmagazine.com/news/castle-opens-savings-stack-individuals",
       "outlet": "BITCOIN MAG",
-      "date": "2026-08-21"
+      "date": "2026-09-08"
     },
     {
-      "title": "Strategy Swings From $13 Billion Bitcoin Loss to $1.4 Billion Profit as BTC Rallies",
-      "url": "https://decrypt.co/376230/strategy-profit-bitcoin-holdings-btc-rallies",
-      "outlet": "DECRYPT",
-      "date": "2026-08-21"
-    },
-    {
-      "title": "Pakistan’s Crypto Pitch: “Come Build Here” as Virtual Assets Act Moves Forward",
-      "url": "https://bitcoinmagazine.com/news/pakistan-tells-companies-to-build-there",
+      "title": "Strategy Halted Its Bitcoin Buys Again Last Week",
+      "url": "https://bitcoinmagazine.com/news/strategy-halted-bitcoin-buys-last-week",
       "outlet": "BITCOIN MAG",
-      "date": "2026-08-21"
+      "date": "2026-09-08"
     },
     {
-      "title": "Bitcoin ETFs Just Had Their Biggest Day Since May—BlackRock Took 83% of It",
-      "url": "https://decrypt.co/376211/bitcoin-etfs-biggest-day-since-may",
+      "title": "Strategy's Return to Bitcoin Buying Lasted Exactly One Week",
+      "url": "https://decrypt.co/377664/strategys-return-to-bitcoin-buying-lasted-exactly-one-week",
       "outlet": "DECRYPT",
-      "date": "2026-08-21"
+      "date": "2026-09-08"
     },
     {
-      "title": "Bitcoin rally sends crypto stocks soaring as miners, treasury companies jump",
-      "url": "https://cointelegraph.com/markets/bitcoin-rally-crypto-stocks-canaan-strive-metaplanet?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
+      "title": "Is Bitcoin too volatile to risk your retirement on?",
+      "url": "https://cointelegraph.com/magazine/is-bitcoin-too-volatile-to-risk-your-retirement-on?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
       "outlet": "COINTELEGRAPH",
-      "date": "2026-08-21"
+      "date": "2026-09-08"
+    },
+    {
+      "title": "Bitcoin rally has more room as volatility shorts unwind, Two Prime CEO says",
+      "url": "https://www.coindesk.com/markets/2026/09/03/bitcoin-rally-has-more-room-as-volatility-shorts-unwind-two-prime-ceo-says",
+      "outlet": "COINDESK",
+      "date": "2026-09-08"
     }
   ]
 }
