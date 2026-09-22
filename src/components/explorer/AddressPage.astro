@@ -95,10 +95,10 @@ const pageHref = (p) => mkPath(p);
   <section class="card acard">
     <div class="sect-head">
       <div class="live-toggle" id="txtabs">
-        <a class={dir ? undefined : 'on'} href={mkPath(1, null, compact)}>All</a>
-        <a class={dir === 'in' ? 'on' : undefined} href={mkPath(1, 'in', compact)}>Received</a>
-        <a class={dir === 'out' ? 'on' : undefined} href={mkPath(1, 'out', compact)}>Sent</a>
-        <a class='lt-view' href={viewHref(compact ? 'full' : 'compact')}>{compact ? 'Full' : 'Compact'}</a>
+        <a class={dir ? undefined : 'on'} href={mkPath(1, null, compact)} rel="nofollow">All</a>
+        <a class={dir === 'in' ? 'on' : undefined} href={mkPath(1, 'in', compact)} rel="nofollow">Received</a>
+        <a class={dir === 'out' ? 'on' : undefined} href={mkPath(1, 'out', compact)} rel="nofollow">Sent</a>
+        <a class='lt-view' href={viewHref(compact ? 'full' : 'compact')} rel="nofollow">{compact ? 'Full' : 'Compact'}</a>
       </div>
     </div>
     <div id="chartwrap"><canvas id="bchart"></canvas></div>
@@ -111,7 +111,7 @@ const pageHref = (p) => mkPath(p);
         return (
           <div class="cmrow">
             <span class="cmleft">
-              <a class="cmid" href={`/${t.txid}`}>{t.txid}</a>
+              <a class="cmid" href={`/${t.txid}`} rel="nofollow">{t.txid}</a>
               <span class="cmwhen">{t.height != null ? `Block ${fmtInt(t.height)}` : 'PENDING'}{t.time ? ` · ${utcStamp(t.time)}` : ''}</span>
             </span>
             {d != null && <span class={`cmamt ${cls}`}>{sign}{fmtBtc(Math.abs(d))}<em>BTC</em></span>}
@@ -144,7 +144,7 @@ const pageHref = (p) => mkPath(p);
         <div class={`txc${dirCls}${pending ? ' pend' : ''}`}>
           <div class="txc-h">
             {d != null && <span class="dir" role="img" aria-label={dirWord}>{glyph}</span>}
-            <a class="txid" href={`/${t.txid}`}>{t.txid}</a>
+            <a class="txid" href={`/${t.txid}`} rel="nofollow">{t.txid}</a>
             {pending
               ? <span class="pendpill"><span class="pdot" aria-hidden="true"></span>UNCONFIRMED · IN MEMPOOL</span>
               : t.time ? <span class="txc-when" title={utcStamp(t.time)}>{whenText(t.time)}</span> : null}
@@ -162,7 +162,7 @@ const pageHref = (p) => mkPath(p);
                       : i.address
                         ? i.mine
                           ? <span class="a a-self">{i.address}</span>
-                          : <a class="a" href={`/${i.address}`}>{i.address}</a>
+                          : <a class="a" href={`/${i.address}`} rel="nofollow">{i.address}</a>
                         : <span class="a" style="cursor:default;color:var(--ink-3)">Input details arrive with confirmation</span>}
                     {i.coinbase && <span class="iotag mine">BLOCK REWARD</span>}
                     {i.mine && <span class="iotag">THIS ADDRESS</span>}
@@ -171,7 +171,7 @@ const pageHref = (p) => mkPath(p);
                 </div>
               ))}
               {insTotal > ins.length && (
-                <div class="iomore">Showing {fmtInt(ins.length)} of {fmtInt(insTotal)} inputs · <a href={`/${t.txid}`}>see the transaction</a></div>
+                <div class="iomore">Showing {fmtInt(ins.length)} of {fmtInt(insTotal)} inputs · <a href={`/${t.txid}`} rel="nofollow">see the transaction</a></div>
               )}
             </div>
             <div class="txd-arrow" aria-hidden="true">&rarr;</div>
@@ -183,7 +183,7 @@ const pageHref = (p) => mkPath(p);
                     {o.address
                       ? o.mine
                         ? <span class="a a-self">{o.address}</span>
-                        : <a class="a" href={`/${o.address}`}>{o.address}</a>
+                        : <a class="a" href={`/${o.address}`} rel="nofollow">{o.address}</a>
                       : <span class="a" style="cursor:default">{typeTag(o.type)}</span>}
                     {o.mine
                       ? <span class="iotag">{t.dir === 'out' ? 'CHANGE · THIS ADDRESS' : 'THIS ADDRESS'}</span>
@@ -193,7 +193,7 @@ const pageHref = (p) => mkPath(p);
                 </div>
               ))}
               {outsTotal > outs.length && (
-                <div class="iomore">Showing {fmtInt(outs.length)} of {fmtInt(outsTotal)} outputs · <a href={`/${t.txid}`}>see the transaction</a></div>
+                <div class="iomore">Showing {fmtInt(outs.length)} of {fmtInt(outsTotal)} outputs · <a href={`/${t.txid}`} rel="nofollow">see the transaction</a></div>
               )}
             </div>
           </div>
@@ -227,9 +227,9 @@ const pageHref = (p) => mkPath(p);
     )}
     {!latestOnly && (txs.length > 0 || curPage > 1) && (
     <div class="pager" id="pager">
-      {curPage > 1 ? <a class="pbtn" href={pageHref(curPage - 1)}>&lsaquo; PREV</a> : <span class="pbtn" aria-disabled="true">&lsaquo; PREV</span>}
+      {curPage > 1 ? <a class="pbtn" href={pageHref(curPage - 1)} rel="nofollow">&lsaquo; PREV</a> : <span class="pbtn" aria-disabled="true">&lsaquo; PREV</span>}
       <span class="pinfo">Page <b>{fmtInt(curPage)}</b>{totPages > 0 ? <Fragment> of <b>{fmtInt(totPages)}</b></Fragment> : null}</span>
-      {curPage < totPages ? <a class="pbtn" href={pageHref(curPage + 1)}>NEXT &rsaquo;</a> : <span class="pbtn" aria-disabled="true">NEXT &rsaquo;</span>}
+      {curPage < totPages ? <a class="pbtn" href={pageHref(curPage + 1)} rel="nofollow">NEXT &rsaquo;</a> : <span class="pbtn" aria-disabled="true">NEXT &rsaquo;</span>}
     </div>
     )}
   </section>

@@ -113,7 +113,7 @@ const pageHref = (p) => `/${b.height}${p > 1 ? `/${p}` : ''}`;
       {b.txs.map((t) => t.coinbase ? (
         <>
         <div class={cbAscii ? 'brow cb' : 'brow cb solo'}>
-          <a class="txid" href={`/${t.txid}`}>{t.txid}</a>
+          <a class="txid" href={`/${t.txid}`} rel="nofollow">{t.txid}</a>
           <span class="cbpill">COINBASE · {minerName ? minerName.toUpperCase() : 'UNKNOWN'}</span>
           {t.outSat != null && <span class="val">{fmtBtc(t.outSat)}<em>BTC</em></span>}
           <span class="rate">subsidy + fees</span>
@@ -122,7 +122,7 @@ const pageHref = (p) => `/${b.height}${p > 1 ? `/${p}` : ''}`;
         </>
       ) : (
         <div class="brow">
-          <a class="txid" href={`/${t.txid}`}>{t.txid}</a>
+          <a class="txid" href={`/${t.txid}`} rel="nofollow">{t.txid}</a>
           {t.ins != null && <span class="io">{t.ins} in &rarr; {t.outs} out</span>}
           {t.outSat != null && <span class="val">{fmtBtc(t.outSat)}<em>BTC</em></span>}
           {t.feerate != null && <span class="rate">{t.feerate} sat/vB</span>}
@@ -130,9 +130,9 @@ const pageHref = (p) => `/${b.height}${p > 1 ? `/${p}` : ''}`;
       ))}
     </div>
     <div class="pager" id="pager">
-      {b.page > 1 ? <a class="pbtn" href={pageHref(b.page - 1)}>&lsaquo; PREV</a> : <span class="pbtn" aria-disabled="true">&lsaquo; PREV</span>}
+      {b.page > 1 ? <a class="pbtn" href={pageHref(b.page - 1)} rel="nofollow">&lsaquo; PREV</a> : <span class="pbtn" aria-disabled="true">&lsaquo; PREV</span>}
       <span class="pinfo">Page <b>{fmtInt(b.page)}</b> of <b>{fmtInt(b.pages)}</b></span>
-      {b.page < b.pages ? <a class="pbtn" href={pageHref(b.page + 1)}>NEXT &rsaquo;</a> : <span class="pbtn" aria-disabled="true">NEXT &rsaquo;</span>}
+      {b.page < b.pages ? <a class="pbtn" href={pageHref(b.page + 1)} rel="nofollow">NEXT &rsaquo;</a> : <span class="pbtn" aria-disabled="true">NEXT &rsaquo;</span>}
     </div>
   </section>
 </main>

@@ -2,34 +2,34 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
-      "title": "Castle Opens Its Bitcoin Savings Stack to Individuals",
-      "url": "https://bitcoinmagazine.com/news/castle-opens-savings-stack-individuals",
-      "outlet": "BITCOIN MAG",
-      "date": "2026-09-08"
-    },
-    {
-      "title": "Strategy Halted Its Bitcoin Buys Again Last Week",
-      "url": "https://bitcoinmagazine.com/news/strategy-halted-bitcoin-buys-last-week",
-      "outlet": "BITCOIN MAG",
-      "date": "2026-09-08"
-    },
-    {
-      "title": "Strategy's Return to Bitcoin Buying Lasted Exactly One Week",
-      "url": "https://decrypt.co/377664/strategys-return-to-bitcoin-buying-lasted-exactly-one-week",
+      "title": "Bitcoin Breaks Out as Nasdaq Hits Records and Oil Slides on Iran Hopes",
+      "url": "https://decrypt.co/378972/bitcoin-breaks-out-nasdaq-hits-records-oil-slides",
       "outlet": "DECRYPT",
-      "date": "2026-09-08"
+      "date": "2026-09-22"
     },
     {
-      "title": "Is Bitcoin too volatile to risk your retirement on?",
-      "url": "https://cointelegraph.com/magazine/is-bitcoin-too-volatile-to-risk-your-retirement-on?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin’s Bull Run Is Back — and the Data Agrees",
+      "url": "https://bitcoinmagazine.com/news/bitcoin-bull-run-is-back-data-shows",
+      "outlet": "BITCOIN MAG",
+      "date": "2026-09-22"
+    },
+    {
+      "title": "No Bitcoin Payments in Russia — But the Digital Ruble Is Open for Business",
+      "url": "https://bitcoinmagazine.com/news/russia-advances-digital-ruble",
+      "outlet": "BITCOIN MAG",
+      "date": "2026-09-22"
+    },
+    {
+      "title": "Bitcoin ETFs Take Nearly $1B in a Day as Average Holder Returns to Profit",
+      "url": "https://decrypt.co/378921/bitcoin-etfs-take-nearly-1b-in-a-day-as-average-holder-returns-to-profit",
+      "outlet": "DECRYPT",
+      "date": "2026-09-22"
+    },
+    {
+      "title": "Big Questions: Does Satoshi actually own 1.1 million Bitcoin?",
+      "url": "https://cointelegraph.com/magazine/big-questions-does-satoshi-actually-own-1-million-bitcoin?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
       "outlet": "COINTELEGRAPH",
-      "date": "2026-09-08"
-    },
-    {
-      "title": "Bitcoin rally has more room as volatility shorts unwind, Two Prime CEO says",
-      "url": "https://www.coindesk.com/markets/2026/09/03/bitcoin-rally-has-more-room-as-volatility-shorts-unwind-two-prime-ceo-says",
-      "outlet": "COINDESK",
-      "date": "2026-09-08"
+      "date": "2026-09-22"
     }
   ]
 }

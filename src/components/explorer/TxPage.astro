@@ -154,12 +154,12 @@ const paramHref = (key, val) => {
             <div class="iorow">
               <span class="io-l">
                 {i.address
-                  ? <a class="a" href={`/${i.address}`}>{i.address}</a>
+                  ? <a class="a" href={`/${i.address}`} rel="nofollow">{i.address}</a>
                   : i.type
                     ? <span class="a" style="cursor:default">{typeTag(i.type)} input</span>
                     : <span class="a" style="cursor:default;color:var(--ink-3)">Input details arrive with confirmation</span>}
                 {i.type && <span class="iotag">{typeTag(i.type)}</span>}
-                {i.txid && <span class="iotag">OUTPOINT <a href={`/${i.txid}`}>{short(i.txid)}</a>:{i.vout}</span>}
+                {i.txid && <span class="iotag">OUTPOINT <a href={`/${i.txid}`} rel="nofollow">{short(i.txid)}</a>:{i.vout}</span>}
               </span>
               {i.valueSat != null && <span class="v">{fmtBtc(i.valueSat)} BTC</span>}
             </div>
@@ -167,8 +167,8 @@ const paramHref = (key, val) => {
           {t.vin.length > CAP && (
             <div class="iomore">
               {allVin
-                ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null)}>show first {CAP}</a></>
-                : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all')}>show all</a></>}
+                ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null)} rel="nofollow">show first {CAP}</a></>
+                : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all')} rel="nofollow">show all</a></>}
             </div>
           )}
         </div>
@@ -181,7 +181,7 @@ const paramHref = (key, val) => {
             <div class="iorow">
               <span class="io-l">
                 {o.address
-                  ? <a class="a" href={`/${o.address}`}>{o.address}</a>
+                  ? <a class="a" href={`/${o.address}`} rel="nofollow">{o.address}</a>
                   : pk
                     ? <span class="a" style="cursor:default">Pubkey {pk.slice(0, 16)}…</span>
                     : <span class="a" style="cursor:default">{typeTag(o.type)}</span>}
@@ -208,8 +208,8 @@ const paramHref = (key, val) => {
           {t.vout.length > CAP && (
             <div class="iomore">
               {allVout
-                ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null)}>show first {CAP}</a></>
-                : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all')}>show all</a></>}
+                ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null)} rel="nofollow">show first {CAP}</a></>
+                : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all')} rel="nofollow">show all</a></>}
             </div>
           )}
         </div>
@@ -230,7 +230,7 @@ const paramHref = (key, val) => {
         <div class="tsec">Input {idx}{i.address ? ` · ${i.address}` : i.coinbase ? ' · coinbase' : ''}</div>
         {i.coinbase
           ? <div class="trow"><span class="k">Coinbase</span><span class="val">Newly created coins; this input has no previous outpoint.</span></div>
-          : <div class="trow"><span class="k">Outpoint</span><span class="val">{i.txid ? <a href={`/${i.txid}`}>{i.txid}</a> : '…'}<i>:{i.vout}</i></span></div>}
+          : <div class="trow"><span class="k">Outpoint</span><span class="val">{i.txid ? <a href={`/${i.txid}`} rel="nofollow">{i.txid}</a> : '…'}<i>:{i.vout}</i></span></div>}
         {i.type === 'pubkey' && i.address && (
           <div class="trow"><span class="k">Address</span><span class="val">{i.address} <i>(derived from the pubkey; a P2PK script carries none)</i></span></div>
         )}
@@ -244,8 +244,8 @@ const paramHref = (key, val) => {
       {t.vin.length > CAP && (
         <div class="iomore">
           {allVin
-            ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null) + '#scripts'}>show first {CAP}</a></>
-            : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all') + '#scripts'}>show all</a></>}
+            ? <>Showing all {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', null) + '#scripts'} rel="nofollow">show first {CAP}</a></>
+            : <>Showing {CAP} of {fmtInt(t.vin.length)} inputs · <a href={paramHref('vin', 'all') + '#scripts'} rel="nofollow">show all</a></>}
         </div>
       )}
       {voutRows.map((o) => {
@@ -275,8 +275,8 @@ const paramHref = (key, val) => {
       {t.vout.length > CAP && (
         <div class="iomore">
           {allVout
-            ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null) + '#scripts'}>show first {CAP}</a></>
-            : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all') + '#scripts'}>show all</a></>}
+            ? <>Showing all {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', null) + '#scripts'} rel="nofollow">show first {CAP}</a></>
+            : <>Showing {CAP} of {fmtInt(t.vout.length)} outputs · <a href={paramHref('vout', 'all') + '#scripts'} rel="nofollow">show all</a></>}
         </div>
       )}
       <div class="tsec">Transaction</div>

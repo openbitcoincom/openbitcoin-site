@@ -6,5 +6,10 @@ Disallow: /cdn-cgi/
 # the API is data plumbing, not pages; /api/v1/stream never ends and was
 # AI crawlers' most-fetched path (63k hangs in one day, seen 2026-08-30)
 Disallow: /api/
+# the comments widget and the analytics beacon are page furniture, not
+# content: Googlebot's renderer was spending thousands of fetches a week on
+# them while the pages that matter went unvisited (seen 2026-09-22)
+Disallow: /comments/
+Disallow: /_uma/
 
 Sitemap: https://openbitcoin.com/sitemap-index.xml
