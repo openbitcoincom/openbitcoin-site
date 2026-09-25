@@ -1,4 +1,4 @@
-{"meta":{"source":"Mt. Gox trade log (bitcoincharts archive via web.archive.org) daily OHLC 2010-07-17 to 2010-08-17; Blockchain.info market-price daily closes (Mt. Gox era, close only) 2010-08-18 to 2011-08-17; Bitstamp public OHLC API (BTC/USD, UTC days) 2011-08-18 to 2026-07-30; extended from 2026-07-31 by the site-logged daily series (provenance at /sources)","fetched":"2026-09-22","first":"2010-07-17","last":"2026-09-21","note":"First weeks (2010-07-17 to 2010-08-17) carry full OHLC computed from the preserved Mt. Gox trade log; Blockchain.info era rows (2010-08-18 to 2011-08-17) carry close only (open/high/low null)."},"days":[
+{"meta":{"source":"Mt. Gox trade log (bitcoincharts archive via web.archive.org) daily OHLC 2010-07-17 to 2010-08-17; Blockchain.info market-price daily closes (Mt. Gox era, close only) 2010-08-18 to 2011-08-17; Bitstamp public OHLC API (BTC/USD, UTC days) 2011-08-18 to 2026-07-30; extended from 2026-07-31 by the site-logged daily series (provenance at /sources)","fetched":"2026-09-25","first":"2010-07-17","last":"2026-09-24","note":"First weeks (2010-07-17 to 2010-08-17) carry full OHLC computed from the preserved Mt. Gox trade log; Blockchain.info era rows (2010-08-18 to 2011-08-17) carry close only (open/high/low null)."},"days":[
 ["2010-07-17",0.04951,0.04951,0.04951,0.04951],
 ["2010-07-18",0.05941,0.08585,0.05941,0.08584],
 ["2010-07-19",0.0909,0.09307,0.07723,0.0808],
@@ -5909,5 +5909,8 @@
 ["2026-09-18",76348.28,81366.07,76235.9,80876.29],
 ["2026-09-19",80878.78,81912.17,80828.9,81235.14],
 ["2026-09-20",81238.57,81436.49,80115.7,81151.65],
-["2026-09-21",81147.36,87351.78,80869.06,86586.52]
+["2026-09-21",81147.36,87351.78,80869.06,86586.52],
+["2026-09-22",86586.52,86687.69,85094.48,86201.35],
+["2026-09-23",86201.34,87271.74,83542,84384.54],
+["2026-09-24",84384.54,84900,82923.15,84383.03]
 ]}

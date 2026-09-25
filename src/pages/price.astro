@@ -401,8 +401,12 @@ import HeroEmblem from '../components/HeroEmblem.astro';
      window forward to today. Any failure leaves the built line, which is real
      closes from the committed file, exactly as served. */
   try{
-    var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:null;
-    if(!api)return;
+    /* Base publishes OB_DATA_API AFTER this inline script parses, so reading
+       it here always found nothing and the spark never redrew (found
+       2026-09-25 when three deploy-free days left the card 3% behind the
+       live price). Same-origin /api/v1 is the answer whenever it is unset,
+       exactly as every other page's lazy reader does. */
+    var api=(typeof window.OB_DATA_API==="string"&&window.OB_DATA_API)?window.OB_DATA_API:"/api/v1";
     var card=document.querySelector(".pc-sparkcard");
     if(!card)return;
     var svg=card.querySelector(".pc-spark"),
