@@ -2,6 +2,12 @@
   "note": "SEED AND FALLBACK: the homepage news card and /news render this list first, then swap in the live /news API feed client-side; this file is what shows before the fetch resolves and permanently when the API is down. Edit freely; newest first. Real headlines with real outbound URLs only (site policy: link the outlet, rewrite nothing). date is the publish date, YYYY-MM-DD.",
   "items": [
     {
+      "title": "Strategy proposes daily dividends to bring STRC back toward $100",
+      "url": "https://www.coindesk.com/markets/2026/09/25/strategy-proposes-daily-dividends-to-bring-strc-back-toward-usd100",
+      "outlet": "COINDESK",
+      "date": "2026-09-25"
+    },
+    {
       "title": "Mitchell Askew Explains What 15M Inactive BTC Means for Bitcoin’s Next Move",
       "url": "https://bitcoinmagazine.com/videos/mitchell-askew-explains-what-15m-inactive-btc-means-for-bitcoins-next-move",
       "outlet": "BITCOIN MAG",
@@ -23,12 +29,6 @@
       "title": "Bitcoin holders are cashing out, just not the way they did at prior market tops",
       "url": "https://www.coindesk.com/daybook-us/2026/09/25/bitcoin-holders-are-cashing-out-just-not-the-way-they-did-at-prior-market-tops",
       "outlet": "COINDESK",
-      "date": "2026-09-25"
-    },
-    {
-      "title": "IBIT options price trading more calmly after Bitcoin rebound",
-      "url": "https://cointelegraph.com/markets/ibit-options-trading-bitcoins-rebound?utm_source=rss_feed&utm_medium=rss_tag_bitcoin&utm_campaign=rss_partner_inbound",
-      "outlet": "COINTELEGRAPH",
       "date": "2026-09-25"
     }
   ]

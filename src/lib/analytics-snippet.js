@@ -6,6 +6,7 @@ var p=location.pathname,b=p;
 if(RegExp('^/(?:[13][a-km-zA-HJ-NP-Z1-9]{24,33}|bc1[a-z0-9]{11,90})$').test(p))b='/lookup/address';
 else if(RegExp('^/[0-9a-fA-F]{64}$').test(p))b='/lookup/tx';
 else if(RegExp('^/[0-9]{1,9}$').test(p))b='/lookup/block';
+if(navigator.webdriver||(screen.width===800&&screen.height===600))return;
 var s=document.createElement('script');s.defer=true;s.src='/u.js';
 s.setAttribute('data-website-id','${UMAMI_ID}');
 s.setAttribute('data-host-url','https://openbitcoin.com/_uma');
